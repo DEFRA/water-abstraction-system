@@ -13,11 +13,50 @@ const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/vi
 describe('View Licence returns presenter', () => {
   let returnData
 
+  const returnItem = {
+    id: 'mock-id-1',
+    dueDate: '2012-11-28T00:00:00.000Z',
+    status: 'completed',
+    startDate: '2020/01/02',
+    endDate: '2020/02/01',
+    metadata: {
+      purposes: [
+        {
+          alias: 'SPRAY IRRIGATION',
+          primary: {
+            code: 'A',
+            description: 'Agriculture'
+          },
+          tertiary: {
+            code: '400',
+            description: 'Spray Irrigation - Direct'
+          },
+          secondary: {
+            code: 'AGR',
+            description: 'General Agriculture'
+          }
+        }
+      ],
+      description: 'empty description'
+    },
+    returnReference: '1068'
+  }
+
   beforeEach(() => {
-    returnData = _returnData()
+    returnData = {
+      returns: [
+        { ...returnItem },
+        {
+          ...returnItem,
+          id: 'mock-id-2',
+          status: 'due',
+          returnReference: '1069'
+        }
+      ]
+    }
   })
 
-  describe('when provided with a populated licence', () => {
+  describe('when provided returns', () => {
     it('correctly presents the data', () => {
       const result = ViewLicenceReturnsPresenter.go(returnData)
 
@@ -38,7 +77,7 @@ describe('View Licence returns presenter', () => {
             id: 'mock-id-2',
             reference: '1069',
             purpose: 'SPRAY IRRIGATION',
-            dueDate: '28 November 2019',
+            dueDate: '28 November 2012',
             status: 'OVERDUE',
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description'
@@ -47,67 +86,22 @@ describe('View Licence returns presenter', () => {
       })
     })
   })
-})
 
-function _returnData () {
-  return {
-    returns: [
-      {
-        id: 'mock-id-1',
-        dueDate: '2012-11-28T00:00:00.000Z',
-        status: 'completed',
-        startDate: '2020/01/02',
-        endDate: '2020/02/01',
-        metadata: {
-          purposes: [
-            {
-              alias: 'SPRAY IRRIGATION',
-              primary: {
-                code: 'A',
-                description: 'Agriculture'
-              },
-              tertiary: {
-                code: '400',
-                description: 'Spray Irrigation - Direct'
-              },
-              secondary: {
-                code: 'AGR',
-                description: 'General Agriculture'
-              }
-            }
-          ],
-          description: 'empty description'
-        },
-        returnReference: '1068'
-      },
-      {
-        id: 'mock-id-2',
-        dueDate: '2019-11-28T00:00:00.000Z',
-        status: 'due',
-        startDate: '2020/01/02',
-        endDate: '2020/02/01',
-        metadata: {
-          description: 'empty description',
-          purposes: [
-            {
-              alias: 'SPRAY IRRIGATION',
-              primary: {
-                code: 'A',
-                description: 'Agriculture'
-              },
-              tertiary: {
-                code: '400',
-                description: 'Spray Irrigation - Direct'
-              },
-              secondary: {
-                code: 'AGR',
-                description: 'General Agriculture'
-              }
-            }
-          ]
-        },
-        returnReference: '1069'
+  describe('when no returns', () => {
+    beforeEach(() => {
+      returnData = {
+        returns: []
       }
-    ]
-  }
-}
+    })
+
+    it('correctly returns the no returns data', () => {
+      const result = ViewLicenceReturnsPresenter.go(returnData)
+
+      expect(result).to.equal({
+        activeTab: 'returns',
+        hasReturns: false,
+        returns: []
+      })
+    })
+  })
+})
