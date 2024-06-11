@@ -18,8 +18,8 @@ const ReturnRequirementPurposeModel = require('../../../app/models/return-requir
  *
  * - `externalId` - [randomly generated - 9:99999:A:AGR:400]
  * - `purposeId` - [random UUID]
- * - `purposePrimaryId` - [random UUID]
- * - `purposeSecondaryId` - [random UUID]
+ * - `primaryPurposeId` - [random UUID]
+ * - `secondaryPurposeId` - [random UUID]
  * - `returnRequirementId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -48,8 +48,8 @@ function defaults (data = {}) {
   const defaults = {
     externalId,
     purposeId: generateUUID(),
-    purposePrimaryId: generateUUID(),
-    purposeSecondaryId: generateUUID(),
+    primaryPurposeId: generateUUID(),
+    secondaryPurposeId: generateUUID(),
     returnRequirementId: generateUUID()
   }
 
