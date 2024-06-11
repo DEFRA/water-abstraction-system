@@ -6,7 +6,9 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
+const { generatePrimaryPurpose } = require('./primary-purpose.helper.js')
 const { generatePurposeCode } = require('./purpose.helper.js')
+const { generateSecondaryPurpose } = require('./secondary-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
 
 /**
@@ -58,17 +60,11 @@ function defaults (data = {}) {
 }
 
 function _generatePrimaryCode () {
-  // NOTE: Taken from water.purposes_primary
-  const codes = ['A', 'E', 'I', 'M', 'P', 'W', 'X', 'C']
-
-  return codes[randomInteger(0, 7)]
+  return generatePrimaryPurpose().code
 }
 
 function _generateSecondaryCode () {
-  // NOTE: This is only a subset. There 63 of these codes that could be used. Taken from water.purposes_secondary
-  const codes = ['AGR', 'AQF', 'AQP', 'BRW', 'BUS', 'CHE', 'CON', 'CRN', 'DAR', 'ELC', 'EXT', 'FAD', 'FOR', 'GOF']
-
-  return codes[randomInteger(0, 13)]
+  return generateSecondaryPurpose().code
 }
 
 module.exports = {
