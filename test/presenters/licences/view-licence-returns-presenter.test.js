@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
+const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 
 describe('View Licence returns presenter', () => {
   let returnData
@@ -23,6 +23,7 @@ describe('View Licence returns presenter', () => {
 
       expect(result).to.equal({
         activeTab: 'returns',
+        hasReturns: true,
         returns: [
           {
             id: 'mock-id-1',

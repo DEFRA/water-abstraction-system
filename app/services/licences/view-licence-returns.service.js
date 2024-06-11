@@ -6,6 +6,7 @@
  */
 
 const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
+const FetchLicenceHasRequirementsService = require('./fetch-licence-has-requirements.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
@@ -23,6 +24,7 @@ async function go (licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const returnsData = await FetchLicenceReturnsService.go(licenceId, page)
+  const hasRequirements = await FetchLicenceHasRequirementsService.go(licenceId)
   const pageData = ViewLicenceReturnsPresenter.go(returnsData)
 
   const pagination = PaginatorPresenter.go(returnsData.pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
@@ -30,7 +32,8 @@ async function go (licenceId, auth, page) {
   return {
     ...pageData,
     ...commonData,
-    pagination
+    pagination,
+    hasRequirements
   }
 }
 

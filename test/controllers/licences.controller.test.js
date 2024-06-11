@@ -421,21 +421,41 @@ describe('Licences controller', () => {
       })
     })
 
-    describe('when a request is valid and has NO returns', () => {
+    describe('when a request is valid and has requirements but NO returns', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
           activeTab: 'returns',
-          returns: []
+          returns: [],
+          hasReturns: false,
+          hasRequirements: true
         })
       })
 
-      it('returns the page successfully', async () => {
+      it('returns the page successfully with the message \'No returns for this licence.\'', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Returns')
-        //  Check the table titles
-        expect(response.payload).to.contain('No returns found')
+        expect(response.payload).to.contain('No returns for this licence.')
+      })
+    })
+
+    describe('when a request is valid and has NO requirements OR returns', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
+          activeTab: 'returns',
+          returns: [],
+          hasReturns: false,
+          hasRequirements: false
+        })
+      })
+
+      it('returns the page successfully with the message \'No returns for this licence.\'', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Returns')
+        expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
       })
     })
   })
@@ -477,6 +497,7 @@ function _viewLicenceContactDetails () {
 function _viewLicenceReturns () {
   return {
     activeTab: 'returns',
+    hasReturns: true,
     returns: [{ id: 'returns-id' }]
   }
 }

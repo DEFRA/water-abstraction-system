@@ -5,7 +5,7 @@
  * @module ViewLicenceReturnsPresenter
  */
 
-const { formatLongDate } = require('../base.presenter')
+const { formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats common data for the `/licences/{id}/*` view licence pages
@@ -17,7 +17,8 @@ function go (returnsData) {
 
   return {
     activeTab: 'returns',
-    returns
+    returns,
+    hasReturns: returns.length > 0
   }
 }
 

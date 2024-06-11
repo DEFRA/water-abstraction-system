@@ -9,13 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
-const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
+const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
+const FetchLicenceHasRequirementsService = require('../../../app/services/licences/fetch-licence-has-requirements.service.js')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
+const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
-const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service')
+const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
 
 describe('View Licence service returns', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
@@ -24,6 +25,7 @@ describe('View Licence service returns', () => {
   const pagination = { page }
 
   beforeEach(() => {
+    Sinon.stub(FetchLicenceHasRequirementsService, 'go').resolves(true)
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnsFetch())
     Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
     Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns(_returnsPresenter())
@@ -41,6 +43,7 @@ describe('View Licence service returns', () => {
 
         expect(result).to.equal({
           licenceName: 'fake licence',
+          hasRequirements: true,
           returns: [],
           activeTab: 'returns',
           pagination: { page: 1 }

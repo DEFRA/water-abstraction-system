@@ -21,7 +21,7 @@
 
 <table class="govuk-table">
   <h2 class="govuk-heading-l">Returns</h2>
-  {% if returns.length > 0 %}
+  {% if hasReturns %}
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header">Return reference and dates</th>
@@ -43,12 +43,15 @@
       </tr>
     {% endfor %}
     </tbody>
-  {% else %}
-    <p>No returns found</p>
+
+  {% elseif hasReturns == false and hasRequirements == false %}
+      <p> No requirements for returns have been set up for this licence. </p>
+  {% elseif hasRequirements and hasReturns == false %}
+    <p> No returns for this licence. </p>
   {% endif %}
 </table>
 
-{% if returns and pagination.numberOfPages > 1 %}
+{% if hasReturns and pagination.numberOfPages > 1 %}
   {{ govukPagination(pagination.component) }}
 {% endif %}
 
