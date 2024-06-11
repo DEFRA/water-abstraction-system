@@ -69,6 +69,20 @@ describe('Return Requirements - Submit Setup service', () => {
         })
       })
 
+      describe('and the user has selected to copy an existing requirement', () => {
+        beforeEach(() => {
+          payload = {
+            setup: 'use-existing-requirements'
+          }
+        })
+
+        it('returns the route for the select an existing requirement page', async () => {
+          const result = await SubmitSetupService.go(session.id, payload)
+
+          expect(result.redirect).to.equal('existing')
+        })
+      })
+
       describe('and the user has selected to setup the requirement manually', () => {
         beforeEach(() => {
           payload = {

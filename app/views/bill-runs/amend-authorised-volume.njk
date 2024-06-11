@@ -67,8 +67,6 @@
 
         {# Hidden input for authorised volume #}
         <input type="hidden" name="totalBillableReturns" value="{{ chargeReference.totalBillableReturns }}">
-        <input type="hidden" name="minVolume" value="{{ chargeCategory.minVolume }}">
-        <input type="hidden" name="maxVolume" value="{{ chargeCategory.maxVolume }}">
 
         {{ govukButton({ text: 'Confirm', preventDoubleClick: true }) }}
       </form>

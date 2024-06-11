@@ -12,6 +12,7 @@ const AgreementsExceptionsService = require('../services/return-requirements/agr
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
+const ExistingService = require('../services/return-requirements/existing.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
@@ -21,7 +22,6 @@ const RemoveService = require('../services/return-requirements/remove.service.js
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
-const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
@@ -30,6 +30,7 @@ const SubmitAdditionalSubmissionOptionsService = require('../services/return-req
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCancel = require('../services/return-requirements/submit-cancel.service.js')
 const SubmitCheckService = require('../services/return-requirements/submit-check.service.js')
+const SubmitExistingService = require('../services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
@@ -120,12 +121,10 @@ async function deleteNote (request, h) {
 async function existing (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await ExistingService.go(sessionId)
 
   return h.view('return-requirements/existing.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select an existing return requirement from',
-    ...session
+    ...pageData
   })
 }
 
@@ -307,7 +306,13 @@ async function submitCheck (request, h) {
 }
 
 async function submitExisting (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload } = request
+
+  const pageData = await SubmitExistingService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/existing.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
