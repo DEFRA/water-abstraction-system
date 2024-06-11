@@ -56,7 +56,7 @@ describe('View Licence returns presenter', () => {
     }
   })
 
-  describe('when provided returns', () => {
+  describe('when provided with returns data', () => {
     it('correctly presents the data', () => {
       const result = ViewLicenceReturnsPresenter.go(returnData)
 
@@ -87,14 +87,14 @@ describe('View Licence returns presenter', () => {
     })
   })
 
-  describe('when no returns', () => {
+  describe('when provided with NO returns data', () => {
     beforeEach(() => {
       returnData = {
         returns: []
       }
     })
 
-    it('correctly returns the no returns data', () => {
+    it('correctly returns no returns data ', () => {
       const result = ViewLicenceReturnsPresenter.go(returnData)
 
       expect(result).to.equal({
