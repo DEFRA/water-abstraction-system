@@ -440,7 +440,7 @@ describe('Licences controller', () => {
       })
     })
 
-    describe('when a request is valid and has NO requirements OR returns', () => {
+    describe('when a request is valid and has NO requirements and NO returns', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
           activeTab: 'returns',
