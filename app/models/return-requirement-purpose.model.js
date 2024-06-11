@@ -16,6 +16,14 @@ class ReturnRequirementPurposeModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      primaryPurpose: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'primary-purpose.model.js',
+        join: {
+          from: 'returnRequirementPurposes.primaryPurposeId',
+          to: 'primaryPurposes.id'
+        }
+      },
       purpose: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'purpose.model',

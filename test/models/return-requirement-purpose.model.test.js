@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
+const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
@@ -39,6 +41,36 @@ describe('Return Requirement Purpose model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to primary purpose', () => {
+      let testPrimaryPurpose
+
+      beforeEach(async () => {
+        testPrimaryPurpose = await PrimaryPurposeHelper.add()
+
+        const { id: primaryPurposeId } = testPrimaryPurpose
+        testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReturnRequirementPurposeModel.query()
+          .innerJoinRelated('primaryPurpose')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the primary purpose', async () => {
+        const result = await ReturnRequirementPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('primaryPurpose')
+
+        expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
+        expect(result.primaryPurpose.id).to.equal(testPrimaryPurpose.id)
+      })
+    })
+
     describe('when linking to purpose', () => {
       let testPurpose
 
@@ -56,7 +88,7 @@ describe('Return Requirement Purpose model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the purposes use', async () => {
+      it('can eager load the purpose', async () => {
         const result = await ReturnRequirementPurposeModel.query()
           .findById(testRecord.id)
           .withGraphFetched('purpose')
