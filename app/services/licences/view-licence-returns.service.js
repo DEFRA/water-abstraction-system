@@ -5,15 +5,17 @@
  * @module ViewLicenceSummaryService
  */
 
-const FetchLicenceReturnsService = require('./fetch-licence-returns.service')
-const ViewLicenceService = require('./view-licence.service')
-const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter')
-const PaginatorPresenter = require('../../presenters/paginator.presenter')
+const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {Object} auth - The auth object taken from `request.auth` containing user details
+ * @param {Object} page - The current page for the pagination service
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
