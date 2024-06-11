@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches requirements for a licence and returns true or false if present
+ * Fetches requirements for a licence and returns and returns a boolean if the licence has requirements for returns
  * @module FetchLicenceHasRequirementsService
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Fetches requirements for a licence and returns true or false if present
+ * Fetches requirements for a licence and returns a boolean if the licence has requirements for returns
  *
  * @param {string} licenceId - The UUID for the licence id to fetch
  *
