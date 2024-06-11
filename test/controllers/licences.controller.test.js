@@ -23,7 +23,7 @@ const ViewLicenceSummaryService = require('../../app/services/licences/view-lice
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Licences controller', () => {
+describe.only('Licences controller', () => {
   let options
   let server
 
@@ -319,6 +319,12 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
+        // Returns for requirements
+        expect(response.payload).to.contain('Returns for requirements')
+        // Returns for requirements present
+        expect(response.payload).to.contain('Set up new returns requirement')
+        expect(response.payload).to.contain('Mark licence as')
+        expect(response.payload).to.contain('no returns needed')
         // Charge information
         expect(response.payload).to.contain('Charge information')
         // Charge information table headers
@@ -453,9 +459,20 @@ function _viewLicenceSetUp () {
     activeTab: 'set-up',
     agreements: [{}],
     chargeInformation: [{ }],
-    setUpAgreement: '/',
-    setupNewCharge: '/',
-    makeLicenceNonChargeable: '/'
+    links: {
+      agreements: {
+        setUpAgreement: '/'
+      },
+      chargeInformation: {
+        setupNewCharge: '/',
+        makeLicenceNonChargeable: '/'
+      },
+      returnsRequirements: {
+        returnsRequired: '/',
+        noReturnsRequired: '/'
+      }
+    },
+    returnsRequirements: [{ }]
   }
 }
 

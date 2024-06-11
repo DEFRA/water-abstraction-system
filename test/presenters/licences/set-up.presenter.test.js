@@ -596,7 +596,7 @@ describe('Licence Set Up presenter', () => {
         })
       })
 
-      describe('when the user wants to charge information', () => {
+      describe('when the user wants to manage charge information', () => {
         describe('and the user can edit a workflow  ', () => {
           describe('and the licence does not end more than 6 years ago', () => {
             it('return the associated links', () => {
@@ -630,6 +630,17 @@ describe('Licence Set Up presenter', () => {
               expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
             })
           })
+        })
+      })
+
+      describe('when the user wants to manage return requirements', () => {
+        it('return the associated links', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+          expect(result.links.returnsRequirements.returnsRequired).to
+            .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required')
+          expect(result.links.returnsRequirements.noReturnsRequired).to
+            .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required')
         })
       })
     })
