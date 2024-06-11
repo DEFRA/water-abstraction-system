@@ -20,7 +20,7 @@ async function go (licenceId) {
   return !!requirement
 }
 
-async function _fetch (licenceId, page) {
+async function _fetch (licenceId) {
   return ReturnVersionModel.query()
     .select([
       'id'
