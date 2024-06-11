@@ -168,7 +168,7 @@
   }) }}
 {% endif %}
 
-{% if setupNewCharge %}
+{% if links.chargeInformation.setupNewCharge %}
   {{ govukButton({
     text: "Set up a new charge",
     href: setupNewCharge,
@@ -176,7 +176,7 @@
   }) }}
 {% endif %}
 
-{% if makeLicenceNonChargeable %}
+{% if links.chargeInformation.makeLicenceNonChargeable %}
   {{ govukButton({
     text: "Make licence non-chargeable",
     href: makeLicenceNonChargeable,
@@ -241,7 +241,7 @@
 {% endif %}
 
 
-{% if setUpAgreement %}
+{% if links.agreements.setUpAgreement %}
   {{ govukButton({
     text: "Set up a new agreement",
     href: setUpAgreement,

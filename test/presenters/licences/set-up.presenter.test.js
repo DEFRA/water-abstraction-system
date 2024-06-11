@@ -28,6 +28,14 @@ describe('Licence Set Up presenter', () => {
     licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
   }
 
+  const returnVersion = {
+    id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+    startDate: new Date('2025-01-01'),
+    endDate: new Date('2025-02-01'),
+    status: 'current',
+    reason: 'change-to-special-agreement'
+  }
+
   const workflow = {
     id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
     createdAt: new Date('2020-01-01'),
@@ -40,6 +48,7 @@ describe('Licence Set Up presenter', () => {
   let auth
   let chargeVersions
   let commonData
+  let returnVersions
   let workflows
 
   beforeEach(() => {
@@ -63,9 +72,10 @@ describe('Licence Set Up presenter', () => {
       }
     }
 
-    chargeVersions = []
-    workflows = []
     agreements = []
+    chargeVersions = []
+    returnVersions = []
+    workflows = []
   })
 
   describe('when provided with populated licence set up data', () => {
@@ -83,7 +93,7 @@ describe('Licence Set Up presenter', () => {
       })
 
       it('correctly presents the agreements data', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
         expect(result.agreements).to.equal([
           {
@@ -111,7 +121,7 @@ describe('Licence Set Up presenter', () => {
 
       describe('when all the actions are available for an agreement', () => {
         it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
           expect(result.agreements[0].action).to.equal([
             {
@@ -137,7 +147,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('there are no actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].action).to.equal([])
           })
@@ -149,7 +159,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('there is no action link to delete', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].action).to.equal([
               {
@@ -170,7 +180,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('there is no action link to end the agreement', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].action).to.equal([
               {
@@ -187,7 +197,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('there is no action link to Recalculate bills', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].action).to.equal([
               {
@@ -209,7 +219,7 @@ describe('Licence Set Up presenter', () => {
             agreement.financialAgreements[0].financialAgreementCode = 'S127'
           })
           it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].description).to.equal('Two-part tariff')
           })
@@ -220,7 +230,7 @@ describe('Licence Set Up presenter', () => {
             agreement.financialAgreements[0].financialAgreementCode = 'S130S'
           })
           it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, supported source (S130S)')
           })
@@ -231,7 +241,7 @@ describe('Licence Set Up presenter', () => {
             agreement.financialAgreements[0].financialAgreementCode = 'S130U'
           })
           it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, unsupported source (S130U)')
           })
@@ -242,59 +252,9 @@ describe('Licence Set Up presenter', () => {
             agreement.financialAgreements[0].financialAgreementCode = 'S126'
           })
           it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].description).to.equal('Abatement')
-          })
-        })
-      })
-
-      describe('when the user can set up agreements', () => {
-        describe('and the licence does not end more than 6 years ago', () => {
-          beforeEach(() => {
-            agreements = [{ ...agreement }]
-          })
-
-          it('correctly presents the set up agreement link ', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
-
-            expect(result.setUpAgreement).to.equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type')
-          })
-        })
-      })
-
-      describe('when the user can not set up agreements ', () => {
-        describe('and the user does not have permission', () => {
-          beforeEach(() => {
-            agreements = [{ ...agreement }]
-
-            auth.credentials.scope = []
-          })
-
-          it('the agreement link is not present', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
-
-            expect(result.setUpAgreement).to.be.undefined()
-          })
-        })
-
-        describe('and the licence ends more than 6 years ago', () => {
-          beforeEach(() => {
-            const sixYearsAndOneDayAgo = new Date()
-            sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-            sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-            commonData.ends = {
-              date: sixYearsAndOneDayAgo
-            }
-
-            agreements = [{ ...agreement }]
-          })
-
-          it('the agreement link is not present', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
-
-            expect(result.setUpAgreement).to.be.undefined()
           })
         })
       })
@@ -305,7 +265,7 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
           expect(result.agreements[0].action).to.equal([
             {
@@ -336,7 +296,7 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
           expect(result.agreements[0].action).to.equal([])
         })
@@ -351,34 +311,29 @@ describe('Licence Set Up presenter', () => {
       })
 
       it('groups both types of data into the \'chargeInformation\' property', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-        expect(result).to.equal({
-          agreements: [],
-          chargeInformation: [
-            {
-              action: [],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 January 2020',
-              endDate: '-',
-              status: 'review',
-              reason: 'changed something'
-            },
-            {
-              action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
-              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-              startDate: '1 January 2020',
-              endDate: '1 September 2020',
-              status: 'approved',
-              reason: 'Major change'
-            }
-          ],
-          makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
-          setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
-        })
+        expect(result.chargeInformation).to.equal([
+          {
+            action: [],
+            id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+            startDate: '1 January 2020',
+            endDate: '-',
+            status: 'review',
+            reason: 'changed something'
+          },
+          {
+            action: [{
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+              text: 'View'
+            }],
+            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+            startDate: '1 January 2020',
+            endDate: '1 September 2020',
+            status: 'approved',
+            reason: 'Major change'
+          }
+        ])
       })
     })
 
@@ -395,24 +350,19 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with a dash for the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          expect(result).to.equal({
-            agreements: [],
-            chargeInformation: [{
-              action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
-              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-              startDate: '1 January 2020',
-              endDate: '-',
-              status: 'approved',
-              reason: 'Major change'
+          expect(result.chargeInformation).to.equal([{
+            action: [{
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+              text: 'View'
             }],
-            makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
-            setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
-          })
+            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+            startDate: '1 January 2020',
+            endDate: '-',
+            status: 'approved',
+            reason: 'Major change'
+          }])
         })
       })
 
@@ -422,24 +372,19 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          expect(result).to.equal({
-            agreements: [],
-            chargeInformation: [{
-              action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
-              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-              startDate: '1 January 2020',
-              endDate: '1 September 2020',
-              status: 'approved',
-              reason: 'Major change'
+          expect(result.chargeInformation).to.equal([{
+            action: [{
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+              text: 'View'
             }],
-            makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
-            setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
-          })
+            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+            startDate: '1 January 2020',
+            endDate: '1 September 2020',
+            status: 'approved',
+            reason: 'Major change'
+          }])
         })
       })
     })
@@ -460,42 +405,34 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-            expect(result).to.equal({
-              agreements: [],
-              chargeInformation: [{
-                action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                  text: 'Review'
-                }],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 January 2020',
-                endDate: '-',
-                status: 'review',
-                reason: 'changed something'
-              }]
-            })
+            expect(result.chargeInformation).to.equal([{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                text: 'Review'
+              }],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 January 2020',
+              endDate: '-',
+              status: 'review',
+              reason: 'changed something'
+            }])
           })
         })
 
         describe('and the user is not permitted to review workflow records', () => {
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-            expect(result).to.equal({
-              agreements: [],
-              chargeInformation: [{
-                action: [],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 January 2020',
-                endDate: '-',
-                status: 'review',
-                reason: 'changed something'
-              }],
-              makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
-              setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
-            })
+            expect(result.chargeInformation).to.equal([{
+              action: [],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 January 2020',
+              endDate: '-',
+              status: 'review',
+              reason: 'changed something'
+            }])
           })
         })
       })
@@ -512,22 +449,19 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-            expect(result).to.equal({
-              agreements: [],
-              chargeInformation: [{
-                action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                  text: 'Review'
-                }],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 January 2020',
-                endDate: '-',
-                status: 'to set up',
-                reason: 'changed something'
-              }]
-            })
+            expect(result.chargeInformation).to.equal([{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                text: 'Review'
+              }],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 January 2020',
+              endDate: '-',
+              status: 'to set up',
+              reason: 'changed something'
+            }])
           })
         })
 
@@ -537,44 +471,166 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-            expect(result).to.equal({
-              agreements: [],
-              chargeInformation: [{
-                action: [],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 January 2020',
-                endDate: '-',
-                status: 'to set up',
-                reason: 'changed something'
-              }]
-            })
+            expect(result.chargeInformation).to.equal([{
+              action: [],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 January 2020',
+              endDate: '-',
+              status: 'to set up',
+              reason: 'changed something'
+            }])
           })
         })
       })
     })
 
-    describe('where the licence \'ends\' more than 6 years ago', () => {
+    describe('that includes return versions', () => {
       beforeEach(() => {
-        const sixYearsAndOneDayAgo = new Date()
-        sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-        sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-        commonData.ends = {
-          date: sixYearsAndOneDayAgo
-        }
-
-        chargeVersions = []
-        workflows = [{ ...workflow }]
-        agreements = []
+        returnVersions = [{ ...returnVersion }]
       })
 
-      it('returns no links for editing', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+      it('correctly presents the returns requirement data', () => {
+        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-        expect(result.makeLicenceNonChargeable).to.be.undefined()
-        expect(result.setupNewCharge).to.be.undefined()
+        expect(result.returnsRequirements).to.equal([
+          {
+            action: [
+              {
+                link: '',
+                text: 'View'
+              }
+            ],
+            endDate: '1 February 2025',
+            reason: 'Change to special agreement',
+            startDate: '1 January 2025',
+            status: 'current'
+          }
+        ])
+      })
+
+      describe('and the data is missing', () => {
+        beforeEach(() => {
+          returnVersions = [{ ...returnVersion, startDate: null, endDate: null, reason: null }]
+        })
+
+        it('correctly presents the returns requirement data with the missing data defaults', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+          expect(result.returnsRequirements).to.equal([
+            {
+              action: [
+                {
+                  link: '',
+                  text: 'View'
+                }
+              ],
+              endDate: '',
+              reason: undefined,
+              startDate: '',
+              status: 'current'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('the "links" property', () => {
+      beforeEach(() => {
+        agreements = []
+        chargeVersions = [{ ...chargeVersion }]
+        workflows = [{ ...workflow }]
+      })
+
+      describe('when the user wants to manage agreements', () => {
+        describe('when the user can set up agreements', () => {
+          describe('and the licence does not end more than 6 years ago', () => {
+            beforeEach(() => {
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope.push('manage_agreements')
+            })
+
+            it('correctly presents the set up agreement link ', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.agreements.setUpAgreement).to.equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type')
+            })
+          })
+        })
+        describe('when the user can not set up agreements ', () => {
+          describe('and the user does not have permission', () => {
+            beforeEach(() => {
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope = []
+            })
+
+            it('the agreement link is not present', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.agreements.setUpAgreement).to.be.undefined()
+            })
+          })
+
+          describe('and the licence ends more than 6 years ago', () => {
+            beforeEach(() => {
+              const sixYearsAndOneDayAgo = new Date()
+              sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+              sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+              commonData.ends = {
+                date: sixYearsAndOneDayAgo
+              }
+
+              agreements = [{ ...agreement }]
+            })
+
+            it('the agreement link is not present', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.setUpAgreement).to.be.undefined()
+            })
+          })
+        })
+      })
+
+      describe('when the user wants to charge information', () => {
+        describe('and the user can edit a workflow  ', () => {
+          describe('and the licence does not end more than 6 years ago', () => {
+            it('return the associated links', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.chargeInformation.makeLicenceNonChargeable).to
+                .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1')
+              expect(result.links.chargeInformation.setupNewCharge).to
+                .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
+            })
+          })
+          describe('and the licence \'ends\' more than 6 years ago', () => {
+            beforeEach(() => {
+              const sixYearsAndOneDayAgo = new Date()
+              sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+              sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+              commonData.ends = {
+                date: sixYearsAndOneDayAgo
+              }
+
+              chargeVersions = []
+              workflows = [{ ...workflow }]
+              agreements = []
+            })
+
+            it('returns no links for editing', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
+              expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
+            })
+          })
+        })
       })
     })
   })

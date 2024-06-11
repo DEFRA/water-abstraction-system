@@ -38,6 +38,8 @@ const agreementDescriptions = {
 function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   return {
     links: {
+      chargeInformation: _chargeInformationLinks(auth, commonData),
+      agreements: _agreementLinks(auth, commonData),
       returnsRequirements: {
         returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
         noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
@@ -45,8 +47,6 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
     },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    ..._agreementButtons(auth, commonData),
-    ..._authorisedLinks(auth, commonData),
     returnsRequirements: _returnsRequirements(returnVersions)
   }
 }
@@ -102,17 +102,17 @@ function _agreementActionLinks (commonData, agreement, auth) {
   return actionLinks
 }
 
-function _agreementButtons (auth, commonData) {
+function _agreementLinks (auth, commonData) {
   if (auth.credentials.scope.includes(roles.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
     }
   }
 
-  return null
+  return {}
 }
 
-function _authorisedLinks (auth, commonData) {
+function _chargeInformationLinks (auth, commonData) {
   if (auth.credentials.scope.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
@@ -177,9 +177,9 @@ function _returnsRequirements (returnVersions = [{}]) {
         text: 'View',
         link: ''
       }],
-      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '-',
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnRequirementReasons[returnVersion.reason],
-      startDate: returnVersion.startDate ? formatLongDate(returnVersion.startDate) : '-',
+      startDate: returnVersion.startDate ? formatLongDate(returnVersion.startDate) : '',
       status: returnVersion.status
     }
   })
