@@ -28,6 +28,9 @@ async function _fetch (licenceId) {
       'status',
       'reason'
     ])
+    .orderBy([
+      { column: 'startDate', order: 'desc' }
+    ])
 }
 
 module.exports = {
