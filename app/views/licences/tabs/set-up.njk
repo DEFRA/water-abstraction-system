@@ -70,19 +70,23 @@
   {% endif %}
 
   {% if links.returnsRequirements.returnsRequired %}
-    {{ govukButton({
-      text: "Set up new returns requirement",
-      href: links.returnsRequirements.returnsRequired,
-      classes: "govuk-button--secondary govuk-!-margin-right-3"
-    }) }}
+    <p>
+      {{ govukButton({
+        text: "Set up new returns requirement",
+        href: links.returnsRequirements.returnsRequired,
+        classes: "govuk-button--secondary govuk-!-margin-right-3"
+      }) }}
+    </p>
   {% endif %}
 
   {% if links.returnsRequirements.noReturnsRequired %}
-    {{ govukButton({
-      text: "Mark licence as 'no returns needed'",
-      href: links.returnsRequirements.noReturnsRequired,
-      classes: "govuk-button--secondary govuk-!-margin-right-3"
-    }) }}
+    <p>
+      {{ govukButton({
+        text: "Mark licence as 'no returns needed'",
+        href: links.returnsRequirements.noReturnsRequired,
+        classes: "govuk-button--secondary govuk-!-margin-right-3"
+      }) }}
+    </p>
   {% endif %}
 {% endif %}
 
@@ -141,19 +145,23 @@
 {% endif %}
 
 {% if links.chargeInformation.setupNewCharge %}
-  {{ govukButton({
-    text: "Set up a new charge",
-    href: setupNewCharge,
-    classes: "govuk-button--secondary govuk-!-margin-right-3"
-  }) }}
+  <p>
+    {{ govukButton({
+      text: "Set up a new charge",
+      href: setupNewCharge,
+      classes: "govuk-button--secondary govuk-!-margin-right-3"
+    }) }}
+  </p>
 {% endif %}
 
 {% if links.chargeInformation.makeLicenceNonChargeable %}
-  {{ govukButton({
-    text: "Make licence non-chargeable",
-    href: makeLicenceNonChargeable,
-    classes: "govuk-button--secondary"
-  }) }}
+  <p>
+    {{ govukButton({
+      text: "Make licence non-chargeable",
+      href: makeLicenceNonChargeable,
+      classes: "govuk-button--secondary"
+    }) }}
+  </p>
 {% endif %}
 
 <hr />
