@@ -15,7 +15,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 const FetchLicenceHasRequirementsService =
   require('../../../app/services/licences/fetch-licence-has-requirements.service.js')
 
-describe.only('Fetch Licence Has Requirements service', () => {
+describe('Fetch Licence Has Requirements service', () => {
   let returnVersion
 
   beforeEach(async () => {
