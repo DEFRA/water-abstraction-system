@@ -19,6 +19,7 @@ exports.up = function (knex) {
         'site_description',
         'legacy_id',
         'external_id',
+        'reporting_frequency',
         'collection_frequency',
         'gravity_fill',
         'reabstraction',
