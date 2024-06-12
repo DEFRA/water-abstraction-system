@@ -90,7 +90,7 @@ describe('Return Requirements - Submit Existing service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
-          pageTitle: 'Select an existing requirements for returns from',
+          pageTitle: 'Use previous requirements for returns',
           existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
           licenceRef: '01/ABC'
         }, { skip: ['sessionId', 'error'] })
@@ -100,7 +100,7 @@ describe('Return Requirements - Submit Existing service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitExistingService.go(session.id, payload)
 
-          expect(result.error).to.equal({ text: 'Select an existing requirements for returns' })
+          expect(result.error).to.equal({ text: 'Use previous requirements for returns' })
         })
       })
     })
