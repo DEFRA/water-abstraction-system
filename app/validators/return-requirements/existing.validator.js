@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const errorMessage = 'Select an existing requirements for returns'
+const errorMessage = 'Use previous requirements for returns'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/existing` page

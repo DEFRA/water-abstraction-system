@@ -312,7 +312,7 @@ describe('Return requirements controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ExistingService, 'go').resolves({
-            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select an existing requirements for returns from'
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Use previous requirements for returns'
           })
         })
 
@@ -320,7 +320,7 @@ describe('Return requirements controller', () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select an existing requirements for returns from')
+          expect(response.payload).to.contain('Use previous requirements for returns')
         })
       })
     })

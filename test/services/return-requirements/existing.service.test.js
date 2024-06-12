@@ -54,7 +54,7 @@ describe('Return Requirements - Existing service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'Select an existing requirements for returns from',
+        pageTitle: 'Use previous requirements for returns',
         existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
         licenceRef: '01/ABC'
       }, { skip: ['sessionId'] })
