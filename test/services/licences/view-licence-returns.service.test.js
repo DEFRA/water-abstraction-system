@@ -41,7 +41,7 @@ describe('View Licence service returns', () => {
     Sinon.restore()
   })
 
-  describe.only('when a return', () => {
+  describe('when a return', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
         const result = await ViewLicenceReturnsService.go(returnVersion.licenceId, auth, page)
