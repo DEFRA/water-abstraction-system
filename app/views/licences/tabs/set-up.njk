@@ -21,24 +21,6 @@
   {% if returnVersions.length > 0 %}
     {% set returnVersionsTableRows = [] %}
 
-    {% set returnVersionsTableHead = [
-      {
-        text: "Start date"
-      },
-      {
-        text: "End date"
-      },
-      {
-        text: "Reason"
-      },
-      {
-        text: "Status"
-      },
-      {
-        text: "Action"
-      }
-    ] %}
-
     {% for returnsRequirement in returnVersions %}
       {% set returnVersionsTableRows = (returnVersionsTableRows.push([
         {
@@ -59,9 +41,24 @@
       ]), returnVersionsTableRows) %}
     {% endfor %}
 
-
     {{ govukTable({
-        head: returnVersionsTableHead,
+        head: [
+        {
+          text: "Start date"
+        },
+        {
+          text: "End date"
+        },
+        {
+          text: "Reason"
+        },
+        {
+          text: "Status"
+        },
+        {
+          text: "Action"
+        }
+      ],
         rows: returnVersionsTableRows
       }) }}
   {% endif %}
@@ -96,24 +93,6 @@
 {% if chargeInformation.length > 0 %}
   {% set chargeVersionRows = [] %}
 
-  {% set chargeVersionHead = [
-    {
-      text: "Start date"
-    },
-    {
-      text: "End date"
-    },
-    {
-      text: "Reason"
-    },
-    {
-      text: "Status"
-    },
-    {
-      text: "Action"
-    }
-  ] %}
-
   {% for chargeVersion in  chargeInformation %}
     {% set chargeVersionRows = (chargeVersionRows.push([
       {
@@ -136,7 +115,23 @@
 
 
   {{ govukTable({
-    head: chargeVersionHead,
+    head: [
+      {
+        text: "Start date"
+      },
+      {
+        text: "End date"
+      },
+      {
+        text: "Reason"
+      },
+      {
+        text: "Status"
+      },
+      {
+        text: "Action"
+      }
+    ],
     rows: chargeVersionRows
   }) }}
 {% endif %}
@@ -173,24 +168,6 @@
 
   {% set agreementRows = [] %}
 
-  {% set agreementHead = [
-    {
-      text: "Start date"
-    },
-    {
-      text: "End date"
-    },
-    {
-      text: "Agreement"
-    },
-    {
-      text: "Date signed"
-    },
-    {
-      text: "Action"
-    }
-  ] %}
-
   {% for agreement in  agreements %}
     {% set agreementRows = (agreementRows.push([
       {
@@ -212,7 +189,23 @@
   {% endfor %}
 
   {{ govukTable({
-    head: agreementHead,
+    head: [
+      {
+        text: "Start date"
+      },
+      {
+        text: "End date"
+      },
+      {
+        text: "Agreement"
+      },
+      {
+        text: "Date signed"
+      },
+      {
+        text: "Action"
+      }
+    ],
     rows: agreementRows
   }) }}
 {% endif %}
