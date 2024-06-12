@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
 const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
@@ -24,6 +25,8 @@ describe('View Licence Set Up service', () => {
   let auth = {}
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+
     Sinon.stub(FetchAgreementsService, 'go').returns([
       {
         id: '123',
@@ -124,7 +127,7 @@ describe('View Licence Set Up service', () => {
             status: 'approved'
           }
         ],
-        enableRequirementsForReturns: true,
+        enableRequirementsForReturns: false,
         licenceId: testId,
         licenceName: 'fake licence',
         links: {
