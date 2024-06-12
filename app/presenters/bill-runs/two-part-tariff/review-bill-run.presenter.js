@@ -14,24 +14,24 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
  * issue this will be a string, not an array
- * @param {String} filterLicenceHolder The licence holder to filter the results by. This will only contain data when
- * there is a POST request, which only occurs when a filter is applied to the results.
+ * @param {String} filterLicenceHolderNumber The licence holder or licence number to filter the results by. This will
+ * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
  * @param {module:LicenceModel} licences The licences data associated with the bill run
  *
  * @returns {Object} The prepared bill run,licence and filter data to be passed to the review page
  */
-function go (billRun, filterIssues, filterLicenceHolder, filterLicenceStatus, licences) {
+function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, licences) {
   const preparedLicences = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences)
 
   const issues = filterIssues ? _prepareIssues(filterIssues) : filterIssues
 
-  const filter = { issues, licenceHolder: filterLicenceHolder, licenceStatus: filterLicenceStatus }
+  const filter = { issues, licenceHolderNumber: filterLicenceHolderNumber, licenceStatus: filterLicenceStatus }
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filter.openFilter = (filterIssues || filterLicenceHolder || filterLicenceStatus) !== undefined
+  filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus) !== undefined
 
   return { ...preparedBillRun, preparedLicences, filter }
 }
