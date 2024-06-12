@@ -35,7 +35,7 @@
   {% for returnItem in  returns %}
     {% set returnRows = (returnRows.push([
       {
-        html: referneceColum(returnItem)
+        html: referenceColumn(returnItem)
       },
       {
         html:  returnItem.purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>"
