@@ -39,7 +39,7 @@ describe('Return Requirements - Check presenter', () => {
         additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
         note: null,
-        pageTitle: 'Check the return requirements for Turbo Kid',
+        pageTitle: 'Check the requirements for returns for Turbo Kid',
         reason: 'Major change',
         reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
@@ -100,7 +100,7 @@ describe('Return Requirements - Check presenter', () => {
     it('returns the page title combined with the licence holder name', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result.pageTitle).to.equal('Check the return requirements for Turbo Kid')
+      expect(result.pageTitle).to.equal('Check the requirements for returns for Turbo Kid')
     })
   })
 
