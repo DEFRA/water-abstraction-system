@@ -6,7 +6,7 @@
 
 {% macro newLine(array) %}
   {% for item in array %}
-    <p> {{ item }}</p>
+    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
   {% endfor %}
 {% endmacro %}
 
@@ -37,13 +37,13 @@
             text: "Start date"
           },
           value: {
-            html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
+            html: '<span data-test="start-date">' + startDate + '</span>'
           },
           actions: {
             items: [
               {
+                html: '<span data-test="change-start-date">' + 'Change' + '</span>',
                 href: "/system/return-requirements/" + sessionId + "/start-date",
-                text: "Change",
                 visuallyHiddenText: "the start date for the return requirement"
               }
             ]
@@ -55,13 +55,13 @@
             text: "Reason"
           },
           value: {
-            html: '<span data-test="meta-data-reason">' + reason + '</span>'
+            html: '<span data-test="reason">' + reason + '</span>'
           },
           actions: {
             items: [
               {
+                html: '<span data-test="change-reason">' + 'Change' + '</span>',
                 href: reasonLink,
-                text: "Change",
                 visuallyHiddenText: "the reason for the return requirement"
               }
             ]
@@ -90,6 +90,7 @@
           actions: {
             items: [
               {
+                attributes: { 'data-test': 'note' },
                 href: "note",
                 text: "Change" if note else "Add a note"
               },
@@ -116,12 +117,16 @@
         }) }}
       </form>
       {% for requirement in requirements %}
+        {% set rowIndex = loop.index0 %}
         <div>
             {{ govukSummaryList({
               card: {
                 title: {
                   text: requirement.siteDescription
                 }
+              },
+              attributes: {
+                'data-test': 'requirement-' + rowIndex
               },
               classes: "govuk-summary-list--no-border",
               rows: [
@@ -130,13 +135,14 @@
                     text: "Purpose"
                   },
                   value: {
-                    html: newLine(requirement.purposes)
+                    html: '<span data-test="purposes-' + rowIndex + '">' + newLine(requirement.purposes) + '</span>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "purpose/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-purposes-' + rowIndex },
+                        href: "purpose/" + requirement.index ,
                         visuallyHiddenText: "Purpose"
                       }
                     ]
@@ -147,13 +153,14 @@
                     text: "Points"
                   },
                   value: {
-                    html: newLine(requirement.points)
+                    html: '<span data-test="points-' + rowIndex + '">' + newLine(requirement.points) + '</span>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "points/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-points-' + rowIndex },
+                        href: "points/" + requirement.index ,
                         visuallyHiddenText: "Point"
                       }
                     ]
@@ -164,13 +171,14 @@
                     text: "Abstraction period"
                   },
                   value: {
-                    html: requirement.abstractionPeriod
+                    html: '<p data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "abstraction-period/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-abstraction-period-' + rowIndex },
+                        href: "abstraction-period/" + requirement.index ,
                         visuallyHiddenText: "Abstraction period"
                       }
                     ]
@@ -181,13 +189,14 @@
                     text: "Returns cycle"
                   },
                   value: {
-                    text: requirement.returnsCycle
+                    html: '<p data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "returns-cycle/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-returns-cycle-' + rowIndex },
+                        href: "returns-cycle/" + requirement.index ,
                         visuallyHiddenText: "Returns cycle"
                       }
                     ]
@@ -198,13 +207,14 @@
                     text: "Site description"
                   },
                   value: {
-                    html: requirement.siteDescription
+                    html: '<p data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "site-description/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-site-description-' + rowIndex },
+                        href: "site-description/" + requirement.index ,
                         visuallyHiddenText: "Site description"
                       }
                     ]
@@ -215,13 +225,14 @@
                     text: "Collection"
                   },
                   value: {
-                    html: requirement.frequencyCollected | capitalize
+                    html: '<p data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "frequency-collected/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-frequency-collected-' + rowIndex },
+                        href: "frequency-collected/" + requirement.index ,
                         visuallyHiddenText: "Collection"
                       }
                     ]
@@ -232,13 +243,14 @@
                     text: "Reporting"
                   },
                   value: {
-                    html: requirement.frequencyReported | capitalize
+                    html: '<p data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "frequency-reported/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-frequency-reported-' + rowIndex },
+                        href: "frequency-reported/" + requirement.index ,
                         visuallyHiddenText: "Reporting"
                       }
                     ]
@@ -249,13 +261,14 @@
                     text: "Agreements exceptions"
                   },
                   value: {
-                    text: requirement.agreementsExceptions
+                    html: '<p data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</p>'
                   },
                   actions: {
                     items: [
                       {
-                        href: "agreements-exceptions/" + requirement.index ,
                         text: "Change",
+                        attributes: { 'data-test': 'change-agreements-exceptions-' + rowIndex },
+                        href: "agreements-exceptions/" + requirement.index ,
                         visuallyHiddenText: "Agreements exception"
                       }
                     ]
@@ -265,7 +278,8 @@
                   key: {
                   html:  govukButton({
                     text: "Remove requirement",
-                    classes: "govuk-button--secondary",
+                    classes: "govuk-button--secondary" ,
+                    attributes: { 'data-test': 'remove-' + rowIndex },
                     preventDoubleClick: true,
                     href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
                   }) if requirements.length >= 2

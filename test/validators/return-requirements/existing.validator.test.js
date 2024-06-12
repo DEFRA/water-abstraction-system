@@ -36,7 +36,7 @@ describe('Existing validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select an existing requirements for returns')
+        expect(result.error.details[0].message).to.equal('Use previous requirements for returns')
       })
     })
 
@@ -46,7 +46,7 @@ describe('Existing validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select an existing requirements for returns')
+        expect(result.error.details[0].message).to.equal('Use previous requirements for returns')
       })
     })
   })

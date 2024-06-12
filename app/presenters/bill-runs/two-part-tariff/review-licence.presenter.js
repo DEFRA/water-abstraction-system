@@ -95,6 +95,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
+      purpose: reviewChargeElement.chargeElement.purpose.description,
       issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
       billableReturns: `${reviewChargeElement.amendedAllocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
