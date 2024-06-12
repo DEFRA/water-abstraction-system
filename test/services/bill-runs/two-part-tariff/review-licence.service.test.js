@@ -163,7 +163,10 @@ function _fetchReviewLicenceResults () {
               abstractionPeriodStartMonth: 4,
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
-              authorisedAnnualQuantity: 200
+              authorisedAnnualQuantity: 200,
+              purpose: {
+                description: 'Spray irrigation - direct'
+              }
             },
             reviewReturns: [{
               id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',
