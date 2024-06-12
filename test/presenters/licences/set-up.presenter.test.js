@@ -527,7 +527,7 @@ describe('Licence Set Up presenter', () => {
                 }
               ],
               endDate: '',
-              reason: undefined,
+              reason: '',
               startDate: '',
               status: 'current'
             }
