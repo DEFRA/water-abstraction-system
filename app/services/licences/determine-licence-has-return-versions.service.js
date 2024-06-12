@@ -26,6 +26,7 @@ async function _fetch (licenceId) {
       'id'
     ])
     .where('licenceId', licenceId)
+    .limit(1)
     .first()
 }
 
