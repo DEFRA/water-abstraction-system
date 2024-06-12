@@ -12,7 +12,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {string} licenceId - The UUID of the licence to determine if return versions exist
  *
- * @returns {Promise<Boolean>} the result of check if a licence has requirements for returns
+ * @returns {Promise<Boolean>} true if the licence has return versions else false
  */
 async function go (licenceId) {
   const requirement = await _fetch(licenceId)
