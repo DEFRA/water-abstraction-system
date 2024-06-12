@@ -39,6 +39,14 @@ class ReturnRequirementPurposeModel extends BaseModel {
           from: 'returnRequirementPurposes.returnRequirementId',
           to: 'returnRequirements.id'
         }
+      },
+      secondaryPurpose: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'secondary-purpose.model.js',
+        join: {
+          from: 'returnRequirementPurposes.secondaryPurposeId',
+          to: 'secondaryPurposes.id'
+        }
       }
     }
   }

@@ -39,6 +39,14 @@ class LicenceVersionPurposeModel extends BaseModel {
           from: 'licenceVersionPurposes.purposeId',
           to: 'purposes.id'
         }
+      },
+      secondaryPurpose: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'secondary-purpose.model.js',
+        join: {
+          from: 'licenceVersionPurposes.secondaryPurposeId',
+          to: 'secondaryPurposes.id'
+        }
       }
     }
   }

@@ -14,6 +14,8 @@ const LicenceVersionHelper = require('../support/helpers/licence-version.helper.
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
+const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
@@ -96,6 +98,36 @@ describe('Licence Version Purposes model', () => {
 
         expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
         expect(result.primaryPurpose.id).to.equal(testPrimaryPurpose.id)
+      })
+    })
+
+    describe('when linking to secondary purpose', () => {
+      let testSecondaryPurpose
+
+      beforeEach(async () => {
+        testSecondaryPurpose = await SecondaryPurposeHelper.add()
+
+        const { id: secondaryPurposeId } = testSecondaryPurpose
+        testRecord = await LicenceVersionPurposeHelper.add({ secondaryPurposeId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query()
+          .innerJoinRelated('secondaryPurpose')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the secondary purpose', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('secondaryPurpose')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.secondaryPurpose).to.be.an.instanceOf(SecondaryPurposeModel)
+        expect(result.secondaryPurpose.id).to.equal(testSecondaryPurpose.id)
       })
     })
   })
