@@ -175,6 +175,41 @@ describe('Fetch Bill Run Licences service', () => {
         })
       })
 
+      describe('and a filter has been applied to the licence number', () => {
+        beforeEach(() => {
+          filterIssues = undefined
+          filterLicenceHolderNumber = '02/200'
+          filterLicenceStatus = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(
+            billRun.id,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterLicenceStatus,
+            page
+          )
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+
+          expect(result.licences.total).to.equal(1)
+          expect(result.licences.results).to.have.length(1)
+          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences.results[0].licenceRef).to.equal('02/200')
+          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
+          expect(result.licences.results[0].status).to.equal('review')
+        })
+      })
+
       describe('and a filter has been applied to the licence status', () => {
         beforeEach(() => {
           filterIssues = undefined
