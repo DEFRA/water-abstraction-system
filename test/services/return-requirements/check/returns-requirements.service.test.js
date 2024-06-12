@@ -79,7 +79,7 @@ describe('Return Requirements service', () => {
           frequencyReported: 'daily',
           index: 0,
           points: [
-            'At National Grid Reference TQ 1234 1234 (Test local name)'
+            'At National Grid Reference TQ 1234 1234 (Test local name 1)'
           ],
           purposes: [
             'Spray Irrigation - Storage'
@@ -96,7 +96,7 @@ describe('Return Requirements service', () => {
         const result = await ReturnRequirementsService.go(session)
 
         expect(result.requirements[0].points).to.equal([
-          'At National Grid Reference TQ 1234 1234 (Test local name)'
+          'At National Grid Reference TQ 1234 1234 (Test local name 1)'
         ])
       })
     })

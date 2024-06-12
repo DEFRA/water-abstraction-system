@@ -362,23 +362,48 @@ function _licenceDataValue (licenceRef) {
                   ID: '9000031',
                   AADD_ID: '9000020',
                   NGR1_EAST: '1234',
-                  LOCAL_NAME: 'Test local name',
+                  LOCAL_NAME: 'Test local name 1',
                   NGR1_NORTH: '1234',
                   NGR1_SHEET: 'TQ',
                   FGAC_REGION_CODE: '9'
                 },
                 point_source: {
                   CODE: 'ABC',
-                  NAME: 'Test point source name',
-                  NOTES: 'Test point source notes',
+                  NAME: 'Test point source name 1',
+                  NOTES: 'Test point source notes 1',
                   CART_NORTH: '1234',
-                  LOCAL_NAME: 'Test local name',
+                  LOCAL_NAME: 'Test local name 1',
                   FGAC_REGION_CODE: '9'
                 },
                 FGAC_REGION_CODE: '9',
                 means_of_abstraction: {
                   CODE: 'UNP',
-                  DESCR: 'Unspecified Pump'
+                  DESCR: 'Unspecified Pump 1'
+                }
+              },
+              {
+                NOTES: 'null',
+                point_detail: {
+                  ID: '9000032',
+                  AADD_ID: '9000022',
+                  NGR1_EAST: '5678',
+                  LOCAL_NAME: 'Test local name 2',
+                  NGR1_NORTH: '5678',
+                  NGR1_SHEET: 'TT',
+                  FGAC_REGION_CODE: '9'
+                },
+                point_source: {
+                  CODE: 'DEF',
+                  NAME: 'Test point source name 2',
+                  NOTES: 'Test point source notes 2',
+                  CART_NORTH: '5678',
+                  LOCAL_NAME: 'Test local name 2',
+                  FGAC_REGION_CODE: '9'
+                },
+                FGAC_REGION_CODE: '9',
+                means_of_abstraction: {
+                  CODE: 'UNP',
+                  DESCR: 'Unspecified Pump 2'
                 }
               }
             ],
