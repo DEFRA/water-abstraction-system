@@ -16,24 +16,26 @@ const FetchLicenceHasRequirementsService =
   require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 
 describe('Fetch Licence Has Requirements service', () => {
-  let returnVersion
+  const licenceId = 'e004c0c9-0316-42fc-a6e3-5ae9a271b3c6'
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
 
-  describe('when the licence has return versions data', () => {
+  describe('when the licence has return versions', () => {
     beforeEach(async () => {
-      returnVersion = await ReturnVersionHelper.add()
+      await ReturnVersionHelper.add({ licenceId })
     })
 
-    it('returns true a licence has any return versions', async () => {
-      const result = await FetchLicenceHasRequirementsService.go(returnVersion.licenceId)
+    it('returns true', async () => {
+      const result = await FetchLicenceHasRequirementsService.go(licenceId)
 
       expect(result).to.be.true()
     })
+  })
 
-    it('returns false no return versions for licence', async () => {
+  describe('when the licence does not have return versions', () => {
+    it('returns false', async () => {
       const result = await FetchLicenceHasRequirementsService.go('ed3b9b1a-94e0-480c-8ad6-60e05f5fa9f4')
 
       expect(result).to.be.false()
