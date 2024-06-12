@@ -17,7 +17,7 @@ function go (session) {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     licenceRef: licence.licenceRef,
     note: note ? note.content : null,
-    pageTitle: `Check the return requirements for ${licence.licenceHolder}`,
+    pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
