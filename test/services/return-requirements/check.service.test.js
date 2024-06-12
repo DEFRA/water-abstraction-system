@@ -69,7 +69,7 @@ describe('Return Requirements - Check service', () => {
         licenceRef: '01/ABC',
         note: null,
         notification: undefined,
-        pageTitle: 'Check the return requirements for Turbo Kid',
+        pageTitle: 'Check the requirements for returns for Turbo Kid',
         reason: 'Major change',
         reasonLink: `/system/return-requirements/${session.id}/reason`,
         requirements: [],
