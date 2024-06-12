@@ -179,7 +179,7 @@ function _returnsVersions (returnVersions = [{}]) {
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
-      startDate: returnVersion.startDate ? formatLongDate(returnVersion.startDate) : '',
+      startDate: formatLongDate(returnVersion.startDate),
       status: returnVersion.status
     }
   })
