@@ -217,11 +217,13 @@ describe('Licence Version Purposes model', () => {
 
     describe('but the secondary purpose is not "ELC" (Electricity)', () => {
       beforeEach(async () => {
-        await LicenceVersionPurposeHelper.add({
+        const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
           primaryPurposeId: validPrimaryPurpose.id,
           secondaryPurposeId: invalidSecondaryPurpose.id,
           purposeId: validPurpose.id
         })
+
+        testRecord = await LicenceVersionPurposeModel.query().findById(licenceVersionPurpose.id).modify('allPurposes')
       })
 
       it('returns false', () => {
@@ -233,11 +235,13 @@ describe('Licence Version Purposes model', () => {
 
     describe('but the purpose is not "200" or "240"', () => {
       beforeEach(async () => {
-        await LicenceVersionPurposeHelper.add({
+        const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
           primaryPurposeId: validPrimaryPurpose.id,
           secondaryPurposeId: validSecondaryPurpose.id,
           purposeId: invalidPurpose.id
         })
+
+        testRecord = await LicenceVersionPurposeModel.query().findById(licenceVersionPurpose.id).modify('allPurposes')
       })
 
       it('returns false', () => {
@@ -249,11 +253,13 @@ describe('Licence Version Purposes model', () => {
 
     describe('and the purpose plus primary and secondary purpose are all electricity generating', () => {
       beforeEach(async () => {
-        await LicenceVersionPurposeHelper.add({
+        const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
           primaryPurposeId: validPrimaryPurpose.id,
           secondaryPurposeId: validSecondaryPurpose.id,
           purposeId: validPurpose.id
         })
+
+        testRecord = await LicenceVersionPurposeModel.query().findById(licenceVersionPurpose.id).modify('allPurposes')
       })
 
       it('returns true', () => {
