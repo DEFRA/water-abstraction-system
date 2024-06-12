@@ -37,12 +37,12 @@
             text: "Start date"
           },
           value: {
-            html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
+            html: '<span data-test="start-date">' + startDate + '</span>'
           },
           actions: {
             items: [
               {
-                html: '<span data-test="meta-data-change-start-date">' + 'Change' + '</span>',
+                html: '<span data-test="change-start-date">' + 'Change' + '</span>',
                 href: "/system/return-requirements/" + sessionId + "/start-date",
                 visuallyHiddenText: "the start date for the return requirement"
               }
@@ -55,12 +55,12 @@
             text: "Reason"
           },
           value: {
-            html: '<span data-test="meta-data-reason">' + reason + '</span>'
+            html: '<span data-test="reason">' + reason + '</span>'
           },
           actions: {
             items: [
               {
-                html: '<span data-test="meta-data-change-reason">' + 'Change' + '</span>',
+                html: '<span data-test="change-reason">' + 'Change' + '</span>',
                 href: reasonLink,
                 visuallyHiddenText: "the reason for the return requirement"
               }
@@ -116,6 +116,7 @@
         }) }}
       </form>
       {% for requirement in requirements %}
+        {% set rowIndex = loop.index0 %}
         <div>
             {{ govukSummaryList({
               card: {
@@ -124,7 +125,7 @@
                 }
               },
               attributes: {
-                'data-test': 'meta-data-requirement-' + requirement.index
+                'data-test': 'requirement-' + rowIndex
               },
               classes: "govuk-summary-list--no-border",
               rows: [
@@ -133,13 +134,13 @@
                     text: "Purpose"
                   },
                   value: {
-                    html: '<span data-test="meta-data-purposes-' + requirement.index + '">' + newLine(requirement.purposes) + '</span>'
+                    html: '<span data-test="purposes-' + rowIndex + '">' + newLine(requirement.purposes) + '</span>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-purposes-' + requirement.index },
+                        attributes: { 'data-test': 'change-purposes-' + rowIndex },
                         href: "purpose/" + requirement.index ,
                         visuallyHiddenText: "Purpose"
                       }
@@ -151,13 +152,13 @@
                     text: "Points"
                   },
                   value: {
-                    html: '<span data-test="meta-data-points-' + requirement.index + '">' + newLine(requirement.points) + '</span>'
+                    html: '<span data-test="points-' + rowIndex + '">' + newLine(requirement.points) + '</span>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-points-' + requirement.index },
+                        attributes: { 'data-test': 'change-points-' + rowIndex },
                         href: "points/" + requirement.index ,
                         visuallyHiddenText: "Point"
                       }
@@ -169,13 +170,13 @@
                     text: "Abstraction period"
                   },
                   value: {
-                    html: '<p data-test="meta-data-abstraction-period-' + requirement.index + '">' + requirement.abstractionPeriod + '</p>'
+                    html: '<p data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-abstraction-period-' + requirement.index },
+                        attributes: { 'data-test': 'change-abstraction-period-' + rowIndex },
                         href: "abstraction-period/" + requirement.index ,
                         visuallyHiddenText: "Abstraction period"
                       }
@@ -187,13 +188,13 @@
                     text: "Returns cycle"
                   },
                   value: {
-                    html: '<p data-test="meta-data-returns-cycle-' + requirement.index + '">' + requirement.returnsCycle + '</p>'
+                    html: '<p data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-returns-cycle-' + requirement.index },
+                        attributes: { 'data-test': 'change-returns-cycle-' + rowIndex },
                         href: "returns-cycle/" + requirement.index ,
                         visuallyHiddenText: "Returns cycle"
                       }
@@ -205,13 +206,13 @@
                     text: "Site description"
                   },
                   value: {
-                    html: '<p data-test="meta-data-site-description-' + requirement.index + '">' + requirement.siteDescription + '</p>'
+                    html: '<p data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-site-description-' + requirement.index },
+                        attributes: { 'data-test': 'change-site-description-' + rowIndex },
                         href: "site-description/" + requirement.index ,
                         visuallyHiddenText: "Site description"
                       }
@@ -223,13 +224,13 @@
                     text: "Collection"
                   },
                   value: {
-                    html: '<p data-test="meta-data-frequency-collected-' + requirement.index + '">' + requirement.frequencyCollected | capitalize + '</p>'
+                    html: '<p data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-frequency-collected-' + requirement.index },
+                        attributes: { 'data-test': 'change-frequency-collected-' + rowIndex },
                         href: "frequency-collected/" + requirement.index ,
                         visuallyHiddenText: "Collection"
                       }
@@ -241,13 +242,13 @@
                     text: "Reporting"
                   },
                   value: {
-                    html: '<p data-test="meta-data-frequency-reported-' + requirement.index + '">' + requirement.frequencyReported | capitalize + '</p>'
+                    html: '<p data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-frequency-reported-' + requirement.index },
+                        attributes: { 'data-test': 'change-frequency-reported-' + rowIndex },
                         href: "frequency-reported/" + requirement.index ,
                         visuallyHiddenText: "Reporting"
                       }
@@ -259,13 +260,13 @@
                     text: "Agreements exceptions"
                   },
                   value: {
-                    html: '<p data-test="meta-data-agreements-exceptions-' + requirement.index + '">' + requirement.agreementsExceptions + '</p>'
+                    html: '<p data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</p>'
                   },
                   actions: {
                     items: [
                       {
                         text: "Change",
-                        attributes: { 'data-test': 'meta-data-change-agreements-exceptions-' + requirement.index },
+                        attributes: { 'data-test': 'change-agreements-exceptions-' + rowIndex },
                         href: "agreements-exceptions/" + requirement.index ,
                         visuallyHiddenText: "Agreements exception"
                       }
@@ -277,7 +278,7 @@
                   html:  govukButton({
                     text: "Remove requirement",
                     classes: "govuk-button--secondary" ,
-                    attributes: { 'data-test': 'meta-data-remove-' + requirement.index },
+                    attributes: { 'data-test': 'remove-' + rowIndex },
                     preventDoubleClick: true,
                     href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
                   }) if requirements.length >= 2
