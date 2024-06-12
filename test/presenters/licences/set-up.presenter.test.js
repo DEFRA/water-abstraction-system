@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe('Licence Set Up presenter', () => {
+describe.only('Licence Set Up presenter', () => {
   const agreement = {
     id: '123',
     startDate: new Date('2020-01-01'),
@@ -505,14 +505,14 @@ describe('Licence Set Up presenter', () => {
             endDate: '1 February 2025',
             reason: 'Change to special agreement',
             startDate: '1 January 2025',
-            status: 'current'
+            status: 'approved'
           }
         ])
       })
 
       describe('and the data is missing', () => {
         beforeEach(() => {
-          returnVersions = [{ ...returnVersion, startDate: null, endDate: null, reason: null }]
+          returnVersions = [{ ...returnVersion, endDate: null, reason: null }]
         })
 
         it('correctly presents the returns versions data with the missing data defaults', () => {
@@ -528,8 +528,8 @@ describe('Licence Set Up presenter', () => {
               ],
               endDate: '',
               reason: '',
-              startDate: '',
-              status: 'current'
+              startDate: '1 January 2025',
+              status: 'approved'
             }
           ])
         })

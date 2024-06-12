@@ -180,7 +180,7 @@ function _returnsVersions (returnVersions = [{}]) {
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
       startDate: formatLongDate(returnVersion.startDate),
-      status: returnVersion.status
+      status: _status(returnVersion.status)
     }
   })
 }
