@@ -103,9 +103,8 @@ async function _fetchReviewLicence (licenceId, billRunId) {
       ])
     })
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.chargeElement.purpose')
-    .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
-      builder
-        .select(['description'])
+    .modifyGraph('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.chargeElement.purpose', (builder) => {
+      builder.select(['description'])
     })
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 }
