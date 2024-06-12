@@ -26,7 +26,7 @@ async function go (licenceId, auth, page) {
   const returnsData = await FetchLicenceReturnsService.go(licenceId, page)
   const pageData = ViewLicenceReturnsPresenter.go(returnsData)
 
-  const hasRequirements = await LicenceHasRequirements(licenceId)
+  const hasRequirements = await _licenceHasRequirements(licenceId)
 
   const pagination = PaginatorPresenter.go(returnsData.pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 
@@ -38,7 +38,7 @@ async function go (licenceId, auth, page) {
   }
 }
 
-async function LicenceHasRequirements (licenceId) {
+async function _licenceHasRequirements (licenceId) {
   const requirement = await ReturnVersionModel.query()
     .select([
       'id'
