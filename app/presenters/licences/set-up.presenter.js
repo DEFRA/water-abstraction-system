@@ -170,7 +170,7 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreements[0].financialAgreementCode
 }
 
-function _returnsVersions (returnVersions = [{}]) {
+function _returnVersions (returnVersions = [{}]) {
   return returnVersions.map((returnVersion) => {
     return {
       action: [{
