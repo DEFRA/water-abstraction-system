@@ -19,7 +19,7 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
 
-describe.only('View Licence service returns', () => {
+describe('View Licence service returns', () => {
   let returnVersion
 
   const page = 1
