@@ -102,6 +102,11 @@ async function _fetchReviewLicence (licenceId, billRunId) {
         'authorisedAnnualQuantity'
       ])
     })
+    .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.chargeElement.purpose')
+    .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
+      builder
+        .select(['description'])
+    })
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 }
 
