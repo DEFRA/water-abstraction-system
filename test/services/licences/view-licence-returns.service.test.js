@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
-const FetchLicenceHasRequirementsService = require('../../../app/services/licences/fetch-licence-has-requirements.service.js')
 const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
@@ -25,7 +25,7 @@ describe('View Licence service returns', () => {
   const pagination = { page }
 
   beforeEach(async () => {
-    Sinon.stub(FetchLicenceHasRequirementsService, 'go').returns(true)
+    Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
 
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
       pagination: { total: 1 },

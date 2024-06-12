@@ -13,7 +13,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 
 // Thing under test
 const FetchLicenceHasRequirementsService =
-  require('../../../app/services/licences/fetch-licence-has-requirements.service.js')
+  require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 
 describe('Fetch Licence Has Requirements service', () => {
   let returnVersion
