@@ -14,12 +14,12 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
  * elements linked to the licence.
  *
  * But the review screens in the UI work from the context of a licence and the main page needs to show whether a licence
- * has any issues and whether it is in 'review'. Only when a user clicks through to look at a the results for a licence
+ * has any issues and whether it is in 'review'. Only when a user clicks through to look at the results for a licence
  * will they see which of its returns and charge elements have the issues.
  *
- * If only one issue is found we still assign it to the licence (an the charge element or return in question) for later
+ * If only one issue is found we still assign it to the licence (and the charge element or return in question) for later
  * persisting in a `ReviewLicence` record. We also check the issue against a list of those that will flag the licence
- * for review. Should a licence have multiple issues we flag it for review regardless.
+ * for review.
  *
  * > No result is returned. The issues are directly assigned to the licence and its relevant properties
  *
@@ -63,13 +63,13 @@ function _determineLicenceStatus (allElementIssues, allReturnIssues) {
   const allLicenceIssues = [...allElementIssues, ...allReturnIssues]
   const reviewStatuses = _getReviewStatuses()
 
-  // If a licence has more than one issue, or has 1 issue that is in the `REVIEW_STATUSES` array the licence status is
+  // If a licence has 1 issue that is in the `REVIEW_STATUSES` array the licence status is
   // set to 'Review' otherwise its 'Ready'
-  if (allLicenceIssues.length > 1 || reviewStatuses.includes(allLicenceIssues[0])) {
-    return 'review'
-  } else {
-    return 'ready'
-  }
+  const hasReviewIssue = allLicenceIssues.some((issue) => {
+    return reviewStatuses.includes(issue)
+  })
+
+  return hasReviewIssue ? 'review' : 'ready'
 }
 
 function _determineReturnLogsIssues (returnLogs, licence) {

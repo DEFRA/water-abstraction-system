@@ -14,7 +14,60 @@ describe('Determine Licence Issues Service', () => {
   describe('when given a licence', () => {
     let licence
 
-    describe('that has multiple issues', () => {
+    describe('that has multiple "ready" issues', () => {
+      beforeEach(() => {
+        licence = _generateMultipleReadyIssuesLicenceData()
+      })
+
+      describe('on the licence', () => {
+        it('sets "issues" to a comma separated unique list in alphabetical order of the issues found', () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.issues).to.equal([
+            'Abstraction outside period',
+            'No returns received',
+            'Over abstraction',
+            'Returns received late',
+            'Some returns not received'
+          ])
+        })
+
+        it('sets the status of the licence to "ready"', () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.status).to.equal('ready')
+        })
+      })
+    })
+
+    describe('that has multiple "review" issues', () => {
+      beforeEach(() => {
+        licence = _generateMultipleReviewIssuesLicenceData()
+      })
+
+      describe('on the licence', () => {
+        it('sets "issues" to a comma separated unique list in alphabetical order of the issues found', () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.issues).to.equal([
+            'Aggregate',
+            'Checking query',
+            'Overlap of charge dates',
+            'Return split over charge references',
+            'Returns received but not processed',
+            'Unable to match return'
+          ])
+        })
+
+        it('sets the status of the licence to "review"', () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.status).to.equal('review')
+        })
+      })
+    })
+
+    describe('that has multiple "ready" and "review" issues', () => {
       beforeEach(() => {
         licence = _generateMultipleIssuesLicenceData()
       })
@@ -301,6 +354,118 @@ function _generateMultipleIssuesLicenceData () {
         quantity: 0,
         allocatedQuantity: 0,
         receivedDate: null,
+        dueDate: new Date('2024 01 01')
+      },
+      {
+        id: '91011',
+        abstractionOutsidePeriod: false,
+        underQuery: false,
+        status: 'received',
+        quantity: 0,
+        allocatedQuantity: 0,
+        receivedDate: new Date('2024 01 01'),
+        dueDate: new Date('2024 01 01')
+      }
+    ]
+  }
+}
+
+function _generateMultipleReadyIssuesLicenceData () {
+  return {
+    chargeVersions: [
+      {
+        chargeReferences: [
+          {
+            aggregate: 1,
+            chargeElements: [
+              {
+                chargeDatesOverlap: false,
+                returnLogs: [
+                  {
+                    returnId: '1234'
+                  },
+                  {
+                    returnId: '5678'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    returnLogs: [
+      {
+        id: '1234',
+        abstractionOutsidePeriod: true,
+        underQuery: false,
+        status: 'completed',
+        quantity: 1,
+        allocatedQuantity: 0,
+        receivedDate: new Date('2024 02 01'),
+        dueDate: new Date('2024 01 01')
+      },
+      {
+        id: '5678',
+        abstractionOutsidePeriod: false,
+        underQuery: false,
+        status: 'due',
+        quantity: 0,
+        allocatedQuantity: 0,
+        receivedDate: null,
+        dueDate: new Date('2024 01 01')
+      }
+    ]
+  }
+}
+
+function _generateMultipleReviewIssuesLicenceData () {
+  return {
+    chargeVersions: [
+      {
+        chargeReferences: [
+          {
+            aggregate: 1.25,
+            chargeElements: [
+              {
+                chargeDatesOverlap: true,
+                returnLogs: [
+                  {
+                    returnId: '1234'
+                  }
+                ]
+              },
+              {
+                chargeDatesOverlap: false,
+                returnLogs: []
+              }
+            ]
+          },
+          {
+            aggregate: 1.25,
+            chargeElements: [
+              {
+                chargeDatesOverlap: false,
+                returnLogs: [
+                  {
+                    returnId: '1234'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    returnLogs: [
+      {
+        id: '1234',
+        abstractionOutsidePeriod: false,
+        underQuery: true,
+        status: 'completed',
+        quantity: 0,
+        allocatedQuantity: 0,
+        receivedDate: new Date('2024 01 01'),
         dueDate: new Date('2024 01 01')
       },
       {
