@@ -11,7 +11,8 @@ const { expect } = Code
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 
 describe('View Licence returns presenter', () => {
-  let returnData
+  let returnsData
+  let hasRequirements
 
   const returnItem = {
     id: 'mock-id-1',
@@ -43,26 +44,25 @@ describe('View Licence returns presenter', () => {
   }
 
   beforeEach(() => {
-    returnData = {
-      returns: [
-        { ...returnItem },
-        {
-          ...returnItem,
-          id: 'mock-id-2',
-          status: 'due',
-          returnReference: '1069'
-        }
-      ]
-    }
+    hasRequirements = true
+    returnsData = [
+      { ...returnItem },
+      {
+        ...returnItem,
+        id: 'mock-id-2',
+        status: 'due',
+        returnReference: '1069'
+      }
+    ]
   })
 
   describe('when provided with returns data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceReturnsPresenter.go(returnData)
+      const result = ViewLicenceReturnsPresenter.go(returnsData, hasRequirements)
 
       expect(result).to.equal({
         activeTab: 'returns',
-        hasReturns: true,
+        noReturnsMessage: null,
         returns: [
           {
             id: 'mock-id-1',
@@ -87,20 +87,37 @@ describe('View Licence returns presenter', () => {
     })
   })
 
-  describe('when provided with NO returns data', () => {
-    beforeEach(() => {
-      returnData = {
-        returns: []
-      }
+  describe('the "noReturnsMessage" property', () => {
+    describe('when a licence has returns and requirements', () => {
+      it('returns null', () => {
+        const result = ViewLicenceReturnsPresenter.go(returnsData, hasRequirements)
+
+        expect(result.noReturnsMessage).to.be.null()
+      })
     })
 
-    it('correctly returns no returns data ', () => {
-      const result = ViewLicenceReturnsPresenter.go(returnData)
+    describe('when a licence has NO returns and NO requirements', () => {
+      beforeEach(() => {
+        returnsData = []
+        hasRequirements = false
+      })
 
-      expect(result).to.equal({
-        activeTab: 'returns',
-        hasReturns: false,
-        returns: []
+      it('presents the No returns and No requirements message "No requirements for returns have been set up for this licence."', () => {
+        const result = ViewLicenceReturnsPresenter.go(returnsData, hasRequirements)
+
+        expect(result.noReturnsMessage).to.equal('No requirements for returns have been set up for this licence.')
+      })
+    })
+
+    describe('when a licence has returns but no requirements', () => {
+      beforeEach(() => {
+        returnsData = []
+      })
+
+      it('presents the returns but no requirements message "No returns for this licence."', () => {
+        const result = ViewLicenceReturnsPresenter.go(returnsData, hasRequirements)
+
+        expect(result.noReturnsMessage).to.equal('No returns for this licence.')
       })
     })
   })

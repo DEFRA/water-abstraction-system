@@ -403,9 +403,15 @@ describe('Licences controller', () => {
       }
     })
 
-    describe('when a request is valid and has returns', () => {
+    describe('when a request is valid and has returns and the licence has requirements', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
+          activeTab: 'returns',
+          returns: [
+            { id: 'returns-id' }
+          ],
+          noReturnsMessage: null
+        })
       })
 
       it('returns the page successfully', async () => {
@@ -426,8 +432,7 @@ describe('Licences controller', () => {
         Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
           activeTab: 'returns',
           returns: [],
-          hasReturns: false,
-          hasRequirements: true
+          noReturnsMessage: 'No returns for this licence.'
         })
       })
 
@@ -437,25 +442,6 @@ describe('Licences controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Returns')
         expect(response.payload).to.contain('No returns for this licence.')
-      })
-    })
-
-    describe('when a request is valid and has NO requirements and NO returns', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
-          activeTab: 'returns',
-          returns: [],
-          hasReturns: false,
-          hasRequirements: false
-        })
-      })
-
-      it('returns the page successfully with the message \'No returns for this licence.\'', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
       })
     })
   })
@@ -491,14 +477,6 @@ function _viewLicenceContactDetails () {
     activeTab: 'contact-details',
     licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
-  }
-}
-
-function _viewLicenceReturns () {
-  return {
-    activeTab: 'returns',
-    hasReturns: true,
-    returns: [{ id: 'returns-id' }]
   }
 }
 

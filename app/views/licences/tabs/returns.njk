@@ -19,37 +19,54 @@
   {% endif %}
 {% endmacro %}
 
-<table class="govuk-table">
-  <h2 class="govuk-heading-l">Returns</h2>
-  {% if hasReturns %}
-    <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header">Return reference and dates</th>
-      <th scope="col" class="govuk-table__header">Purpose and description</th>
-      <th scope="col" class="govuk-table__header">Due date</th>
-      <th scope="col" class="govuk-table__header">Status</th>
-    </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-    {% for return in returns %}
-      <tr class="govuk-table__row govuk-body-s">
-        <th class="govuk-table__cell">
-          <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
-          <p class="govuk-body-s"> {{ return.dates }}</p>
-        </th>
-        <td class="govuk-table__cell">{{ return.purpose }} <p class="govuk-body-s"> {{ return.description }}</p></td>
-        <td class="govuk-table__cell">{{ return.dueDate }}</td>
-        <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
+<h2 class="govuk-heading-l">Returns</h2>
 
-  {% elseif hasReturns == false and hasRequirements == false %}
-      <p> No requirements for returns have been set up for this licence. </p>
-  {% elseif hasRequirements and hasReturns == false %}
-    <p> No returns for this licence. </p>
-  {% endif %}
-</table>
+{% if noReturnsMessage %}
+  <p> {{ noReturnsMessage }} </p>
+{% else %}
+
+  {% macro referneceColum(return) %}
+    <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
+    <p class="govuk-body-s"> {{ return.dates }}</p>
+  {% endmacro %}
+
+  {% set returnRows = [] %}
+
+  {% for returnItem in  returns %}
+    {% set returnRows = (returnRows.push([
+      {
+        html: referneceColum(returnItem)
+      },
+      {
+        html:  returnItem.purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>"
+      },
+      {
+        text: returnItem.dueDate
+      },
+      {
+        html: formatStatus(returnItem.status)
+      }
+    ]), returnRows) %}
+  {% endfor %}
+
+  {{ govukTable({
+    head: [
+      {
+        text: 'Return reference and dates'
+      },
+      {
+        text: 'Purpose and description'
+      },
+      {
+        text: 'Due date'
+      },
+      {
+        text: 'Status'
+      }
+    ],
+    rows: returnRows
+  }) }}
+{% endif %}
 
 {% if hasReturns and pagination.numberOfPages > 1 %}
   {{ govukPagination(pagination.component) }}

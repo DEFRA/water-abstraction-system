@@ -10,15 +10,20 @@ const { formatLongDate } = require('../base.presenter.js')
 /**
  * Formats common data for the `/licences/{id}/*` view licence pages
  *
+ * @param {module:ReturnLogModel[]} returnsData - The session for the return requirement journey
+ * @param {boolean} hasRequirements - If the licence has return versions then it has requirements
+ *
  * @returns {Object} The data formatted for the view template
  */
-function go (returnsData) {
-  const returns = _formatReturnToTableRow(returnsData.returns)
+function go (returnsData, hasRequirements) {
+  const returns = _formatReturnToTableRow(returnsData)
+
+  const hasReturns = returns.length > 0
 
   return {
     activeTab: 'returns',
     returns,
-    hasReturns: returns.length > 0
+    noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements)
   }
 }
 
@@ -52,6 +57,18 @@ function _formatStatus (status) {
   }
 
   return 'NO STATUS'
+}
+
+function _noReturnsMessage (hasReturns, hasRequirements) {
+  if (!hasReturns && !hasRequirements) {
+    return 'No requirements for returns have been set up for this licence.'
+  }
+
+  if (hasRequirements && !hasReturns) {
+    return 'No returns for this licence.'
+  }
+
+  return null
 }
 
 module.exports = {
