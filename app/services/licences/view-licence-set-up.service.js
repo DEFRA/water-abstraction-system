@@ -30,13 +30,12 @@ async function go (licenceId, auth) {
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
   const licenceSetUpData = SetUpPresenter
-    .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+    .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData, FeatureFlagsConfig.enableRequirementsForReturns)
 
   return {
     activeTab: 'set-up',
     ...commonData,
-    ...licenceSetUpData,
-    enableRequirementsForReturns: FeatureFlagsConfig.enableRequirementsForReturns
+    ...licenceSetUpData
   }
 }
 

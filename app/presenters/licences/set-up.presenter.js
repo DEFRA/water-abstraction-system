@@ -28,27 +28,36 @@ const agreementDescriptions = {
  *
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
- * @param {module:LicenceAgreements[]} agreements - All agreements records for the licence
+ * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
  * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
+ * @param {boolean} enableRequirementsForReturns - feature toggle for the return versions links
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData, enableRequirementsForReturns) {
   return {
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
-      returnVersions: {
-        returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
-        noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
-      }
+      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns)
     },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    returnVersions: _returnsVersions(returnVersions)
+    returnVersions: _returnVersions(returnVersions)
   }
+}
+
+function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
+  if (enableRequirementsForReturns) {
+    return {
+      returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
+      noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
+    }
+  }
+
+  return {}
 }
 
 function _agreements (commonData, agreements, auth) {

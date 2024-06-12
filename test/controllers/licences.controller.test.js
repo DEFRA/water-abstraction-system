@@ -353,7 +353,6 @@ describe('Licences controller', () => {
           activeTab: 'set-up',
           agreements: [],
           chargeInformation: [],
-          enableRequirementsForReturns: true,
           returnVersions: []
         })
       })
@@ -378,7 +377,6 @@ describe('Licences controller', () => {
           activeTab: 'set-up',
           agreements: [],
           chargeInformation: [],
-          enableRequirementsForReturns: false,
           returnVersions: []
         })
       })

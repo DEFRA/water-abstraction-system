@@ -25,7 +25,7 @@ describe('View Licence Set Up service', () => {
   let auth = {}
 
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(true)
 
     Sinon.stub(FetchAgreementsService, 'go').returns([
       {
@@ -127,7 +127,6 @@ describe('View Licence Set Up service', () => {
             status: 'approved'
           }
         ],
-        enableRequirementsForReturns: false,
         licenceId: testId,
         licenceName: 'fake licence',
         links: {

@@ -62,7 +62,7 @@
         rows: returnVersionsTableRows
       }) }}
   {% endif %}
-{% if enableRequirementsForReturns %}
+
   {% if links.returnVersions.returnsRequired %}
     <p>
       {{ govukButton({
@@ -82,7 +82,6 @@
       }) }}
     </p>
   {% endif %}
-{% endif %}
 
 <h3 class="govuk-heading-m"> Charge information </h3>
 
