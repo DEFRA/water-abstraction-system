@@ -559,6 +559,7 @@ describe('Licence Set Up presenter', () => {
             })
           })
         })
+
         describe('when the user can not set up agreements ', () => {
           describe('and the user does not have permission', () => {
             beforeEach(() => {
