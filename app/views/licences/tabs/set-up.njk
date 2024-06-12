@@ -12,7 +12,6 @@
 
 <h2 class="govuk-heading-l">Licence set up</h2>
 
-{% if enableRequirementsForReturns %}
   <h3 class="govuk-heading-m"> Requirements for returns </h3>
 
   {% if returnVersions.length == 0 %}
@@ -66,7 +65,7 @@
         rows: returnVersionsTableRows
       }) }}
   {% endif %}
-
+{% if enableRequirementsForReturns %}
   {% if links.returnVersions.returnsRequired %}
     <p>
       {{ govukButton({

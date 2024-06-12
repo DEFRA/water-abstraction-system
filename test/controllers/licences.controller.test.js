@@ -387,7 +387,11 @@ describe('Licences controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.not.contain('Requirements for returns')
+        expect(response.payload).to.contain('Requirements for returns')
+        // Buttons hidden behind the enableRequirementsForReturns feature flag
+        expect(response.payload).to.not.contain('Set up new returns requirement')
+        expect(response.payload).to.not.contain('Mark licence as')
+        expect(response.payload).to.not.contain('no returns needed')
       })
     })
   })
