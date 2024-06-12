@@ -25,7 +25,7 @@
   <p> {{ noReturnsMessage }} </p>
 {% else %}
 
-  {% macro referneceColum(return) %}
+  {% macro referenceColumn(return) %}
     <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
     <p class="govuk-body-s"> {{ return.dates }}</p>
   {% endmacro %}
