@@ -178,7 +178,7 @@ function _returnsVersions (returnVersions = [{}]) {
         link: ''
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
-      reason: returnRequirementReasons[returnVersion.reason],
+      reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
       startDate: returnVersion.startDate ? formatLongDate(returnVersion.startDate) : '',
       status: returnVersion.status
     }
