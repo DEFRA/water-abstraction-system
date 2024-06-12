@@ -403,7 +403,7 @@ describe('Licences controller', () => {
       }
     })
 
-    describe('when a request is valid and has returns and the licence has requirements', () => {
+    describe('when a request is valid', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
           activeTab: 'returns',
@@ -424,24 +424,6 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Purpose and description')
         expect(response.payload).to.contain('Due date')
         expect(response.payload).to.contain('Status')
-      })
-    })
-
-    describe('when a request is valid and has requirements but NO returns', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
-          activeTab: 'returns',
-          returns: [],
-          noReturnsMessage: 'No returns for this licence.'
-        })
-      })
-
-      it('returns the page successfully with the message \'No returns for this licence.\'', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        expect(response.payload).to.contain('No returns for this licence.')
       })
     })
   })

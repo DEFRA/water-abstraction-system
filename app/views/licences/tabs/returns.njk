@@ -68,7 +68,7 @@
   }) }}
 {% endif %}
 
-{% if hasReturns and pagination.numberOfPages > 1 %}
+{% if pagination.numberOfPages > 1 %}
   {{ govukPagination(pagination.component) }}
 {% endif %}
 
