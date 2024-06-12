@@ -43,7 +43,12 @@ function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNum
   }
 
   if (filterLicenceHolderNumber) {
-    reviewLicenceQuery.whereILike('licenceHolder', `%${filterLicenceHolderNumber}%`)
+    // reviewLicenceQuery.whereILike('licenceHolder', `%${filterLicenceHolderNumber}%`)
+    reviewLicenceQuery.where((builder) => {
+      builder
+        .whereILike('licenceHolder', `%${filterLicenceHolderNumber}%`)
+        .orWhereLike('licenceRef', `%${filterLicenceHolderNumber}%`)
+    })
   }
 
   if (filterLicenceStatus) {
