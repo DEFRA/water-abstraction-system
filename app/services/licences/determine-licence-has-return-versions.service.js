@@ -10,7 +10,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 /**
  * Determines if a licence has requirements
  *
- * @param {string} licenceId - The UUID for the licence id to fetch
+ * @param {string} licenceId - The UUID of the licence to determine if return versions exist
  *
  * @returns {Promise<Boolean>} the result of check if a licence has requirements for returns
  */
