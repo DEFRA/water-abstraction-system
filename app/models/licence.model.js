@@ -32,6 +32,14 @@ class LicenceModel extends BaseModel {
           to: 'chargeVersions.licenceId'
         }
       },
+      licenceAgreements: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-agreement.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'licenceAgreements.licenceRef'
+        }
+      },
       licenceDocument: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-document.model',
