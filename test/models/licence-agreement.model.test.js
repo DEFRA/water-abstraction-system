@@ -12,6 +12,8 @@ const DatabaseSupport = require('../support/database.js')
 const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
 const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
+const LicenceHelper = require('../support/helpers/licence.helper.js')
+const LicenceModel = require('../../app/models/licence.model.js')
 
 // Thing under test
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
@@ -37,7 +39,7 @@ describe('Licence Agreement model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to licence entity roles', () => {
+    describe('when linking to financial agreements', () => {
       let testFinancialAgreements
 
       beforeEach(async () => {
@@ -55,7 +57,7 @@ describe('Licence Agreement model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the licence entity roles', async () => {
+      it('can eager load the financial agreements', async () => {
         const result = await LicenceAgreementModel.query()
           .findById(testRecord.id)
           .withGraphFetched('financialAgreements')
@@ -66,6 +68,36 @@ describe('Licence Agreement model', () => {
         expect(result.financialAgreements).to.be.an.array()
         expect(result.financialAgreements[0]).to.be.an.instanceOf(FinancialAgreementModel)
         expect(result.financialAgreements).to.include(testFinancialAgreements)
+      })
+    })
+
+    describe('when linking to licence', () => {
+      let testLicence
+
+      beforeEach(async () => {
+        testLicence = await LicenceHelper.add()
+
+        const { licenceRef } = testLicence
+        testRecord = await LicenceAgreementHelper.add({ licenceRef })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceAgreementModel.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence', async () => {
+        const result = await LicenceAgreementModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licence')
+
+        expect(result).to.be.instanceOf(LicenceAgreementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licence).to.be.an.instanceOf(LicenceModel)
+        expect(result.licence.id).to.equal(testLicence.id)
       })
     })
   })

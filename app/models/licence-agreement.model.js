@@ -23,6 +23,14 @@ class LicenceAgreementModel extends BaseModel {
           from: 'licenceAgreements.financialAgreementId',
           to: 'financialAgreements.id'
         }
+      },
+      licence: {
+        relation: Model.HasOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'licenceAgreements.licenceRef',
+          to: 'licences.licenceRef'
+        }
       }
     }
   }
