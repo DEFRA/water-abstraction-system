@@ -15,6 +15,8 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const DatabaseSupport = require('../support/database.js')
+const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
+const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
@@ -125,6 +127,41 @@ describe('Licence model', () => {
         expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
         expect(result.chargeVersions).to.include(testChargeVersions[0])
         expect(result.chargeVersions).to.include(testChargeVersions[1])
+      })
+    })
+
+    describe('when linking to licence agreements', () => {
+      let testLicenceAgreements
+
+      beforeEach(async () => {
+        const { licenceRef } = testRecord
+
+        testLicenceAgreements = []
+        for (let i = 0; i < 2; i++) {
+          const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef })
+          testLicenceAgreements.push(licenceAgreement)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceAgreements')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence agreements', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceAgreements')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceAgreements).to.be.an.array()
+        expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[0])
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[1])
       })
     })
 
