@@ -56,12 +56,32 @@ class LicenceModel extends BaseModel {
           to: 'licenceDocumentHeaders.licenceRef'
         }
       },
+      licenceGaugingStations: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'gauging-station.model',
+        join: {
+          from: 'licences.id',
+          through: {
+            from: 'licenceGaugingStations.licenceId',
+            to: 'licenceGaugingStations.gaugingStationId'
+          },
+          to: 'gaugingStations.id'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
         join: {
           from: 'licences.id',
           to: 'licenceVersions.licenceId'
+        }
+      },
+      permitLicence: {
+        relation: Model.HasOneRelation,
+        modelClass: 'permit-licence.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'permitLicences.licenceRef'
         }
       },
       region: {
@@ -102,26 +122,6 @@ class LicenceModel extends BaseModel {
         join: {
           from: 'licences.id',
           to: 'workflows.licenceId'
-        }
-      },
-      permitLicence: {
-        relation: Model.HasOneRelation,
-        modelClass: 'permit-licence.model',
-        join: {
-          from: 'licences.licenceRef',
-          to: 'permitLicences.licenceRef'
-        }
-      },
-      licenceGaugingStations: {
-        relation: Model.ManyToManyRelation,
-        modelClass: 'gauging-station.model',
-        join: {
-          from: 'licences.id',
-          through: {
-            from: 'licenceGaugingStations.licenceId',
-            to: 'licenceGaugingStations.gaugingStationId'
-          },
-          to: 'gaugingStations.id'
         }
       }
     }
