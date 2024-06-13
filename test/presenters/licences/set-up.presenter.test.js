@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
@@ -82,6 +82,10 @@ describe('Licence Set Up presenter', () => {
     chargeVersions = []
     returnVersions = []
     workflows = []
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with populated licence set up data', () => {
