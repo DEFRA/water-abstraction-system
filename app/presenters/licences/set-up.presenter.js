@@ -51,17 +51,6 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
   }
 }
 
-function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
-  if (enableRequirementsForReturns) {
-    return {
-      returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
-      noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
-    }
-  }
-
-  return {}
-}
-
 function _agreements (commonData, agreements, auth) {
   return agreements.map((agreement) => {
     return {
@@ -194,6 +183,17 @@ function _returnVersions (returnVersions = [{}]) {
       status: _status(returnVersion.status)
     }
   })
+}
+
+function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
+  if (enableRequirementsForReturns) {
+    return {
+      returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
+      noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
+    }
+  }
+
+  return {}
 }
 
 function _status (status) {
