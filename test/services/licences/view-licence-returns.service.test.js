@@ -9,13 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
-const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
+const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
+const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
+const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
-const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service')
+const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
 
 describe('View Licence service returns', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
@@ -23,11 +24,24 @@ describe('View Licence service returns', () => {
   const auth = {}
   const pagination = { page }
 
-  beforeEach(() => {
-    Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnsFetch())
+  beforeEach(async () => {
+    Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
+
+    Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
+      pagination: { total: 1 },
+      returns: []
+    })
+
     Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
-    Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns(_returnsPresenter())
-    Sinon.stub(ViewLicenceService, 'go').resolves(_licence())
+
+    Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns({
+      returns: [],
+      activeTab: 'returns'
+    })
+
+    Sinon.stub(ViewLicenceService, 'go').resolves({
+      licenceName: 'fake licence'
+    })
   })
 
   afterEach(() => {
@@ -49,21 +63,3 @@ describe('View Licence service returns', () => {
     })
   })
 })
-
-function _licence () {
-  return { licenceName: 'fake licence' }
-}
-
-function _returnsFetch () {
-  return {
-    pagination: { total: 1 },
-    returns: []
-  }
-}
-
-function _returnsPresenter () {
-  return {
-    returns: [],
-    activeTab: 'returns'
-  }
-}

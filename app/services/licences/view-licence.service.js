@@ -12,7 +12,7 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
  * @param {string} licenceId - The UUID of the licence
- * @param {string} auth - Auth object
+ * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go (licenceId, auth) {

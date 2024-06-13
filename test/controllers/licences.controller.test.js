@@ -412,9 +412,15 @@ describe('Licences controller', () => {
       }
     })
 
-    describe('when a request is valid and has returns', () => {
+    describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
+          activeTab: 'returns',
+          returns: [
+            { id: 'returns-id' }
+          ],
+          noReturnsMessage: null
+        })
       })
 
       it('returns the page successfully', async () => {
@@ -427,24 +433,6 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Purpose and description')
         expect(response.payload).to.contain('Due date')
         expect(response.payload).to.contain('Status')
-      })
-    })
-
-    describe('when a request is valid and has NO returns', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
-          activeTab: 'returns',
-          returns: []
-        })
-      })
-
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        //  Check the table titles
-        expect(response.payload).to.contain('No returns found')
       })
     })
   })
@@ -492,13 +480,6 @@ function _viewLicenceContactDetails () {
     activeTab: 'contact-details',
     licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
-  }
-}
-
-function _viewLicenceReturns () {
-  return {
-    activeTab: 'returns',
-    returns: [{ id: 'returns-id' }]
   }
 }
 
