@@ -60,7 +60,7 @@ function _getFilters (id, yar) {
 }
 
 function _pageTitle (numberOfPages, selectedPageNumber) {
-  if (numberOfPages === 1) {
+  if (numberOfPages < 2) {
     return 'Review licences'
   }
 
