@@ -13,7 +13,7 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two
 describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     let filterIssues
-    let filterLicenceHolder
+    let filterLicenceHolderNumber
     let filterLicenceStatus
     let testBillRun
     let testLicences
@@ -26,7 +26,7 @@ describe('Review Bill Run presenter', () => {
     describe('and no filter has been applied', () => {
       beforeEach(() => {
         filterIssues = undefined
-        filterLicenceHolder = undefined
+        filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
       })
 
@@ -34,7 +34,7 @@ describe('Review Bill Run presenter', () => {
         const result = ReviewBillRunPresenter.go(
           testBillRun,
           filterIssues,
-          filterLicenceHolder,
+          filterLicenceHolderNumber,
           filterLicenceStatus,
           testLicences
         )
@@ -76,7 +76,7 @@ describe('Review Bill Run presenter', () => {
           ],
           filter: {
             issues: undefined,
-            licenceHolder: undefined,
+            licenceHolderNumber: undefined,
             licenceStatus: undefined,
             openFilter: false
           }
@@ -87,7 +87,7 @@ describe('Review Bill Run presenter', () => {
     describe('and filters have been applied', () => {
       beforeEach(() => {
         filterIssues = ['abs-outside-period', 'over-abstraction']
-        filterLicenceHolder = 'bob'
+        filterLicenceHolderNumber = 'bob'
         filterLicenceStatus = 'ready'
       })
 
@@ -95,13 +95,13 @@ describe('Review Bill Run presenter', () => {
         const result = ReviewBillRunPresenter.go(
           testBillRun,
           filterIssues,
-          filterLicenceHolder,
+          filterLicenceHolderNumber,
           filterLicenceStatus,
           testLicences
         )
 
         expect(result.filter.openFilter).to.equal(true)
-        expect(result.filter.licenceHolder).to.equal(filterLicenceHolder)
+        expect(result.filter.licenceHolderNumber).to.equal(filterLicenceHolderNumber)
         expect(result.filter.licenceStatus).to.equal(filterLicenceStatus)
         expect(result.filter.issues).to.equal({
           absOutsidePeriod: true,

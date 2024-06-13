@@ -104,7 +104,7 @@ describe('Review Bill Run Service', () => {
       }
       const yarGetStubData = {
         filterIssues: ['abs-outside-period', 'aggregate-factor'],
-        filterLicenceHolder: 'A Licence Holder Ltd',
+        filterLicenceHolderNumber: 'A Licence Holder Ltd',
         filterLicenceStatus: 'review'
       }
 
@@ -156,7 +156,7 @@ describe('Review Bill Run Service', () => {
       }
       const yarGetStubData = {
         filterIssues: ['abs-outside-period', 'aggregate-factor'],
-        filterLicenceHolder: 'A Licence Holder Ltd',
+        filterLicenceHolderNumber: 'A Licence Holder Ltd',
         filterLicenceStatus: 'review'
       }
 

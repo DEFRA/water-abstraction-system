@@ -21,8 +21,8 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
  * issue this will be a string, not an array
- * @param {String} filterLicenceHolder The licence holder to filter the results by. This will only contain data when
- * there is a POST request, which only occurs when a filter is applied to the results.
+ * @param {String} filterLicenceHolderNumber The licence holder or licence number to filter the results by. This will
+ * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
  * @param {number} page - the page number of licences to be viewed
@@ -30,20 +30,24 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected 'page in the data. Also included is any data that has been used to filter the results
  */
-async function go (id, filterIssues, filterLicenceHolder, filterLicenceStatus, page) {
+async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, filterIssues, filterLicenceHolder, filterLicenceStatus, page)
+  const licences = await _fetchBillRunLicences(id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page)
 
   return { billRun, licences }
 }
 
-function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolder, filterLicenceStatus) {
+function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus) {
   if (filterIssues) {
     _filterIssues(filterIssues, reviewLicenceQuery)
   }
 
-  if (filterLicenceHolder) {
-    reviewLicenceQuery.whereILike('licenceHolder', `%${filterLicenceHolder}%`)
+  if (filterLicenceHolderNumber) {
+    reviewLicenceQuery.where((builder) => {
+      builder
+        .whereILike('licenceHolder', `%${filterLicenceHolderNumber}%`)
+        .orWhereILike('licenceRef', `%${filterLicenceHolderNumber}%`)
+    })
   }
 
   if (filterLicenceStatus) {
@@ -67,7 +71,7 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolder, filterLicenceStatus, page = 1) {
+async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page = 1) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)
@@ -77,7 +81,7 @@ async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolder, fil
     ])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 
-  _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolder, filterLicenceStatus)
+  _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus)
 
   return reviewLicenceQuery
 }
