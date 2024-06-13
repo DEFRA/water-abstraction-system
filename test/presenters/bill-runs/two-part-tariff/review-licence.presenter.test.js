@@ -93,6 +93,7 @@ describe('Review Licence presenter', () => {
                     elementStatus: 'ready',
                     elementDescription: 'Trickle Irrigation - Direct',
                     dates: ['1 April 2022 to 5 June 2022'],
+                    purpose: 'Make-up or top up water',
                     issues: [''],
                     billableReturns: '0 ML / 200 ML',
                     returnVolume: ['0 ML (10031343)'],
@@ -350,7 +351,10 @@ function _licenceData () {
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
-            authorisedAnnualQuantity: 200
+            authorisedAnnualQuantity: 200,
+            purpose: {
+              description: 'Make-up or top up water'
+            }
           },
           reviewReturns: [{
             id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',

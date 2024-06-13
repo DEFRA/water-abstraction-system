@@ -15,8 +15,8 @@ const { randomInteger } = require('../general.js')
  *
  * - `licenceVersionPurposeId` - [random UUID]
  * - `licenceVersionId` - [random UUID]
- * - `purposePrimaryId` - [random UUID]
- * - `purposeSecondaryId` - [random UUID]
+ * - `primaryPurposeId` - [random UUID]
+ * - `secondaryPurposeId` - [random UUID]
  * - `purposeUseId` - [random UUID]
  * - `abstractionPeriodStartDay` - [1]
  * - `abstractionPeriodStartMonth` - [1]
@@ -58,8 +58,8 @@ function defaults (data = {}) {
     updatedAt: timestamp,
     externalId: `9:${randomInteger(10000, 99999)}:1:0`,
     licenceVersionId: generateUUID(),
-    purposePrimaryId: generateUUID(),
-    purposeSecondaryId: generateUUID(),
+    primaryPurposeId: generateUUID(),
+    secondaryPurposeId: generateUUID(),
     purposeId: generateUUID()
   }
 

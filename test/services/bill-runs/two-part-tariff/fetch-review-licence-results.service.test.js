@@ -15,6 +15,7 @@ const ChargeReferenceHelper = require('../../../support/helpers/charge-reference
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
@@ -59,6 +60,7 @@ describe('Fetch Review Licence Results Service', () => {
       let reviewChargeElement
       let returnLog
       let reviewReturn
+      let purpose
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
@@ -76,7 +78,8 @@ describe('Fetch Review Licence Results Service', () => {
           chargeReferenceId: chargeReference.id
         })
 
-        chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
+        purpose = await PurposeHelper.add()
+        chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id, purposeId: purpose.id })
         reviewChargeElement = await ReviewChargeElementHelper.add({
           reviewChargeReferenceId: reviewChargeReference.id,
           chargeElementId: chargeElement.id
@@ -198,7 +201,10 @@ describe('Fetch Review Licence Results Service', () => {
                   abstractionPeriodStartMonth: chargeElement.abstractionPeriodStartMonth,
                   abstractionPeriodEndDay: chargeElement.abstractionPeriodEndDay,
                   abstractionPeriodEndMonth: chargeElement.abstractionPeriodEndMonth,
-                  authorisedAnnualQuantity: chargeElement.authorisedAnnualQuantity
+                  authorisedAnnualQuantity: chargeElement.authorisedAnnualQuantity,
+                  purpose: {
+                    description: purpose.description
+                  }
                 },
                 reviewReturns: [{
                   id: reviewReturn.id,
