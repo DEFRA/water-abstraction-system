@@ -20,7 +20,6 @@ async function go (licenceId) {
 
 async function _fetch (licenceId) {
   return ReturnVersionModel.query()
-    .where('licenceId', licenceId)
     .select([
       'id',
       'startDate',
@@ -28,6 +27,7 @@ async function _fetch (licenceId) {
       'status',
       'reason'
     ])
+    .where('licenceId', licenceId)
     .orderBy([
       { column: 'startDate', order: 'desc' }
     ])
