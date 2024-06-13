@@ -319,6 +319,12 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
+        // Returns for requirements
+        expect(response.payload).to.contain('Requirements for returns')
+        // Returns for requirements present
+        expect(response.payload).to.contain('Set up new returns requirement')
+        expect(response.payload).to.contain('Mark licence as')
+        expect(response.payload).to.contain('no returns needed')
         // Charge information
         expect(response.payload).to.contain('Charge information')
         // Charge information table headers
@@ -346,7 +352,8 @@ describe('Licences controller', () => {
         Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
           activeTab: 'set-up',
           agreements: [],
-          chargeInformation: []
+          chargeInformation: [],
+          returnVersions: []
         })
       })
 
@@ -355,6 +362,8 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
+        expect(response.payload).to.contain('Requirements for returns')
+        expect(response.payload).to.contain('No requirements for returns for this licence.')
         expect(response.payload).to.contain('Charge information')
         expect(response.payload).to.contain('No charge information for this licence.')
         expect(response.payload).to.contain('Agreements')
@@ -441,9 +450,21 @@ function _viewLicenceSetUp () {
     activeTab: 'set-up',
     agreements: [{}],
     chargeInformation: [{ }],
-    setUpAgreement: '/',
-    setupNewCharge: '/',
-    makeLicenceNonChargeable: '/'
+    enableRequirementsForReturns: true,
+    links: {
+      agreements: {
+        setUpAgreement: '/'
+      },
+      chargeInformation: {
+        setupNewCharge: '/',
+        makeLicenceNonChargeable: '/'
+      },
+      returnVersions: {
+        returnsRequired: '/',
+        noReturnsRequired: '/'
+      }
+    },
+    returnVersions: [{ }]
   }
 }
 

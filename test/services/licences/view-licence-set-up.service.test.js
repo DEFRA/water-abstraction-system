@@ -10,10 +10,9 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
-const FetchChargeVersionsService =
-  require('../../../app/services/licences/fetch-charge-versions.service.js')
-const FetchWorkflowsService =
-  require('../../../app/services/licences/fetch-workflows.service.js')
+const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
+const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
+const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
@@ -43,6 +42,16 @@ describe('View Licence Set Up service', () => {
         licenceId: '456',
         startDate: new Date('2020-01-01'),
         status: 'current'
+      }
+    ])
+
+    Sinon.stub(FetchReturnVersionsService, 'go').returns([
+      {
+        id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+        startDate: new Date('2025-01-01'),
+        endDate: new Date('2025-02-01'),
+        status: 'current',
+        reason: 'change-to-special-agreement'
       }
     ])
 
@@ -117,8 +126,28 @@ describe('View Licence Set Up service', () => {
         ],
         licenceId: testId,
         licenceName: 'fake licence',
-        makeLicenceNonChargeable: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
-        setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
+        links: {
+          agreements: {},
+          chargeInformation: {
+            makeLicenceNonChargeable: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
+            setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
+          },
+          returnVersions: {}
+        },
+        returnVersions: [
+          {
+            action: [
+              {
+                link: '',
+                text: 'View'
+              }
+            ],
+            endDate: '1 February 2025',
+            reason: 'Change to special agreement',
+            startDate: '1 January 2025',
+            status: 'approved'
+          }
+        ]
       })
     })
   })
