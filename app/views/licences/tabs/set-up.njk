@@ -10,135 +10,199 @@
   {% endfor %}
 {% endmacro %}
 
-{% set chargeVersionRows = [] %}
-
-{% set chargeVersionHead = [
-  {
-    text: "Start date"
-  },
-  {
-    text: "End date"
-  },
-  {
-    text: "Reason"
-  },
-  {
-    text: "Status"
-  },
-  {
-    text: "Action"
-  }
-] %}
-
-{% for chargeVersion in  chargeInformation %}
-  {% set chargeVersionRows = (chargeVersionRows.push([
-    {
-      text: chargeVersion.startDate
-    },
-    {
-      text: chargeVersion.endDate
-    },
-    {
-      text: chargeVersion.reason
-    },
-    {
-      html: statusTag(chargeVersion.status)
-    },
-    {
-      html: createLink(chargeVersion)
-    }
-  ]), chargeVersionRows) %}
-{% endfor %}
-
 <h2 class="govuk-heading-l">Licence set up</h2>
+
+  <h3 class="govuk-heading-m"> Requirements for returns </h3>
+
+  {% if returnVersions.length == 0 %}
+    <p class="govuk-body"> No requirements for returns for this licence.</p>
+  {% else %}
+    {% set returnVersionsTableRows = [] %}
+
+    {% for returnsRequirement in returnVersions %}
+      {% set returnVersionsTableRows = (returnVersionsTableRows.push([
+        {
+          text: returnsRequirement.startDate
+        },
+        {
+          text: returnsRequirement.endDate
+        },
+        {
+          text: returnsRequirement.reason
+        },
+        {
+          html: statusTag(returnsRequirement.status)
+        },
+        {
+          html: createLink(returnsRequirement)
+        }
+      ]), returnVersionsTableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+        head: [
+        {
+          text: "Start date"
+        },
+        {
+          text: "End date"
+        },
+        {
+          text: "Reason"
+        },
+        {
+          text: "Status"
+        },
+        {
+          text: "Action"
+        }
+      ],
+        rows: returnVersionsTableRows
+      }) }}
+  {% endif %}
+
+  {% if links.returnVersions.returnsRequired %}
+    <p>
+      {{ govukButton({
+        text: "Set up new returns requirement",
+        href: links.returnVersions.returnsRequired,
+        classes: "govuk-button--secondary govuk-!-margin-right-3"
+      }) }}
+    </p>
+  {% endif %}
+
+  {% if links.returnVersions.noReturnsRequired %}
+    <p>
+      {{ govukButton({
+        text: "Mark licence as 'no returns needed'",
+        href: links.returnVersions.noReturnsRequired,
+        classes: "govuk-button--secondary govuk-!-margin-right-3"
+      }) }}
+    </p>
+  {% endif %}
 
 <h3 class="govuk-heading-m"> Charge information </h3>
 
 {% if chargeInformation.length == 0 %}
   <p class="govuk-body"> No charge information for this licence.</p>
-{% endif %}
+{% else %}
+  {% set chargeVersionRows = [] %}
 
-{% if chargeInformation.length > 0 %}
+  {% for chargeVersion in  chargeInformation %}
+    {% set chargeVersionRows = (chargeVersionRows.push([
+      {
+        text: chargeVersion.startDate
+      },
+      {
+        text: chargeVersion.endDate
+      },
+      {
+        text: chargeVersion.reason
+      },
+      {
+        html: statusTag(chargeVersion.status)
+      },
+      {
+        html: createLink(chargeVersion)
+      }
+    ]), chargeVersionRows) %}
+  {% endfor %}
+
+
   {{ govukTable({
-    head: chargeVersionHead,
+    head: [
+      {
+        text: "Start date"
+      },
+      {
+        text: "End date"
+      },
+      {
+        text: "Reason"
+      },
+      {
+        text: "Status"
+      },
+      {
+        text: "Action"
+      }
+    ],
     rows: chargeVersionRows
   }) }}
 {% endif %}
 
-{% if setupNewCharge %}
-  {{ govukButton({
-    text: "Set up a new charge",
-    href: setupNewCharge,
-    classes: "govuk-button--secondary govuk-!-margin-right-3"
-  }) }}
+{% if links.chargeInformation.setupNewCharge %}
+  <p>
+    {{ govukButton({
+      text: "Set up a new charge",
+      href: setupNewCharge,
+      classes: "govuk-button--secondary govuk-!-margin-right-3"
+    }) }}
+  </p>
 {% endif %}
 
-{% if makeLicenceNonChargeable %}
-  {{ govukButton({
-    text: "Make licence non-chargeable",
-    href: makeLicenceNonChargeable,
-    classes: "govuk-button--secondary"
-  }) }}
+{% if links.chargeInformation.makeLicenceNonChargeable %}
+  <p>
+    {{ govukButton({
+      text: "Make licence non-chargeable",
+      href: makeLicenceNonChargeable,
+      classes: "govuk-button--secondary"
+    }) }}
+  </p>
 {% endif %}
 
 <hr />
-
-{% set agreementRows = [] %}
-
-{% set agreementHead = [
-  {
-    text: "Start date"
-  },
-  {
-    text: "End date"
-  },
-  {
-    text: "Agreement"
-  },
-  {
-    text: "Date signed"
-  },
-  {
-    text: "Action"
-  }
-] %}
-
-{% for agreement in  agreements %}
-  {% set agreementRows = (agreementRows.push([
-    {
-      text: agreement.startDate
-    },
-    {
-      text: agreement.endDate
-    },
-    {
-      text: agreement.description
-    },
-    {
-      text: agreement.signedDate
-    },
-    {
-      html: createLink(agreement)
-    }
-  ]), agreementRows) %}
-{% endfor %}
-
 
 <h3 class="govuk-heading-m"> Agreements </h3>
 
 {% if agreements.length == 0 %}
   <p class="govuk-body"> No agreements for this licence.</p>
-{% endif %}
+{% else %}
+  {% set agreementRows = [] %}
 
-{% if agreements.length > 0 %}
+  {% for agreement in  agreements %}
+    {% set agreementRows = (agreementRows.push([
+      {
+        text: agreement.startDate
+      },
+      {
+        text: agreement.endDate
+      },
+      {
+        text: agreement.description
+      },
+      {
+        text: agreement.signedDate
+      },
+      {
+        html: createLink(agreement)
+      }
+    ]), agreementRows) %}
+  {% endfor %}
+
   {{ govukTable({
-    head: agreementHead,
+    head: [
+      {
+        text: "Start date"
+      },
+      {
+        text: "End date"
+      },
+      {
+        text: "Agreement"
+      },
+      {
+        text: "Date signed"
+      },
+      {
+        text: "Action"
+      }
+    ],
     rows: agreementRows
   }) }}
 {% endif %}
 
-
-{% if setUpAgreement %}
+{% if links.agreements.setUpAgreement %}
   {{ govukButton({
     text: "Set up a new agreement",
     href: setUpAgreement,

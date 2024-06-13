@@ -15,7 +15,7 @@
 async function go (billRunId, payload, yar) {
   const clearFilters = payload?.clearFilters
   const filterIssues = payload?.filterIssues
-  const filterLicenceHolder = payload?.filterLicenceHolder
+  const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber
   const filterLicenceStatus = payload?.filterLicenceStatus
 
   if (clearFilters) {
@@ -23,7 +23,7 @@ async function go (billRunId, payload, yar) {
   } else {
     yar.set(`review-${billRunId}`, {
       filterIssues,
-      filterLicenceHolder,
+      filterLicenceHolderNumber,
       filterLicenceStatus
     })
   }

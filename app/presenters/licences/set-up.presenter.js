@@ -5,7 +5,9 @@
  * @module SetUpPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 const roles = {
   billing: 'billing',
@@ -27,18 +29,25 @@ const agreementDescriptions = {
  *
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
- * @param {module:LicenceAgreements[]} agreements - All agreements records for the licence
+ * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
+ * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, agreements, auth, commonData) {
+function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+  const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
+
   return {
+    links: {
+      chargeInformation: _chargeInformationLinks(auth, commonData),
+      agreements: _agreementLinks(auth, commonData),
+      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns)
+    },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    ..._agreementButtons(auth, commonData),
-    ..._authorisedLinks(auth, commonData)
+    returnVersions: _returnVersions(returnVersions)
   }
 }
 
@@ -93,17 +102,17 @@ function _agreementActionLinks (commonData, agreement, auth) {
   return actionLinks
 }
 
-function _agreementButtons (auth, commonData) {
+function _agreementLinks (auth, commonData) {
   if (auth.credentials.scope.includes(roles.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
     }
   }
 
-  return null
+  return {}
 }
 
-function _authorisedLinks (auth, commonData) {
+function _chargeInformationLinks (auth, commonData) {
   if (auth.credentials.scope.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
@@ -159,6 +168,32 @@ function _endsSixYearsAgo (endDate) {
 
 function _financialAgreementCode (agreement) {
   return agreement.financialAgreements[0].financialAgreementCode
+}
+
+function _returnVersions (returnVersions = [{}]) {
+  return returnVersions.map((returnVersion) => {
+    return {
+      action: [{
+        text: 'View',
+        link: ''
+      }],
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
+      reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
+      startDate: formatLongDate(returnVersion.startDate),
+      status: _status(returnVersion.status)
+    }
+  })
+}
+
+function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
+  if (enableRequirementsForReturns) {
+    return {
+      returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
+      noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
+    }
+  }
+
+  return {}
 }
 
 function _status (status) {

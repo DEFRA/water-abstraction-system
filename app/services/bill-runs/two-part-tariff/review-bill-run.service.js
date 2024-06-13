@@ -20,14 +20,14 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, page, yar) {
-  const { filterIssues, filterLicenceHolder, filterLicenceStatus } = _getFilters(id, yar)
+  const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus } = _getFilters(id, yar)
 
   const selectedPageNumber = page ? Number(page) : 1
 
   const { billRun, licences } = await FetchBillRunLicencesService.go(
     id,
     filterIssues,
-    filterLicenceHolder,
+    filterLicenceHolderNumber,
     filterLicenceStatus,
     selectedPageNumber
   )
@@ -37,7 +37,7 @@ async function go (id, page, yar) {
   const pageData = ReviewBillRunPresenter.go(
     billRun,
     filterIssues,
-    filterLicenceHolder,
+    filterLicenceHolderNumber,
     filterLicenceStatus,
     licences.results
   )
@@ -53,10 +53,10 @@ function _getFilters (id, yar) {
   const filters = yar.get(`review-${id}`)
 
   const filterIssues = filters?.filterIssues
-  const filterLicenceHolder = filters?.filterLicenceHolder
+  const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber
   const filterLicenceStatus = filters?.filterLicenceStatus
 
-  return { filterIssues, filterLicenceHolder, filterLicenceStatus }
+  return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus }
 }
 
 function _pageTitle (numberOfPages, selectedPageNumber) {
