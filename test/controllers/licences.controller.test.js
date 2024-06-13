@@ -370,28 +370,6 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('No agreements for this licence.')
       })
     })
-
-    describe('when a request is valid but the requirements for returns toggle is false', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
-          activeTab: 'set-up',
-          agreements: [],
-          chargeInformation: [],
-          returnVersions: []
-        })
-      })
-
-      it('returns the page successfully with no requirements for returns', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Requirements for returns')
-        // Buttons hidden behind the enableRequirementsForReturns feature flag
-        expect(response.payload).to.not.contain('Set up new returns requirement')
-        expect(response.payload).to.not.contain('Mark licence as')
-        expect(response.payload).to.not.contain('no returns needed')
-      })
-    })
   })
 
   describe('GET /licences/{id}/summary', () => {

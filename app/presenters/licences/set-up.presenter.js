@@ -5,6 +5,7 @@
  * @module SetUpPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
@@ -32,11 +33,12 @@ const agreementDescriptions = {
  * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
- * @param {boolean} enableRequirementsForReturns - feature toggle for the return versions links
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData, enableRequirementsForReturns) {
+function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+  const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
+
   return {
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),

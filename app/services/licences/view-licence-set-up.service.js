@@ -5,7 +5,6 @@
  * @module ViewLicenceSetUpService
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('./fetch-agreements.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
@@ -30,7 +29,7 @@ async function go (licenceId, auth) {
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
   const licenceSetUpData = SetUpPresenter
-    .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData, FeatureFlagsConfig.enableRequirementsForReturns)
+    .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
   return {
     activeTab: 'set-up',
