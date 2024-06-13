@@ -37,7 +37,7 @@ describe('Licence Agreement model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to licence entity roles', () => {
+    describe('when linking to financial agreements', () => {
       let testFinancialAgreements
 
       beforeEach(async () => {
@@ -55,7 +55,7 @@ describe('Licence Agreement model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the licence entity roles', async () => {
+      it('can eager load the financial agreements', async () => {
         const result = await LicenceAgreementModel.query()
           .findById(testRecord.id)
           .withGraphFetched('financialAgreements')
