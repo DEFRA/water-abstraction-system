@@ -26,7 +26,7 @@ describe('Submit Review Bill Run Service', () => {
   describe('when called with the filters applied', () => {
     const payload = {
       filterIssues: ['abs-outside-period', 'aggregate-factor'],
-      filterLicenceHolder: 'A Licence Holder Ltd',
+      filterLicenceHolderNumber: 'A Licence Holder Ltd',
       filterLicenceStatus: 'review'
     }
 

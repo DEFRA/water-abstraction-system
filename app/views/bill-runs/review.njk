@@ -131,17 +131,17 @@
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
 
     <form  method="post" action="review">
-      {# Filter by licence holder #}
+      {# Filter by licence holder or licence number #}
       {{ govukInput({
         label: {
-          text: "Licence holder",
+          text: "Licence holder or number",
           classes: "govuk-label--s",
           isPageHeading: false
         },
         classes: "govuk-input--width-20",
-        id: "filter-licence-holder",
-        name: "filterLicenceHolder",
-        value: filter.licenceHolder
+        id: "filter-licence-holder-number",
+        name: "filterLicenceHolderNumber",
+        value: filter.licenceHolderNumber
       }) }}
 
       {# Filter by licence issues #}

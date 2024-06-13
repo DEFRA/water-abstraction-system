@@ -20,7 +20,7 @@ const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/
 
 describe('Fetch Bill Run Licences service', () => {
   let filterIssues
-  let filterLicenceHolder
+  let filterLicenceHolderNumber
   let filterLicenceStatus
   let page
   let testLicenceReady
@@ -62,7 +62,7 @@ describe('Fetch Bill Run Licences service', () => {
       beforeEach(async () => {
         // no filters are being applied so these are undefined
         filterIssues = undefined
-        filterLicenceHolder = undefined
+        filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
 
         page = undefined
@@ -74,7 +74,7 @@ describe('Fetch Bill Run Licences service', () => {
         const result = await FetchBillRunLicencesService.go(
           billRun.id,
           filterIssues,
-          filterLicenceHolder,
+          filterLicenceHolderNumber,
           filterLicenceStatus,
           page
         )
@@ -106,7 +106,7 @@ describe('Fetch Bill Run Licences service', () => {
         const result = await FetchBillRunLicencesService.go(
           billRun.id,
           filterIssues,
-          filterLicenceHolder,
+          filterLicenceHolderNumber,
           filterLicenceStatus,
           page
         )
@@ -130,7 +130,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -143,7 +143,7 @@ describe('Fetch Bill Run Licences service', () => {
       describe('and a filter has been applied to the licence holder', () => {
         beforeEach(() => {
           filterIssues = undefined
-          filterLicenceHolder = 'ready licence'
+          filterLicenceHolderNumber = 'ready licence'
           filterLicenceStatus = undefined
         })
 
@@ -151,7 +151,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -175,10 +175,45 @@ describe('Fetch Bill Run Licences service', () => {
         })
       })
 
+      describe('and a filter has been applied to the licence number', () => {
+        beforeEach(() => {
+          filterIssues = undefined
+          filterLicenceHolderNumber = '02/200'
+          filterLicenceStatus = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(
+            billRun.id,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterLicenceStatus,
+            page
+          )
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+
+          expect(result.licences.total).to.equal(1)
+          expect(result.licences.results).to.have.length(1)
+          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences.results[0].licenceRef).to.equal('02/200')
+          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
+          expect(result.licences.results[0].status).to.equal('review')
+        })
+      })
+
       describe('and a filter has been applied to the licence status', () => {
         beforeEach(() => {
           filterIssues = undefined
-          filterLicenceHolder = undefined
+          filterLicenceHolderNumber = undefined
           filterLicenceStatus = 'review'
         })
 
@@ -186,7 +221,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -213,7 +248,7 @@ describe('Fetch Bill Run Licences service', () => {
       describe('and a single filter has been applied to the licence issues', () => {
         beforeEach(() => {
           filterIssues = 'over-abstraction'
-          filterLicenceHolder = undefined
+          filterLicenceHolderNumber = undefined
           filterLicenceStatus = undefined
         })
 
@@ -221,7 +256,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -248,7 +283,7 @@ describe('Fetch Bill Run Licences service', () => {
       describe('and multiple filters have been applied to the licence issues', () => {
         beforeEach(() => {
           filterIssues = ['abs-outside-period', 'returns-received-not-processed', 'returns-late']
-          filterLicenceHolder = undefined
+          filterLicenceHolderNumber = undefined
           filterLicenceStatus = undefined
         })
 
@@ -256,7 +291,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -288,7 +323,7 @@ describe('Fetch Bill Run Licences service', () => {
       describe('and filters have been applied that will return no results', () => {
         beforeEach(() => {
           filterIssues = undefined
-          filterLicenceHolder = 'ready licence'
+          filterLicenceHolderNumber = 'ready licence'
           filterLicenceStatus = 'review'
         })
 
@@ -296,7 +331,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -319,7 +354,7 @@ describe('Fetch Bill Run Licences service', () => {
       beforeEach(async () => {
         // no filters are being applied so these are undefined
         filterIssues = undefined
-        filterLicenceHolder = undefined
+        filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
 
         // Set the default page size to 1 so the 2 records fit on 2 pages
@@ -335,7 +370,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -368,7 +403,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -401,7 +436,7 @@ describe('Fetch Bill Run Licences service', () => {
           const result = await FetchBillRunLicencesService.go(
             billRun.id,
             filterIssues,
-            filterLicenceHolder,
+            filterLicenceHolderNumber,
             filterLicenceStatus,
             page
           )
@@ -427,7 +462,7 @@ describe('Fetch Bill Run Licences service', () => {
 
     beforeEach(() => {
       filterIssues = undefined
-      filterLicenceHolder = undefined
+      filterLicenceHolderNumber = undefined
       filterLicenceStatus = undefined
       invalidBillRunId = '56db85ed-767f-4c83-8174-5ad9c80fd00d'
       page = undefined
@@ -437,7 +472,7 @@ describe('Fetch Bill Run Licences service', () => {
       const result = await FetchBillRunLicencesService.go(
         invalidBillRunId,
         filterIssues,
-        filterLicenceHolder,
+        filterLicenceHolderNumber,
         filterLicenceStatus,
         page
       )
