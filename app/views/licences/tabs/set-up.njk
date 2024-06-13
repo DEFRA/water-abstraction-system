@@ -16,9 +16,7 @@
 
   {% if returnVersions.length == 0 %}
     <p class="govuk-body"> No requirements for returns for this licence.</p>
-  {% endif %}
-
-  {% if returnVersions.length > 0 %}
+  {% else %}
     {% set returnVersionsTableRows = [] %}
 
     {% for returnsRequirement in returnVersions %}
@@ -87,9 +85,7 @@
 
 {% if chargeInformation.length == 0 %}
   <p class="govuk-body"> No charge information for this licence.</p>
-{% endif %}
-
-{% if chargeInformation.length > 0 %}
+{% else %}
   {% set chargeVersionRows = [] %}
 
   {% for chargeVersion in  chargeInformation %}
@@ -161,10 +157,7 @@
 
 {% if agreements.length == 0 %}
   <p class="govuk-body"> No agreements for this licence.</p>
-{% endif %}
-
-{% if agreements.length > 0 %}
-
+{% else %}
   {% set agreementRows = [] %}
 
   {% for agreement in  agreements %}
