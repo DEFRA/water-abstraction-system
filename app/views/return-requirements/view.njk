@@ -1,6 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
+{% from "macros/charge-version-status-tag.njk" import statusTag %}
 
 {% macro newLine(array) %}
   {% for item in array %}
@@ -9,21 +9,14 @@
 {% endmacro %}
 
 {% block content %}
-  {% if notification %}
-    {{ govukNotificationBanner({
-      titleText: notification.title,
-      text: notification.text
-    }) }}
-  {% endif %}
-
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
       <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
       {{ pageTitle }}
     </h1>
+    {{ statusTag(status) }}
   </div>
-  {{ data | dump }}
 
   <div class="govuk-!-margin-bottom-9">
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
@@ -33,37 +26,19 @@
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-            text: "Start date"
+          text: "Reason"
           },
-          value: {
-            html: '<span data-test="start-date">' + startDate + '</span>'
-          },
-          actions: {
-            items: [
-              {
-                html: '<span data-test="change-start-date">' + 'Change' + '</span>',
-                href: "/system/return-requirements/" + sessionId + "/start-date",
-                visuallyHiddenText: "the start date for the return requirement"
-              }
-            ]
+            value: {
+            html: '<span data-test="reason">' + reason + '</span>'
           }
         },
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-            text: "Reason"
+            text: "Start date"
           },
           value: {
-            html: '<span data-test="reason">' + reason + '</span>'
-          },
-          actions: {
-            items: [
-              {
-                html: '<span data-test="change-reason">' + 'Change' + '</span>',
-                href: reasonLink,
-                visuallyHiddenText: "the reason for the return requirement"
-              }
-            ]
+            html: '<span data-test="start-date">' + startDate + '</span>'
           }
         }
       ]
@@ -79,7 +54,7 @@
             {{ govukSummaryList({
               card: {
                 title: {
-                  text: requirement.siteDescription
+                  html: "<p> Return reference " + requirement.returnReference + "</p>" + requirement.title
                 }
               },
               attributes: {

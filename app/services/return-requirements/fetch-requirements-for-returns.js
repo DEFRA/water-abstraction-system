@@ -2,7 +2,7 @@
 
 /**
  * Fetches existing return requirements to be copied from
- * @module FetchExistingRequirementsService
+ * @module FetchRequirementsForReturnsService
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
@@ -29,7 +29,10 @@ const FREQUENCIES = {
 async function go (returnVersionId) {
   const returnVersion = await _fetch(returnVersionId)
 
-  return _transformForSetup(returnVersion)
+  return {
+    ...returnVersion,
+    returnRequirements: _transformForSetup(returnVersion.returnRequirements)
+  }
 }
 
 function _agreementExceptions (returnRequirement) {
@@ -63,8 +66,17 @@ async function _fetch (returnVersionId) {
   return ReturnVersionModel.query()
     .findById(returnVersionId)
     .select([
-      'id'
+      'id',
+      'reason',
+      'startDate',
+      'status'
     ])
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (builder) => {
+      builder.select([
+        'id'
+      ]).modify('licenceHolder')
+    })
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (builder) => {
       builder.select([
@@ -98,6 +110,12 @@ async function _fetch (returnVersionId) {
         'purposeId'
       ])
     })
+    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
+    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
+      builder.select([
+        'description'
+      ])
+    })
 }
 
 function _points (returnRequirementPoints) {
@@ -108,13 +126,11 @@ function _points (returnRequirementPoints) {
 
 function _purposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    return returnRequirementPurpose.purposeId
+    return returnRequirementPurpose.purpose.description
   })
 }
 
-function _transformForSetup (returnVersion) {
-  const { returnRequirements } = returnVersion
-
+function _transformForSetup (returnRequirements) {
   return returnRequirements.map((returnRequirement) => {
     const {
       abstractionPeriodEndDay,
