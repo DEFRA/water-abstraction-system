@@ -16,6 +16,15 @@ const contactTypes = [
   'department'
 ]
 
+const frequencies = {
+  day: 'daily',
+  week: 'weekly',
+  fortnight: 'fortnightly',
+  month: 'monthly',
+  quarter: 'quarterly',
+  year: 'yearly'
+}
+
 const organisationTypes = [
   'individual',
   'limitedCompany',
@@ -63,6 +72,7 @@ module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
+  frequencies,
   organisationTypes,
   returnRequirementReasons,
   sources,

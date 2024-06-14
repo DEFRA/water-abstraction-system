@@ -6,15 +6,7 @@
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
-
-const FREQUENCIES = {
-  day: 'daily',
-  week: 'weekly',
-  fortnight: 'fortnightly',
-  month: 'monthly',
-  quarter: 'quarterly',
-  year: 'yearly'
-}
+const { frequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Fetches return versions with the returns requirements and licence
@@ -31,7 +23,7 @@ async function go (returnVersionId) {
 
   return {
     ...returnVersion,
-    returnRequirements: _transformForSetup(returnVersion.returnRequirements)
+    returnRequirements: _transformForReturnRequirements(returnVersion.returnRequirements)
   }
 }
 
@@ -130,7 +122,7 @@ function _purposes (returnRequirementPurposes) {
   })
 }
 
-function _transformForSetup (returnRequirements) {
+function _transformForReturnRequirements (returnRequirements) {
   return returnRequirements.map((returnRequirement) => {
     const {
       abstractionPeriodEndDay,
@@ -140,7 +132,7 @@ function _transformForSetup (returnRequirements) {
       collectionFrequency,
       reportingFrequency,
       returnRequirementPoints,
-      returnRequirementPurposes,
+      returnRequirementPurposes,k
       siteDescription,
       summer,
       legacyId
@@ -157,8 +149,8 @@ function _transformForSetup (returnRequirements) {
         'start-abstraction-period-day': abstractionPeriodStartDay,
         'start-abstraction-period-month': abstractionPeriodStartMonth
       },
-      frequencyReported: FREQUENCIES[reportingFrequency],
-      frequencyCollected: FREQUENCIES[collectionFrequency],
+      frequencyReported: frequencies[reportingFrequency],
+      frequencyCollected: frequencies[collectionFrequency],
       agreementsExceptions: _agreementExceptions(returnRequirement),
       legacyId
     }
