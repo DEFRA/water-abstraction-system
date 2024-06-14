@@ -350,9 +350,9 @@ async function submitFrequencyReported (request, h) {
 }
 
 async function submitNoReturnsRequired (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, request.payload)
+  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/no-returns-required.njk', pageData)

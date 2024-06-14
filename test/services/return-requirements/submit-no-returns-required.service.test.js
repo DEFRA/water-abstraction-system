@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,11 +18,13 @@ const SubmitNoReturnsRequiredService = require('../../../app/services/return-req
 describe('Return Requirements - Submit No Returns Required service', () => {
   let payload
   let session
+  let sessionData
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    session = await SessionHelper.add({
+    sessionData = {
       data: {
         checkPageVisited: false,
         licence: {
@@ -36,7 +39,15 @@ describe('Return Requirements - Submit No Returns Required service', () => {
         requirements: [{}],
         startDateOptions: 'licenceStartDate'
       }
-    })
+    }
+
+    session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -56,9 +67,33 @@ describe('Return Requirements - Submit No Returns Required service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
+        const result = await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({ checkPageVisited: false, journey: 'no-returns-required' })
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        })
+
+        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
+          const result = await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: true,
+            journey: 'no-returns-required'
+          })
+        })
+
+        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+        })
       })
     })
 
