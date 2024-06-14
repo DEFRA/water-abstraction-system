@@ -6,9 +6,9 @@
  */
 
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
-const SessionModel = require('../../models/session.model.js')
-const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
-const SetupValidator = require('../../validators/return-requirements/setup.validator.js')
+const SessionModel = require('../../../models/session.model.js')
+const SetupPresenter = require('../../../presenters/return-requirements/setup.presenter.js')
+const SetupValidator = require('../../../validators/return-requirements/setup.validator.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page

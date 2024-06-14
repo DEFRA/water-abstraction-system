@@ -7,8 +7,8 @@
 
 const { ref } = require('objection')
 
-const LicenceModel = require('../../models/licence.model.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+const LicenceModel = require('../../../models/licence.model.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'

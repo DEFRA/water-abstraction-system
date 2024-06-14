@@ -9,14 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const GenerateFromAbstractionDataService = require('../../../app/services/return-requirements/generate-from-abstraction-data.service.js')
+const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/setup/generate-from-abstraction-data.service.js')
 
 // Thing under test
-const SubmitSetupService = require('../../../app/services/return-requirements/submit-setup.service.js')
+const SubmitSetupService = require('../../../../app/services/return-requirements/setup/submit-setup.service.js')
 
 describe('Return Requirements - Submit Setup service', () => {
   let payload
