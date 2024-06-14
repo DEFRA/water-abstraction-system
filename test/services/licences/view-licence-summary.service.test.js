@@ -54,22 +54,23 @@ describe('View Licence service summary', () => {
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPointLinkText: 'View details of the abstraction point',
-          abstractionPoints: [
-            'At National Grid Reference TL 23198 88603'
-          ],
+          abstractionPoints: ['At National Grid Reference TL 23198 88603'],
           abstractionPointsCaption: 'Point of abstraction',
           abstractionQuantities: null,
           activeTab: 'summary',
-          documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
+          documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
           endDate: null,
-          id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+          id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
           licenceHolder: 'Unregistered licence',
+          monitoringStations: [{
+            id: 'ac075651-4781-4e24-a684-b943b98607ca',
+            label: 'MEVAGISSEY FIRE STATION'
+          }],
           licenceName: 'fake licence',
-          monitoringStations: [],
           purposes: null,
-          region: 'South West',
+          region: 'Avalon',
           sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
-          startDate: '7 March 2013'
+          startDate: '1 April 2019'
         })
       })
     })
@@ -106,13 +107,13 @@ describe('View Licence service summary', () => {
 
 function _testLicence () {
   return LicenceModel.fromJson({
-    id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-    licenceDocumentHeader: {
-      id: '40306a46-d4ce-4874-9c9e-30ab6469b3fe'
+    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    expiredDate: null,
+    startDate: new Date('2019-04-01'),
+    region: {
+      id: '740375f0-5add-4335-8ed5-b21b55b4a228',
+      displayName: 'Avalon'
     },
-    licenceRef: '01/130/R01',
-    licenceName: 'Unregistered licence',
-    licenceVersions: [],
     permitLicence: {
       purposes: [{
         ANNUAL_QTY: 'null',
@@ -131,11 +132,16 @@ function _testLicence () {
         }]
       }]
     },
-    region: {
-      id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
-      displayName: 'South West'
-    },
-    registeredTo: null,
-    startDate: new Date('2013-03-07')
+    licenceVersions: [],
+    licenceGaugingStations: [{
+      id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
+      gaugingStation: {
+        id: 'ac075651-4781-4e24-a684-b943b98607ca',
+        label: 'MEVAGISSEY FIRE STATION'
+      }
+    }],
+    licenceDocument: {},
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
+    licenceHolder: null
   })
 }
