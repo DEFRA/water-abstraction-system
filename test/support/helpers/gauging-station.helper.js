@@ -12,12 +12,11 @@ const GaugingStationModel = require('../../../app/models/gauging-station.model.j
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `gauging_station_id` - [random UUID]
- * - `hydrology_station_id` - [random UUID]
- * - `lat` - [decimal]
- * - `long` - [decimal]
- * - `grid_reference` - [string]
- * - `label` - [string]
+ * - `hydrologyStationId` - [random UUID]
+ * - `lat` - 52.04436
+ * - `long` - -0.15477
+ * - `gridReference` - TL2664640047
+ * - `label` - MEVAGISSEY FIRE STATION
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -41,7 +40,6 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
     hydrologyStationId: generateUUID(),
     lat: 52.04436,
     long: -0.15477,

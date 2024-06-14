@@ -50,7 +50,7 @@ function _abstractionWrapper (licenceAbstractionConditions, licenceVersions, pur
   const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
   let abstractionPeriodsAndPurposesLinkText = null
 
-  if (abstractionPeriods && purposes) {
+  if (abstractionPeriods) {
     const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
     const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
@@ -112,11 +112,7 @@ function _endDate (expiredDate) {
 }
 
 function _generateAbstractionPeriods (licenceVersions) {
-  if (!licenceVersions ||
-    licenceVersions.length === 0 ||
-    licenceVersions[0]?.licenceVersionPurposes === undefined ||
-    licenceVersions[0]?.licenceVersionPurposes?.length === 0
-  ) {
+  if (licenceVersions.length === 0 || licenceVersions[0].licenceVersionPurposes.length === 0) {
     return null
   }
 
@@ -143,26 +139,19 @@ function _generateLicenceHolder (licenceHolder) {
   return licenceHolder
 }
 
-function _generateMonitoringStation (stations) {
-  let monitoringStations = []
-  if (stations && stations.length !== undefined) {
-    const jsonArray = stations.map(JSON.stringify)
-    monitoringStations = Array.from(new Set(jsonArray)).map(JSON.parse)
-  }
-
-  return monitoringStations
+function _generateMonitoringStation (licenceGaugingStations) {
+  return licenceGaugingStations.map((licenceGaugingStation) => {
+    return licenceGaugingStation.gaugingStation
+  })
 }
 
 function _generatePurposes (licenceVersions) {
-  if (!licenceVersions ||
-    licenceVersions.length === 0 ||
-    licenceVersions[0]?.purposes === undefined ||
-    licenceVersions[0]?.purposes?.length === 0
-  ) {
+  if (licenceVersions.length === 0 || licenceVersions[0].licenceVersionPurposes.length === 0) {
     return null
   }
-  const allPurposeDescriptions = licenceVersions[0].purposes.map((item) => {
-    return item.description
+
+  const allPurposeDescriptions = licenceVersions[0].licenceVersionPurposes.map((licenceVersionPurpose) => {
+    return licenceVersionPurpose.purpose.description
   })
 
   const uniquePurposes = [...new Set(allPurposeDescriptions)]

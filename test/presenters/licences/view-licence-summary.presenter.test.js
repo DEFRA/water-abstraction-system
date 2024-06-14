@@ -28,8 +28,11 @@ describe('View Licence Summary presenter', () => {
           conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
           numberOfConditions: 4
         },
-        abstractionPeriods: null,
-        abstractionPeriodsAndPurposesLinkText: null,
+        abstractionPeriods: {
+          caption: 'Periods of abstraction',
+          uniqueAbstractionPeriods: ['1 April to 31 October', '1 November to 31 March']
+        },
+        abstractionPeriodsAndPurposesLinkText: 'View details of your purposes, periods and amounts',
         abstractionPointLinkText: 'View details of the abstraction point',
         abstractionPoints: ['At National Grid Reference TL 23198 88603'],
         abstractionPointsCaption: 'Point of abstraction',
@@ -40,11 +43,14 @@ describe('View Licence Summary presenter', () => {
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceHolder: 'Unregistered licence',
         monitoringStations: [{
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          id: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
         }],
-        purposes: null,
-        region: 'Narnia',
+        purposes: {
+          caption: 'Purposes',
+          data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
+        },
+        region: 'Avalon',
         sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
         startDate: '1 April 2019'
       })
@@ -120,9 +126,191 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
+  describe('the "abstractionPeriods" property', () => {
+    describe('when there is no "current" licence version', () => {
+      beforeEach(() => {
+        licence.licenceVersions = []
+      })
+
+      it('returns null', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPeriods).to.equal(null)
+      })
+    })
+
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
+
+        it('returns null', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+          expect(result.abstractionPeriods).to.equal(null)
+        })
+      })
+
+      describe('and a single licence version purpose linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+        })
+
+        it('returns the singular version of the caption and period formatted for display', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+          expect(result.abstractionPeriods).to.equal({
+            caption: 'Period of abstraction',
+            uniqueAbstractionPeriods: ['1 April to 31 October']
+          })
+        })
+      })
+
+      describe('and multiple licence version purposes linked to it', () => {
+        describe('that all have different abstraction periods', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes.pop()
+          })
+
+          it('returns the plural version of the caption and periods formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+            expect(result.abstractionPeriods).to.equal({
+              caption: 'Periods of abstraction',
+              uniqueAbstractionPeriods: ['1 April to 31 October', '1 November to 31 March']
+            })
+          })
+        })
+
+        describe('that have some abstraction periods that are the same', () => {
+          it('returns the plural version of the caption and the unique periods formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+            expect(result.abstractionPeriods).to.equal({
+              caption: 'Periods of abstraction',
+              uniqueAbstractionPeriods: ['1 April to 31 October', '1 November to 31 March']
+            })
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "abstractionPeriodsAndPurposesLinkText" property', () => {
+    describe('when there is no "current" licence version', () => {
+      beforeEach(() => {
+        licence.licenceVersions = []
+      })
+
+      it('returns null', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
+      })
+    })
+
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
+
+        it('returns null', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+          expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
+        })
+      })
+
+      describe('and a single licence version purpose linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+        })
+
+        it('returns the singular version of the link (period and purpose)', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+          expect(result.abstractionPeriodsAndPurposesLinkText)
+            .to
+            .equal('View details of your purpose, period and amounts')
+        })
+      })
+
+      describe('and multiple licence version purposes linked to it', () => {
+        describe('that all have different abstraction periods', () => {
+          describe('but the same purpose', () => {
+            beforeEach(() => {
+              licence.licenceVersions[0].licenceVersionPurposes.pop()
+            })
+
+            it('returns a mixed version of the link (periods and purpose)', () => {
+              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+              expect(result.abstractionPeriodsAndPurposesLinkText)
+                .to
+                .equal('View details of your purpose, periods and amounts')
+            })
+          })
+
+          describe('and different purposes', () => {
+            beforeEach(() => {
+              licence.licenceVersions[0].licenceVersionPurposes.pop()
+              licence.licenceVersions[0].licenceVersionPurposes[1].purpose = {
+                id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct'
+              }
+            })
+
+            it('returns the plural version of the link (periods and purposes)', () => {
+              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+              expect(result.abstractionPeriodsAndPurposesLinkText)
+                .to
+                .equal('View details of your purposes, periods and amounts')
+            })
+          })
+        })
+
+        describe('that all have the same abstraction period', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes.splice(1, 1)
+          })
+
+          describe('and the same purpose', () => {
+            beforeEach(() => {
+              licence.licenceVersions[0].licenceVersionPurposes[1].purpose = {
+                id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage'
+              }
+            })
+
+            it('returns the singular version of the link (period and purpose)', () => {
+              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+              expect(result.abstractionPeriodsAndPurposesLinkText)
+                .to
+                .equal('View details of your purpose, period and amounts')
+            })
+          })
+
+          describe('but different purposes', () => {
+            it('returns a mixed version of the link (period and purposes)', () => {
+              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+              expect(result.abstractionPeriodsAndPurposesLinkText)
+                .to
+                .equal('View details of your purposes, period and amounts')
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('the "endDate" property', () => {
     describe('when the licence expired date is null', () => {
-      it('returns NULL', () => {
+      it('returns null', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.be.null()
@@ -140,7 +328,7 @@ describe('View Licence Summary presenter', () => {
         licence.expiredDate = today
       })
 
-      it('returns NULL', () => {
+      it('returns null', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.be.null()
@@ -182,162 +370,13 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the "licenceVersionPurposes" property', () => {
-    describe('when there are no licenceVersions', () => {
-      it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal(null)
-        expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
-      })
-    })
-
-    describe('when there are no licenceVersions so an empty array is returned', () => {
-      beforeEach(() => {
-        licence.licenceVersions = []
-      })
-
-      it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal(null)
-        expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
-      })
-    })
-
-    describe('when the licenceVersionPurposes has no abstraction period and one purpose', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }],
-          licenceVersionPurposes: []
-        }]
-      })
-
-      it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal(null)
-      })
-    })
-
-    describe('when the licenceVersionPurposes has one abstraction period and one purpose', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }],
-          licenceVersionPurposes: [{
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodEndDay: 28,
-            abstractionPeriodEndMonth: 2
-          }]
-        }]
-      })
-
-      it('returns an object with a caption and an array with one abstraction period', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal({
-          caption: 'Period of abstraction',
-          uniqueAbstractionPeriods: ['1 January to 28 February']
-        })
-      })
-    })
-
-    describe('when the licenceVersions has more than one abstraction period of the same range', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          licenceVersionPurposes: [{
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodEndDay: 28,
-            abstractionPeriodEndMonth: 2
-          }, {
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodEndDay: 28,
-            abstractionPeriodEndMonth: 2
-          }]
-        }]
-      })
-
-      it('returns an object with a caption and an array with one abstraction period', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal({
-          caption: 'Period of abstraction',
-          uniqueAbstractionPeriods: ['1 January to 28 February']
-        })
-      })
-    })
-
-    describe('when the licenceVersions has more than one abstraction period and purposes of different types', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }, {
-            description: 'Make-Up Or Top Up Water'
-          }],
-          licenceVersionPurposes: [{
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodEndDay: 28,
-            abstractionPeriodEndMonth: 2
-          }, {
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 3,
-            abstractionPeriodEndDay: 28,
-            abstractionPeriodEndMonth: 4
-          }]
-        }]
-      })
-
-      it('returns an object with a caption and an array with two purposes', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.abstractionPeriods).to.equal({
-          caption: 'Periods of abstraction',
-          uniqueAbstractionPeriods: ['1 January to 28 February', '1 March to 28 April']
-        })
-      })
-    })
-  })
-
   describe('the "monitoringStations" property', () => {
-    describe('when the licenceGaugingStations property is not an array', () => {
-      beforeEach(() => {
-        licence.licenceGaugingStations = {}
-      })
-
-      it('will return an empty array of monitoring station details', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.monitoringStations).to.equal([])
-      })
-    })
-
     describe('when the licence has no gauging stations', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = []
       })
 
-      it('will return an empty array of monitoring station details', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.monitoringStations).to.equal([])
-      })
-    })
-
-    describe('when the licence has a null "licenceGaugingStations" property', () => {
-      beforeEach(() => {
-        licence.licenceGaugingStations = null
-      })
-
-      it('will return an empty array of monitoring station details', async () => {
+      it('will return an empty array', async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([])
@@ -345,11 +384,11 @@ describe('View Licence Summary presenter', () => {
     })
 
     describe('when the licence has a gauging station', () => {
-      it('will return an array populated with monitoring station details', async () => {
+      it('will return any array with the monitoring station details', async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([{
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          id: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
         }])
       })
@@ -357,39 +396,34 @@ describe('View Licence Summary presenter', () => {
 
     describe('when the licence has multiple gauging stations', () => {
       beforeEach(() => {
-        licence.licenceGaugingStations = [{
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
-          label: 'MEVAGISSEY FIRE STATION'
-        }, {
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607cb',
-          label: 'AVALON FIRE STATION'
-        }]
+        licence.licenceGaugingStations.push({
+          id: '13f7504d-2750-4dd9-94dd-929e99e900a0',
+          gaugingStation: {
+            id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
+            label: 'AVALON FIRE STATION'
+          }
+        })
       })
 
-      it('will return an array populated with multiple monitoring station details', async () => {
+      it('will return any array with the monitoring station details', async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.monitoringStations).to.equal([{
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
-          label: 'MEVAGISSEY FIRE STATION'
-        }, {
-          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607cb',
-          label: 'AVALON FIRE STATION'
-        }])
+        expect(result.monitoringStations).to.equal([
+          {
+            id: 'ac075651-4781-4e24-a684-b943b98607ca',
+            label: 'MEVAGISSEY FIRE STATION'
+          },
+          {
+            id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
+            label: 'AVALON FIRE STATION'
+          }
+        ])
       })
     })
   })
 
   describe('the "purposes" property', () => {
-    describe('when there are no licenceVersions', () => {
-      it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.purposes).to.equal(null)
-      })
-    })
-
-    describe('when there is an empty licenceVersions array', () => {
+    describe('when there is no "current" licence version', () => {
       beforeEach(() => {
         licence.licenceVersions = []
       })
@@ -401,83 +435,66 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when there is an empty licenceVersions purposes array', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: []
-        }]
-      })
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
 
-      it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        it('returns null', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.purposes).to.equal(null)
-      })
-    })
-
-    describe('when the licenceVersions has one purpose', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }]
-        }]
-      })
-
-      it('returns an object with a caption and an array with one purpose', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.purposes).to.equal({
-          caption: 'Purpose',
-          data: ['Spray Irrigation - Storage']
+          expect(result.purposes).to.equal(null)
         })
       })
-    })
 
-    describe('when the licenceVersions has more than one purpose of the same type', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }, {
-            description: 'Spray Irrigation - Storage'
-          }]
-        }]
-      })
+      describe('and a single licence version purpose linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+        })
 
-      it('returns an object with a caption and an array with one entry', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        it('returns the singular version of the caption and the purpose descriptions', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.purposes).to.equal({
-          caption: 'Purpose',
-          data: ['Spray Irrigation - Storage']
+          expect(result.purposes).to.equal({
+            caption: 'Purpose',
+            data: ['Spray Irrigation - Storage']
+          })
         })
       })
-    })
 
-    describe('when the licenceVersions has more than one purpose of different types', () => {
-      beforeEach(() => {
-        licence.licenceVersions = [{
-          purposes: [{
-            description: 'Spray Irrigation - Storage'
-          }, {
-            description: 'Make-Up Or Top Up Water'
-          }]
-        }]
-      })
+      describe('and multiple licence version purposes linked to it', () => {
+        describe('that all have different purposes', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes.splice(1, 1)
+          })
 
-      it('returns an object with a caption and an array with two entries', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          it('returns the plural version of the caption and all purpose descriptions', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.purposes).to.equal({
-          caption: 'Purposes',
-          data: ['Spray Irrigation - Storage', 'Make-Up Or Top Up Water']
+            expect(result.purposes).to.equal({
+              caption: 'Purposes',
+              data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
+            })
+          })
+        })
+
+        describe('that have some abstraction purposes that are the same', () => {
+          it('returns the plural version of the captions and the unique purpose descriptions', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+
+            expect(result.purposes).to.equal({
+              caption: 'Purposes',
+              data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
+            })
+          })
         })
       })
     })
   })
 
-  describe('the "purposes" property', () => {
+  describe('the "sourceOfSupply" property', () => {
     describe('and it has a source of supply', () => {
       it('will return the source of supply for use in the licence summary page', async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
@@ -980,16 +997,12 @@ function _abstractionConditions () {
 function _licence () {
   return {
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-    ends: null,
     expiredDate: null,
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
-    licenceGaugingStations: [{
-      gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
-      label: 'MEVAGISSEY FIRE STATION'
-    }],
-    licenceHolder: null,
-    licenceName: 'Unregistered licence',
-    licenceRef: '01/123',
+    startDate: new Date('2019-04-01'),
+    region: {
+      id: '740375f0-5add-4335-8ed5-b21b55b4a228',
+      displayName: 'Avalon'
+    },
     permitLicence: {
       purposes: [{
         ANNUAL_QTY: 'null',
@@ -1008,8 +1021,44 @@ function _licence () {
         }]
       }]
     },
-    region: { displayName: 'Narnia' },
-    registeredTo: null,
-    startDate: new Date('2019-04-01')
+    licenceVersions: [{
+      id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
+      licenceVersionPurposes: [
+        {
+          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 10,
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' }
+        },
+        {
+          id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 11,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' }
+        },
+        {
+          id: 'f68ed9a0-4a2b-42da-8f5b-c5c897113121',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 10,
+          purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' }
+        }
+      ]
+    }],
+    licenceGaugingStations: [{
+      id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
+      gaugingStation: {
+        id: 'ac075651-4781-4e24-a684-b943b98607ca',
+        label: 'MEVAGISSEY FIRE STATION'
+      }
+    }],
+    licenceDocument: {},
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
+    licenceHolder: null
   }
 }
