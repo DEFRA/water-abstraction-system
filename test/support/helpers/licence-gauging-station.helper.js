@@ -12,15 +12,14 @@ const LicenceGaugingStationModel = require('../../../app/models/licence-gauging-
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licence_gauging_station_id` - [random UUID]
- * - `licence_id` - [random UUID]
- * - `licence_version_purpose_condition_id` - [random UUID]
- * - `source` - [string]
- * - `restriction_type` - [string]
- * - `threshold_unit` - [string]
- * - `threshold_value` - [string]
- * - `status` - [string]
- * - `alert_type` -[string]
+ * - `gaugingStationId` - [random UUID]
+ * - `licenceId` - [random UUID]
+ * - `restrictionType` - flow
+ * - `source` - wrls
+ * - `thresholdUnit` - m3/s
+ * - `thresholdValue` - 100
+ * - `createdAt` - Date.now()
+ * - `updatedAt` - Date.now()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -44,15 +43,19 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
+    gaugingStationId: generateUUID(),
     licenceId: generateUUID(),
-    licenceVersionPurposeConditionId: generateUUID(),
-    source: 'wrls',
     restrictionType: 'flow',
+    source: 'wrls',
     thresholdUnit: 'm3/s',
-    thresholdValue: '100',
-    status: 'resume',
-    alertType: 'stop'
+    thresholdValue: 100,
+    // INFO: The table does not have a default for the createAt and updatedAt columns. But they are set as 'not
+    // nullable'! So, we need to ensure we set them when creating a new record. Also, we can't use Date.now() because
+    // Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold
+    // the seconds since the epoch. Pass it an ISO string though ('2023-01-05T08:37:05.575Z') and PostgreSQL can do the
+    // conversion https://stackoverflow.com/a/61912776/6117745
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   }
 
   return {
