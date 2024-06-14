@@ -11,6 +11,7 @@ const AddService = require('../services/return-requirements/add.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
+const ViewService = require('../services/return-requirements/view.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const ExistingService = require('../services/return-requirements/existing.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
@@ -244,6 +245,15 @@ async function startDate (request, h) {
   const pageData = await StartDateService.go(sessionId)
 
   return h.view('return-requirements/start-date.njk', {
+    ...pageData
+  })
+}
+
+async function view (request, h) {
+  const { returnVersionId } = request.params
+  const pageData = await ViewService.go(returnVersionId)
+
+  return h.view('return-requirements/view.njk', {
     ...pageData
   })
 }
@@ -533,5 +543,6 @@ module.exports = {
   submitReturnsCycle,
   submitSetup,
   submitSiteDescription,
-  submitStartDate
+  submitStartDate,
+  view
 }

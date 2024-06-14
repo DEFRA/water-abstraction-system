@@ -175,7 +175,7 @@ function _returnVersions (returnVersions = [{}]) {
     return {
       action: [{
         text: 'View',
-        link: ''
+        link: `/system/return-requirements/${returnVersion.id}/view`
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
