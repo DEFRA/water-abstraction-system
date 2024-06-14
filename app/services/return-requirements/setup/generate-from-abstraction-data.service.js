@@ -5,9 +5,7 @@
  * @module GenerateFromAbstractionDataService
  */
 
-const { ref } = require('objection')
-
-const LicenceModel = require('../../../models/licence.model.js')
+const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
@@ -34,7 +32,7 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
  * be persisted to the setup session
  */
 async function go (licenceId) {
-  const licence = await _fetch(licenceId)
+  const licence = await FetchAbstractionDataService.go(licenceId)
 
   return _transformForSetup(licence)
 }
@@ -56,62 +54,6 @@ function _agreementExceptions (licence) {
   }
 
   return ['none']
-}
-
-/**
- * Fetch the specified licence, its current version, and other linked records we need to do the transformation
- */
-async function _fetch (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'licences.id',
-      'licences.waterUndertaker',
-      // This is generates a sub-select query which uses `EXISTS` to convert whether a user has a current two-part
-      // tariff agreement into a boolean value
-      LicenceModel.raw(`
-        EXISTS (SELECT 1
-          FROM licence_agreements la
-          INNER JOIN financial_agreements fa ON fa.id = la.financial_agreement_id
-          WHERE la.licence_ref = licences.licence_ref
-          AND fa.financial_agreement_code = 'S127'
-          AND (la.end_date IS NULL OR la.end_date >= ?)) AS two_part_tariff_agreement
-          `, [new Date()])
-    ])
-    // For reasons unknown (!!) the previous team never normalised the points against a licence, just the purposes. So,
-    // we have to dip into the JSONB blob of _all_ the NALD data for a licence to retrieve the points for a purpose
-    .withGraphFetched('permitLicence')
-    .modifyGraph('permitLicence', (builder) => {
-      builder.select([
-        ref('licenceDataValue:data.current_version.purposes').as('purposes')
-      ])
-    })
-    // Grab only the current version for the licence. The licence version purposes are linked off it
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder
-        .select([
-          'id',
-          'startDate'
-        ])
-        .where('status', 'current')
-        .orderBy('startDate', 'desc')
-        .limit(1)
-    })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes')
-    .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
-      builder.select([
-        'id',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'externalId'
-      ])
-        // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary
-        // and secondary against a licence version purpose
-        .modify('allPurposes')
-    })
 }
 
 /**
