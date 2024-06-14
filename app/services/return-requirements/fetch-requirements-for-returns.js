@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches existing return requirements to be copied from
+ * Fetches return versions with the returns requirements and licence
  * @module FetchRequirementsForReturnsService
  */
 
@@ -17,10 +17,10 @@ const FREQUENCIES = {
 }
 
 /**
- * Fetches existing return requirements to be copied from
+ * Fetches return versions with the returns requirements and licence
  *
- * In the returns setup journey we allow users to select the option to create new requirements by copying from them
- * from an existing return version. This service fetches the selected return version and its requirements
+ * All the requirements for the return will be formatted
+ *
  *
  * @param {string} returnVersionId - The UUID of the selected return version to copy requirements from
  *

@@ -1,19 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check` page
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/view` page
  * @module ViewService
  */
 
-// const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
 const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.js')
 const FetchPointsService = require('./fetch-points.service.js')
-const PurposeModel = require('../../models/purpose.model.js')
 const ViewPresenter = require('../../presenters/return-requirements/view.presenter.js')
-// const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check` page
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/view` page
  *
  * @param {string} returnVersionId - The UUID for return requirement version
  *

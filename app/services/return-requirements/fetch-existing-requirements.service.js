@@ -80,8 +80,7 @@ async function _fetch (returnVersionId) {
         'reportingFrequency',
         'siteDescription',
         'summer',
-        'twoPartTariff',
-        'legacyId'
+        'twoPartTariff'
       ])
     })
     .withGraphFetched('returnRequirements.returnRequirementPoints')
@@ -126,8 +125,7 @@ function _transformForSetup (returnVersion) {
       returnRequirementPoints,
       returnRequirementPurposes,
       siteDescription,
-      summer,
-      legacyId
+      summer
     } = returnRequirement
 
     return {
@@ -143,8 +141,7 @@ function _transformForSetup (returnVersion) {
       },
       frequencyReported: FREQUENCIES[reportingFrequency],
       frequencyCollected: FREQUENCIES[collectionFrequency],
-      agreementsExceptions: _agreementExceptions(returnRequirement),
-      legacyId
+      agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })
 }

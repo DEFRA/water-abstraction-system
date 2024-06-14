@@ -1,9 +1,9 @@
 'use strict'
 
 const { formatAbstractionDate } = require('../base.presenter.js')
+const { formatLongDate } = require('../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
-const { returnRequirementReasons } = require('../../lib/static-lookups.lib')
-const { formatLongDate } = require('../base.presenter')
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 const agreementsExceptionsText = {
   none: 'None',
@@ -21,8 +21,8 @@ const agreementsExceptionsText = {
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/view` page
  *
- * @param {Object[]} requirements - The existing return requirements in the current session
- * @param {Object[]} points - The points related to the licence
+ * @param {ReturnVersionModel[]} requirementsForReturns - The return version inc licence and requirements
+ * @param {LicenceModel[]} points - The points related to the return version licence
  *
  * @returns {Object} returns requirement data needed by the view template
  */
