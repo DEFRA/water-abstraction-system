@@ -12,7 +12,7 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
  *
- * Was built to support the testing of `FetchExistingRequirementsService` but can be used in any scenario where a
+ * Was built to support the testing of `GenerateFromExistingRequirementsService` but can be used in any scenario where a
  * complete 'requirements for returns' record is needed.
  *
  * It creates the parent return version then two return requirement records. To each it adds a return requirement point
