@@ -23,6 +23,14 @@ class LicenceGaugingStationModel extends BaseModel {
           from: 'licenceGaugingStations.gaugingStationId',
           to: 'gaugingStations.id'
         }
+      },
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'licenceGaugingStations.licenceId',
+          to: 'licences.id'
+        }
       }
     }
   }
