@@ -251,4 +251,51 @@ describe('Review Bill Run Service', () => {
       })
     })
   })
+
+  describe('when there are no pages of results after a filter is applied', () => {
+    const bannerMessage = undefined
+    const presenterStubData = {
+      preparedBillRun: 'bill run data',
+      preparedLicences: 'licence data',
+      filter: {
+        issues: undefined,
+        licenceHolder: 'Unknown Licence Holder',
+        licenceStatus: undefined,
+        openFilter: true
+      }
+    }
+    const yarGetStubData = {
+      filterIssues: undefined,
+      filterLicenceHolderNumber: 'Unknown Licence Holder',
+      filterLicenceStatus: undefined
+    }
+
+    beforeEach(() => {
+      page = undefined
+
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
+        billRun: 'bill data',
+        licences: { results: 'licence data', total: 0 }
+      })
+
+      Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
+
+      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
+    })
+
+    it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+      const result = await ReviewBillRunService.go(billRunId, page, yarStub)
+
+      expect(result.bannerMessage).to.equal(bannerMessage)
+      expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+      expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+      expect(result.filter).to.equal(presenterStubData.filter)
+      expect(result.pageTitle).to.equal('Review licences')
+      expect(result.pagination.numberOfPages).to.equal(0)
+      expect(result.pagination.component).not.to.exist()
+
+      expect(FetchBillRunLicencesService.go.called).to.be.true()
+      expect(ReviewBillRunPresenter.go.called).to.be.true()
+    })
+  })
 })

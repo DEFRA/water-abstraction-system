@@ -33,6 +33,7 @@ const SubmitAgreementsExceptions = require('../../app/services/return-requiremen
 const SubmitExistingService = require('../../app/services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-requirements/submit-frequency-reported.service.js')
+const SubmitNoReturnsRequiredService = require('../../app/services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../../app/services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../../app/services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../../app/services/return-requirements/submit-reason.service.js')
@@ -499,6 +500,36 @@ describe('Return requirements controller', () => {
           const response = await server.inject(_getOptions(path))
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Why are no returns required?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation passes', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ })
+          })
+
+          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })
