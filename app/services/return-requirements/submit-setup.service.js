@@ -5,6 +5,7 @@
  * @module SubmitSetupService
  */
 
+const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../models/session.model.js')
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SetupValidator = require('../../validators/return-requirements/setup.validator.js')
@@ -61,6 +62,13 @@ function _redirect (setup) {
 
 async function _save (session, payload) {
   session.setup = payload.setup
+
+  // If the user selected the option to use abstraction data to setup the return requirements we use
+  // GenerateFromAbstractionDataService to fetch the licence's abstraction data and transform it into return
+  // requirements we can persist in the session
+  if (payload.setup === 'use-abstraction-data') {
+    session.requirements = await GenerateFromAbstractionDataService.go(session.licence.id)
+  }
 
   return session.$update()
 }
