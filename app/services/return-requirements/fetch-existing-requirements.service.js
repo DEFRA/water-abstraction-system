@@ -6,15 +6,7 @@
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
-
-const FREQUENCIES = {
-  day: 'daily',
-  week: 'weekly',
-  fortnight: 'fortnightly',
-  month: 'monthly',
-  quarter: 'quarterly',
-  year: 'yearly'
-}
+const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Fetches existing return requirements to be copied from
@@ -139,8 +131,8 @@ function _transformForSetup (returnVersion) {
         'start-abstraction-period-day': abstractionPeriodStartDay,
         'start-abstraction-period-month': abstractionPeriodStartMonth
       },
-      frequencyReported: FREQUENCIES[reportingFrequency],
-      frequencyCollected: FREQUENCIES[collectionFrequency],
+      frequencyReported: returnRequirementFrequencies[reportingFrequency],
+      frequencyCollected: returnRequirementFrequencies[collectionFrequency],
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })
