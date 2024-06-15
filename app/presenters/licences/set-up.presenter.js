@@ -167,7 +167,7 @@ function _endsSixYearsAgo (endDate) {
 }
 
 function _financialAgreementCode (agreement) {
-  return agreement.financialAgreements[0].financialAgreementCode
+  return agreement.financialAgreements[0].code
 }
 
 function _returnVersions (returnVersions = [{}]) {

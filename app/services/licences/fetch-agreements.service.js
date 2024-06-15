@@ -30,7 +30,7 @@ async function _fetch (licenceRef) {
     .withGraphFetched('financialAgreements')
     .modifyGraph('financialAgreements', (builder) => {
       builder.select([
-        'financialAgreementCode'
+        'code'
       ])
     })
     .orderBy([

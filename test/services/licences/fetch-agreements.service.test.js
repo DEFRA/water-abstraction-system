@@ -38,7 +38,7 @@ describe('Fetch Agreements service', () => {
         {
           dateSigned: result[0].dateSigned,
           endDate: null,
-          financialAgreements: [{ financialAgreementCode: 'S127' }],
+          financialAgreements: [{ code: 'S127' }],
           id: result[0].id,
           startDate: result[0].startDate
         }

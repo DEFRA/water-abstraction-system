@@ -28,7 +28,7 @@ async function _fetch (licenceRef) {
       builder.select([
         'id'
       ])
-        .where('financialAgreementCode', 'S127')
+        .where('code', 'S127')
     })
 }
 

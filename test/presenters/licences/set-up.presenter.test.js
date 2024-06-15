@@ -20,7 +20,7 @@ describe('Licence Set Up presenter', () => {
     startDate: new Date('2020-01-01'),
     endDate: null,
     dateSigned: null,
-    financialAgreements: [{ financialAgreementCode: 'S127' }]
+    financialAgreements: [{ code: 'S127' }]
   }
 
   const chargeVersion = {
@@ -226,7 +226,7 @@ describe('Licence Set Up presenter', () => {
       describe('when the financial agreement code ', () => {
         describe('is for Two-part tariff ', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].financialAgreementCode = 'S127'
+            agreement.financialAgreements[0].code = 'S127'
           })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
@@ -237,7 +237,7 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Canal and Rivers Trust, supported source (S130S) ', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].financialAgreementCode = 'S130S'
+            agreement.financialAgreements[0].code = 'S130S'
           })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
@@ -248,7 +248,7 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Canal and Rivers Trust, unsupported source (S130U)', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].financialAgreementCode = 'S130U'
+            agreement.financialAgreements[0].code = 'S130U'
           })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
@@ -259,7 +259,7 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Abatement', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].financialAgreementCode = 'S126'
+            agreement.financialAgreements[0].code = 'S126'
           })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter
@@ -272,7 +272,7 @@ describe('Licence Set Up presenter', () => {
 
       describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
         beforeEach(() => {
-          agreement.financialAgreements[0].financialAgreementCode = 'S127'
+          agreement.financialAgreements[0].code = 'S127'
         })
 
         it('shows delete, end and recalculate bills actions', () => {

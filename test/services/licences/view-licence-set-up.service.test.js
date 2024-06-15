@@ -33,7 +33,7 @@ describe('View Licence Set Up service', () => {
         startDate: new Date('2020-01-01'),
         endDate: null,
         dateSigned: null,
-        financialAgreements: [{ financialAgreementCode: 'S127' }]
+        financialAgreements: [{ code: 'S127' }]
       }
     ])
 
