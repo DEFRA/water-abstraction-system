@@ -14,13 +14,13 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe('Licence Set Up presenter', () => {
+describe('Licences - Set Up presenter', () => {
   const agreement = {
     id: '123',
     startDate: new Date('2020-01-01'),
     endDate: null,
-    dateSigned: null,
-    financialAgreements: [{ code: 'S127' }]
+    signedOn: null,
+    financialAgreement: { id: '970168ce-06c3-4823-b84d-9da30b742bb8', code: 'S127' }
   }
 
   const chargeVersion = {
@@ -69,12 +69,10 @@ describe('Licence Set Up presenter', () => {
       }
     }
 
-    const lessThanSixYearsAgo = new Date()
-
     commonData = {
       licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b',
       ends: {
-        date: lessThanSixYearsAgo
+        date: new Date()
       }
     }
 
@@ -91,7 +89,6 @@ describe('Licence Set Up presenter', () => {
   describe('when provided with populated licence set up data', () => {
     describe('that includes licence agreements', () => {
       beforeEach(() => {
-        agreement.endDate = null
         agreements = [{ ...agreement }]
         chargeVersions = []
         workflows = []
@@ -121,7 +118,7 @@ describe('Licence Set Up presenter', () => {
                 text: 'Recalculate bills'
               }
             ],
-            dateSigned: '',
+            signedOn: '',
             description: 'Two-part tariff',
             endDate: '',
             startDate: '1 January 2020'
@@ -225,9 +222,6 @@ describe('Licence Set Up presenter', () => {
 
       describe('when the financial agreement code ', () => {
         describe('is for Two-part tariff ', () => {
-          beforeEach(() => {
-            agreement.financialAgreements[0].code = 'S127'
-          })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
@@ -237,8 +231,9 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Canal and Rivers Trust, supported source (S130S) ', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].code = 'S130S'
+            agreement.financialAgreement.code = 'S130S'
           })
+
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
@@ -248,8 +243,9 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Canal and Rivers Trust, unsupported source (S130U)', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].code = 'S130U'
+            agreement.financialAgreement.code = 'S130U'
           })
+
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
@@ -259,7 +255,7 @@ describe('Licence Set Up presenter', () => {
 
         describe('is for Abatement', () => {
           beforeEach(() => {
-            agreement.financialAgreements[0].code = 'S126'
+            agreement.financialAgreement.code = 'S126'
           })
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter
@@ -272,7 +268,7 @@ describe('Licence Set Up presenter', () => {
 
       describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
         beforeEach(() => {
-          agreement.financialAgreements[0].code = 'S127'
+          agreement.financialAgreement.code = 'S127'
         })
 
         it('shows delete, end and recalculate bills actions', () => {
