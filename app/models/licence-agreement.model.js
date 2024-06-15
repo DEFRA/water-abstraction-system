@@ -16,8 +16,8 @@ class LicenceAgreementModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      financialAgreements: {
-        relation: Model.HasManyRelation,
+      financialAgreement: {
+        relation: Model.HasOneRelation,
         modelClass: 'financial-agreement.model',
         join: {
           from: 'licenceAgreements.financialAgreementId',

@@ -23,8 +23,8 @@ async function _fetch (licenceRef) {
     .where('licenceRef', licenceRef)
     .whereNull('endDate')
     .orWhere('endDate', '>=', new Date())
-    .withGraphFetched('financialAgreements')
-    .modifyGraph('financialAgreements', (builder) => {
+    .withGraphFetched('financialAgreement')
+    .modifyGraph('financialAgreement', (builder) => {
       builder.select([
         'id'
       ])

@@ -8,7 +8,7 @@
 const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
 
 /**
- * Fetches charge version data needed for the view '/licences/{id}/set-up` page
+ * Fetches licence agreements data needed for the view '/licences/{id}/set-up` page
  *
  * @param {string} licenceRef - The licence ref for the licence to fetch licence agreements for
  *
@@ -25,11 +25,12 @@ async function _fetch (licenceRef) {
       'id',
       'startDate',
       'endDate',
-      'dateSigned'
+      'signedOn'
     ])
-    .withGraphFetched('financialAgreements')
-    .modifyGraph('financialAgreements', (builder) => {
+    .withGraphFetched('financialAgreement')
+    .modifyGraph('financialAgreement', (builder) => {
       builder.select([
+        'id',
         'code'
       ])
     })
