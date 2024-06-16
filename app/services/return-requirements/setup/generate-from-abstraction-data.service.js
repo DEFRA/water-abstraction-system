@@ -11,6 +11,8 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
 
+const DAILY_CUBIC_METRES_THRESHOLD = 2500
+
 const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620']
 
 /**
@@ -127,7 +129,7 @@ function _frequencyCollected (licenceVersionPurpose, waterUndertaker) {
     return returnRequirementFrequencies.day
   }
 
-  if (dailyQuantity > 2500) {
+  if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
     return returnRequirementFrequencies.week
   }
 
@@ -150,7 +152,7 @@ function _frequencyReported (licenceVersionPurpose, waterUndertaker) {
     return returnRequirementFrequencies.day
   }
 
-  if (dailyQuantity > 2500) {
+  if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
     return returnRequirementFrequencies.week
   }
 
