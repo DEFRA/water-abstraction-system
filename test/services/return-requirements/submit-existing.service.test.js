@@ -13,7 +13,7 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchExistingRequirementsService = require('../../../app/services/return-requirements/fetch-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('../../../app/services/return-requirements/generate-from-existing-requirements.service.js')
 
 // Thing under test
 const SubmitExistingService = require('../../../app/services/return-requirements/submit-existing.service.js')
@@ -62,7 +62,7 @@ describe('Return Requirements - Submit Existing service', () => {
           existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab'
         }
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves([_transformedReturnRequirement()])
+        Sinon.stub(GenerateFromExistingRequirementsService, 'go').resolves([_transformedReturnRequirement()])
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
