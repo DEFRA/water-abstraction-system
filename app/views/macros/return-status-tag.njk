@@ -1,0 +1,30 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro statusTag(status, inline=false) %}
+  {% if status === 'overdue' %}
+    {% set color = 'govuk-tag--orange' %}
+  {% elif status === 'void' %}
+    {% set color = 'govuk-tag--grey' %}
+  {% elif status === 'due' %}
+    {% set color = 'govuk-tag--blue' %}
+  {% elif status === 'received' %}
+    {% set color = 'govuk-tag--green' %}
+  {% elif status === 'complete' %}
+    {% set color = 'govuk-tag--green' %}
+  {% else %}
+    {% set color = 'govuk-tag--blue' %}
+  {% endif %}
+
+  {% if inline %}
+    {% set fontSize = "" %}
+  {% else %}
+    {% set fontSize = "govuk-!-font-size-27" %}
+  {% endif %}
+
+  {{
+    govukTag({
+      text: status,
+      classes: color + ' ' + fontSize
+    })
+  }}
+{% endmacro %}
