@@ -47,8 +47,12 @@ const PermitLicenceHelper = require('../../../../test/support/helpers/permit-lic
 const PurposeHelper = require('../../../../test/support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../../test/support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
+const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPurposeHelper = require('../../../../test/support/helpers/return-requirement-purpose.helper.js')
+const ReturnRequirementHelper = require('../../../../test/support/helpers/return-requirement.helper.js')
 const ReturnSubmissionLineHelper = require('../../../../test/support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionHelper = require('../../../../test/support/helpers/return-submission.helper.js')
+const ReturnVersionHelper = require('../../../../test/support/helpers/return-version.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../../test/support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeElementHelper = require('../../../../test/support/helpers/review-charge-element.helper.js')
 const ReviewChargeReferenceHelper = require('../../../../test/support/helpers/review-charge-reference.helper.js')
@@ -106,8 +110,12 @@ const LOAD_HELPERS = {
   purposes: { helper: PurposeHelper, test: true, legacy: { schema: 'water', table: 'purposes_uses', id: 'purpose_use_id' } },
   regions: { helper: RegionHelper, test: true, legacy: { schema: 'water', table: 'regions', id: 'region_id' } },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
+  returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
+  returnRequirementPurposes: { helper: ReturnRequirementPurposeHelper, test: false },
+  returnRequirements: { helper: ReturnRequirementHelper, test: false },
   returnSubmissionLines: { helper: ReturnSubmissionLineHelper, test: false },
   returnSubmissions: { helper: ReturnSubmissionHelper, test: false },
+  returnVersions: { helper: ReturnVersionHelper, test: false },
   reviewChargeElementReturns: { helper: ReviewChargeElementReturnHelper, test: false },
   reviewChargeElements: { helper: ReviewChargeElementHelper, test: false },
   reviewChargeReferences: { helper: ReviewChargeReferenceHelper, test: false },
