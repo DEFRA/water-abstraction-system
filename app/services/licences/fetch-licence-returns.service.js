@@ -5,9 +5,9 @@
  * @module FetchLicenceReturnsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model')
+const ReturnLogModel = require('../../models/return-log.model.js')
 
-const DatabaseConfig = require('../../../config/database.config')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
