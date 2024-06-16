@@ -11,10 +11,10 @@ exports.up = function (knex) {
       table.uuid('financial_agreement_type_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('financial_agreement_code')
-      table.string('description')
-      table.boolean('disabled')
-      table.boolean('is_test')
+      table.string('financial_agreement_code').notNullable()
+      table.string('description').notNullable()
+      table.boolean('disabled').default(false)
+      table.boolean('is_test').notNullable().default(false)
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())

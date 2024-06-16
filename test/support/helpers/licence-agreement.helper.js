@@ -13,11 +13,9 @@ const LicenceHelper = require('./licence.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceAgreementId` - [random UUID]
+ * - `financialAgreementId` - [random UUID]
  * - `licenceRef` - [randomly generated - 01/123]
  * - `startDate` - 2023-01-01
- * - `dateSigned` - 2022-12-31
- * - `source` - 'nald'
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -41,11 +39,9 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
+    financialAgreementId: generateUUID(),
     licenceRef: LicenceHelper.generateLicenceRef(),
-    startDate: new Date('2023-01-01'),
-    dateSigned: new Date('2022-01-01'),
-    source: 'nald'
+    startDate: new Date('2023-01-01')
   }
 
   return {

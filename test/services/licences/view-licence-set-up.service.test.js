@@ -29,11 +29,11 @@ describe('View Licence Set Up service', () => {
 
     Sinon.stub(FetchAgreementsService, 'go').returns([
       {
-        id: '123',
+        id: 'ca41d547-2cb6-4995-8af4-90117839bf86',
         startDate: new Date('2020-01-01'),
         endDate: null,
-        dateSigned: null,
-        financialAgreements: [{ financialAgreementCode: 'S127' }]
+        signedOn: null,
+        financialAgreement: { id: 'f766a058-99e0-4cb3-8b63-53856dd60cf9', code: 'S127' }
       }
     ])
 
@@ -41,7 +41,7 @@ describe('View Licence Set Up service', () => {
       {
         changeReason: { description: 'Missing thing' },
         endDate: new Date('2020-09-01'),
-        id: '123',
+        id: 'c0601335-b6ad-4651-b54b-c586f8d22ac3',
         licenceId: '456',
         startDate: new Date('2020-01-01'),
         status: 'current'
@@ -60,7 +60,7 @@ describe('View Licence Set Up service', () => {
 
     Sinon.stub(FetchWorkflowsService, 'go').returns([
       {
-        id: '123',
+        id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
         createdAt: new Date('2020-01-01'),
         status: 'review',
         data: { chargeVersion: { changeReason: { description: 'changed something' } } },
@@ -98,7 +98,7 @@ describe('View Licence Set Up service', () => {
         agreements: [
           {
             action: [],
-            dateSigned: '',
+            signedOn: '',
             description: 'Two-part tariff',
             endDate: '',
             startDate: '1 January 2020'
@@ -108,7 +108,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [],
             endDate: '-',
-            id: '123',
+            id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
             reason: 'changed something',
             startDate: '1 January 2020',
             status: 'review'
@@ -116,12 +116,12 @@ describe('View Licence Set Up service', () => {
           {
             action: [
               {
-                link: '/licences/456/charge-information/123/view',
+                link: '/licences/456/charge-information/c0601335-b6ad-4651-b54b-c586f8d22ac3/view',
                 text: 'View'
               }
             ],
             endDate: '1 September 2020',
-            id: '123',
+            id: 'c0601335-b6ad-4651-b54b-c586f8d22ac3',
             reason: 'Missing thing',
             startDate: '1 January 2020',
             status: 'approved'

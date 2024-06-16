@@ -37,35 +37,38 @@ describe('Financial Agreement model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to licence entity roles', () => {
+    describe('when linking to licence agreements', () => {
       let testLicenceAgreements
 
       beforeEach(async () => {
         testRecord = await FinancialAgreementHelper.add()
 
-        const { id: financialAgreementId } = testRecord
-
-        testLicenceAgreements = await LicenceAgreementHelper.add({ financialAgreementId })
+        testLicenceAgreements = []
+        for (let i = 0; i < 2; i++) {
+          const licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId: testRecord.id })
+          testLicenceAgreements.push(licenceAgreement)
+        }
       })
 
       it('can successfully run a related query', async () => {
         const query = await FinancialAgreementModel.query()
-          .innerJoinRelated('licenceAgreementTypes')
+          .innerJoinRelated('licenceAgreements')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the licence entity roles', async () => {
+      it('can eager load the licence agreements', async () => {
         const result = await FinancialAgreementModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('licenceAgreementTypes')
+          .withGraphFetched('licenceAgreements')
 
         expect(result).to.be.instanceOf(FinancialAgreementModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.licenceAgreementTypes).to.be.an.array()
-        expect(result.licenceAgreementTypes[0]).to.be.an.instanceOf(LicenceAgreementModel)
-        expect(result.licenceAgreementTypes).to.include(testLicenceAgreements)
+        expect(result.licenceAgreements).to.be.an.array()
+        expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[0])
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[1])
       })
     })
   })

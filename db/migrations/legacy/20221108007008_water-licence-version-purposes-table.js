@@ -26,13 +26,16 @@ exports.up = function (knex) {
       table.decimal('daily_quantity')
       table.decimal('hourly_quantity')
       table.decimal('annual_quantity')
-      table.string('external_id').unique()
-      table.boolean('is_test')
+      table.string('external_id').notNullable()
+      table.boolean('is_test').notNullable().default(false)
 
       // Legacy timestamps
       // NOTE: They are not automatically set
       table.dateTime('date_created').notNullable()
       table.dateTime('date_updated').notNullable()
+
+      // Constraints
+      table.unique(['external_id'], { useConstraint: true })
     })
 }
 

@@ -22,7 +22,7 @@ describe('Return Requirements - Fetch Licence Agreements service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const financialAgreement = await FinancialAgreementHelper.add()
+    const financialAgreement = await FinancialAgreementHelper.add({ code: 'S127' })
     financialAgreementId = financialAgreement.id
   })
 
@@ -41,14 +41,12 @@ describe('Return Requirements - Fetch Licence Agreements service', () => {
           licenceRef: licenceAgreement.licenceRef,
           startDate: licenceAgreement.startDate,
           endDate: null,
-          dateSigned: licenceAgreement.dateSigned,
+          signedOn: licenceAgreement.signedOn,
           deletedAt: null,
-          source: 'nald',
+          source: 'wrls',
           createdAt: licenceAgreement.createdAt,
           updatedAt: licenceAgreement.updatedAt,
-          financialAgreements: [{
-            id: financialAgreementId
-          }]
+          financialAgreement: { id: financialAgreementId }
         }])
       })
     })
@@ -67,14 +65,12 @@ describe('Return Requirements - Fetch Licence Agreements service', () => {
           licenceRef: licenceAgreement.licenceRef,
           startDate: licenceAgreement.startDate,
           endDate: new Date('2099-01-01'),
-          dateSigned: licenceAgreement.dateSigned,
+          signedOn: licenceAgreement.signedOn,
           deletedAt: null,
-          source: 'nald',
+          source: 'wrls',
           createdAt: licenceAgreement.createdAt,
           updatedAt: licenceAgreement.updatedAt,
-          financialAgreements: [{
-            id: financialAgreementId
-          }]
+          financialAgreement: { id: financialAgreementId }
         }])
       })
     })
