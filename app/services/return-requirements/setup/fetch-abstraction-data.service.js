@@ -79,6 +79,7 @@ async function _fetch (licenceId) {
         'abstractionPeriodEndMonth',
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
+        'dailyQuantity',
         'externalId'
       ])
         // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary

@@ -105,6 +105,7 @@ async function _licenceVersions (licenceId) {
 
 async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   const { id: electricityId } = await LicenceVersionPurposeHelper.add({
+    dailyQuantity: 455,
     externalId: '1:10065380',
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryElectricityId,
@@ -113,6 +114,7 @@ async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   })
 
   const { id: standardId } = await LicenceVersionPurposeHelper.add({
+    dailyQuantity: 2675,
     externalId: '1:10065381',
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
@@ -121,6 +123,7 @@ async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   })
 
   const { id: twoPartTariffId } = await LicenceVersionPurposeHelper.add({
+    dailyQuantity: 300,
     externalId: '1:10065382',
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
