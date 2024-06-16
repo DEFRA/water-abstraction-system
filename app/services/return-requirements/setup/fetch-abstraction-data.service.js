@@ -47,7 +47,7 @@ async function _fetch (licenceId) {
           FROM licence_agreements la
           INNER JOIN financial_agreements fa ON fa.id = la.financial_agreement_id
           WHERE la.licence_ref = licences.licence_ref
-          AND fa.financial_agreement_code = 'S127'
+          AND fa.code = 'S127'
           AND (la.end_date IS NULL OR la.end_date >= ?)) AS two_part_tariff_agreement
           `, [new Date()])
     ])
