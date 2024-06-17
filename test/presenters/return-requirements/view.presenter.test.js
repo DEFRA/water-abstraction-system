@@ -11,14 +11,6 @@ const { expect } = Code
 const ViewPresenter = require('../../../app/presenters/return-requirements/view.presenter.js')
 
 describe('Return Requirements - View presenter', () => {
-  const point = {
-    ID: '286',
-    NGR1_EAST: '69212',
-    NGR1_SHEET: 'TQ',
-    NGR1_NORTH: '50394',
-    LOCAL_NAME: 'Midway River'
-  }
-
   let points
   let requirement
   let requirementsForReturns
@@ -49,9 +41,6 @@ describe('Return Requirements - View presenter', () => {
 
     requirementsForReturns = {
       id: '0d6f0f07-7d5c-48bf-90f0-d441680c3653',
-      reason: 'major-change',
-      startDate: new Date('2023-04-21'),
-      status: 'current',
       licence: {
         id: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
         licenceRef: '02/01',
@@ -61,16 +50,25 @@ describe('Return Requirements - View presenter', () => {
           licenceDocumentRoles: []
         }
       },
+      multipleUpload: false,
+      reason: 'major-change',
       returnRequirements: [{ ...requirement }],
-      multipleUpload: false
+      startDate: new Date('2023-04-21'),
+      status: 'current'
     }
 
     points = [
-      { ...point }
+      {
+        ID: '286',
+        LOCAL_NAME: 'Midway River',
+        NGR1_EAST: '69212',
+        NGR1_NORTH: '50394',
+        NGR1_SHEET: 'TQ'
+      }
     ]
   })
 
-  describe('when provided with requirementsForReturns', () => {
+  describe('when provided with requirements for returns', () => {
     it('correctly presents the data', () => {
       const result = ViewPresenter.go(requirementsForReturns, points)
 
@@ -106,12 +104,13 @@ describe('Return Requirements - View presenter', () => {
 
     describe('the "reason" property', () => {
       describe('and a reason', () => {
-        it('correctly defaults reason to an empty string', () => {
+        it('returns the formatted reason', () => {
           const result = ViewPresenter.go(requirementsForReturns, points)
 
           expect(result.reason).to.equal('Major change')
         })
       })
+
       describe('and no reason', () => {
         beforeEach(() => {
           requirementsForReturns.reason = null

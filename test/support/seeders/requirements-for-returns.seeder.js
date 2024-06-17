@@ -4,11 +4,11 @@
  * @module RequirementsForReturnsSeeder
  */
 
-const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
-const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
+const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
+const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 
 /**
@@ -19,7 +19,7 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
  *
  * It creates the parent return version then two return requirement records. To each it adds a return requirement point
  * and purpose record.
- *
+ *k
  * The first requirement has a winter returns cycle. reports weekly, and has no agreements. The second has a summer
  * returns cycle, reports monthly, and has _all_ the agreements!
  *
