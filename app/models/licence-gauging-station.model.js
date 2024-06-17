@@ -16,12 +16,20 @@ class LicenceGaugingStationModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      licenceGaugingStations: {
-        relation: Model.HasManyRelation,
+      gaugingStation: {
+        relation: Model.BelongsToOneRelation,
         modelClass: 'gauging-station.model',
         join: {
           from: 'licenceGaugingStations.gaugingStationId',
           to: 'gaugingStations.id'
+        }
+      },
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'licenceGaugingStations.licenceId',
+          to: 'licences.id'
         }
       }
     }

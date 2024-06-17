@@ -4,18 +4,16 @@
  * @module FinancialAgreementHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new financial agreement
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `financialAgreementId` - [random UUID]
- * - `financialAgreementCode` - INST
- * - `description` - Installment
- * - `disabled` - false
+ * - `code` - [randomly generated - S127]
+ * - `description` - [randomly generated - Section S127]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -38,11 +36,11 @@ async function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const code = data.code ? data.code : generateFinancialAgreementCode()
+
   const defaults = {
-    id: generateUUID(),
-    financialAgreementCode: 'S127',
-    description: 'Section 127 (Two Part Tariff)',
-    disabled: false
+    code,
+    description: `Section ${code}`
   }
 
   return {
@@ -51,7 +49,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateFinancialAgreementCode () {
+  return `S${randomInteger(100, 199)}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateFinancialAgreementCode
 }

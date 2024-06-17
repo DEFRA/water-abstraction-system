@@ -21,11 +21,13 @@ describe('Scheduled Notification model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ScheduledNotificationHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ScheduledNotificationHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ScheduledNotificationModel.query().findById(testRecord.id)
 
@@ -35,14 +37,13 @@ describe('Scheduled Notification model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to events', () => {
+    describe('when linking to event', () => {
       let testEvent
-      beforeEach(async () => {
-        testRecord = await ScheduledNotificationHelper.add()
 
-        testEvent = await EventHelper.add({
-          id: testRecord.eventId
-        })
+      beforeEach(async () => {
+        testEvent = await EventHelper.add()
+
+        testRecord = await ScheduledNotificationHelper.add({ eventId: testEvent.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -52,7 +53,7 @@ describe('Scheduled Notification model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the events', async () => {
+      it('can eager load the event', async () => {
         const result = await ScheduledNotificationModel.query()
           .findById(testRecord.id)
           .withGraphFetched('event')

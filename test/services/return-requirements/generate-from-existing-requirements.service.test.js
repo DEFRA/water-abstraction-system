@@ -12,9 +12,9 @@ const DatabaseSupport = require('../../support/database.js')
 const RequirementsForReturnsSeed = require('../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
-const FetchExistingRequirementsService = require('../../../app/services/return-requirements/fetch-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('../../../app/services/return-requirements/generate-from-existing-requirements.service.js')
 
-describe('Return Requirements - Fetch Existing Requirements service', () => {
+describe('Return Requirements - Generate From Existing Requirements service', () => {
   let returnVersion
 
   beforeEach(async () => {
@@ -27,7 +27,7 @@ describe('Return Requirements - Fetch Existing Requirements service', () => {
     })
 
     it('returns the details of the its return requirements transformed for use in the journey', async () => {
-      const result = await FetchExistingRequirementsService.go(returnVersion.id)
+      const result = await GenerateFromExistingRequirementsService.go(returnVersion.id)
 
       expect(result).to.equal([
         {

@@ -57,7 +57,7 @@ function _agreements (commonData, agreements, auth) {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: agreementDescriptions[_financialAgreementCode(agreement)],
-      dateSigned: agreement.dateSigned ? formatLongDate(agreement.dateSigned) : '',
+      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
       action: _agreementActionLinks(commonData, agreement, auth)
     }
   })
@@ -167,7 +167,7 @@ function _endsSixYearsAgo (endDate) {
 }
 
 function _financialAgreementCode (agreement) {
-  return agreement.financialAgreements[0].financialAgreementCode
+  return agreement.financialAgreement.code
 }
 
 function _returnVersions (returnVersions = [{}]) {

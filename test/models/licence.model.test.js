@@ -15,12 +15,16 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const DatabaseSupport = require('../support/database.js')
+const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
+const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceGaugingStationHelper = require('../support/helpers/licence-gauging-station.helper.js')
+const LicenceGaugingStationModel = require('../../app/models/licence-gauging-station.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -128,6 +132,41 @@ describe('Licence model', () => {
       })
     })
 
+    describe('when linking to licence agreements', () => {
+      let testLicenceAgreements
+
+      beforeEach(async () => {
+        const { licenceRef } = testRecord
+
+        testLicenceAgreements = []
+        for (let i = 0; i < 2; i++) {
+          const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef })
+          testLicenceAgreements.push(licenceAgreement)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceAgreements')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence agreements', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceAgreements')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceAgreements).to.be.an.array()
+        expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[0])
+        expect(result.licenceAgreements).to.include(testLicenceAgreements[1])
+      })
+    })
+
     describe('when linking to licence document', () => {
       let testLicenceDocument
 
@@ -185,6 +224,41 @@ describe('Licence model', () => {
 
         expect(result.licenceDocumentHeader).to.be.an.instanceOf(LicenceDocumentHeaderModel)
         expect(result.licenceDocumentHeader).to.equal(testLicenceDocumentHeader)
+      })
+    })
+
+    describe('when linking to licence gauging stations', () => {
+      let testLicenceGaugingStations
+
+      beforeEach(async () => {
+        const { id: licenceId } = testRecord
+
+        testLicenceGaugingStations = []
+        for (let i = 0; i < 2; i++) {
+          const licenceGaugingStation = await LicenceGaugingStationHelper.add({ licenceId })
+          testLicenceGaugingStations.push(licenceGaugingStation)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceGaugingStations')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence gauging stations', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceGaugingStations')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceGaugingStations).to.be.an.array()
+        expect(result.licenceGaugingStations[0]).to.be.an.instanceOf(LicenceGaugingStationModel)
+        expect(result.licenceGaugingStations).to.include(testLicenceGaugingStations[0])
+        expect(result.licenceGaugingStations).to.include(testLicenceGaugingStations[1])
       })
     })
 

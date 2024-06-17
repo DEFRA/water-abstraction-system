@@ -12,8 +12,11 @@ const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 /**
  * Adds a company to the provided licence that is set up to be the licence holder
  *
- * @param {String} licenceRef The licence reference that the company will be the licence holder for
- * @param {String} name The name of the company that will be the licence holder
+ * @param {String} licenceRef - The licence reference that the company will be the licence holder for
+ * @param {String} [name] - The name of the company that will be the licence holder
+ *
+ * @returns {Promise<module:LicenceDocumentRoleHelper>} the licence document role which will link through to all the
+ * entities that make up the licence holder
  */
 async function seed (licenceRef, name = 'Licence Holder Ltd') {
   // Create a licence role (the default is licenceHolder)
@@ -27,7 +30,7 @@ async function seed (licenceRef, name = 'Licence Holder Ltd') {
   const licenceDocument = await LicenceDocumentHelper.add({ licenceRef })
 
   // Create the licence document role record that _is_ linked to the correct licence holder record
-  await LicenceDocumentRoleHelper.add({
+  return LicenceDocumentRoleHelper.add({
     licenceDocumentId: licenceDocument.id,
     licenceRoleId: licenceRole.id,
     companyId: company.id,

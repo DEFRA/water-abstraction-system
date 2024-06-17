@@ -17,7 +17,7 @@ const FetchAgreementsService =
   require('../../../app/services/licences/fetch-agreements.service.js')
 
 describe('Fetch Agreements service', () => {
-  let testRecord
+  const licenceRef = '01/12/34/1000'
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -25,24 +25,29 @@ describe('Fetch Agreements service', () => {
 
   describe('when the licence has agreements data', () => {
     beforeEach(async () => {
-      const financialAgreement = await FinancialAgreementHelper.add()
+      const financialAgreement = await FinancialAgreementHelper.add({
+        id: '970168ce-06c3-4823-b84d-9da30b742bb8',
+        code: 'S127'
+      })
 
-      testRecord = await LicenceAgreementHelper.add({
-        financial_agreement_id: financialAgreement.id
+      await LicenceAgreementHelper.add({
+        endDate: new Date('2040-05-01'),
+        financialAgreementId: financialAgreement.id,
+        licenceRef,
+        startDate: new Date('2022-04-01'),
+        signedOn: new Date('2022-04-01')
       })
     })
-    it('returns the matching agreements data', async () => {
-      const result = await FetchAgreementsService.go(testRecord.licenceRef)
 
-      expect(result).to.equal([
-        {
-          dateSigned: result[0].dateSigned,
-          endDate: null,
-          financialAgreements: [{ financialAgreementCode: 'S127' }],
-          id: result[0].id,
-          startDate: result[0].startDate
-        }
-      ])
+    it('returns the matching agreements data', async () => {
+      const results = await FetchAgreementsService.go(licenceRef)
+
+      expect(results[0]).to.equal({
+        startDate: new Date('2022-04-01'),
+        signedOn: new Date('2022-04-01'),
+        endDate: new Date('2040-05-01'),
+        financialAgreement: { id: '970168ce-06c3-4823-b84d-9da30b742bb8', code: 'S127' }
+      }, { skip: ['id'] })
     })
   })
 })

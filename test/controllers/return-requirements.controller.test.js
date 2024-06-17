@@ -25,7 +25,7 @@ const RemoveService = require('../../app/services/return-requirements/remove.ser
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
-const SetupService = require('../../app/services/return-requirements/setup.service.js')
+const SetupService = require('../../app/services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../../app/services/return-requirements/site-description.service.js')
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-requirements/submit-abstraction-period.service.js')
@@ -33,11 +33,12 @@ const SubmitAgreementsExceptions = require('../../app/services/return-requiremen
 const SubmitExistingService = require('../../app/services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-requirements/submit-frequency-reported.service.js')
+const SubmitNoReturnsRequiredService = require('../../app/services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../../app/services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../../app/services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../../app/services/return-requirements/submit-reason.service.js')
 const SubmitReturnsCycleService = require('../../app/services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../../app/services/return-requirements/submit-setup.service.js')
+const SubmitSetupService = require('../../app/services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../../app/services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../../app/services/return-requirements/submit-start-date.service.js')
 
@@ -499,6 +500,36 @@ describe('Return requirements controller', () => {
           const response = await server.inject(_getOptions(path))
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Why are no returns required?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation passes', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ })
+          })
+
+          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

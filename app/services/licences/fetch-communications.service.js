@@ -32,17 +32,17 @@ async function _fetch (licenceRef, page) {
       'messageRef'
     ])
     .where('licences', '@>', `["${licenceRef}"]`)
-    .andWhere('notify_status', 'in', ['delivered', 'received'])
+    .andWhere('notifyStatus', 'in', ['delivered', 'received'])
     .andWhere('eventId', 'is not', null)
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
         'createdAt',
+        'issuer',
         'metadata',
-        'type',
-        'subtype',
         'status',
-        'issuer'
+        'subtype',
+        'type'
       ])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)

@@ -22,7 +22,7 @@ const RemoveService = require('../services/return-requirements/remove.service.js
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
-const SetupService = require('../services/return-requirements/setup.service.js')
+const SetupService = require('../services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
@@ -40,7 +40,7 @@ const SubmitPurposeService = require('../services/return-requirements/submit-pur
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitRemoveService = require('../services/return-requirements/submit-remove.service.js')
 const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
+const SubmitSetupService = require('../services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
@@ -350,9 +350,9 @@ async function submitFrequencyReported (request, h) {
 }
 
 async function submitNoReturnsRequired (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, request.payload)
+  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/no-returns-required.njk', pageData)

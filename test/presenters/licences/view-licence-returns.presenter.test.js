@@ -16,10 +16,10 @@ describe('View Licence returns presenter', () => {
 
   const returnItem = {
     id: 'mock-id-1',
-    dueDate: '2012-11-28T00:00:00.000Z',
+    dueDate: new Date('2012-11-28'),
     status: 'completed',
-    startDate: '2020/01/02',
-    endDate: '2020/02/01',
+    startDate: new Date('2020/01/02'),
+    endDate: new Date('2020/02/01'),
     metadata: {
       purposes: [
         {
@@ -69,7 +69,7 @@ describe('View Licence returns presenter', () => {
             reference: '1068',
             purpose: 'SPRAY IRRIGATION',
             dueDate: '28 November 2012',
-            status: 'COMPLETE',
+            status: 'complete',
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description'
           },
@@ -78,7 +78,7 @@ describe('View Licence returns presenter', () => {
             reference: '1069',
             purpose: 'SPRAY IRRIGATION',
             dueDate: '28 November 2012',
-            status: 'OVERDUE',
+            status: 'overdue',
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description'
           }

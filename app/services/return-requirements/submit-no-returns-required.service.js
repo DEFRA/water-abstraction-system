@@ -8,6 +8,7 @@
 const NoReturnsRequiredPresenter = require('../../presenters/return-requirements/no-returns-required.presenter.js')
 const NoReturnsRequiredValidator = require('../../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../../models/session.model.js')
+const GeneralLib = require('../../lib/general.lib')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/no-returns-required` page
@@ -20,15 +21,20 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} The page data for the no returns required page
  */
-async function go (sessionId, payload) {
+async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
+
+    if (session.checkPageVisited) {
+      GeneralLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited,
