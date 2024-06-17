@@ -5,7 +5,9 @@
  */
 
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
+const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 
@@ -31,6 +33,10 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
   // Create a return version to which we'll link multiple return requirements
   const returnVersion = await ReturnVersionHelper.add({ licenceId })
+
+  await LicenceHelper.add({
+    id: licenceId
+  })
 
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
@@ -77,6 +83,10 @@ async function _returnRequirement (returnVersionId, reportingFrequency, summer, 
 
   const purpose = await ReturnRequirementPurposeHelper.add({ purposeId, returnRequirementId })
   returnRequirement.returnRequirementPurposes = [purpose]
+
+  await PurposeHelper.add({
+    id: purposeId
+  })
 
   return returnRequirement
 }

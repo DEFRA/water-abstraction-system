@@ -100,8 +100,8 @@ function _mapRequirement (requirement, points) {
 }
 
 function _mapPoints (requirementPoints, points) {
-  return requirementPoints.map((point) => {
-    const matchedPoint = points.find((pid) => { return pid.ID === point })
+  return requirementPoints.map((requirementPoint) => {
+    const matchedPoint = points.find((pid) => { return pid.ID === requirementPoint })
 
     return generateAbstractionPointDetail(matchedPoint)
   })
