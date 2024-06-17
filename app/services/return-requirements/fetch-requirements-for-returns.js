@@ -132,7 +132,7 @@ function _transformForReturnRequirements (returnRequirements) {
       collectionFrequency,
       reportingFrequency,
       returnRequirementPoints,
-      returnRequirementPurposes,k
+      returnRequirementPurposes,
       siteDescription,
       summer,
       legacyId
