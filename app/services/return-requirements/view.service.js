@@ -5,8 +5,8 @@
  * @module ViewService
  */
 
-const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.service.js')
 const FetchPointsService = require('./fetch-points.service.js')
+const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.service.js')
 const ViewPresenter = require('../../presenters/return-requirements/view.presenter.js')
 
 /**

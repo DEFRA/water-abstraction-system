@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches return versions with the returns requirements and licence
+ * Fetches requirements for returns by the return version id
  * @module FetchRequirementsForReturnsService
  */
 
@@ -9,12 +9,13 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 const { frequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Fetches return versions with the returns requirements and licence
+ * Fetches requirements for returns by the return version id
  *
- * All the requirements for the return will be formatted
+ * Includes the licence
  *
+ * Formats the requirements
  *
- * @param {string} returnVersionId - The UUID of the selected return version to copy requirements from
+ * @param {string} returnVersionId - The UUID of the selected return version to get requirements for
  *
  * @returns {Promise<Object>} The return version and its linked return requirements, plus their points and purposes
  */
