@@ -17,6 +17,13 @@ const RequirementsForReturnsSeeder = require('../../support/seeders/requirements
 const ViewService = require('../../../app/services/return-requirements/view.service.js')
 
 describe('Return Requirements - View service', () => {
+  const point = {
+    NGR1_EAST: '69212',
+    NGR1_SHEET: 'TQ',
+    NGR1_NORTH: '50394',
+    LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE'
+  }
+
   let returnVersion
 
   beforeEach(async () => {
@@ -25,38 +32,8 @@ describe('Return Requirements - View service', () => {
     returnVersion = await RequirementsForReturnsSeeder.seed()
 
     Sinon.stub(FetchPointsService, 'go').resolves([
-      {
-        ID: '1234',
-        NGR1_EAST: '69212',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-        NGR1_NORTH: '50394',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
-      },
-      {
-        ID: '4321',
-        NGR1_EAST: '69212',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-        NGR1_NORTH: '50394',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
-      }
+      { ...point, ID: '1234' },
+      { ...point, ID: '4321' }
     ])
   })
 

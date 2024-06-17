@@ -36,7 +36,6 @@ function go (requirementsForReturns, points) {
     licenceRef: licence.licenceRef,
     pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
-    // TODO: double check date is okay
     startDate: formatLongDate(startDate),
     requirements: _requirements(returnRequirements, points),
     status
