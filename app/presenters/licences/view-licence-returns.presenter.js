@@ -34,29 +34,36 @@ function _formatPurpose (purpose) {
 }
 
 function _formatReturnToTableRow (returns) {
-  return returns.map((r) => {
+  return returns.map((returnLog) => {
     return {
-      dates: `${formatLongDate(new Date(r.startDate))} to ${formatLongDate(new Date(r.endDate))}`,
-      description: r.metadata.description,
-      dueDate: formatLongDate(new Date(r.dueDate)),
-      id: r.id,
-      purpose: _formatPurpose(r.metadata.purposes),
-      reference: r.returnReference,
-      status: _formatStatus(r.status)
+      dates: `${formatLongDate(new Date(returnLog.startDate))} to ${formatLongDate(new Date(returnLog.endDate))}`,
+      description: returnLog.metadata.description,
+      dueDate: formatLongDate(new Date(returnLog.dueDate)),
+      id: returnLog.id,
+      purpose: _formatPurpose(returnLog.metadata.purposes),
+      reference: returnLog.returnReference,
+      status: _formatStatus(returnLog)
     }
   })
 }
 
-function _formatStatus (status) {
+function _formatStatus (returnLog) {
+  const { status, dueDate } = returnLog
+
+  // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
+  // statues
   if (status === 'completed') {
-    return 'COMPLETE'
+    return 'complete'
   }
 
-  if (status === 'due') {
-    return 'OVERDUE'
+  // Work out if the return is overdue (status is still 'due' and it is past the due date)
+  const today = new Date()
+  if (status === 'due' && dueDate < today) {
+    return 'overdue'
   }
 
-  return 'NO STATUS'
+  // For all other cases we can just return the status and the return-status-tag macro will know how to display it
+  return status
 }
 
 function _noReturnsMessage (hasReturns, hasRequirements) {

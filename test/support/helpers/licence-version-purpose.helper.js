@@ -13,17 +13,17 @@ const { randomInteger } = require('../general.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceVersionPurposeId` - [random UUID]
- * - `licenceVersionId` - [random UUID]
- * - `primaryPurposeId` - [random UUID]
- * - `secondaryPurposeId` - [random UUID]
- * - `purposeUseId` - [random UUID]
  * - `abstractionPeriodStartDay` - [1]
  * - `abstractionPeriodStartMonth` - [1]
  * - `abstractionPeriodEndDay` - [31]
  * - `abstractionPeriodEndMonth` - [3]
- * - `dateCreated` - new Date()
- * - `dateUpdated` - new Date()
+ * - `externalId` - [randomly generated - 9:99999]
+ * - `licenceVersionId` - [random UUID]
+ * - `primaryPurposeId` - [random UUID]
+ * - `purposeId` - [random UUID]
+ * - `secondaryPurposeId` - [random UUID]
+ * - `created` - new Date()
+ * - `updated` - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -53,14 +53,14 @@ function defaults (data = {}) {
     abstractionPeriodStartMonth: 1,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    annualQuantity: 1000,
-    createdAt: timestamp,
-    updatedAt: timestamp,
-    externalId: `9:${randomInteger(10000, 99999)}:1:0`,
+    externalId: `9:${randomInteger(10000, 99999)}`,
     licenceVersionId: generateUUID(),
     primaryPurposeId: generateUUID(),
+    purposeId: generateUUID(),
     secondaryPurposeId: generateUUID(),
-    purposeId: generateUUID()
+    // INFO: The table does not have a default for the date columns
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {

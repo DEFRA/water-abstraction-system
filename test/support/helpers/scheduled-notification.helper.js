@@ -4,17 +4,15 @@
  * @module ScheduledNotificationHelper
  */
 
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ScheduledNotificationModel = require('../../../app/models/scheduled-notification.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
- * Add a new company contact
+ * Add a new scheduled notification
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
- * - `event_id` - [random UUID]
- * - 'notify_status': 'delivered'
+ * - `createdAt` - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -38,8 +36,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    eventId: generateUUID(),
-    notifyStatus: 'delivered'
+    // INFO: The table does not have a default for the createdAt column.
+    createdAt: timestampForPostgres()
   }
 
   return {

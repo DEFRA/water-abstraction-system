@@ -39,35 +39,33 @@ describe('Licence Agreement model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to financial agreements', () => {
-      let testFinancialAgreements
+    describe('when linking to financial agreement', () => {
+      let testFinancialAgreement
 
       beforeEach(async () => {
-        testFinancialAgreements = await FinancialAgreementHelper.add()
+        testFinancialAgreement = await FinancialAgreementHelper.add()
 
-        const { id: financialAgreementId } = testFinancialAgreements
-
+        const { id: financialAgreementId } = testFinancialAgreement
         testRecord = await LicenceAgreementHelper.add({ financialAgreementId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await LicenceAgreementModel.query()
-          .innerJoinRelated('financialAgreements')
+          .innerJoinRelated('financialAgreement')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the financial agreements', async () => {
+      it('can eager load the financial agreement', async () => {
         const result = await LicenceAgreementModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('financialAgreements')
+          .withGraphFetched('financialAgreement')
 
         expect(result).to.be.instanceOf(LicenceAgreementModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.financialAgreements).to.be.an.array()
-        expect(result.financialAgreements[0]).to.be.an.instanceOf(FinancialAgreementModel)
-        expect(result.financialAgreements).to.include(testFinancialAgreements)
+        expect(result.financialAgreement).to.be.an.instanceOf(FinancialAgreementModel)
+        expect(result.financialAgreement).to.equal(testFinancialAgreement)
       })
     })
 

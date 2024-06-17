@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const CompanyContactsHelper = require('../../support/helpers/company-contact.helper.js')
+const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const DatabaseSupport = require('../../support/database.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRolesHelper = require('../../support/helpers/licence-document-role.helper.js')
+const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
@@ -44,13 +44,13 @@ describe('Fetch Customer Contacts service', () => {
       const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
       const { id: licenceRoleId } = await LicenceRoleHelper.add()
 
-      await CompanyContactsHelper.add({
+      await CompanyContactHelper.add({
         companyId,
         contactId,
         roleId: licenceRoleId
       })
 
-      await LicenceDocumentRolesHelper.add({
+      await LicenceDocumentRoleHelper.add({
         companyId,
         contactId,
         endDate: null,

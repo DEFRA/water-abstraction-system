@@ -3,16 +3,20 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/setup/generate-from-abstraction-data.service.js')
 
 // Thing under test
-const SubmitSetupService = require('../../../app/services/return-requirements/submit-setup.service.js')
+const SubmitSetupService = require('../../../../app/services/return-requirements/setup/submit-setup.service.js')
 
 describe('Return Requirements - Submit Setup service', () => {
   let payload
@@ -45,12 +49,18 @@ describe('Return Requirements - Submit Setup service', () => {
     })
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
           setup: 'use-abstraction-data'
         }
+
+        Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
       })
 
       it('saves the submitted value', async () => {
@@ -66,6 +76,14 @@ describe('Return Requirements - Submit Setup service', () => {
           const result = await SubmitSetupService.go(session.id, payload)
 
           expect(result.redirect).to.equal('check')
+        })
+
+        it('returns the route to check page', async () => {
+          await SubmitSetupService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.requirements).to.equal(_generatedReturnRequirements())
         })
       })
 
@@ -128,3 +146,23 @@ describe('Return Requirements - Submit Setup service', () => {
     })
   })
 })
+
+function _generatedReturnRequirements () {
+  return [
+    {
+      points: ['12345'],
+      purposes: ['cea0e449-48de-4ff9-8dd7-c2f6d74ab1ea'],
+      returnsCycle: 'summer',
+      siteDescription: 'BOREHOLE IN FIELD',
+      abstractionPeriod: {
+        'end-abstraction-period-day': 31,
+        'end-abstraction-period-month': 12,
+        'start-abstraction-period-day': 1,
+        'start-abstraction-period-month': 4
+      },
+      frequencyReported: 'month',
+      frequencyCollected: 'week',
+      agreementsExceptions: ['none']
+    }
+  ]
+}

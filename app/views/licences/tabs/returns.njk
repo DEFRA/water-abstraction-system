@@ -1,23 +1,7 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/tag/macro.njk" import govukTag %}
 
-{% macro formatStatus(status) %}
-  {% if status === 'COMPLETE' %}
-    {{ govukTag({
-      text: status,
-      classes: "govuk-tag--green"
-    }) }}
-
-  {% elseif status === 'OVERDUE' %}
-    {{ govukTag({
-      text: status,
-      classes: "govuk-tag--red"
-    }) }}
-  {% else %}
-    {{ status }}
-  {% endif %}
-{% endmacro %}
+{% from "macros/return-status-tag.njk" import statusTag %}
 
 <h2 class="govuk-heading-l">Returns</h2>
 
@@ -33,6 +17,10 @@
   {% set returnRows = [] %}
 
   {% for returnItem in  returns %}
+    {% set returnStatusTag %}
+      {{ statusTag(returnItem.status, true) }}
+    {% endset %}
+
     {% set returnRows = (returnRows.push([
       {
         html: referenceColumn(returnItem)
@@ -44,7 +32,7 @@
         text: returnItem.dueDate
       },
       {
-        html: formatStatus(returnItem.status)
+        html: returnStatusTag
       }
     ]), returnRows) %}
   {% endfor %}
@@ -71,4 +59,3 @@
 {% if pagination.numberOfPages > 1 %}
   {{ govukPagination(pagination.component) }}
 {% endif %}
-

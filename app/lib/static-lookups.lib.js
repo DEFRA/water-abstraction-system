@@ -32,6 +32,15 @@ const organisationTypes = [
   'publicLimitedCompany'
 ]
 
+const returnRequirementFrequencies = {
+  day: 'daily',
+  week: 'weekly',
+  fortnight: 'fortnightly',
+  month: 'monthly',
+  quarter: 'quarterly',
+  year: 'yearly'
+}
+
 const returnRequirementReasons = {
   'abstraction-below-100-cubic-metres-per-day': 'Abstraction amount below 100 cubic metres per day',
   'change-to-special-agreement': 'Change to special agreement',
@@ -74,6 +83,7 @@ module.exports = {
   contactTypes,
   frequencies,
   organisationTypes,
+  returnRequirementFrequencies,
   returnRequirementReasons,
   sources,
   twoPartTariffReviewIssues

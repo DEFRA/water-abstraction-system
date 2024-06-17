@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SetupService = require('../../../app/services/return-requirements/setup.service.js')
+const SetupService = require('../../../../app/services/return-requirements/setup/setup.service.js')
 
 describe('Return Requirements - Setup service', () => {
   let session

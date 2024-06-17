@@ -7,7 +7,7 @@
 
 const ExistingPresenter = require('../../presenters/return-requirements/existing.presenter.js')
 const ExistingValidator = require('../../validators/return-requirements/existing.validator.js')
-const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -32,9 +32,7 @@ async function go (sessionId, payload) {
   const validationResult = _validate(payload, session)
 
   if (!validationResult) {
-    const existingReturnRequirements = await FetchExistingRequirementsService.go(payload.existing)
-
-    await _save(session, existingReturnRequirements)
+    await _save(session, payload)
 
     return {}
   }
@@ -49,8 +47,8 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, existingReturnRequirements) {
-  session.requirements = existingReturnRequirements
+async function _save (session, payload) {
+  session.requirements = await GenerateFromExistingRequirementsService.go(payload.existing)
 
   return session.$update()
 }

@@ -1,16 +1,17 @@
 'use strict'
 
 /**
- * Model for scheduled_notification (water.scheduled_notification)
+ * Model for scheduled_notifications (water.scheduled_notification)
  * @module ScheduledNotificationModel
  */
 
-const BaseModel = require('./base.model.js')
 const { Model } = require('objection')
+
+const BaseModel = require('./base.model.js')
 
 class ScheduledNotificationModel extends BaseModel {
   static get tableName () {
-    return 'scheduled_notification'
+    return 'scheduledNotifications'
   }
 
   static get relationMappings () {
@@ -19,7 +20,7 @@ class ScheduledNotificationModel extends BaseModel {
         relation: Model.HasOneRelation,
         modelClass: 'event.model',
         join: {
-          from: 'scheduled_notification.eventId',
+          from: 'scheduledNotifications.eventId',
           to: 'events.id'
         }
       }
