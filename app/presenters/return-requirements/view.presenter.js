@@ -40,7 +40,7 @@ function go (requirementsForReturns, points) {
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements, points),
     startDate: formatLongDate(startDate),
-    status
+    status: _status(status)
   }
 }
 
@@ -79,12 +79,6 @@ function _agreementsExceptions (agreementsExceptions) {
     .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
 }
 
-function _requirements (requirements, points) {
-  return requirements.map((requirement) => {
-    return _mapRequirement(requirement, points)
-  })
-}
-
 function _mapRequirement (requirement, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
@@ -106,6 +100,28 @@ function _mapPoints (requirementPoints, points) {
 
     return generateAbstractionPointDetail(matchedPoint)
   })
+}
+
+function _requirements (requirements, points) {
+  return requirements.map((requirement) => {
+    return _mapRequirement(requirement, points)
+  })
+}
+
+function _status (status) {
+  const statuses = {
+    current: 'approved',
+    draft: 'draft',
+    approved: 'approved',
+    replaced: 'replaced',
+    superseded: 'replaced',
+    invalid: 'invalid',
+    review: 'review',
+    changes_requested: 'change request',
+    to_setup: 'to set up'
+  }
+
+  return statuses[status]
 }
 
 module.exports = {

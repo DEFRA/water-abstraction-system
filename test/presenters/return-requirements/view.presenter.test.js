@@ -99,7 +99,7 @@ describe('Return Requirements - View presenter', () => {
           }
         ],
         startDate: '21 April 2023',
-        status: 'current'
+        status: 'approved'
       })
     })
 
