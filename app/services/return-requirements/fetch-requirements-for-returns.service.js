@@ -61,7 +61,8 @@ async function _fetch (returnVersionId) {
       'id',
       'reason',
       'startDate',
-      'status'
+      'status',
+      'multiple_upload'
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {

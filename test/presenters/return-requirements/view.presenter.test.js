@@ -61,7 +61,8 @@ describe('Return Requirements - View presenter', () => {
           licenceDocumentRoles: []
         }
       },
-      returnRequirements: [{ ...requirement }]
+      returnRequirements: [{ ...requirement }],
+      multipleUpload: false
     }
 
     points = [
@@ -74,6 +75,9 @@ describe('Return Requirements - View presenter', () => {
       const result = ViewPresenter.go(requirementsForReturns, points)
 
       expect(result).to.equal({
+        additionalSubmissionOptions: {
+          multipleUpload: 'No'
+        },
         licenceRef: '02/01',
         pageTitle: 'Check the requirements for returns for Martha Stuart',
         reason: 'Major change',
@@ -117,6 +121,28 @@ describe('Return Requirements - View presenter', () => {
           const result = ViewPresenter.go(requirementsForReturns, points)
 
           expect(result.reason).to.equal('')
+        })
+      })
+    })
+
+    describe('the "additionalSubmissionOptions" property', () => {
+      describe('when multipleUpload is true', () => {
+        beforeEach(() => {
+          requirementsForReturns.multipleUpload = true
+        })
+
+        it('returns "Yes"', () => {
+          const result = ViewPresenter.go(requirementsForReturns, points)
+
+          expect(result.additionalSubmissionOptions.multipleUpload).to.equal('Yes')
+        })
+      })
+
+      describe('when multipleUpload is false', () => {
+        it('returns "No"', () => {
+          const result = ViewPresenter.go(requirementsForReturns, points)
+
+          expect(result.additionalSubmissionOptions.multipleUpload).to.equal('No')
         })
       })
     })

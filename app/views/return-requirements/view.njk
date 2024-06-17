@@ -132,32 +132,32 @@
       {% endfor %}
     </div>
 
-{#    <div class="govuk-body">#}
-{#        {{ govukSummaryList({#}
-{#          classes: 'govuk-!-margin-bottom-2',#}
-{#          rows: [#}
-{#            {#}
-{#              classes: 'govuk-summary-list',#}
-{#              key: {#}
-{#                text: 'Additional submission options',#}
-{#                classes: "govuk-heading-m govuk-!-width-one-half"#}
-{#              },#}
-{#              value: {#}
-{#                text: ''#}
-{#              }#}
-{#            },#}
-{#            {#}
-{#              classes: 'govuk-summary-list govuk-summary-list__row--no-border',#}
-{#              key: {#}
-{#                text: 'Multiple upload',#}
-{#                classes: "govuk-body "#}
-{#              },#}
-{#              value: {#}
-{#                text: 'Yes' if additionalSubmissionOptions.includes('multiple-upload') else "No"#}
-{#              }#}
-{#            }#}
-{#          ]#}
-{#        }) }}#}
-{#    </div>#}
+    <div class="govuk-body">
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-2',
+          rows: [
+            {
+              classes: 'govuk-summary-list',
+              key: {
+                text: 'Additional submission options',
+                classes: "govuk-heading-m govuk-!-width-one-half"
+              },
+              value: {
+                text: ''
+              }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+                text: 'Multiple upload',
+                classes: "govuk-body "
+              },
+              value: {
+                text: additionalSubmissionOptions.multipleUpload
+            }
+            }
+          ]
+        }) }}
+    </div>
 
 {% endblock %}

@@ -47,6 +47,9 @@ describe('Return Requirements - View service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        additionalSubmissionOptions: {
+          multipleUpload: 'No'
+        },
         licenceRef: undefined,
         pageTitle: 'Check the requirements for returns for null',
         reason: 'New licence',
@@ -86,8 +89,7 @@ describe('Return Requirements - View service', () => {
         ],
         startDate: '1 April 2022',
         status: 'current'
-      }
-      )
+      })
     })
   })
 })

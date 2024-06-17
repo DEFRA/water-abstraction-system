@@ -31,14 +31,15 @@ function go (requirementsForReturns, points) {
   const { returnRequirements, licence, reason, startDate, status } = requirementsForReturns
 
   return {
-    // TODO: additional submission options
-    // additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     licenceRef: licence.licenceRef,
     pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
     startDate: formatLongDate(startDate),
     requirements: _requirements(returnRequirements, points),
-    status
+    status,
+    additionalSubmissionOptions: {
+      multipleUpload: requirementsForReturns.multipleUpload === true ? 'Yes' : 'No'
+    }
   }
 }
 
