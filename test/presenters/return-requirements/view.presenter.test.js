@@ -76,6 +76,7 @@ describe('Return Requirements - View presenter', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
+        licenceId: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
         licenceRef: '02/01',
         pageTitle: 'Check the requirements for returns for Martha Stuart',
         reason: 'Major change',

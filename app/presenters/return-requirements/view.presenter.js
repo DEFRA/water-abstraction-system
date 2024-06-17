@@ -34,6 +34,7 @@ function go (requirementsForReturns, points) {
     additionalSubmissionOptions: {
       multipleUpload: requirementsForReturns.multipleUpload === true ? 'Yes' : 'No'
     },
+    licenceId: licence.id,
     licenceRef: licence.licenceRef,
     pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',

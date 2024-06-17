@@ -50,6 +50,7 @@ describe('Return Requirements - View service', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
+        licenceId: '1c68cd37-84af-46a4-b3ce-1fc625fcbf37',
         licenceRef: undefined,
         pageTitle: 'Check the requirements for returns for null',
         reason: 'New licence',
