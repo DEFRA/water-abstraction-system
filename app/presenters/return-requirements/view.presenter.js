@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Formats return requirements data for the `/return-requirements/{sessionId}/view` page
+ * @module ViewPresenter
+ */
+
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
@@ -14,12 +19,7 @@ const agreementsExceptionsText = {
 }
 
 /**
- * Formats return requirements data for the `/return-requirements/{sessionId}/view` page
- * @module ViewPresenter
- */
-
-/**
- * Formats return requirements data for the `/return-requirements/{sessionId}/view` page
+ * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
  *
  * @param {ReturnVersionModel[]} requirementsForReturns - The return version inc licence and requirements
  * @param {LicenceModel[]} points - The points related to the return version licence
@@ -31,15 +31,15 @@ function go (requirementsForReturns, points) {
   const { returnRequirements, licence, reason, startDate, status } = requirementsForReturns
 
   return {
+    additionalSubmissionOptions: {
+      multipleUpload: requirementsForReturns.multipleUpload === true ? 'Yes' : 'No'
+    },
     licenceRef: licence.licenceRef,
     pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
-    startDate: formatLongDate(startDate),
     requirements: _requirements(returnRequirements, points),
-    status,
-    additionalSubmissionOptions: {
-      multipleUpload: requirementsForReturns.multipleUpload === true ? 'Yes' : 'No'
-    }
+    startDate: formatLongDate(startDate),
+    status
   }
 }
 

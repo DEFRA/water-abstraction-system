@@ -6,12 +6,11 @@
  */
 
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
-const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const AddService = require('../services/return-requirements/add.service.js')
+const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
-const ViewService = require('../services/return-requirements/view.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const ExistingService = require('../services/return-requirements/existing.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
@@ -44,6 +43,7 @@ const SubmitReturnsCycleService = require('../services/return-requirements/submi
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
+const ViewService = require('../services/return-requirements/view.service.js')
 
 async function abstractionPeriod (request, h) {
   const { requirementIndex, sessionId } = request.params
@@ -245,15 +245,6 @@ async function startDate (request, h) {
   const pageData = await StartDateService.go(sessionId)
 
   return h.view('return-requirements/start-date.njk', {
-    ...pageData
-  })
-}
-
-async function view (request, h) {
-  const { returnVersionId } = request.params
-  const pageData = await ViewService.go(returnVersionId)
-
-  return h.view('return-requirements/view.njk', {
     ...pageData
   })
 }
@@ -502,6 +493,15 @@ async function submitStartDate (request, h) {
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
+}
+
+async function view (request, h) {
+  const { returnVersionId } = request.params
+  const pageData = await ViewService.go(returnVersionId)
+
+  return h.view('return-requirements/view.njk', {
+    ...pageData
+  })
 }
 
 module.exports = {
