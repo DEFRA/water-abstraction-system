@@ -296,7 +296,7 @@
     <div class="govuk-body">
       {% if returnsRequired %}
         {{ govukSummaryList({
-          classes: 'govuk-!-margin-bottom-2',
+          classes: 'govuk-!-margin-bottom-10',
           rows: [
             {
               classes: 'govuk-summary-list',
@@ -330,10 +330,9 @@
         }) }}
         {% else %}
           <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
-          <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
       {{ govukButton({
         text: "Approve returns requirements",
