@@ -5,7 +5,7 @@
  * @module ViewService
  */
 
-const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.service.js')
+// const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.service.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/view` page

@@ -41,6 +41,7 @@ const SubmitReturnsCycleService = require('../../app/services/return-requirement
 const SubmitSetupService = require('../../app/services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../../app/services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../../app/services/return-requirements/submit-start-date.service.js')
+const ViewService = require('../../app/services/return-requirements/view.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -1000,6 +1001,34 @@ describe('Return requirements controller', () => {
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
           })
+        })
+      })
+    })
+  })
+
+  describe('/return-requirements/{sessionId}/view', () => {
+    const path = 'view'
+    const returnVersionId = '2a075724-b66c-410e-9fc8-b964077204f2'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewService, 'go').resolves({
+          pageTitle: 'Requirements for returns valid from'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject({
+            method: 'GET',
+            url: `/return-requirements/${returnVersionId}/${path}`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
+          })
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Requirements for returns valid from')
         })
       })
     })
