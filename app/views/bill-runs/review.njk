@@ -100,21 +100,11 @@
     </div>
   </div>
 
-  {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
+  {# Message either telling the user they have issues to deal with or that they can generate bills #}
   <section class="govuk-!-margin-bottom-9">
-    {% if numberOfLicencesToReview === 1 %}
-        {{ govukInsetText({
-          html: '<span data-test="licences-to-review">You need to review ' + numberOfLicencesToReview + ' licence with returns data issues. You can then continue and send the bill run.</span>'
-        }) }}
-    {% elif numberOfLicencesToReview > 1 %}
-        {{ govukInsetText({
-          html: '<span data-test="licences-to-review">You need to review ' + numberOfLicencesToReview + ' licences with returns data issues. You can then continue and send the bill run.</span>'
-        }) }}
-    {% else %}
-        {{ govukInsetText({
-          html: '<span data-test="licences-to-review">You have resolved all returns data issues. Continue to generate bills.</span>'
-        }) }}
-    {% endif %}
+    {{ govukInsetText({
+      html: '<span data-test="licences-to-review">'+ reviewMessage +'</span>'
+    }) }}
   </section>
 
   {# Cancel bill run button #}
