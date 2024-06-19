@@ -14,6 +14,7 @@ const CalculateChargeService = require('../services/bill-runs/two-part-tariff/ca
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
+const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
@@ -295,6 +296,21 @@ async function submitSend (request, h) {
   }
 }
 
+async function twoPartTariff (request, h) {
+  const { id } = request.params
+
+  try {
+    // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
+    // `processing'.
+    await GenerateBillRunService.go(id)
+
+    // Redirect to the bill runs page
+    return h.redirect('/system/bill-runs')
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
+}
+
 async function view (request, h) {
   const { id } = request.params
 
@@ -328,5 +344,6 @@ module.exports = {
   submitRemoveLicence,
   submitReviewLicence,
   submitSend,
+  twoPartTariff,
   view
 }

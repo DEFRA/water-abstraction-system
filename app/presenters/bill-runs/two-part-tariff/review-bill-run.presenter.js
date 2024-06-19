@@ -75,6 +75,7 @@ function _prepareLicences (licences) {
 
 function _prepareBillRun (billRun, preparedLicences) {
   return {
+    billRunId: billRun.id,
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),

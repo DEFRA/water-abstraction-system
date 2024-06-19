@@ -14,6 +14,8 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 const DatabaseSupport = require('../support/database.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
+const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 
 // Thing under test
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
@@ -23,11 +25,13 @@ describe('Charge Element model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ChargeElementHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ChargeElementHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ChargeElementModel.query().findById(testRecord.id)
 
@@ -94,6 +98,41 @@ describe('Charge Element model', () => {
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
         expect(result.purpose).to.equal(testPurpose)
+      })
+    })
+
+    describe('when linking to review charge elements', () => {
+      let testReviewChargeElements
+
+      beforeEach(async () => {
+        testRecord = await ChargeElementHelper.add()
+
+        testReviewChargeElements = []
+        for (let i = 0; i < 2; i++) {
+          const reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId: testRecord.id })
+          testReviewChargeElements.push(reviewChargeElement)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeElementModel.query()
+          .innerJoinRelated('reviewChargeElements')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge elements', async () => {
+        const result = await ChargeElementModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeElements')
+
+        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeElements).to.be.an.array()
+        expect(result.reviewChargeElements[0]).to.be.an.instanceOf(ReviewChargeElementModel)
+        expect(result.reviewChargeElements).to.include(testReviewChargeElements[0])
+        expect(result.reviewChargeElements).to.include(testReviewChargeElements[1])
       })
     })
   })
