@@ -148,6 +148,36 @@ describe('Charge Reference model', () => {
       })
     })
 
+    describe('when linking to charge version', () => {
+      let testChargeVersion
+
+      beforeEach(async () => {
+        testChargeVersion = await ChargeVersionHelper.add()
+
+        const { id: chargeVersionId } = testChargeVersion
+        testRecord = await ChargeReferenceHelper.add({ chargeVersionId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeReferenceModel.query()
+          .innerJoinRelated('chargeVersion')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge version', async () => {
+        const result = await ChargeReferenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersion')
+
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).to.equal(testChargeVersion)
+      })
+    })
+
     describe('when linking to purpose', () => {
       let testPurpose
 
@@ -210,36 +240,6 @@ describe('Charge Reference model', () => {
         expect(result.transactions[0]).to.be.an.instanceOf(TransactionModel)
         expect(result.transactions).to.include(testTransactions[0])
         expect(result.transactions).to.include(testTransactions[1])
-      })
-    })
-
-    describe('when linking to charge version', () => {
-      let testChargeVersion
-
-      beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add()
-
-        const { id: chargeVersionId } = testChargeVersion
-        testRecord = await ChargeReferenceHelper.add({ chargeVersionId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeVersion')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the charge version', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersion')
-
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
       })
     })
   })
