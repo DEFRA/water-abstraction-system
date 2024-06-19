@@ -153,6 +153,36 @@ function generateAbstractionPointDetail (pointDetail) {
 }
 
 /**
+ * Generate a string that represents an abstraction point based on the new data (obs change this in PR)
+ *
+ */
+function generatePointDetail (point) {
+  let abstractionPoint = null
+
+  if (point.ngr4) {
+    const point1 = point.ngr1
+    const point2 = point.ngr2
+    const point3 = point.ngr3
+    const point4 = point.ngr4
+
+    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
+  } else if (point.ngr2) {
+    const point1 = point.ngr1
+    const point2 = point.ngr2
+
+    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
+  } else {
+    const point1 = point.ngr1
+
+    abstractionPoint = `At National Grid Reference ${point1}`
+  }
+
+  abstractionPoint += point.description !== undefined ? ` (${point.description})` : ''
+
+  return abstractionPoint
+}
+
+/**
  * Generate a Universally Unique Identifier (UUID)
  *
  * The service uses these as the IDs for most records in the DB. Most tables will automatically generate them when
@@ -295,6 +325,7 @@ module.exports = {
   determineCurrentFinancialYear,
   flashNotification,
   generateAbstractionPointDetail,
+  generatePointDetail,
   generateUUID,
   periodsOverlap,
   timestampForPostgres,
