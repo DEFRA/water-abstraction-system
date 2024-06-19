@@ -56,6 +56,14 @@ class ChargeReferenceModel extends BaseModel {
           to: 'purposes.id'
         }
       },
+      reviewChargeReferences: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-charge-reference.model',
+        join: {
+          from: 'chargeReferences.id',
+          to: 'reviewChargeReferences.chargeReferenceId'
+        }
+      },
       transactions: {
         relation: Model.HasManyRelation,
         modelClass: 'transaction.model',

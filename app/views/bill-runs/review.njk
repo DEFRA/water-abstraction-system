@@ -117,6 +117,14 @@
 
   {# Cancel bill run button #}
   <section class="govuk-!-margin-bottom-9">
+    {% if numberOfLicencesToReview === 0 %}
+      {{ govukButton({
+        classes: "govuk-!-margin-right-1 govuk-!-margin-bottom-0",
+        text: "Continue bill run",
+        href: "/system/bill-runs/" + billRunId  + "/two-part-tariff",
+        preventDoubleClick: true
+      }) }}
+    {% endif %}
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
       text: "Cancel bill run",
