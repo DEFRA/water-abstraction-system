@@ -16,8 +16,8 @@ const RequirementsForReturnsSeeder = require('../../support/seeders/requirements
 const FetchRequirementsForReturnsService = require('../../../app/services/return-requirements/fetch-requirements-for-returns.service.js')
 
 describe('Return Requirements - Fetch Requirements for returns service', () => {
-  let returnVersion
   let licence
+  let returnVersion
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -25,8 +25,9 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      licence = await LicenceHelper.add()
+      await DatabaseSupport.clean()
 
+      licence = await LicenceHelper.add()
       returnVersion = await RequirementsForReturnsSeeder.seed(licence.id)
     })
 
