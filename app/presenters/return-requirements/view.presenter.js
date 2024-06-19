@@ -19,7 +19,7 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  */
 
 function go (requirementsForReturns) {
-  const { returnRequirements, licence, reason, startDate, status } = requirementsForReturns
+  const { returnRequirements, licence, reason, startDate, status, notes } = requirementsForReturns
 
   return {
     additionalSubmissionOptions: {
@@ -27,6 +27,7 @@ function go (requirementsForReturns) {
     },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    notes,
     pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),

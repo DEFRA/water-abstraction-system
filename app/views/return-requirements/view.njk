@@ -55,6 +55,28 @@
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 
+{% if notes %}
+  <div class="govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+          text: userEmail,
+          classes: "govuk-body govuk-!-font-weight-regular"
+        },
+          value: {
+          text: notes | escape | nl2br
+        }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+{% endif %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
       {% for requirement in requirements %}

@@ -29,10 +29,11 @@ async function _fetch (returnVersionId) {
     .findById(returnVersionId)
     .select([
       'id',
+      'multiple_upload',
+      'notes',
       'reason',
       'startDate',
-      'status',
-      'multiple_upload'
+      'status'
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
@@ -43,7 +44,6 @@ async function _fetch (returnVersionId) {
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (builder) => {
       builder.select([
-        'id',
         'abstractionPeriodEndDay',
         'abstractionPeriodEndMonth',
         'abstractionPeriodStartDay',
@@ -51,12 +51,13 @@ async function _fetch (returnVersionId) {
         'collectionFrequency',
         'fiftySixException',
         'gravityFill',
+        'id',
+        'legacyId',
         'reabstraction',
         'reportingFrequency',
         'siteDescription',
         'summer',
-        'twoPartTariff',
-        'legacyId'
+        'twoPartTariff'
       ])
     })
     .withGraphFetched('returnRequirements.[returnRequirementPoints as points]')
