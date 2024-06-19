@@ -27,6 +27,17 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/session-cleanup',
+    handler: JobsController.sessionCleanup,
+    options: {
+      app: {
+        plainOutput: true
+      },
+      auth: false
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/time-limited',
     handler: JobsController.timeLimited,
     options: {

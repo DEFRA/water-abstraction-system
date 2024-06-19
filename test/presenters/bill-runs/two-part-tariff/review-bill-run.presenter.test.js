@@ -46,7 +46,7 @@ describe('Review Bill Run presenter', () => {
           financialYear: '2022 to 2023',
           billRunType: 'two-part tariff',
           numberOfLicencesDisplayed: 3,
-          numberOfLicencesToReview: 1,
+          reviewMessage: 'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
           totalNumberOfLicences: 3,
           preparedLicences: [
             {
@@ -80,6 +80,46 @@ describe('Review Bill Run presenter', () => {
             licenceStatus: undefined,
             openFilter: false
           }
+        })
+      })
+
+      describe('and there are no licences in "review" status', () => {
+        beforeEach(() => {
+          testBillRun.reviewLicences[0].numberOfLicencesToReview = 0
+        })
+
+        it('correctly presents the data', () => {
+          const result = ReviewBillRunPresenter.go(
+            testBillRun,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterLicenceStatus,
+            testLicences
+          )
+
+          expect(result.reviewMessage).to.equal(
+            'You have resolved all returns data issues. Continue to generate bills.'
+          )
+        })
+      })
+
+      describe('and there are 2 licences in "review" status', () => {
+        beforeEach(() => {
+          testBillRun.reviewLicences[0].numberOfLicencesToReview = 2
+        })
+
+        it('correctly presents the data', () => {
+          const result = ReviewBillRunPresenter.go(
+            testBillRun,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterLicenceStatus,
+            testLicences
+          )
+
+          expect(result.reviewMessage).to.equal(
+            'You need to review 2 licences with returns data issues. You can then continue and send the bill run.'
+          )
         })
       })
     })
