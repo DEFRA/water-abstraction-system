@@ -24,14 +24,6 @@ class ChargeReferenceModel extends BaseModel {
           to: 'billRunVolumes.chargeReferenceId'
         }
       },
-      chargeVersion: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
-        join: {
-          from: 'chargeReferences.chargeVersionId',
-          to: 'chargeVersions.id'
-        }
-      },
       chargeCategory: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-category.model',
@@ -48,12 +40,28 @@ class ChargeReferenceModel extends BaseModel {
           to: 'chargeElements.chargeReferenceId'
         }
       },
+      chargeVersion: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'charge-version.model',
+        join: {
+          from: 'chargeReferences.chargeVersionId',
+          to: 'chargeVersions.id'
+        }
+      },
       purpose: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'purpose.model',
         join: {
           from: 'chargeReferences.purposeId',
           to: 'purposes.id'
+        }
+      },
+      reviewChargeReferences: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-charge-reference.model',
+        join: {
+          from: 'chargeReferences.id',
+          to: 'reviewChargeReferences.chargeReferenceId'
         }
       },
       transactions: {
