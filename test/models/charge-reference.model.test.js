@@ -31,11 +31,13 @@ describe('Charge Reference model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ChargeReferenceHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ChargeReferenceHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ChargeReferenceModel.query().findById(testRecord.id)
 
@@ -115,11 +117,11 @@ describe('Charge Reference model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await ChargeReferenceHelper.add()
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
-          const chargeElement = await ChargeElementHelper.add({ description: `CP ${i}`, chargeReferenceId: id })
+          const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: testRecord.id })
           testChargeElements.push(chargeElement)
         }
       })
@@ -180,11 +182,11 @@ describe('Charge Reference model', () => {
       let testTransactions
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await ChargeReferenceHelper.add()
 
         testTransactions = []
         for (let i = 0; i < 2; i++) {
-          const transaction = await TransactionHelper.add({ description: `TEST TRANSACTION ${i}`, chargeReferenceId: id })
+          const transaction = await TransactionHelper.add({ chargeReferenceId: testRecord.id })
           testTransactions.push(transaction)
         }
       })

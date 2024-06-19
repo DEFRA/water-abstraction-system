@@ -29,11 +29,13 @@ describe('Charge Version model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ChargeVersionHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ChargeVersionHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ChargeVersionModel.query().findById(testRecord.id)
 
@@ -77,11 +79,11 @@ describe('Charge Version model', () => {
       let testBillRunChargeVersionYears
 
       beforeEach(async () => {
-        const { id: chargeVersionId } = testRecord
+        testRecord = await ChargeVersionHelper.add()
 
         testBillRunChargeVersionYears = []
         for (let i = 0; i < 2; i++) {
-          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId })
+          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId: testRecord.id })
           testBillRunChargeVersionYears.push(billRunChargeVersionYear)
         }
       })
@@ -172,11 +174,11 @@ describe('Charge Version model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await ChargeVersionHelper.add()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeVersionId: id })
+          const chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: testRecord.id })
           testChargeReferences.push(chargeReference)
         }
       })

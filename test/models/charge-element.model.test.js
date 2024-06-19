@@ -23,11 +23,13 @@ describe('Charge Element model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ChargeElementHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ChargeElementHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ChargeElementModel.query().findById(testRecord.id)
 
