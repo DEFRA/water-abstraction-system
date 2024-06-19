@@ -20,6 +20,8 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
+const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
 
 // Thing under test
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
@@ -202,6 +204,41 @@ describe('Charge Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to review charge versions', () => {
+      let testReviewChargeVersions
+
+      beforeEach(async () => {
+        testRecord = await ChargeVersionHelper.add()
+
+        testReviewChargeVersions = []
+        for (let i = 0; i < 2; i++) {
+          const reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId: testRecord.id })
+          testReviewChargeVersions.push(reviewChargeVersion)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('reviewChargeVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge versions', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeVersions')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeVersions).to.be.an.array()
+        expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
       })
     })
   })
