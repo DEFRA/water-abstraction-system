@@ -110,36 +110,6 @@ describe('Charge Version model', () => {
       })
     })
 
-    describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-        testRecord = await ChargeVersionHelper.add({ licenceId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('licence')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the licence', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
-
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
-      })
-    })
-
     describe('when linking to change reason', () => {
       let testChangeReason
 
@@ -202,6 +172,36 @@ describe('Charge Version model', () => {
         expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
         expect(result.chargeReferences).to.include(testChargeReferences[0])
         expect(result.chargeReferences).to.include(testChargeReferences[1])
+      })
+    })
+
+    describe('when linking to licence', () => {
+      let testLicence
+
+      beforeEach(async () => {
+        testLicence = await LicenceHelper.add()
+
+        const { id: licenceId } = testLicence
+        testRecord = await ChargeVersionHelper.add({ licenceId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licence')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licence).to.be.an.instanceOf(LicenceModel)
+        expect(result.licence).to.equal(testLicence)
       })
     })
   })
