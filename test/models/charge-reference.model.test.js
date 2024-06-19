@@ -20,6 +20,8 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const DatabaseSupport = require('../support/database.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
+const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../app/models/transaction.model.js')
 
@@ -205,6 +207,41 @@ describe('Charge Reference model', () => {
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
         expect(result.purpose).to.equal(testPurpose)
+      })
+    })
+
+    describe('when linking to review charge references', () => {
+      let testReviewChargeReferences
+
+      beforeEach(async () => {
+        testRecord = await ChargeReferenceHelper.add()
+
+        testReviewChargeReferences = []
+        for (let i = 0; i < 2; i++) {
+          const reviewChargeReference = await ReviewChargeReferenceHelper.add({ chargeReferenceId: testRecord.id })
+          testReviewChargeReferences.push(reviewChargeReference)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeReferenceModel.query()
+          .innerJoinRelated('reviewChargeReferences')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge references', async () => {
+        const result = await ChargeReferenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeReferences')
+
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeReferences).to.be.an.array()
+        expect(result.reviewChargeReferences[0]).to.be.an.instanceOf(ReviewChargeReferenceModel)
+        expect(result.reviewChargeReferences).to.include(testReviewChargeReferences[0])
+        expect(result.reviewChargeReferences).to.include(testReviewChargeReferences[1])
       })
     })
 
