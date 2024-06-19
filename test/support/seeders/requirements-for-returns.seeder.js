@@ -4,6 +4,7 @@
  * @module RequirementsForReturnsSeeder
  */
 
+const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
@@ -77,6 +78,10 @@ async function _returnRequirement (returnVersionId, reportingFrequency, summer, 
 
   const purpose = await ReturnRequirementPurposeHelper.add({ purposeId, returnRequirementId })
   returnRequirement.returnRequirementPurposes = [purpose]
+
+  await PurposeHelper.add({
+    id: purposeId
+  })
 
   return returnRequirement
 }
