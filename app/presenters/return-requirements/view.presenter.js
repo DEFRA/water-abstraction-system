@@ -119,9 +119,9 @@ function _points (returnRequirementPoints) {
   })
 }
 
-function _requirements (requirements, points) {
+function _requirements (requirements) {
   return requirements.map((requirement) => {
-    return _mapRequirement(requirement, points)
+    return _mapRequirement(requirement)
   })
 }
 
