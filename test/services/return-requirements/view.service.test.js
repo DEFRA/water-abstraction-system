@@ -42,7 +42,7 @@ describe('Return Requirements - View service', () => {
           multipleUpload: 'No'
         },
         licenceId: licence.id,
-        licenceRef: licence.ref,
+        licenceRef: result.licenceRef,
         notes: null,
         pageTitle: 'Check the requirements for returns for null',
         reason: 'New licence',

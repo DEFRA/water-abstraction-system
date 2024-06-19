@@ -38,6 +38,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
         id: returnVersion.id,
         licence: {
           id: licence.id,
+          licenceRef: licence.licenceRef,
           licenceDocument: null
         },
         multipleUpload: false,
