@@ -153,31 +153,40 @@ function generateAbstractionPointDetail (pointDetail) {
 }
 
 /**
- * Generate a string that represents an abstraction point based on the new data (obs change this in PR)
+ * Generate a string that represents an abstraction point based on the assumption the points have already been merged
  *
+ * When abstracting water the point at which this is done can be described in several ways depending on the number of
+ * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
+ * a string that defines the details of the abstraction point.
+ *
+ * This follows the same out put as generateAbstractionPointDetail but the points have already been merged
+ *
+ * @param {Object} pointDetail - Object containing all the details for the point
+ *
+ * @returns {String} a description of the abstraction point
  */
-function generatePointDetail (point) {
+function generatePointDetail (pointDetail) {
   let abstractionPoint = null
 
-  if (point.ngr4) {
-    const point1 = point.ngr1
-    const point2 = point.ngr2
-    const point3 = point.ngr3
-    const point4 = point.ngr4
+  if (pointDetail.ngr4) {
+    const point1 = pointDetail.ngr1
+    const point2 = pointDetail.ngr2
+    const point3 = pointDetail.ngr3
+    const point4 = pointDetail.ngr4
 
     abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (point.ngr2) {
-    const point1 = point.ngr1
-    const point2 = point.ngr2
+  } else if (pointDetail.ngr2) {
+    const point1 = pointDetail.ngr1
+    const point2 = pointDetail.ngr2
 
     abstractionPoint = `Between National Grid References ${point1} and ${point2}`
   } else {
-    const point1 = point.ngr1
+    const point1 = pointDetail.ngr1
 
     abstractionPoint = `At National Grid Reference ${point1}`
   }
 
-  abstractionPoint += point.description !== undefined ? ` (${point.description})` : ''
+  abstractionPoint += pointDetail.description !== undefined ? ` (${pointDetail.description})` : ''
 
   return abstractionPoint
 }
