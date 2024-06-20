@@ -102,7 +102,7 @@ function _returnsCycle (startMonth, endMonth) {
  * |100 - 2500|Daily     |Daily    |
  * |Above 2500|Daily     |Daily    |
  *
- * ### Irrigation with two-part tariff
+ * ### Irrigation with two-part tariff (purpose is 2PT _and_ licence has 2PT agreement)
  *
  * |CM per day|Collection|Reporting|
  * |----------|----------|---------|
@@ -119,13 +119,17 @@ function _returnsCycle (startMonth, endMonth) {
  * |Above 2500|Weekly    |Weekly   |
  *
  */
-function _frequencyCollected (licenceVersionPurpose, waterUndertaker) {
+function _frequencyCollected (licence, licenceVersionPurpose) {
+  const { twoPartTariffAgreement, waterUndertaker } = licence
   const { dailyQuantity, purpose } = licenceVersionPurpose
 
-  // Licensee is a water company, the purpose is for electricity generation or two=part tariff irrigation
-  if (waterUndertaker ||
-    licenceVersionPurpose.$electricityGeneration() ||
-    TWO_PART_IRRIGATION_IDS.includes(purpose.legacyId)) {
+  // Licensee is a water company or the purpose is for electricity generation
+  if (waterUndertaker || licenceVersionPurpose.$electricityGeneration()) {
+    return returnRequirementFrequencies.day
+  }
+
+  // Licensee has a two-part tariff agreement and the purpose is two-part tariff
+  if (twoPartTariffAgreement && TWO_PART_IRRIGATION_IDS.includes(purpose.legacyId)) {
     return returnRequirementFrequencies.day
   }
 
@@ -144,7 +148,8 @@ function _frequencyCollected (licenceVersionPurpose, waterUndertaker) {
  *
  * See the tables in _frequencyCollected() for details
  */
-function _frequencyReported (licenceVersionPurpose, waterUndertaker) {
+function _frequencyReported (licence, licenceVersionPurpose) {
+  const { waterUndertaker } = licence
   const { dailyQuantity } = licenceVersionPurpose
 
   // Licensee is a water company or the purpose is for electricity generation
@@ -244,8 +249,8 @@ function _transformForSetup (licence) {
         'start-abstraction-period-day': startDay,
         'start-abstraction-period-month': startMonth
       },
-      frequencyReported: _frequencyReported(licenceVersionPurpose, licence.waterUndertaker),
-      frequencyCollected: _frequencyCollected(licenceVersionPurpose, licence.waterUndertaker),
+      frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
+      frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
       agreementsExceptions: _agreementExceptions(licence)
     }
   })
