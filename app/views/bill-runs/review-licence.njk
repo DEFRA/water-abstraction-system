@@ -310,7 +310,7 @@
         {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
         {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element " %}
 
-        <div class="govuk-heading-m govuk-!-margin-bottom-1">{{chargeVersion.chargeReferences.length}} {{chargeReferenceText}} with {{chargeVersion.chargeElementCount}} two-part tariff {{chargeElementText}}</div>
+        <div class="govuk-heading-m govuk-!-margin-bottom-1" data-test="charge-version-{{ chargeVersionIndex }}-details">{{chargeVersion.chargeReferences.length}} {{chargeReferenceText}} with {{chargeVersion.chargeElementCount}} two-part tariff {{chargeElementText}}</div>
 
         {# Billing account details #}
         {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
