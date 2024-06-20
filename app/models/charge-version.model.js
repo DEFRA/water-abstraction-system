@@ -32,14 +32,6 @@ class ChargeVersionModel extends BaseModel {
           to: 'billRunChargeVersionYears.chargeVersionId'
         }
       },
-      licence: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
-        join: {
-          from: 'chargeVersions.licenceId',
-          to: 'licences.id'
-        }
-      },
       changeReason: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'change-reason.model',
@@ -54,6 +46,22 @@ class ChargeVersionModel extends BaseModel {
         join: {
           from: 'chargeVersions.id',
           to: 'chargeReferences.chargeVersionId'
+        }
+      },
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'chargeVersions.licenceId',
+          to: 'licences.id'
+        }
+      },
+      reviewChargeVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-charge-version.model',
+        join: {
+          from: 'chargeVersions.id',
+          to: 'reviewChargeVersions.chargeVersionId'
         }
       }
     }
