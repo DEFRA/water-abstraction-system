@@ -10,7 +10,6 @@
 {% endmacro %}
 
 {% block breadcrumbs %}
-  {# Back link #}
   {{ govukBackLink({
     text: 'Back',
     href: '/system/licences/' + licenceId + '/set-up'
@@ -18,7 +17,6 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
       <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
@@ -190,5 +188,4 @@
           ]
         }) }}
     </div>
-
 {% endblock %}
