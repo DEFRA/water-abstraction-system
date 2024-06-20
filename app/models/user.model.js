@@ -17,20 +17,24 @@ class UserModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      userGroups: {
-        relation: Model.HasManyRelation,
-        modelClass: 'user-group.model',
+      groups: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'group.model',
         join: {
           from: 'users.id',
-          to: 'userGroups.userId'
+          through: {
+            from: 'userGroups.userId',
+            to: 'userGroups.groupId'
+          },
+          to: 'groups.id'
         }
       },
-      userRoles: {
+      returnVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'user-role.model',
+        modelClass: 'return-version.model',
         join: {
           from: 'users.id',
-          to: 'userRoles.userId'
+          to: 'returnVersions.createdBy'
         }
       },
       roles: {
@@ -45,16 +49,20 @@ class UserModel extends BaseModel {
           to: 'roles.id'
         }
       },
-      groups: {
-        relation: Model.ManyToManyRelation,
-        modelClass: 'group.model',
+      userGroups: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-group.model',
         join: {
           from: 'users.id',
-          through: {
-            from: 'userGroups.userId',
-            to: 'userGroups.groupId'
-          },
-          to: 'groups.id'
+          to: 'userGroups.userId'
+        }
+      },
+      userRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-role.model',
+        join: {
+          from: 'users.id',
+          to: 'userRoles.userId'
         }
       }
     }

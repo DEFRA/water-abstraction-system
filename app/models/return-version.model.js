@@ -31,6 +31,14 @@ class ReturnVersionModel extends BaseModel {
           from: 'returnVersions.id',
           to: 'returnRequirements.returnVersionId'
         }
+      },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'returnVersions.createdBy',
+          to: 'users.id'
+        }
       }
     }
   }
