@@ -46,25 +46,25 @@ describe('Return Requirements - View presenter', () => {
       gravityFill: true,
       id: '49a0aff3-268d-4b1d-870d-67acf3e3b0b5',
       legacyId: 12345,
+      points,
+      purposes,
       reabstraction: false,
       reportingFrequency: 'day',
       siteDescription: 'A place in the sun',
       summer: false,
-      twoPartTariff: false,
-      points,
-      purposes
+      twoPartTariff: false
     }
 
     requirementsForReturns = {
       id: '0d6f0f07-7d5c-48bf-90f0-d441680c3653',
       licence: {
-        id: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
-        licenceRef: '02/01',
         $licenceHolder: () => { return 'Martha Stuart' },
+        id: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
         licenceDocument: {
           id: '4391032d-7165-49ab-98cd-245ae8b8e10d',
           licenceDocumentRoles: []
-        }
+        },
+        licenceRef: '02/01'
       },
       multipleUpload: false,
       notes: 'A special note',
@@ -163,7 +163,7 @@ describe('Return Requirements - View presenter', () => {
       })
     })
 
-    describe('the \'requirements\' property', () => {
+    describe('the "requirements" property', () => {
       it('correctly returns the requirement', () => {
         const result = ViewPresenter.go(requirementsForReturns)
 
@@ -185,7 +185,7 @@ describe('Return Requirements - View presenter', () => {
         }])
       })
 
-      it('returns the purpose descriptions', () => {
+      it('returns the purposes descriptions', () => {
         const result = ViewPresenter.go(requirementsForReturns)
 
         expect(result.requirements[0].purposes).to.equal(['Transfer Between Sources (Pre Water Act 2003)'])
