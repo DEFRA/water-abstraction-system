@@ -17,34 +17,6 @@ class UserModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      userGroups: {
-        relation: Model.HasManyRelation,
-        modelClass: 'user-group.model',
-        join: {
-          from: 'users.id',
-          to: 'userGroups.userId'
-        }
-      },
-      userRoles: {
-        relation: Model.HasManyRelation,
-        modelClass: 'user-role.model',
-        join: {
-          from: 'users.id',
-          to: 'userRoles.userId'
-        }
-      },
-      roles: {
-        relation: Model.ManyToManyRelation,
-        modelClass: 'role.model',
-        join: {
-          from: 'users.id',
-          through: {
-            from: 'userRoles.userId',
-            to: 'userRoles.roleId'
-          },
-          to: 'roles.id'
-        }
-      },
       groups: {
         relation: Model.ManyToManyRelation,
         modelClass: 'group.model',
@@ -63,6 +35,34 @@ class UserModel extends BaseModel {
         join: {
           from: 'users.id',
           to: 'returnVersions.createdBy'
+        }
+      },
+      roles: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'role.model',
+        join: {
+          from: 'users.id',
+          through: {
+            from: 'userRoles.userId',
+            to: 'userRoles.roleId'
+          },
+          to: 'roles.id'
+        }
+      },
+      userGroups: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-group.model',
+        join: {
+          from: 'users.id',
+          to: 'userGroups.userId'
+        }
+      },
+      userRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-role.model',
+        join: {
+          from: 'users.id',
+          to: 'userRoles.userId'
         }
       }
     }

@@ -45,97 +45,6 @@ describe('User model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to user groups', () => {
-      let testUserGroup
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add()
-        testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('userGroups')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the user groups', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('userGroups')
-
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.userGroups).to.be.an.array()
-        expect(result.userGroups).to.have.length(1)
-        expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup)
-      })
-    })
-
-    describe('when linking to user roles', () => {
-      let testUserRole
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add()
-        testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('userRoles')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the user roles', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('userRoles')
-
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.userRoles).to.be.an.array()
-        expect(result.userRoles).to.have.length(1)
-        expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole)
-      })
-    })
-
-    describe('when linking through user roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add()
-        testRole = await RoleHelper.add()
-        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('roles')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the roles', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('roles')
-
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.roles).to.be.an.array()
-        expect(result.roles).to.have.length(1)
-        expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole)
-      })
-    })
-
     describe('when linking through user groups to groups', () => {
       let testGroup
 
@@ -199,6 +108,97 @@ describe('User model', () => {
         expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
         expect(result.returnVersions).to.include(testReturnVersions[0])
         expect(result.returnVersions).to.include(testReturnVersions[1])
+      })
+    })
+
+    describe('when linking through user roles to roles', () => {
+      let testRole
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+        testRole = await RoleHelper.add()
+        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('roles')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the roles', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('roles')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.roles).to.be.an.array()
+        expect(result.roles).to.have.length(1)
+        expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
+        expect(result.roles[0]).to.equal(testRole)
+      })
+    })
+
+    describe('when linking to user groups', () => {
+      let testUserGroup
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+        testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('userGroups')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the user groups', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('userGroups')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.userGroups).to.be.an.array()
+        expect(result.userGroups).to.have.length(1)
+        expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
+        expect(result.userGroups[0]).to.equal(testUserGroup)
+      })
+    })
+
+    describe('when linking to user roles', () => {
+      let testUserRole
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+        testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('userRoles')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the user roles', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('userRoles')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.userRoles).to.be.an.array()
+        expect(result.userRoles).to.have.length(1)
+        expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
+        expect(result.userRoles[0]).to.equal(testUserRole)
       })
     })
   })
