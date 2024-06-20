@@ -100,23 +100,23 @@
     </div>
   </div>
 
-  {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
-  {% if numberOfLicencesToReview > 0 %}
-    <section class="govuk-!-margin-bottom-9">
-      {{ govukInsetText({
-        html: '<span data-test="licences-to-review">You need to review ' + numberOfLicencesToReview + ' licences with returns data issues. You can then continue and send the bill run.</span>'
-      }) }}
-    </section>
-  {% else %}
-    <section class="govuk-!-margin-bottom-9">
-      {{ govukInsetText({
-        html: '<span data-test="licences-to-review">You have resolved all returns data issues. Continue to generate bills.</span>'
-      }) }}
-    </section>
-  {% endif %}
-
-  {# Cancel bill run button #}
+  {# Message either telling the user they have issues to deal with or that they can generate bills #}
   <section class="govuk-!-margin-bottom-9">
+    {{ govukInsetText({
+      html: '<span data-test="licences-to-review">'+ reviewMessage +'</span>'
+    }) }}
+  </section>
+
+  {# Continue and Cancel bill run buttons #}
+  <section class="govuk-!-margin-bottom-9">
+    {% if numberOfLicencesToReview === 0 %}
+      {{ govukButton({
+        classes: "govuk-!-margin-right-1 govuk-!-margin-bottom-0",
+        text: "Continue bill run",
+        href: "/system/bill-runs/" + billRunId  + "/two-part-tariff",
+        preventDoubleClick: true
+      }) }}
+    {% endif %}
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
       text: "Cancel bill run",

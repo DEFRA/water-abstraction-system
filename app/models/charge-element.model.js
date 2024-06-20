@@ -31,6 +31,14 @@ class ChargeElementModel extends BaseModel {
           from: 'chargeElements.purposeId',
           to: 'purposes.id'
         }
+      },
+      reviewChargeElements: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-charge-element.model',
+        join: {
+          from: 'chargeElements.id',
+          to: 'reviewChargeElements.chargeElementId'
+        }
       }
     }
   }

@@ -75,15 +75,30 @@ function _prepareLicences (licences) {
 
 function _prepareBillRun (billRun, preparedLicences) {
   return {
+    billRunId: billRun.id,
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
-    numberOfLicencesToReview: billRun.reviewLicences[0].numberOfLicencesToReview,
+    reviewMessage: _prepareReviewMessage(billRun.reviewLicences[0].numberOfLicencesToReview),
     totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
+}
+
+function _prepareReviewMessage (numberOfLicencesToReview) {
+  let numberOfLicences
+
+  if (numberOfLicencesToReview === 0) {
+    return 'You have resolved all returns data issues. Continue to generate bills.'
+  } else if (numberOfLicencesToReview === 1) {
+    numberOfLicences = '1 licence'
+  } else {
+    numberOfLicences = `${numberOfLicencesToReview} licences`
+  }
+
+  return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
 }
 
 function _financialYear (financialYearEnding) {

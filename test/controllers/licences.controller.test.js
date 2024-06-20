@@ -363,7 +363,7 @@ describe('Licences controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
         expect(response.payload).to.contain('Requirements for returns')
-        expect(response.payload).to.contain('No requirements for returns for this licence.')
+        expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
         expect(response.payload).to.contain('Charge information')
         expect(response.payload).to.contain('No charge information for this licence.')
         expect(response.payload).to.contain('Agreements')

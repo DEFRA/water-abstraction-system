@@ -100,7 +100,7 @@ describe('Return Requirements - Submit Existing service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitExistingService.go(session.id, payload)
 
-          expect(result.error).to.equal({ text: 'Use previous requirements for returns' })
+          expect(result.error).to.equal({ text: 'Select a return version' })
         })
       })
     })
