@@ -16,6 +16,7 @@ const Boom = require('@hapi/boom')
 const CalculateChargeService = require('../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
+const GenerateBillRunService = require('../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
@@ -792,6 +793,43 @@ describe('Bill Runs controller', () => {
           beforeEach(async () => {
             Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
             Sinon.stub(SubmitSendBillRunService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/two-part-tariff', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options('GET', 'two-part-tariff')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(GenerateBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
+        })
+
+        it('redirects to the bill runs page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs')
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the generate service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(GenerateBillRunService, 'go').rejects()
           })
 
           it('returns the error page', async () => {
