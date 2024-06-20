@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats return requirements data for the `/return-requirements/{sessionId}/view` page
+ * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
  * @module ViewPresenter
  */
 
@@ -13,17 +13,18 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
 /**
  * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
  *
- * @param {ReturnVersionModel[]} requirementsForReturns - The return version inc licence and requirements
+ * @param {ReturnVersionModel[]} requirementsForReturns
+ * return version, licence, return requirements (requirement, points, purposes)
  *
- * @returns {Object} returns requirement data needed by the view template
+ * @returns {Object} requirements for returns data needed by the view template
  */
 
 function go (requirementsForReturns) {
-  const { returnRequirements, licence, reason, startDate, status, notes } = requirementsForReturns
+  const { licence, reason, notes, multipleUpload, returnRequirements, startDate, status } = requirementsForReturns
 
   return {
     additionalSubmissionOptions: {
-      multipleUpload: requirementsForReturns.multipleUpload === true ? 'Yes' : 'No'
+      multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
@@ -100,9 +101,9 @@ function _mapRequirement (requirement) {
     frequencyReported: returnRequirementFrequencies[requirement.reportingFrequency],
     points: _points(requirement.points),
     purposes: _purposes(requirement.purposes),
+    returnReference: requirement.legacyId,
     returnsCycle: requirement.summer === true ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription,
-    returnReference: requirement.legacyId,
     title: requirement.siteDescription
   }
 }
