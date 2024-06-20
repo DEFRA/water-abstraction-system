@@ -56,6 +56,14 @@ class UserModel extends BaseModel {
           },
           to: 'groups.id'
         }
+      },
+      returnVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'return-version.model',
+        join: {
+          from: 'users.id',
+          to: 'returnVersions.createdBy'
+        }
       }
     }
   }
