@@ -31,9 +31,11 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
       returnVersion = await RequirementsForReturnsSeeder.seed(licence.id)
     })
 
-    it('returns the details of the requirements for returns transformed for use in the view page', async () => {
+    it('returns the details of the requirements for returns', async () => {
       const result = await FetchRequirementsForReturnsService.go(returnVersion.id)
+
       const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
+
       expect(result).to.equal({
         id: returnVersion.id,
         licence: {

@@ -78,8 +78,7 @@ describe('Return Requirements - View service', () => {
         ],
         startDate: '1 April 2022',
         status: 'approved'
-      }
-      )
+      })
     })
   })
 })
