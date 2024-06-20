@@ -166,7 +166,11 @@
         <div class="govuk-grid-column-full">
           <section>
             <div class="govuk-button-group">
-              <a class="govuk-link" href="/licences/{{ licenceId }}">View licence summary</a>
+              {% if featureFlag.enableSystemLicenceView %}
+                <a class="govuk-link" href="/system/licences/{{ licenceId }}/summary">View licence summary</a>
+              {% else %}
+                <a class="govuk-link" href="/licences/{{ licenceId }}">View licence summary</a>
+              {% endif %}
             </div>
           </section>
         </div>

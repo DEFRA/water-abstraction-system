@@ -10,9 +10,10 @@
  * @module ViewsPlugin
  */
 
-const path = require('path')
 const Nunjucks = require('nunjucks')
 const Vision = require('@hapi/vision')
+const path = require('path')
+const { enableSystemLicenceView } = require('../../config/feature-flags.config.js')
 
 const ServerConfig = require('../../config/server.config.js')
 
@@ -99,6 +100,9 @@ function context (request) {
       user: request.auth.credentials?.user,
       scope: request.auth.credentials?.scope,
       permission: request.auth.credentials?.permission
+    },
+    featureFlag: {
+      enableSystemLicenceView
     },
     navigationLinks: _navigationLinks(request.auth)
   }

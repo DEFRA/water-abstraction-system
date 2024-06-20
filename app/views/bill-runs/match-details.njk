@@ -37,15 +37,51 @@
 
       {# Licence nav bars #}
       <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-        <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#summary">
-            Summary
-          </a></li>
-        <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#returns">
-            Returns
-          </a></li>
-          <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#charge">
-            Charge information
-          </a></li>
+        <li class="govuk-summary-list__actions-list-item">
+          {% if featureFlag.enableSystemLicenceView %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/system/licences/{{ licenceId }}/summary">
+              Summary
+            </a>
+          {% else %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/licences/{{ licenceId }}#summary">
+              Summary
+            </a>
+          {% endif %}
+        </li>
+        <li class="govuk-summary-list__actions-list-item">
+          {% if featureFlag.enableSystemLicenceView %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/system/licences/{{ licenceId }}/returns">
+              Returns
+            </a>
+          {% else %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/licences/{{ licenceId }}#returns">
+              Returns
+            </a>
+          {% endif %}
+        </li>
+        <li class="govuk-summary-list__actions-list-item">
+          {% if featureFlag.enableSystemLicenceView %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/system/licences/{{ licenceId }}/set-up">
+              Charge information
+            </a>
+          {% else %}
+            <a
+              class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+              href="/licences/{{ licenceId }}#charge">
+              Charge information
+            </a>
+          {% endif %}
+        </li>
       </ul>
     </div>
   </div>

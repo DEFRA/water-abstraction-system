@@ -10,6 +10,10 @@
   <h2 class="govuk-heading-m">What happens next</h2>
   <p class="govuk-body">These return requirements are now active and returns will be opened for this licence in the next returns cycle.</p>
   <p class="govuk-body">
-    <a href="/licences/{{ licenceId }}#charge" class="govuk-link">Return to licence set up</a>
+    {% if featureFlag.enableSystemLicenceView %}
+      <a class="govuk-link" href="/system/licences/{{ licenceId }}/set-up">Return to licence set up</a>
+    {% else %}
+      <a class="govuk-link" href="/licences/{{ licenceId }}#charge">Return to licence set up</a>
+    {% endif %}
   </p>
 {% endblock %}
