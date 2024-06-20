@@ -78,7 +78,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-month': 5
             },
             frequencyReported: 'monthly',
-            frequencyCollected: 'daily',
+            frequencyCollected: 'monthly',
             agreementsExceptions: ['none']
           }
         ])
@@ -99,6 +99,17 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         expect(result[0].agreementsExceptions).to.equal(['two-part-tariff'])
         expect(result[1].agreementsExceptions).to.equal(['two-part-tariff'])
         expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
+      })
+
+      it('sets the collection frequency to "daily" for the two-part tariff spray purpose', async () => {
+        const result = await GenerateFromAbstractionDataService.go(licenceId)
+
+        // We assert the others haven't changed because of this
+        expect(result[0].frequencyCollected).to.equal('daily')
+        expect(result[1].frequencyCollected).to.equal('weekly')
+
+        // We then assert that the 3rd requirement has changed because of this
+        expect(result[2].frequencyCollected).to.equal('daily')
       })
     })
 
