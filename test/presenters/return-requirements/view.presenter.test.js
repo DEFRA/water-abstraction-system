@@ -56,6 +56,7 @@ describe('Return Requirements - View presenter', () => {
     }
 
     requirementsForReturns = {
+      createdAt: new Date('2020-12-01'),
       id: '0d6f0f07-7d5c-48bf-90f0-d441680c3653',
       licence: {
         $licenceHolder: () => { return 'Martha Stuart' },
@@ -83,6 +84,8 @@ describe('Return Requirements - View presenter', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
+        createdBy: '',
+        createdDate: '1 December 2020',
         licenceId: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
         licenceRef: '02/01',
         notes: 'A special note',
@@ -108,6 +111,34 @@ describe('Return Requirements - View presenter', () => {
         ],
         startDate: '21 April 2023',
         status: 'approved'
+      })
+    })
+
+    describe('the "createdBy" property', () => {
+      describe('and there is no user linked to the return', () => {
+        it('returns an empty string', () => {
+          const result = ViewPresenter.go(requirementsForReturns)
+
+          expect(result.createdBy).to.equal('')
+        })
+      })
+      describe('and there is a user linked to the return', () => {
+        beforeEach(() => {
+          requirementsForReturns.user = { username: 'iron@man.net' }
+        })
+        it('returns the users username', () => {
+          const result = ViewPresenter.go(requirementsForReturns)
+
+          expect(result.createdBy).to.equal('iron@man.net')
+        })
+      })
+    })
+
+    describe('the "createdDate" property', () => {
+      it('returns created date', () => {
+        const result = ViewPresenter.go(requirementsForReturns)
+
+        expect(result.createdDate).to.equal('1 December 2020')
       })
     })
 

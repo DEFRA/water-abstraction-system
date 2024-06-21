@@ -37,6 +37,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
       const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
 
       expect(result).to.equal({
+        createdAt: returnVersion.createdAt,
         id: returnVersion.id,
         licence: {
           id: licence.id,
@@ -115,7 +116,8 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
           }
         ],
         startDate: new Date('2022-04-01'),
-        status: 'current'
+        status: 'current',
+        user: null
       })
     })
   })

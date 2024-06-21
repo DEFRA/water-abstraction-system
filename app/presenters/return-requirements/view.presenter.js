@@ -20,7 +20,7 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  */
 
 function go (requirementsForReturns) {
-  const { createdAt, createdBy, licence, reason, notes, multipleUpload, returnRequirements, startDate, status } =
+  const { createdAt, licence, reason, notes, multipleUpload, returnRequirements, startDate, status, user } =
     requirementsForReturns
 
   return {
@@ -36,7 +36,7 @@ function go (requirementsForReturns) {
     startDate: formatLongDate(startDate),
     status: _status(status),
     createdDate: formatLongDate(createdAt),
-    createdBy: createdBy || ''
+    createdBy: user ? user.username : ''
   }
 }
 

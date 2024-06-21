@@ -29,7 +29,6 @@ async function _fetch (returnVersionId) {
     .findById(returnVersionId)
     .select([
       'createdAt',
-      'createdBy',
       'id',
       'multiple_upload',
       'notes',
@@ -37,6 +36,12 @@ async function _fetch (returnVersionId) {
       'startDate',
       'status'
     ])
+    .withGraphFetched('user')
+    .modifyGraph('user', (builder) => {
+      builder.select([
+        'username'
+      ])
+    })
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
