@@ -20,6 +20,8 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
+const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
 
 // Thing under test
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
@@ -29,11 +31,13 @@ describe('Charge Version model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ChargeVersionHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ChargeVersionHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ChargeVersionModel.query().findById(testRecord.id)
 
@@ -77,11 +81,11 @@ describe('Charge Version model', () => {
       let testBillRunChargeVersionYears
 
       beforeEach(async () => {
-        const { id: chargeVersionId } = testRecord
+        testRecord = await ChargeVersionHelper.add()
 
         testBillRunChargeVersionYears = []
         for (let i = 0; i < 2; i++) {
-          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId })
+          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId: testRecord.id })
           testBillRunChargeVersionYears.push(billRunChargeVersionYear)
         }
       })
@@ -105,36 +109,6 @@ describe('Charge Version model', () => {
         expect(result.billRunChargeVersionYears[0]).to.be.an.instanceOf(BillRunChargeVersionYearModel)
         expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[0])
         expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[1])
-      })
-    })
-
-    describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-        testRecord = await ChargeVersionHelper.add({ licenceId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('licence')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the licence', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
-
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
       })
     })
 
@@ -172,11 +146,11 @@ describe('Charge Version model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await ChargeVersionHelper.add()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeVersionId: id })
+          const chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: testRecord.id })
           testChargeReferences.push(chargeReference)
         }
       })
@@ -200,6 +174,71 @@ describe('Charge Version model', () => {
         expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
         expect(result.chargeReferences).to.include(testChargeReferences[0])
         expect(result.chargeReferences).to.include(testChargeReferences[1])
+      })
+    })
+
+    describe('when linking to licence', () => {
+      let testLicence
+
+      beforeEach(async () => {
+        testLicence = await LicenceHelper.add()
+
+        const { id: licenceId } = testLicence
+        testRecord = await ChargeVersionHelper.add({ licenceId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licence')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licence).to.be.an.instanceOf(LicenceModel)
+        expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to review charge versions', () => {
+      let testReviewChargeVersions
+
+      beforeEach(async () => {
+        testRecord = await ChargeVersionHelper.add()
+
+        testReviewChargeVersions = []
+        for (let i = 0; i < 2; i++) {
+          const reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId: testRecord.id })
+          testReviewChargeVersions.push(reviewChargeVersion)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('reviewChargeVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge versions', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeVersions')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeVersions).to.be.an.array()
+        expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
+        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
       })
     })
   })

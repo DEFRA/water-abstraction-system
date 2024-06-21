@@ -43,6 +43,7 @@ const SubmitReturnsCycleService = require('../services/return-requirements/submi
 const SubmitSetupService = require('../services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
+const ViewService = require('../services/return-requirements/view.service.js')
 
 async function abstractionPeriod (request, h) {
   const { requirementIndex, sessionId } = request.params
@@ -494,6 +495,15 @@ async function submitStartDate (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
 }
 
+async function view (request, h) {
+  const { returnVersionId } = request.params
+  const pageData = await ViewService.go(returnVersionId)
+
+  return h.view('return-requirements/view.njk', {
+    ...pageData
+  })
+}
+
 module.exports = {
   abstractionPeriod,
   add,
@@ -533,5 +543,6 @@ module.exports = {
   submitReturnsCycle,
   submitSetup,
   submitSiteDescription,
-  submitStartDate
+  submitStartDate,
+  view
 }

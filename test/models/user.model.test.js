@@ -11,6 +11,8 @@ const { expect } = Code
 const DatabaseSupport = require('../support/database.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
+const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
+const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const RoleModel = require('../../app/models/role.model.js')
 const UserGroupHelper = require('../support/helpers/user-group.helper.js')
@@ -43,6 +45,103 @@ describe('User model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking through user groups to groups', () => {
+      let testGroup
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+        testGroup = await GroupHelper.add()
+        await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('groups')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the groups', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('groups')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.groups).to.be.an.array()
+        expect(result.groups).to.have.length(1)
+        expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
+        expect(result.groups[0]).to.equal(testGroup)
+      })
+    })
+
+    describe('when linking to return versions', () => {
+      let testReturnVersions
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+
+        testReturnVersions = []
+        for (let i = 0; i < 2; i++) {
+          const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.id })
+          testReturnVersions.push(returnVersion)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('returnVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return versions', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnVersions')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnVersions).to.be.an.array()
+        expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
+        expect(result.returnVersions).to.include(testReturnVersions[0])
+        expect(result.returnVersions).to.include(testReturnVersions[1])
+      })
+    })
+
+    describe('when linking through user roles to roles', () => {
+      let testRole
+
+      beforeEach(async () => {
+        testRecord = await UserHelper.add()
+        testRole = await RoleHelper.add()
+        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('roles')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the roles', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('roles')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.roles).to.be.an.array()
+        expect(result.roles).to.have.length(1)
+        expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
+        expect(result.roles[0]).to.equal(testRole)
+      })
+    })
+
     describe('when linking to user groups', () => {
       let testUserGroup
 
@@ -100,68 +199,6 @@ describe('User model', () => {
         expect(result.userRoles).to.have.length(1)
         expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
         expect(result.userRoles[0]).to.equal(testUserRole)
-      })
-    })
-
-    describe('when linking through user roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add()
-        testRole = await RoleHelper.add()
-        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('roles')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the roles', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('roles')
-
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.roles).to.be.an.array()
-        expect(result.roles).to.have.length(1)
-        expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole)
-      })
-    })
-
-    describe('when linking through user groups to groups', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add()
-        testGroup = await GroupHelper.add()
-        await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('groups')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the groups', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('groups')
-
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.groups).to.be.an.array()
-        expect(result.groups).to.have.length(1)
-        expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup)
       })
     })
   })
