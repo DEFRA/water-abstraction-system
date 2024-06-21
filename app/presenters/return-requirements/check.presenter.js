@@ -16,13 +16,31 @@ function go (session) {
   return {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     licenceRef: licence.licenceRef,
-    note: note ? note.content : null,
+    note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
-    startDate: _startDate(session),
-    userEmail: note ? note.userEmail : 'No notes added'
+    startDate: _startDate(session)
+  }
+}
+
+function _note (note) {
+  if (note?.content) {
+    return {
+      actions: [
+        { text: 'Change', href: 'note' },
+        { text: 'Delete', href: 'delete-note' }
+      ],
+      text: note.content
+    }
+  } else {
+    return {
+      actions: [
+        { text: 'Add a note', href: 'note' }
+      ],
+      text: 'No notes added'
+    }
   }
 }
 
