@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
@@ -61,6 +62,7 @@ describe('Fetch Review Licence Results Service', () => {
       let returnLog
       let reviewReturn
       let purpose
+      let chargeCategory
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
@@ -72,7 +74,11 @@ describe('Fetch Review Licence Results Service', () => {
           chargeVersionId: chargeVersion.id
         })
 
-        chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
+        chargeCategory = await ChargeCategoryHelper.add()
+        chargeReference = await ChargeReferenceHelper.add({
+          chargeVersionId: chargeVersion.id,
+          chargeCategoryId: chargeCategory.id
+        })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,
           chargeReferenceId: chargeReference.id
@@ -111,6 +117,7 @@ describe('Fetch Review Licence Results Service', () => {
 
       it('returns the licence review data', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
+        console.log('Result', result.licence[0].reviewChargeVersions[0].reviewChargeReferences)
 
         expect(result.licence).to.equal([{
           id: reviewLicence.id,
@@ -182,7 +189,10 @@ describe('Fetch Review Licence Results Service', () => {
               updatedAt: reviewChargeReference.updatedAt,
               chargeReference: {
                 chargeCategoryId: chargeReference.chargeCategoryId,
-                chargeCategory: null
+                chargeCategory: {
+                  reference: chargeCategory.reference,
+                  shortDescription: chargeCategory.shortDescription
+                }
               },
               reviewChargeElements: [{
                 id: reviewChargeElement.id,
