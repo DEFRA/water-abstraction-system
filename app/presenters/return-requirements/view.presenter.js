@@ -20,7 +20,8 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  */
 
 function go (requirementsForReturns) {
-  const { licence, reason, notes, multipleUpload, returnRequirements, startDate, status } = requirementsForReturns
+  const { createdAt, createdBy, licence, reason, notes, multipleUpload, returnRequirements, startDate, status } =
+    requirementsForReturns
 
   return {
     additionalSubmissionOptions: {
@@ -33,7 +34,9 @@ function go (requirementsForReturns) {
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
-    status: _status(status)
+    status: _status(status),
+    createdDate: formatLongDate(createdAt),
+    createdBy: createdBy || ''
   }
 }
 

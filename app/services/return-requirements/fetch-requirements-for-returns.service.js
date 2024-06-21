@@ -28,6 +28,8 @@ async function _fetch (returnVersionId) {
   return ReturnVersionModel.query()
     .findById(returnVersionId)
     .select([
+      'createdAt',
+      'createdBy',
       'id',
       'multiple_upload',
       'notes',
