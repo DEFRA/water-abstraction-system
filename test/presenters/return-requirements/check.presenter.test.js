@@ -38,13 +38,20 @@ describe('Return Requirements - Check presenter', () => {
       expect(result).to.equal({
         additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
-        note: null,
+        note: {
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
+        },
         pageTitle: 'Check the requirements for returns for Turbo Kid',
         reason: 'Major change',
         reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        startDate: '1 January 2023',
-        userEmail: 'No notes added'
+        startDate: '1 January 2023'
       })
     })
   })
@@ -75,23 +82,42 @@ describe('Return Requirements - Check presenter', () => {
     describe('when the user has added a note', () => {
       beforeEach(() => {
         session.note = {
-          content: 'Note attached to requirement',
-          userEmail: 'carol.shaw@atari.com'
+          content: 'Note attached to requirement'
         }
       })
 
-      it('returns a populated note', () => {
+      it('returns text with the note content and the change and delete a note action', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.note).to.equal('Note attached to requirement')
+        expect(result.note).to.equal({
+          actions: [
+            {
+              href: 'note',
+              text: 'Change'
+            },
+            {
+              href: 'delete-note',
+              text: 'Delete'
+            }
+          ],
+          text: 'Note attached to requirement'
+        })
       })
     })
 
     describe('when the user has not added a note', () => {
-      it('returns an empty note', () => {
+      it('returns text with "No notes added" and the add a note action', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.note).to.be.null()
+        expect(result.note).to.equal({
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
+        })
       })
     })
   })
@@ -155,32 +181,6 @@ describe('Return Requirements - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.startDate).to.equal('26 November 2023')
-      })
-    })
-  })
-
-  describe('the "userEmail" property', () => {
-    describe('when the user has added a note', () => {
-      beforeEach(() => {
-        session.note = {
-          content: 'Note attached to requirement',
-          status: 'Added',
-          userEmail: 'carol.shaw@atari.com'
-        }
-      })
-
-      it("returns a the user's email address", () => {
-        const result = CheckPresenter.go(session)
-
-        expect(result.userEmail).to.equal('carol.shaw@atari.com')
-      })
-    })
-
-    describe('when the user has not added a note', () => {
-      it('returns the message "no notes added"', () => {
-        const result = CheckPresenter.go(session)
-
-        expect(result.userEmail).to.equal('No notes added')
       })
     })
   })

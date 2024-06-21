@@ -16,13 +16,28 @@ function go (session) {
   return {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     licenceRef: licence.licenceRef,
-    note: note ? note.content : null,
+    note: {
+      actions: _noteActions(note),
+      text: note ? note.content : 'No notes added'
+    },
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
-    startDate: _startDate(session),
-    userEmail: note ? note.userEmail : 'No notes added'
+    startDate: _startDate(session)
+  }
+}
+
+function _noteActions (note) {
+  if (note && note.content) {
+    return [
+      { text: 'Change', href: 'note' },
+      { text: 'Delete', href: 'delete-note' }
+    ]
+  } else {
+    return [
+      { text: 'Add a note', href: 'note' }
+    ]
   }
 }
 
