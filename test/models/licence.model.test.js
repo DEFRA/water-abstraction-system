@@ -474,6 +474,50 @@ describe('Licence model', () => {
     })
   })
 
+  describe('$currentVersion', () => {
+    let currentLicenceVersion
+
+    beforeEach(async () => {
+      testRecord = await LicenceHelper.add()
+
+      currentLicenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'current' })
+
+      // Add a second that isn't current
+      await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'superseded' })
+    })
+
+    describe('when instance does not have licence versions', () => {
+      it('returns null', () => {
+        const result = testRecord.$licenceHolder()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when instance has licence versions', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceHelper.add()
+
+        currentLicenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'current' })
+
+        // Add a second that isn't current
+        await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'superseded' })
+
+        testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+      })
+
+      it('returns the "current" licence version', () => {
+        const result = testRecord.$currentVersion()
+
+        expect(result).to.equal({
+          id: currentLicenceVersion.id,
+          startDate: currentLicenceVersion.startDate,
+          status: currentLicenceVersion.status
+        })
+      })
+    })
+  })
+
   describe('$ends', () => {
     let expiredDate
     let lapsedDate

@@ -135,6 +135,24 @@ class LicenceModel extends BaseModel {
   static get modifiers () {
     return {
       /**
+       * currentVersion modifier fetches only the current licence version record for this licence
+       */
+      currentVersion (query) {
+        query
+          .withGraphFetched('licenceVersions')
+          .modifyGraph('licenceVersions', (builder) => {
+            builder
+              .select([
+                'id',
+                'startDate',
+                'status'
+              ])
+              .where('status', 'current')
+              .orderBy('startDate', 'desc')
+              .limit(1)
+          })
+      },
+      /**
        * licenceHolder modifier fetches all the joined records needed to identify the licence holder
        */
       licenceHolder (query) {
@@ -202,6 +220,33 @@ class LicenceModel extends BaseModel {
           })
       }
     }
+  }
+
+  /**
+   * Of the licence versions against the licence instance, return the first 'current'
+   *
+   * > We recommend adding the `currentVersion` modifier to your query if you only care about the current licence
+   * version for the licence
+   *
+   * Minor changes to a licence will result in a new version of the licence being created in NALD. Purposes, points and
+   * agreements are then linked to the licence version purpose.
+   *
+   * It can be assumed that every licence has at least one licence version and that there will only ever be one with a
+   * status of 'current'. However, at times we have encountered licences without a licence version hence we cater for
+   * that in the function.
+   *
+   * @returns {module:LicenceVersion|null} `null` if this instance's `licenceVersions` has not been populated or there
+   * are none (we've found a couple of examples!). Else a `LicenceVersionModel` that is the 'current' version for this
+   * licence
+   */
+  $currentVersion () {
+    if (!this.licenceVersions || this.licenceVersions.length === 0) {
+      return null
+    }
+
+    return this.licenceVersions.find((licenceVersion) => {
+      return licenceVersion.status === 'current'
+    })
   }
 
   /**
