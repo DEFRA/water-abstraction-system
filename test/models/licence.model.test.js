@@ -488,7 +488,7 @@ describe('Licence model', () => {
 
     describe('when instance does not have licence versions', () => {
       it('returns null', () => {
-        const result = testRecord.$licenceHolder()
+        const result = testRecord.$currentVersion()
 
         expect(result).to.be.null()
       })
