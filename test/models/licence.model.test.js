@@ -48,11 +48,13 @@ describe('Licence model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await LicenceHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await LicenceModel.query().findById(testRecord.id)
 
@@ -66,11 +68,13 @@ describe('Licence model', () => {
       let testBillLicences
 
       beforeEach(async () => {
-        const { id, licenceRef } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testBillLicences = []
         for (let i = 0; i < 2; i++) {
-          const billLicence = await BillLicenceHelper.add({ licenceRef, licenceId: id })
+          const billLicence = await BillLicenceHelper.add({
+            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+          })
           testBillLicences.push(billLicence)
         }
       })
@@ -101,11 +105,13 @@ describe('Licence model', () => {
       let testChargeVersions
 
       beforeEach(async () => {
-        const { id, licenceRef } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testChargeVersions = []
         for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({ licenceRef, licenceId: id })
+          const chargeVersion = await ChargeVersionHelper.add({
+            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+          })
           testChargeVersions.push(chargeVersion)
         }
       })
@@ -136,11 +142,11 @@ describe('Licence model', () => {
       let testLicenceAgreements
 
       beforeEach(async () => {
-        const { licenceRef } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testLicenceAgreements = []
         for (let i = 0; i < 2; i++) {
-          const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef })
+          const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef: testRecord.licenceRef })
           testLicenceAgreements.push(licenceAgreement)
         }
       })
@@ -231,11 +237,11 @@ describe('Licence model', () => {
       let testLicenceGaugingStations
 
       beforeEach(async () => {
-        const { id: licenceId } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testLicenceGaugingStations = []
         for (let i = 0; i < 2; i++) {
-          const licenceGaugingStation = await LicenceGaugingStationHelper.add({ licenceId })
+          const licenceGaugingStation = await LicenceGaugingStationHelper.add({ licenceId: testRecord.id })
           testLicenceGaugingStations.push(licenceGaugingStation)
         }
       })
@@ -266,11 +272,11 @@ describe('Licence model', () => {
       let testLicenceVersions
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testLicenceVersions = []
         for (let i = 0; i < 2; i++) {
-          const licenceVersion = await LicenceVersionHelper.add({ licenceId: id })
+          const licenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id })
           testLicenceVersions.push(licenceVersion)
         }
       })
@@ -331,11 +337,11 @@ describe('Licence model', () => {
       let testReturnLogs
 
       beforeEach(async () => {
-        const { licenceRef } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testReturnLogs = []
         for (let i = 0; i < 2; i++) {
-          const returnLog = await ReturnLogHelper.add({ licenceRef })
+          const returnLog = await ReturnLogHelper.add({ licenceRef: testRecord.licenceRef })
           testReturnLogs.push(returnLog)
         }
       })
@@ -366,11 +372,11 @@ describe('Licence model', () => {
       let testReturnVersions
 
       beforeEach(async () => {
-        const { id: licenceId } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
-          const returnVersion = await ReturnVersionHelper.add({ licenceId })
+          const returnVersion = await ReturnVersionHelper.add({ licenceId: testRecord.id })
           testReturnVersions.push(returnVersion)
         }
       })
@@ -401,11 +407,11 @@ describe('Licence model', () => {
       let testReviewLicences
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testReviewLicences = []
         for (let i = 0; i < 2; i++) {
-          const reviewLicence = await ReviewLicenceHelper.add({ licenceId: id })
+          const reviewLicence = await ReviewLicenceHelper.add({ licenceId: testRecord.id })
           testReviewLicences.push(reviewLicence)
         }
       })
@@ -436,11 +442,11 @@ describe('Licence model', () => {
       let testWorkflows
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await LicenceHelper.add()
 
         testWorkflows = []
         for (let i = 0; i < 2; i++) {
-          const workflow = await WorkflowHelper.add({ licenceId: id })
+          const workflow = await WorkflowHelper.add({ licenceId: testRecord.id })
           testWorkflows.push(workflow)
         }
       })
@@ -776,6 +782,10 @@ describe('Licence model', () => {
   })
 
   describe('$registeredTo', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceHelper.add()
+    })
+
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
         const result = testRecord.$registeredTo()
