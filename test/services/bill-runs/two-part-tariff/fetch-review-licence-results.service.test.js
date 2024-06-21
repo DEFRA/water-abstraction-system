@@ -117,7 +117,6 @@ describe('Fetch Review Licence Results Service', () => {
 
       it('returns the licence review data', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
-        console.log('Result', result.licence[0].reviewChargeVersions[0].reviewChargeReferences)
 
         expect(result.licence).to.equal([{
           id: reviewLicence.id,
