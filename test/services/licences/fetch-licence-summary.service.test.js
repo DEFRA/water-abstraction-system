@@ -157,8 +157,7 @@ describe('Fetch Licence Summary service', () => {
           licenceName: 'Licence Holder Ltd',
           registeredTo: 'grace.hopper@example.com',
           role: 'primary_user'
-        },
-        licenceHolder: 'Licence Holder Ltd'
+        }
       })
     })
   })
