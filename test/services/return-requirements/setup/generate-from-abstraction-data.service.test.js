@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const FetchAbstractionDataService = require('../../../../app/services/return-requirements/setup/fetch-abstraction-data.service.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const LicenceVersionPurposeModel = require('../../../../app/models/licence-version-purpose.model.js')
 
 // Thing under test
@@ -144,7 +145,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
 })
 
 function _fetchResult (licenceId) {
-  return {
+  return LicenceModel.fromJson({
     id: licenceId,
     waterUndertaker: false,
     twoPartTariffAgreement: false,
@@ -165,6 +166,7 @@ function _fetchResult (licenceId) {
       {
         id: 'f7a5ba6a-ceaa-41e9-a8b5-27f33f42d05e',
         startDate: new Date('2022-05-01'),
+        status: 'current',
         licenceVersionPurposes: [
           // NOTE: We specifically create a model from JSON rather than just passing in the JSON directly because the
           // service needs to be able to call the model instances $electricityGeneration() method
@@ -207,5 +209,5 @@ function _fetchResult (licenceId) {
         ]
       }
     ]
-  }
+  })
 }
