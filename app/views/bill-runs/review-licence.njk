@@ -46,40 +46,40 @@
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licenceId }}/summary">
+          href="/system/licences/{{ licence.licenceId  }}/summary">
           Summary
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licenceId }}/returns">
+          href="/system/licences/{{ licence.licenceId  }}/returns">
           Returns
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licenceId }}/set-up">
+          href="/system/licences/{{ licence.licenceId  }}/set-up">
           Charge information
         </a>
       </li>
     {% else %}
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licenceId }}#summary">
+          href="/licences/{{ licence.licenceId  }}#summary">
           Summary
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licenceId }}#returns">
+          href="/licences/{{ licence.licenceId  }}#returns">
           Returns
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licenceId }}#charge">
+          href="/licences/{{ licence.licenceId  }}#charge">
           Charge information
         </a>
       </li>
