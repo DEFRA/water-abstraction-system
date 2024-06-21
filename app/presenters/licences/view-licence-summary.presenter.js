@@ -21,16 +21,21 @@ function go (licence, licenceAbstractionConditions) {
     id,
     licenceDocumentHeader,
     licenceGaugingStations,
-    licenceHolder,
-    licenceVersions,
     permitLicence,
     region,
     startDate
   } = licence
 
-  const purposes = _generatePurposes(licenceVersions)
+  const licenceVersionPurposes = _licenceVersionPurposes(licence)
+
+  const purposes = _generatePurposes(licenceVersionPurposes)
   const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
-  const abstractionData = _abstractionWrapper(licenceAbstractionConditions, licenceVersions, purposes, permitLicence)
+  const abstractionData = _abstractionWrapper(
+    licenceAbstractionConditions,
+    licenceVersionPurposes,
+    purposes,
+    permitLicence
+  )
 
   return {
     ...abstractionData,
@@ -38,7 +43,7 @@ function go (licence, licenceAbstractionConditions) {
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     id,
-    licenceHolder: _generateLicenceHolder(licenceHolder),
+    licenceHolder: _generateLicenceHolder(licence),
     monitoringStations,
     purposes,
     region: region.displayName,
@@ -46,8 +51,8 @@ function go (licence, licenceAbstractionConditions) {
   }
 }
 
-function _abstractionWrapper (licenceAbstractionConditions, licenceVersions, purposes, permitLicence) {
-  const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
+function _abstractionWrapper (licenceAbstractionConditions, licenceVersionPurposes, purposes, permitLicence) {
+  const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
   let abstractionPeriodsAndPurposesLinkText = null
 
   if (abstractionPeriods) {
@@ -111,12 +116,12 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _generateAbstractionPeriods (licenceVersions) {
-  if (licenceVersions.length === 0 || licenceVersions[0].licenceVersionPurposes.length === 0) {
+function _generateAbstractionPeriods (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
     return null
   }
 
-  const formattedAbstractionPeriods = licenceVersions[0].licenceVersionPurposes.map((purpose) => {
+  const formattedAbstractionPeriods = licenceVersionPurposes.map((purpose) => {
     const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
     const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
 
@@ -131,7 +136,9 @@ function _generateAbstractionPeriods (licenceVersions) {
   }
 }
 
-function _generateLicenceHolder (licenceHolder) {
+function _generateLicenceHolder (licence) {
+  const licenceHolder = licence.$licenceHolder()
+
   if (!licenceHolder) {
     return 'Unregistered licence'
   }
@@ -145,12 +152,12 @@ function _generateMonitoringStation (licenceGaugingStations) {
   })
 }
 
-function _generatePurposes (licenceVersions) {
-  if (licenceVersions.length === 0 || licenceVersions[0].licenceVersionPurposes.length === 0) {
+function _generatePurposes (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
     return null
   }
 
-  const allPurposeDescriptions = licenceVersions[0].licenceVersionPurposes.map((licenceVersionPurpose) => {
+  const allPurposeDescriptions = licenceVersionPurposes.map((licenceVersionPurpose) => {
     return licenceVersionPurpose.purpose.description
   })
 
@@ -233,6 +240,18 @@ function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
   }
 
   return abstractionAmountSet
+}
+
+function _licenceVersionPurposes (licence) {
+  const currentVersion = licence.$currentVersion()
+
+  if (!currentVersion ||
+    !currentVersion.licenceVersionPurposes ||
+    currentVersion.licenceVersionPurposes.length === 0) {
+    return null
+  }
+
+  return currentVersion.licenceVersionPurposes
 }
 
 module.exports = {

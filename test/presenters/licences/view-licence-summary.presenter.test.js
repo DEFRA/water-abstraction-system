@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceModel = require('../../../app/models/licence.model.js')
+
 // Thing under test
 const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
 
@@ -359,7 +362,16 @@ describe('View Licence Summary presenter', () => {
 
     describe('when the licence holder is set', () => {
       beforeEach(() => {
-        licence.licenceHolder = 'Barbara Liskov'
+        // We 'mimic' licenceDocument containing a ContactModel instance that is populated. If it was the call to its
+        // instance method $name() would return the contact's name. We pretend in order to test the logic in the
+        // presenter
+        const contact = {
+          $name: () => { return 'Barbara Liskov' }
+        }
+
+        licence.licenceDocument = {
+          licenceDocumentRoles: [{ contact }]
+        }
       })
 
       it('returns "Barbara Liskov"', () => {
@@ -995,7 +1007,7 @@ function _abstractionConditions () {
 }
 
 function _licence () {
-  return {
+  return LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
     startDate: new Date('2019-04-01'),
@@ -1023,6 +1035,8 @@ function _licence () {
     },
     licenceVersions: [{
       id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
+      startDate: new Date('2022-04-01'),
+      status: 'current',
       licenceVersionPurposes: [
         {
           id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
@@ -1057,8 +1071,7 @@ function _licence () {
         label: 'MEVAGISSEY FIRE STATION'
       }
     }],
-    licenceDocument: {},
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
-    licenceHolder: null
-  }
+    licenceDocument: null,
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
+  })
 }
