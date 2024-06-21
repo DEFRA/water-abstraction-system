@@ -322,6 +322,18 @@ describe('Return Requirements - View presenter', () => {
           expect(result.pageTitle).to.equal('Check the requirements for returns for Martha Stuart')
         })
       })
+
+      describe('and there are no return requirements', () => {
+        beforeEach(() => {
+          requirementsForReturns.returnRequirements = []
+        })
+
+        it('should return an empty array', () => {
+          const result = ViewPresenter.go(requirementsForReturns)
+
+          expect(result.requirements).to.equal([])
+        })
+      })
     })
   })
 })

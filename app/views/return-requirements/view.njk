@@ -81,6 +81,7 @@
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 {% endif %}
+{% if requirements.length > 0 %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
       {% for requirement in requirements %}
@@ -194,4 +195,8 @@
           ]
         }) }}
     </div>
+  {% else %}
+    <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endif %}
 {% endblock %}
