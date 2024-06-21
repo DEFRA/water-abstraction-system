@@ -16,10 +16,7 @@ function go (session) {
   return {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     licenceRef: licence.licenceRef,
-    note: {
-      actions: _noteActions(note),
-      text: note ? note.content : 'No notes added'
-    },
+    note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
@@ -28,16 +25,22 @@ function go (session) {
   }
 }
 
-function _noteActions (note) {
+function _note (note) {
   if (note?.content) {
-    return [
-      { text: 'Change', href: 'note' },
-      { text: 'Delete', href: 'delete-note' }
-    ]
+    return {
+      actions: [
+        { text: 'Change', href: 'note' },
+        { text: 'Delete', href: 'delete-note' }
+      ],
+      text: note.content
+    }
   } else {
-    return [
-      { text: 'Add a note', href: 'note' }
-    ]
+    return {
+      actions: [
+        { text: 'Add a note', href: 'note' }
+      ],
+      text: 'No notes added'
+    }
   }
 }
 
