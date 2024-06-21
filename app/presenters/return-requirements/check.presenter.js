@@ -29,7 +29,7 @@ function go (session) {
 }
 
 function _noteActions (note) {
-  if (note && note.content) {
+  if (note?.content) {
     return [
       { text: 'Change', href: 'note' },
       { text: 'Delete', href: 'delete-note' }
