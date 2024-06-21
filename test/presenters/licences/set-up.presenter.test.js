@@ -505,7 +505,7 @@ describe('Licences - Set Up presenter', () => {
           {
             action: [
               {
-                link: '',
+                link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d/view',
                 text: 'View'
               }
             ],
@@ -529,7 +529,7 @@ describe('Licences - Set Up presenter', () => {
             {
               action: [
                 {
-                  link: '',
+                  link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d/view',
                   text: 'View'
                 }
               ],

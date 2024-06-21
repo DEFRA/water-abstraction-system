@@ -470,6 +470,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{returnVersionId}/view',
+    handler: ReturnRequirementsController.view,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
