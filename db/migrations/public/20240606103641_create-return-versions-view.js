@@ -17,6 +17,7 @@ exports.up = function (knex) {
         'reason',
         'multiple_upload',
         'notes',
+        'created_by',
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))

@@ -14,6 +14,8 @@ const LicenceModel = require('../../app/models/licence.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
+const UserModel = require('../../app/models/user.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
 
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
@@ -103,6 +105,36 @@ describe('Return Version model', () => {
         expect(result.returnRequirements[0]).to.be.an.instanceOf(ReturnRequirementModel)
         expect(result.returnRequirements).to.include(testReturnRequirements[0])
         expect(result.returnRequirements).to.include(testReturnRequirements[1])
+      })
+    })
+
+    describe('when linking to user', () => {
+      let testUser
+
+      beforeEach(async () => {
+        testUser = await UserHelper.add()
+
+        const { id: createdBy } = testUser
+        testRecord = await ReturnVersionHelper.add({ createdBy })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReturnVersionModel.query()
+          .innerJoinRelated('user')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the user', async () => {
+        const result = await ReturnVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('user')
+
+        expect(result).to.be.instanceOf(ReturnVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.user).to.be.an.instanceOf(UserModel)
+        expect(result.user).to.equal(testUser)
       })
     })
   })

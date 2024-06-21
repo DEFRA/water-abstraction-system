@@ -269,6 +269,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/two-part-tariff',
+    handler: BillRunsController.twoPartTariff,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
