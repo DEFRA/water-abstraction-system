@@ -29,7 +29,7 @@ function go (licence) {
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
 
   const purposes = _generatePurposes(licenceVersionPurposes)
-  const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
+  const monitoringStations = _generateMonitoringStations(licenceGaugingStations)
   const abstractionData = _abstractionWrapper(licenceVersionPurposes, purposes, permitLicence)
 
   return {
@@ -156,7 +156,7 @@ function _generateLicenceHolder (licence) {
   return licenceHolder
 }
 
-function _generateMonitoringStation (licenceGaugingStations) {
+function _generateMonitoringStations (licenceGaugingStations) {
   return licenceGaugingStations.map((licenceGaugingStation) => {
     return licenceGaugingStation.gaugingStation
   })
