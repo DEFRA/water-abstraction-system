@@ -322,7 +322,7 @@ describe('Licences controller', () => {
         // Returns for requirements
         expect(response.payload).to.contain('Requirements for returns')
         // Returns for requirements present
-        expect(response.payload).to.contain('Set up new returns requirement')
+        expect(response.payload).to.contain('Set up new requirements')
         expect(response.payload).to.contain('Mark licence as')
         expect(response.payload).to.contain('no returns needed')
         // Charge information
