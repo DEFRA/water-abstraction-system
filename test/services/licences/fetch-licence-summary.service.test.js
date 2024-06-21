@@ -118,6 +118,8 @@ describe('Fetch Licence Summary service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            startDate: new Date('2022-05-01'),
+            status: 'current',
             licenceVersionPurposes: [{
               id: licenceVersionPurpose.id,
               abstractionPeriodStartDay: 1,

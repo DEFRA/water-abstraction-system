@@ -35,6 +35,7 @@ async function _fetchLicence (licenceId) {
       'expiredDate',
       'startDate'
     ])
+    .modify('currentVersion')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
@@ -48,13 +49,6 @@ async function _fetchLicence (licenceId) {
         'id',
         ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
-    })
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder.select([
-        'id'
-      ])
-        .where('status', 'current')
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
