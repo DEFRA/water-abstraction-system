@@ -84,7 +84,7 @@ describe('Return Requirements - View presenter', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: '',
+        createdBy: 'Migrated from NALD',
         createdDate: '1 December 2020',
         licenceId: 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5',
         licenceRef: '02/01',
@@ -116,10 +116,10 @@ describe('Return Requirements - View presenter', () => {
 
     describe('the "createdBy" property', () => {
       describe('and there is no user linked to the return', () => {
-        it('returns an empty string', () => {
+        it('returns "Migrated from NALD" ', () => {
           const result = ViewPresenter.go(requirementsForReturns)
 
-          expect(result.createdBy).to.equal('')
+          expect(result.createdBy).to.equal('Migrated from NALD')
         })
       })
       describe('and there is a user linked to the return', () => {

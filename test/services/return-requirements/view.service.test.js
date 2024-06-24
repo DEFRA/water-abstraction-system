@@ -41,7 +41,7 @@ describe('Return Requirements - View service', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: '',
+        createdBy: 'Migrated from NALD',
         createdDate: returnVersion.createdAt.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }),
         licenceId: licence.id,
         licenceRef: result.licenceRef,
