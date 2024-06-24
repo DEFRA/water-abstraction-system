@@ -36,7 +36,7 @@ function go (requirementsForReturns) {
     startDate: formatLongDate(startDate),
     status: _status(status),
     createdDate: formatLongDate(createdAt),
-    createdBy: user ? user.username : ''
+    createdBy: user ? user.username : 'Migrated from NALD'
   }
 }
 
