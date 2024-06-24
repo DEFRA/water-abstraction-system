@@ -387,7 +387,7 @@
 
                     <div class="govuk-!-margin-top-6">
                       <span class="govuk-body govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-count-{{ chargeElementIndex }}">{{chargeElement.elementNumber}}</span>
-                      <span class="float-right">
+                      <span class="float-right" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-status-{{ chargeElementIndex }}">
                         {{ statusTag(chargeElement.elementStatus) }}
                       </span>
                       <h3 class="govuk-heading-s govuk-!-margin-bottom-1" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-description-{{ chargeElementIndex }}">{{chargeElement.elementDescription}}
