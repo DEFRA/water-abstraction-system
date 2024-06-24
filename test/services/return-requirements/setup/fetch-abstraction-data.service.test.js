@@ -49,6 +49,7 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
           {
             id: seedIds.licenceVersions.currentId,
             startDate: new Date('2022-05-01'),
+            status: 'current',
             licenceVersionPurposes: [
               {
                 id: seedIds.licenceVersionPurposes.electricityId,

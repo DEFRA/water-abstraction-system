@@ -225,7 +225,7 @@ function _siteDescription (matchingPermitPurpose) {
  * user to make changes from the `/check` page to the requirements we generate.
  */
 function _transformForSetup (licence) {
-  const { licenceVersionPurposes } = licence.licenceVersions[0]
+  const { licenceVersionPurposes } = licence.$currentVersion()
 
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
     const {

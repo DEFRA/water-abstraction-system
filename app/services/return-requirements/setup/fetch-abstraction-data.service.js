@@ -51,6 +51,8 @@ async function _fetch (licenceId) {
           AND (la.end_date IS NULL OR la.end_date >= ?)) AS two_part_tariff_agreement
           `, [new Date()])
     ])
+    // Grab only the current version for the licence. The licence version purposes are linked off it
+    .modify('currentVersion')
     // For reasons unknown (!!) the previous team never normalised the points against a licence, just the purposes. So,
     // we have to dip into the JSONB blob of _all_ the NALD data for a licence to retrieve the points for a purpose
     .withGraphFetched('permitLicence')
@@ -58,18 +60,6 @@ async function _fetch (licenceId) {
       builder.select([
         ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
-    })
-    // Grab only the current version for the licence. The licence version purposes are linked off it
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder
-        .select([
-          'id',
-          'startDate'
-        ])
-        .where('status', 'current')
-        .orderBy('startDate', 'desc')
-        .limit(1)
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {

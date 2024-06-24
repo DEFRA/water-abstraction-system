@@ -118,6 +118,8 @@ describe('Fetch Licence Summary service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            startDate: new Date('2022-05-01'),
+            status: 'current',
             licenceVersionPurposes: [{
               id: licenceVersionPurpose.id,
               abstractionPeriodStartDay: 1,
@@ -155,8 +157,7 @@ describe('Fetch Licence Summary service', () => {
           licenceName: 'Licence Holder Ltd',
           registeredTo: 'grace.hopper@example.com',
           role: 'primary_user'
-        },
-        licenceHolder: 'Licence Holder Ltd'
+        }
       })
     })
   })

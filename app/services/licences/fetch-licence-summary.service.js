@@ -16,15 +16,10 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page summary tab
+ * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
 async function go (licenceId) {
-  const licence = await _fetchLicence(licenceId)
-
-  return {
-    ...licence,
-    licenceHolder: licence.$licenceHolder()
-  }
+  return _fetchLicence(licenceId)
 }
 
 async function _fetchLicence (licenceId) {
@@ -35,6 +30,7 @@ async function _fetchLicence (licenceId) {
       'expiredDate',
       'startDate'
     ])
+    .modify('currentVersion')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
@@ -48,13 +44,6 @@ async function _fetchLicence (licenceId) {
         'id',
         ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
-    })
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder.select([
-        'id'
-      ])
-        .where('status', 'current')
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
