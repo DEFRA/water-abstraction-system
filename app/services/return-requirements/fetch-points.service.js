@@ -44,6 +44,7 @@ async function _fetchPoints (licenceId) {
 function _abstractPointsData (result) {
   const pointsData = []
 
+  // First extract from the current_version's purposes the various points
   result.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
       const pointDetail = point.point_detail
@@ -51,7 +52,16 @@ function _abstractPointsData (result) {
     })
   })
 
-  return pointsData
+  // Then sort the extracted points to give us a consistent display order and return
+  return pointsData.sort((first, second) => {
+    // NOTE: This ensures we don't call localeCompare with null or undefined values
+    const firstLocalName = first.LOCAL_NAME ? first.LOCAL_NAME : ''
+    const secondLocalName = second.LOCAL_NAME ? second.LOCAL_NAME : ''
+
+    // NOTE: localeCompare() handles dealing with values in different cases automatically! So we don't have to lowercase
+    // everything before then comparing.
+    return firstLocalName.localeCompare(secondLocalName)
+  })
 }
 
 module.exports = {
