@@ -245,7 +245,7 @@ function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
 function _licenceVersionPurposes (licence) {
   const currentVersion = licence.$currentVersion()
 
-  if (!currentVersion.licenceVersionPurposes || currentVersion.licenceVersionPurposes.length === 0) {
+  if (!currentVersion || currentVersion?.licenceVersionPurposes.length === 0) {
     return null
   }
 
