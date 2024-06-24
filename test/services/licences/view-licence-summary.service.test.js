@@ -74,34 +74,6 @@ describe('View Licence service summary', () => {
         })
       })
     })
-
-    describe('and it does not have a licence holder', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        fetchLicenceResult.licenceHolder = null
-        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will return unregistered licence for use in the licence summary page', async () => {
-        const result = await ViewLicenceSummaryService.go(testId)
-
-        expect(result.licenceHolder).to.equal('Unregistered licence')
-      })
-    })
-
-    describe('and it does have a licence holder', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        fetchLicenceResult.licenceHolder = 'Test Company'
-        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will return the licence holder for use in the licence summary page', async () => {
-        const result = await ViewLicenceSummaryService.go(testId)
-
-        expect(result.licenceHolder).to.equal('Test Company')
-      })
-    })
   })
 })
 
@@ -140,8 +112,7 @@ function _testLicence () {
         label: 'MEVAGISSEY FIRE STATION'
       }
     }],
-    licenceDocument: {},
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
-    licenceHolder: null
+    licenceDocument: null,
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
   })
 }
