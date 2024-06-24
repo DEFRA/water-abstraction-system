@@ -31,9 +31,12 @@ function go (licence) {
   const purposes = _generatePurposes(licenceVersionPurposes)
   const monitoringStations = _generateMonitoringStations(licenceGaugingStations)
   const abstractionData = _abstractionWrapper(licenceVersionPurposes, purposes, permitLicence)
+  const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
 
   return {
     ...abstractionData,
+    abstractionPeriods,
+    abstractionPeriodsAndPurposesLinkText: _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
@@ -47,23 +50,11 @@ function go (licence) {
 }
 
 function _abstractionWrapper (licenceVersionPurposes, purposes, permitLicence) {
-  const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
-  let abstractionPeriodsAndPurposesLinkText = null
-
-  if (abstractionPeriods) {
-    const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
-    const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
-
-    abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
-  }
-
   const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
 
   return {
     abstractionConditions,
-    abstractionPeriods,
-    abstractionPeriodsAndPurposesLinkText,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
@@ -116,6 +107,18 @@ function _abstractionConditions (licenceVersionPurposes) {
 
   // Sort them alphabetically
   return uniqueConditions.sort()
+}
+
+function _abstractionPeriodsAndPurposesLinkText (abstractionPeriods, purposes) {
+  let abstractionPeriodsAndPurposesLinkText = null
+
+  if (abstractionPeriods) {
+    const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
+    const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
+    abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
+  }
+
+  return abstractionPeriodsAndPurposesLinkText
 }
 
 function _endDate (expiredDate) {
