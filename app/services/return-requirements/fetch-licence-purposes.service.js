@@ -28,6 +28,9 @@ async function _fetch (licenceId) {
     .innerJoin('licenceVersions', 'licenceVersionPurposes.licenceVersionId', 'licenceVersions.id')
     .where('licenceVersions.licenceId', licenceId)
     .where('licenceVersions.status', 'current')
+    .orderBy([
+      { column: 'purposes.description', order: 'asc' }
+    ])
 }
 
 module.exports = {

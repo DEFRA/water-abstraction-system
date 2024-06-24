@@ -53,7 +53,25 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
                     NGR4_NORTH: 'null',
                     NGR4_SHEET: 'null'
                   }
-                }]
+                },
+                {
+                  point_detail: {
+                    NGR1_EAST: '6520',
+                    NGR2_EAST: 'null',
+                    NGR3_EAST: 'null',
+                    NGR4_EAST: 'null',
+                    LOCAL_NAME: 'POINT A, ADDINGTON SANDPITS',
+                    NGR1_NORTH: '5937',
+                    NGR1_SHEET: 'TQ',
+                    NGR2_NORTH: 'null',
+                    NGR2_SHEET: 'null',
+                    NGR3_NORTH: 'null',
+                    NGR3_SHEET: 'null',
+                    NGR4_NORTH: 'null',
+                    NGR4_SHEET: 'null'
+                  }
+                }
+              ]
             }]
           }
         }
@@ -63,9 +81,25 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
 
   describe('when called', () => {
     it('returns result', async () => {
-      const result = await FetchPointsService.go(licence.id)
+      const results = await FetchPointsService.go(licence.id)
 
-      expect(result).to.equal([{
+      expect(results[0]).to.equal({
+        NGR1_EAST: '6520',
+        NGR2_EAST: 'null',
+        NGR3_EAST: 'null',
+        NGR4_EAST: 'null',
+        LOCAL_NAME: 'POINT A, ADDINGTON SANDPITS',
+        NGR1_NORTH: '5937',
+        NGR1_SHEET: 'TQ',
+        NGR2_NORTH: 'null',
+        NGR2_SHEET: 'null',
+        NGR3_NORTH: 'null',
+        NGR3_SHEET: 'null',
+        NGR4_NORTH: 'null',
+        NGR4_SHEET: 'null'
+      })
+
+      expect(results[1]).to.equal({
         NGR1_EAST: '69212',
         NGR2_EAST: 'null',
         NGR3_EAST: 'null',
@@ -79,7 +113,7 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
         NGR3_SHEET: 'null',
         NGR4_NORTH: 'null',
         NGR4_SHEET: 'null'
-      }])
+      })
     })
   })
 })

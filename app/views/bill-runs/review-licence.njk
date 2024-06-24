@@ -42,15 +42,48 @@
 
   {# Licence nav bars #}
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-    <li class="govuk-summary-list__actions-list-item" data-test="summary-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
-        Summary
-      </a></li>
-    <li class="govuk-summary-list__actions-list-item" data-test="returns-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
-        Returns
-      </a></li>
-      <li class="govuk-summary-list__actions-list-item" data-test="charge-information-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
-        Charge information
-      </a></li>
+    {% if featureFlags.enableSystemLicenceView %}
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/summary">
+          Summary
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/returns">
+          Returns
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/set-up">
+          Charge information
+        </a>
+      </li>
+    {% else %}
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#summary">
+          Summary
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#returns">
+          Returns
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#charge">
+          Charge information
+        </a>
+      </li>
+    {% endif %}
   </ul>
 
   {# Licence in review text #}
