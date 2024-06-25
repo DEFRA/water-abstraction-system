@@ -11,7 +11,7 @@ exports.up = function (knex) {
         'company_contact_id AS id',
         'company_id',
         'contact_id',
-        'role_id',
+        'role_id AS licence_role_id',
         'is_default AS default',
         'start_date',
         'water_abstraction_alerts_enabled AS abstraction_alerts',
