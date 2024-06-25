@@ -31,6 +31,14 @@ class CompanyContactModel extends BaseModel {
           from: 'companyContacts.contactId',
           to: 'contacts.id'
         }
+      },
+      licenceRole: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-role.model',
+        join: {
+          from: 'companyContacts.licenceRoleId',
+          to: 'licenceRoles.id'
+        }
       }
     }
   }

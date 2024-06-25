@@ -14,6 +14,8 @@ const CompanyModel = require('../../app/models/company.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
 const DatabaseSupport = require('../support/database.js')
+const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
+const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 
 // Thing under test
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
@@ -96,6 +98,36 @@ describe('Company Contacts model', () => {
 
         expect(result.contact).to.be.an.instanceOf(ContactModel)
         expect(result.contact).to.equal(testContact)
+      })
+    })
+
+    describe('when linking to licence role', () => {
+      let testLicenceRole
+
+      beforeEach(async () => {
+        testLicenceRole = await LicenceRoleHelper.add()
+
+        const { id: licenceRoleId } = testLicenceRole
+        testRecord = await CompanyContactHelper.add({ licenceRoleId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await CompanyContactModel.query()
+          .innerJoinRelated('licenceRole')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence role', async () => {
+        const result = await CompanyContactModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceRole')
+
+        expect(result).to.be.instanceOf(CompanyContactModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceRole).to.be.an.instanceOf(LicenceRoleModel)
+        expect(result.licenceRole).to.equal(testLicenceRole)
       })
     })
   })
