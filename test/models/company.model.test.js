@@ -12,6 +12,8 @@ const BillingAccountAddressHelper = require('../support/helpers/billing-account-
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
+const CompanyAddressModel = require('../../app/models/company-address.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
@@ -113,6 +115,43 @@ describe('Company model', () => {
         expect(result.billingAccounts[0]).to.be.an.instanceOf(BillingAccountModel)
         expect(result.billingAccounts).to.include(testBillingAccounts[0])
         expect(result.billingAccounts).to.include(testBillingAccounts[1])
+      })
+    })
+
+    describe('when linking to company addresses', () => {
+      let testCompanyAddresses
+
+      beforeEach(async () => {
+        testRecord = await CompanyHelper.add()
+
+        const { id: companyId } = testRecord
+
+        testCompanyAddresses = []
+        for (let i = 0; i < 2; i++) {
+          const companyAddress = await CompanyAddressHelper.add({ companyId })
+          testCompanyAddresses.push(companyAddress)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query()
+          .innerJoinRelated('companyAddresses')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the company addresses', async () => {
+        const result = await CompanyModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('companyAddresses')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.companyAddresses).to.be.an.array()
+        expect(result.companyAddresses[0]).to.be.an.instanceOf(CompanyAddressModel)
+        expect(result.companyAddresses).to.include(testCompanyAddresses[0])
+        expect(result.companyAddresses).to.include(testCompanyAddresses[1])
       })
     })
 
