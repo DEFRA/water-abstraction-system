@@ -47,7 +47,7 @@ describe('Fetch Customer Contacts service', () => {
       await CompanyContactHelper.add({
         companyId,
         contactId,
-        roleId: licenceRoleId
+        licenceRoleId
       })
 
       await LicenceDocumentRoleHelper.add({
