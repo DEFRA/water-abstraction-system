@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
+const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
+const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
@@ -75,6 +77,43 @@ describe('Contact model', () => {
         expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+      })
+    })
+
+    describe('when linking to company contacts', () => {
+      let testCompanyContacts
+
+      beforeEach(async () => {
+        testRecord = await ContactHelper.add()
+
+        const { id: contactId } = testRecord
+
+        testCompanyContacts = []
+        for (let i = 0; i < 2; i++) {
+          const companyContact = await CompanyContactHelper.add({ contactId })
+          testCompanyContacts.push(companyContact)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ContactModel.query()
+          .innerJoinRelated('companyContacts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the company contacts', async () => {
+        const result = await ContactModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('companyContacts')
+
+        expect(result).to.be.instanceOf(ContactModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.companyContacts).to.be.an.array()
+        expect(result.companyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
+        expect(result.companyContacts).to.include(testCompanyContacts[0])
+        expect(result.companyContacts).to.include(testCompanyContacts[1])
       })
     })
 
