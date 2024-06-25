@@ -46,40 +46,46 @@
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licence.licenceId  }}/summary">
+          href="/system/licences/{{ licence.licenceId  }}/summary"
+          data-test="summary-link">
           Summary
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licence.licenceId  }}/returns">
+          href="/system/licences/{{ licence.licenceId  }}/returns"
+          data-test="returns-link">
           Returns
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item">
         <a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/system/licences/{{ licence.licenceId  }}/set-up">
+          href="/system/licences/{{ licence.licenceId  }}/set-up"
+          data-test="charge-information-link">
           Charge information
         </a>
       </li>
     {% else %}
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licence.licenceId  }}#summary">
+          href="/licences/{{ licence.licenceId  }}#summary"
+          data-test="summary-link">
           Summary
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licence.licenceId  }}#returns">
+          href="/licences/{{ licence.licenceId  }}#returns"
+          data-test="returns-link">
           Returns
         </a>
       </li>
       <li class="govuk-summary-list__actions-list-item"><a
           class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-          href="/licences/{{ licence.licenceId  }}#charge">
+          href="/licences/{{ licence.licenceId  }}#charge"
+          data-test="charge-information-link">
           Charge information
         </a>
       </li>
