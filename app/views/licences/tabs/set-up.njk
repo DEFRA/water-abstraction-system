@@ -134,7 +134,7 @@
   <p>
     {{ govukButton({
       text: "Set up a new charge",
-      href: setupNewCharge,
+      href: links.chargeInformation.setupNewCharge,
       classes: "govuk-button--secondary govuk-!-margin-right-3"
     }) }}
   </p>
@@ -144,7 +144,7 @@
   <p>
     {{ govukButton({
       text: "Make licence non-chargeable",
-      href: makeLicenceNonChargeable,
+      href: links.chargeInformation.makeLicenceNonChargeable,
       classes: "govuk-button--secondary"
     }) }}
   </p>
@@ -204,7 +204,7 @@
 {% if links.agreements.setUpAgreement %}
   {{ govukButton({
     text: "Set up a new agreement",
-    href: setUpAgreement,
+    href: links.agreements.setUpAgreement,
     classes: "govuk-button--secondary"
   }) }}
 {% endif %}
