@@ -1,21 +1,17 @@
 'use strict'
 
 /**
- * Manages converting the session data to return requirement records when check return requirements is confirmed
+ * Uses the session data to generate the data sets required to create a new return version for a licence
  * @module GenerateReturnVersionDataService
  */
 
-// const SessionModel = require('../../models/session.model.js')
+const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Manages converting the session data to return requirement records when check return requirements is confirmed
+ * Uses the session data to generate the data sets required to create a new return version for a licence
  *
- * > This service is work in progress. Some of the functionality described is yet to be implemented
- *
- * After fetching the session instance for the returns requirements journey in progress it validates that what the user
- * has setup can be persisted for the licence.
- *
- * If valid it converts the session data to return requirements records then deletes the session record.
+ * Creates the data needed to populate the `return_versions`, `return_requirements`, `return_requirement_points` and
+ * `return_requirement_purposes` tables.
  *
  * @param {string} session - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
@@ -23,7 +19,7 @@
  * @returns {string} The licence ID
  */
 async function go (session, userId) {
-  const returnVersion = _generateReturnVersion(session, userId)
+  const returnVersion = await _generateReturnVersionData(session, userId)
 
   return {
     returnVersion
@@ -40,19 +36,32 @@ function _calculateStartDate (session) {
   return session.licence.currentVersionStartDate
 }
 
-function _generateReturnVersion (session, userId) {
+async function _generateReturnVersionData (session, userId) {
   const multipleUpload = _multipleUpload(session?.additionalSubmissionOptions)
 
   return {
     licenceId: session.licence.id,
-    version: 1, // TODO: Need to work this out
+    version: await _getNextVersionNumber(session.licence.id),
     startDate: _calculateStartDate(session),
-    endDate: null, // TODO: If this has been inserted between versions then we will have to make the end date a day before the start date of the next one. CONFIRM IT DOESN'T JUST REPLACE THE ONES AFTER IT
+    endDate: null,
     status: 'current',
     multipleUpload,
     notes: session?.note?.content,
     createdBy: userId
   }
+}
+
+async function _getNextVersionNumber (licenceId) {
+  const { lastVersionNumber } = await ReturnVersionModel.query()
+    .max('version as lastVersionNumber')
+    .where({ licenceId })
+    .first()
+
+  if (lastVersionNumber) {
+    return lastVersionNumber + 1
+  }
+
+  return 1
 }
 
 function _multipleUpload (additionalSubmissionOptions) {
