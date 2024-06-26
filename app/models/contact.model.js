@@ -51,6 +51,14 @@ class ContactModel extends BaseModel {
           to: 'billingAccountAddresses.contactId'
         }
       },
+      companyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'contacts.id',
+          to: 'companyContacts.contactId'
+        }
+      },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-document-role.model',

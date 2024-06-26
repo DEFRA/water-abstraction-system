@@ -72,6 +72,14 @@ class CompanyModel extends BaseModel {
           to: 'companyAddresses.companyId'
         }
       },
+      companyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'companies.id',
+          to: 'companyContacts.companyId'
+        }
+      },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-document-role.model',

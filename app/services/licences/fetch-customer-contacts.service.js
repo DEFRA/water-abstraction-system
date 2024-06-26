@@ -43,7 +43,7 @@ async function _fetch (licenceId) {
     })
     .innerJoin('companyContacts AS cct', 'cct.companyId', '=', 'ldr.companyId')
     .innerJoin('contacts AS con', 'con.id', '=', 'cct.contactId')
-    .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'cct.roleId')
+    .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'cct.licenceRoleId')
 }
 
 module.exports = {

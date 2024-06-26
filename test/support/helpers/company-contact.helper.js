@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  *
  * - `companyId` - [random UUID]
  * - `contactId` - [random UUID]
- * - `roleId` - [random UUID]
+ * - `licenceRoleId` - [random UUID]
  * - `startDate` - 2022-04-01
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -41,7 +41,7 @@ function defaults (data = {}) {
   const defaults = {
     companyId: generateUUID(),
     contactId: generateUUID(),
-    roleId: generateUUID(),
+    licenceRoleId: generateUUID(),
     startDate: new Date('2022-04-01')
   }
 
