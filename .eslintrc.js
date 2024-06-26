@@ -9,9 +9,6 @@ module.exports = {
     '@stylistic/js'
   ],
   rules: {
-    'arrow-body-style': ['error', 'always'],
-    'import/extensions': ['error', 'always'],
-    strict: ['error', 'global'],
     '@stylistic/js/arrow-parens': ['error', 'always'],
     '@stylistic/js/implicit-arrow-linebreak': ['off'],
     '@stylistic/js/max-len': ['error', {
@@ -22,8 +19,17 @@ module.exports = {
     }],
     '@stylistic/js/padding-line-between-statements': [
       'error',
-      { blankLine: 'always', prev: '*', next: 'return' }
-    ]
+      { blankLine: 'always', prev: '*', next: 'block' },
+      { blankLine: 'always', prev: '*', next: 'expression' },
+      { blankLine: 'always', prev: '*', next: 'return' },
+      { blankLine: 'always', prev: 'block', next: '*' },
+      { blankLine: 'always', prev: 'block', next: 'function' },
+      { blankLine: 'always', prev: 'expression', next: '*' },
+      { blankLine: 'always', prev: 'function', next: '*' }
+    ],
+    'arrow-body-style': ['error', 'always'],
+    'import/extensions': ['error', 'always'],
+    strict: ['error', 'global']
   }
 }
 

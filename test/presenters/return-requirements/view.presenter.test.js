@@ -122,10 +122,12 @@ describe('Return Requirements - View presenter', () => {
           expect(result.createdBy).to.equal('Migrated from NALD')
         })
       })
+
       describe('and there is a user linked to the return', () => {
         beforeEach(() => {
           requirementsForReturns.user = { username: 'iron@man.net' }
         })
+
         it('returns the users username', () => {
           const result = ViewPresenter.go(requirementsForReturns)
 
