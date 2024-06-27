@@ -23,7 +23,10 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'return' },
       { blankLine: 'always', prev: 'block', next: '*' },
       { blankLine: 'always', prev: 'block', next: 'function' },
-      { blankLine: 'always', prev: 'function', next: '*' }
+      { blankLine: 'always', prev: 'function', next: '*' },
+      // blank lines after every sequence of variable declarations
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] }
     ],
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
