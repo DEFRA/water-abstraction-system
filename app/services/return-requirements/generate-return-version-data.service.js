@@ -5,6 +5,7 @@
  * @module GenerateReturnVersionDataService
  */
 
+const FetchPointsService = require('./fetch-points.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
@@ -21,11 +22,11 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  */
 async function go (session, userId) {
   const returnVersion = await _generateReturnVersionData(session, userId)
-  const returnRequirements = await _generateReturnRequirementsData(session.requirements, session.licence.id)
+  const returnRequirementsData = await _generateReturnRequirementsData(session.requirements, session.licence.id)
 
   return {
     returnVersion,
-    returnRequirements
+    returnRequirementsData
   }
 }
 
@@ -40,10 +41,12 @@ function _calculateStartDate (session) {
 }
 
 async function _generateReturnRequirementsData (requirements, licenceId) {
+  const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   for (const requirement of requirements) {
     const legacyId = await _getNextLegacyId(licenceId)
+    const requirementExternalId = await _generateRequirementExternalId(legacyId, licenceId)
 
     const returnRequirement = {
       returns_frequency: 'year',
@@ -54,19 +57,44 @@ async function _generateReturnRequirementsData (requirements, licenceId) {
       abstractionPeriodEndMonth: requirement.abstractionPeriod['end-abstraction-period-month'],
       siteDescription: requirement.siteDescription,
       legacyId,
-      externalId: await _generateExternalId(legacyId, licenceId),
+      externalId: requirementExternalId,
       reportingFrequency: requirement.frequencyReported,
       collectionFrequency: requirement.frequencyCollected,
       gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff'),
-      fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception')
+      fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
+      returnRequirementPoints: _generateReturnRequirementPointsData(points, requirementExternalId, requirement.points)
     }
 
     returnRequirements.push(returnRequirement)
   }
 
   return returnRequirements
+}
+
+function _generateReturnRequirementPointsData (points, requirementExternalId, requirementPoints) {
+  const returnRequirementPoints = []
+
+  requirementPoints.forEach((requirementPoint) => {
+    const point = points.find((point) => {
+      return point.ID === requirementPoint
+    })
+
+    const returnRequirementPoint = {
+      description: point.LOCAL_NAME,
+      ngr1: point.NGR1_SHEET !== 'null' ? `${point.NGR1_SHEET} ${point.NGR1_EAST} ${point.NGR1_NORTH}` : null,
+      ngr2: point.NGR2_SHEET !== 'null' ? `${point.NGR2_SHEET} ${point.NGR2_EAST} ${point.NGR2_NORTH}` : null,
+      ngr3: point.NGR3_SHEET !== 'null' ? `${point.NGR3_SHEET} ${point.NGR3_EAST} ${point.NGR3_NORTH}` : null,
+      ngr4: point.NGR4_SHEET !== 'null' ? `${point.NGR4_SHEET} ${point.NGR4_EAST} ${point.NGR4_NORTH}` : null,
+      externalId: `${requirementExternalId}:${point.ID}`,
+      naldPointId: point.ID
+    }
+
+    returnRequirementPoints.push(returnRequirementPoint)
+  })
+
+  return returnRequirementPoints
 }
 
 async function _generateReturnVersionData (session, userId) {
@@ -85,7 +113,7 @@ async function _generateReturnVersionData (session, userId) {
   }
 }
 
-async function _generateExternalId (legacyId, licenceId) {
+async function _generateRequirementExternalId (legacyId, licenceId) {
   const { naldRegionId } = await LicenceModel.query()
     .findById(licenceId)
     .select('region.naldRegionId')
