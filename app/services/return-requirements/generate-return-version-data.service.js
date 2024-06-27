@@ -5,6 +5,7 @@
  * @module GenerateReturnVersionDataService
  */
 
+const LicenceModel = require('../../models/licence.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
@@ -20,9 +21,11 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  */
 async function go (session, userId) {
   const returnVersion = await _generateReturnVersionData(session, userId)
+  const returnRequirements = await _generateReturnRequirementsData(session.requirements, session.licence.id)
 
   return {
-    returnVersion
+    returnVersion,
+    returnRequirements
   }
 }
 
@@ -36,6 +39,36 @@ function _calculateStartDate (session) {
   return session.licence.currentVersionStartDate
 }
 
+async function _generateReturnRequirementsData (requirements, licenceId) {
+  const returnRequirements = []
+
+  for (const requirement of requirements) {
+    const legacyId = await _getNextLegacyId(licenceId)
+
+    const returnRequirement = {
+      returns_frequency: 'year',
+      summer: requirement.returnsCycle === 'summer',
+      abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
+      abstractionPeriodStartMonth: requirement.abstractionPeriod['start-abstraction-period-month'],
+      abstractionPeriodEndDay: requirement.abstractionPeriod['end-abstraction-period-day'],
+      abstractionPeriodEndMonth: requirement.abstractionPeriod['end-abstraction-period-month'],
+      siteDescription: requirement.siteDescription,
+      legacyId,
+      externalId: await _generateExternalId(legacyId, licenceId),
+      reportingFrequency: requirement.frequencyReported,
+      collectionFrequency: requirement.frequencyCollected,
+      gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
+      reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
+      twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff'),
+      fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception')
+    }
+
+    returnRequirements.push(returnRequirement)
+  }
+
+  return returnRequirements
+}
+
 async function _generateReturnVersionData (session, userId) {
   const multipleUpload = _multipleUpload(session?.additionalSubmissionOptions)
 
@@ -45,10 +78,34 @@ async function _generateReturnVersionData (session, userId) {
     startDate: _calculateStartDate(session),
     endDate: null,
     status: 'current',
+    reason: session.reason,
     multipleUpload,
     notes: session?.note?.content,
     createdBy: userId
   }
+}
+
+async function _generateExternalId (legacyId, licenceId) {
+  const { naldRegionId } = await LicenceModel.query()
+    .findById(licenceId)
+    .select('region.naldRegionId')
+    .innerJoinRelated('region')
+
+  return `${naldRegionId}:${legacyId}`
+}
+
+async function _getNextLegacyId (licenceId) {
+  const { lastLegacyId } = await ReturnVersionModel.query()
+    .max('returnRequirements.legacyId as lastLegacyId')
+    .innerJoinRelated('returnRequirements')
+    .where({ licenceId })
+    .first()
+
+  if (lastLegacyId) {
+    return lastLegacyId + 1
+  }
+
+  return 1
 }
 
 async function _getNextVersionNumber (licenceId) {
