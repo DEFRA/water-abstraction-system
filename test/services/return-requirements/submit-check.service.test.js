@@ -12,6 +12,9 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 const ExpandedError = require('../../../app/errors/expanded.error.js')
 
+// Things we need to stub
+const GenerateReturnVersionDataService = require('../../../app/services/return-requirements/generate-return-version-data.service.js')
+
 // Thing under test
 const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 const SubmitCheckService = require('../../../app/services/return-requirements/submit-check.service.js')
@@ -39,6 +42,8 @@ describe('Return Requirements - Submit Check service', () => {
       }
     })
     sessionId = session.id
+
+    Sinon.stub(GenerateReturnVersionDataService, 'go').resolves('returnVersionData')
   })
 
   afterEach(() => {
