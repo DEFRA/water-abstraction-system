@@ -19,13 +19,7 @@ module.exports = {
     }],
     '@stylistic/js/padding-line-between-statements': [
       'error',
-      { blankLine: 'always', prev: '*', next: 'block' },
-      { blankLine: 'always', prev: '*', next: 'expression' },
-      { blankLine: 'always', prev: '*', next: 'return' },
-      { blankLine: 'always', prev: 'block', next: '*' },
-      { blankLine: 'always', prev: 'block', next: 'function' },
-      { blankLine: 'always', prev: 'expression', next: '*' },
-      { blankLine: 'always', prev: 'function', next: '*' }
+      { blankLine: 'always', prev: '*', next: 'return' }
     ],
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
