@@ -21,11 +21,13 @@ describe('Licence Version Purposes model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await LicenceVersionPurposeConditionHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceVersionPurposeConditionHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await LicenceVersionPurposeConditionModel.query().findById(testRecord.id)
 
