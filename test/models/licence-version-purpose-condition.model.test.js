@@ -12,7 +12,7 @@ const DatabaseSupport = require('../support/database.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const LicenceVersionPurposeConditionTypesHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
 
 // Thing under test
@@ -70,11 +70,12 @@ describe('Licence Version Purposes model', () => {
       })
     })
 
-    describe('when linking to licence version purpose condition', () => {
+    describe('when linking to licence version purpose condition type', () => {
       let testLicenceVersionPurposeConditionType
 
       beforeEach(async () => {
-        testLicenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypesHelper.add()
+        testLicenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.add()
+
         testRecord = await LicenceVersionPurposeConditionHelper.add({
           licenceVersionPurposeConditionTypeId: testLicenceVersionPurposeConditionType.id
         })
@@ -82,7 +83,7 @@ describe('Licence Version Purposes model', () => {
 
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceVersionPurposeConditionTypes')
+          .innerJoinRelated('licenceVersionPurposeConditionType')
 
         expect(query).to.exist()
       })
@@ -90,14 +91,13 @@ describe('Licence Version Purposes model', () => {
       it('can eager load the licence version purpose condition type', async () => {
         const result = await LicenceVersionPurposeConditionModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('licenceVersionPurposeConditionTypes')
+          .withGraphFetched('licenceVersionPurposeConditionType')
 
         expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.licenceVersionPurposeConditionTypes[0])
-          .to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
-        expect(result.licenceVersionPurposeConditionTypes[0].id).to.equal(testLicenceVersionPurposeConditionType.id)
+        expect(result.licenceVersionPurposeConditionType).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
+        expect(result.licenceVersionPurposeConditionType).to.equal(testLicenceVersionPurposeConditionType)
       })
     })
   })

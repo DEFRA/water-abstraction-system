@@ -24,8 +24,8 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
           to: 'licenceVersionPurposes.id'
         }
       },
-      licenceVersionPurposeConditionTypes: {
-        relation: Model.HasManyRelation,
+      licenceVersionPurposeConditionType: {
+        relation: Model.HasOneRelation,
         modelClass: 'licence-version-purpose-condition-type.model',
         join: {
           from: 'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId',
