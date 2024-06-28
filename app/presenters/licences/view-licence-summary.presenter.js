@@ -46,6 +46,7 @@ function go (licence) {
     monitoringStations,
     purposes,
     region: region.displayName,
+    sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null,
     startDate: formatLongDate(startDate)
   }
 }
@@ -79,15 +80,14 @@ function _abstractionAmounts (licenceVersionPurposes) {
 }
 
 function _abstractionWrapper (licenceVersionPurposes, permitLicence) {
-  const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
+  const abstractionDetails = _parseAbstractions(permitLicence)
   const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
 
   return {
     abstractionConditions,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
-    abstractionPointsCaption: abstractionDetails.pointsCaption,
-    sourceOfSupply: abstractionDetails.sourceOfSupply
+    abstractionPointsCaption: abstractionDetails.pointsCaption
   }
 }
 
@@ -187,7 +187,7 @@ function _generatePurposes (licenceVersionPurposes) {
   }
 }
 
-function _parseAbstractionsAndSourceOfSupply (permitLicence) {
+function _parseAbstractions (permitLicence) {
   if (!permitLicence ||
     !permitLicence.purposes ||
     permitLicence.purposes.length === 0 ||
@@ -197,10 +197,7 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
     return {
       points: null,
       pointsCaption: null,
-      pointLinkText: null,
-      quantities: null,
-      quantityCaption: null,
-      sourceOfSupply: null
+      pointLinkText: null
     }
   }
 
@@ -226,8 +223,7 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   return {
     points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     pointsCaption,
-    pointLinkText,
-    sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
+    pointLinkText
   }
 }
 
