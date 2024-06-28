@@ -11,7 +11,7 @@ const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
 /**
  * Formats data for the `/licences/{id}/summary` page's summary tab
  *
- * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
+ * @param {module:LicenceModel} licence - The licence the summary data will be extracted from
  *
  * @returns {Object} The data formatted for the view template
  */
