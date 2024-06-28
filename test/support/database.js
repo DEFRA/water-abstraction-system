@@ -85,7 +85,12 @@ async function _viewNames (schema) {
   })
 }
 
+async function closeConnection () {
+  await db.destroy()
+}
+
 module.exports = {
   clean,
+  closeConnection,
   wipe
 }
