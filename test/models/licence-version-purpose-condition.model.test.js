@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const LicenceVersionPurposeConditionTypesHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
 
@@ -37,6 +39,37 @@ describe('Licence Version Purposes model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to licence version purpose', () => {
+      let testLicenceVersionPurpose
+
+      beforeEach(async () => {
+        testLicenceVersionPurpose = await LicenceVersionPurposeHelper.add()
+
+        testRecord = await LicenceVersionPurposeConditionHelper.add({
+          licenceVersionPurposeId: testLicenceVersionPurpose.id
+        })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeConditionModel.query()
+          .innerJoinRelated('licenceVersionPurpose')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose', async () => {
+        const result = await LicenceVersionPurposeConditionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurpose')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurpose).to.be.an.instanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurpose).to.equal(testLicenceVersionPurpose)
+      })
+    })
+
     describe('when linking to licence version purpose condition', () => {
       let testLicenceVersionPurposeConditionType
 

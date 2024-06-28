@@ -16,6 +16,14 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      licenceVersionPurpose: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-version-purpose.model',
+        join: {
+          from: 'licenceVersionPurposeConditions.licenceVersionPurposeId',
+          to: 'licenceVersionPurposes.id'
+        }
+      },
       licenceVersionPurposeConditionTypes: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version-purpose-condition-type.model',
