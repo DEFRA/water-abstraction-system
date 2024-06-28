@@ -9,8 +9,6 @@
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
-const { version } = require('../../../package.json')
-
 /**
  * Returns information about the `system` repo in the format required by the info service
  *
@@ -20,9 +18,19 @@ async function go () {
   return {
     name: 'System',
     serviceName: 'system',
-    version,
+    version: await _getTagReference(),
     commit: await _getCommitHash(),
     jobs: []
+  }
+}
+
+async function _getTagReference () {
+  try {
+    const { stdout, stderr } = await exec('git describe --always --tags')
+
+    return stderr ? `ERROR: ${stderr}` : stdout.replace('\n', '')
+  } catch (error) {
+    return `ERROR: ${error.message}`
   }
 }
 
