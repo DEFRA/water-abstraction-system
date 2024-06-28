@@ -11,6 +11,8 @@ const { expect } = Code
 const DatabaseSupport = require('../support/database.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
@@ -50,6 +52,7 @@ describe('Licence Version Purposes model', () => {
         testLicenceVersion = await LicenceVersionHelper.add()
 
         const { id } = testLicenceVersion
+
         testRecord = await LicenceVersionPurposeHelper.add({ licenceVersionId: id })
       })
 
@@ -73,6 +76,44 @@ describe('Licence Version Purposes model', () => {
       })
     })
 
+    describe('when linking to licence version purpose conditions', () => {
+      let testLicenceVersionPurposeConditions
+
+      beforeEach(async () => {
+        testRecord = await LicenceVersionPurposeHelper.add()
+
+        testLicenceVersionPurposeConditions = []
+        for (let i = 0; i < 2; i++) {
+          const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+            licenceVersionPurposeId: testRecord.id
+          })
+
+          testLicenceVersionPurposeConditions.push(licenceVersionPurposeCondition)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query()
+          .innerJoinRelated('licenceVersionPurposeConditions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose conditions', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposeConditions')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposeConditions).to.be.an.array()
+        expect(result.licenceVersionPurposeConditions[0]).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
+        expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[0])
+        expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[1])
+      })
+    })
+
     describe('when linking to primary purpose', () => {
       let testPrimaryPurpose
 
@@ -80,6 +121,7 @@ describe('Licence Version Purposes model', () => {
         testPrimaryPurpose = await PrimaryPurposeHelper.add()
 
         const { id: primaryPurposeId } = testPrimaryPurpose
+
         testRecord = await LicenceVersionPurposeHelper.add({ primaryPurposeId })
       })
 
@@ -110,6 +152,7 @@ describe('Licence Version Purposes model', () => {
         testPurpose = await PurposeHelper.add()
 
         const { id: purposeId } = testPurpose
+
         testRecord = await LicenceVersionPurposeHelper.add({ purposeId })
       })
 
@@ -140,6 +183,7 @@ describe('Licence Version Purposes model', () => {
         testSecondaryPurpose = await SecondaryPurposeHelper.add()
 
         const { id: secondaryPurposeId } = testSecondaryPurpose
+
         testRecord = await LicenceVersionPurposeHelper.add({ secondaryPurposeId })
       })
 
