@@ -30,11 +30,12 @@ function go (licence) {
 
   const purposes = _generatePurposes(licenceVersionPurposes)
   const monitoringStations = _generateMonitoringStations(licenceGaugingStations)
-  const abstractionData = _abstractionWrapper(licenceVersionPurposes, purposes, permitLicence)
+  const abstractionData = _abstractionWrapper(licenceVersionPurposes, permitLicence)
   const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
 
   return {
     ...abstractionData,
+    abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText: _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes),
     activeTab: 'summary',
@@ -49,7 +50,35 @@ function go (licence) {
   }
 }
 
-function _abstractionWrapper (licenceVersionPurposes, purposes, permitLicence) {
+function _abstractionAmounts (licenceVersionPurposes) {
+  const details = []
+
+  if (!licenceVersionPurposes) {
+    return details
+  }
+
+  const { annualQuantity, dailyQuantity, hourlyQuantity, instantQuantity } = licenceVersionPurposes[0]
+
+  if (annualQuantity) {
+    details.push(`${parseFloat(annualQuantity).toFixed(2)} cubic metres per year`)
+  }
+
+  if (dailyQuantity) {
+    details.push(`${parseFloat(dailyQuantity).toFixed(2)} cubic metres per year`)
+  }
+
+  if (hourlyQuantity) {
+    details.push(`${parseFloat(hourlyQuantity).toFixed(2)} cubic metres per year`)
+  }
+
+  if (instantQuantity) {
+    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per year`)
+  }
+
+  return details
+}
+
+function _abstractionWrapper (licenceVersionPurposes, permitLicence) {
   const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
 
@@ -58,32 +87,8 @@ function _abstractionWrapper (licenceVersionPurposes, purposes, permitLicence) {
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
-    abstractionQuantities: abstractionDetails.quantities,
     sourceOfSupply: abstractionDetails.sourceOfSupply
   }
-}
-
-function _abstractionAmountDetails (purpose) {
-  const abstractionAmountDetails = []
-  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
-
-  if (ANNUAL_QTY !== 'null') {
-    abstractionAmountDetails.push(`${parseFloat(ANNUAL_QTY).toFixed(2)} cubic metres per year`)
-  }
-
-  if (DAILY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${parseFloat(DAILY_QTY).toFixed(2)} cubic metres per day`)
-  }
-
-  if (HOURLY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${parseFloat(HOURLY_QTY).toFixed(2)} cubic metres per hour`)
-  }
-
-  if (INST_QTY !== 'null') {
-    abstractionAmountDetails.push(`${parseFloat(INST_QTY).toFixed(2)} litres per second`)
-  }
-
-  return abstractionAmountDetails
 }
 
 function _abstractionConditions (licenceVersionPurposes) {
@@ -200,7 +205,6 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   }
 
   const abstractionPoints = []
-  let abstractionQuantities
 
   permitLicence.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
@@ -210,7 +214,6 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
         abstractionPoints.push(generateAbstractionPointDetail(pointDetail))
       }
     })
-    abstractionQuantities = _setAbstractionAmountDetails(abstractionQuantities, purpose)
   })
 
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
@@ -224,36 +227,8 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
     points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     pointsCaption,
     pointLinkText,
-    quantities: abstractionQuantities && abstractionQuantities.length === 1
-      ? _abstractionAmountDetails(abstractionQuantities[0])
-      : null,
     sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
   }
-}
-
-function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
-  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
-  const purposeAbstractionQuantities = {
-    ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY
-  }
-
-  if (!abstractionAmountSet &&
-    (purposeAbstractionQuantities.DAILY_QTY !== 'null' ||
-      purposeAbstractionQuantities.ANNUAL_QTY !== 'null' ||
-      purposeAbstractionQuantities.HOURLY_QTY !== 'null' ||
-      purposeAbstractionQuantities.INST_QTY !== 'null')) {
-    return [purposeAbstractionQuantities]
-  }
-
-  if (abstractionAmountSet &&
-    (abstractionAmountSet[0].ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
-      abstractionAmountSet[0].DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
-      abstractionAmountSet[0].HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
-      abstractionAmountSet[0].INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
-    return abstractionAmountSet.push(purposeAbstractionQuantities)
-  }
-
-  return abstractionAmountSet
 }
 
 function _licenceVersionPurposes (licence) {

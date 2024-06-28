@@ -52,7 +52,11 @@ async function _fetch (licenceId) {
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth'
+        'abstractionPeriodEndMonth',
+        'annualQuantity',
+        'dailyQuantity',
+        'hourlyQuantity',
+        'instantQuantity'
       ])
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes.purpose')

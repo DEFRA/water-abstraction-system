@@ -134,12 +134,12 @@
     </dd>
   </div>
 
-  {% if abstractionQuantities %}
+  {% if abstractionAmounts.length > 0 %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Abstraction amounts</dt>
       <dd class="govuk-summary-list__value">
         <ul class="govuk-list govuk-!-margin-bottom-0">
-          {% for quantity in abstractionQuantities %}
+          {% for quantity in abstractionAmounts %}
             <li>{{ quantity }}</li>
           {% endfor %}
         </ul>
