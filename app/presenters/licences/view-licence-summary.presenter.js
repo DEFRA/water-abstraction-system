@@ -42,6 +42,7 @@ function go (licence) {
     endDate: _endDate(expiredDate),
     id,
     licenceHolder: _licenceHolder(licence),
+    licenceId: id,
     monitoringStations: _monitoringStations(licenceGaugingStations),
     purposes,
     region: region.displayName,
