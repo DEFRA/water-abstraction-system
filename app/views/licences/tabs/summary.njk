@@ -118,16 +118,16 @@
     <dt class="govuk-summary-list__key">Abstraction conditions</dt>
     <dd class="govuk-summary-list__value">
       <div>
-        {% if abstractionConditionDetails.numberOfConditions > 5 %}
-          There are {{ abstractionConditionDetails.numberOfConditions }} abstraction conditions
-        {% elif abstractionConditionDetails.numberOfConditions > 1 %}
+        {% if abstractionConditions.length > 5 %}
+          There are {{ abstractionConditions.length }} abstraction conditions
+        {% elif abstractionConditions.length > 1 %}
           <ul class="govuk-list govuk-!-margin-bottom-0">
-            {% for condition in abstractionConditionDetails.conditions %}
+            {% for condition in abstractionConditions %}
               <li>{{ condition }}</li>
             {% endfor %}
           </ul>
         {% else %}
-          {{ abstractionConditionDetails.conditions[0] }}
+          {{ abstractionConditions[0] }}
         {% endif %}
       </div>
       <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>

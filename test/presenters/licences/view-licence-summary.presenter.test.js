@@ -14,23 +14,18 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
 
 describe('View Licence Summary presenter', () => {
-  let licenceAbstractionConditions
   let licence
 
   beforeEach(() => {
     licence = _licence()
-    licenceAbstractionConditions = _abstractionConditions()
   })
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+      const result = ViewLicenceSummaryPresenter.go(licence)
 
       expect(result).to.equal({
-        abstractionConditionDetails: {
-          conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
-          numberOfConditions: 4
-        },
+        abstractionConditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
         abstractionPeriods: {
           caption: 'Periods of abstraction',
           uniqueAbstractionPeriods: ['1 April to 31 October', '1 November to 31 March']
@@ -60,73 +55,213 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the "abstractionConditionDetails" property', () => {
-    describe('when there are multiple abstraction conditions', () => {
+  describe('the "abstractionConditions" property', () => {
+    describe('when there are multiple licence version purposes', () => {
       beforeEach(() => {
-        licenceAbstractionConditions.conditions = ['Derogation clause', 'General conditions']
-        licenceAbstractionConditions.numberOfConditions = 2
+        licence.licenceVersions[0].licenceVersionPurposes = [{
+          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 10,
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          licenceVersionPurposeConditions: []
+        },
+        {
+          id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 11,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          licenceVersionPurposeConditions: []
+        }]
       })
 
-      describe('and they have different display titles', () => {
-        it('returns the details with plural text and a populated conditions array', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-          expect(result.abstractionConditionDetails).to.equal({
-            conditions: ['Derogation clause', 'General conditions'],
-            numberOfConditions: 2
-          })
-        })
-      })
-
-      describe('but they have the same title', () => {
+      describe('and each contains a condition with a different display title', () => {
         beforeEach(() => {
-          licenceAbstractionConditions.conditions = ['Derogation clause']
-          licenceAbstractionConditions.numberOfConditions = 2
-        })
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
+            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          })
 
-        it('returns the details with plural text and a populated conditions array', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
-
-          expect(result.abstractionConditionDetails).to.equal({
-            conditions: ['Derogation clause'],
-            numberOfConditions: 2
+          licence.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
+            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            licenceVersionPurposeConditionType: {
+              id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+              displayTitle: 'Derogation clause'
+            }
           })
         })
+
+        it('returns an array containing all the titles in alphabetical order', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.abstractionConditions).to.equal(['Derogation clause', 'General conditions'])
+        })
       })
-    })
 
-    describe('when there is one abstraction condition', () => {
-      beforeEach(() => {
-        licenceAbstractionConditions.conditions = ['Derogation clause']
-        licenceAbstractionConditions.numberOfConditions = 1
-      })
+      describe('and each contains conditions with the same display titles', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
+            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          })
 
-      it('returns the details with singular text and a populated conditions array', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          licence.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
+            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          })
+        })
 
-        expect(result.abstractionConditionDetails).to.equal({
-          conditions: ['Derogation clause'],
-          numberOfConditions: 1
+        it('returns an array containing only the distinct title', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.abstractionConditions).to.equal(['General conditions'])
         })
       })
     })
 
-    describe('when there are no abstraction conditions', () => {
+    describe('when there is a single licence version purpose', () => {
       beforeEach(() => {
-        licenceAbstractionConditions.conditions = []
-        licenceAbstractionConditions.purposeIds = []
-        licenceAbstractionConditions.numberOfConditions = 0
+        licence.licenceVersions[0].licenceVersionPurposes = [{
+          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 10,
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          licenceVersionPurposeConditions: []
+        }]
       })
 
-      it('returns the details with plural text and an empty conditions array', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+      describe('with conditions with different display titles', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
+            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          },
+          {
+            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            licenceVersionPurposeConditionType: {
+              id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+              displayTitle: 'Derogation clause'
+            }
+          })
+        })
 
-        expect(result.abstractionConditionDetails).to.equal({
-          conditions: [],
-          numberOfConditions: 0
+        it('returns an array containing all the titles in alphabetical order', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.abstractionConditions).to.equal(['Derogation clause', 'General conditions'])
+        })
+      })
+
+      describe('with conditions with the same display titles', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
+            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          },
+          {
+            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            licenceVersionPurposeConditionType: {
+              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              displayTitle: 'General conditions'
+            }
+          })
+        })
+
+        it('returns an array containing only the distinct title', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.abstractionConditions).to.equal(['General conditions'])
         })
       })
     })
+
+    // describe('when there are multiple abstraction conditions', () => {
+    //   beforeEach(() => {
+    //     licenceAbstractionConditions.conditions = ['Derogation clause', 'General conditions']
+    //     licenceAbstractionConditions.numberOfConditions = 2
+    //   })
+
+    //   describe('and they have different display titles', () => {
+    //     it('returns the details with plural text and a populated conditions array', () => {
+    //       const result = ViewLicenceSummaryPresenter.go(licence)
+
+    //       expect(result.abstractionConditionDetails).to.equal({
+    //         conditions: ['Derogation clause', 'General conditions'],
+    //         numberOfConditions: 2
+    //       })
+    //     })
+    //   })
+
+    //   describe('but they have the same title', () => {
+    //     beforeEach(() => {
+    //       licenceAbstractionConditions.conditions = ['Derogation clause']
+    //       licenceAbstractionConditions.numberOfConditions = 2
+    //     })
+
+    //     it('returns the details with plural text and a populated conditions array', () => {
+    //       const result = ViewLicenceSummaryPresenter.go(licence)
+
+    //       expect(result.abstractionConditionDetails).to.equal({
+    //         conditions: ['Derogation clause'],
+    //         numberOfConditions: 2
+    //       })
+    //     })
+    //   })
+    // })
+
+    // describe('when there is one abstraction condition', () => {
+    //   beforeEach(() => {
+    //     licenceAbstractionConditions.conditions = ['Derogation clause']
+    //     licenceAbstractionConditions.numberOfConditions = 1
+    //   })
+
+    //   it('returns the details with singular text and a populated conditions array', () => {
+    //     const result = ViewLicenceSummaryPresenter.go(licence)
+
+    //     expect(result.abstractionConditionDetails).to.equal({
+    //       conditions: ['Derogation clause'],
+    //       numberOfConditions: 1
+    //     })
+    //   })
+    // })
+
+    // describe('when there are no abstraction conditions', () => {
+    //   beforeEach(() => {
+    //     licence.licenceVersions[0].licenceVersionPurposes
+    //     licenceAbstractionConditions.conditions = []
+    //     licenceAbstractionConditions.purposeIds = []
+    //     licenceAbstractionConditions.numberOfConditions = 0
+    //   })
+
+    //   it('returns the details with plural text and an empty conditions array', () => {
+    //     const result = ViewLicenceSummaryPresenter.go(licence)
+
+    //     expect(result.abstractionConditionDetails).to.equal({
+    //       conditions: [],
+    //       numberOfConditions: 0
+    //     })
+    //   })
+    // })
   })
 
   describe('the "abstractionPeriods" property', () => {
@@ -136,7 +271,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPeriods).to.equal(null)
       })
@@ -149,7 +284,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.abstractionPeriods).to.equal(null)
         })
@@ -162,7 +297,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns the singular version of the caption and period formatted for display', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.abstractionPeriods).to.equal({
             caption: 'Period of abstraction',
@@ -178,7 +313,7 @@ describe('View Licence Summary presenter', () => {
           })
 
           it('returns the plural version of the caption and periods formatted for display', () => {
-            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
             expect(result.abstractionPeriods).to.equal({
               caption: 'Periods of abstraction',
@@ -189,7 +324,7 @@ describe('View Licence Summary presenter', () => {
 
         describe('that have some abstraction periods that are the same', () => {
           it('returns the plural version of the caption and the unique periods formatted for display', () => {
-            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
             expect(result.abstractionPeriods).to.equal({
               caption: 'Periods of abstraction',
@@ -208,7 +343,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
       })
@@ -221,7 +356,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
         })
@@ -234,7 +369,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns the singular version of the link (period and purpose)', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.abstractionPeriodsAndPurposesLinkText)
             .to
@@ -250,7 +385,7 @@ describe('View Licence Summary presenter', () => {
             })
 
             it('returns a mixed version of the link (periods and purpose)', () => {
-              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+              const result = ViewLicenceSummaryPresenter.go(licence)
 
               expect(result.abstractionPeriodsAndPurposesLinkText)
                 .to
@@ -267,7 +402,7 @@ describe('View Licence Summary presenter', () => {
             })
 
             it('returns the plural version of the link (periods and purposes)', () => {
-              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+              const result = ViewLicenceSummaryPresenter.go(licence)
 
               expect(result.abstractionPeriodsAndPurposesLinkText)
                 .to
@@ -289,7 +424,7 @@ describe('View Licence Summary presenter', () => {
             })
 
             it('returns the singular version of the link (period and purpose)', () => {
-              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+              const result = ViewLicenceSummaryPresenter.go(licence)
 
               expect(result.abstractionPeriodsAndPurposesLinkText)
                 .to
@@ -299,7 +434,7 @@ describe('View Licence Summary presenter', () => {
 
           describe('but different purposes', () => {
             it('returns a mixed version of the link (period and purposes)', () => {
-              const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+              const result = ViewLicenceSummaryPresenter.go(licence)
 
               expect(result.abstractionPeriodsAndPurposesLinkText)
                 .to
@@ -314,7 +449,7 @@ describe('View Licence Summary presenter', () => {
   describe('the "endDate" property', () => {
     describe('when the licence expired date is null', () => {
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.endDate).to.be.null()
       })
@@ -326,13 +461,14 @@ describe('View Licence Summary presenter', () => {
         // there is a chance the test could fail depending on how quickly this is compared to the logic in the
         // presenter
         const today = new Date()
+
         today.setHours(0, 0, 0, 0)
 
         licence.expiredDate = today
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.endDate).to.be.null()
       })
@@ -344,7 +480,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('returns "1 April 2099"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.endDate).to.equal('1 April 2099')
       })
@@ -354,7 +490,7 @@ describe('View Licence Summary presenter', () => {
   describe('the "licenceHolder" property', () => {
     describe('when the licence holder is not set', () => {
       it('returns "Unregistered licence"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.licenceHolder).to.equal('Unregistered licence')
       })
@@ -375,7 +511,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('returns "Barbara Liskov"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.licenceHolder).to.equal('Barbara Liskov')
       })
@@ -389,7 +525,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return an empty array', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([])
       })
@@ -397,7 +533,7 @@ describe('View Licence Summary presenter', () => {
 
     describe('when the licence has a gauging station', () => {
       it('will return any array with the monitoring station details', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([{
           id: 'ac075651-4781-4e24-a684-b943b98607ca',
@@ -418,7 +554,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return any array with the monitoring station details', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([
           {
@@ -441,7 +577,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.purposes).to.equal(null)
       })
@@ -454,7 +590,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.purposes).to.equal(null)
         })
@@ -467,7 +603,7 @@ describe('View Licence Summary presenter', () => {
         })
 
         it('returns the singular version of the caption and the purpose descriptions', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
           expect(result.purposes).to.equal({
             caption: 'Purpose',
@@ -483,7 +619,7 @@ describe('View Licence Summary presenter', () => {
           })
 
           it('returns the plural version of the caption and all purpose descriptions', () => {
-            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
             expect(result.purposes).to.equal({
               caption: 'Purposes',
@@ -494,7 +630,7 @@ describe('View Licence Summary presenter', () => {
 
         describe('that have some abstraction purposes that are the same', () => {
           it('returns the plural version of the captions and the unique purpose descriptions', () => {
-            const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
             expect(result.purposes).to.equal({
               caption: 'Purposes',
@@ -509,7 +645,7 @@ describe('View Licence Summary presenter', () => {
   describe('the "sourceOfSupply" property', () => {
     describe('and it has a source of supply', () => {
       it('will return the source of supply for use in the licence summary page', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
       })
@@ -527,7 +663,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.sourceOfSupply).to.equal(null)
       })
@@ -543,7 +679,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
@@ -562,7 +698,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -580,7 +716,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -598,7 +734,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -614,7 +750,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -630,7 +766,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -659,7 +795,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the correct information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
@@ -688,7 +824,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'Within the area formed by the straight lines running between National Grid References TL 23198 88603 TM 23197 88602 TN 23196 88601 and TO 23195 88600'
@@ -711,7 +847,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
@@ -734,7 +870,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
@@ -752,7 +888,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603'
@@ -773,7 +909,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603 (Local)'
@@ -800,7 +936,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603',
@@ -828,7 +964,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will only display one of the abstraction point', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603'
@@ -847,7 +983,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted strings with the rates per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year',
@@ -864,7 +1000,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year'
@@ -881,7 +1017,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal([
           '60.00 cubic metres per hour',
@@ -899,7 +1035,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal([
           '6.00 litres per second'
@@ -943,7 +1079,7 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year',
@@ -990,21 +1126,13 @@ describe('View Licence Summary presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionQuantities).to.equal(null)
       })
     })
   })
 })
-
-function _abstractionConditions () {
-  return {
-    conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
-    purposeIds: ['63de1a43-209b-448c-ae30-a3ca458a9cc2', '6e9744c8-e0ae-4a22-95b4-e689b776c902'],
-    numberOfConditions: 4
-  }
-}
 
 function _licence () {
   return LicenceModel.fromJson({
@@ -1044,7 +1172,23 @@ function _licence () {
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 10,
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' }
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          licenceVersionPurposeConditions: [
+            {
+              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+              licenceVersionPurposeConditionType: {
+                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                displayTitle: 'General conditions'
+              }
+            },
+            {
+              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+              licenceVersionPurposeConditionType: {
+                id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+                displayTitle: 'Derogation clause'
+              }
+            }
+          ]
         },
         {
           id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
@@ -1052,7 +1196,16 @@ function _licence () {
           abstractionPeriodStartMonth: 11,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' }
+          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          licenceVersionPurposeConditions: [
+            {
+              id: '999d98b0-ba6a-4a82-8cb6-03253a6722aa',
+              licenceVersionPurposeConditionType: {
+                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                displayTitle: 'General conditions'
+              }
+            }
+          ]
         },
         {
           id: 'f68ed9a0-4a2b-42da-8f5b-c5c897113121',
@@ -1060,7 +1213,16 @@ function _licence () {
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 10,
-          purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' }
+          purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' },
+          licenceVersionPurposeConditions: [
+            {
+              id: 'd5f30ba6-8170-4596-9276-362efb2175fa',
+              licenceVersionPurposeConditionType: {
+                id: '923846ea-da9a-4687-bb66-6dd11411afb9',
+                displayTitle: 'Non standard quantities'
+              }
+            }
+          ]
         }
       ]
     }],

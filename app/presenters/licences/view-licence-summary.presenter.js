@@ -15,7 +15,7 @@ const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence, licenceAbstractionConditions) {
+function go (licence) {
   const {
     expiredDate,
     id,
@@ -30,12 +30,7 @@ function go (licence, licenceAbstractionConditions) {
 
   const purposes = _generatePurposes(licenceVersionPurposes)
   const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
-  const abstractionData = _abstractionWrapper(
-    licenceAbstractionConditions,
-    licenceVersionPurposes,
-    purposes,
-    permitLicence
-  )
+  const abstractionData = _abstractionWrapper(licenceVersionPurposes, purposes, permitLicence)
 
   return {
     ...abstractionData,
@@ -51,21 +46,22 @@ function go (licence, licenceAbstractionConditions) {
   }
 }
 
-function _abstractionWrapper (licenceAbstractionConditions, licenceVersionPurposes, purposes, permitLicence) {
+function _abstractionWrapper (licenceVersionPurposes, purposes, permitLicence) {
   const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
   let abstractionPeriodsAndPurposesLinkText = null
 
   if (abstractionPeriods) {
     const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
     const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
+
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
   }
 
   const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
-  const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
+  const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
 
   return {
-    abstractionConditionDetails,
+    abstractionConditions,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
@@ -99,13 +95,27 @@ function _abstractionAmountDetails (purpose) {
   return abstractionAmountDetails
 }
 
-function _abstractionConditionDetails (licenceAbstractionConditions) {
-  const { conditions, numberOfConditions } = licenceAbstractionConditions
+function _abstractionConditions (licenceVersionPurposes) {
+  const allConditions = []
 
-  return {
-    conditions,
-    numberOfConditions
+  if (!licenceVersionPurposes) {
+    return allConditions
   }
+
+  for (const licenceVersionPurpose of licenceVersionPurposes) {
+    const { licenceVersionPurposeConditions } = licenceVersionPurpose
+
+    for (const licenceVersionPurposeCondition of licenceVersionPurposeConditions) {
+      const { displayTitle } = licenceVersionPurposeCondition.licenceVersionPurposeConditionType
+
+      allConditions.push(displayTitle)
+    }
+  }
+
+  const uniqueConditions = [...new Set(allConditions)]
+
+  // Sort them alphabetically
+  return uniqueConditions.sort()
 }
 
 function _endDate (expiredDate) {
@@ -192,6 +202,7 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   permitLicence.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
       const pointDetail = point.point_detail
+
       if (pointDetail) {
         abstractionPoints.push(generateAbstractionPointDetail(pointDetail))
       }
