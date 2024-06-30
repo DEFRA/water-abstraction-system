@@ -14,6 +14,7 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 // Things we need to stub
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
+
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
 
