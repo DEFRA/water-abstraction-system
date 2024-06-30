@@ -19,11 +19,11 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
 async function go (licenceId) {
-  return _fetchLicence(licenceId)
+  return _fetch(licenceId)
 }
 
-async function _fetchLicence (licenceId) {
-  const result = await LicenceModel.query()
+async function _fetch (licenceId) {
+  return LicenceModel.query()
     .findById(licenceId)
     .select([
       'id',
@@ -62,6 +62,19 @@ async function _fetchLicence (licenceId) {
         'description'
       ])
     })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions', (builder) => {
+      builder.select([
+        'id'
+      ])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType', (builder) => {
+      builder.select([
+        'id',
+        'displayTitle'
+      ])
+    })
     .withGraphFetched('licenceGaugingStations')
     .modifyGraph('licenceGaugingStations', (builder) => {
       builder.select([
@@ -78,8 +91,6 @@ async function _fetchLicence (licenceId) {
     })
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
-
-  return result
 }
 
 module.exports = {
