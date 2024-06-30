@@ -29,18 +29,18 @@ function go (licence) {
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
 
   const purposes = _purposes(licenceVersionPurposes)
-  const abstractionData = _abstractionWrapper(licenceVersionPurposes, permitLicence)
+  const abstractionData = _abstractionWrapper(permitLicence)
   const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
 
   return {
     ...abstractionData,
     abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
+    abstractionConditions: _abstractionConditions(licenceVersionPurposes),
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText: _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
-    id,
     licenceHolder: _licenceHolder(licence),
     licenceId: id,
     monitoringStations: _monitoringStations(licenceGaugingStations),
@@ -122,12 +122,10 @@ function _abstractionPeriods (licenceVersionPurposes) {
   }
 }
 
-function _abstractionWrapper (licenceVersionPurposes, permitLicence) {
+function _abstractionWrapper (permitLicence) {
   const abstractionDetails = _parseAbstractions(permitLicence)
-  const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
 
   return {
-    abstractionConditions,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption
