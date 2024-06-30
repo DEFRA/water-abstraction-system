@@ -12,7 +12,6 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
-const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 // Thing under test
@@ -24,11 +23,6 @@ describe('View Licence service summary', () => {
   let fetchLicenceResult
 
   beforeEach(() => {
-    Sinon.stub(FetchLicenceAbstractionConditionsService, 'go').resolves({
-      conditions: [],
-      purposeIds: [],
-      numberOfConditions: 0
-    })
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
 
@@ -47,10 +41,7 @@ describe('View Licence service summary', () => {
         const result = await ViewLicenceSummaryService.go(testId)
 
         expect(result).to.equal({
-          abstractionConditionDetails: {
-            conditions: [],
-            numberOfConditions: 0
-          },
+          abstractionConditions: [],
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPointLinkText: 'View details of the abstraction point',
