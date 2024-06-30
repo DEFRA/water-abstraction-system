@@ -28,10 +28,9 @@ function go (licence) {
 
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
 
-  const purposes = _generatePurposes(licenceVersionPurposes)
-  const monitoringStations = _generateMonitoringStations(licenceGaugingStations)
+  const purposes = _purposes(licenceVersionPurposes)
   const abstractionData = _abstractionWrapper(licenceVersionPurposes, permitLicence)
-  const abstractionPeriods = _generateAbstractionPeriods(licenceVersionPurposes)
+  const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
 
   return {
     ...abstractionData,
@@ -42,8 +41,8 @@ function go (licence) {
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     id,
-    licenceHolder: _generateLicenceHolder(licence),
-    monitoringStations,
+    licenceHolder: _licenceHolder(licence),
+    monitoringStations: _monitoringStations(licenceGaugingStations),
     purposes,
     region: region.displayName,
     sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null,
@@ -79,18 +78,6 @@ function _abstractionAmounts (licenceVersionPurposes) {
   return details
 }
 
-function _abstractionWrapper (licenceVersionPurposes, permitLicence) {
-  const abstractionDetails = _parseAbstractions(permitLicence)
-  const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
-
-  return {
-    abstractionConditions,
-    abstractionPointLinkText: abstractionDetails.pointLinkText,
-    abstractionPoints: abstractionDetails.points,
-    abstractionPointsCaption: abstractionDetails.pointsCaption
-  }
-}
-
 function _abstractionConditions (licenceVersionPurposes) {
   const allConditions = []
 
@@ -114,6 +101,38 @@ function _abstractionConditions (licenceVersionPurposes) {
   return uniqueConditions.sort()
 }
 
+function _abstractionPeriods (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
+    return null
+  }
+
+  const formattedAbstractionPeriods = licenceVersionPurposes.map((purpose) => {
+    const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
+    const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
+
+    return `${startDate} to ${endDate}`
+  })
+
+  const uniqueAbstractionPeriods = [...new Set(formattedAbstractionPeriods)]
+
+  return {
+    caption: uniqueAbstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction',
+    uniqueAbstractionPeriods
+  }
+}
+
+function _abstractionWrapper (licenceVersionPurposes, permitLicence) {
+  const abstractionDetails = _parseAbstractions(permitLicence)
+  const abstractionConditions = _abstractionConditions(licenceVersionPurposes)
+
+  return {
+    abstractionConditions,
+    abstractionPointLinkText: abstractionDetails.pointLinkText,
+    abstractionPoints: abstractionDetails.points,
+    abstractionPointsCaption: abstractionDetails.pointsCaption
+  }
+}
+
 function _abstractionPeriodsAndPurposesLinkText (abstractionPeriods, purposes) {
   let abstractionPeriodsAndPurposesLinkText = null
 
@@ -134,27 +153,7 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _generateAbstractionPeriods (licenceVersionPurposes) {
-  if (!licenceVersionPurposes) {
-    return null
-  }
-
-  const formattedAbstractionPeriods = licenceVersionPurposes.map((purpose) => {
-    const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
-    const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
-
-    return `${startDate} to ${endDate}`
-  })
-
-  const uniqueAbstractionPeriods = [...new Set(formattedAbstractionPeriods)]
-
-  return {
-    caption: uniqueAbstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction',
-    uniqueAbstractionPeriods
-  }
-}
-
-function _generateLicenceHolder (licence) {
+function _licenceHolder (licence) {
   const licenceHolder = licence.$licenceHolder()
 
   if (!licenceHolder) {
@@ -164,27 +163,10 @@ function _generateLicenceHolder (licence) {
   return licenceHolder
 }
 
-function _generateMonitoringStations (licenceGaugingStations) {
+function _monitoringStations (licenceGaugingStations) {
   return licenceGaugingStations.map((licenceGaugingStation) => {
     return licenceGaugingStation.gaugingStation
   })
-}
-
-function _generatePurposes (licenceVersionPurposes) {
-  if (!licenceVersionPurposes) {
-    return null
-  }
-
-  const allPurposeDescriptions = licenceVersionPurposes.map((licenceVersionPurpose) => {
-    return licenceVersionPurpose.purpose.description
-  })
-
-  const uniquePurposes = [...new Set(allPurposeDescriptions)]
-
-  return {
-    caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',
-    data: uniquePurposes
-  }
 }
 
 function _parseAbstractions (permitLicence) {
@@ -224,6 +206,23 @@ function _parseAbstractions (permitLicence) {
     points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     pointsCaption,
     pointLinkText
+  }
+}
+
+function _purposes (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
+    return null
+  }
+
+  const allPurposeDescriptions = licenceVersionPurposes.map((licenceVersionPurpose) => {
+    return licenceVersionPurpose.purpose.description
+  })
+
+  const uniquePurposes = [...new Set(allPurposeDescriptions)]
+
+  return {
+    caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',
+    data: uniquePurposes
   }
 }
 
