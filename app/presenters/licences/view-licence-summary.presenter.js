@@ -27,17 +27,21 @@ function go (licence) {
   } = licence
 
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
+  const points = _points(permitLicence)
 
   const purposes = _purposes(licenceVersionPurposes)
-  const abstractionData = _abstractionWrapper(permitLicence)
   const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
+  const abstractionPoints = _abstractionPoints(points)
 
   return {
-    ...abstractionData,
     abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
     abstractionConditions: _abstractionConditions(licenceVersionPurposes),
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText: _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes),
+    abstractionPeriodsCaption: _abstractionPeriodsCaption(abstractionPeriods),
+    abstractionPoints,
+    abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
+    abstractionPointsLinkText: _abstractionPointsLinkText(abstractionPoints),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
@@ -46,7 +50,7 @@ function go (licence) {
     monitoringStations: _monitoringStations(licenceGaugingStations),
     purposes,
     region: region.displayName,
-    sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null,
+    sourceOfSupply: points[0]?.point_source?.NAME ?? null,
     startDate: formatLongDate(startDate)
   }
 }
@@ -65,15 +69,15 @@ function _abstractionAmounts (licenceVersionPurposes) {
   }
 
   if (dailyQuantity) {
-    details.push(`${parseFloat(dailyQuantity).toFixed(2)} cubic metres per year`)
+    details.push(`${parseFloat(dailyQuantity).toFixed(2)} cubic metres per day`)
   }
 
   if (hourlyQuantity) {
-    details.push(`${parseFloat(hourlyQuantity).toFixed(2)} cubic metres per year`)
+    details.push(`${parseFloat(hourlyQuantity).toFixed(2)} cubic metres per hour`)
   }
 
   if (instantQuantity) {
-    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per year`)
+    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per second`)
   }
 
   return details
@@ -104,44 +108,58 @@ function _abstractionConditions (licenceVersionPurposes) {
 
 function _abstractionPeriods (licenceVersionPurposes) {
   if (!licenceVersionPurposes) {
-    return null
+    return []
   }
 
-  const formattedAbstractionPeriods = licenceVersionPurposes.map((purpose) => {
+  const abstractionPeriods = licenceVersionPurposes.map((purpose) => {
     const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
     const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
 
     return `${startDate} to ${endDate}`
   })
 
-  const uniqueAbstractionPeriods = [...new Set(formattedAbstractionPeriods)]
+  const uniqueAbstractionPeriods = [...new Set(abstractionPeriods)]
 
-  return {
-    caption: uniqueAbstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction',
-    uniqueAbstractionPeriods
-  }
-}
-
-function _abstractionWrapper (permitLicence) {
-  const abstractionDetails = _parseAbstractions(permitLicence)
-
-  return {
-    abstractionPointLinkText: abstractionDetails.pointLinkText,
-    abstractionPoints: abstractionDetails.points,
-    abstractionPointsCaption: abstractionDetails.pointsCaption
-  }
+  return uniqueAbstractionPeriods
 }
 
 function _abstractionPeriodsAndPurposesLinkText (abstractionPeriods, purposes) {
   let abstractionPeriodsAndPurposesLinkText = null
 
-  if (abstractionPeriods) {
-    const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
+  if (abstractionPeriods.length > 0) {
+    const abstractionPeriodsLabel = abstractionPeriods.length > 1 ? 'periods' : 'period'
     const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
+
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
   }
 
   return abstractionPeriodsAndPurposesLinkText
+}
+
+function _abstractionPeriodsCaption (abstractionPeriods) {
+  return abstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction'
+}
+
+function _abstractionPoints (points) {
+  const abstractionPoints = []
+
+  points.forEach((point) => {
+    if (point?.point_detail) {
+      abstractionPoints.push(generateAbstractionPointDetail(point.point_detail))
+    }
+  })
+
+  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
+
+  return uniqueAbstractionPoints.sort()
+}
+
+function _abstractionPointsCaption (abstractionPoints) {
+  return abstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
+}
+
+function _abstractionPointsLinkText (abstractionPoints) {
+  return abstractionPoints.length > 1 ? 'View details of the abstraction points' : 'View details of the abstraction point'
 }
 
 function _endDate (expiredDate) {
@@ -168,44 +186,20 @@ function _monitoringStations (licenceGaugingStations) {
   })
 }
 
-function _parseAbstractions (permitLicence) {
-  if (!permitLicence ||
-    !permitLicence.purposes ||
-    permitLicence.purposes.length === 0 ||
-    permitLicence.purposes[0]?.purposePoints === undefined ||
-    permitLicence.purposes[0]?.purposePoints.length === 0
-  ) {
-    return {
-      points: null,
-      pointsCaption: null,
-      pointLinkText: null
-    }
+function _points (permitLicence) {
+  const points = []
+
+  if (!permitLicence?.purposes || !permitLicence.purposes[0]?.purposePoints) {
+    return points
   }
 
-  const abstractionPoints = []
-
   permitLicence.purposes.forEach((purpose) => {
-    purpose.purposePoints.forEach((point) => {
-      const pointDetail = point.point_detail
-
-      if (pointDetail) {
-        abstractionPoints.push(generateAbstractionPointDetail(pointDetail))
-      }
+    purpose.purposePoints.forEach((purposePoint) => {
+      points.push(purposePoint)
     })
   })
 
-  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
-
-  const abstractionLinkDefaultText = 'View details of the abstraction point'
-  const pointLinkText = uniqueAbstractionPoints.length > 1 ? abstractionLinkDefaultText + 's' : abstractionLinkDefaultText
-
-  const pointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
-
-  return {
-    points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
-    pointsCaption,
-    pointLinkText
-  }
+  return points
 }
 
 function _purposes (licenceVersionPurposes) {
