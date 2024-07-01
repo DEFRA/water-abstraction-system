@@ -1,76 +1,116 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro displayAddress(address) %}
+  {% if address.address1 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address1 }}</p>
+  {% endif %}
+  {% if address.address2 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address2 }}</p>
+  {% endif %}
+  {% if address.address3 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address3 }}</p>
+  {% endif %}
+  {% if address.address4 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address4 }}</p>
+  {% endif %}
+  {% if address.address5 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address5 }}</p>
+  {% endif %}
+  {% if address.address6 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address6 }}</p>
+  {% endif %}
+  {% if address.country %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.country }}</p>
+  {% endif %}
+  {% if address.postcode %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.postcode }}</p>
+  {% endif %}
+{% endmacro %}
+
 <h2 class="govuk-heading-l">Contact details</h2>
 
+{% set tableHeaders = [
+  { text: 'Name' },
+  { text: 'Communication type' },
+  { text: 'Send to' }
+] %}
+
+{% set licenceContactsTableRows = [] %}
+
+{% for licenceContact in licenceContacts %}
+  {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+  {% set rowIndex = loop.index0 %}
+
+  {% set transactionRow = [
+    {
+      text: licenceContact.name,
+      attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
+    },
+    {
+      text: licenceContact.communicationType,
+      attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
+    },
+    {
+      html: displayAddress(licenceContact.address),
+      attributes: { 'data-test': 'licence-contact-send-to-' + rowIndex }
+    }
+  ] %}
+
+  {% set licenceContactsTableRows = (licenceContactsTableRows.push(transactionRow), licenceContactsTableRows) %}
+{% endfor %}
+
+{{ govukTable({
+  attributes: { 'data-test': 'licence-contacts-table' },
+  caption: "Licence contacts",
+  captionClasses: "govuk-table__caption--m",
+  firstCellIsHeader: false,
+  head: tableHeaders if licenceContacts.length > 0,
+  rows: licenceContactsTableRows if licenceContacts.length > 0
+}) }}
+
+{% if licenceContacts.length === 0 %}
+  <p>No licence contacts found.</p>
+{% endif %}
+
 {% if customerId %}
-  <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts</a></p>
+  {% set customerContactsCaption = 'Customer contacts for this licence<p class="govuk-body"><a class="govuk-link" href="/customer/' + customerId + '/#contacts">Go to customer contacts</a></p>' %}
+{% else %}
+  {% set customerContactsCaption = 'Customer contacts for this licence' %}
 {% endif %}
 
-{% if customerContacts.length == 0 and licenceContacts.length == 0 %}
-  <p>No contacts found.</p>
-{% endif %}
+{% set customerContactsTableRows = [] %}
 
-{% if licenceContacts.length > 0 %}
-  <h2 class="govuk-heading-m">Licence contacts</h2>
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Communication type</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Send to</th>
-    </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-    {% for licenceContact in licenceContacts %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{ licenceContact.name }}</td>
-        <td class="govuk-table__cell">{{ licenceContact.communicationType }}</td>
-        <td class="govuk-table__cell">
-          {% if licenceContact.address.address1 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address1 }}</p>
-          {% endif %}
-          {% if licenceContact.address.address2 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address2 }}</p>
-          {% endif %}
-          {% if licenceContact.address.address3 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address3 }}</p>
-          {% endif %}
-          {% if licenceContact.address.address4 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address4 }}</p>
-          {% endif %}
-          {% if licenceContact.address.address5 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address5 }}</p>
-          {% endif %}
-          {% if licenceContact.address.address6 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address6 }}</p>
-          {% endif %}
-          {% if licenceContact.address.country %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.country }}</p>
-          {% endif %}
-          {% if licenceContact.address.postcode %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.postcode }}</p>
-          {% endif %}
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+{% for customerContact in customerContacts %}
+  {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+  {% set rowIndex = loop.index0 %}
 
-{% if customerContacts.length > 0 %}
-  <h2 class="govuk-heading-m">Customer contacts for this licence</h2>
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Communication type</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Send to</th>
-    </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-    {% for customerContact in customerContacts %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{ customerContact.name }}</td>
-        <td class="govuk-table__cell">{{ customerContact.communicationType }}</td>
-        <td class="govuk-table__cell">{{ customerContact.email }}</tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  {% set transactionRow = [
+    {
+      text: customerContact.name,
+      attributes: { 'data-test': 'customer-contact-name-' + rowIndex }
+    },
+    {
+      text: customerContact.communicationType,
+      attributes: { 'data-test': 'customer-contact-type-' + rowIndex }
+    },
+    {
+      text: customerContact.email,
+      attributes: { 'data-test': 'customer-contact-send-to-' + rowIndex }
+    }
+  ] %}
+
+  {% set customerContactsTableRows = (customerContactsTableRows.push(transactionRow), customerContactsTableRows) %}
+{% endfor %}
+
+{{ govukTable({
+  attributes: { 'data-test': 'customer-contacts-table' },
+  caption: customerContactsCaption|safe,
+  captionClasses: "govuk-table__caption--m",
+  firstCellIsHeader: false,
+  head: tableHeaders if customerContacts.length > 0,
+  rows: customerContactsTableRows if customerContacts.length > 0
+}) }}
+
+{% if customerContacts.length === 0 %}
+  <p>No customer contacts found.</p>
 {% endif %}
