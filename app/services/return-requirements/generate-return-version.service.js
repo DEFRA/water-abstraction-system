@@ -22,12 +22,12 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @returns {string} The licence ID
  */
 async function go (session, userId) {
-  const returnVersion = await _generateReturnVersionData(session, userId)
-  const returnRequirementsData = await _generateReturnRequirementsData(session.licence.id, session.requirements)
+  const returnVersion = await _generateReturnVersion(session, userId)
+  const returnRequirements = await _generateReturnRequirements(session.licence.id, session.requirements)
 
   return {
     returnVersion,
-    returnRequirementsData
+    returnRequirements
   }
 }
 
@@ -41,7 +41,7 @@ function _calculateStartDate (session) {
   return session.licence.currentVersionStartDate
 }
 
-async function _generateReturnRequirementsData (licenceId, requirements) {
+async function _generateReturnRequirements (licenceId, requirements) {
   const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
@@ -65,8 +65,8 @@ async function _generateReturnRequirementsData (licenceId, requirements) {
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff'),
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
-      returnRequirementPoints: _generateReturnRequirementPointsData(points, requirementExternalId, requirement.points),
-      returnRequirementPurposes: await _generateReturnRequirementPurposesData(licenceId, requirement.purposes)
+      returnRequirementPoints: _generateReturnRequirementPoints(points, requirementExternalId, requirement.points),
+      returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
     }
 
     returnRequirements.push(returnRequirement)
@@ -75,7 +75,7 @@ async function _generateReturnRequirementsData (licenceId, requirements) {
   return returnRequirements
 }
 
-function _generateReturnRequirementPointsData (points, requirementExternalId, requirementPoints) {
+function _generateReturnRequirementPoints (points, requirementExternalId, requirementPoints) {
   const returnRequirementPoints = []
 
   requirementPoints.forEach((requirementPoint) => {
@@ -99,7 +99,7 @@ function _generateReturnRequirementPointsData (points, requirementExternalId, re
   return returnRequirementPoints
 }
 
-async function _generateReturnRequirementPurposesData (licenceId, purposeIds) {
+async function _generateReturnRequirementPurposes (licenceId, purposeIds) {
   const returnRequirementPurposes = []
 
   for (const purposeId of purposeIds) {
@@ -123,7 +123,7 @@ async function _generateReturnRequirementPurposesData (licenceId, purposeIds) {
   return returnRequirementPurposes
 }
 
-async function _generateReturnVersionData (session, userId) {
+async function _generateReturnVersion (session, userId) {
   const multipleUpload = _multipleUpload(session?.additionalSubmissionOptions)
 
   return {
