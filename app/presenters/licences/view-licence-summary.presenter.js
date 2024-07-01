@@ -189,7 +189,7 @@ function _monitoringStations (licenceGaugingStations) {
 function _points (permitLicence) {
   const points = []
 
-  if (!permitLicence?.purposes || !permitLicence.purposes[0]?.purposePoints) {
+  if (!permitLicence?.purposes?.[0]?.purposePoints) {
     return points
   }
 
