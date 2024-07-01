@@ -40,8 +40,6 @@ function _calculateStartDate (session) {
 }
 
 async function _generateReturnVersion (session, userId) {
-  const multipleUpload = _multipleUpload(session?.additionalSubmissionOptions)
-
   return {
     licenceId: session.licence.id,
     version: await _getNextVersionNumber(session.licence.id),
@@ -49,7 +47,7 @@ async function _generateReturnVersion (session, userId) {
     endDate: null,
     status: 'current',
     reason: session.reason,
-    multipleUpload,
+    multipleUpload: _multipleUpload(session?.additionalSubmissionOptions),
     notes: session?.note?.content,
     createdBy: userId
   }
