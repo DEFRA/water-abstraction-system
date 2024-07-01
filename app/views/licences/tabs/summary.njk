@@ -50,21 +50,21 @@
     </div>
   {% endif %}
 
-  {% if abstractionPeriods %}
+  {% if abstractionPeriods.length > 0 %}
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">{{ abstractionPeriods.caption }}</dt>
+      <dt class="govuk-summary-list__key">{{ abstractionPeriodsCaption }}</dt>
       <dd class="govuk-summary-list__value">
         <div>
-          {% if abstractionPeriods.uniqueAbstractionPeriods.length > 5 %}
-            There are {{ abstractionPeriods.uniqueAbstractionPeriods.length }} periods of abstraction
-          {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
+          {% if abstractionPeriods.length > 5 %}
+            There are {{ abstractionPeriods.length }} periods of abstraction
+          {% elseif abstractionPeriods.length > 1 %}
             <ul class="govuk-list govuk-!-margin-bottom-0">
-              {% for abstractionPeriod in abstractionPeriods.uniqueAbstractionPeriods %}
+              {% for abstractionPeriod in abstractionPeriods %}
                 <li>{{ abstractionPeriod }}</li>
               {% endfor %}
             </ul>
           {% else %}
-            {{ abstractionPeriods.uniqueAbstractionPeriods[0] }}
+            {{ abstractionPeriods[0] }}
           {% endif %}
         </div>
         <a href="/licences/{{ documentId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
@@ -72,7 +72,7 @@
     </div>
   {% endif %}
 
-  {% if abstractionPoints %}
+  {% if abstractionPoints.length > 0 %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">{{ abstractionPointsCaption }}</dt>
       <dd class="govuk-summary-list__value">
@@ -89,7 +89,7 @@
             {{ abstractionPoints[0] }}
           {% endif %}
         </div>
-        <a href="/licences/{{ documentId }}/points">{{ abstractionPointLinkText }}</a>
+        <a href="/licences/{{ documentId }}/points">{{ abstractionPointsLinkText }}</a>
       </dd>
     </div>
   {% endif %}
@@ -114,32 +114,34 @@
     </dd>
   </div>
 
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">Abstraction conditions</dt>
-    <dd class="govuk-summary-list__value">
-      <div>
-        {% if abstractionConditions.length > 5 %}
-          There are {{ abstractionConditions.length }} abstraction conditions
-        {% elif abstractionConditions.length > 1 %}
-          <ul class="govuk-list govuk-!-margin-bottom-0">
-            {% for condition in abstractionConditions %}
-              <li>{{ condition }}</li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          {{ abstractionConditions[0] }}
-        {% endif %}
-      </div>
-      <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>
-    </dd>
-  </div>
+  {% if abstractionConditions.length > 0 %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Abstraction conditions</dt>
+      <dd class="govuk-summary-list__value">
+        <div>
+          {% if abstractionConditions.length > 5 %}
+            There are {{ abstractionConditions.length }} abstraction conditions
+          {% elif abstractionConditions.length > 1 %}
+            <ul class="govuk-list govuk-!-margin-bottom-0">
+              {% for condition in abstractionConditions %}
+                <li>{{ condition }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            {{ abstractionConditions[0] }}
+          {% endif %}
+        </div>
+        <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>
+      </dd>
+    </div>
+  {% endif %}
 
-  {% if abstractionQuantities %}
+  {% if abstractionAmounts.length > 0 %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Abstraction amounts</dt>
       <dd class="govuk-summary-list__value">
         <ul class="govuk-list govuk-!-margin-bottom-0">
-          {% for quantity in abstractionQuantities %}
+          {% for quantity in abstractionAmounts %}
             <li>{{ quantity }}</li>
           {% endfor %}
         </ul>

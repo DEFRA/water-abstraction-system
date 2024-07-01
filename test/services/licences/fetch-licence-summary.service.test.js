@@ -136,6 +136,10 @@ describe('Fetch Licence Summary service', () => {
               abstractionPeriodStartMonth: 1,
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
+              annualQuantity: null,
+              dailyQuantity: null,
+              hourlyQuantity: null,
+              instantQuantity: null,
               purpose: {
                 id: purpose.id,
                 description: 'Spray Irrigation - Storage'
