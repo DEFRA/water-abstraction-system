@@ -7,6 +7,7 @@
 
 const FetchPointsService = require('./fetch-points.service.js')
 const LicenceModel = require('../../models/licence.model.js')
+const LicenceVersionModel = require('../../models/licence-version.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
@@ -22,7 +23,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  */
 async function go (session, userId) {
   const returnVersion = await _generateReturnVersionData(session, userId)
-  const returnRequirementsData = await _generateReturnRequirementsData(session.requirements, session.licence.id)
+  const returnRequirementsData = await _generateReturnRequirementsData(session.licence.id, session.requirements)
 
   return {
     returnVersion,
@@ -40,7 +41,7 @@ function _calculateStartDate (session) {
   return session.licence.currentVersionStartDate
 }
 
-async function _generateReturnRequirementsData (requirements, licenceId) {
+async function _generateReturnRequirementsData (licenceId, requirements) {
   const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
@@ -64,7 +65,8 @@ async function _generateReturnRequirementsData (requirements, licenceId) {
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff'),
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
-      returnRequirementPoints: _generateReturnRequirementPointsData(points, requirementExternalId, requirement.points)
+      returnRequirementPoints: _generateReturnRequirementPointsData(points, requirementExternalId, requirement.points),
+      returnRequirementPurposes: await _generateReturnRequirementPurposesData(licenceId, requirement.purposes)
     }
 
     returnRequirements.push(returnRequirement)
@@ -95,6 +97,30 @@ function _generateReturnRequirementPointsData (points, requirementExternalId, re
   })
 
   return returnRequirementPoints
+}
+
+async function _generateReturnRequirementPurposesData (licenceId, purposeIds) {
+  const returnRequirementPurposes = []
+
+  for (const purposeId of purposeIds) {
+    const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query()
+      .select('primaryPurposeId', 'secondaryPurposeId')
+      .innerJoinRelated('licenceVersionPurposes')
+      .where('licenceId', licenceId)
+      .andWhere('status', 'current')
+      .andWhere('purposeId', purposeId)
+      .first()
+
+    const returnRequirementPurpose = {
+      purposeId,
+      primaryPurposeId,
+      secondaryPurposeId
+    }
+
+    returnRequirementPurposes.push(returnRequirementPurpose)
+  }
+
+  return returnRequirementPurposes
 }
 
 async function _generateReturnVersionData (session, userId) {
