@@ -24,9 +24,9 @@ async function go () {
   }
 }
 
-async function _getTagReference () {
+async function _getCommitHash () {
   try {
-    const { stdout, stderr } = await exec('git describe --always --tags')
+    const { stdout, stderr } = await exec('git rev-parse HEAD')
 
     return stderr ? `ERROR: ${stderr}` : stdout.replace('\n', '')
   } catch (error) {
@@ -34,9 +34,9 @@ async function _getTagReference () {
   }
 }
 
-async function _getCommitHash () {
+async function _getTagReference () {
   try {
-    const { stdout, stderr } = await exec('git rev-parse HEAD')
+    const { stdout, stderr } = await exec('git describe --always --tags')
 
     return stderr ? `ERROR: ${stderr}` : stdout.replace('\n', '')
   } catch (error) {
