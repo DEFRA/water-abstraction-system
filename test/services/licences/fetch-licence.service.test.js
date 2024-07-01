@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -21,14 +20,9 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 describe('Fetch licence service', () => {
   let licence
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when there is no optional data in the model', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add({
-        id: 'a8256ea1-4509-4992-b30f-d011509e5f62',
         expiredDate: null,
         include_in_presroc_billing: 'yes',
         include_in_sroc_billing: true,
@@ -43,7 +37,7 @@ describe('Fetch licence service', () => {
     it('returns results', async () => {
       const result = await FetchLicenceService.go(licence.id)
 
-      expect(result.id).to.equal('a8256ea1-4509-4992-b30f-d011509e5f62')
+      expect(result.id).to.equal(licence.id)
       expect(result.ends).to.equal(null)
       expect(result.expiredDate).to.equal(null)
       expect(result.lapsedDate).to.equal(null)
@@ -75,6 +69,7 @@ describe('Fetch licence service', () => {
 
     it('returns results', async () => {
       const result = await FetchLicenceService.go(licence.id)
+
       expect(result.registeredTo).to.equal('grace.hopper@example.com')
       expect(result.licenceName).to.equal('Test Company Ltd')
       expect(result.ends).to.equal({

@@ -5,7 +5,6 @@
  * @module ViewLicenceSummaryService
  */
 
-const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
 const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
@@ -23,11 +22,7 @@ async function go (licenceId, auth) {
 
   const summaryLicenceData = await FetchLicenceSummaryService.go(licenceId)
 
-  const currentLicenceVersionId = summaryLicenceData?.licenceVersions[0]?.id
-
-  const abstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
-
-  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, abstractionConditions)
+  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData)
 
   return {
     ...pageData,

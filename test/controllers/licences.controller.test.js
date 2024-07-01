@@ -292,7 +292,8 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Contact details')
-        expect(response.payload).to.contain('No contacts found.')
+        expect(response.payload).to.contain('No licence contacts found.')
+        expect(response.payload).to.contain('No customer contacts found.')
       })
     })
   })

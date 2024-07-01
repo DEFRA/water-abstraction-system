@@ -12,23 +12,18 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
-const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
+
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
 
-describe('View Licence service summary', () => {
+describe('View Licence Summary service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let fetchLicenceResult
 
   beforeEach(() => {
-    Sinon.stub(FetchLicenceAbstractionConditionsService, 'go').resolves({
-      conditions: [],
-      purposeIds: [],
-      numberOfConditions: 0
-    })
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
 
@@ -47,20 +42,18 @@ describe('View Licence service summary', () => {
         const result = await ViewLicenceSummaryService.go(testId)
 
         expect(result).to.equal({
-          abstractionConditionDetails: {
-            conditions: [],
-            numberOfConditions: 0
-          },
-          abstractionPeriods: null,
+          abstractionAmounts: [],
+          abstractionConditions: [],
+          abstractionPeriods: [],
           abstractionPeriodsAndPurposesLinkText: null,
-          abstractionPointLinkText: 'View details of the abstraction point',
+          abstractionPeriodsCaption: 'Period of abstraction',
           abstractionPoints: ['At National Grid Reference TL 23198 88603'],
           abstractionPointsCaption: 'Point of abstraction',
-          abstractionQuantities: null,
+          abstractionPointsLinkText: 'View details of the abstraction point',
           activeTab: 'summary',
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
           endDate: null,
-          id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+          licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
           licenceHolder: 'Unregistered licence',
           monitoringStations: [{
             id: 'ac075651-4781-4e24-a684-b943b98607ca',
