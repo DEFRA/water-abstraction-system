@@ -7,7 +7,7 @@
 
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
-const GenerateReturnVersionDataService = require('./generate-return-version-data.service.js')
+const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -30,7 +30,7 @@ async function go (sessionId, userId) {
 
   await _validateLicence(session.licence.id)
 
-  const returnVersionData = await GenerateReturnVersionDataService.go(session, userId)
+  const returnVersionData = await GenerateReturnVersionService.go(session, userId)
   console.log('🚀 ~ go ~ returnVersionData:', returnVersionData)
 
   return session.licence.id

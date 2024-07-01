@@ -2,7 +2,7 @@
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
- * @module GenerateReturnVersionDataService
+ * @module GenerateReturnVersionService
  */
 
 const FetchPointsService = require('./fetch-points.service.js')
