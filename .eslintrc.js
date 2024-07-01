@@ -20,12 +20,16 @@ module.exports = {
     '@stylistic/js/padding-line-between-statements': [
       'error',
       { blankLine: 'always', prev: '*', next: 'block' },
-      { blankLine: 'always', prev: '*', next: 'expression' },
       { blankLine: 'always', prev: '*', next: 'return' },
       { blankLine: 'always', prev: 'block', next: '*' },
       { blankLine: 'always', prev: 'block', next: 'function' },
-      { blankLine: 'always', prev: 'expression', next: '*' },
-      { blankLine: 'always', prev: 'function', next: '*' }
+      { blankLine: 'always', prev: 'function', next: '*' },
+      // blank lines after every sequence of variable declarations
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+      // blank lines after all directive prologues e.g. 'use strict'
+      { blankLine: 'always', prev: 'directive', next: '*' },
+      { blankLine: 'any', prev: 'directive', next: 'directive' }
     ],
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],

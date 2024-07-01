@@ -30,6 +30,7 @@ function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStat
   const issues = filterIssues ? _prepareIssues(filterIssues) : filterIssues
 
   const filter = { issues, licenceHolderNumber: filterLicenceHolderNumber, licenceStatus: filterLicenceStatus }
+
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
   filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus) !== undefined
 

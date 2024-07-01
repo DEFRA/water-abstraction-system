@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
@@ -19,21 +18,20 @@ const FetchLiveBillRunsService = require('../../../app/services/bill-runs/fetch-
 describe('Fetch Live Bill Runs service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
 
+  let billRun
   let financialYearEnding
   let regionId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const region = await RegionHelper.add()
+
     regionId = region.id
   })
 
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       beforeEach(async () => {
-        await BillRunHelper.add({
-          id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
+        billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
           status: 'ready',
@@ -51,7 +49,7 @@ describe('Fetch Live Bill Runs service', () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
           expect(results).to.have.length(1)
-          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+          expect(results[0].id).to.equal(billRun.id)
         })
       })
 
@@ -64,7 +62,7 @@ describe('Fetch Live Bill Runs service', () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
 
           expect(results).to.have.length(1)
-          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+          expect(results[0].id).to.equal(billRun.id)
         })
       })
 
@@ -83,8 +81,7 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the previous year (SROC)', () => {
       beforeEach(async () => {
-        await BillRunHelper.add({
-          id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
+        billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
           status: 'ready',
@@ -126,15 +123,14 @@ describe('Fetch Live Bill Runs service', () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
           expect(results).to.have.length(1)
-          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+          expect(results[0].id).to.equal(billRun.id)
         })
       })
     })
 
     describe('and it is for the last PRESROC year (PRESROC)', () => {
       beforeEach(async () => {
-        await BillRunHelper.add({
-          id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
+        billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
           status: 'ready',
@@ -164,7 +160,7 @@ describe('Fetch Live Bill Runs service', () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
 
           expect(results).to.have.length(1)
-          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+          expect(results[0].id).to.equal(billRun.id)
         })
       })
 
