@@ -14,7 +14,6 @@ const { formatBillRunType, formatLongDate, formatMoney } = require('../base.pres
  */
 function go (bills) {
   return {
-    activeTab: 'bills',
     bills: _bills(bills)
   }
 }

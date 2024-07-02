@@ -22,7 +22,6 @@ describe('View Licence Bills presenter', () => {
       const result = ViewLicenceBillsPresenter.go([bill])
 
       expect(result).to.equal({
-        activeTab: 'bills',
         bills: [{
           accountNumber: 'BA1234443S',
           billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',

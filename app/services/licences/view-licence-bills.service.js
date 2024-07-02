@@ -26,6 +26,7 @@ async function go (licenceId, auth, page) {
   const pagination = PaginatorPresenter.go(billsData.pagination.total, Number(page), `/system/licences/${licenceId}/bills`)
 
   return {
+    activeTab: 'bills',
     ...commonData,
     ...pageData,
     pagination
