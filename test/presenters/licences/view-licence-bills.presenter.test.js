@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter')
+const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
 describe('View Licence Bills presenter', () => {
   describe('when provided with a bills data', () => {
