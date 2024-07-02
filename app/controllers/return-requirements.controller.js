@@ -305,8 +305,9 @@ async function submitCancel (request, h) {
 
 async function submitCheck (request, h) {
   const { sessionId } = request.params
+  const { id: userId } = request.auth.credentials.user
 
-  const licenceId = await SubmitCheckService.go(sessionId)
+  const licenceId = await SubmitCheckService.go(sessionId, userId)
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
