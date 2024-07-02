@@ -74,7 +74,7 @@ jobs:
         run: |
           ! grep -R 'describe.only(\|it.only(' test
 
-      # Alongside this, check we haven't accidentally left any `console.log()` while checking results.
+      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
       - name: Temporary log check
         run: |
           if grep -R 'console.log(' ./app/ ./test/; then
