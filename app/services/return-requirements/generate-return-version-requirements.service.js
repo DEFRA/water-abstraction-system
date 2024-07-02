@@ -22,13 +22,14 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  * @returns {Promise<Object>} The new return version requirements data for a licence
  */
 async function go (licenceId, requirements) {
+  const naldRegionId = await _fetchNaldRegionId(licenceId)
   const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   let legacyId = await _getNextLegacyId()
 
   for (const requirement of requirements) {
-    const requirementExternalId = await _generateRequirementExternalId(legacyId, licenceId)
+    const externalId = `${naldRegionId}:${legacyId}`
 
     const returnRequirement = {
       abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
@@ -36,14 +37,14 @@ async function go (licenceId, requirements) {
       abstractionPeriodEndDay: requirement.abstractionPeriod['end-abstraction-period-day'],
       abstractionPeriodEndMonth: requirement.abstractionPeriod['end-abstraction-period-month'],
       collectionFrequency: requirement.frequencyCollected,
-      externalId: requirementExternalId,
+      externalId,
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
       gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
       legacyId,
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       reportingFrequency: requirement.frequencyReported,
       returnsFrequency: 'year',
-      returnRequirementPoints: _generateReturnRequirementPoints(points, requirementExternalId, requirement.points),
+      returnRequirementPoints: _generateReturnRequirementPoints(points, externalId, requirement.points),
       returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes),
       siteDescription: requirement.siteDescription,
       summer: requirement.returnsCycle === 'summer',
@@ -56,6 +57,15 @@ async function go (licenceId, requirements) {
   }
 
   return returnRequirements
+}
+
+async function _fetchNaldRegionId (licenceId) {
+  const { naldRegionId } = await LicenceModel.query()
+    .findById(licenceId)
+    .select('region.naldRegionId')
+    .innerJoinRelated('region')
+
+  return naldRegionId
 }
 
 function _generateReturnRequirementPoints (points, requirementExternalId, requirementPoints) {
@@ -104,15 +114,6 @@ async function _generateReturnRequirementPurposes (licenceId, purposeIds) {
   }
 
   return returnRequirementPurposes
-}
-
-async function _generateRequirementExternalId (legacyId, licenceId) {
-  const { naldRegionId } = await LicenceModel.query()
-    .findById(licenceId)
-    .select('region.naldRegionId')
-    .innerJoinRelated('region')
-
-  return `${naldRegionId}:${legacyId}`
 }
 
 async function _getNextLegacyId () {
