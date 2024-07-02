@@ -14,14 +14,14 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * Creates the data needed to populate the `return_versions`, `return_requirements`, `return_requirement_points` and
  * `return_requirement_purposes` tables.
  *
- * @param {string} session - The session data required to set up a new return version for a licence
+ * @param {string} sessionData - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  *
  * @returns {Promise<Object>} The new return version and requirement data for a licence
  */
-async function go (session, userId) {
-  const returnVersion = await _generateReturnVersion(session, userId)
-  const returnRequirements = await GenerateReturnVersionRequirementsService.go(session.licence.id, session.requirements)
+async function go (sessionData, userId) {
+  const returnVersion = await _generateReturnVersion(sessionData, userId)
+  const returnRequirements = await GenerateReturnVersionRequirementsService.go(sessionData.licence.id, sessionData.requirements)
 
   return {
     returnRequirements,
@@ -29,27 +29,27 @@ async function go (session, userId) {
   }
 }
 
-function _calculateStartDate (session) {
-  if (session.startDateOptions === 'anotherStartDate') {
+function _calculateStartDate (sessionData) {
+  if (sessionData.startDateOptions === 'anotherStartDate') {
     // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
     // January is actually 0, February is 1 etc. This is why we deduct 1 from the month.
-    return new Date(session.startDateYear, session.startDateMonth - 1, session.startDateDay)
+    return new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
   }
 
-  return session.licence.currentVersionStartDate
+  return sessionData.licence.currentVersionStartDate
 }
 
-async function _generateReturnVersion (session, userId) {
+async function _generateReturnVersion (sessionData, userId) {
   return {
     createdBy: userId,
     endDate: null,
-    licenceId: session.licence.id,
-    multipleUpload: _multipleUpload(session?.additionalSubmissionOptions),
-    notes: session?.note?.content,
-    reason: session.reason,
-    startDate: _calculateStartDate(session),
+    licenceId: sessionData.licence.id,
+    multipleUpload: _multipleUpload(sessionData?.additionalSubmissionOptions),
+    notes: sessionData?.note?.content,
+    reason: sessionData.reason,
+    startDate: _calculateStartDate(sessionData),
     status: 'current',
-    version: await _getNextVersionNumber(session.licence.id)
+    version: await _getNextVersionNumber(sessionData.licence.id)
   }
 }
 
