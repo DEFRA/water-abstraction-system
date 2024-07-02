@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/data/deduplicate',
-    handler: DataController.deduplicate,
     options: {
+      handler: DataController.deduplicate,
       auth: {
         access: {
           scope: ['billing']
@@ -18,8 +18,8 @@ const routes = [
   {
     method: 'POST',
     path: '/data/deduplicate',
-    handler: DataController.submitDeduplicate,
     options: {
+      handler: DataController.submitDeduplicate,
       auth: {
         access: {
           scope: ['billing']
@@ -30,8 +30,8 @@ const routes = [
   {
     method: 'POST',
     path: '/data/load',
-    handler: DataController.load,
     options: {
+      handler: DataController.load,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -42,8 +42,8 @@ const routes = [
   {
     method: 'POST',
     path: '/data/seed',
-    handler: DataController.seed,
     options: {
+      handler: DataController.seed,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -54,8 +54,8 @@ const routes = [
   {
     method: 'POST',
     path: '/data/tear-down',
-    handler: DataController.tearDown,
     options: {
+      handler: DataController.tearDown,
       app: {
         excludeFromProd: true,
         plainOutput: true

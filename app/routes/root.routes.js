@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/',
-    handler: RootController.index,
     options: {
+      handler: RootController.index,
       app: {
         plainOutput: true
       },
@@ -17,18 +17,18 @@ const routes = [
   {
     method: 'GET',
     path: '/robots.txt',
-    handler: {
-      file: 'app/public/static/robots.txt'
-    },
     options: {
+      handler: {
+        file: 'app/public/static/robots.txt'
+      },
       auth: false
     }
   },
   {
     method: 'GET',
     path: '/status',
-    handler: RootController.index,
     options: {
+      handler: RootController.index,
       app: {
         plainOutput: true
       },

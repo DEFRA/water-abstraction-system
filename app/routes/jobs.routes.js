@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'POST',
     path: '/jobs/export',
-    handler: JobsController.exportDb,
     options: {
+      handler: JobsController.exportDb,
       app: {
         plainOutput: true
       },
@@ -17,8 +17,8 @@ const routes = [
   {
     method: 'POST',
     path: '/jobs/licence-updates',
-    handler: JobsController.licenceUpdates,
     options: {
+      handler: JobsController.licenceUpdates,
       app: {
         plainOutput: true
       },
@@ -28,8 +28,8 @@ const routes = [
   {
     method: 'POST',
     path: '/jobs/session-cleanup',
-    handler: JobsController.sessionCleanup,
     options: {
+      handler: JobsController.sessionCleanup,
       app: {
         plainOutput: true
       },
@@ -39,8 +39,8 @@ const routes = [
   {
     method: 'POST',
     path: '/jobs/time-limited',
-    handler: JobsController.timeLimited,
     options: {
+      handler: JobsController.timeLimited,
       app: {
         plainOutput: true
       },

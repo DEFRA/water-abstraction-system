@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs',
-    handler: BillRunsController.index,
     options: {
+      handler: BillRunsController.index,
       auth: {
         access: {
           scope: ['billing']
@@ -18,8 +18,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs',
-    handler: BillRunsController.create,
     options: {
+      handler: BillRunsController.create,
       app: {
         plainOutput: true
       },
@@ -33,8 +33,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}',
-    handler: BillRunsController.view,
     options: {
+      handler: BillRunsController.view,
       auth: {
         access: {
           scope: ['billing']
@@ -45,8 +45,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/cancel',
-    handler: BillRunsController.cancel,
     options: {
+      handler: BillRunsController.cancel,
       auth: {
         access: {
           scope: ['billing']
@@ -57,8 +57,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/cancel',
-    handler: BillRunsController.submitCancel,
     options: {
+      handler: BillRunsController.submitCancel,
       auth: {
         access: {
           scope: ['billing']
@@ -69,8 +69,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/remove/{licenceId}',
-    handler: BillRunsController.removeLicence,
     options: {
+      handler: BillRunsController.removeLicence,
       auth: {
         access: {
           scope: ['billing']
@@ -81,8 +81,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/remove/{licenceId}',
-    handler: BillRunsController.submitRemoveLicence,
     options: {
+      handler: BillRunsController.submitRemoveLicence,
       auth: {
         access: {
           scope: ['billing']
@@ -93,8 +93,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review',
-    handler: BillRunsController.review,
     options: {
+      handler: BillRunsController.review,
       auth: {
         access: {
           scope: ['billing']
@@ -105,8 +105,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review',
-    handler: BillRunsController.submitReview,
     options: {
+      handler: BillRunsController.submitReview,
       auth: {
         access: {
           scope: ['billing']
@@ -117,8 +117,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}',
-    handler: BillRunsController.reviewLicence,
     options: {
+      handler: BillRunsController.reviewLicence,
       auth: {
         access: {
           scope: ['billing']
@@ -129,8 +129,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review/{licenceId}',
-    handler: BillRunsController.submitReviewLicence,
     options: {
+      handler: BillRunsController.submitReviewLicence,
       auth: {
         access: {
           scope: ['billing']
@@ -141,8 +141,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}',
-    handler: BillRunsController.chargeReferenceDetails,
     options: {
+      handler: BillRunsController.chargeReferenceDetails,
       auth: {
         access: {
           scope: ['billing']
@@ -153,8 +153,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
-    handler: BillRunsController.amendAuthorisedVolume,
     options: {
+      handler: BillRunsController.amendAuthorisedVolume,
       auth: {
         access: {
           scope: ['billing']
@@ -165,8 +165,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
-    handler: BillRunsController.submitAmendedAuthorisedVolume,
     options: {
+      handler: BillRunsController.submitAmendedAuthorisedVolume,
       auth: {
         access: {
           scope: ['billing']
@@ -177,8 +177,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
-    handler: BillRunsController.amendAdjustmentFactor,
     options: {
+      handler: BillRunsController.amendAdjustmentFactor,
       auth: {
         access: {
           scope: ['billing']
@@ -189,8 +189,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
-    handler: BillRunsController.submitAmendedAdjustmentFactor,
     options: {
+      handler: BillRunsController.submitAmendedAdjustmentFactor,
       auth: {
         access: {
           scope: ['billing']
@@ -201,8 +201,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
-    handler: BillRunsController.matchDetails,
     options: {
+      handler: BillRunsController.matchDetails,
       auth: {
         access: {
           scope: ['billing']
@@ -213,8 +213,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
-    handler: BillRunsController.amendBillableReturns,
     options: {
+      handler: BillRunsController.amendBillableReturns,
       auth: {
         access: {
           scope: ['billing']
@@ -225,8 +225,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
-    handler: BillRunsController.submitAmendedBillableReturns,
     options: {
+      handler: BillRunsController.submitAmendedBillableReturns,
       auth: {
         access: {
           scope: ['billing']
@@ -237,8 +237,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/preview-charge/{reviewChargeReferenceId}',
-    handler: BillRunsController.previewCharge,
     options: {
+      handler: BillRunsController.previewCharge,
       auth: {
         access: {
           scope: ['billing']
@@ -249,8 +249,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/send',
-    handler: BillRunsController.send,
     options: {
+      handler: BillRunsController.send,
       auth: {
         access: {
           scope: ['billing']
@@ -261,8 +261,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/send',
-    handler: BillRunsController.submitSend,
     options: {
+      handler: BillRunsController.submitSend,
       auth: {
         access: {
           scope: ['billing']
@@ -273,8 +273,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-runs/{id}/two-part-tariff',
-    handler: BillRunsController.twoPartTariff,
     options: {
+      handler: BillRunsController.twoPartTariff,
       auth: {
         access: {
           scope: ['billing']
