@@ -46,6 +46,7 @@ describe('View Licence Summary presenter', () => {
           caption: 'Purposes',
           data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
         },
+        purposesCount: 3,
         region: 'Avalon',
         sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
         startDate: '1 April 2019'
