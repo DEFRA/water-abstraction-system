@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
-const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter')
+const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service.js')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
+const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
 // Thing under test
-const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service')
+const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service.js')
 
 describe('View Licence service bills', () => {
   const auth = {}

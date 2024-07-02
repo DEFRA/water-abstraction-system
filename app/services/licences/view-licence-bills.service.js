@@ -5,10 +5,10 @@
  * @module ViewLicenceBillsService
  */
 
-const FetchLicenceBillsService = require('./fetch-licence-bills.service')
-const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter')
-const ViewLicenceService = require('./view-licence.service')
-const PaginatorPresenter = require('../../presenters/paginator.presenter')
+const FetchLicenceBillsService = require('./fetch-licence-bills.service.js')
+const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
