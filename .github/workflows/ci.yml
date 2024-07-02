@@ -77,7 +77,10 @@ jobs:
       # Alongside this, check we haven't accidentally left any `console.log()` while checking results.
       - name: Temporary log check
         run: |
-        ! grep -R 'console.log('
+          if grep -R 'console.log(' .; then
+            echo "console.log statements found. Please remove them."
+            exit 1
+          fi
 
       - name: Install Node
         uses: actions/setup-node@v4
