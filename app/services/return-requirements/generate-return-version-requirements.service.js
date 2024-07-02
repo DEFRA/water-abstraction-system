@@ -25,8 +25,9 @@ async function go (licenceId, requirements) {
   const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
+  let legacyId = await _getNextLegacyId()
+
   for (const requirement of requirements) {
-    const legacyId = await _getNextLegacyId()
     const requirementExternalId = await _generateRequirementExternalId(legacyId, licenceId)
 
     const returnRequirement = {
@@ -48,6 +49,8 @@ async function go (licenceId, requirements) {
       summer: requirement.returnsCycle === 'summer',
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff')
     }
+
+    legacyId++
 
     returnRequirements.push(returnRequirement)
   }
