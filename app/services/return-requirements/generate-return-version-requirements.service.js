@@ -23,7 +23,7 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  */
 async function go (licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)
-  const points = await FetchPointsService.go(licenceId)
+  const licencePointsData = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   let legacyId = await _getNextLegacyId()
@@ -44,7 +44,7 @@ async function go (licenceId, requirements) {
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       reportingFrequency: requirement.frequencyReported,
       returnsFrequency: 'year',
-      returnRequirementPoints: _generateReturnRequirementPoints(points, externalId, requirement.points),
+      returnRequirementPoints: _generateReturnRequirementPoints(licencePointsData, externalId, requirement.points),
       returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes),
       siteDescription: requirement.siteDescription,
       summer: requirement.returnsCycle === 'summer',
@@ -68,12 +68,12 @@ async function _fetchNaldRegionId (licenceId) {
   return naldRegionId
 }
 
-function _generateReturnRequirementPoints (points, requirementExternalId, requirementPoints) {
+function _generateReturnRequirementPoints (licencePointsData, requirementExternalId, requirementPoints) {
   const returnRequirementPoints = []
 
   requirementPoints.forEach((requirementPoint) => {
-    const point = points.find((point) => {
-      return point.ID === requirementPoint
+    const point = licencePointsData.find((licencePointData) => {
+      return licencePointData.ID === requirementPoint
     })
 
     const returnRequirementPoint = {
