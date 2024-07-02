@@ -22,8 +22,6 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
 
-  console.log('🚀🚀🚀 ~ session:', session)
-
   const formattedData = AbstractionPeriodPresenter.go(session, requirementIndex)
 
   return {
