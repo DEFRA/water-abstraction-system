@@ -33,7 +33,9 @@ async function go (sessionId, userId) {
 
   const returnVersionData = await GenerateReturnVersionService.go(session, userId)
 
-  PersistReturnVersionService.go(returnVersionData)
+  await PersistReturnVersionService.go(returnVersionData)
+
+  await SessionModel.query().deleteById(sessionId)
 
   return session.licence.id
 }
