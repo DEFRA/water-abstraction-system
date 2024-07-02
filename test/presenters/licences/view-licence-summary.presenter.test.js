@@ -25,12 +25,7 @@ describe('View Licence Summary presenter', () => {
       const result = ViewLicenceSummaryPresenter.go(licence)
 
       expect(result).to.equal({
-        abstractionAmounts: [
-          '180000.00 cubic metres per year',
-          '720.00 cubic metres per day',
-          '144.00 cubic metres per hour',
-          '40.00 cubic metres per second'
-        ],
+        abstractionAmounts: [],
         abstractionConditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
         abstractionPeriods: ['1 April to 31 October', '1 November to 31 March'],
         abstractionPeriodsAndPurposesLinkText: 'View details of your purposes, periods and amounts',
@@ -71,7 +66,7 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the there is at least one licence version purpose', () => {
+    describe('when the there is one licence version purpose', () => {
       beforeEach(() => {
         licence.licenceVersions[0].licenceVersionPurposes = [{
           id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
@@ -150,6 +145,14 @@ describe('View Licence Summary presenter', () => {
 
           expect(result.abstractionAmounts).to.include('40.00 cubic metres per second')
         })
+      })
+    })
+
+    describe('when the there are multiple licence version purposes', () => {
+      it('returns an empty array', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence)
+
+        expect(result.abstractionAmounts).to.be.empty()
       })
     })
   })
