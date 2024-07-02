@@ -30,23 +30,23 @@ async function go (licenceId, requirements) {
     const requirementExternalId = await _generateRequirementExternalId(legacyId, licenceId)
 
     const returnRequirement = {
-      returnsFrequency: 'year',
-      summer: requirement.returnsCycle === 'summer',
       abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
       abstractionPeriodStartMonth: requirement.abstractionPeriod['start-abstraction-period-month'],
       abstractionPeriodEndDay: requirement.abstractionPeriod['end-abstraction-period-day'],
       abstractionPeriodEndMonth: requirement.abstractionPeriod['end-abstraction-period-month'],
-      siteDescription: requirement.siteDescription,
-      legacyId,
-      externalId: requirementExternalId,
-      reportingFrequency: requirement.frequencyReported,
       collectionFrequency: requirement.frequencyCollected,
-      gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
-      reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
-      twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff'),
+      externalId: requirementExternalId,
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
+      gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
+      legacyId,
+      reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
+      reportingFrequency: requirement.frequencyReported,
+      returnsFrequency: 'year',
       returnRequirementPoints: _generateReturnRequirementPoints(points, requirementExternalId, requirement.points),
-      returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
+      returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes),
+      siteDescription: requirement.siteDescription,
+      summer: requirement.returnsCycle === 'summer',
+      twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff')
     }
 
     returnRequirements.push(returnRequirement)
@@ -65,12 +65,12 @@ function _generateReturnRequirementPoints (points, requirementExternalId, requir
 
     const returnRequirementPoint = {
       description: point.LOCAL_NAME,
+      externalId: `${requirementExternalId}:${point.ID}`,
+      naldPointId: point.ID,
       ngr1: point.NGR1_SHEET !== 'null' ? `${point.NGR1_SHEET} ${point.NGR1_EAST} ${point.NGR1_NORTH}` : null,
       ngr2: point.NGR2_SHEET !== 'null' ? `${point.NGR2_SHEET} ${point.NGR2_EAST} ${point.NGR2_NORTH}` : null,
       ngr3: point.NGR3_SHEET !== 'null' ? `${point.NGR3_SHEET} ${point.NGR3_EAST} ${point.NGR3_NORTH}` : null,
-      ngr4: point.NGR4_SHEET !== 'null' ? `${point.NGR4_SHEET} ${point.NGR4_EAST} ${point.NGR4_NORTH}` : null,
-      externalId: `${requirementExternalId}:${point.ID}`,
-      naldPointId: point.ID
+      ngr4: point.NGR4_SHEET !== 'null' ? `${point.NGR4_SHEET} ${point.NGR4_EAST} ${point.NGR4_NORTH}` : null
     }
 
     returnRequirementPoints.push(returnRequirementPoint)
@@ -92,8 +92,8 @@ async function _generateReturnRequirementPurposes (licenceId, purposeIds) {
       .first()
 
     const returnRequirementPurpose = {
-      purposeId,
       primaryPurposeId,
+      purposeId,
       secondaryPurposeId
     }
 

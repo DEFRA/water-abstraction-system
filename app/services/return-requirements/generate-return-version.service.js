@@ -41,15 +41,15 @@ function _calculateStartDate (session) {
 
 async function _generateReturnVersion (session, userId) {
   return {
-    licenceId: session.licence.id,
-    version: await _getNextVersionNumber(session.licence.id),
-    startDate: _calculateStartDate(session),
+    createdBy: userId,
     endDate: null,
-    status: 'current',
-    reason: session.reason,
+    licenceId: session.licence.id,
     multipleUpload: _multipleUpload(session?.additionalSubmissionOptions),
     notes: session?.note?.content,
-    createdBy: userId
+    reason: session.reason,
+    startDate: _calculateStartDate(session),
+    status: 'current',
+    version: await _getNextVersionNumber(session.licence.id)
   }
 }
 

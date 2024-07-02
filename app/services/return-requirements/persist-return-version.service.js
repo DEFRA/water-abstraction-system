@@ -31,22 +31,22 @@ async function _persistReturnRequirements (returnRequirements, returnVersionId) 
   for (const returnRequirement of returnRequirements) {
     const { id: returnRequirementId } = await ReturnRequirementModel.query()
       .insert({
-        returnVersionId,
-        returnsFrequency: returnRequirement.returnsFrequency,
-        summer: returnRequirement.summer,
         abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
         abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
         abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
         abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-        siteDescription: returnRequirement.siteDescription,
-        legacyId: returnRequirement.legacyId,
-        externalId: returnRequirement.externalId,
-        reportingFrequency: returnRequirement.reportingFrequency,
         collectionFrequency: returnRequirement.collectionFrequency,
+        externalId: returnRequirement.externalId,
+        fiftySixException: returnRequirement.fiftySixException,
         gravityFill: returnRequirement.gravityFill,
+        legacyId: returnRequirement.legacyId,
         reabstraction: returnRequirement.reabstraction,
-        twoPartTariff: returnRequirement.twoPartTariff,
-        fiftySixException: returnRequirement.fiftySixException
+        reportingFrequency: returnRequirement.reportingFrequency,
+        returnsFrequency: returnRequirement.returnsFrequency,
+        returnVersionId,
+        siteDescription: returnRequirement.siteDescription,
+        summer: returnRequirement.summer,
+        twoPartTariff: returnRequirement.twoPartTariff
       })
       .returning('id')
 
@@ -58,14 +58,14 @@ async function _persistReturnRequirements (returnRequirements, returnVersionId) 
 async function _persistReturnRequirementsPoints (returnRequirementPoints, returnRequirementId) {
   for (const returnRequirementPoint of returnRequirementPoints) {
     await ReturnRequirementPointModel.query().insert({
-      returnRequirementId,
       description: returnRequirementPoint.description,
+      externalId: returnRequirementPoint.externalId,
+      naldPointId: returnRequirementPoint.naldPointId,
       ngr1: returnRequirementPoint.ngr1,
       ngr2: returnRequirementPoint.ngr2,
       ngr3: returnRequirementPoint.ngr3,
       ngr4: returnRequirementPoint.ngr4,
-      externalId: returnRequirementPoint.externalId,
-      naldPointId: returnRequirementPoint.naldPointId
+      returnRequirementId
     })
   }
 }
@@ -73,10 +73,10 @@ async function _persistReturnRequirementsPoints (returnRequirementPoints, return
 async function _persistReturnRequirementsPurposes (returnRequirementPurposes, returnRequirementId) {
   for (const returnRequirementPurpose of returnRequirementPurposes) {
     await ReturnRequirementPurposeModel.query().insert({
-      returnRequirementId,
       primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
-      secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId,
-      purposeId: returnRequirementPurpose.purposeId
+      purposeId: returnRequirementPurpose.purposeId,
+      returnRequirementId,
+      secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId
     })
   }
 }
