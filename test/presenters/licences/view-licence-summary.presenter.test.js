@@ -789,7 +789,7 @@ describe('View Licence Summary presenter', () => {
   })
 
   describe('the "monitoringStations" property', () => {
-    describe('when the licence has no gauging stations', () => {
+    describe('when the licence is linked to no monitoring stations', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = []
       })
@@ -801,8 +801,8 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the licence has a gauging station', () => {
-      it('will return any array with the monitoring station details', async () => {
+    describe('when the licence is linked to a single monitoring station', () => {
+      it("will return an array with the monitoring station's details", async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([{
@@ -812,30 +812,47 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the licence has multiple gauging stations', () => {
-      beforeEach(() => {
-        licence.licenceGaugingStations.push({
-          id: '13f7504d-2750-4dd9-94dd-929e99e900a0',
-          gaugingStation: {
-            id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
-            label: 'AVALON FIRE STATION'
-          }
+    describe('when the licence is linked to multiple monitoring stations', () => {
+      describe('that are all different', () => {
+        beforeEach(() => {
+          licence.licenceGaugingStations.push({
+            id: '13f7504d-2750-4dd9-94dd-929e99e900a0',
+            gaugingStation: {
+              id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
+              label: 'AVALON FIRE STATION'
+            }
+          })
+        })
+
+        it('will return an array with each monitoring stations details', async () => {
+          const result = await ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.monitoringStations).to.equal([
+            { id: 'ac075651-4781-4e24-a684-b943b98607ca', label: 'MEVAGISSEY FIRE STATION' },
+            { id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f', label: 'AVALON FIRE STATION' }
+          ])
         })
       })
 
-      it('will return any array with the monitoring station details', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence)
+      describe('that are all the same station', () => {
+        beforeEach(() => {
+          licence.licenceGaugingStations.push({
+            id: 'e813542c-50a0-4497-be1a-00af3a810cac',
+            gaugingStation: {
+              id: 'ac075651-4781-4e24-a684-b943b98607ca',
+              label: 'MEVAGISSEY FIRE STATION'
+            }
+          })
+        })
 
-        expect(result.monitoringStations).to.equal([
-          {
+        it("will return an array with just the one monitoring station's details", async () => {
+          const result = await ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.monitoringStations).to.equal([{
             id: 'ac075651-4781-4e24-a684-b943b98607ca',
             label: 'MEVAGISSEY FIRE STATION'
-          },
-          {
-            id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
-            label: 'AVALON FIRE STATION'
-          }
-        ])
+          }])
+        })
       })
     })
   })

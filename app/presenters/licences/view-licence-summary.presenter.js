@@ -181,9 +181,21 @@ function _licenceHolder (licence) {
 }
 
 function _monitoringStations (licenceGaugingStations) {
-  return licenceGaugingStations.map((licenceGaugingStation) => {
-    return licenceGaugingStation.gaugingStation
-  })
+  const monitoringStations = []
+
+  for (const licenceGaugingStation of licenceGaugingStations) {
+    const alreadySeen = monitoringStations.some((monitoringStation) => {
+      return monitoringStation.id === licenceGaugingStation.gaugingStation.id
+    })
+
+    if (alreadySeen) {
+      continue
+    }
+
+    monitoringStations.push(licenceGaugingStation.gaugingStation)
+  }
+
+  return monitoringStations
 }
 
 function _points (permitLicence) {
