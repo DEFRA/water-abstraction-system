@@ -18,7 +18,7 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
 
-describe('View Licence Summary service', () => {
+describe.only('View Licence Summary service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let fetchLicenceResult
@@ -61,6 +61,7 @@ describe('View Licence Summary service', () => {
           }],
           licenceName: 'fake licence',
           purposes: null,
+          purposesCount: 0,
           region: 'Avalon',
           sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
           startDate: '1 April 2019'
