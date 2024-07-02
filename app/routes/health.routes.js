@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/health/airbrake',
-    handler: HealthController.airbrake,
     options: {
+      handler: HealthController.airbrake,
       app: {
         plainOutput: true
       },
@@ -17,8 +17,8 @@ const routes = [
   {
     method: 'GET',
     path: '/health/database',
-    handler: HealthController.database,
     options: {
+      handler: HealthController.database,
       app: {
         plainOutput: true
       },
@@ -28,8 +28,8 @@ const routes = [
   {
     method: 'GET',
     path: '/health/info',
-    handler: HealthController.info,
     options: {
+      handler: HealthController.info,
       auth: {
         // NOTE: this means any request credentials are attempted authentication, but if the credentials are invalid,
         // the request proceeds regardless of the authentication error. We do this so we can display the change
