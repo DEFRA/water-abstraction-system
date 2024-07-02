@@ -14,8 +14,6 @@ const SessionModel = require('../../models/session.model.js')
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
  *
- * > This service is work in progress. Some of the functionality described is yet to be implemented
- *
  * After fetching the session instance for the returns requirements journey in progress it validates that what the user
  * has setup can be persisted for the licence.
  *
