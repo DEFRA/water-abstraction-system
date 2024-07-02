@@ -32,7 +32,6 @@ async function go (sessionId, userId) {
   await _validateLicence(session.licence.id)
 
   const returnVersionData = await GenerateReturnVersionService.go(session, userId)
-  console.log('🚀 ~ go ~ returnVersionData:', returnVersionData)
 
   PersistReturnVersionService.go(returnVersionData)
 

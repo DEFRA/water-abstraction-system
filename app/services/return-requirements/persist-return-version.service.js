@@ -49,6 +49,35 @@ async function _persistReturnRequirements (returnRequirements, returnVersionId) 
         fiftySixException: returnRequirement.fiftySixException
       })
       .returning('id')
+
+    await _persistReturnRequirementsPoints(returnRequirement.returnRequirementPoints, returnRequirementId)
+    await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId)
+  }
+}
+
+async function _persistReturnRequirementsPoints (returnRequirementPoints, returnRequirementId) {
+  for (const returnRequirementPoint of returnRequirementPoints) {
+    await ReturnRequirementPointModel.query().insert({
+      returnRequirementId,
+      description: returnRequirementPoint.description,
+      ngr1: returnRequirementPoint.ngr1,
+      ngr2: returnRequirementPoint.ngr2,
+      ngr3: returnRequirementPoint.ngr3,
+      ngr4: returnRequirementPoint.ngr4,
+      externalId: returnRequirementPoint.externalId,
+      naldPointId: returnRequirementPoint.naldPointId
+    })
+  }
+}
+
+async function _persistReturnRequirementsPurposes (returnRequirementPurposes, returnRequirementId) {
+  for (const returnRequirementPurpose of returnRequirementPurposes) {
+    await ReturnRequirementPurposeModel.query().insert({
+      returnRequirementId,
+      primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
+      secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId,
+      purposeId: returnRequirementPurpose.purposeId
+    })
   }
 }
 
