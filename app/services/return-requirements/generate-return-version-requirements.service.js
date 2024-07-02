@@ -8,7 +8,7 @@
 const FetchPointsService = require('./fetch-points.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
-const ReturnVersionModel = require('../../models/return-version.model.js')
+const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
@@ -19,18 +19,18 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @param {String} licenceId - The UUID of the licence the requirements are for
  * @param {Object[]} requirements - The return requirements data from the session
  *
- * @returns {Promise<Object>[]} The new return version requirements data for a licence
+ * @returns {Promise<Object>} The new return version requirements data for a licence
  */
 async function go (licenceId, requirements) {
   const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   for (const requirement of requirements) {
-    const legacyId = await _getNextLegacyId(licenceId)
+    const legacyId = await _getNextLegacyId()
     const requirementExternalId = await _generateRequirementExternalId(legacyId, licenceId)
 
     const returnRequirement = {
-      returns_frequency: 'year',
+      returnsFrequency: 'year',
       summer: requirement.returnsCycle === 'summer',
       abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
       abstractionPeriodStartMonth: requirement.abstractionPeriod['start-abstraction-period-month'],
@@ -112,11 +112,9 @@ async function _generateRequirementExternalId (legacyId, licenceId) {
   return `${naldRegionId}:${legacyId}`
 }
 
-async function _getNextLegacyId (licenceId) {
-  const { lastLegacyId } = await ReturnVersionModel.query()
-    .max('returnRequirements.legacyId as lastLegacyId')
-    .innerJoinRelated('returnRequirements')
-    .where({ licenceId })
+async function _getNextLegacyId () {
+  const { lastLegacyId } = await ReturnRequirementModel.query()
+    .max('legacyId as lastLegacyId')
     .first()
 
   if (lastLegacyId) {

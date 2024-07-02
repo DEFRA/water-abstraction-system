@@ -8,6 +8,7 @@
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
+const PersistReturnVersionService = require('./persist-return-version.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -20,10 +21,10 @@ const SessionModel = require('../../models/session.model.js')
  *
  * If valid it converts the session data to return requirements records then deletes the session record.
  *
- * @param {string} sessionId - The UUID for return requirement setup session record
- * @param {number} userId - The id of the logged in user
+ * @param {String} sessionId - The UUID for return requirement setup session record
+ * @param {Number} userId - The id of the logged in user
  *
- * @returns {string} The licence ID
+ * @returns {String} The licence ID
  */
 async function go (sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)
@@ -32,6 +33,8 @@ async function go (sessionId, userId) {
 
   const returnVersionData = await GenerateReturnVersionService.go(session, userId)
   console.log('🚀 ~ go ~ returnVersionData:', returnVersionData)
+
+  PersistReturnVersionService.go(returnVersionData)
 
   return session.licence.id
 }

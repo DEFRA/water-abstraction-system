@@ -17,15 +17,15 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @param {string} session - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  *
- * @returns {string} The licence ID
+ * @returns {Promise<Object>} The new return version and requirement data for a licence
  */
 async function go (session, userId) {
   const returnVersion = await _generateReturnVersion(session, userId)
   const returnRequirements = await GenerateReturnVersionRequirementsService.go(session.licence.id, session.requirements)
 
   return {
-    returnVersion,
-    returnRequirements
+    returnRequirements,
+    returnVersion
   }
 }
 
