@@ -6,9 +6,9 @@
  */
 
 const FetchLicenceBillsService = require('./fetch-licence-bills.service.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
