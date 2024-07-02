@@ -19,7 +19,7 @@
 
     {% set row = [
       {
-        html: '<a href="/system/bills/' + bill.id + '">' + bill.billNumber + '</a>',
+        html: '<a href="/system/bills/' + bill.billId + '">' + bill.billNumber + '</a>',
         attributes: { 'data-test': 'bill-number-' + rowIndex }
       },
       {
@@ -27,15 +27,15 @@
         attributes: { 'data-test': 'bill-created-' + rowIndex }
       },
       {
-        html: '<a href="/billing-accounts/' + bill.accountId + '">' + bill.account + '</a>',
+        html: '<a href="/billing-accounts/' + bill.billingAccountId + '">' + bill.accountNumber + '</a>',
         attributes: { 'data-test': 'bill-account-' + rowIndex }
       },
       {
-        text: bill.runType,
+        text: bill.billRunType,
         attributes: { 'data-test': 'bill-type-' + rowIndex }
       },
       {
-        text: bill.financialYear,
+        text: bill.financialYearEnding,
         attributes: { 'data-test': 'bill-year-' + rowIndex },
         format: 'numeric'
       },
