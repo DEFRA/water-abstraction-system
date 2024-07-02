@@ -50,6 +50,7 @@ const init = async () => {
 
 const start = async () => {
   const server = await init()
+
   await server.start()
 
   return server
