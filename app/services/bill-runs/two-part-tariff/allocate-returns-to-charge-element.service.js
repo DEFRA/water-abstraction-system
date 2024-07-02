@@ -162,11 +162,13 @@ function _processCompletedReturns (chargeElement, matchingReturns, chargePeriod,
   matchingReturns.forEach((matchedReturn, i) => {
     // We don't allocate returns with issues
     if (_checkReturnForIssues(matchedReturn)) {
+      global.GlobalNotifier.omg('TwoPartTariffLicenceObject allocateReturnsToChargeElementService check return for issue flag :', matchedReturn)
       return
     }
 
     // If the element/reference is fully allocated there is no further processing to do for the return
     if (_fullyAllocated(chargeElement, chargeReference)) {
+      global.GlobalNotifier.omg('TwoPartTariffLicenceObject allocateReturnsToChargeElementService fully allocated flag :', chargeElement, chargeReference)
       return
     }
 
@@ -185,8 +187,11 @@ function _processDueReturns (chargeElement, matchingReturns, chargeReference) {
       return
     }
 
+    global.GlobalNotifier.omg('TwoPartTariffLicenceObject allocateReturnsToChargeElementService due returns flag :', matchedReturn)
+
     // If the element/reference is fully allocated there is no further processing to do for the return
     if (_fullyAllocated(chargeElement, chargeReference)) {
+      global.GlobalNotifier.omg('TwoPartTariffLicenceObject allocateReturnsToChargeElementService fully allocated due returns flag :', chargeElement, chargeReference)
       return
     }
 

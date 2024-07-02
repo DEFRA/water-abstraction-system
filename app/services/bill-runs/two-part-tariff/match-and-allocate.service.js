@@ -68,6 +68,8 @@ async function _process (licences, billingPeriod, billRun) {
     })
 
     DetermineLicenceIssuesService.go(licence)
+
+    global.GlobalNotifier.omg('TwoPartTariffLicenceObject :', licence)
     await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
   }
 }
