@@ -18,21 +18,38 @@ const FetchChargeVersionsService =
 
 describe('Fetch Charge Versions service', () => {
   const licenceId = generateUUID()
-  const startDate = new Date('2022-04-01')
+  // These dates were taken from a real licence where our first iteration was not showing the charge versions in the
+  // correct order!
+  const startDate = new Date('2018-04-01')
+  const endDate = new Date('2030-03-31')
 
-  let testRecordId
+  let currentChargeVersionId
+  let supersededChargeVersionId
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
       const changeReason = await ChangeReasonHelper.add()
 
-      const chargeVersion = await ChargeVersionHelper.add({
+      // Create multiple charge versions to ensure we get them in the right order
+      let chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate,
+        licenceId,
+        scheme: 'alcs',
+        startDate,
+        status: 'superseded'
+      })
+
+      supersededChargeVersionId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
         licenceId,
+        scheme: 'alcs',
         startDate
       })
 
-      testRecordId = chargeVersion.id
+      currentChargeVersionId = chargeVersion.id
     })
 
     it('returns the matching charge versions data', async () => {
@@ -44,10 +61,20 @@ describe('Fetch Charge Versions service', () => {
             description: 'Strategic review of charges (SRoC)'
           },
           endDate: null,
-          id: testRecordId,
+          id: currentChargeVersionId,
           licenceId,
           startDate,
           status: 'current'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate,
+          id: supersededChargeVersionId,
+          licenceId,
+          startDate,
+          status: 'superseded'
         }
       ])
     })
