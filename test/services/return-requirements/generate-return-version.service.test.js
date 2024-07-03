@@ -81,6 +81,7 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
       expect(result.returnVersion.startDate).to.equal(sessionData.licence.currentVersionStartDate)
       expect(result.returnVersion.status).to.equal('current')
+      // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
     })
   })
@@ -131,6 +132,7 @@ describe('Generate Return Version service', () => {
         new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
       )
       expect(result.returnVersion.status).to.equal('current')
+      // Version number is 1 because no previous return versions exist
       expect(result.returnVersion.version).to.equal(1)
     })
   })
