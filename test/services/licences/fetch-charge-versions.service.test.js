@@ -8,32 +8,52 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
-  let testRecord
+  const licenceId = generateUUID()
+  // These dates were taken from a real licence where our first iteration was not showing the charge versions in the
+  // correct order!
+  const startDate = new Date('2018-04-01')
+  const endDate = new Date('2030-03-31')
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let currentChargeVersionId
+  let supersededChargeVersionId
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
       const changeReason = await ChangeReasonHelper.add()
 
-      testRecord = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id
+      // Create multiple charge versions to ensure we get them in the right order
+      let chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate,
+        licenceId,
+        scheme: 'alcs',
+        startDate,
+        status: 'superseded'
       })
+
+      supersededChargeVersionId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        licenceId,
+        scheme: 'alcs',
+        startDate
+      })
+
+      currentChargeVersionId = chargeVersion.id
     })
 
     it('returns the matching charge versions data', async () => {
-      const result = await FetchChargeVersionsService.go(testRecord.licenceId)
+      const result = await FetchChargeVersionsService.go(licenceId)
 
       expect(result).to.equal([
         {
@@ -41,10 +61,20 @@ describe('Fetch Charge Versions service', () => {
             description: 'Strategic review of charges (SRoC)'
           },
           endDate: null,
-          id: testRecord.id,
-          licenceId: testRecord.licenceId,
-          startDate: testRecord.startDate,
+          id: currentChargeVersionId,
+          licenceId,
+          startDate,
           status: 'current'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate,
+          id: supersededChargeVersionId,
+          licenceId,
+          startDate,
+          status: 'superseded'
         }
       ])
     })
