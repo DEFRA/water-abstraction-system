@@ -31,6 +31,14 @@ class ReviewReturnModel extends BaseModel {
           to: 'reviewLicences.id'
         }
       },
+      returnLog: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'return-log.model',
+        join: {
+          from: 'reviewReturns.returnId',
+          to: 'returnLogs.id'
+        }
+      },
       reviewChargeElements: {
         relation: Model.ManyToManyRelation,
         modelClass: 'review-charge-element.model',
