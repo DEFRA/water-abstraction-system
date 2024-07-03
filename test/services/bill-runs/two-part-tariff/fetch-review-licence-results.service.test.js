@@ -91,7 +91,16 @@ describe('Fetch Review Licence Results Service', () => {
           chargeElementId: chargeElement.id
         })
 
-        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
+        const metadata = {
+          nald: {
+            periodEndDay: 30,
+            periodEndMonth: 9,
+            periodStartDay: 1,
+            periodStartMonth: 4
+          }
+        }
+
+        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata })
         reviewReturn = await ReviewReturnHelper.add({ returnId: returnLog.id, reviewLicenceId: reviewLicence.id })
 
         await ReviewChargeElementReturnHelper.add({
@@ -159,7 +168,13 @@ describe('Fetch Review Licence Results Service', () => {
               status: reviewChargeElement.status,
               createdAt: reviewChargeElement.createdAt,
               updatedAt: reviewChargeElement.updatedAt
-            }]
+            }],
+            returnLog: {
+              periodEndDay: returnLog.metadata.nald.periodEndDay,
+              periodEndMonth: returnLog.metadata.nald.periodEndMonth,
+              periodStartDay: returnLog.metadata.nald.periodStartDay,
+              periodStartMonth: returnLog.metadata.nald.periodStartMonth
+            }
           }],
           reviewChargeVersions: [{
             id: reviewChargeVersion.id,
