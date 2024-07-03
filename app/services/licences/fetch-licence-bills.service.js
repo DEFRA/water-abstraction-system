@@ -42,7 +42,12 @@ async function _fetch (licenceId, page) {
     .where('billRuns.status', 'sent')
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
-      builder.select(['batchType'])
+      builder.select([
+        'id',
+        'batchType',
+        'scheme',
+        'summer'
+      ])
     })
     .orderBy([
       { column: 'createdAt', order: 'desc' }
