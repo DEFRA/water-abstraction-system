@@ -13,6 +13,7 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
@@ -44,6 +45,7 @@ describe('Fetch Match Details service', () => {
       let chargeReference
       let reviewChargeVersion
       let reviewChargeReference
+      let returnLog
 
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
@@ -62,7 +64,17 @@ describe('Fetch Match Details service', () => {
         let reviewReturn
 
         beforeEach(async () => {
-          reviewReturn = await ReviewReturnHelper.add()
+          const metadata = {
+            nald: {
+              periodEndDay: 30,
+              periodEndMonth: 9,
+              periodStartDay: 1,
+              periodStartMonth: 4
+            }
+          }
+
+          returnLog = await ReturnLogHelper.add({ metadata })
+          reviewReturn = await ReviewReturnHelper.add({ returnId: returnLog.id })
 
           await ReviewChargeElementReturnHelper.add({
             reviewChargeElementId: reviewChargeElement.id,
@@ -114,7 +126,13 @@ describe('Fetch Match Details service', () => {
                 endDate: reviewReturn.endDate,
                 issues: reviewReturn.issues,
                 createdAt: reviewReturn.createdAt,
-                updatedAt: reviewReturn.updatedAt
+                updatedAt: reviewReturn.updatedAt,
+                returnLog: {
+                  periodEndDay: returnLog.metadata.nald.periodEndDay,
+                  periodEndMonth: returnLog.metadata.nald.periodEndMonth,
+                  periodStartDay: returnLog.metadata.nald.periodStartDay,
+                  periodStartMonth: returnLog.metadata.nald.periodStartMonth
+                }
               }
             ],
             chargeElement: {
