@@ -50,13 +50,14 @@ const init = async () => {
 
 const start = async () => {
   const server = await init()
+
   await server.start()
 
   return server
 }
 
 process.on('unhandledRejection', (err) => {
-  console.log(err)
+  console.error(err)
   process.exit(1)
 })
 

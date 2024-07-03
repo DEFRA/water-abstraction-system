@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'POST',
     path: '/billing-accounts/{billingAccountId}/change-address',
-    handler: BillingAccountsController.changeAddress,
     options: {
+      handler: BillingAccountsController.changeAddress,
       app: {
         plainOutput: true
       },
