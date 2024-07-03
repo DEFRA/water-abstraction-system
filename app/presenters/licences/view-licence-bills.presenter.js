@@ -5,7 +5,7 @@
  * @module ViewLicenceBillsPresenter
  */
 
-const { formatLongDate, formatMoney } = require('../base.presenter')
+const { formatBillRunType, formatLongDate, formatMoney } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
@@ -14,47 +14,55 @@ const { formatLongDate, formatMoney } = require('../base.presenter')
  */
 function go (bills) {
   return {
-    activeTab: 'bills',
-    bills: _formatBillsToTableRow(bills)
+    bills: _bills(bills)
   }
 }
 
-function _formatBatchType (batchType) {
-  return batchType.replace(/_/g, ' ')
+function _bills (bills) {
+  return bills.map((bill) => {
+    const {
+      accountNumber,
+      billingAccountId,
+      billRun,
+      createdAt,
+      credit,
+      financialYearEnding,
+      id: billId,
+      netAmount
+    } = bill
+
+    return {
+      accountNumber,
+      billingAccountId,
+      billId,
+      billNumber: _formatBillNumber(bill),
+      billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
+      credit,
+      dateCreated: formatLongDate(createdAt),
+      financialYearEnding,
+      total: formatMoney(netAmount)
+    }
+  })
 }
 
-function _formatBillNumberLabel (bill) {
+function _formatBillNumber (bill) {
   if (bill.invoiceNumber) {
     return bill.invoiceNumber
   }
+
   if (bill.deminimis) {
     return 'De minimis bill'
   }
+
   if (bill.legacyId) {
     return 'NALD revised bill'
   }
+
   if (bill.netAmount === 0) {
     return 'Zero value bill'
   }
 
-  return null
-}
-
-function _formatBillsToTableRow (bills) {
-  return bills.map((bill) => {
-    return {
-      billNumber: _formatBillNumberLabel(bill),
-      dateCreated: formatLongDate(new Date(bill.createdAt)),
-      account: bill.accountNumber,
-      runType: _formatBatchType(bill.billRun.batchType),
-      financialYear: bill.financialYearEnding,
-      total: formatMoney(bill.netAmount),
-      accountId: bill.billingAccountId,
-      id: bill.id,
-      legacyId: bill.legacyId,
-      credit: bill.credit
-    }
-  })
+  return ''
 }
 
 module.exports = {
