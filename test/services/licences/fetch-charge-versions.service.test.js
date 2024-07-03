@@ -8,32 +8,35 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
-  let testRecord
+  const licenceId = generateUUID()
+  const startDate = new Date('2022-04-01')
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let testRecordId
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
       const changeReason = await ChangeReasonHelper.add()
 
-      testRecord = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id
+      const chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        licenceId,
+        startDate
       })
+
+      testRecordId = chargeVersion.id
     })
 
     it('returns the matching charge versions data', async () => {
-      const result = await FetchChargeVersionsService.go(testRecord.licenceId)
+      const result = await FetchChargeVersionsService.go(licenceId)
 
       expect(result).to.equal([
         {
@@ -41,9 +44,9 @@ describe('Fetch Charge Versions service', () => {
             description: 'Strategic review of charges (SRoC)'
           },
           endDate: null,
-          id: testRecord.id,
-          licenceId: testRecord.licenceId,
-          startDate: testRecord.startDate,
+          id: testRecordId,
+          licenceId,
+          startDate,
           status: 'current'
         }
       ])
