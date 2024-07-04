@@ -10,13 +10,13 @@ const { formatLongDate } = require('../base.presenter.js')
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
  *
- * @param {module:ReturnLogModel[]} returnsData - The session for the return requirement journey
- * @param {boolean} hasRequirements - If the licence has return versions then it has requirements
+ * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
+ * @param {boolean} hasRequirements - True if the licence has return requirements else false
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (returnsData, hasRequirements) {
-  const returns = _returns(returnsData)
+function go (returnLogs, hasRequirements) {
+  const returns = _returns(returnLogs)
 
   const hasReturns = returns.length > 0
 
