@@ -137,7 +137,7 @@ describe('Return Requirements - Submit Start Date service', () => {
           anotherStartDateDay: null,
           anotherStartDateMonth: null,
           anotherStartDateYear: null,
-          backLink: '/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d#charge',
+          backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licenceVersionStartDate: '1 January 2023',
