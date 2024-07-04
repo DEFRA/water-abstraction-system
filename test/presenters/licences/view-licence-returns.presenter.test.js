@@ -69,6 +69,7 @@ describe('View Licence returns presenter', () => {
             description: 'empty description',
             dueDate: '28 November 2012',
             id: 'd5912c1d-3928-48e9-b2fc-e99a96d704a3',
+            link: '/returns/return?id=d5912c1d-3928-48e9-b2fc-e99a96d704a3',
             purpose: 'SPRAY IRRIGATION',
             reference: '1068',
             status: 'complete'
@@ -78,6 +79,7 @@ describe('View Licence returns presenter', () => {
             description: 'empty description',
             dueDate: '28 November 2012',
             id: '2fb6d1be-5d56-45de-a252-3c1e8a955991',
+            link: '/return/internal?returnId=2fb6d1be-5d56-45de-a252-3c1e8a955991',
             purpose: 'SPRAY IRRIGATION',
             reference: '1069',
             status: 'overdue'
