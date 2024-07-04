@@ -10,7 +10,7 @@
 {% else %}
 
   {% macro referenceColumn(return) %}
-    <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
+    <a href="{{ return.link }}" class="govuk-link">{{ return.reference }} </a>
     <p class="govuk-body-s"> {{ return.dates }}</p>
   {% endmacro %}
 

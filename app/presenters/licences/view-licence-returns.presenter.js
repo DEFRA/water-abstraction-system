@@ -35,13 +35,16 @@ function _formatPurpose (purpose) {
 
 function _formatReturnToTableRow (returns) {
   return returns.map((returnLog) => {
+    const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate, status } = returnLog
+
     return {
-      dates: `${formatLongDate(new Date(returnLog.startDate))} to ${formatLongDate(new Date(returnLog.endDate))}`,
-      description: returnLog.metadata.description,
-      dueDate: formatLongDate(new Date(returnLog.dueDate)),
+      dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
+      description: metadata.description,
+      dueDate: formatLongDate(new Date(dueDate)),
       id: returnLog.id,
-      purpose: _formatPurpose(returnLog.metadata.purposes),
-      reference: returnLog.returnReference,
+      link: _link(status, returnLogId),
+      purpose: _formatPurpose(metadata.purposes),
+      reference: returnReference,
       status: _formatStatus(returnLog)
     }
   })
@@ -58,12 +61,21 @@ function _formatStatus (returnLog) {
 
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
   const today = new Date()
+
   if (status === 'due' && dueDate < today) {
     return 'overdue'
   }
 
   // For all other cases we can just return the status and the return-status-tag macro will know how to display it
   return status
+}
+
+function _link (status, returnLogId) {
+  if (status === 'completed') {
+    return `/returns/return?id=${returnLogId}`
+  }
+
+  return `/return/internal?returnId=${returnLogId}`
 }
 
 function _noReturnsMessage (hasReturns, hasRequirements) {
