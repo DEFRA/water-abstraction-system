@@ -43,7 +43,8 @@ describe('Match Details presenter', () => {
             returnStatus: 'completed',
             returnTotal: '0 ML / 0 ML',
             issues: [''],
-            returnLink: '/returns/return?id=v1:1:01/57/14/1646:15584914:2022-04-01:2023-03-31'
+            returnLink: '/returns/return?id=v1:1:01/57/14/1646:15584914:2022-04-01:2023-03-31',
+            absPeriod: '1 April to 31 March'
           }
         ]
       })
@@ -93,7 +94,13 @@ function _reviewChargeElementData () {
         endDate: new Date('2022-05-06'),
         issues: null,
         createdAt: new Date('2024-04-02'),
-        updatedAt: new Date('2024-04-02')
+        updatedAt: new Date('2024-04-02'),
+        returnLog: {
+          periodEndDay: 31,
+          periodEndMonth: 3,
+          periodStartDay: 1,
+          periodStartMonth: 4
+        }
       }
     ],
     chargeElement: {

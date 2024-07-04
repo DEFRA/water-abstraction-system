@@ -8,7 +8,7 @@
 const Big = require('big.js')
 
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -166,13 +166,20 @@ function _matchedReturns (returnLogs) {
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: _returnTotal(returnLog),
           issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
-          returnLink: _returnLink(returnLog)
+          returnLink: _returnLink(returnLog),
+          absPeriod: _prepareAbsPeriod(returnLog.returnLog)
         }
       )
     }
   })
 
   return matchedReturns
+}
+
+function _prepareAbsPeriod (returnLog) {
+  const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog
+
+  return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 }
 
 function _prepareChargeData (licence, billRun) {
@@ -303,7 +310,8 @@ function _unmatchedReturns (returnLogs) {
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: `${returnLog.allocated} / ${returnLog.quantity} ML`,
           issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
-          returnLink: _returnLink(returnLog)
+          returnLink: _returnLink(returnLog),
+          absPeriod: _prepareAbsPeriod(returnLog.returnLog)
         }
       )
     }
