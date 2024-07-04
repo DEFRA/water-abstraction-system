@@ -68,20 +68,20 @@ describe('View Licence returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2012',
-            id: 'd5912c1d-3928-48e9-b2fc-e99a96d704a3',
             link: '/returns/return?id=d5912c1d-3928-48e9-b2fc-e99a96d704a3',
             purpose: 'SPRAY IRRIGATION',
             reference: '1068',
+            returnLogId: 'd5912c1d-3928-48e9-b2fc-e99a96d704a3',
             status: 'complete'
           },
           {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2012',
-            id: '2fb6d1be-5d56-45de-a252-3c1e8a955991',
             link: '/return/internal?returnId=2fb6d1be-5d56-45de-a252-3c1e8a955991',
             purpose: 'SPRAY IRRIGATION',
             reference: '1069',
+            returnLogId: '2fb6d1be-5d56-45de-a252-3c1e8a955991',
             status: 'overdue'
           }
         ]

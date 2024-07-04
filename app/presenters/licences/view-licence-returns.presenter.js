@@ -41,10 +41,10 @@ function _formatReturnToTableRow (returns) {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description,
       dueDate: formatLongDate(new Date(dueDate)),
-      id: returnLog.id,
       link: _link(status, returnLogId),
       purpose: _formatPurpose(metadata.purposes),
       reference: returnReference,
+      returnLogId,
       status: _formatStatus(returnLog)
     }
   })
