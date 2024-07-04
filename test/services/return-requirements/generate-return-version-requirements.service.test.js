@@ -21,9 +21,9 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const GenerateReturnVersionRequirementsService = require('../../../app/services/return-requirements/generate-return-version-requirements.service.js')
 
-describe('Generate Return Version Requirements service', () => {
+describe.only('Generate Return Version Requirements service', () => {
   let licenceId
-  let licencePointsData
+  let licencePoints
   let naldRegionId
   let purposeId
   let primaryPurposeId
@@ -45,49 +45,9 @@ describe('Generate Return Version Requirements service', () => {
   describe('when called with a single requirement, purpose and point with no exemptions set', () => {
     beforeEach(async () => {
       purposeId = generateUUID()
+      licencePoints = _generateLicencePoints()
 
-      licencePointsData = [
-        {
-          ID: '59140',
-          NGR1_EAST: '586',
-          NGR2_EAST: 'null',
-          NGR3_EAST: 'null',
-          NGR4_EAST: 'null',
-          LOCAL_NAME: 'SHERBORNE SPRINGS, LITTON',
-          NGR1_NORTH: '550',
-          NGR1_SHEET: 'ST',
-          NGR2_NORTH: 'null',
-          NGR2_SHEET: 'null',
-          NGR3_NORTH: 'null',
-          NGR3_SHEET: 'null',
-          NGR4_NORTH: 'null',
-          NGR4_SHEET: 'null'
-        }
-      ]
-
-      requirements = [
-        {
-          points: [
-            '59140'
-          ],
-          purposes: [
-            purposeId
-          ],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'Sherborne Spring, Litton',
-          abstractionPeriod: {
-            'end-abstraction-period-day': 31,
-            'end-abstraction-period-month': 3,
-            'start-abstraction-period-day': 1,
-            'start-abstraction-period-month': 4
-          },
-          frequencyReported: 'month',
-          frequencyCollected: 'week',
-          agreementsExceptions: [
-            'none'
-          ]
-        }
-      ]
+      requirements = _generateRequirements(purposeId)
 
       const { id: licenceVersionId } = await LicenceVersionHelper.add({ licenceId })
       const testLicenceVersionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId })
@@ -95,7 +55,7 @@ describe('Generate Return Version Requirements service', () => {
       primaryPurposeId = testLicenceVersionPurpose.primaryPurposeId
       secondaryPurposeId = testLicenceVersionPurpose.secondaryPurposeId
 
-      Sinon.stub(FetchPointsService, 'go').resolves(licencePointsData)
+      Sinon.stub(FetchPointsService, 'go').resolves(licencePoints)
     })
 
     it('generates the data required to populate the return requirements tables', async () => {
@@ -129,13 +89,13 @@ describe('Generate Return Version Requirements service', () => {
 
       // The data that will populate the "return_requirement_points" table
       expect(result[0].returnRequirementPoints).to.have.length(1)
-      expect(result[0].returnRequirementPoints[0].description).to.equal(licencePointsData[0].LOCAL_NAME)
+      expect(result[0].returnRequirementPoints[0].description).to.equal(licencePoints[0].LOCAL_NAME)
       expect(result[0].returnRequirementPoints[0].externalId).to.equal(
-        `${result[0].externalId}:${licencePointsData[0].ID}`
+        `${result[0].externalId}:${licencePoints[0].ID}`
       )
-      expect(result[0].returnRequirementPoints[0].naldPointId).to.equal(licencePointsData[0].ID)
+      expect(result[0].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].ID)
       expect(result[0].returnRequirementPoints[0].ngr1).to.equal(
-        `${licencePointsData[0].NGR1_SHEET} ${licencePointsData[0].NGR1_EAST} ${licencePointsData[0].NGR1_NORTH}`
+        `${licencePoints[0].NGR1_SHEET} ${licencePoints[0].NGR1_EAST} ${licencePoints[0].NGR1_NORTH}`
       )
       expect(result[0].returnRequirementPoints[0].ngr2).to.be.null()
       expect(result[0].returnRequirementPoints[0].ngr3).to.be.null()
@@ -149,3 +109,126 @@ describe('Generate Return Version Requirements service', () => {
     })
   })
 })
+
+function _generateLicencePoints (multiplePoints) {
+  const licencePoints = [
+    {
+      ID: '12345',
+      NGR1_EAST: '123',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'POINT NUMBER ONE',
+      NGR1_NORTH: '456',
+      NGR1_SHEET: 'ST',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    }
+  ]
+
+  const additionalPoints = [
+    {
+      ID: '99999',
+      NGR1_EAST: '990',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'POINT NUMBER TWO',
+      NGR1_NORTH: '991',
+      NGR1_SHEET: 'ZZ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    },
+    {
+      ID: '67890',
+      NGR1_EAST: '110',
+      NGR2_EAST: '220',
+      NGR3_EAST: '330',
+      NGR4_EAST: '440',
+      LOCAL_NAME: 'POINT NUMBER THREE',
+      NGR1_NORTH: '111',
+      NGR1_SHEET: 'AA',
+      NGR2_NORTH: '221',
+      NGR2_SHEET: 'BB',
+      NGR3_NORTH: '331',
+      NGR3_SHEET: 'CC',
+      NGR4_NORTH: '441',
+      NGR4_SHEET: 'DD'
+    }
+  ]
+
+  if (multiplePoints) {
+    licencePoints.push(...additionalPoints)
+  }
+
+  return licencePoints
+}
+
+function _generateRequirements (purposeOneId, purposeTwoId) {
+  const requirements = [
+    {
+      points: [
+        '12345'
+      ],
+      purposes: [
+        purposeOneId
+      ],
+      returnsCycle: 'winter-and-all-year',
+      siteDescription: 'Site Number One',
+      abstractionPeriod: {
+        'end-abstraction-period-day': 31,
+        'end-abstraction-period-month': 3,
+        'start-abstraction-period-day': 1,
+        'start-abstraction-period-month': 4
+      },
+      frequencyReported: 'month',
+      frequencyCollected: 'week',
+      agreementsExceptions: [
+        'none'
+      ]
+    }
+  ]
+
+  const additionalRequirements = {
+    points: [
+      '12345',
+      '67890'
+    ],
+    purposes: [
+      purposeOneId,
+      purposeTwoId
+    ],
+    returnsCycle: 'summer',
+    siteDescription: 'Site Number Two',
+    // NOTE: When abstraction periods are manually entered they are saved in the session as strings rather than integers
+    // The ORM isn't fussy and correctly converts the strings to integers when writing the data to the database
+    abstractionPeriod: {
+      'end-abstraction-period-day': '31',
+      'end-abstraction-period-month': '8',
+      'start-abstraction-period-day': '1',
+      'start-abstraction-period-month': '6'
+    },
+    frequencyReported: 'daily',
+    frequencyCollected: 'daily',
+    agreementsExceptions: [
+      'gravity-fill',
+      'transfer-re-abstraction-scheme',
+      'two-part-tariff',
+      '56-returns-exception'
+    ]
+  }
+
+  if (purposeTwoId) {
+    requirements.push(additionalRequirements)
+  }
+
+  return requirements
+}
