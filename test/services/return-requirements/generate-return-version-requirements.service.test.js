@@ -25,10 +25,7 @@ describe('Generate Return Version Requirements service', () => {
   let licenceId
   let licencePoints
   let naldRegionId
-  let purposeId
-  let primaryPurposeId
   let requirements
-  let secondaryPurposeId
 
   beforeEach(async () => {
     const testRegion = await RegionHelper.add()
@@ -43,8 +40,12 @@ describe('Generate Return Version Requirements service', () => {
   })
 
   describe('when called with a single requirement, purpose and point with no exemptions set', () => {
+    const purposeId = generateUUID()
+
+    let primaryPurposeId
+    let secondaryPurposeId
+
     beforeEach(async () => {
-      purposeId = generateUUID()
       licencePoints = _generateLicencePoints()
 
       requirements = _generateRequirements(purposeId)
@@ -106,6 +107,109 @@ describe('Generate Return Version Requirements service', () => {
       expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(primaryPurposeId)
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(purposeId)
       expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(secondaryPurposeId)
+    })
+  })
+
+  describe('when called with multiple requirements, purposes and points with all exemptions set', () => {
+    const purposeOneId = generateUUID()
+    const purposeTwoId = generateUUID()
+
+    let primaryPurposeOneId
+    let primaryPurposeTwoId
+    let secondaryPurposeOneId
+    let secondaryPurposeTwoId
+
+    beforeEach(async () => {
+      licencePoints = _generateLicencePoints('multiple')
+
+      requirements = _generateRequirements(purposeOneId, purposeTwoId)
+
+      const { id: licenceVersionId } = await LicenceVersionHelper.add({ licenceId })
+      const testLicenceVersionPurposeOne = await LicenceVersionPurposeHelper.add({
+        licenceVersionId,
+        purposeId: purposeOneId
+      })
+      const testLicenceVersionPurposeTwo = await LicenceVersionPurposeHelper.add({
+        licenceVersionId,
+        purposeId: purposeTwoId
+      })
+
+      primaryPurposeOneId = testLicenceVersionPurposeOne.primaryPurposeId
+      primaryPurposeTwoId = testLicenceVersionPurposeTwo.primaryPurposeId
+      secondaryPurposeOneId = testLicenceVersionPurposeOne.secondaryPurposeId
+      secondaryPurposeTwoId = testLicenceVersionPurposeTwo.secondaryPurposeId
+
+      Sinon.stub(FetchPointsService, 'go').resolves(licencePoints)
+    })
+
+    it('generates the data required to populate the return requirements tables', async () => {
+      const result = await GenerateReturnVersionRequirementsService.go(licenceId, requirements)
+
+      // The data that will populate the "return_requirements" table
+      expect(result).to.have.length(2)
+      expect(result[1].abstractionPeriodStartDay).to.equal(
+        requirements[1].abstractionPeriod['start-abstraction-period-day']
+      )
+      expect(result[1].abstractionPeriodStartMonth).to.equal(
+        requirements[1].abstractionPeriod['start-abstraction-period-month']
+      )
+      expect(result[1].abstractionPeriodEndDay).to.equal(
+        requirements[1].abstractionPeriod['end-abstraction-period-day']
+      )
+      expect(result[1].abstractionPeriodEndMonth).to.equal(
+        requirements[1].abstractionPeriod['end-abstraction-period-month']
+      )
+      expect(result[1].collectionFrequency).to.equal(requirements[1].frequencyCollected)
+      expect(result[1].externalId).to.equal(`${naldRegionId}:${result[1].legacyId}`)
+      expect(result[1].fiftySixException).to.be.true()
+      expect(result[1].gravityFill).to.be.true()
+      expect(result[1].legacyId).to.be.number()
+      expect(result[1].reabstraction).to.be.true()
+      expect(result[1].reportingFrequency).to.equal(requirements[1].frequencyReported)
+      expect(result[1].returnsFrequency).to.equal('year')
+      expect(result[1].siteDescription).to.equal(requirements[1].siteDescription)
+      expect(result[1].summer).to.be.true()
+      expect(result[1].twoPartTariff).to.be.true()
+
+      // The data that will populate the "return_requirement_points" table
+      expect(result[1].returnRequirementPoints).to.have.length(2)
+      expect(result[1].returnRequirementPoints[0].description).to.equal(licencePoints[0].LOCAL_NAME)
+      expect(result[1].returnRequirementPoints[1].description).to.equal(licencePoints[2].LOCAL_NAME)
+      expect(result[1].returnRequirementPoints[0].externalId).to.equal(
+        `${result[1].externalId}:${licencePoints[0].ID}`
+      )
+      expect(result[1].returnRequirementPoints[1].externalId).to.equal(
+        `${result[1].externalId}:${licencePoints[2].ID}`
+      )
+      expect(result[1].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].ID)
+      expect(result[1].returnRequirementPoints[1].naldPointId).to.equal(licencePoints[2].ID)
+      expect(result[1].returnRequirementPoints[0].ngr1).to.equal(
+        `${licencePoints[0].NGR1_SHEET} ${licencePoints[0].NGR1_EAST} ${licencePoints[0].NGR1_NORTH}`
+      )
+      expect(result[1].returnRequirementPoints[1].ngr1).to.equal(
+        `${licencePoints[2].NGR1_SHEET} ${licencePoints[2].NGR1_EAST} ${licencePoints[2].NGR1_NORTH}`
+      )
+      expect(result[1].returnRequirementPoints[0].ngr2).to.be.null()
+      expect(result[1].returnRequirementPoints[1].ngr2).to.equal(
+        `${licencePoints[2].NGR2_SHEET} ${licencePoints[2].NGR2_EAST} ${licencePoints[2].NGR2_NORTH}`
+      )
+      expect(result[1].returnRequirementPoints[0].ngr3).to.be.null()
+      expect(result[1].returnRequirementPoints[1].ngr3).to.equal(
+        `${licencePoints[2].NGR3_SHEET} ${licencePoints[2].NGR3_EAST} ${licencePoints[2].NGR3_NORTH}`
+      )
+      expect(result[1].returnRequirementPoints[0].ngr4).to.be.null()
+      expect(result[1].returnRequirementPoints[1].ngr4).to.equal(
+        `${licencePoints[2].NGR4_SHEET} ${licencePoints[2].NGR4_EAST} ${licencePoints[2].NGR4_NORTH}`
+      )
+
+      // The data that will populate the "return_requirement_purposes" table
+      expect(result[1].returnRequirementPurposes).to.have.length(2)
+      expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(primaryPurposeOneId)
+      expect(result[1].returnRequirementPurposes[1].primaryPurposeId).to.equal(primaryPurposeTwoId)
+      expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(purposeOneId)
+      expect(result[1].returnRequirementPurposes[1].purposeId).to.equal(purposeTwoId)
+      expect(result[1].returnRequirementPurposes[0].secondaryPurposeId).to.equal(secondaryPurposeOneId)
+      expect(result[1].returnRequirementPurposes[1].secondaryPurposeId).to.equal(secondaryPurposeTwoId)
     })
   })
 })
