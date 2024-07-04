@@ -46,6 +46,7 @@ describe('View Licence Returns service', () => {
         expect(result).to.equal({
           activeTab: 'returns',
           returns: [],
+          noReturnsMessage: 'No returns for this licence.',
           licenceName: 'fake licence',
           pagination: { numberOfPages: 1 }
         })
