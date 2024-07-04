@@ -174,6 +174,23 @@ describe('Index Bill Runs presenter', () => {
         })
       })
     })
+
+    describe('the "total" property', () => {
+      describe('when a bill run is two-part tariff', () => {
+        describe('and has the status "review"', () => {
+          beforeEach(() => {
+            billRuns[0].batchType = 'two_part_tariff'
+            billRuns[0].status = 'review'
+          })
+
+          it('does not return a pound value', () => {
+            const results = IndexBillRunsPresenter.go(billRuns)
+
+            expect(results[0].total).to.equal('')
+          })
+        })
+      })
+    })
   })
 })
 
