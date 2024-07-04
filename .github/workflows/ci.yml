@@ -39,6 +39,7 @@ jobs:
       POSTGRES_DB_TEST: wabs_system_test
       ENVIRONMENT: dev
       COOKIE_SECRET: 1a1028df-a2af-468a-929b-e3a274be1208
+      ENABLE_SYSTEM_LICENCE_VIEW: true
 
 
     # Service containers to run with `runner-job`
