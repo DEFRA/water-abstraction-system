@@ -5,6 +5,8 @@
  * @module FetchMatchDetailsService
  */
 
+const { ref } = require('objection')
+
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
@@ -36,6 +38,14 @@ async function _fetchReviewChargeElement (reviewChargeElementId) {
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
     .withGraphFetched('reviewReturns')
+    .withGraphFetched('reviewReturns.returnLog')
+    .modifyGraph('reviewReturns.returnLog', (builder) => {
+      builder.select([
+        ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
+        ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
+        ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
+        ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')])
+    })
     .withGraphFetched('chargeElement')
     .modifyGraph('chargeElement', (builder) => {
       builder.select([

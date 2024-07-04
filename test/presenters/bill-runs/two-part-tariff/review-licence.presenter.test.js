@@ -44,7 +44,8 @@ describe('Review Licence presenter', () => {
             purpose: 'Site description',
             returnTotal: '0 ML / 0 ML',
             issues: [''],
-            returnLink: '/returns/return?id=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31'
+            returnLink: '/returns/return?id=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
+            absPeriod: '1 April to 31 March'
           }
         ],
         unmatchedReturns: [
@@ -57,7 +58,8 @@ describe('Review Licence presenter', () => {
             returnId: 'v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
             returnLink: '/returns/return?id=v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
             returnStatus: 'completed',
-            returnTotal: '0 / 0 ML'
+            returnTotal: '0 / 0 ML',
+            absPeriod: '1 April to 31 March'
           }
         ],
         chargeData: [
@@ -286,7 +288,13 @@ function _licenceData () {
         chargeDatesOverlap: false,
         issues: '',
         status: 'ready'
-      }]
+      }],
+      returnLog: {
+        periodStartDay: 1,
+        periodStartMonth: 4,
+        periodEndDay: 31,
+        periodEndMonth: 3
+      }
     },
     {
       id: '4864f643-5c16-5ca9-8512-f63e1d4e58be',
@@ -310,7 +318,13 @@ function _licenceData () {
       startDate: new Date(' 2022-04-01'),
       endDate: new Date('2022-05-06'),
       issues: '',
-      reviewChargeElements: []
+      reviewChargeElements: [],
+      returnLog: {
+        periodStartDay: 1,
+        periodStartMonth: 4,
+        periodEndDay: 31,
+        periodEndMonth: 3
+      }
     }],
     reviewChargeVersions: [{
       id: '3de5634a-da26-4241-87e9-7248a4b83a69',

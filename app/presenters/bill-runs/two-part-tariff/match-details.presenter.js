@@ -6,7 +6,7 @@
  */
 
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run and review charge element and returns data for presentation
@@ -49,6 +49,12 @@ function _financialYear (financialYearEnding) {
   return `${startYear} to ${endYear}`
 }
 
+function _prepareAbsPeriod (returnLog) {
+  const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog
+
+  return formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
+}
+
 function _matchedReturns (reviewReturns) {
   const matchedReturns = []
 
@@ -64,7 +70,8 @@ function _matchedReturns (reviewReturns) {
       returnStatus: _returnStatus(returnLog),
       returnTotal,
       issues: returnLog.issues?.length > 0 ? returnLog.issues.split(', ') : [''],
-      returnLink
+      returnLink,
+      absPeriod: _prepareAbsPeriod(returnLog.returnLog)
     })
   })
 
