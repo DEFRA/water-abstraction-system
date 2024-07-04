@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
@@ -47,6 +49,7 @@ describe('Review Return model', () => {
         testReviewLicence = await ReviewLicenceHelper.add()
 
         const { id: reviewLicenceId } = testReviewLicence
+
         testRecord = await ReviewReturnHelper.add({ reviewLicenceId })
       })
 
@@ -70,6 +73,37 @@ describe('Review Return model', () => {
       })
     })
 
+    describe('when linking to return log', () => {
+      let testReturnLog
+
+      beforeEach(async () => {
+        testReturnLog = await ReturnLogHelper.add()
+
+        const { id: returnId } = testReturnLog
+
+        testRecord = await ReviewReturnHelper.add({ returnId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewReturnModel.query()
+          .innerJoinRelated('returnLog')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return log', async () => {
+        const result = await ReviewReturnModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnLog')
+
+        expect(result).to.be.instanceOf(ReviewReturnModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnLog).to.be.an.instanceOf(ReturnLogModel)
+        expect(result.returnLog).to.equal(testReturnLog)
+      })
+    })
+
     describe('when linking to review charge elements', () => {
       let testReviewChargeElements
 
@@ -80,6 +114,7 @@ describe('Review Return model', () => {
         testReviewChargeElements = []
         for (let i = 0; i < 2; i++) {
           const testReviewChargeElement = await ReviewChargeElementHelper.add()
+
           testReviewChargeElements.push(testReviewChargeElement)
 
           await ReviewChargeElementReturnHelper.add({

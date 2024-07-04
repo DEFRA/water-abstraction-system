@@ -61,6 +61,7 @@ describe('View Licence Summary service', () => {
           }],
           licenceName: 'fake licence',
           purposes: null,
+          purposesCount: 0,
           region: 'Avalon',
           sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
           startDate: '1 April 2019'

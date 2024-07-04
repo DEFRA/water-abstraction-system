@@ -9,24 +9,18 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
-const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter')
+const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service.js')
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
-const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service')
+const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service.js')
 
 describe('View Licence service bills', () => {
   const auth = {}
-  const page = 1
-  const pagination = { page }
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   beforeEach(() => {
     Sinon.stub(FetchLicenceBillsService, 'go').returns(_billsFetchService())
-    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
-    Sinon.stub(ViewLicenceBillsPresenter, 'go').returns(_billsPresenter())
     Sinon.stub(ViewLicenceService, 'go').resolves(_licence())
   })
 
@@ -43,7 +37,7 @@ describe('View Licence service bills', () => {
           activeTab: 'bills',
           bills: [],
           licenceName: 'fake licence',
-          pagination: { page: 1 }
+          pagination: { numberOfPages: 1 }
         })
       })
     })
@@ -52,13 +46,6 @@ describe('View Licence service bills', () => {
 
 function _licence () {
   return { licenceName: 'fake licence' }
-}
-
-function _billsPresenter () {
-  return {
-    bills: [],
-    activeTab: 'bills'
-  }
 }
 
 function _billsFetchService () {
