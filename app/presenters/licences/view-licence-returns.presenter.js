@@ -21,7 +21,6 @@ function go (returnLogs, hasRequirements) {
   const hasReturns = returns.length > 0
 
   return {
-    activeTab: 'returns',
     returns,
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements)
   }

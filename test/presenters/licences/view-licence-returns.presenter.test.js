@@ -61,7 +61,6 @@ describe('View Licence returns presenter', () => {
       const result = ViewLicenceReturnsPresenter.go(returnsData, hasRequirements)
 
       expect(result).to.equal({
-        activeTab: 'returns',
         noReturnsMessage: null,
         returns: [
           {
