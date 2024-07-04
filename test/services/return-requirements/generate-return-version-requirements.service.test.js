@@ -21,7 +21,7 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const GenerateReturnVersionRequirementsService = require('../../../app/services/return-requirements/generate-return-version-requirements.service.js')
 
-describe.only('Generate Return Version Requirements service', () => {
+describe('Generate Return Version Requirements service', () => {
   let licenceId
   let licencePoints
   let naldRegionId
