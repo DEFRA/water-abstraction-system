@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -126,6 +127,8 @@ describe('Return Requirements - Submit Start Date service', () => {
     describe('with an invalid payload', () => {
       beforeEach(async () => {
         payload = {}
+
+        Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
       })
 
       it('returns the page data for the view', async () => {
