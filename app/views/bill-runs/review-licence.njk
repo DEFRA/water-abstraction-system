@@ -179,6 +179,7 @@
       {% set action %}
         <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
+        <div>{{return.absPeriod}}</div>
       {% endset %}
 
       {% set returnSummary %}
@@ -231,7 +232,7 @@
       firstCellIsHeader: false,
       head: [
         {
-          text: 'Return reference and dates'
+          text: 'Return reference and periods'
         },
         {
           text: 'Purpose and description'
@@ -258,6 +259,7 @@
       {% set action %}
         <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
+        <div>{{return.absPeriod}}</div>
       {% endset %}
 
       {% set returnSummary %}
@@ -311,7 +313,7 @@
       firstCellIsHeader: false,
       head: [
         {
-          text: 'Return reference and dates'
+          text: 'Return reference and periods'
         },
         {
           text: 'Purpose and description'

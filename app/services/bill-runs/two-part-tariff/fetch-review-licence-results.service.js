@@ -5,6 +5,8 @@
  * @module FetchReviewLicenceResultsService
  */
 
+const { ref } = require('objection')
+
 const BillRunModel = require('../../../models/bill-run.model.js')
 const FetchBillingAccountService = require('../../fetch-billing-account.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
@@ -20,6 +22,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
   const licence = await _fetchReviewLicence(licenceId, billRunId)
+
   await _fetchBillingAccountDetails(licence[0].reviewChargeVersions)
 
   return { billRun, licence }
@@ -71,6 +74,14 @@ async function _fetchReviewLicence (licenceId, billRunId) {
     .withGraphFetched('reviewReturns.reviewChargeElements')
     .modifyGraph('reviewReturns', (builder) => {
       builder.orderBy('reviewReturns.startDate', 'asc')
+    })
+    .withGraphFetched('reviewReturns.returnLog')
+    .modifyGraph('reviewReturns.returnLog', (builder) => {
+      builder.select([
+        ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
+        ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
+        ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
+        ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')])
     })
     .withGraphFetched('reviewChargeVersions')
     .modifyGraph('reviewChargeVersions', (builder) => {
