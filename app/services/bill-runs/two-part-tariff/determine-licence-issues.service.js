@@ -172,8 +172,8 @@ function _licenceIssues (allElementIssues, allReturnIssues) {
   const allIssues = [...allElementIssues, ...allReturnIssues]
   const uniqueIssues = new Set(allIssues)
 
-  if (uniqueIssues.length > 1) {
-    uniqueIssues.push('Multiple issues')
+  if (uniqueIssues.size > 1) {
+    uniqueIssues.add('Multiple issues')
   }
 
   return [...uniqueIssues].sort()
