@@ -40,6 +40,7 @@ async function go (id, page, yar) {
     filterIssues,
     filterLicenceHolderNumber,
     filterLicenceStatus,
+    filterProgress,
     licences.results
   )
 
@@ -51,9 +52,7 @@ async function go (id, page, yar) {
 }
 
 function _getFilters (id, yar) {
-  // console.log('AHAHAHAH :', yar)
   const filters = yar.get(`review-${id}`)
-  console.log('AHHHHH :', filters)
   const filterIssues = filters?.filterIssues
   const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber
   const filterLicenceStatus = filters?.filterLicenceStatus

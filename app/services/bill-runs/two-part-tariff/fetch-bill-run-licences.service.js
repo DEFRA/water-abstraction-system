@@ -62,7 +62,6 @@ function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNum
   if (filterLicenceStatus) {
     reviewLicenceQuery.where('status', filterLicenceStatus)
   }
-  console.log('AHh :', filterProgress)
 
   if (filterProgress) {
     reviewLicenceQuery.where('progress', 'true')
@@ -104,6 +103,7 @@ function _filterIssues (filterIssues, reviewLicenceQuery) {
   // if only a single issue is checked in the filter then a string is returned, otherwise it is an array
   if (typeof filterIssues === 'string') {
     const lookupIssue = twoPartTariffReviewIssues[filterIssues]
+
     reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
   } else {
     // if we have got here then `issues` must be an array containing at least 2 records
