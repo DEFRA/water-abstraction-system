@@ -36,7 +36,7 @@ async function _fetch (licenceId) {
     })
     .orderBy([
       { column: 'startDate', order: 'desc' },
-      { column: 'endDate', order: 'desc' }
+      { column: 'versionNumber', order: 'desc' }
     ])
 }
 
