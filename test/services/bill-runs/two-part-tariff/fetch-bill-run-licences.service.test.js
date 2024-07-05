@@ -22,6 +22,7 @@ describe('Fetch Bill Run Licences service', () => {
   let filterIssues
   let filterLicenceHolderNumber
   let filterLicenceStatus
+  let filterProgress
   let page
   let testLicenceReady
   let testLicenceReview
@@ -46,6 +47,7 @@ describe('Fetch Bill Run Licences service', () => {
         billRunId: billRun.id,
         licenceHolder: 'Ready Licence Holder Ltd',
         status: 'ready',
+        progress: true,
         issues: 'Returns received late'
       })
 
@@ -64,6 +66,7 @@ describe('Fetch Bill Run Licences service', () => {
         filterIssues = undefined
         filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
+        filterProgress = undefined
 
         page = undefined
         // Set the default page size to 2 so all 2 records fit on a single page
@@ -75,6 +78,7 @@ describe('Fetch Bill Run Licences service', () => {
           billRun.id,
           filterIssues,
           filterLicenceHolderNumber,
+          filterProgress,
           filterLicenceStatus,
           page
         )
@@ -107,6 +111,7 @@ describe('Fetch Bill Run Licences service', () => {
           billRun.id,
           filterIssues,
           filterLicenceHolderNumber,
+          filterProgress,
           filterLicenceStatus,
           page
         )
@@ -131,6 +136,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -145,6 +151,7 @@ describe('Fetch Bill Run Licences service', () => {
           filterIssues = undefined
           filterLicenceHolderNumber = 'ready licence'
           filterLicenceStatus = undefined
+          filterProgress = undefined
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
@@ -152,6 +159,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -180,6 +188,7 @@ describe('Fetch Bill Run Licences service', () => {
           filterIssues = undefined
           filterLicenceHolderNumber = '02/200'
           filterLicenceStatus = undefined
+          filterProgress = undefined
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
@@ -187,6 +196,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -215,6 +225,7 @@ describe('Fetch Bill Run Licences service', () => {
           filterIssues = undefined
           filterLicenceHolderNumber = undefined
           filterLicenceStatus = 'review'
+          filterProgress = undefined
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
@@ -222,6 +233,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -245,11 +257,12 @@ describe('Fetch Bill Run Licences service', () => {
         })
       })
 
-      describe('and a single filter has been applied to the licence issues', () => {
+      describe('and a filter has been applied to the licence progress', () => {
         beforeEach(() => {
-          filterIssues = 'over-abstraction'
+          filterIssues = undefined
           filterLicenceHolderNumber = undefined
           filterLicenceStatus = undefined
+          filterProgress = true
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
@@ -257,6 +270,44 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
+            filterLicenceStatus,
+            page
+          )
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+
+          expect(result.licences.total).to.equal(1)
+          expect(result.licences.results).to.have.length(1)
+          expect(result.licences.results[0].licenceId).to.equal(testLicenceReady.licenceId)
+          expect(result.licences.results[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
+          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReady.licenceRef)
+          expect(result.licences.results[0].issues).to.equal('Returns received late')
+          expect(result.licences.results[0].status).to.equal('ready')
+        })
+      })
+
+      describe('and a single filter has been applied to the licence issues', () => {
+        beforeEach(() => {
+          filterIssues = 'over-abstraction'
+          filterLicenceHolderNumber = undefined
+          filterLicenceStatus = undefined
+          filterProgress = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(
+            billRun.id,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -285,6 +336,7 @@ describe('Fetch Bill Run Licences service', () => {
           filterIssues = ['abs-outside-period', 'returns-received-not-processed', 'returns-late']
           filterLicenceHolderNumber = undefined
           filterLicenceStatus = undefined
+          filterProgress = undefined
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
@@ -292,6 +344,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -325,6 +378,7 @@ describe('Fetch Bill Run Licences service', () => {
           filterIssues = undefined
           filterLicenceHolderNumber = 'ready licence'
           filterLicenceStatus = 'review'
+          filterProgress = undefined
         })
 
         it('returns details of the bill run and no licences', async () => {
@@ -332,6 +386,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -356,6 +411,7 @@ describe('Fetch Bill Run Licences service', () => {
         filterIssues = undefined
         filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
+        filterProgress = undefined
 
         // Set the default page size to 1 so the 2 records fit on 2 pages
         Sinon.replace(DatabaseConfig, 'defaultPageSize', 1)
@@ -371,6 +427,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -404,6 +461,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -437,6 +495,7 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
+            filterProgress,
             filterLicenceStatus,
             page
           )
@@ -466,6 +525,7 @@ describe('Fetch Bill Run Licences service', () => {
       filterLicenceStatus = undefined
       invalidBillRunId = '56db85ed-767f-4c83-8174-5ad9c80fd00d'
       page = undefined
+      filterProgress = undefined
     })
 
     it('returns no results', async () => {
@@ -473,6 +533,7 @@ describe('Fetch Bill Run Licences service', () => {
         invalidBillRunId,
         filterIssues,
         filterLicenceHolderNumber,
+        filterProgress,
         filterLicenceStatus,
         page
       )
