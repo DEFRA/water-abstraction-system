@@ -27,6 +27,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/history',
+    options: {
+      handler: LicencesController.viewHistory,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/set-up',
     options: {
       handler: LicencesController.viewSetUp,
