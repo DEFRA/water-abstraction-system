@@ -1,14 +1,29 @@
 'use strict'
 
 const { db } = require('../../../db/db.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 async function go (licenceId) {
-  const results = await _fetch(licenceId)
+  const licence = await _fetchLicence(licenceId)
+  const results = await _fetchEntries(licenceId)
 
-  return results.rows
+  return {
+    entries: results.rows,
+    licence
+  }
 }
 
-async function _fetch (licenceId) {
+async function _fetchLicence (licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select([
+      'id',
+      'licenceRef',
+      'createdAt'
+    ])
+}
+
+async function _fetchEntries (licenceId) {
   return db.raw(`
     SELECT
   *
@@ -17,7 +32,7 @@ FROM (
     l.id AS licence_id,
     'licence-version' AS entry_type,
     lv.id AS entry_id,
-    lv.status::text AS reason,
+    '' AS reason,
     lv.created_at,
     '' AS created_by,
     '' AS note,

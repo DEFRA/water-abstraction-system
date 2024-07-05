@@ -78,6 +78,8 @@ async function viewHistory (request, h) {
   const data = await ViewLicenceHistoryService.go(id, auth)
 
   return h.view('licences/history.njk', {
+    pageTitle: 'History',
+    activeNavBar: 'search',
     ...data
   })
 }

@@ -2,8 +2,12 @@
 
 const { formatLongDate } = require('../base.presenter.js')
 
-function go (entries) {
+function go (history) {
+  const { entries, licence } = history
+
   return {
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
     entries: _entries(entries)
   }
 }
@@ -14,7 +18,7 @@ function _entries (entries) {
       type: _type(entry.entry_type),
       reason: entry.reason,
       dateCreated: formatLongDate(entry.created_at),
-      createdBy: entry.created_by,
+      createdBy: entry.created_by ? entry.created_by : 'Migrated from NALD',
       note: entry.note,
       link: _link(entry.entry_type, entry.entry_id, entry.licence_id)
     }
@@ -42,7 +46,7 @@ function _link (entryType, entryId, licenceId) {
     return `/system/return-requirements/${entryId}/view`
   }
 
-  return `/system/licences/${licenceId}/summary`
+  return null
 }
 
 module.exports = {
