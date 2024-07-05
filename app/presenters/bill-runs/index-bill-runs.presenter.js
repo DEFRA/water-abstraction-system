@@ -43,10 +43,18 @@ function go (billRuns) {
       region: titleCase(region),
       scheme,
       status,
-      total: formatMoney(netTotal, true),
+      total: _formatTotal(status, batchType, netTotal),
       type: formatBillRunType(batchType, scheme, summer)
     }
   })
+}
+
+function _formatTotal (status, batchType, netTotal) {
+  if (status === 'review' && batchType === 'two_part_tariff') {
+    return ''
+  }
+
+  return formatMoney(netTotal, true)
 }
 
 function _link (billRunId, status, scheme) {
