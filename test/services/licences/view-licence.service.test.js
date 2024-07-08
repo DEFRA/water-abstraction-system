@@ -12,7 +12,6 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
-const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -22,14 +21,6 @@ describe('View Licence service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let fetchLicenceResult
-
-  beforeEach(() => {
-    Sinon.stub(FetchLicenceAbstractionConditionsService, 'go').resolves({
-      conditions: [],
-      purposeIds: [],
-      numberOfConditions: 0
-    })
-  })
 
   afterEach(() => {
     Sinon.restore()

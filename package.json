@@ -1,6 +1,6 @@
 {
   "name": "water-abstraction-system",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "System for managing water abstraction licences, including alerts, returns and billing",
   "homepage": "https://github.com/DEFRA/water-abstraction-team",
   "main": "index.js",
@@ -19,6 +19,7 @@
     "seed": "knex seed:run --knexfile knexfile.application.js",
     "lint": "eslint $(git diff --name-only --diff-filter=ACMRTUXB  | grep -E \"\\.(js)$\")",
     "lint:all": "eslint .",
+    "pretest": "NODE_ENV=test node db/clean.js",
     "test": "lab --silent-skips --shuffle",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"

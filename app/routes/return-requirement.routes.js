@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/abstraction-period/{requirementIndex}',
-    handler: ReturnRequirementsController.abstractionPeriod,
     options: {
+      handler: ReturnRequirementsController.abstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
@@ -18,8 +18,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/abstraction-period/{requirementIndex}',
-    handler: ReturnRequirementsController.submitAbstractionPeriod,
     options: {
+      handler: ReturnRequirementsController.submitAbstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
@@ -30,8 +30,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/add',
-    handler: ReturnRequirementsController.add,
     options: {
+      handler: ReturnRequirementsController.add,
       auth: {
         access: {
           scope: ['billing']
@@ -43,8 +43,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/additional-submission-options',
-    handler: ReturnRequirementsController.additionalSubmissionOptions,
     options: {
+      handler: ReturnRequirementsController.additionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
@@ -55,8 +55,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/additional-submission-options',
-    handler: ReturnRequirementsController.submitAdditionalSubmissionOptions,
     options: {
+      handler: ReturnRequirementsController.submitAdditionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
@@ -67,8 +67,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
-    handler: ReturnRequirementsController.agreementsExceptions,
     options: {
+      handler: ReturnRequirementsController.agreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
@@ -79,8 +79,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
-    handler: ReturnRequirementsController.submitAgreementsExceptions,
     options: {
+      handler: ReturnRequirementsController.submitAgreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
@@ -91,8 +91,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{licenceId}/approved',
-    handler: ReturnRequirementsController.approved,
     options: {
+      handler: ReturnRequirementsController.approved,
       auth: {
         access: {
           scope: ['billing']
@@ -103,8 +103,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/cancel',
-    handler: ReturnRequirementsController.cancel,
     options: {
+      handler: ReturnRequirementsController.cancel,
       auth: {
         access: {
           scope: ['billing']
@@ -115,8 +115,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/cancel',
-    handler: ReturnRequirementsController.submitCancel,
     options: {
+      handler: ReturnRequirementsController.submitCancel,
       auth: {
         access: {
           scope: ['billing']
@@ -127,8 +127,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/check',
-    handler: ReturnRequirementsController.check,
     options: {
+      handler: ReturnRequirementsController.check,
       auth: {
         access: {
           scope: ['billing']
@@ -139,8 +139,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/check',
-    handler: ReturnRequirementsController.submitCheck,
     options: {
+      handler: ReturnRequirementsController.submitCheck,
       auth: {
         access: {
           scope: ['billing']
@@ -151,8 +151,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/delete-note',
-    handler: ReturnRequirementsController.deleteNote,
     options: {
+      handler: ReturnRequirementsController.deleteNote,
       auth: {
         access: {
           scope: ['billing']
@@ -163,8 +163,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/existing',
-    handler: ReturnRequirementsController.existing,
     options: {
+      handler: ReturnRequirementsController.existing,
       auth: {
         access: {
           scope: ['billing']
@@ -175,8 +175,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/existing',
-    handler: ReturnRequirementsController.submitExisting,
     options: {
+      handler: ReturnRequirementsController.submitExisting,
       auth: {
         access: {
           scope: ['billing']
@@ -187,8 +187,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/frequency-collected/{requirementIndex}',
-    handler: ReturnRequirementsController.frequencyCollected,
     options: {
+      handler: ReturnRequirementsController.frequencyCollected,
       auth: {
         access: {
           scope: ['billing']
@@ -199,8 +199,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/frequency-collected/{requirementIndex}',
-    handler: ReturnRequirementsController.submitFrequencyCollected,
     options: {
+      handler: ReturnRequirementsController.submitFrequencyCollected,
       auth: {
         access: {
           scope: ['billing']
@@ -211,8 +211,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/frequency-reported/{requirementIndex}',
-    handler: ReturnRequirementsController.frequencyReported,
     options: {
+      handler: ReturnRequirementsController.frequencyReported,
       auth: {
         access: {
           scope: ['billing']
@@ -223,8 +223,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/frequency-reported/{requirementIndex}',
-    handler: ReturnRequirementsController.submitFrequencyReported,
     options: {
+      handler: ReturnRequirementsController.submitFrequencyReported,
       auth: {
         access: {
           scope: ['billing']
@@ -235,8 +235,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/no-returns-required',
-    handler: ReturnRequirementsController.noReturnsRequired,
     options: {
+      handler: ReturnRequirementsController.noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -247,8 +247,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/no-returns-required',
-    handler: ReturnRequirementsController.submitNoReturnsRequired,
     options: {
+      handler: ReturnRequirementsController.submitNoReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -259,8 +259,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/note',
-    handler: ReturnRequirementsController.note,
     options: {
+      handler: ReturnRequirementsController.note,
       auth: {
         access: {
           scope: ['billing']
@@ -271,8 +271,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/note',
-    handler: ReturnRequirementsController.submitNote,
     options: {
+      handler: ReturnRequirementsController.submitNote,
       auth: {
         access: {
           scope: ['billing']
@@ -283,8 +283,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/points/{requirementIndex}',
-    handler: ReturnRequirementsController.points,
     options: {
+      handler: ReturnRequirementsController.points,
       auth: {
         access: {
           scope: ['billing']
@@ -295,8 +295,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/points/{requirementIndex}',
-    handler: ReturnRequirementsController.submitPoints,
     options: {
+      handler: ReturnRequirementsController.submitPoints,
       auth: {
         access: {
           scope: ['billing']
@@ -307,8 +307,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/purpose/{requirementIndex}',
-    handler: ReturnRequirementsController.purpose,
     options: {
+      handler: ReturnRequirementsController.purpose,
       auth: {
         access: {
           scope: ['billing']
@@ -319,8 +319,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/purpose/{requirementIndex}',
-    handler: ReturnRequirementsController.submitPurpose,
     options: {
+      handler: ReturnRequirementsController.submitPurpose,
       auth: {
         access: {
           scope: ['billing']
@@ -331,8 +331,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.reason,
     options: {
+      handler: ReturnRequirementsController.reason,
       auth: {
         access: {
           scope: ['billing']
@@ -343,8 +343,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.submitReason,
     options: {
+      handler: ReturnRequirementsController.submitReason,
       auth: {
         access: {
           scope: ['billing']
@@ -355,8 +355,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
-    handler: ReturnRequirementsController.remove,
     options: {
+      handler: ReturnRequirementsController.remove,
       auth: {
         access: {
           scope: ['billing']
@@ -367,8 +367,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
-    handler: ReturnRequirementsController.submitRemove,
     options: {
+      handler: ReturnRequirementsController.submitRemove,
       auth: {
         access: {
           scope: ['billing']
@@ -379,8 +379,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
-    handler: ReturnRequirementsController.returnsCycle,
     options: {
+      handler: ReturnRequirementsController.returnsCycle,
       auth: {
         access: {
           scope: ['billing']
@@ -391,8 +391,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
-    handler: ReturnRequirementsController.submitReturnsCycle,
     options: {
+      handler: ReturnRequirementsController.submitReturnsCycle,
       auth: {
         access: {
           scope: ['billing']
@@ -403,8 +403,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/setup',
-    handler: ReturnRequirementsController.setup,
     options: {
+      handler: ReturnRequirementsController.setup,
       auth: {
         access: {
           scope: ['billing']
@@ -415,8 +415,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/setup',
-    handler: ReturnRequirementsController.submitSetup,
     options: {
+      handler: ReturnRequirementsController.submitSetup,
       auth: {
         access: {
           scope: ['billing']
@@ -427,8 +427,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/site-description/{requirementIndex}',
-    handler: ReturnRequirementsController.siteDescription,
     options: {
+      handler: ReturnRequirementsController.siteDescription,
       auth: {
         access: {
           scope: ['billing']
@@ -439,8 +439,8 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/site-description/{requirementIndex}',
-    handler: ReturnRequirementsController.submitSiteDescription,
     options: {
+      handler: ReturnRequirementsController.submitSiteDescription,
       auth: {
         access: {
           scope: ['billing']
@@ -451,8 +451,8 @@ const routes = [
   {
     method: 'GET',
     path: '/return-requirements/{sessionId}/start-date',
-    handler: ReturnRequirementsController.startDate,
     options: {
+      handler: ReturnRequirementsController.startDate,
       auth: {
         access: {
           scope: ['billing']
@@ -462,8 +462,20 @@ const routes = [
   }, {
     method: 'POST',
     path: '/return-requirements/{sessionId}/start-date',
-    handler: ReturnRequirementsController.submitStartDate,
     options: {
+      handler: ReturnRequirementsController.submitStartDate,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{returnVersionId}/view',
+    options: {
+      handler: ReturnRequirementsController.view,
       auth: {
         access: {
           scope: ['billing']

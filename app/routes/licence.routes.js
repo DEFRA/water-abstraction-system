@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/bills',
-    handler: LicencesController.viewBills,
     options: {
+      handler: LicencesController.viewBills,
       auth: {
         access: {
           scope: ['billing']
@@ -28,8 +28,8 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/set-up',
-    handler: LicencesController.viewSetUp,
     options: {
+      handler: LicencesController.viewSetUp,
       auth: {
         access: {
           scope: ['view_charge_versions']
@@ -50,8 +50,8 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/no-returns-required',
-    handler: LicencesController.noReturnsRequired,
     options: {
+      handler: LicencesController.noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -62,8 +62,8 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/returns-required',
-    handler: LicencesController.returnsRequired,
     options: {
+      handler: LicencesController.returnsRequired,
       auth: {
         access: {
           scope: ['billing']

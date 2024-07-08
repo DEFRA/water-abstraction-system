@@ -18,6 +18,8 @@ const LicenceGaugingStationHelper = require('../../support/helpers/licence-gaugi
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -33,6 +35,8 @@ describe('Fetch Licence Summary service', () => {
   let licenceHolderSeed
   let licenceVersion
   let licenceVersionPurpose
+  let licenceVersionPurposeCondition
+  let licenceVersionPurposeConditionType
   let permitLicence
   let purpose
   let region
@@ -57,10 +61,16 @@ describe('Fetch Licence Summary service', () => {
     })
 
     purpose = await PurposeHelper.add()
+    licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.add()
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,
       purposeId: purpose.id
+    })
+
+    licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
     })
 
     licenceHolderSeed = await LicenceHolderSeeder.seed(licence.licenceRef)
@@ -118,16 +128,29 @@ describe('Fetch Licence Summary service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            startDate: new Date('2022-05-01'),
+            status: 'current',
             licenceVersionPurposes: [{
               id: licenceVersionPurpose.id,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 1,
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
+              annualQuantity: null,
+              dailyQuantity: null,
+              hourlyQuantity: null,
+              instantQuantity: null,
               purpose: {
                 id: purpose.id,
                 description: 'Spray Irrigation - Storage'
-              }
+              },
+              licenceVersionPurposeConditions: [{
+                id: licenceVersionPurposeCondition.id,
+                licenceVersionPurposeConditionType: {
+                  id: licenceVersionPurposeConditionType.id,
+                  displayTitle: 'Link between split licences'
+                }
+              }]
             }]
           }
         ],
@@ -155,8 +178,7 @@ describe('Fetch Licence Summary service', () => {
           licenceName: 'Licence Holder Ltd',
           registeredTo: 'grace.hopper@example.com',
           role: 'primary_user'
-        },
-        licenceHolder: 'Licence Holder Ltd'
+        }
       })
     })
   })

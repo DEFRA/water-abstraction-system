@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../app/services/return-requirements/initiate-session.service.js')
@@ -22,19 +22,19 @@ describe('Return Requirements - Initiate Session service', () => {
   let journey
   let licence
   let returnVersionId
+  let licenceRef
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
+    // 'ends' information
+    licenceRef = generateLicenceRef()
+    licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef })
   })
 
   describe('when called', () => {
     describe('and the licence exists', () => {
       beforeEach(async () => {
         journey = 'returns-required'
-
-        // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
-        // 'ends' information
-        licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef: '01/ABC' })
 
         // Create two licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
@@ -59,7 +59,7 @@ describe('Return Requirements - Initiate Session service', () => {
             id: licence.id,
             currentVersionStartDate: new Date('2022-05-01'),
             endDate: new Date('2024-08-10'),
-            licenceRef: '01/ABC',
+            licenceRef,
             licenceHolder: 'Licence Holder Ltd',
             returnVersions: [],
             startDate: new Date('2022-01-01')
@@ -74,6 +74,7 @@ describe('Return Requirements - Initiate Session service', () => {
           const returnVersion = await ReturnVersionHelper.add({
             licenceId: licence.id, startDate: new Date('2022-05-01')
           })
+
           returnVersionId = returnVersion.id
 
           await ReturnRequirementHelper.add({ returnVersionId })

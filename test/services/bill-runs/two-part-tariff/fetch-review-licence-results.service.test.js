@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
@@ -61,6 +62,7 @@ describe('Fetch Review Licence Results Service', () => {
       let returnLog
       let reviewReturn
       let purpose
+      let chargeCategory
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
@@ -72,7 +74,11 @@ describe('Fetch Review Licence Results Service', () => {
           chargeVersionId: chargeVersion.id
         })
 
-        chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
+        chargeCategory = await ChargeCategoryHelper.add()
+        chargeReference = await ChargeReferenceHelper.add({
+          chargeVersionId: chargeVersion.id,
+          chargeCategoryId: chargeCategory.id
+        })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,
           chargeReferenceId: chargeReference.id
@@ -85,7 +91,16 @@ describe('Fetch Review Licence Results Service', () => {
           chargeElementId: chargeElement.id
         })
 
-        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
+        const metadata = {
+          nald: {
+            periodEndDay: 30,
+            periodEndMonth: 9,
+            periodStartDay: 1,
+            periodStartMonth: 4
+          }
+        }
+
+        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata })
         reviewReturn = await ReviewReturnHelper.add({ returnId: returnLog.id, reviewLicenceId: reviewLicence.id })
 
         await ReviewChargeElementReturnHelper.add({
@@ -153,7 +168,13 @@ describe('Fetch Review Licence Results Service', () => {
               status: reviewChargeElement.status,
               createdAt: reviewChargeElement.createdAt,
               updatedAt: reviewChargeElement.updatedAt
-            }]
+            }],
+            returnLog: {
+              periodEndDay: returnLog.metadata.nald.periodEndDay,
+              periodEndMonth: returnLog.metadata.nald.periodEndMonth,
+              periodStartDay: returnLog.metadata.nald.periodStartDay,
+              periodStartMonth: returnLog.metadata.nald.periodStartMonth
+            }
           }],
           reviewChargeVersions: [{
             id: reviewChargeVersion.id,
@@ -182,7 +203,10 @@ describe('Fetch Review Licence Results Service', () => {
               updatedAt: reviewChargeReference.updatedAt,
               chargeReference: {
                 chargeCategoryId: chargeReference.chargeCategoryId,
-                chargeCategory: null
+                chargeCategory: {
+                  reference: chargeCategory.reference,
+                  shortDescription: chargeCategory.shortDescription
+                }
               },
               reviewChargeElements: [{
                 id: reviewChargeElement.id,

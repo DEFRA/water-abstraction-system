@@ -8,32 +8,76 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
-  let testRecord
+  const licenceId = generateUUID()
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let currentChargeVersionWithEndDateId
+  let currentChargeVersionWithoutEndDateId
+  let supersededChargeVersionWithEndDateId
+  let supersededChargeVersionWithoutEndDateId
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
       const changeReason = await ChangeReasonHelper.add()
 
-      testRecord = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id
+      // Create multiple charge versions to ensure we get them in the right order
+      let chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: new Date('2030-03-31'),
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2018-04-01'),
+        status: 'superseded',
+        versionNumber: 1
       })
+
+      supersededChargeVersionWithEndDateId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: null,
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2021-04-01'),
+        status: 'superseded',
+        versionNumber: 3
+      })
+
+      supersededChargeVersionWithoutEndDateId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: null,
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2021-04-01'),
+        versionNumber: 4
+      })
+
+      currentChargeVersionWithoutEndDateId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: new Date('2021-03-31'),
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2018-04-01'),
+        versionNumber: 2
+      })
+
+      currentChargeVersionWithEndDateId = chargeVersion.id
     })
 
     it('returns the matching charge versions data', async () => {
-      const result = await FetchChargeVersionsService.go(testRecord.licenceId)
+      const result = await FetchChargeVersionsService.go(licenceId)
 
       expect(result).to.equal([
         {
@@ -41,10 +85,40 @@ describe('Fetch Charge Versions service', () => {
             description: 'Strategic review of charges (SRoC)'
           },
           endDate: null,
-          id: testRecord.id,
-          licenceId: testRecord.licenceId,
-          startDate: testRecord.startDate,
+          id: currentChargeVersionWithoutEndDateId,
+          licenceId,
+          startDate: new Date('2021-04-01'),
           status: 'current'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: null,
+          id: supersededChargeVersionWithoutEndDateId,
+          licenceId,
+          startDate: new Date('2021-04-01'),
+          status: 'superseded'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: new Date('2021-03-31'),
+          id: currentChargeVersionWithEndDateId,
+          licenceId,
+          startDate: new Date('2018-04-01'),
+          status: 'current'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: new Date('2030-03-31'),
+          id: supersededChargeVersionWithEndDateId,
+          licenceId,
+          startDate: new Date('2018-04-01'),
+          status: 'superseded'
         }
       ])
     })

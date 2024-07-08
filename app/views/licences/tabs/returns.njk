@@ -3,38 +3,42 @@
 
 {% from "macros/return-status-tag.njk" import statusTag %}
 
+{% macro referenceColumn(return) %}
+  <a href="{{ return.link }}" class="govuk-link">{{ return.reference }} </a>
+  <p class="govuk-body-s">{{ return.dates }}</p>
+{% endmacro %}
+
 <h2 class="govuk-heading-l">Returns</h2>
 
 {% if noReturnsMessage %}
-  <p> {{ noReturnsMessage }} </p>
+  <p>{{ noReturnsMessage }}</p>
 {% else %}
-
-  {% macro referenceColumn(return) %}
-    <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
-    <p class="govuk-body-s"> {{ return.dates }}</p>
-  {% endmacro %}
-
-  {% set returnRows = [] %}
+  {% set tableRows = [] %}
 
   {% for returnItem in  returns %}
-    {% set returnStatusTag %}
-      {{ statusTag(returnItem.status, true) }}
-    {% endset %}
+    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+    {% set rowIndex = loop.index0 %}
 
-    {% set returnRows = (returnRows.push([
+    {% set row = [
       {
-        html: referenceColumn(returnItem)
+        html: referenceColumn(returnItem),
+        attributes: { 'data-test': 'return-reference-' + rowIndex }
       },
       {
-        html:  returnItem.purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>"
+        html:  returnItem.purpose +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
+        attributes: { 'data-test': 'return-purpose-' + rowIndex }
       },
       {
-        text: returnItem.dueDate
+        text: returnItem.dueDate,
+        attributes: { 'data-test': 'return-due-date-' + rowIndex }
       },
       {
-        html: returnStatusTag
+        html: statusTag(returnItem.status, true),
+        attributes: { 'data-test': 'return-status-' + rowIndex }
       }
-    ]), returnRows) %}
+    ] %}
+
+    {% set tableRows = (tableRows.push(row), tableRows) %}
   {% endfor %}
 
   {{ govukTable({
@@ -52,10 +56,10 @@
         text: 'Status'
       }
     ],
-    rows: returnRows
+    rows: tableRows
   }) }}
-{% endif %}
 
-{% if pagination.numberOfPages > 1 %}
-  {{ govukPagination(pagination.component) }}
+  {% if pagination.numberOfPages > 1 %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
 {% endif %}

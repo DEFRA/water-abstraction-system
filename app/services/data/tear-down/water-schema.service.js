@@ -25,6 +25,7 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirement_points DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
   ALTER TABLE water.return_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.scheduled_notification DISABLE TRIGGER ALL;
@@ -177,6 +178,18 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."return_requirement_points" AS "rrpt"
+      USING "water"."return_requirements" AS "rr",
+    "water"."return_versions" AS "rv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "rrpt"."return_requirement_id" = "rr"."return_requirement_id"
+    AND "rr"."return_version_id" = "rv"."return_version_id"
+    AND "rv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."return_requirements" AS "rr"
       USING "water"."return_versions" AS "rv",
     "water"."licences" AS "l"
@@ -293,6 +306,7 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirement_points ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements ENABLE TRIGGER ALL;
   ALTER TABLE water.return_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL;

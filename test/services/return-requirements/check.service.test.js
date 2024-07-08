@@ -67,15 +67,22 @@ describe('Return Requirements - Check service', () => {
         activeNavBar: 'search',
         additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
-        note: null,
+        note: {
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
+        },
         notification: undefined,
         pageTitle: 'Check the requirements for returns for Turbo Kid',
         reason: 'Major change',
         reasonLink: `/system/return-requirements/${session.id}/reason`,
         requirements: [],
         returnsRequired: true,
-        startDate: '1 January 2023',
-        userEmail: 'No notes added'
+        startDate: '1 January 2023'
       }, { skip: ['sessionId'] })
     })
 

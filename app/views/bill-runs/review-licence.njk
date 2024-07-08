@@ -42,15 +42,54 @@
 
   {# Licence nav bars #}
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-    <li class="govuk-summary-list__actions-list-item" data-test="summary-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
-        Summary
-      </a></li>
-    <li class="govuk-summary-list__actions-list-item" data-test="returns-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
-        Returns
-      </a></li>
-      <li class="govuk-summary-list__actions-list-item" data-test="charge-information-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
-        Charge information
-      </a></li>
+    {% if featureFlags.enableSystemLicenceView %}
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/summary"
+          data-test="summary-link">
+          Summary
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/returns"
+          data-test="returns-link">
+          Returns
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item">
+        <a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/system/licences/{{ licence.licenceId  }}/set-up"
+          data-test="charge-information-link">
+          Charge information
+        </a>
+      </li>
+    {% else %}
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#summary"
+          data-test="summary-link">
+          Summary
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#returns"
+          data-test="returns-link">
+          Returns
+        </a>
+      </li>
+      <li class="govuk-summary-list__actions-list-item"><a
+          class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+          href="/licences/{{ licence.licenceId  }}#charge"
+          data-test="charge-information-link">
+          Charge information
+        </a>
+      </li>
+    {% endif %}
   </ul>
 
   {# Licence in review text #}
@@ -140,6 +179,7 @@
       {% set action %}
         <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
+        <div>{{return.absPeriod}}</div>
       {% endset %}
 
       {% set returnSummary %}
@@ -192,7 +232,7 @@
       firstCellIsHeader: false,
       head: [
         {
-          text: 'Return reference and dates'
+          text: 'Return reference and periods'
         },
         {
           text: 'Purpose and description'
@@ -219,6 +259,7 @@
       {% set action %}
         <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
+        <div>{{return.absPeriod}}</div>
       {% endset %}
 
       {% set returnSummary %}
@@ -272,7 +313,7 @@
       firstCellIsHeader: false,
       head: [
         {
-          text: 'Return reference and dates'
+          text: 'Return reference and periods'
         },
         {
           text: 'Purpose and description'
@@ -387,7 +428,7 @@
 
                     <div class="govuk-!-margin-top-6">
                       <span class="govuk-body govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-count-{{ chargeElementIndex }}">{{chargeElement.elementNumber}}</span>
-                      <span class="float-right">
+                      <span class="float-right" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-status-{{ chargeElementIndex }}">
                         {{ statusTag(chargeElement.elementStatus) }}
                       </span>
                       <h3 class="govuk-heading-s govuk-!-margin-bottom-1" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-description-{{ chargeElementIndex }}">{{chargeElement.elementDescription}}

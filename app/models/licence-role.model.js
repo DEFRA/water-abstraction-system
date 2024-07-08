@@ -16,6 +16,22 @@ class LicenceRoleModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      companyAddresses: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-address.model',
+        join: {
+          from: 'licenceRoles.id',
+          to: 'companyAddresses.licenceRoleId'
+        }
+      },
+      companyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'licenceRoles.id',
+          to: 'companyContacts.licenceRoleId'
+        }
+      },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-document-role.model',

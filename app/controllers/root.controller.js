@@ -8,6 +8,7 @@
 function index (_request, _h) {
   return { status: 'alive' }
 }
+
 module.exports = {
   index
 }

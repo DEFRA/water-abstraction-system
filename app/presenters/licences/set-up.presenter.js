@@ -157,10 +157,12 @@ function _endsSixYearsAgo (endDate) {
   const timeStamp = { hour: 23, minutes: 59, seconds: 59, ms: 999 }
 
   const yesterday = new Date()
+
   yesterday.setDate(yesterday.getDate() - 1)
   yesterday.setHours(timeStamp.hour, timeStamp.minutes, timeStamp.seconds, timeStamp.ms)
 
   const sixYearsFromYesterday = new Date(yesterday.getTime())
+
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
   return endDate.date < sixYearsFromYesterday
@@ -175,7 +177,7 @@ function _returnVersions (returnVersions = [{}]) {
     return {
       action: [{
         text: 'View',
-        link: ''
+        link: `/system/return-requirements/${returnVersion.id}/view`
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',

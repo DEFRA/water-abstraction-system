@@ -8,23 +8,27 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
 describe('Fetch Licence Bills service', () => {
-  const billId = '72988ec1-9fb2-4b87-b0a0-3c0be628a72c'
-  const billingAccountId = '0ba3b707-72ee-4296-b177-a19afff10688'
-  const billRunId = 'd40004d5-a99b-40a7-adf2-22d36d5b20b5'
   const createdDate = new Date('2022-01-01')
-  const licenceId = '96d97293-1a62-4ad0-bcb6-24f68a203e6b'
+
+  let billId
+  let billingAccountId
+  let billRunId
+  let licenceId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    billId = generateUUID()
+    billingAccountId = generateUUID()
+    billRunId = generateUUID()
+    licenceId = generateUUID()
   })
 
   describe('when the licence has bills', () => {
@@ -65,7 +69,10 @@ describe('Fetch Licence Bills service', () => {
           [{
             accountNumber: 'T21404193A',
             billRun: {
-              batchType: 'supplementary'
+              id: billRunId,
+              batchType: 'supplementary',
+              scheme: 'sroc',
+              summer: false
             },
             billingAccountId,
             createdAt: createdDate,

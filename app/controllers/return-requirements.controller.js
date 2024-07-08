@@ -6,13 +6,14 @@
  */
 
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
-const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const AddService = require('../services/return-requirements/add.service.js')
+const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const ExistingService = require('../services/return-requirements/existing.service.js')
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
@@ -43,6 +44,7 @@ const SubmitReturnsCycleService = require('../services/return-requirements/submi
 const SubmitSetupService = require('../services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
+const ViewService = require('../services/return-requirements/view.service.js')
 
 async function abstractionPeriod (request, h) {
   const { requirementIndex, sessionId } = request.params
@@ -294,7 +296,11 @@ async function submitCancel (request, h) {
 
   await SubmitCancel.go(sessionId)
 
-  return h.redirect(`/licences/${licenceId}#charge`)
+  if (FeatureFlagsConfig.enableSystemLicenceView) {
+    return h.redirect(`/system/licences/${licenceId}/set-up`)
+  } else {
+    return h.redirect(`/licences/${licenceId}#charge`)
+  }
 }
 
 async function submitCheck (request, h) {
@@ -494,6 +500,15 @@ async function submitStartDate (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
 }
 
+async function view (request, h) {
+  const { returnVersionId } = request.params
+  const pageData = await ViewService.go(returnVersionId)
+
+  return h.view('return-requirements/view.njk', {
+    ...pageData
+  })
+}
+
 module.exports = {
   abstractionPeriod,
   add,
@@ -533,5 +548,6 @@ module.exports = {
   submitReturnsCycle,
   submitSetup,
   submitSiteDescription,
-  submitStartDate
+  submitStartDate,
+  view
 }

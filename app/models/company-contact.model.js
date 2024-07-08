@@ -11,25 +11,33 @@ const BaseModel = require('./base.model.js')
 
 class CompanyContactModel extends BaseModel {
   static get tableName () {
-    return 'company_contacts'
+    return 'companyContacts'
   }
 
   static get relationMappings () {
     return {
-      companies: {
-        relation: Model.HasManyRelation,
+      company: {
+        relation: Model.BelongsToOneRelation,
         modelClass: 'company.model',
         join: {
-          from: 'company_contacts.companyId',
+          from: 'companyContacts.companyId',
           to: 'companies.id'
         }
       },
-      contacts: {
-        relation: Model.HasManyRelation,
+      contact: {
+        relation: Model.BelongsToOneRelation,
         modelClass: 'contact.model',
         join: {
-          from: 'company_contacts.contactId',
+          from: 'companyContacts.contactId',
           to: 'contacts.id'
+        }
+      },
+      licenceRole: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-role.model',
+        join: {
+          from: 'companyContacts.licenceRoleId',
+          to: 'licenceRoles.id'
         }
       }
     }

@@ -255,6 +255,7 @@ function titleCase (value) {
 
   words.forEach((word) => {
     const titleCasedWord = word.charAt(0).toUpperCase() + word.slice(1)
+
     titleCasedWords.push(titleCasedWord)
   })
 

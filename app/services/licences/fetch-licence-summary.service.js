@@ -16,25 +16,21 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page summary tab
+ * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
 async function go (licenceId) {
-  const licence = await _fetchLicence(licenceId)
-
-  return {
-    ...licence,
-    licenceHolder: licence.$licenceHolder()
-  }
+  return _fetch(licenceId)
 }
 
-async function _fetchLicence (licenceId) {
-  const result = await LicenceModel.query()
+async function _fetch (licenceId) {
+  return LicenceModel.query()
     .findById(licenceId)
     .select([
       'id',
       'expiredDate',
       'startDate'
     ])
+    .modify('currentVersion')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
@@ -49,13 +45,6 @@ async function _fetchLicence (licenceId) {
         ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
     })
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder.select([
-        'id'
-      ])
-        .where('status', 'current')
-    })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
       builder.select([
@@ -63,7 +52,11 @@ async function _fetchLicence (licenceId) {
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth'
+        'abstractionPeriodEndMonth',
+        'annualQuantity',
+        'dailyQuantity',
+        'hourlyQuantity',
+        'instantQuantity'
       ])
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes.purpose')
@@ -71,6 +64,19 @@ async function _fetchLicence (licenceId) {
       builder.select([
         'id',
         'description'
+      ])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions', (builder) => {
+      builder.select([
+        'id'
+      ])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType', (builder) => {
+      builder.select([
+        'id',
+        'displayTitle'
       ])
     })
     .withGraphFetched('licenceGaugingStations')
@@ -89,8 +95,6 @@ async function _fetchLicence (licenceId) {
     })
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
-
-  return result
 }
 
 module.exports = {

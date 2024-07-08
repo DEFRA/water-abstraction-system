@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const GroupRoleHelper = require('../../support/helpers/group-role.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
 const UserGroupHelper = require('../../support/helpers/user-group.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 const UserRoleHelper = require('../../support/helpers/user-role.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
@@ -26,9 +26,11 @@ describe('Fetch User Roles And Groups service', () => {
   let testGroup
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
-    testUser = await UserHelper.add()
+    testUser = await UserHelper.add(
+      {
+        username: `${generateUUID()}@test.com`
+      }
+    )
 
     // Create a role and assign it directly to the user
     testRoleForUser = await RoleHelper.add({ role: 'role_for_user' })
@@ -44,6 +46,7 @@ describe('Fetch User Roles And Groups service', () => {
     await RoleHelper.add({ role: 'not_assigned_role' })
     const notAssignedGroup = await GroupHelper.add({ group: 'not_assigned' })
     const notAssignedGroupRole = await RoleHelper.add({ role: 'not_assigned_group_role' })
+
     await GroupRoleHelper.add({ groupId: notAssignedGroup.id, roleId: notAssignedGroupRole.id })
   })
 

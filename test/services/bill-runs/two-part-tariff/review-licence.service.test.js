@@ -101,7 +101,13 @@ function _fetchReviewLicenceResults () {
           chargeDatesOverlap: false,
           issues: '',
           status: 'ready'
-        }]
+        }],
+        returnLog: {
+          periodEndDay: 31,
+          periodEndMonth: 3,
+          periodStartDay: 1,
+          periodStartMonth: 4
+        }
       },
       {
         id: '4864f643-5c16-5ca9-8512-f63e1d4e58be',
@@ -125,7 +131,13 @@ function _fetchReviewLicenceResults () {
         startDate: new Date(' 2022-04-01'),
         endDate: new Date('2022-05-06'),
         issues: '',
-        reviewChargeElements: []
+        reviewChargeElements: [],
+        returnLog: {
+          periodEndDay: 31,
+          periodEndMonth: 3,
+          periodStartDay: 1,
+          periodStartMonth: 4
+        }
       }],
       reviewChargeVersions: [{
         id: '3de5634a-da26-4241-87e9-7248a4b83a69',

@@ -22,6 +22,7 @@ const ChargeCategoryHelper = require('../../../../test/support/helpers/charge-ca
 const ChargeElementHelper = require('../../../../test/support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../../test/support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../../test/support/helpers/charge-version.helper.js')
+const CompanyAddressHelper = require('../../../../test/support/helpers/company-address.helper.js')
 const CompanyContactHelper = require('../../../../test/support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../../../test/support/helpers/company.helper.js')
 const ContactHelper = require('../../../../test/support/helpers/contact.helper.js')
@@ -85,6 +86,7 @@ const LOAD_HELPERS = {
   chargeElements: { helper: ChargeElementHelper, test: true, legacy: { schema: 'water', table: 'charge_purposes', id: 'charge_purpose_id' } },
   chargeReferences: { helper: ChargeReferenceHelper, test: true, legacy: { schema: 'water', table: 'charge_elements', id: 'charge_element_id' } },
   chargeVersions: { helper: ChargeVersionHelper, test: true, legacy: { schema: 'water', table: 'charge_versions', id: 'charge_version_id' } },
+  companyAddresses: { helper: CompanyAddressHelper, test: true, legacy: { schema: 'crm_v2', table: 'company_addresses', id: 'company_address_id' } },
   companyContacts: { helper: CompanyContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'company_contacts', id: 'company_contact_id' } },
   companies: { helper: CompanyHelper, test: true, legacy: { schema: 'crm_v2', table: 'companies', id: 'company_id' } },
   contacts: { helper: ContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'contacts', id: 'contact_id' } },
