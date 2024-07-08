@@ -126,7 +126,7 @@ function _handleMultipleIssues (filterIssues, reviewLicenceQuery) {
 
 function _handleNoIssues (reviewLicenceQuery) {
   // To search for no issues, check if the issues column is empty
-  reviewLicenceQuery.whereLike('issues', '')
+  reviewLicenceQuery.where('issues', '')
 }
 
 function _handleSingleIssue (filterIssues, reviewLicenceQuery) {

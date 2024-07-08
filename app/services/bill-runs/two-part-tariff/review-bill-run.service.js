@@ -20,7 +20,7 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, page, yar) {
-  const { filterIssues, filterLicenceHolderNumber, filterProgress, filterLicenceStatus } = _getFilters(id, yar)
+  const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress } = _getFilters(id, yar)
 
   const selectedPageNumber = page ? Number(page) : 1
 
@@ -58,7 +58,7 @@ function _getFilters (id, yar) {
   const filterLicenceStatus = filters?.filterLicenceStatus
   const filterProgress = filters?.filterProgress
 
-  return { filterIssues, filterLicenceHolderNumber, filterProgress, filterLicenceStatus }
+  return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
 }
 
 function _pageTitle (numberOfPages, selectedPageNumber) {
