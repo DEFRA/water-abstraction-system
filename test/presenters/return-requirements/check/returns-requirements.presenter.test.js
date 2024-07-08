@@ -35,8 +35,8 @@ describe('Return Requirements presenter', () => {
       agreementsExceptions: [
         'gravity-fill'
       ],
-      frequencyCollected: 'daily',
-      frequencyReported: 'daily',
+      frequencyCollected: 'day',
+      frequencyReported: 'day',
       points: [
         '9000031'
       ],

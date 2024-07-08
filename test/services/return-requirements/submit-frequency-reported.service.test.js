@@ -53,7 +53,7 @@ describe('Return Requirements - Submit Frequency Reported service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          frequencyReported: 'weekly'
+          frequencyReported: 'week'
         }
       })
 
@@ -62,7 +62,7 @@ describe('Return Requirements - Submit Frequency Reported service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].frequencyReported).to.equal('weekly')
+        expect(refreshedSession.requirements[0].frequencyReported).to.equal('week')
       })
 
       describe('and the page has been not been visited', () => {

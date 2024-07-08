@@ -73,13 +73,13 @@ describe('Return Requirements - Frequency Reported presenter', () => {
   describe('the "frequencyReported" property', () => {
     describe('when the user has previously submitted the frequency reported', () => {
       beforeEach(() => {
-        session.requirements[0].frequencyReported = 'weekly'
+        session.requirements[0].frequencyReported = 'week'
       })
 
       it('returns a populated frequency reported', () => {
         const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
-        expect(result.frequencyReported).to.equal('weekly')
+        expect(result.frequencyReported).to.equal('week')
       })
     })
 

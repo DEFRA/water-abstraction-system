@@ -48,8 +48,8 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 4
             },
-            frequencyReported: 'daily',
-            frequencyCollected: 'daily',
+            frequencyReported: 'day',
+            frequencyCollected: 'day',
             agreementsExceptions: ['none']
           },
           {
@@ -63,8 +63,8 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 11
             },
-            frequencyReported: 'weekly',
-            frequencyCollected: 'weekly',
+            frequencyReported: 'week',
+            frequencyCollected: 'week',
             agreementsExceptions: ['none']
           },
           {
@@ -78,8 +78,8 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 5
             },
-            frequencyReported: 'monthly',
-            frequencyCollected: 'monthly',
+            frequencyReported: 'month',
+            frequencyCollected: 'month',
             agreementsExceptions: ['none']
           }
         ])
@@ -102,15 +102,15 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
       })
 
-      it('sets the collection frequency to "daily" for the two-part tariff spray purpose', async () => {
+      it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId)
 
         // We assert the others haven't changed because of this
-        expect(result[0].frequencyCollected).to.equal('daily')
-        expect(result[1].frequencyCollected).to.equal('weekly')
+        expect(result[0].frequencyCollected).to.equal('day')
+        expect(result[1].frequencyCollected).to.equal('week')
 
         // We then assert that the 3rd requirement has changed because of this
-        expect(result[2].frequencyCollected).to.equal('daily')
+        expect(result[2].frequencyCollected).to.equal('day')
       })
     })
 
@@ -122,15 +122,15 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
       })
 
-      it('sets the collection and reporting frequencies to "daily"', async () => {
+      it('sets the collection and reporting frequencies to "day"', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId)
 
-        expect(result[0].frequencyCollected).to.equal('daily')
-        expect(result[0].frequencyReported).to.equal('daily')
-        expect(result[1].frequencyCollected).to.equal('daily')
-        expect(result[1].frequencyReported).to.equal('daily')
-        expect(result[2].frequencyCollected).to.equal('daily')
-        expect(result[2].frequencyReported).to.equal('daily')
+        expect(result[0].frequencyCollected).to.equal('day')
+        expect(result[0].frequencyReported).to.equal('day')
+        expect(result[1].frequencyCollected).to.equal('day')
+        expect(result[1].frequencyReported).to.equal('day')
+        expect(result[2].frequencyCollected).to.equal('day')
+        expect(result[2].frequencyReported).to.equal('day')
       })
     })
   })

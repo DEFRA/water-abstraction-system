@@ -6,7 +6,6 @@
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Fetches an existing return version and generates setup return requirements from it
@@ -137,8 +136,8 @@ function _transformForSetup (returnVersion) {
         'start-abstraction-period-day': abstractionPeriodStartDay,
         'start-abstraction-period-month': abstractionPeriodStartMonth
       },
-      frequencyReported: returnRequirementFrequencies[reportingFrequency],
-      frequencyCollected: returnRequirementFrequencies[collectionFrequency],
+      frequencyReported: reportingFrequency,
+      frequencyCollected: collectionFrequency,
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })

@@ -320,8 +320,8 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
       'start-abstraction-period-day': '1',
       'start-abstraction-period-month': '6'
     },
-    frequencyReported: 'daily',
-    frequencyCollected: 'daily',
+    frequencyReported: 'day',
+    frequencyCollected: 'day',
     agreementsExceptions: [
       'gravity-fill',
       'transfer-re-abstraction-scheme',

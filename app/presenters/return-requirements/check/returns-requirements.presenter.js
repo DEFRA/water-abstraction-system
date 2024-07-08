@@ -2,6 +2,7 @@
 
 const { formatAbstractionDate } = require('../../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const agreementsExceptionsText = {
   none: 'None',
@@ -97,8 +98,8 @@ function _mapRequirement (requirement, index, purposes, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
-    frequencyCollected: requirement.frequencyCollected,
-    frequencyReported: requirement.frequencyReported,
+    frequencyCollected: returnRequirementFrequencies[requirement.frequencyCollected],
+    frequencyReported: returnRequirementFrequencies[requirement.frequencyReported],
     index,
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),

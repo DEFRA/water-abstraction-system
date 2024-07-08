@@ -97,13 +97,13 @@ function _generateReturnVersionData () {
         abstractionPeriodStartMonth: '4',
         abstractionPeriodEndDay: '31',
         abstractionPeriodEndMonth: '3',
-        collectionFrequency: 'weekly',
+        collectionFrequency: 'week',
         externalId: '5:10063928',
         fiftySixException: false,
         gravityFill: false,
         legacyId: 10063928,
         reabstraction: false,
-        reportingFrequency: 'monthly',
+        reportingFrequency: 'month',
         returnsFrequency: 'year',
         returnRequirementPoints: [
           {
