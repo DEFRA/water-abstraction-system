@@ -3,11 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const StartDatePresenter = require('../../../app/presenters/return-requirements/start-date.presenter.js')
 
 describe('Return Requirements - Start Date presenter', () => {
@@ -28,6 +30,8 @@ describe('Return Requirements - Start Date presenter', () => {
       journey: 'returns-required',
       requirements: [{}]
     }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
   })
 
   describe('when provided with a session', () => {
@@ -38,7 +42,7 @@ describe('Return Requirements - Start Date presenter', () => {
         anotherStartDateDay: null,
         anotherStartDateMonth: null,
         anotherStartDateYear: null,
-        backLink: '/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d#charge',
+        backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',
@@ -65,7 +69,7 @@ describe('Return Requirements - Start Date presenter', () => {
       it("returns a link back to the licence page's charge tab", () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d#charge')
+        expect(result.backLink).to.equal('/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up')
       })
     })
   })
