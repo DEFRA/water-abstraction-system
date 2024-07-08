@@ -23,16 +23,16 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * issue this will be a string, not an array
  * @param {String} filterLicenceHolderNumber The licence holder or licence number to filter the results by. This will
  * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
- * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
- * when there is a POST request.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
+ * when there is a POST request.
+ * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
  * when there is a POST request.
  * @param {number} page - the page number of licences to be viewed
  *
  * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected 'page in the data. Also included is any data that has been used to filter the results
  */
-async function go (id, filterIssues, filterLicenceHolderNumber, filterProgress, filterLicenceStatus, page) {
+async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page) {
   const billRun = await _fetchBillRun(id)
   const licences = await _fetchBillRunLicences(
     id,

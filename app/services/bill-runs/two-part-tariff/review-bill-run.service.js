@@ -28,8 +28,8 @@ async function go (id, page, yar) {
     id,
     filterIssues,
     filterLicenceHolderNumber,
-    filterProgress,
     filterLicenceStatus,
+    filterProgress,
     selectedPageNumber
   )
 
