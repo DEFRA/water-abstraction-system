@@ -227,6 +227,16 @@
             text: "Unable to match return",
             checked: filter.issues.unableToMatchReturn,
             attributes: { 'data-test': 'unable-to-match-return' }
+          },
+          {
+            divider: "or"
+          },
+          {
+            value: "no-issues",
+            text: "No issues",
+            checked: filter.issues.noIssues,
+            attributes: { 'data-test': 'no-issues' },
+            behaviour: "exclusive"
           }
         ]
       }) }}

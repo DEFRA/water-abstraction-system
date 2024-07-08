@@ -54,6 +54,7 @@ function _prepareIssues (filterIssues) {
     aggregateFactor: filterIssues.includes('aggregate-factor'),
     checkingQuery: filterIssues.includes('checking-query'),
     multipleIssues: filterIssues.includes('multiple-issues'),
+    noIssues: filterIssues.includes('no-issues'),
     noReturnsReceived: filterIssues.includes('no-returns-received'),
     overAbstraction: filterIssues.includes('over-abstraction'),
     overlapOfChargeDates: filterIssues.includes('overlap-of-charge-dates'),

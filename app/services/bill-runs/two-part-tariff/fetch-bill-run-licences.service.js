@@ -100,19 +100,24 @@ async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumbe
 }
 
 function _filterIssues (filterIssues, reviewLicenceQuery) {
-  // if only a single issue is checked in the filter then a string is returned, otherwise it is an array
+  // When only one issue is selected in the filter, a string is returned; otherwise, an array is returned.
+  // The "no issues" filter can only be selected exclusively, so it will always be a string.
   if (typeof filterIssues === 'string') {
-    const lookupIssue = twoPartTariffReviewIssues[filterIssues]
+    if (filterIssues === 'no-issues') {
+      // To search for no issues, check if the issues column is empty
+      reviewLicenceQuery.whereLike('issues', '')
+    } else {
+      const lookupIssue = twoPartTariffReviewIssues[filterIssues]
 
-    reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
+      reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
+    }
   } else {
-    // if we have got here then `issues` must be an array containing at least 2 records
+    // If filterIssues is an array, it contains at least two items
     const lookupIssues = filterIssues.map((filterIssue) => {
       return twoPartTariffReviewIssues[filterIssue]
     })
 
-    // the number of issues to check for in the where clause will vary depending on the number of issues checked. But
-    // there will always be at least 2
+    // Construct a query that checks for multiple issues. There will always be at least two issues to check for.
     reviewLicenceQuery.where((builder) => {
       builder
         .whereLike('issues', `%${lookupIssues[0]}%`)

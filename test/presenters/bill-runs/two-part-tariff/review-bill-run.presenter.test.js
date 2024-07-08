@@ -158,6 +158,7 @@ describe('Review Bill Run presenter', () => {
           aggregateFactor: false,
           checkingQuery: false,
           multipleIssues: false,
+          noIssues: false,
           noReturnsReceived: false,
           overAbstraction: true,
           overlapOfChargeDates: false,
