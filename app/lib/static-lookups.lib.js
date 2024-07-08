@@ -34,7 +34,9 @@ const returnRequirementFrequencies = {
 
 const returnRequirementReasons = {
   'abstraction-below-100-cubic-metres-per-day': 'Abstraction amount below 100 cubic metres per day',
+  'change-to-return-requirements': 'Change to requirements for returns',
   'change-to-special-agreement': 'Change to special agreement',
+  'error-correction': 'Error correction',
   'extension-of-licence-validity': 'Limited extension of licence validity (LEV)',
   'major-change': 'Major change',
   'minor-change': 'Minor change',
