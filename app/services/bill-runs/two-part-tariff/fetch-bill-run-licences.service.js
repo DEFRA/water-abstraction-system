@@ -103,29 +103,36 @@ function _filterIssues (filterIssues, reviewLicenceQuery) {
   // When only one issue is selected in the filter, a string is returned; otherwise, an array is returned.
   // The "no issues" filter can only be selected exclusively, so it will always be a string.
   if (typeof filterIssues === 'string') {
-    if (filterIssues === 'no-issues') {
-      // To search for no issues, check if the issues column is empty
-      reviewLicenceQuery.whereLike('issues', '')
-    } else {
-      const lookupIssue = twoPartTariffReviewIssues[filterIssues]
-
-      reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
-    }
+    filterIssues === 'no-issues' ? _handleNoIssues(reviewLicenceQuery) : _handleSingleIssue(filterIssues, reviewLicenceQuery)
   } else {
-    // If filterIssues is an array, it contains at least two items
-    const lookupIssues = filterIssues.map((filterIssue) => {
-      return twoPartTariffReviewIssues[filterIssue]
-    })
-
-    // Construct a query that checks for multiple issues. There will always be at least two issues to check for.
-    reviewLicenceQuery.where((builder) => {
-      builder
-        .whereLike('issues', `%${lookupIssues[0]}%`)
-      for (let i = 1; i < lookupIssues.length; i++) {
-        builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
-      }
-    })
+    _handleMultipleIssues(filterIssues, reviewLicenceQuery)
   }
+}
+
+function _handleMultipleIssues (filterIssues, reviewLicenceQuery) {
+  const lookupIssues = filterIssues.map((filterIssue) => {
+    return twoPartTariffReviewIssues[filterIssue]
+  })
+
+  // Construct a query that checks for multiple issues. There will always be at least two issues to check for.
+  reviewLicenceQuery.where((builder) => {
+    builder
+      .whereLike('issues', `%${lookupIssues[0]}%`)
+    for (let i = 1; i < lookupIssues.length; i++) {
+      builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
+    }
+  })
+}
+
+function _handleNoIssues (reviewLicenceQuery) {
+  // To search for no issues, check if the issues column is empty
+  reviewLicenceQuery.whereLike('issues', '')
+}
+
+function _handleSingleIssue (filterIssues, reviewLicenceQuery) {
+  const lookupIssue = twoPartTariffReviewIssues[filterIssues]
+
+  reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
 }
 
 module.exports = {
