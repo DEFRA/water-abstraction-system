@@ -15,6 +15,7 @@ describe('Review Bill Run presenter', () => {
     let filterIssues
     let filterLicenceHolderNumber
     let filterLicenceStatus
+    let filterProgress
     let testBillRun
     let testLicences
 
@@ -28,6 +29,7 @@ describe('Review Bill Run presenter', () => {
         filterIssues = undefined
         filterLicenceHolderNumber = undefined
         filterLicenceStatus = undefined
+        filterProgress = undefined
       })
 
       it('correctly presents the data', () => {
@@ -36,6 +38,7 @@ describe('Review Bill Run presenter', () => {
           filterIssues,
           filterLicenceHolderNumber,
           filterLicenceStatus,
+          filterProgress,
           testLicences
         )
 
@@ -79,6 +82,7 @@ describe('Review Bill Run presenter', () => {
             issues: undefined,
             licenceHolderNumber: undefined,
             licenceStatus: undefined,
+            inProgress: undefined,
             openFilter: false
           }
         })
@@ -95,6 +99,7 @@ describe('Review Bill Run presenter', () => {
             filterIssues,
             filterLicenceHolderNumber,
             filterLicenceStatus,
+            filterProgress,
             testLicences
           )
 
@@ -115,6 +120,7 @@ describe('Review Bill Run presenter', () => {
             filterIssues,
             filterLicenceHolderNumber,
             filterLicenceStatus,
+            filterProgress,
             testLicences
           )
 
@@ -130,6 +136,7 @@ describe('Review Bill Run presenter', () => {
         filterIssues = ['abs-outside-period', 'over-abstraction']
         filterLicenceHolderNumber = 'bob'
         filterLicenceStatus = 'ready'
+        filterProgress = true
       })
 
       it('correctly presents the data', () => {
@@ -138,16 +145,20 @@ describe('Review Bill Run presenter', () => {
           filterIssues,
           filterLicenceHolderNumber,
           filterLicenceStatus,
+          filterProgress,
           testLicences
         )
 
         expect(result.filter.openFilter).to.equal(true)
         expect(result.filter.licenceHolderNumber).to.equal(filterLicenceHolderNumber)
         expect(result.filter.licenceStatus).to.equal(filterLicenceStatus)
+        expect(result.filter.inProgress).to.equal(filterProgress)
         expect(result.filter.issues).to.equal({
           absOutsidePeriod: true,
           aggregateFactor: false,
           checkingQuery: false,
+          multipleIssues: false,
+          noIssues: false,
           noReturnsReceived: false,
           overAbstraction: true,
           overlapOfChargeDates: false,

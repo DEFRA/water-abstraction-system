@@ -67,7 +67,8 @@ const twoPartTariffReviewIssues = {
   'returns-late': 'Returns received late',
   'return-split-over-refs': 'Return split over charge references',
   'some-returns-not-received': 'Some returns not received',
-  'unable-to-match-return': 'Unable to match return'
+  'unable-to-match-return': 'Unable to match return',
+  'multiple-issues': 'Multiple issues'
 }
 
 module.exports = {
