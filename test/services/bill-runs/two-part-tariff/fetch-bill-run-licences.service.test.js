@@ -79,8 +79,8 @@ describe('Fetch Bill Run Licences service', () => {
           billRun.id,
           filterIssues,
           filterLicenceHolderNumber,
-          filterProgress,
           filterLicenceStatus,
+          filterProgress,
           page
         )
 
@@ -112,8 +112,8 @@ describe('Fetch Bill Run Licences service', () => {
           billRun.id,
           filterIssues,
           filterLicenceHolderNumber,
-          filterProgress,
           filterLicenceStatus,
+          filterProgress,
           page
         )
 
@@ -160,8 +160,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -197,8 +197,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -234,8 +234,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -271,8 +271,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -308,8 +308,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -353,8 +353,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -390,8 +390,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -432,8 +432,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -473,8 +473,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -507,8 +507,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -541,8 +541,8 @@ describe('Fetch Bill Run Licences service', () => {
             billRun.id,
             filterIssues,
             filterLicenceHolderNumber,
-            filterProgress,
             filterLicenceStatus,
+            filterProgress,
             page
           )
 
@@ -579,8 +579,8 @@ describe('Fetch Bill Run Licences service', () => {
         invalidBillRunId,
         filterIssues,
         filterLicenceHolderNumber,
-        filterProgress,
         filterLicenceStatus,
+        filterProgress,
         page
       )
 
