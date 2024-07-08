@@ -7,19 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = [
-  'change-to-special-agreement',
-  'name-or-address-change',
-  'transfer-and-now-chargeable',
-  'extension-of-licence-validity',
-  'major-change',
-  'minor-change',
-  'new-licence-in-part-succession-or-licence-apportionment',
-  'new-licence',
-  'new-special-agreement',
-  'succession-or-transfer-of-licence',
-  'succession-to-remainder-licence-or-licence-apportionment'
-]
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 const errorMessage = 'Select the reason for the requirements for returns'
 
@@ -32,10 +20,12 @@ const errorMessage = 'Select the reason for the requirements for returns'
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data) {
+  const validValues = Object.keys(returnRequirementReasons)
+
   const schema = Joi.object({
     reason: Joi.string()
       .required()
-      .valid(...VALID_VALUES)
+      .valid(...validValues)
       .messages({
         'any.required': errorMessage,
         'any.only': errorMessage,
