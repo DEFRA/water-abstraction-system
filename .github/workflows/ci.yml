@@ -40,7 +40,6 @@ jobs:
       ENVIRONMENT: dev
       COOKIE_SECRET: 1a1028df-a2af-468a-929b-e3a274be1208
 
-
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
