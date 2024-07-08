@@ -18,13 +18,11 @@ const FetchChargeVersionsService =
 
 describe('Fetch Charge Versions service', () => {
   const licenceId = generateUUID()
-  // These dates were taken from a real licence where our first iteration was not showing the charge versions in the
-  // correct order!
-  const startDate = new Date('2018-04-01')
-  const endDate = new Date('2030-03-31')
 
-  let currentChargeVersionId
-  let supersededChargeVersionId
+  let currentChargeVersionWithEndDateId
+  let currentChargeVersionWithoutEndDateId
+  let supersededChargeVersionWithEndDateId
+  let supersededChargeVersionWithoutEndDateId
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
@@ -33,23 +31,49 @@ describe('Fetch Charge Versions service', () => {
       // Create multiple charge versions to ensure we get them in the right order
       let chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
-        endDate,
+        endDate: new Date('2030-03-31'),
         licenceId,
         scheme: 'alcs',
-        startDate,
-        status: 'superseded'
+        startDate: new Date('2018-04-01'),
+        status: 'superseded',
+        versionNumber: 1
       })
 
-      supersededChargeVersionId = chargeVersion.id
+      supersededChargeVersionWithEndDateId = chargeVersion.id
 
       chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
+        endDate: null,
         licenceId,
         scheme: 'alcs',
-        startDate
+        startDate: new Date('2021-04-01'),
+        status: 'superseded',
+        versionNumber: 3
       })
 
-      currentChargeVersionId = chargeVersion.id
+      supersededChargeVersionWithoutEndDateId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: null,
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2021-04-01'),
+        versionNumber: 4
+      })
+
+      currentChargeVersionWithoutEndDateId = chargeVersion.id
+
+      chargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        endDate: new Date('2021-03-31'),
+        licenceId,
+        scheme: 'alcs',
+        startDate: new Date('2018-04-01'),
+        versionNumber: 2
+      })
+
+      currentChargeVersionWithEndDateId = chargeVersion.id
     })
 
     it('returns the matching charge versions data', async () => {
@@ -61,19 +85,39 @@ describe('Fetch Charge Versions service', () => {
             description: 'Strategic review of charges (SRoC)'
           },
           endDate: null,
-          id: currentChargeVersionId,
+          id: currentChargeVersionWithoutEndDateId,
           licenceId,
-          startDate,
+          startDate: new Date('2021-04-01'),
           status: 'current'
         },
         {
           changeReason: {
             description: 'Strategic review of charges (SRoC)'
           },
-          endDate,
-          id: supersededChargeVersionId,
+          endDate: null,
+          id: supersededChargeVersionWithoutEndDateId,
           licenceId,
-          startDate,
+          startDate: new Date('2021-04-01'),
+          status: 'superseded'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: new Date('2021-03-31'),
+          id: currentChargeVersionWithEndDateId,
+          licenceId,
+          startDate: new Date('2018-04-01'),
+          status: 'current'
+        },
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: new Date('2030-03-31'),
+          id: supersededChargeVersionWithEndDateId,
+          licenceId,
+          startDate: new Date('2018-04-01'),
           status: 'superseded'
         }
       ])
