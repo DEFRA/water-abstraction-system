@@ -26,6 +26,7 @@ describe('Fetch Bill Run Licences service', () => {
   let page
   let testLicenceReady
   let testLicenceReview
+  let testLicenceNoIssues
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -328,6 +329,51 @@ describe('Fetch Bill Run Licences service', () => {
           expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
           expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
           expect(result.licences.results[0].status).to.equal('review')
+        })
+      })
+
+      describe('and a "no issues" filter has been applied to the licence issues', () => {
+        beforeEach(async () => {
+          testLicenceNoIssues = await ReviewLicenceHelper.add({
+            billRunId: billRun.id,
+            licenceRef: '03/200',
+            licenceHolder: 'No issues Licence Holder Ltd',
+            status: 'ready',
+            issues: ''
+          })
+
+          filterIssues = 'no-issues'
+          filterLicenceHolderNumber = undefined
+          filterLicenceStatus = undefined
+          filterProgress = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(
+            billRun.id,
+            filterIssues,
+            filterLicenceHolderNumber,
+            filterProgress,
+            filterLicenceStatus,
+            page
+          )
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(3)
+          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+
+          expect(result.licences.total).to.equal(1)
+          expect(result.licences.results).to.have.length(1)
+          expect(result.licences.results[0].licenceId).to.equal(testLicenceNoIssues.licenceId)
+          expect(result.licences.results[0].licenceHolder).to.equal('No issues Licence Holder Ltd')
+          expect(result.licences.results[0].licenceRef).to.equal(testLicenceNoIssues.licenceRef)
+          expect(result.licences.results[0].issues).to.equal('')
+          expect(result.licences.results[0].status).to.equal('ready')
         })
       })
 
