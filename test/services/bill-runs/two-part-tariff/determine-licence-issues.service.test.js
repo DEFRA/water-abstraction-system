@@ -25,6 +25,7 @@ describe('Determine Licence Issues Service', () => {
 
           expect(licence.issues).to.equal([
             'Abstraction outside period',
+            'Multiple issues',
             'No returns received',
             'Over abstraction',
             'Returns received late',
@@ -52,6 +53,7 @@ describe('Determine Licence Issues Service', () => {
           expect(licence.issues).to.equal([
             'Aggregate',
             'Checking query',
+            'Multiple issues',
             'Overlap of charge dates',
             'Return split over charge references',
             'Returns received but not processed',
@@ -80,6 +82,7 @@ describe('Determine Licence Issues Service', () => {
             'Abstraction outside period',
             'Aggregate',
             'Checking query',
+            'Multiple issues',
             'No returns received',
             'Over abstraction',
             'Overlap of charge dates',
