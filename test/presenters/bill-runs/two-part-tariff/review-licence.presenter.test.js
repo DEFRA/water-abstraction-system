@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
-describe('Review Licence presenter', () => {
+describe.only('Review Licence presenter', () => {
   let billRun
   let licence
 
@@ -87,6 +87,7 @@ describe('Review Licence presenter', () => {
                 chargeCategory: 'Charge reference 4.6.7',
                 chargeDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr',
                 totalBillableReturns: '0 ML / 200 ML',
+                billableReturnsWarning: false,
                 id: 'b2af5935-4b65-4dce-9f75-9073798f6375',
                 chargeReferenceLink: { linkName: 'View details' },
                 chargeElements: [
@@ -230,6 +231,29 @@ describe('Review Licence presenter', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('View details')
+        })
+      })
+    })
+
+    describe('the "billableReturnsWarning" property', () => {
+      describe('when a review charge reference has an authorised volume greater than the sum of its charge element quantities', () => {
+        it('sets the "billableReturnsWarning" to false', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].billableReturnsWarning).to.equal(false)
+        })
+      })
+
+      describe('when a review charge reference has an authorised volume less than the sum of its charge element quantities', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].amendedAuthorisedVolume = 10
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].amendedAllocated = 50
+        })
+
+        it('sets the "billableReturnsWarning" to true', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].billableReturnsWarning).to.equal(true)
         })
       })
     })
