@@ -26,7 +26,7 @@ async function go (licenceId, requirements) {
   const licencePoints = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
-  let legacyId = await _getNextLegacyId(naldRegionId)
+  let legacyId = await _nextLegacyId(naldRegionId)
 
   for (const requirement of requirements) {
     const externalId = `${naldRegionId}:${legacyId}`
@@ -116,7 +116,7 @@ async function _generateReturnRequirementPurposes (licenceId, purposeIds) {
   return returnRequirementPurposes
 }
 
-async function _getNextLegacyId (naldRegionId) {
+async function _nextLegacyId (naldRegionId) {
   const { lastLegacyId } = await ReturnRequirementModel.query()
     .max('legacyId as lastLegacyId')
     .whereLike('externalId', `${naldRegionId}%`)

@@ -49,11 +49,11 @@ async function _generateReturnVersion (sessionData, userId) {
     reason: sessionData.reason,
     startDate: _calculateStartDate(sessionData),
     status: 'current',
-    version: await _getNextVersionNumber(sessionData.licence.id)
+    version: await _nextVersionNumber(sessionData.licence.id)
   }
 }
 
-async function _getNextVersionNumber (licenceId) {
+async function _nextVersionNumber (licenceId) {
   const { lastVersionNumber } = await ReturnVersionModel.query()
     .max('version as lastVersionNumber')
     .where({ licenceId })
