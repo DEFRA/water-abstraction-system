@@ -25,7 +25,9 @@ async function go (licenceId, auth) {
 
   const agreements = await FetchAgreementsService.go(commonData.licenceRef)
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
+  console.log('🚀 ~ go ~ chargeVersions:', chargeVersions)
   const workflows = await FetchWorkflowsService.go(licenceId)
+  console.log('🚀 ~ go ~ workflows:', workflows)
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
   const licenceSetUpData = SetUpPresenter
