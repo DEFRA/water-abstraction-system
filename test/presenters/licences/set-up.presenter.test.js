@@ -427,7 +427,7 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Review'
               }],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2024',
+              startDate: '1 April 2022',
               endDate: '-',
               status: 'review',
               reason: 'changed something'
@@ -442,7 +442,7 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).to.equal([{
               action: [],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2024',
+              startDate: '1 April 2022',
               endDate: '-',
               status: 'review',
               reason: 'changed something'
