@@ -27,7 +27,8 @@ describe('Submit Review Bill Run Service', () => {
     const payload = {
       filterIssues: ['abs-outside-period', 'aggregate-factor'],
       filterLicenceHolderNumber: 'A Licence Holder Ltd',
-      filterLicenceStatus: 'review'
+      filterLicenceStatus: 'review',
+      filterProgress: true
     }
 
     it('will set the cookie with the filter data', async () => {

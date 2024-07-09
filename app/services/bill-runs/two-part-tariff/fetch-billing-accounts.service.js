@@ -74,6 +74,13 @@ async function go (billRunId) {
         'revokedDate'
       ])
     })
+    .withGraphFetched('chargeVersions.licence.region')
+    .modifyGraph('chargeVersions.licence.region', (builder) => {
+      builder.select([
+        'id',
+        'chargeRegionId'
+      ])
+    })
     .withGraphFetched('chargeVersions.chargeReferences')
     .modifyGraph('chargeVersions.chargeReferences', (builder) => {
       builder.select([

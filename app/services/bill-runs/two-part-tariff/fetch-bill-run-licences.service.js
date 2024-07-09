@@ -25,19 +25,28 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
+ * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
+ * when there is a POST request.
  * @param {number} page - the page number of licences to be viewed
  *
  * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected 'page in the data. Also included is any data that has been used to filter the results
  */
-async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page) {
+async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page)
+  const licences = await _fetchBillRunLicences(
+    id,
+    filterIssues,
+    filterLicenceHolderNumber,
+    filterLicenceStatus,
+    filterProgress,
+    page
+  )
 
   return { billRun, licences }
 }
 
-function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus) {
+function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress) {
   if (filterIssues) {
     _filterIssues(filterIssues, reviewLicenceQuery)
   }
@@ -52,6 +61,10 @@ function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNum
 
   if (filterLicenceStatus) {
     reviewLicenceQuery.where('status', filterLicenceStatus)
+  }
+
+  if (filterProgress) {
+    reviewLicenceQuery.where('progress', 'true')
   }
 }
 
@@ -71,7 +84,7 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, page = 1) {
+async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)
@@ -81,32 +94,45 @@ async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumbe
     ])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 
-  _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus)
+  _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress)
 
   return reviewLicenceQuery
 }
 
 function _filterIssues (filterIssues, reviewLicenceQuery) {
-  // if only a single issue is checked in the filter then a string is returned, otherwise it is an array
+  // When only one issue is selected in the filter, a string is returned; otherwise, an array is returned.
+  // The "no issues" filter can only be selected exclusively, so it will always be a string.
   if (typeof filterIssues === 'string') {
-    const lookupIssue = twoPartTariffReviewIssues[filterIssues]
-    reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
+    filterIssues === 'no-issues' ? _handleNoIssues(reviewLicenceQuery) : _handleSingleIssue(filterIssues, reviewLicenceQuery)
   } else {
-    // if we have got here then `issues` must be an array containing at least 2 records
-    const lookupIssues = filterIssues.map((filterIssue) => {
-      return twoPartTariffReviewIssues[filterIssue]
-    })
-
-    // the number of issues to check for in the where clause will vary depending on the number of issues checked. But
-    // there will always be at least 2
-    reviewLicenceQuery.where((builder) => {
-      builder
-        .whereLike('issues', `%${lookupIssues[0]}%`)
-      for (let i = 1; i < lookupIssues.length; i++) {
-        builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
-      }
-    })
+    _handleMultipleIssues(filterIssues, reviewLicenceQuery)
   }
+}
+
+function _handleMultipleIssues (filterIssues, reviewLicenceQuery) {
+  const lookupIssues = filterIssues.map((filterIssue) => {
+    return twoPartTariffReviewIssues[filterIssue]
+  })
+
+  // Construct a query that checks for multiple issues. There will always be at least two issues to check for.
+  reviewLicenceQuery.where((builder) => {
+    builder
+      .whereLike('issues', `%${lookupIssues[0]}%`)
+    for (let i = 1; i < lookupIssues.length; i++) {
+      builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
+    }
+  })
+}
+
+function _handleNoIssues (reviewLicenceQuery) {
+  // To search for no issues, check if the issues column is empty
+  reviewLicenceQuery.where('issues', '')
+}
+
+function _handleSingleIssue (filterIssues, reviewLicenceQuery) {
+  const lookupIssue = twoPartTariffReviewIssues[filterIssues]
+
+  reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
 }
 
 module.exports = {

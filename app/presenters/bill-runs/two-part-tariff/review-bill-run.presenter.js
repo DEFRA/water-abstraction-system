@@ -18,21 +18,28 @@ const { formatLongDate } = require('../../base.presenter.js')
  * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
+ * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
+ * when there is a POST request.
  * @param {module:LicenceModel} licences The licences data associated with the bill run
  *
  * @returns {Object} The prepared bill run,licence and filter data to be passed to the review page
  */
-function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, licences) {
+function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, licences) {
   const preparedLicences = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences)
 
   const issues = filterIssues ? _prepareIssues(filterIssues) : filterIssues
 
-  const filter = { issues, licenceHolderNumber: filterLicenceHolderNumber, licenceStatus: filterLicenceStatus }
+  const filter = {
+    issues,
+    licenceHolderNumber: filterLicenceHolderNumber,
+    licenceStatus: filterLicenceStatus,
+    inProgress: filterProgress
+  }
 
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus) !== undefined
+  filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus || filterProgress) !== undefined
 
   return { ...preparedBillRun, preparedLicences, filter }
 }
@@ -46,6 +53,8 @@ function _prepareIssues (filterIssues) {
     absOutsidePeriod: filterIssues.includes('abs-outside-period'),
     aggregateFactor: filterIssues.includes('aggregate-factor'),
     checkingQuery: filterIssues.includes('checking-query'),
+    multipleIssues: filterIssues.includes('multiple-issues'),
+    noIssues: filterIssues.includes('no-issues'),
     noReturnsReceived: filterIssues.includes('no-returns-received'),
     overAbstraction: filterIssues.includes('over-abstraction'),
     overlapOfChargeDates: filterIssues.includes('overlap-of-charge-dates'),
@@ -83,6 +92,7 @@ function _prepareBillRun (billRun, preparedLicences) {
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
+    numberOfLicencesToReview: billRun.reviewLicences[0].numberOfLicencesToReview,
     reviewMessage: _prepareReviewMessage(billRun.reviewLicences[0].numberOfLicencesToReview),
     totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
