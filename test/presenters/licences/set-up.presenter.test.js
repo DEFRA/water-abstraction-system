@@ -14,7 +14,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe('Licences - Set Up presenter', () => {
+describe.only('Licences - Set Up presenter', () => {
   const agreement = {
     id: '123',
     startDate: new Date('2020-01-01'),
@@ -123,9 +123,9 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Recalculate bills'
               }
             ],
-            signedOn: '-',
+            signedOn: '',
             description: 'Two-part tariff',
-            endDate: '-',
+            endDate: '',
             startDate: '1 January 2020'
           }
         ])
@@ -331,7 +331,7 @@ describe('Licences - Set Up presenter', () => {
             action: [],
             id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
             startDate: '1 April 2022',
-            endDate: '-',
+            endDate: '',
             status: 'review',
             reason: 'changed something'
           },
@@ -342,7 +342,7 @@ describe('Licences - Set Up presenter', () => {
             }],
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
-            endDate: '-',
+            endDate: '',
             status: 'approved',
             reason: 'Major change'
           }
@@ -372,7 +372,7 @@ describe('Licences - Set Up presenter', () => {
             }],
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
-            endDate: '-',
+            endDate: '',
             status: 'approved',
             reason: 'Major change'
           }])
@@ -428,7 +428,7 @@ describe('Licences - Set Up presenter', () => {
               }],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '1 April 2022',
-              endDate: '-',
+              endDate: '',
               status: 'review',
               reason: 'changed something'
             }])
@@ -443,7 +443,7 @@ describe('Licences - Set Up presenter', () => {
               action: [],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '1 April 2022',
-              endDate: '-',
+              endDate: '',
               status: 'review',
               reason: 'changed something'
             }])
@@ -471,8 +471,8 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Review'
               }],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '-',
-              endDate: '-',
+              startDate: '',
+              endDate: '',
               status: 'to set up',
               reason: 'changed something'
             }])
@@ -490,8 +490,8 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).to.equal([{
               action: [],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '-',
-              endDate: '-',
+              startDate: '',
+              endDate: '',
               status: 'to set up',
               reason: 'changed something'
             }])
@@ -516,7 +516,7 @@ describe('Licences - Set Up presenter', () => {
                 text: 'View'
               }
             ],
-            endDate: '-',
+            endDate: '',
             reason: 'Change to special agreement',
             startDate: '1 January 2020',
             status: 'approved'
@@ -540,7 +540,7 @@ describe('Licences - Set Up presenter', () => {
                   text: 'View'
                 }
               ],
-              endDate: '-',
+              endDate: '',
               reason: '',
               startDate: '1 January 2020',
               status: 'approved'

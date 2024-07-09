@@ -55,9 +55,9 @@ function _agreements (commonData, agreements, auth) {
   return agreements.map((agreement) => {
     return {
       startDate: formatLongDate(agreement.startDate),
-      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '-',
+      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: agreementDescriptions[_financialAgreementCode(agreement)],
-      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '-',
+      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
       action: _agreementActionLinks(commonData, agreement, auth)
     }
   })
@@ -135,7 +135,7 @@ function _chargeVersions (chargeVersions) {
     return {
       id: chargeVersion.id,
       startDate: formatLongDate(chargeVersion.startDate),
-      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '-',
+      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '',
       status: _status(chargeVersion.status),
       reason: chargeVersion.changeReason?.description,
       action: [
@@ -179,7 +179,7 @@ function _returnVersions (returnVersions = [{}]) {
         text: 'View',
         link: `/system/return-requirements/${returnVersion.id}/view`
       }],
-      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '-',
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
       startDate: formatLongDate(returnVersion.startDate),
       status: _status(returnVersion.status)
@@ -218,7 +218,7 @@ function _workflows (workflows, auth) {
   return workflows.map((workflow) => {
     return {
       action: _workflowAction(workflow, auth),
-      endDate: '-',
+      endDate: '',
       id: workflow.id,
       reason: workflow.data.chargeVersion?.changeReason?.description,
       startDate: _workflowStartDate(workflow),
@@ -269,7 +269,7 @@ function _workflowStartDate (workflow) {
     return formatLongDate(startDate)
   }
 
-  return '-'
+  return ''
 }
 
 module.exports = {
