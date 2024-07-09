@@ -98,7 +98,7 @@
   {# of points as the summary. Users must expand the block to get the full list. #}
   {% macro pointDetails(points) %}
     {% set pointsList %}
-    {% set count = 0 %}
+      {% set count = 0 %}
       {% for point in points %}
         {% set count = loop.index %}
         {{ point }}<br>
