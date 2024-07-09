@@ -83,6 +83,7 @@ function _prepareBillRun (billRun, preparedLicences) {
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
+    numberOfLicencesToReview: billRun.reviewLicences[0].numberOfLicencesToReview,
     reviewMessage: _prepareReviewMessage(billRun.reviewLicences[0].numberOfLicencesToReview),
     totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
