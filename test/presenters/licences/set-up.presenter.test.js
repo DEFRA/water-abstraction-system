@@ -14,7 +14,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe.only('Licences - Set Up presenter', () => {
+describe('Licences - Set Up presenter', () => {
   const agreement = {
     id: '123',
     startDate: new Date('2020-01-01'),
