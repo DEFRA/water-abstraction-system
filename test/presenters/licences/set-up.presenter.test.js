@@ -343,7 +343,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }
         ])
@@ -373,7 +373,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }])
         })
@@ -396,7 +396,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '31 March 2024',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }])
         })
@@ -451,6 +451,50 @@ describe('Licences - Set Up presenter', () => {
         })
       })
 
+      describe('that have a status of "changes_requested"', () => {
+        beforeEach(() => {
+          workflows = [{ ...workflow }]
+          workflows[0].status = 'changes_requested'
+        })
+
+        describe('and the user is permitted to review workflow records', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+          })
+
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.chargeInformation).to.equal([{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                text: 'Review'
+              }],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 April 2022',
+              endDate: '',
+              status: 'changes_requested',
+              reason: 'changed something'
+            }])
+          })
+        })
+
+        describe('and the user is not permitted to review workflow records', () => {
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.chargeInformation).to.equal([{
+              action: [],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 April 2022',
+              endDate: '',
+              status: 'changes_requested',
+              reason: 'changed something'
+            }])
+          })
+        })
+      })
+
       describe('that have a status of "to_setup"', () => {
         beforeEach(() => {
           workflows = [{ ...workflow }]
@@ -473,7 +517,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '',
               endDate: '',
-              status: 'to set up',
+              status: 'to_setup',
               reason: 'changed something'
             }])
           })
@@ -492,7 +536,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '',
               endDate: '',
-              status: 'to set up',
+              status: 'to_setup',
               reason: 'changed something'
             }])
           })
@@ -519,7 +563,7 @@ describe('Licences - Set Up presenter', () => {
             endDate: '',
             reason: 'Change to special agreement',
             startDate: '1 January 2020',
-            status: 'approved'
+            status: 'current'
           }
         ])
       })
@@ -543,7 +587,7 @@ describe('Licences - Set Up presenter', () => {
               endDate: '',
               reason: '',
               startDate: '1 January 2020',
-              status: 'approved'
+              status: 'current'
             }
           ])
         })
