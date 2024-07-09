@@ -451,6 +451,50 @@ describe('Licences - Set Up presenter', () => {
         })
       })
 
+      describe('that have a status of "changes_requested"', () => {
+        beforeEach(() => {
+          workflows = [{ ...workflow }]
+          workflows[0].status = 'changes_requested'
+        })
+
+        describe('and the user is permitted to review workflow records', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+          })
+
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.chargeInformation).to.equal([{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                text: 'Review'
+              }],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 April 2022',
+              endDate: '',
+              status: 'change request',
+              reason: 'changed something'
+            }])
+          })
+        })
+
+        describe('and the user is not permitted to review workflow records', () => {
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.chargeInformation).to.equal([{
+              action: [],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 April 2022',
+              endDate: '',
+              status: 'change request',
+              reason: 'changed something'
+            }])
+          })
+        })
+      })
+
       describe('that have a status of "to_setup"', () => {
         beforeEach(() => {
           workflows = [{ ...workflow }]
