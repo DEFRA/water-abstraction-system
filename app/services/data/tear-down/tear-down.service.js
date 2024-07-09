@@ -11,10 +11,12 @@ const IdmSchemaService = require('./idm-schema.service.js')
 const PermitSchemaService = require('./permit-schema.service.js')
 const ReturnsSchemaService = require('./returns-schema.service.js')
 const WaterSchemaService = require('./water-schema.service.js')
+const PublicSchemaService = require('./public-schema.service.js')
 
 async function go () {
   const startTime = currentTimeInNanoseconds()
 
+  await PublicSchemaService.go()
   await Promise.all([
     CrmSchemaService.go(),
     IdmSchemaService.go(),
