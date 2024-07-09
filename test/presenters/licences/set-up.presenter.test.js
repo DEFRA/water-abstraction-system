@@ -343,7 +343,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }
         ])
@@ -373,7 +373,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }])
         })
@@ -396,7 +396,7 @@ describe('Licences - Set Up presenter', () => {
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
             endDate: '31 March 2024',
-            status: 'approved',
+            status: 'current',
             reason: 'Major change'
           }])
         })
@@ -473,7 +473,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '1 April 2022',
               endDate: '',
-              status: 'change request',
+              status: 'changes_requested',
               reason: 'changed something'
             }])
           })
@@ -488,7 +488,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '1 April 2022',
               endDate: '',
-              status: 'change request',
+              status: 'changes_requested',
               reason: 'changed something'
             }])
           })
@@ -517,7 +517,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '',
               endDate: '',
-              status: 'to set up',
+              status: 'to_setup',
               reason: 'changed something'
             }])
           })
@@ -536,7 +536,7 @@ describe('Licences - Set Up presenter', () => {
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '',
               endDate: '',
-              status: 'to set up',
+              status: 'to_setup',
               reason: 'changed something'
             }])
           })
@@ -563,7 +563,7 @@ describe('Licences - Set Up presenter', () => {
             endDate: '',
             reason: 'Change to special agreement',
             startDate: '1 January 2020',
-            status: 'approved'
+            status: 'current'
           }
         ])
       })
@@ -587,7 +587,7 @@ describe('Licences - Set Up presenter', () => {
               endDate: '',
               reason: '',
               startDate: '1 January 2020',
-              status: 'approved'
+              status: 'current'
             }
           ])
         })

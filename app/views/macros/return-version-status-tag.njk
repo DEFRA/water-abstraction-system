@@ -10,14 +10,6 @@
   {% elif status === 'superseded' %}
     {% set color = "govuk-tag--grey" %}
     {% set text = 'replaced' %}
-  {% elif status === 'review' %}
-    {% set color = "govuk-tag--orange" %}
-  {% elif status === 'changes_requested' %}
-    {% set color = "govuk-tag--blue" %}
-    {% set text = 'change request' %}
-  {% elif status === 'to_setup' %}
-    {% set color = "govuk-tag--blue" %}
-    {% set text = 'to set up' %}
   {% else %}
     {% set color = "govuk-tag--blue" %}
   {% endif %}
