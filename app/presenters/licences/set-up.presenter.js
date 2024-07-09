@@ -179,7 +179,7 @@ function _returnVersions (returnVersions = [{}]) {
         text: 'View',
         link: `/system/return-requirements/${returnVersion.id}/view`
       }],
-      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '-',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
       startDate: formatLongDate(returnVersion.startDate),
       status: _status(returnVersion.status)
