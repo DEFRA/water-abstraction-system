@@ -93,31 +93,6 @@
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 
-  {# Generate the points cell #}
-  {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
-  {# of points as the summary. Users must expand the block to get the full list. #}
-  {% macro pointDetails(points) %}
-    {% set pointsList %}
-      {% set count = 0 %}
-      {% for point in points %}
-        {% set count = loop.index %}
-        {{ point }}<br>
-      {% endfor %}
-    {% endset %}
-
-    {% if count > 5 %}
-      {{
-        govukDetails({
-          classes: 'govuk-!-margin-bottom-0',
-          summaryText: points | length + ' points',
-          html: pointsList
-        })
-      }}
-    {% else %}
-      {{ pointsList | safe }}
-    {% endif %}
-  {% endmacro %}
-
   {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
@@ -129,6 +104,31 @@
         }) }}
       </form>
       {% for requirement in requirements %}
+        {# Generate the points cell #}
+        {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
+        {# of points as the summary. Users must expand the block to get the full list. #}
+        {% set pointCell %}
+          {% set pointsList %}
+            {% set count = requirement.points | length %}
+            {% for point in requirement.points %}
+              {% set count = loop.index %}
+              {{ point }}<br>
+            {% endfor %}
+          {% endset %}
+
+          {% if count > 5 %}
+            {{
+              govukDetails({
+                classes: 'govuk-!-margin-bottom-0',
+                summaryText: count + ' points',
+                html: pointsList
+              })
+            }}
+          {% else %}
+            {{ pointsList | safe }}
+          {% endif %}
+        {% endset %}
+
         {% set rowIndex = loop.index0 %}
         <div>
             {{ govukSummaryList({
@@ -165,7 +165,7 @@
                     text: "Points"
                   },
                   value: {
-                    html: '<span data-test="points-' + rowIndex + '">' + pointDetails(requirement.points) + '</span>'
+                    html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
                   },
                   actions: {
                     items: [
