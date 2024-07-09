@@ -111,11 +111,14 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
   const { reviewChargeReferences } = reviewChargeVersion
 
   reviewChargeReferences.forEach((reviewChargeReference) => {
+    const totalBillableReturns = _totalBillableReturns(reviewChargeReference)
+
     chargeReference.push({
       id: reviewChargeReference.id,
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
-      totalBillableReturns: _totalBillableReturns(reviewChargeReference),
+      totalBillableReturns: `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`,
+      billableReturnsWarning: totalBillableReturns > reviewChargeReference.amendedAuthorisedVolume,
       chargeReferenceLink: _chargeReferenceLink(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
@@ -290,7 +293,7 @@ function _totalBillableReturns (reviewChargeReference) {
     totalBillableReturns = Big(totalBillableReturns).plus(reviewChargeElement.amendedAllocated).toNumber()
   })
 
-  return `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`
+  return totalBillableReturns
 }
 
 function _unmatchedReturns (returnLogs) {
