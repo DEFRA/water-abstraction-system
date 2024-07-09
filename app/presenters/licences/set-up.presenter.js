@@ -262,14 +262,14 @@ function _workflowActionReviewer (workflow) {
 }
 
 function _workflowStartDate (workflow) {
-  if (workflow.status === 'review') {
-    // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
-    const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
-
-    return formatLongDate(startDate)
+  if (workflow.status === 'to_setup') {
+    return ''
   }
 
-  return ''
+  // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
+  const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
+
+  return formatLongDate(startDate)
 }
 
 module.exports = {
