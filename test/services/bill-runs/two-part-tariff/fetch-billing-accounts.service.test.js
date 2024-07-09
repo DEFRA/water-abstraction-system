@@ -16,6 +16,7 @@ const ChargeElementHelper = require('../../../support/helpers/charge-element.hel
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
@@ -33,15 +34,16 @@ describe('Fetch Billing Accounts service', () => {
   let chargeReference
   let chargeVersion
   let licence
-
+  let region
   let reviewChargeElement
   let reviewChargeReference
   let reviewChargeVersion
 
   before(async () => {
-    billRun = await BillRunHelper.add()
+    region = await RegionHelper.add()
+    billRun = await BillRunHelper.add({ regionId: region.id })
 
-    licence = await LicenceHelper.add()
+    licence = await LicenceHelper.add({ regionId: region.id })
 
     billingAccount = await BillingAccountHelper.add()
     billingAccountNotInBillRun = await BillingAccountHelper.add()
@@ -112,6 +114,10 @@ describe('Fetch Billing Accounts service', () => {
             expect(licence.waterUndertaker).to.equal(false)
             expect(licence.historicalAreaCode).to.equal('SAAR')
             expect(licence.regionalChargeArea).to.equal('Southern')
+            expect(licence.region).to.equal({
+              id: region.id,
+              chargeRegionId: region.chargeRegionId
+            })
           })
 
           it('includes the applicable charge references', async () => {

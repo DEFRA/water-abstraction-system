@@ -50,6 +50,7 @@ describe('Review Bill Run presenter', () => {
           financialYear: '2022 to 2023',
           billRunType: 'two-part tariff',
           numberOfLicencesDisplayed: 3,
+          numberOfLicencesToReview: 1,
           reviewMessage: 'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
           totalNumberOfLicences: 3,
           preparedLicences: [
