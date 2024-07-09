@@ -63,7 +63,12 @@ describe('View Licence Set Up service', () => {
         id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
         createdAt: new Date('2020-01-01'),
         status: 'review',
-        data: { chargeVersion: { changeReason: { description: 'changed something' } } },
+        data: {
+          chargeVersion: {
+            changeReason: { description: 'changed something' },
+            dateRange: { startDate: '2022-04-01' }
+          }
+        },
         licenceId: '456'
       }
     ])
@@ -107,10 +112,10 @@ describe('View Licence Set Up service', () => {
         chargeInformation: [
           {
             action: [],
-            endDate: '-',
+            endDate: '',
             id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
             reason: 'changed something',
-            startDate: '1 January 2020',
+            startDate: '1 April 2022',
             status: 'review'
           },
           {
