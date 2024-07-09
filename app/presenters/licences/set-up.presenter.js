@@ -55,9 +55,9 @@ function _agreements (commonData, agreements, auth) {
   return agreements.map((agreement) => {
     return {
       startDate: formatLongDate(agreement.startDate),
-      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
+      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '-',
       description: agreementDescriptions[_financialAgreementCode(agreement)],
-      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
+      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '-',
       action: _agreementActionLinks(commonData, agreement, auth)
     }
   })
