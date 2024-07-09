@@ -40,7 +40,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const naldRegionId = randomInteger(1, 8)
   const defaults = {
-    chargeRegionId: _chargeRegionId(naldRegionId),
+    chargeRegionId: generateChargeRegionId(naldRegionId),
     naldRegionId,
     name: 'Kingdom of Avalon',
     displayName: 'Avalon'
@@ -52,7 +52,11 @@ function defaults (data = {}) {
   }
 }
 
-function _chargeRegionId (naldRegionId) {
+function generateChargeRegionId (naldRegionId = null) {
+  if (!naldRegionId) {
+    naldRegionId = randomInteger(1, 8)
+  }
+
   const chargeRegionIds = ['A', 'B', 'Y', 'N', 'E', 'S', 'T', 'W']
 
   return chargeRegionIds[naldRegionId - 1]
@@ -60,5 +64,6 @@ function _chargeRegionId (naldRegionId) {
 
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateChargeRegionId
 }
