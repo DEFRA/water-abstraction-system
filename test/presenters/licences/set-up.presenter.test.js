@@ -26,7 +26,7 @@ describe('Licences - Set Up presenter', () => {
   const chargeVersion = {
     id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
     startDate: new Date('2020-01-01'),
-    endDate: new Date('2020-09-01'),
+    endDate: null,
     status: 'current',
     changeReason: { description: 'Major change' },
     licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
@@ -34,8 +34,8 @@ describe('Licences - Set Up presenter', () => {
 
   const returnVersion = {
     id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
-    startDate: new Date('2025-01-01'),
-    endDate: new Date('2025-02-01'),
+    startDate: new Date('2020-01-01'),
+    endDate: null,
     status: 'current',
     reason: 'change-to-special-agreement'
   }
@@ -44,7 +44,12 @@ describe('Licences - Set Up presenter', () => {
     id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
     createdAt: new Date('2020-01-01'),
     status: 'review',
-    data: { chargeVersion: { changeReason: { description: 'changed something' } } },
+    data: {
+      chargeVersion: {
+        changeReason: { description: 'changed something' },
+        dateRange: { startDate: '2022-04-01' }
+      }
+    },
     licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
   }
 
@@ -118,9 +123,9 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Recalculate bills'
               }
             ],
-            signedOn: '',
+            signedOn: '-',
             description: 'Two-part tariff',
-            endDate: '',
+            endDate: '-',
             startDate: '1 January 2020'
           }
         ])
@@ -294,6 +299,7 @@ describe('Licences - Set Up presenter', () => {
       describe('when the licence is more than 6 years old and all the actions are available for an agreement', () => {
         beforeEach(() => {
           const sixYearsAndOneDayAgo = new Date()
+
           sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
           sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
 
@@ -317,14 +323,14 @@ describe('Licences - Set Up presenter', () => {
         workflows = [{ ...workflow }]
       })
 
-      it('groups both types of data into the \'chargeInformation\' property', () => {
+      it('groups both types of data into the "chargeInformation" property', () => {
         const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
         expect(result.chargeInformation).to.equal([
           {
             action: [],
             id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-            startDate: '1 January 2020',
+            startDate: '1 April 2022',
             endDate: '-',
             status: 'review',
             reason: 'changed something'
@@ -336,7 +342,7 @@ describe('Licences - Set Up presenter', () => {
             }],
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
-            endDate: '1 September 2020',
+            endDate: '-',
             status: 'approved',
             reason: 'Major change'
           }
@@ -376,6 +382,7 @@ describe('Licences - Set Up presenter', () => {
       describe('where the end date is populated', () => {
         beforeEach(() => {
           chargeVersions = [{ ...chargeVersion }]
+          chargeVersions[0].endDate = new Date('2024-03-31')
         })
 
         it('correctly presents the data with the end date', () => {
@@ -388,7 +395,7 @@ describe('Licences - Set Up presenter', () => {
             }],
             id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
             startDate: '1 January 2020',
-            endDate: '1 September 2020',
+            endDate: '31 March 2024',
             status: 'approved',
             reason: 'Major change'
           }])
@@ -401,7 +408,7 @@ describe('Licences - Set Up presenter', () => {
         chargeVersions = []
       })
 
-      describe('that have a status of \'review\'', () => {
+      describe('that have a status of "review"', () => {
         beforeEach(() => {
           workflows = [{ ...workflow }]
         })
@@ -420,7 +427,7 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Review'
               }],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 January 2020',
+              startDate: '1 April 2024',
               endDate: '-',
               status: 'review',
               reason: 'changed something'
@@ -435,7 +442,7 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).to.equal([{
               action: [],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 January 2020',
+              startDate: '1 April 2024',
               endDate: '-',
               status: 'review',
               reason: 'changed something'
@@ -444,7 +451,7 @@ describe('Licences - Set Up presenter', () => {
         })
       })
 
-      describe('that have a status of \'to_setup\'', () => {
+      describe('that have a status of "to_setup"', () => {
         beforeEach(() => {
           workflows = [{ ...workflow }]
           workflows[0].status = 'to_setup'
@@ -464,7 +471,7 @@ describe('Licences - Set Up presenter', () => {
                 text: 'Review'
               }],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 January 2020',
+              startDate: '-',
               endDate: '-',
               status: 'to set up',
               reason: 'changed something'
@@ -483,7 +490,7 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).to.equal([{
               action: [],
               id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 January 2020',
+              startDate: '-',
               endDate: '-',
               status: 'to set up',
               reason: 'changed something'
@@ -509,9 +516,9 @@ describe('Licences - Set Up presenter', () => {
                 text: 'View'
               }
             ],
-            endDate: '1 February 2025',
+            endDate: '-',
             reason: 'Change to special agreement',
-            startDate: '1 January 2025',
+            startDate: '1 January 2020',
             status: 'approved'
           }
         ])
@@ -533,9 +540,9 @@ describe('Licences - Set Up presenter', () => {
                   text: 'View'
                 }
               ],
-              endDate: '',
+              endDate: '-',
               reason: '',
-              startDate: '1 January 2025',
+              startDate: '1 January 2020',
               status: 'approved'
             }
           ])
@@ -586,6 +593,7 @@ describe('Licences - Set Up presenter', () => {
           describe('and the licence ends more than 6 years ago', () => {
             beforeEach(() => {
               const sixYearsAndOneDayAgo = new Date()
+
               sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
               sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
 
@@ -617,9 +625,10 @@ describe('Licences - Set Up presenter', () => {
                 .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
             })
           })
-          describe('and the licence \'ends\' more than 6 years ago', () => {
+          describe('and the licence "ends" more than 6 years ago', () => {
             beforeEach(() => {
               const sixYearsAndOneDayAgo = new Date()
+
               sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
               sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
 

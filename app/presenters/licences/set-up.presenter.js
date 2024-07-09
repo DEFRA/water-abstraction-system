@@ -221,7 +221,7 @@ function _workflows (workflows, auth) {
       endDate: '-',
       id: workflow.id,
       reason: workflow.data.chargeVersion?.changeReason?.description,
-      startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
+      startDate: _workflowStartDate(workflow),
       status: _status(workflow.status)
     }
   })
@@ -259,6 +259,17 @@ function _workflowActionReviewer (workflow) {
       link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
     }
   ]
+}
+
+function _workflowStartDate (workflow) {
+  if (workflow.status === 'review') {
+    // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
+    const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
+
+    return formatLongDate(startDate)
+  }
+
+  return '-'
 }
 
 module.exports = {
