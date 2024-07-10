@@ -14,14 +14,11 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {string} returnVersionId - The UUID of the selected return version to get requirements for
  *
- * @returns {Promise<ReturnVersionModel[]>}
- * The return version, licence, return requirements (requirement, points, purposes)
- *
+ * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
+ * points, purposes)
  */
 async function go (returnVersionId) {
-  const returnVersion = await _fetch(returnVersionId)
-
-  return returnVersion
+  return _fetch(returnVersionId)
 }
 
 async function _fetch (returnVersionId) {
@@ -30,7 +27,7 @@ async function _fetch (returnVersionId) {
     .select([
       'createdAt',
       'id',
-      'multiple_upload',
+      'multipleUpload',
       'notes',
       'reason',
       'startDate',
