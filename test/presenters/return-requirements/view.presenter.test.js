@@ -30,7 +30,7 @@ describe('Return Requirements - View presenter', () => {
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
         notes: 'A special note',
-        pageTitle: 'Check the requirements for returns for Me Ingles',
+        pageTitle: 'Check the requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
           {
@@ -216,7 +216,7 @@ describe('Return Requirements - View presenter', () => {
       describe('the requirements "purposes" property', () => {
         describe('when a purpose description (alias) was added to the purpose', () => {
           beforeEach(() => {
-            returnVersion.returnRequirements[0].purposes[0].alias = 'spray indiscreetly'
+            returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias = 'spray indiscreetly'
           })
 
           it('formats the purposes for display with the purpose description in brackets', () => {
@@ -277,7 +277,7 @@ function _returnVersion () {
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     status: 'current',
-    user: { username: 'carol.shaw@atari.com' },
+    user: { id: 1, username: 'carol.shaw@atari.com' },
     licence: {
       id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
@@ -298,17 +298,18 @@ function _returnVersion () {
       siteDescription: 'Borehole in field',
       summer: false,
       twoPartTariff: false,
-      points: [{
+      returnRequirementPoints: [{
         description: 'Borehole in top field',
+        id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
         ngr1: 'SE 4044 7262',
         ngr2: null,
         ngr3: null,
         ngr4: null
       }],
-      purposes: [{
+      returnRequirementPurposes: [{
         alias: null,
         id: '7a2e3a5a-b10d-4a0f-b115-42b7551c4e8c',
-        purposeDetails: { description: 'Spray Irrigation - Direct' }
+        purpose: { description: 'Spray Irrigation - Direct', id: 'e0bd8bd4-cfb8-44ba-b76b-2b722fcc2207' }
       }]
     }]
   }

@@ -4,11 +4,13 @@
  * @module RequirementsForReturnsSeeder
  */
 
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
+const UserHelper = require('../helpers/user.helper.js')
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -30,8 +32,11 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
  * purpose
  */
 async function seed (licenceId) {
+  // Create a user
+  const user = await UserHelper.add({ username: `${generateUUID()}@wrls.gov.uk` })
+
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId })
+  const returnVersion = await ReturnVersionHelper.add({ licenceId, createdBy: user.id })
 
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
@@ -56,7 +61,7 @@ async function seed (licenceId) {
   )
   returnVersion.returnRequirements.push(returnRequirement)
 
-  return returnVersion
+  return { returnVersion, user }
 }
 
 async function _returnRequirement (
