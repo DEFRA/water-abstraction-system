@@ -12,7 +12,7 @@ const PurposeModel = require('../../models/purpose.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} The purposes for the matching licenceId
+ * @returns {Promise<Object>} The distinct purposes for the matching licence's current version
  */
 async function go (licenceId) {
   return _fetch(licenceId)
@@ -24,10 +24,12 @@ async function _fetch (licenceId) {
       'purposes.id',
       'purposes.description'
     ])
-    .innerJoin('licenceVersionPurposes', 'purposes.id', 'licenceVersionPurposes.purposeId')
-    .innerJoin('licenceVersions', 'licenceVersionPurposes.licenceVersionId', 'licenceVersions.id')
-    .where('licenceVersions.licenceId', licenceId)
-    .where('licenceVersions.status', 'current')
+    .whereExists(
+      PurposeModel.relatedQuery('licenceVersionPurposes')
+        .innerJoin('licenceVersions', 'licenceVersions.id', 'licenceVersionPurposes.licenceVersionId')
+        .where('licenceVersions.licenceId', licenceId)
+        .where('licenceVersions.status', 'current')
+    )
     .orderBy([
       { column: 'purposes.description', order: 'asc' }
     ])
