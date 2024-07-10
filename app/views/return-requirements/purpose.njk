@@ -4,6 +4,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -41,12 +42,32 @@
 <div>
   <form method="post">
     {% set checkBoxItems = [] %}
-    {% for purpose in licencePurposes %}
+    {% for purpose in purposes %}
+      {# Set an easier to use index. Also means we can refer to it inside our loop #}
+      {% set checkIndex = loop.index0 %}
+
+      {% set aliasInput %}
+        {{ govukInput({
+          id: 'alias-' + checkIndex,
+          name: 'alias-' + purpose.id,
+          type: 'text',
+          value: purpose.alias,
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Add a purpose description (optional)"
+          },
+          attributes: { 'data-test': 'purpose-alias-' + checkIndex }
+        }) }}
+      {% endset %}
 
       {% set checkBoxItem = {
+        id: 'purposes-' + checkIndex,
+        name: 'purposes',
         value: purpose.id,
         text: purpose.description,
-        checked: purpose.id in purposes
+        checked: purpose.checked,
+        attributes: { 'data-test': 'purpose-' + checkIndex },
+        conditional: { html: aliasInput }
       } %}
 
       {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
@@ -56,7 +77,8 @@
     {{ govukCheckboxes({
       name: "purposes",
       errorMessage: error,
-      items: checkBoxItems
+      items: checkBoxItems,
+      attributes: { 'data-test': 'purposes' }
     }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
