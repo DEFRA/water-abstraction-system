@@ -13,20 +13,22 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
 /**
  * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
  *
- * @param {ReturnVersionModel[]} requirementsForReturns
- * return version, licence, return requirements (requirement, points, purposes)
+ * @param {ReturnVersionModel[]} returnVersion - The return version and associated, licence, and return requirements
+ * (requirement, points, purposes) returned by FetchRequirementsForReturns
  *
  * @returns {Object} requirements for returns data needed by the view template
  */
 
-function go (requirementsForReturns) {
+function go (returnVersion) {
   const { createdAt, licence, reason, notes, multipleUpload, returnRequirements, startDate, status, user } =
-    requirementsForReturns
+    returnVersion
 
   return {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
+    createdBy: user ? user.username : 'Migrated from NALD',
+    createdDate: formatLongDate(createdAt),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     notes,
@@ -34,9 +36,7 @@ function go (requirementsForReturns) {
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
-    status,
-    createdDate: formatLongDate(createdAt),
-    createdBy: user ? user.username : 'Migrated from NALD'
+    status
   }
 }
 
@@ -113,6 +113,10 @@ function _mapRequirement (requirement) {
 
 function _purposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
+    if (returnRequirementPurpose.alias) {
+      return `${returnRequirementPurpose.purposeDetails.description} (${returnRequirementPurpose.alias})`
+    }
+
     return returnRequirementPurpose.purposeDetails.description
   })
 }
