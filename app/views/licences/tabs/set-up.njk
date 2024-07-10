@@ -1,6 +1,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "macros/charge-version-status-tag.njk" import statusTag %}
+
+{% from "macros/charge-version-status-tag.njk" import statusTag as chargeVersionStatusTag %}
+{% from "macros/return-version-status-tag.njk" import statusTag as returnVersionStatusTag %}
 
 {% macro createLink(data) %}
   {% for linkItem in data.action %}
@@ -30,7 +32,7 @@
           text: returnsRequirement.reason
         },
         {
-          html: statusTag(returnsRequirement.status)
+          html: returnVersionStatusTag(returnsRequirement.status, true)
         },
         {
           html: createLink(returnsRequirement)
@@ -99,7 +101,7 @@
         text: chargeVersion.reason
       },
       {
-        html: statusTag(chargeVersion.status)
+        html: chargeVersionStatusTag(chargeVersion.status, true)
       },
       {
         html: createLink(chargeVersion)

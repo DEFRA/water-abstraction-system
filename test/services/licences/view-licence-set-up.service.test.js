@@ -129,7 +129,7 @@ describe('View Licence Set Up service', () => {
             id: 'c0601335-b6ad-4651-b54b-c586f8d22ac3',
             reason: 'Missing thing',
             startDate: '1 January 2020',
-            status: 'approved'
+            status: 'current'
           }
         ],
         licenceId: testId,
@@ -153,7 +153,7 @@ describe('View Licence Set Up service', () => {
             endDate: '1 February 2025',
             reason: 'Change to special agreement',
             startDate: '1 January 2025',
-            status: 'approved'
+            status: 'current'
           }
         ]
       })

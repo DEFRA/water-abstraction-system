@@ -136,7 +136,7 @@ function _chargeVersions (chargeVersions) {
       id: chargeVersion.id,
       startDate: formatLongDate(chargeVersion.startDate),
       endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '',
-      status: _status(chargeVersion.status),
+      status: chargeVersion.status,
       reason: chargeVersion.changeReason?.description,
       action: [
         {
@@ -182,7 +182,7 @@ function _returnVersions (returnVersions = [{}]) {
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
       startDate: formatLongDate(returnVersion.startDate),
-      status: _status(returnVersion.status)
+      status: returnVersion.status
     }
   })
 }
@@ -198,22 +198,6 @@ function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
   return {}
 }
 
-function _status (status) {
-  const statuses = {
-    current: 'approved',
-    draft: 'draft',
-    approved: 'approved',
-    replaced: 'replaced',
-    superseded: 'replaced',
-    invalid: 'invalid',
-    review: 'review',
-    changes_requested: 'change request',
-    to_setup: 'to set up'
-  }
-
-  return statuses[status]
-}
-
 function _workflows (workflows, auth) {
   return workflows.map((workflow) => {
     return {
@@ -222,7 +206,7 @@ function _workflows (workflows, auth) {
       id: workflow.id,
       reason: workflow.data.chargeVersion?.changeReason?.description,
       startDate: _workflowStartDate(workflow),
-      status: _status(workflow.status)
+      status: workflow.status
     }
   })
 }
@@ -262,14 +246,14 @@ function _workflowActionReviewer (workflow) {
 }
 
 function _workflowStartDate (workflow) {
-  if (workflow.status === 'review') {
-    // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
-    const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
-
-    return formatLongDate(startDate)
+  if (workflow.status === 'to_setup') {
+    return ''
   }
 
-  return ''
+  // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
+  const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
+
+  return formatLongDate(startDate)
 }
 
 module.exports = {
