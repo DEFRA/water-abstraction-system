@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we want to stub
-const FetchRequirementsForReturnsService = require('../../../app/services/return-requirements/fetch-requirements-for-returns.service.js')
+const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
 // Thing under test
 const ViewService = require('../../../app/services/return-requirements/view.service.js')
@@ -18,7 +18,7 @@ describe('Return Requirements - View service', () => {
   const returnVersionId = '0c6ed18f-39fb-4d70-93bb-cf24453dbb70'
 
   beforeEach(async () => {
-    Sinon.stub(FetchRequirementsForReturnsService, 'go').resolves(_returnVersion())
+    Sinon.stub(FetchReturnVersionService, 'go').resolves(_returnVersion())
   })
 
   afterEach(() => {

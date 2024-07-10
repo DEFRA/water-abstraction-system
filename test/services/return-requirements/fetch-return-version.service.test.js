@@ -12,9 +12,9 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
-const FetchRequirementsForReturnsService = require('../../../app/services/return-requirements/fetch-requirements-for-returns.service.js')
+const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
-describe('Return Requirements - Fetch Requirements for returns service', () => {
+describe('Return Requirements - Fetch Return Version service', () => {
   let licence
   let returnVersion
 
@@ -25,7 +25,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
     })
 
     it('returns the details of the requirements for returns', async () => {
-      const result = await FetchRequirementsForReturnsService.go(returnVersion.id)
+      const result = await FetchReturnVersionService.go(returnVersion.id)
 
       const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
 
