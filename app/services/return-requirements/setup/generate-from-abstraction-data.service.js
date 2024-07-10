@@ -240,7 +240,7 @@ function _transformForSetup (licence) {
 
     return {
       points: _points(matchingPermitPurpose),
-      purposes: [purpose.id],
+      purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(startMonth, endMonth),
       siteDescription: _siteDescription(matchingPermitPurpose),
       abstractionPeriod: {
