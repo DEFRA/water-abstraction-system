@@ -30,14 +30,16 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const purposesData = await FetchLicencePurposesService.go(session.licence.id)
+  const licencePurposes = await FetchLicencePurposesService.go(session.licence.id)
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = await _validate(payload, purposesData)
+  const purposes = _combinePurposeDetails(payload, licencePurposes)
+
+  const validationResult = await _validate(purposes, licencePurposes)
 
   if (!validationResult) {
-    await _save(session, requirementIndex, payload)
+    await _save(session, requirementIndex, purposes)
 
     if (session.checkPageVisited) {
       GeneralLib.flashNotification(yar)
@@ -48,14 +50,33 @@ async function go (sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = PurposePresenter.go(session, requirementIndex, purposesData)
+  const submittedSessionData = _submittedSessionData(session, requirementIndex, purposes, licencePurposes)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
     pageTitle: 'Select the purpose for the requirements for returns',
-    ...formattedData
+    ...submittedSessionData
   }
+}
+
+function _combinePurposeDetails (payload, licencePurposes) {
+  const combinedValues = []
+
+  for (const purpose of payload.purposes) {
+    const alias = payload[`alias-${purpose}`]
+    const matchedLicencePurpose = licencePurposes.find((licencePurpose) => {
+      return licencePurpose.id === purpose
+    })
+
+    combinedValues.push({
+      id: purpose,
+      alias: alias || '',
+      description: matchedLicencePurpose.description
+    })
+  }
+
+  return combinedValues
 }
 
 /**
@@ -64,15 +85,28 @@ async function go (sessionId, requirementIndex, payload, yar) {
  * for uniformity.
  */
 function _handleOneOptionSelected (payload) {
+  if (!payload.purposes) {
+    payload.purposes = []
+  }
+
   if (!Array.isArray(payload.purposes)) {
     payload.purposes = [payload.purposes]
   }
 }
 
-async function _save (session, requirementIndex, payload) {
-  session.requirements[requirementIndex].purposes = payload.purposes
+async function _save (session, requirementIndex, purposes) {
+  session.requirements[requirementIndex].purposes = purposes
 
   return session.$update()
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter
+ */
+function _submittedSessionData (session, requirementIndex, purposes, licencePurposes) {
+  session.requirements[requirementIndex].purposes = purposes
+
+  return PurposePresenter.go(session, requirementIndex, licencePurposes)
 }
 
 async function _validate (payload, purposesData) {
