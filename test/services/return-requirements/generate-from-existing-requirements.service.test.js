@@ -29,7 +29,11 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
       expect(result).to.equal([
         {
           points: ['1234'],
-          purposes: [returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId],
+          purposes: [{
+            alias: '',
+            description: 'Spray Irrigation - Storage',
+            id: returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId
+          }],
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'FIRST BOREHOLE AT AVALON',
           abstractionPeriod: {
@@ -44,7 +48,11 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
         },
         {
           points: ['4321'],
-          purposes: [returnVersion.returnRequirements[1].returnRequirementPurposes[0].purposeId],
+          purposes: [{
+            alias: '',
+            description: 'Spray Irrigation - Storage',
+            id: returnVersion.returnRequirements[1].returnRequirementPurposes[0].purposeId
+          }],
           returnsCycle: 'summer',
           siteDescription: 'SECOND BOREHOLE AT AVALON',
           abstractionPeriod: {

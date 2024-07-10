@@ -95,6 +95,13 @@ async function _fetch (returnVersionId) {
         'purposeId'
       ])
     })
+    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
+    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
+      builder.select([
+        'id',
+        'description'
+      ])
+    })
 }
 
 function _points (returnRequirementPoints) {
@@ -105,7 +112,13 @@ function _points (returnRequirementPoints) {
 
 function _purposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    return returnRequirementPurpose.purposeId
+    const { description, id } = returnRequirementPurpose.purpose
+
+    return {
+      alias: '',
+      description,
+      id
+    }
   })
 }
 
