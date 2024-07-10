@@ -82,6 +82,7 @@ class LicenceVersionPurposeModel extends BaseModel {
           .modifyGraph('purpose', (builder) => {
             builder.select([
               'id',
+              'description',
               'legacyId',
               'twoPartTariff'
             ])
