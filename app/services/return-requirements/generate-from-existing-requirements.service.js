@@ -91,6 +91,7 @@ async function _fetch (returnVersionId) {
     .withGraphFetched('returnRequirements.returnRequirementPurposes')
     .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
       builder.select([
+        'alias',
         'id',
         'purposeId'
       ])
@@ -115,7 +116,7 @@ function _purposes (returnRequirementPurposes) {
     const { description, id } = returnRequirementPurpose.purpose
 
     return {
-      alias: '',
+      alias: returnRequirementPurpose.alias || '',
       description,
       id
     }

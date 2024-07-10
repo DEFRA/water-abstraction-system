@@ -30,7 +30,7 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
         {
           points: ['1234'],
           purposes: [{
-            alias: '',
+            alias: returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias,
             description: 'Spray Irrigation - Storage',
             id: returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId
           }],
