@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 
@@ -19,14 +18,8 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
   let licence
   let returnVersion
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      await DatabaseSupport.clean()
-
       licence = await LicenceHelper.add()
       returnVersion = await RequirementsForReturnsSeeder.seed(licence.id)
     })
@@ -69,6 +62,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
             ],
             purposes: [
               {
+                alias: 'I have an alias',
                 id: returnRequirementsOne.purposes[0].id,
                 purposeDetails: {
                   description: 'Spray Irrigation - Storage'
@@ -102,6 +96,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
             ],
             purposes: [
               {
+                alias: null,
                 id: returnRequirementsTwo.purposes[0].id,
                 purposeDetails: {
                   description: 'Spray Irrigation - Storage'
