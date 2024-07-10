@@ -58,7 +58,7 @@ describe('Return Requirements - Fetch Purposes service', () => {
         description: 'Horticultural Watering'
       })
       expect(result[2]).to.equal({
-        id: purposes[1].id,
+        id: purposes[0].id,
         description: 'Large Garden Watering'
       })
     })
