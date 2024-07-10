@@ -13,13 +13,6 @@ async function go () {
 
 async function _deleteAllTestData () {
   return db.raw(`
-  ALTER TABLE public.review_returns DISABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_elements_returns DISABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_elements DISABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_references DISABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_versions DISABLE TRIGGER ALL;
-  ALTER TABLE public.review_licences DISABLE TRIGGER ALL;
-
   DELETE
   FROM
     "public"."review_returns" AS "rr"
@@ -101,13 +94,6 @@ async function _deleteAllTestData () {
     "r"."nald_region_id" = 9
     AND "rl"."bill_run_id" = "br"."id"
     AND "br"."region_id" = "r"."id";
-
-  ALTER TABLE public.review_returns ENABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_elements_returns ENABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_elements ENABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_references ENABLE TRIGGER ALL;
-  ALTER TABLE public.review_charge_versions ENABLE TRIGGER ALL;
-  ALTER TABLE public.review_licences ENABLE TRIGGER ALL;
   `)
 }
 
