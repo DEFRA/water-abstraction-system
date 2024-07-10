@@ -69,7 +69,10 @@ describe('Fetch Licence Bills service', () => {
           [{
             accountNumber: 'T21404193A',
             billRun: {
-              batchType: 'supplementary'
+              id: billRunId,
+              batchType: 'supplementary',
+              scheme: 'sroc',
+              summer: false
             },
             billingAccountId,
             createdAt: createdDate,

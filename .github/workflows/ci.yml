@@ -40,7 +40,6 @@ jobs:
       ENVIRONMENT: dev
       COOKIE_SECRET: 1a1028df-a2af-468a-929b-e3a274be1208
 
-
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
@@ -73,6 +72,14 @@ jobs:
       - name: Temporary tag check
         run: |
           ! grep -R 'describe.only(\|it.only(' test
+
+      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
+      - name: Temporary log check
+        run: |
+          if grep -R 'console.log(' ./app/ ./test/; then
+            echo "console.log statement found. Please remove it."
+            exit 1
+          fi
 
       - name: Install Node
         uses: actions/setup-node@v4

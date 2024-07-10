@@ -49,6 +49,7 @@ function go (licence) {
     licenceId: id,
     monitoringStations: _monitoringStations(licenceGaugingStations),
     purposes,
+    purposesCount: licenceVersionPurposes ? licenceVersionPurposes.length : 0,
     region: region.displayName,
     sourceOfSupply: points[0]?.point_source?.NAME ?? null,
     startDate: formatLongDate(startDate)
@@ -58,7 +59,7 @@ function go (licence) {
 function _abstractionAmounts (licenceVersionPurposes) {
   const details = []
 
-  if (!licenceVersionPurposes) {
+  if (!licenceVersionPurposes || licenceVersionPurposes.length > 1) {
     return details
   }
 
@@ -181,9 +182,21 @@ function _licenceHolder (licence) {
 }
 
 function _monitoringStations (licenceGaugingStations) {
-  return licenceGaugingStations.map((licenceGaugingStation) => {
-    return licenceGaugingStation.gaugingStation
-  })
+  const monitoringStations = []
+
+  for (const licenceGaugingStation of licenceGaugingStations) {
+    const alreadySeen = monitoringStations.some((monitoringStation) => {
+      return monitoringStation.id === licenceGaugingStation.gaugingStation.id
+    })
+
+    if (alreadySeen) {
+      continue
+    }
+
+    monitoringStations.push(licenceGaugingStation.gaugingStation)
+  }
+
+  return monitoringStations
 }
 
 function _points (permitLicence) {

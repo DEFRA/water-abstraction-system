@@ -34,7 +34,7 @@ function go (requirementsForReturns) {
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
-    status: _status(status),
+    status,
     createdDate: formatLongDate(createdAt),
     createdBy: user ? user.username : 'Migrated from NALD'
   }
@@ -127,15 +127,6 @@ function _requirements (requirements) {
   return requirements.map((requirement) => {
     return _mapRequirement(requirement)
   })
-}
-
-function _status (status) {
-  const statuses = {
-    current: 'approved',
-    superseded: 'replaced'
-  }
-
-  return statuses[status]
 }
 
 module.exports = {

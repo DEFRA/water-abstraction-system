@@ -11,18 +11,15 @@ const { expect } = Code
 // Things we need to stub
 const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
-const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
-const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
 
-describe('View Licence service returns', () => {
+describe('View Licence Returns service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   const page = 1
   const auth = {}
-  const pagination = { page }
 
   beforeEach(async () => {
     Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
@@ -30,13 +27,6 @@ describe('View Licence service returns', () => {
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
       pagination: { total: 1 },
       returns: []
-    })
-
-    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
-
-    Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns({
-      returns: [],
-      activeTab: 'returns'
     })
 
     Sinon.stub(ViewLicenceService, 'go').resolves({
@@ -54,10 +44,11 @@ describe('View Licence service returns', () => {
         const result = await ViewLicenceReturnsService.go(testId, auth, page)
 
         expect(result).to.equal({
-          licenceName: 'fake licence',
-          returns: [],
           activeTab: 'returns',
-          pagination: { page: 1 }
+          returns: [],
+          noReturnsMessage: 'No returns for this licence.',
+          licenceName: 'fake licence',
+          pagination: { numberOfPages: 1 }
         })
       })
     })

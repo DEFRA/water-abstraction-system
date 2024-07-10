@@ -94,7 +94,13 @@ function _reviewChargeElementData () {
         endDate: new Date('2022-05-06'),
         issues: null,
         createdAt: new Date('2024-04-02'),
-        updatedAt: new Date('2024-04-02')
+        updatedAt: new Date('2024-04-02'),
+        returnLog: {
+          periodEndDay: 31,
+          periodEndMonth: 3,
+          periodStartDay: 1,
+          periodStartMonth: 4
+        }
       }
     ],
     chargeElement: {

@@ -34,7 +34,9 @@ const returnRequirementFrequencies = {
 
 const returnRequirementReasons = {
   'abstraction-below-100-cubic-metres-per-day': 'Abstraction amount below 100 cubic metres per day',
+  'change-to-return-requirements': 'Change to requirements for returns',
   'change-to-special-agreement': 'Change to special agreement',
+  'error-correction': 'Error correction',
   'extension-of-licence-validity': 'Limited extension of licence validity (LEV)',
   'major-change': 'Major change',
   'minor-change': 'Minor change',
@@ -65,7 +67,8 @@ const twoPartTariffReviewIssues = {
   'returns-late': 'Returns received late',
   'return-split-over-refs': 'Return split over charge references',
   'some-returns-not-received': 'Some returns not received',
-  'unable-to-match-return': 'Unable to match return'
+  'unable-to-match-return': 'Unable to match return',
+  'multiple-issues': 'Multiple issues'
 }
 
 module.exports = {

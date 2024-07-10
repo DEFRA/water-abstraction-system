@@ -1,7 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "macros/charge-version-status-tag.njk" import statusTag %}
+
+{% from "macros/return-version-status-tag.njk" import statusTag %}
 
 {% macro newLine(array) %}
   {% for item in array %}
