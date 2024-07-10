@@ -110,10 +110,7 @@
         {% set pointCell %}
           {% set pointsList %}
             {% set count = requirement.points | length %}
-            {% for point in requirement.points %}
-              {% set count = loop.index %}
-              {{ point }}<br>
-            {% endfor %}
+            {{ newLine(requirement.points) }}
           {% endset %}
 
           {% if count > 5 %}
