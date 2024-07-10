@@ -28,6 +28,7 @@ describe('Return Requirements - CheckLicenceEndedService', () => {
 
     it('fetches licence data correctly', async () => {
       const result = await CheckLicenceEndedService.go(licence.id)
+
       expect(result).to.be.false()
     })
   })
