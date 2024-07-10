@@ -39,7 +39,7 @@ describe('Return Requirements - View service', () => {
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
         notes: null,
-        pageTitle: 'Check the requirements for returns for Me Ingles',
+        pageTitle: 'Check the requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
           {
@@ -77,7 +77,7 @@ function _returnVersion (returnVersionId) {
     licence: {
       id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
-      $licenceHolder: () => { return 'Me Ingles' }
+      $licenceHolder: () => { return 'Mr Ingles' }
     },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
