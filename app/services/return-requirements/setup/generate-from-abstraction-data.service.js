@@ -204,7 +204,7 @@ function _points (matchingPermitPurpose) {
  * > This is from the abs data the local name on the point
  *
  * The problem is a purpose can have multiple points. So, we grab all the local name values for each point in the
- * matched permit purpose, strip out any nulls or undefined and then join them with ' - ' to form the site description.
+ * matched permit purpose, strip out any nulls or undefined and then select the first one to form the site description.
  */
 function _siteDescription (matchingPermitPurpose) {
   const localNames = matchingPermitPurpose.purposePoints.map((purposePoint) => {
@@ -213,8 +213,8 @@ function _siteDescription (matchingPermitPurpose) {
 
   // NOTE: This is doing two things at once. It first filters the local names by passing each one to Boolean(). It will
   // return true or false depending on whether the value is 'truthy'. In our case this means null or undefined will be
-  // stripped from the array. What's left it calls `.join()` on.
-  return localNames.filter(Boolean).join(' - ')
+  // stripped from the array. From whats left we select the first one.
+  return localNames.filter(Boolean)[0]
 }
 
 /**
