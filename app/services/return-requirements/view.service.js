@@ -5,7 +5,7 @@
  * @module ViewService
  */
 
-const FetchRequirementsForReturnsService = require('./fetch-requirements-for-returns.service.js')
+const FetchReturnVersionService = require('./fetch-return-version.service.js')
 const ViewPresenter = require('../../presenters/return-requirements/view.presenter.js')
 
 /**
@@ -16,7 +16,7 @@ const ViewPresenter = require('../../presenters/return-requirements/view.present
  * @returns {Promise<Object>} page data needed by the view template
  */
 async function go (returnVersionId) {
-  const requirementsForReturns = await FetchRequirementsForReturnsService.go(returnVersionId)
+  const requirementsForReturns = await FetchReturnVersionService.go(returnVersionId)
 
   const data = ViewPresenter.go(requirementsForReturns)
 

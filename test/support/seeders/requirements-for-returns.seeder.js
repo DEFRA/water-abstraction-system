@@ -4,11 +4,14 @@
  * @module RequirementsForReturnsSeeder
  */
 
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
+const UserHelper = require('../helpers/user.helper.js')
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -24,14 +27,19 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
  *
  * Because of this it can be useful to test presenters and services that need to transform the data.
  *
- * @param {String} [licenceId] - The UUID of the licence to link the return version to
- *
- * @returns a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a point and a
- * purpose
+ * @returns {Promise<Object>} a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a
+ * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
+ * it is linked to
  */
-async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
+async function seed () {
+  // Create a user
+  const user = await UserHelper.add({ username: `${generateUUID()}@wrls.gov.uk` })
+
+  // Create a licence
+  const licence = await LicenceHelper.add()
+
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId })
+  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
 
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
@@ -39,9 +47,10 @@ async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
     'week',
     false,
     1234,
-    '1a1a68cc-b1f5-43db-8d1a-3452425bcc68',
-    false
+    false,
+    'I have an alias'
   )
+
   returnVersion.returnRequirements = [returnRequirement]
 
   // Create the second requirement record
@@ -50,15 +59,22 @@ async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
     'month',
     true,
     4321,
-    '91bac151-1c95-4ae5-b0bb-490980396e24',
-    true
+    true,
+    null
   )
   returnVersion.returnRequirements.push(returnRequirement)
 
-  return returnVersion
+  return { licence, returnVersion, user }
 }
 
-async function _returnRequirement (returnVersionId, reportingFrequency, summer, naldPointId, purposeId, agreements) {
+async function _returnRequirement (
+  returnVersionId,
+  reportingFrequency,
+  summer,
+  naldPointId,
+  agreements,
+  alias
+) {
   const returnRequirement = await ReturnRequirementHelper.add({
     collectionFrequency: 'week',
     fiftySixException: agreements,
@@ -74,14 +90,16 @@ async function _returnRequirement (returnVersionId, reportingFrequency, summer, 
   const { id: returnRequirementId } = returnRequirement
 
   const point = await ReturnRequirementPointHelper.add({ naldPointId, returnRequirementId })
+
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = await ReturnRequirementPurposeHelper.add({ purposeId, returnRequirementId })
-  returnRequirement.returnRequirementPurposes = [purpose]
+  const purpose = await PurposeHelper.add()
 
-  await PurposeHelper.add({
-    id: purposeId
+  const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+    purposeId: purpose.id, returnRequirementId, alias
   })
+
+  returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
   return returnRequirement
 }
