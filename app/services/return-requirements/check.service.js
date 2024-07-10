@@ -6,7 +6,8 @@
  */
 
 const CheckPresenter = require('../../presenters/return-requirements/check.presenter.js')
-const ReturnRequirementsService = require('./check/returns-requirements.service.js')
+const FetchPointsService = require('./fetch-points.service.js')
+const ReturnRequirementsPresenter = require('../../presenters/return-requirements/check/returns-requirements.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -22,7 +23,7 @@ async function go (sessionId, yar) {
 
   await _markCheckPageVisited(session)
 
-  const returnRequirements = await ReturnRequirementsService.go(session)
+  const returnRequirements = await _returnRequirements(session)
 
   const formattedData = CheckPresenter.go(session)
 
@@ -40,6 +41,14 @@ async function _markCheckPageVisited (session) {
   session.checkPageVisited = true
 
   return session.$update()
+}
+
+async function _returnRequirements (session) {
+  const { licence, requirements, journey } = session
+
+  const points = await FetchPointsService.go(licence.id)
+
+  return ReturnRequirementsPresenter.go(requirements, points, journey)
 }
 
 module.exports = {
