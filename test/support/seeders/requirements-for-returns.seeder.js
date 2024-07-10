@@ -29,7 +29,7 @@ const ReturnVersionHelper = require('../helpers/return-version.helper.js')
  * @returns a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a point and a
  * purpose
  */
-async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
+async function seed (licenceId) {
   // Create a return version to which we'll link multiple return requirements
   const returnVersion = await ReturnVersionHelper.add({ licenceId })
 
@@ -39,9 +39,10 @@ async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
     'week',
     false,
     1234,
-    '1a1a68cc-b1f5-43db-8d1a-3452425bcc68',
-    false
+    false,
+    'I have an alias'
   )
+
   returnVersion.returnRequirements = [returnRequirement]
 
   // Create the second requirement record
@@ -50,15 +51,22 @@ async function seed (licenceId = '1c68cd37-84af-46a4-b3ce-1fc625fcbf37') {
     'month',
     true,
     4321,
-    '91bac151-1c95-4ae5-b0bb-490980396e24',
-    true
+    true,
+    null
   )
   returnVersion.returnRequirements.push(returnRequirement)
 
   return returnVersion
 }
 
-async function _returnRequirement (returnVersionId, reportingFrequency, summer, naldPointId, purposeId, agreements) {
+async function _returnRequirement (
+  returnVersionId,
+  reportingFrequency,
+  summer,
+  naldPointId,
+  agreements,
+  alias
+) {
   const returnRequirement = await ReturnRequirementHelper.add({
     collectionFrequency: 'week',
     fiftySixException: agreements,
@@ -74,14 +82,16 @@ async function _returnRequirement (returnVersionId, reportingFrequency, summer, 
   const { id: returnRequirementId } = returnRequirement
 
   const point = await ReturnRequirementPointHelper.add({ naldPointId, returnRequirementId })
+
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = await ReturnRequirementPurposeHelper.add({ purposeId, returnRequirementId })
-  returnRequirement.returnRequirementPurposes = [purpose]
+  const purpose = await PurposeHelper.add()
 
-  await PurposeHelper.add({
-    id: purposeId
+  const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+    purposeId: purpose.id, returnRequirementId, alias
   })
+
+  returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
   return returnRequirement
 }
