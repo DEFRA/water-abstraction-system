@@ -80,7 +80,10 @@ async function _fetch (returnVersionId) {
     })
     .withGraphFetched('returnRequirements.[returnRequirementPurposes as purposes.[purpose as purposeDetails]]')
     .modifyGraph('returnRequirements.[returnRequirementPurposes as purposes]', (builder) => {
-      builder.select(['id'])
+      builder.select([
+        'alias',
+        'id'
+      ])
     })
     .modifyGraph('returnRequirements.[returnRequirementPurposes as purposes.[purpose as purposeDetails]]', (builder) => {
       builder.select(['description'])
