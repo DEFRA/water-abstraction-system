@@ -63,7 +63,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
 function _combinePurposeDetails (payload, licencePurposes) {
   const combinedValues = []
 
-  for (const purpose of payload?.purposes) {
+  for (const purpose of payload.purposes) {
     const alias = payload[`alias-${purpose}`]
     const matchedLicencePurpose = licencePurposes.find((licencePurpose) => {
       return licencePurpose.id === purpose
@@ -87,7 +87,9 @@ function _combinePurposeDetails (payload, licencePurposes) {
 function _handleOneOptionSelected (payload) {
   if (!payload.purposes) {
     payload.purposes = []
-  } else if (!Array.isArray(payload.purposes)) {
+  }
+
+  if (!Array.isArray(payload.purposes)) {
     payload.purposes = [payload.purposes]
   }
 }
