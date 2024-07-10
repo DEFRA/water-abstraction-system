@@ -5,6 +5,7 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
@@ -26,17 +27,19 @@ const UserHelper = require('../helpers/user.helper.js')
  *
  * Because of this it can be useful to test presenters and services that need to transform the data.
  *
- * @param {String} [licenceId] - The UUID of the licence to link the return version to
- *
- * @returns a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a point and a
- * purpose
+ * @returns {Promise<Object>} a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a
+ * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
+ * it is linked to
  */
-async function seed (licenceId) {
+async function seed () {
   // Create a user
   const user = await UserHelper.add({ username: `${generateUUID()}@wrls.gov.uk` })
 
+  // Create a licence
+  const licence = await LicenceHelper.add()
+
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId, createdBy: user.id })
+  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
 
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
@@ -61,7 +64,7 @@ async function seed (licenceId) {
   )
   returnVersion.returnRequirements.push(returnRequirement)
 
-  return { returnVersion, user }
+  return { licence, returnVersion, user }
 }
 
 async function _returnRequirement (

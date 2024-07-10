@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
@@ -21,10 +20,9 @@ describe('Return Requirements - Fetch Return Version service', () => {
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      licence = await LicenceHelper.add()
+      const seedData = await RequirementsForReturnsSeeder.seed()
 
-      const seedData = await RequirementsForReturnsSeeder.seed(licence.id)
-
+      licence = seedData.licence
       returnVersion = seedData.returnVersion
       user = seedData.user
     })
