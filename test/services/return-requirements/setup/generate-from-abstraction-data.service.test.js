@@ -41,7 +41,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
             points: ['10030400', '10030401'],
             purposes: ['24939b40-a187-4bd1-9222-f552a3af6368'],
             returnsCycle: 'summer',
-            siteDescription: 'INTAKE POINT - OUT TAKE POINT',
+            siteDescription: 'INTAKE POINT',
             abstractionPeriod: {
               'end-abstraction-period-day': 31,
               'end-abstraction-period-month': 10,
