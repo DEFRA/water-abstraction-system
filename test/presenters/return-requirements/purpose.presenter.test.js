@@ -13,11 +13,11 @@ const PurposePresenter = require('../../../app/presenters/return-requirements/pu
 describe('Return Requirements - Purpose presenter', () => {
   const requirementIndex = 0
 
-  let purposesData
+  let licencePurposes
   let session
 
   beforeEach(() => {
-    purposesData = [
+    licencePurposes = [
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
       { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
@@ -44,19 +44,18 @@ describe('Return Requirements - Purpose presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = PurposePresenter.go(session, requirementIndex, purposesData)
+      const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/setup',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePurposes: [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
-          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
-          { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
-        ],
         licenceRef: '01/ABC',
-        purposes: '',
+        purposes: [
+          { alias: '', checked: false, description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+          { alias: '', checked: false, description: 'Horticultural Watering', id: '49088608-ee9f-491a-8070-6831240945ac' },
+          { alias: '', checked: false, description: 'Hydraulic Rams', id: '1d03c79b-da97-4838-a68c-ccb613d54367' },
+          { alias: '', checked: false, description: 'Hydraulic Testing', id: '02036782-81d2-43be-b6af-bf20898653e1' }
+        ],
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
@@ -64,57 +63,114 @@ describe('Return Requirements - Purpose presenter', () => {
 
   describe('the "backLink" property', () => {
     describe('when the user has come from the "check" page', () => {
-      beforeEach(() => {
-        session.checkPageVisited = true
+      describe('because they wish to change the purpose', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('returns a link back to the "check" page', () => {
+          const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+
+          expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        })
       })
 
-      it('returns a link back to the "check" page', () => {
-        const result = PurposePresenter.go(session, requirementIndex, purposesData)
+      describe('because they are adding a new return requirement', () => {
+        beforeEach(() => {
+          // The logic to determine we came from the /check to add a new requirement looks at the number of
+          // requirements. Hence we just need to add a second to exercise that branch of the logic
+          session.requirements.push({})
+          session.checkPageVisited = false
+        })
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        it('returns a link back to the "check" page', () => {
+          const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+
+          expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        })
       })
     })
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "setup" page', () => {
-        const result = PurposePresenter.go(session, requirementIndex, purposesData)
+        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/setup')
       })
     })
   })
 
-  describe('the "licencePurposes" property', () => {
-    it('returns the id and description from each "purpose" passed in', () => {
-      const result = PurposePresenter.go(session, requirementIndex, purposesData)
-
-      expect(result.licencePurposes).to.equal([
-        { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-        { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
-        { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
-        { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
-      ])
-    })
-  })
-
   describe('the "purposes" property', () => {
     describe('when the user has previously submitted purposes', () => {
       beforeEach(() => {
-        session.requirements[0].purposes = ['Heat Pump', 'Hydraulic Rams']
+        session.requirements[0].purposes = [
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump', alias: '' },
+          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams', alias: 'Steampunk sheep' }
+        ]
       })
 
-      it('returns a populated purposes', () => {
-        const result = PurposePresenter.go(session, requirementIndex, purposesData)
+      it('returns all the licence purposes with those previously submitted checked and optional aliases populate', () => {
+        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.purposes).to.equal('Heat Pump,Hydraulic Rams')
+        expect(result.purposes).to.equal([
+          {
+            alias: '',
+            checked: true,
+            description: 'Heat Pump',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
+          },
+          {
+            alias: '',
+            checked: false,
+            description: 'Horticultural Watering',
+            id: '49088608-ee9f-491a-8070-6831240945ac'
+          },
+          {
+            alias: 'Steampunk sheep',
+            checked: true,
+            description: 'Hydraulic Rams',
+            id: '1d03c79b-da97-4838-a68c-ccb613d54367'
+          },
+          {
+            alias: '',
+            checked: false,
+            description: 'Hydraulic Testing',
+            id: '02036782-81d2-43be-b6af-bf20898653e1'
+          }
+        ])
       })
     })
 
     describe('when the user has not previously submitted a purpose', () => {
-      it('returns an empty purposes', () => {
-        const result = PurposePresenter.go(session, requirementIndex, purposesData)
+      it('returns all the licence purposes with nothing checked and no aliases populated', () => {
+        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.purposes).to.equal('')
+        expect(result.purposes).to.equal([
+          {
+            alias: '',
+            checked: false,
+            description: 'Heat Pump',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
+          },
+          {
+            alias: '',
+            checked: false,
+            description: 'Horticultural Watering',
+            id: '49088608-ee9f-491a-8070-6831240945ac'
+          },
+          {
+            alias: '',
+            checked: false,
+            description: 'Hydraulic Rams',
+            id: '1d03c79b-da97-4838-a68c-ccb613d54367'
+          },
+          {
+            alias: '',
+            checked: false,
+            description: 'Hydraulic Testing',
+            id: '02036782-81d2-43be-b6af-bf20898653e1'
+          }
+        ])
       })
     })
   })
