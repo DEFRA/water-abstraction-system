@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
@@ -21,25 +20,29 @@ describe('Return Requirements - Fetch Purposes service', () => {
   let purposes
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // Create the initial licenceVersion
     licenceVersion = await LicenceVersionHelper.add()
 
-    // Create 3 descriptions for the purposes
+    // Create 3 purposes. Note - we purposefully don't add them in alphabetical order so we can test they get sorted
+    // by the service
     purposes = await Promise.all([
-      await PurposeHelper.add({ id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }),
-      await PurposeHelper.add({ id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' }),
-      await PurposeHelper.add({ id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' })
+      PurposeHelper.add({ description: 'Large Garden Watering' }),
+      PurposeHelper.add({ description: 'Heat Pump' }),
+      PurposeHelper.add({ description: 'Horticultural Watering' })
     ])
 
-    // Create the licenceVersionPurposes with the purposes and licenceVersion
-    for (const purpose of purposes) {
-      await LicenceVersionPurposeHelper.add({
-        licenceVersionId: licenceVersion.id,
-        purposeId: purpose.id
-      })
-    }
+    // Create the licenceVersionPurposes. Note - two of them are for the same purpose. This is common in the service
+    // where, for example, a licence might abstract water from 2 different points for the same purpose, but they were
+    // set up separately (rather than the licence version purpose being linked to multiple points) because the details
+    // and/or conditions are different at the 2 points.
+    const licenceVersionId = licenceVersion.id
+
+    await Promise.all([
+      LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[0].id }),
+      LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[1].id }),
+      LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[1].id }),
+      LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[2].id })
+    ])
   })
 
   describe('when called with a valid licenceId', () => {
@@ -47,22 +50,22 @@ describe('Return Requirements - Fetch Purposes service', () => {
       const result = await FetchPurposesService.go(licenceVersion.licenceId)
 
       expect(result[0]).to.equal({
-        id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
+        id: purposes[1].id,
         description: 'Heat Pump'
       })
       expect(result[1]).to.equal({
-        id: '49088608-ee9f-491a-8070-6831240945ac',
+        id: purposes[2].id,
         description: 'Horticultural Watering'
       })
       expect(result[2]).to.equal({
-        id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d',
+        id: purposes[1].id,
         description: 'Large Garden Watering'
       })
     })
   })
 
   describe('when called with an invalid licenceId', () => {
-    it('returns empty result', async () => {
+    it('returns an empty result', async () => {
       const result = await FetchPurposesService.go('5505ca34-270a-4dfb-894c-168c8a4d6e23')
 
       expect(result).to.be.empty()
