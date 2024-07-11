@@ -5,9 +5,7 @@
  * @module ImportServiceLicenceMapper
  */
 
-//  Need to fix
-const DATE_FORMAT = 'YYYY-MM-DD'
-const NALD_FORMAT = 'DD/MM/YYYY'
+const { formatNaldToISO } = require('../../helpers/dates.js')
 
 const regions = {
   AN: 'Anglian',
@@ -33,30 +31,9 @@ function go (licence) {
   }
 }
 
-function formatNaldToISO (date) {
-  console.log('Date: ', date)
-  if (date === 'null') {
-    return null
-  }
-
-  const [day, month, year] = date.split('/')
-
-  return `${year}-${month}-${day}`
-}
-
-const mapNaldDate = (str) => {
-  return formatNaldToISO(str)
-  // if (str === 'null') {
-  //   return null
-  // }
-  //
-  // // return moment(str, NALD_FORMAT).format(DATE_FORMAT)
-  // return str
-}
-
 const mapNull = (str) => { return str === 'null' ? null : str }
 
-function _mapLicence (licence, licenceVersions) {
+function endDates (licence) {
   const endDates = [
     licence.EXPIRY_DATE,
     licence.REV_DATE,
@@ -64,13 +41,17 @@ function _mapLicence (licence, licenceVersions) {
   ]
     .map(mapNull)
     .filter((value) => { return value })
-    .map(mapNaldDate)
+    .map(formatNaldToISO)
 
+  return getMinDate(endDates)
+}
+
+function _mapLicence (licence, licenceVersions) {
   return {
     licenceRef: licence.LIC_NO,
     // TODO: need the licence versions
     startDate: mapStartDate(licence, licenceVersions),
-    endDate: getMinDate(endDates),
+    endDate: endDates(licence),
     // TODO: why is this empty ?
     documents: [],
     // TODO: why is this empty ?
@@ -78,10 +59,11 @@ function _mapLicence (licence, licenceVersions) {
     externalId: `${licence.FGAC_REGION_CODE}:${licence.ID}`,
     isWaterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC'),
     regions: getRegionData(licence),
+    // TODO: needed ?
     regionCode: parseInt(licence.FGAC_REGION_CODE, 10),
-    expiredDate: mapNaldDate(licence.EXPIRY_DATE),
-    lapsedDate: mapNaldDate(licence.LAPSED_DATE),
-    revokedDate: mapNaldDate(licence.REV_DATE),
+    expiredDate: formatNaldToISO(licence.EXPIRY_DATE),
+    lapsedDate: formatNaldToISO(licence.LAPSED_DATE),
+    revokedDate: formatNaldToISO(licence.REV_DATE),
     // TODO: is this stored ?
     _nald: licence
   }
@@ -127,9 +109,10 @@ const getSortedDates = (arr) => {
 const mapStartDate = (licence, licenceVersions) => {
   console.log('Licence', licence.ORIG_EFF_DATE)
   if (licence.ORIG_EFF_DATE !== 'null') {
-    return mapNaldDate(licence.ORIG_EFF_DATE)
+    return formatNaldToISO(licence.ORIG_EFF_DATE)
   }
 
+  // TODO: assume a licence versions must exists if no start date ORIG_EFF_DATE ?
   return licenceVersions
     .filter(isNotDraftLicenceVersion)
     .map(getLicenceVersionStartDate)
@@ -139,7 +122,7 @@ const mapStartDate = (licence, licenceVersions) => {
 
 const isNotDraftLicenceVersion = (licenceVersion) => { return licenceVersion.STATUS !== 'DRAFT' }
 
-const getLicenceVersionStartDate = (licenceVersion) => { return mapNaldDate(licenceVersion.EFF_ST_DATE) }
+const getLicenceVersionStartDate = (licenceVersion) => { return formatNaldToISO(licenceVersion.EFF_ST_DATE) }
 
 module.exports = {
   go

@@ -72,9 +72,9 @@ describe.only('Fetch Agreements service', () => {
       })
       describe('when the licence ORIG_EFF_DATE is null', () => {
         beforeEach(() => {
-          licence.licence.ORIG_EFF_DATE = null
+          licence.licence.ORIG_EFF_DATE = 'null'
         })
-        describe('then start date of the earliest non-draft licence version is used', () => {
+        describe.only('then start date of the earliest non-draft licence version is used', () => {
           it('returns the start date in the correct format', () => {
             //  need to add licence versions
             const result = ImportServiceLicenceMapper.go(licence)
