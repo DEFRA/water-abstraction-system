@@ -39,7 +39,7 @@ describe('Return Requirements - View service', () => {
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
         notes: null,
-        pageTitle: 'Check the requirements for returns for Mr Ingles',
+        pageTitle: 'Requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
           {

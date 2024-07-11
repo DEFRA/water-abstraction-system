@@ -30,7 +30,7 @@ describe('Return Requirements - View presenter', () => {
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
         notes: 'A special note',
-        pageTitle: 'Check the requirements for returns for Mr Ingles',
+        pageTitle: 'Requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
           {
@@ -107,7 +107,7 @@ describe('Return Requirements - View presenter', () => {
       it("returns the title incorporating the licence holder's name", () => {
         const result = ViewPresenter.go(returnVersion)
 
-        expect(result.pageTitle).to.equal('Check the requirements for returns for Mr Ingles')
+        expect(result.pageTitle).to.equal('Requirements for returns for Mr Ingles')
       })
     })
 
