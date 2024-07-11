@@ -127,6 +127,10 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
 
   const generatedTransactions = _generateTransactionData(billLicenceId, chargePeriod, chargeVersion)
 
+  if (generatedTransactions.length === 0) {
+    return []
+  }
+
   return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
 }
 
@@ -221,7 +225,9 @@ function _generateTransactionData (billLicenceId, chargePeriod, chargeVersion) {
         chargeVersion.licence.waterUndertaker
       )
 
-      transactions.push(transaction)
+      if (transaction) {
+        transactions.push(transaction)
+      }
     })
 
     return transactions
