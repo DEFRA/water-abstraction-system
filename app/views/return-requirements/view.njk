@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% from "macros/return-version-status-tag.njk" import statusTag %}
@@ -86,13 +87,51 @@
 {% if requirements.length > 0 %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+
+      {# Bookmarks - only displays when there us more than 1 return requirement #}
+      {% if requirements.length > 1 %}
+        <div class="govuk-body govuk-!-margin-bottom-6">
+          <ul>
+            {% for requirement in requirements %}
+              {% set requirementIndex = loop.index0 %}
+              <li><a href="#requirement-{{ requirementIndex }}">Return reference {{ requirement.returnReference }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
       {% for requirement in requirements %}
+        {# Generate the points cell #}
+        {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
+        {# of points as the summary. Users must expand the block to get the full list. #}
+        {% set pointCell %}
+          {% set pointsList %}
+            {% set count = requirement.points | length %}
+            {{ newLine(requirement.points) }}
+          {% endset %}
+
+          {% if count > 5 %}
+            {{
+              govukDetails({
+                classes: 'govuk-!-margin-bottom-0',
+                summaryText: count + ' points',
+                html: pointsList
+              })
+            }}
+          {% else %}
+            {{ pointsList | safe }}
+          {% endif %}
+        {% endset %}
+
         {% set rowIndex = loop.index0 %}
         <div>
             {{ govukSummaryList({
               card: {
                 title: {
                   html: "<p> Return reference " + requirement.returnReference + "</p>" + requirement.title
+                },
+                attributes: {
+                  id: 'requirement-' + rowIndex
                 }
               },
               attributes: {
@@ -113,7 +152,7 @@
                     text: "Points"
                   },
                   value: {
-                    html: '<span data-test="points-' + rowIndex + '">' + newLine(requirement.points) + '</span>'
+                    html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
                   }
                 },
                 {

@@ -35,6 +35,10 @@ const { generateUUID } = require('../../../lib/general.lib.js')
 function go (billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)
 
+  if (billableQuantity === 0) {
+    return null
+  }
+
   return _standardTransaction(
     billLicenceId,
     billableQuantity,
@@ -105,7 +109,7 @@ function _standardTransaction (
     billableQuantity,
     status: 'candidate',
     description: _description(chargeReference),
-    volume: chargeReference.volume,
+    volume: billableQuantity,
     section126Factor: Number(chargeReference.adjustments.s126) || 1,
     section127Agreement: !!chargeReference.adjustments.s127,
     section130Agreement: !!chargeReference.adjustments.s130,

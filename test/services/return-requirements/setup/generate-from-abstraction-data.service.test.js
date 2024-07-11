@@ -39,9 +39,11 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         expect(result).to.equal([
           {
             points: ['10030400', '10030401'],
-            purposes: ['24939b40-a187-4bd1-9222-f552a3af6368'],
+            purposes: [{
+              alias: '', description: 'Heat Pump', id: '24939b40-a187-4bd1-9222-f552a3af6368'
+            }],
             returnsCycle: 'summer',
-            siteDescription: 'INTAKE POINT - OUT TAKE POINT',
+            siteDescription: 'INTAKE POINT',
             abstractionPeriod: {
               'end-abstraction-period-day': 31,
               'end-abstraction-period-month': 10,
@@ -54,7 +56,11 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
           },
           {
             points: ['10030500'],
-            purposes: ['e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'],
+            purposes: [{
+              alias: '',
+              description: 'Vegetable Washing',
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
+            }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {
@@ -69,7 +75,11 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
           },
           {
             points: ['10030600'],
-            purposes: ['76c8c08c-4fef-421a-83d6-16d8000311a4'],
+            purposes: [{
+              alias: '',
+              description: 'Spray Irrigation - Direct',
+              id: '76c8c08c-4fef-421a-83d6-16d8000311a4'
+            }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'MAIN INTAKE',
             abstractionPeriod: {
@@ -179,7 +189,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 455,
             externalId: '1:10065380',
             primaryPurpose: { id: 'd7c327ce-246d-4370-a6fe-1f2c6ba7a22a', legacyId: 'P' },
-            purpose: { id: '24939b40-a187-4bd1-9222-f552a3af6368', legacyId: '200', twoPartTariff: false },
+            purpose: {
+              id: '24939b40-a187-4bd1-9222-f552a3af6368',
+              description: 'Heat Pump',
+              legacyId: '200',
+              twoPartTariff: false
+            },
             secondaryPurpose: { id: '235ed780-f535-4b8d-b367-b5438ac130e9', legacyId: 'ELC' }
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -191,7 +206,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 2675,
             externalId: '1:10065381',
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
-            purpose: { id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f', legacyId: '460', twoPartTariff: false },
+            purpose: {
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f',
+              description: 'Vegetable Washing',
+              legacyId: '460',
+              twoPartTariff: false
+            },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -203,7 +223,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 300,
             externalId: '1:10065382',
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
-            purpose: { id: '76c8c08c-4fef-421a-83d6-16d8000311a4', legacyId: '400', twoPartTariff: true },
+            purpose: {
+              id: '76c8c08c-4fef-421a-83d6-16d8000311a4',
+              description: 'Spray Irrigation - Direct',
+              legacyId: '400',
+              twoPartTariff: true
+            },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           })
         ]

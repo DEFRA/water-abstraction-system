@@ -5,7 +5,7 @@
  * @module PurposeService
  */
 
-const FetchLicencePurposesService = require('./fetch-licence-purposes.service.js')
+const FetchPurposesService = require('./fetch-purposes.service.js')
 const SelectPurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -22,7 +22,7 @@ const SessionModel = require('../../models/session.model.js')
 */
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
-  const purposesData = await FetchLicencePurposesService.go(session.licence.id)
+  const purposesData = await FetchPurposesService.go(session.licence.id)
 
   const formattedData = SelectPurposePresenter.go(session, requirementIndex, purposesData)
 

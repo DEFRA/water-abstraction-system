@@ -8,45 +8,44 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
-const FetchRequirementsForReturnsService = require('../../../app/services/return-requirements/fetch-requirements-for-returns.service.js')
+const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
-describe('Return Requirements - Fetch Requirements for returns service', () => {
+describe('Return Requirements - Fetch Return Version service', () => {
   let licence
   let returnVersion
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let user
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      await DatabaseSupport.clean()
+      const seedData = await RequirementsForReturnsSeeder.seed()
 
-      licence = await LicenceHelper.add()
-      returnVersion = await RequirementsForReturnsSeeder.seed(licence.id)
+      licence = seedData.licence
+      returnVersion = seedData.returnVersion
+      user = seedData.user
     })
 
     it('returns the details of the requirements for returns', async () => {
-      const result = await FetchRequirementsForReturnsService.go(returnVersion.id)
+      const result = await FetchReturnVersionService.go(returnVersion.id)
 
       const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
 
       expect(result).to.equal({
         createdAt: returnVersion.createdAt,
         id: returnVersion.id,
+        multipleUpload: false,
+        notes: null,
+        reason: 'new-licence',
+        startDate: new Date('2022-04-01'),
+        status: 'current',
+        user: { id: user.id, username: user.username },
         licence: {
           id: licence.id,
           licenceRef: licence.licenceRef,
           licenceDocument: null
         },
-        multipleUpload: false,
-        notes: null,
-        reason: 'new-licence',
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
@@ -58,20 +57,23 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
             gravityFill: false,
             id: returnRequirementsOne.id,
             legacyId: returnRequirementsOne.legacyId,
-            points: [
+            returnRequirementPoints: [
               {
                 description: null,
-                ngr1: returnRequirementsOne.points[0].ngr1,
+                id: returnRequirementsOne.returnRequirementPoints[0].id,
+                ngr1: returnRequirementsOne.returnRequirementPoints[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null
               }
             ],
-            purposes: [
+            returnRequirementPurposes: [
               {
-                id: returnRequirementsOne.purposes[0].id,
-                purposeDetails: {
-                  description: 'Spray Irrigation - Storage'
+                alias: 'I have an alias',
+                id: returnRequirementsOne.returnRequirementPurposes[0].id,
+                purpose: {
+                  description: 'Spray Irrigation - Storage',
+                  id: returnRequirementsOne.returnRequirementPurposes[0].purpose.id
                 }
               }
             ],
@@ -91,20 +93,23 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
             gravityFill: true,
             id: returnRequirementsTwo.id,
             legacyId: returnRequirementsTwo.legacyId,
-            points: [
+            returnRequirementPoints: [
               {
                 description: null,
-                ngr1: returnRequirementsTwo.points[0].ngr1,
+                id: returnRequirementsTwo.returnRequirementPoints[0].id,
+                ngr1: returnRequirementsTwo.returnRequirementPoints[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null
               }
             ],
-            purposes: [
+            returnRequirementPurposes: [
               {
-                id: returnRequirementsTwo.purposes[0].id,
-                purposeDetails: {
-                  description: 'Spray Irrigation - Storage'
+                alias: null,
+                id: returnRequirementsTwo.returnRequirementPurposes[0].id,
+                purpose: {
+                  description: 'Spray Irrigation - Storage',
+                  id: returnRequirementsTwo.returnRequirementPurposes[0].purpose.id
                 }
               }
             ],
@@ -114,10 +119,7 @@ describe('Return Requirements - Fetch Requirements for returns service', () => {
             summer: true,
             twoPartTariff: true
           }
-        ],
-        startDate: new Date('2022-04-01'),
-        status: 'current',
-        user: null
+        ]
       })
     })
   })

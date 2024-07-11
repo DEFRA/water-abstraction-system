@@ -15,7 +15,7 @@ const LicenceAgreementModel = require('../../../../app/models/licence-agreement.
 // Thing under test
 const FetchAbstractionDataService = require('../../../../app/services/return-requirements/setup/fetch-abstraction-data.service.js')
 
-describe('Return Requirements - Return requirements Fetch Points service', () => {
+describe('Return Requirements - Fetch Abstraction Data service', () => {
   let seedIds
 
   beforeEach(async () => {
@@ -60,7 +60,7 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
                 dailyQuantity: 455,
                 externalId: '1:10065380',
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryElectricityId, legacyId: 'P' },
-                purpose: { id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
+                purpose: { description: 'Heat Pump', id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' }
               },
               {
@@ -72,7 +72,7 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
                 dailyQuantity: 2675,
                 externalId: '1:10065381',
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
+                purpose: { description: 'Vegetable washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
               },
               {
@@ -84,7 +84,7 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
                 dailyQuantity: 300,
                 externalId: '1:10065382',
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
+                purpose: { description: 'Spray Irrigation - Direct', id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
               }
             ]
