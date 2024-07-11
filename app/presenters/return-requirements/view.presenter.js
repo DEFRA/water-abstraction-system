@@ -32,7 +32,7 @@ function go (returnVersion) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     notes,
-    pageTitle: `Check the requirements for returns for ${licence.$licenceHolder()}`,
+    pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
