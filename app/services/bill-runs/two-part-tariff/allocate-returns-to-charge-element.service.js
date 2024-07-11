@@ -128,9 +128,23 @@ function _matchLines (chargeElement, returnSubmissionLines) {
       return false
     }
 
-    const { startDate, endDate } = returnSubmissionLine
+    const { startDate: lineStartDate, endDate: lineEndDate } = returnSubmissionLine
 
-    return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
+    // If the endDate of the return submission line is after the end date of the charge elements abstraction period then
+    // we do not want to allocate this. Here we are creating an array of the abstraction periods endDates (since there
+    // can be more than 1), then by doing Math.max we can compare the end of the abstraction period to the end date of
+    // the return submission line
+    const abstractionPeriodsEndDates = chargeElement.abstractionPeriods.map((abstractionPeriod) => {
+      return abstractionPeriod.endDate
+    })
+
+    const abstractionEndDate = new Date(Math.max(...abstractionPeriodsEndDates))
+
+    if (lineEndDate <= abstractionEndDate) {
+      return periodsOverlap(chargeElement.abstractionPeriods, [{ lineStartDate, lineEndDate }])
+    }
+
+    return false
   })
 }
 
