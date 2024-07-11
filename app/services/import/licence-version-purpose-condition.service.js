@@ -15,9 +15,9 @@ const LicenceVersionPurposeConditionValidator = require('../../validators/import
  * @returns {Promise<module:LicenceVersionPurposeConditionModel>} The instance of the newly created record
  */
 async function go (data) {
-  const validation = LicenceVersionPurposeConditionValidator.go(data)
+  try {
+    LicenceVersionPurposeConditionValidator.go(data)
 
-  if (!validation.error) {
     return await LicenceVersionPurposeConditionModel.query()
       .insert(data)
       .onConflict(['externalId'])
@@ -31,9 +31,9 @@ async function go (data) {
       .returning([
         'id'
       ])
+  } catch (error) {
+    return error.message
   }
-
-  return validation.error.details[0].message
 }
 
 module.exports = {

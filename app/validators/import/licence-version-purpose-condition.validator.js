@@ -28,7 +28,13 @@ function go (data) {
     dateUpdated: Joi.date().optional()
   })
 
-  return schema.validate(data)
+  const result = schema.validate(data)
+
+  if (Object.hasOwn(result, 'error')) {
+    throw new Error(result.error.details[0].message)
+  }
+
+  return result
 }
 
 module.exports = {
