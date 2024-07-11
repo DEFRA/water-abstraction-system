@@ -156,15 +156,12 @@ describe('Two-part Tariff Process Billing Period service', () => {
 
       describe('but they are not billable', () => {
         beforeEach(() => {
-          // Create a licence that has a revoked date before the billing period and then link it to a charge version
-          // that is also linked to our billing account. The engine will determine that the charge period for the charge
-          // version is invalid so won't attempt to generate a transaction. If we did try, the Charging Module would
-          // only reject it.
-          const unbillableLicence = _licence()
+          // This time we update the charge version so that nothing is allocated in the charge references. This means
+          // the service will not generate any transactions and therefore no bills leading to bills being empty
+          const unbillableChargeVersion = _chargeVersion(billingAccount.id, licence)
 
-          unbillableLicence.revokedDate = new Date('2019-01-01')
-
-          const unbillableChargeVersion = _chargeVersion(billingAccount.id, unbillableLicence)
+          unbillableChargeVersion.chargeReferences[0].chargeElements[0].reviewChargeElements[0].amendedAllocated = 0
+          unbillableChargeVersion.chargeReferences[0].chargeElements[1].reviewChargeElements[0].amendedAllocated = 0
 
           billingAccount.chargeVersions = [unbillableChargeVersion]
         })
@@ -289,7 +286,7 @@ function _chargeVersion (billingAccountId, licence) {
           amendedChargeAdjustment: 0.6
         }],
         source: 'non-tidal',
-        volume: 15
+        volume: 20
       }
     ]
   }
