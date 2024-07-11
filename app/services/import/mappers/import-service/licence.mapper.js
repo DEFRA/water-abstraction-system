@@ -33,13 +33,25 @@ function go (licence) {
   }
 }
 
-const mapNaldDate = (str) => {
-  if (str === 'null') {
+function formatNaldToISO (date) {
+  console.log('Date: ', date)
+  if (date === 'null') {
     return null
   }
 
-  // return moment(str, NALD_FORMAT).format(DATE_FORMAT)
-  return str
+  const [day, month, year] = date.split('/')
+
+  return `${year}-${month}-${day}`
+}
+
+const mapNaldDate = (str) => {
+  return formatNaldToISO(str)
+  // if (str === 'null') {
+  //   return null
+  // }
+  //
+  // // return moment(str, NALD_FORMAT).format(DATE_FORMAT)
+  // return str
 }
 
 const mapNull = (str) => { return str === 'null' ? null : str }
@@ -55,11 +67,13 @@ function _mapLicence (licence, licenceVersions) {
     .map(mapNaldDate)
 
   return {
-    licenceNumber: licence.LIC_NO,
+    licenceRef: licence.LIC_NO,
     // TODO: need the licence versions
     startDate: mapStartDate(licence, licenceVersions),
     endDate: getMinDate(endDates),
+    // TODO: why is this empty ?
     documents: [],
+    // TODO: why is this empty ?
     agreements: [],
     externalId: `${licence.FGAC_REGION_CODE}:${licence.ID}`,
     isWaterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC'),
@@ -86,49 +100,19 @@ const getRegionData = (licenceData) => {
 const getMinDate = (arr) => {
   const sorted = getSortedDates(arr)
 
-  return sorted.length === 0 ? null : sorted[0].format(DATE_FORMAT)
-}
-
-// moment replace functions start
-const parseDate = (dateStr) => {
-  const parts = dateStr.split('-')
-
-  if (parts.length !== 3) return null
-  const [year, month, day] = parts.map(Number)
-
-  if (!year || !month || !day) return null
-
-  return new Date(year, month - 1, day) // month is zero-indexed in JavaScript Date
-}
-
-const isValidDate = (date) => {
-  return date instanceof Date && !isNaN(date)
+  return sorted.length === 0 ? null : sorted[0]
 }
 
 const getSortedDates = (arr) => {
-  const dates = arr
-    .map((str) => { return parseDate(str) })
-    .filter((date) => { return isValidDate(date) })
+  const sortedDates = arr
+    .sort(function (a, b) {
+      return new Date(b.date) - new Date(a.date)
+    })
 
-  dates.sort((a, b) => { return a - b })
+  console.log('Sorted dates', sortedDates)
 
-  return dates
+  return sortedDates
 }
-
-//  Original
-// const getSortedDates = (arr) => {
-//   const moments = arr
-//     .map((str) => { return moment(str, DATE_FORMAT) })
-//     .filter((m) => { return m.isValid() })
-//
-//   const sorted = moments.sort(function (startDate1, startDate2) {
-//     return startDate1 - startDate2
-//   })
-//
-//   return sorted
-// }
-
-// moment replace functions end
 
 /**
  * Maps the licence and licence versions to a start date.
@@ -141,6 +125,7 @@ const getSortedDates = (arr) => {
  * @return {String} YYYY-MM-DD
  */
 const mapStartDate = (licence, licenceVersions) => {
+  console.log('Licence', licence.ORIG_EFF_DATE)
   if (licence.ORIG_EFF_DATE !== 'null') {
     return mapNaldDate(licence.ORIG_EFF_DATE)
   }

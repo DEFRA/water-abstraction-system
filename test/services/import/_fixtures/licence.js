@@ -1,0 +1,29 @@
+'use strict'
+
+const licence = {
+  ID: '10013151',
+  LIC_NO: '2/27/15/359',
+  AREP_SUC_CODE: 'YORKI',
+  AREP_AREA_CODE: 'RIDIN',
+  SUSP_FROM_BILLING: 'N',
+  AREP_LEAP_CODE: 'AIREL',
+  EXPIRY_DATE: '31/03/2015',
+  ORIG_EFF_DATE: '03/06/2005',
+  ORIG_SIG_DATE: '03/06/2005',
+  ORIG_APP_NO: '8146',
+  ORIG_LIC_NO: 'null',
+  NOTES: 'null',
+  REV_DATE: 'null',
+  LAPSED_DATE: 'null',
+  SUSP_FROM_RETURNS: 'N',
+  AREP_CAMS_CODE: 'ACCAM',
+  X_REG_IND: 'N',
+  PREV_LIC_NO: 'null',
+  FOLL_LIC_NO: '2/27/15/359/R01',
+  AREP_EIUC_CODE: 'YOOTH',
+  FGAC_REGION_CODE: '3',
+  SOURCE_CODE: 'null',
+  'BATCH_RUN_DATE\r': '09/07/2024 22:22:00'
+}
+
+module.exports = licence
