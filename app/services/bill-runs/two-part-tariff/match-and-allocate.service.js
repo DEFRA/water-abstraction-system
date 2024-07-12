@@ -43,10 +43,12 @@ async function _process (licences, billingPeriod, billRun) {
     await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
+
     chargeVersions.forEach((chargeVersion) => {
       PrepareChargeVersionService.go(chargeVersion, billingPeriod)
 
       const { chargeReferences } = chargeVersion
+
       chargeReferences.forEach((chargeReference) => {
         chargeReference.allocatedQuantity = 0
 
