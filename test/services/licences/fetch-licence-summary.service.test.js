@@ -56,7 +56,6 @@ describe('Fetch Licence Summary service', () => {
     })
 
     purpose = await PurposeHelper.add()
-    // licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.add()
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,
