@@ -2,7 +2,6 @@
 
 // 21/01/2006 to 2006-01-21
 function formatNaldToISO (date) {
-  console.log('Date is ', date)
   if (date === 'null') {
     return null
   }

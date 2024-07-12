@@ -7,6 +7,7 @@
 
 const FetchImportLicenceService = require('./fetch-licence-from-import.service.js')
 const ImportServiceLicenceMapper = require('./mappers/import-service/licence.mapper.js')
+const PersistLicenceService = require('./persist-licence.service.js')
 
 /**
  * Imports a licence from the imports tables into the views
@@ -19,11 +20,17 @@ async function go (licenceRef) {
     console.debug('Ref: ', licenceRef)
     const licenceData = await FetchImportLicenceService.go(licenceRef)
 
-    const mappedLicenceData = ImportServiceLicenceMapper.go(licenceData)
-
     console.log('Licence data', licenceData)
 
+    const mappedLicenceData = ImportServiceLicenceMapper.go(licenceData)
+
     console.log('Mapped licence data', mappedLicenceData)
+    // validate
+
+    // persist
+    const savedLicence = await PersistLicenceService.go(mappedLicenceData)
+
+    console.log('Saved licence', savedLicence)
   } catch (e) {
     //  Should we do this in the controller and pass the message back to import service ?
     console.error('Licence', licenceRef, 'failed to import: ', e)

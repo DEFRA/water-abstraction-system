@@ -57,15 +57,15 @@ function _mapLicence (licence, licenceVersions) {
     // TODO: why is this empty ?
     agreements: [],
     externalId: `${licence.FGAC_REGION_CODE}:${licence.ID}`,
-    isWaterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC'),
+    waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC'),
     regions: getRegionData(licence),
     // TODO: needed ?
     regionCode: parseInt(licence.FGAC_REGION_CODE, 10),
     expiredDate: formatNaldToISO(licence.EXPIRY_DATE),
     lapsedDate: formatNaldToISO(licence.LAPSED_DATE),
-    revokedDate: formatNaldToISO(licence.REV_DATE),
+    revokedDate: formatNaldToISO(licence.REV_DATE)
     // TODO: is this stored ?
-    _nald: licence
+    // _nald: licence
   }
 }
 
@@ -91,8 +91,6 @@ const getSortedDates = (arr) => {
       return new Date(b.date) - new Date(a.date)
     })
 
-  console.log('Sorted dates', sortedDates)
-
   return sortedDates
 }
 
@@ -107,7 +105,6 @@ const getSortedDates = (arr) => {
  * @return {String} YYYY-MM-DD
  */
 const mapStartDate = (licence, licenceVersions) => {
-  console.log('Licence', licence.ORIG_EFF_DATE)
   if (licence.ORIG_EFF_DATE !== 'null') {
     return formatNaldToISO(licence.ORIG_EFF_DATE)
   }
