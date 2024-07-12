@@ -10,22 +10,22 @@ const RegionModel = require('../../models/region.model.js')
 
 async function go (licence) {
   const {
-    licence: {
-      regionCode,
-      licenceRef,
-      waterUndertaker,
-      regions,
-      startDate,
-      expiredDate,
-      lapsedDate,
-      revokedDate
-    }
+
+    expiredDate,
+    lapsedDate,
+    licenceRef,
+    naldRegionId,
+    regions,
+    revokedDate,
+    startDate,
+    waterUndertaker
   } = licence
 
-  // TODO: can this be eager
-  const region = await RegionModel.query().select([
-    'id'
-  ]).where('naldRegionId', regionCode).limit(1).first()
+  const region = await RegionModel.query()
+    .select(['id'])
+    .where('naldRegionId', naldRegionId)
+    .limit(1)
+    .first()
 
   return LicenceModel.query()
     .insert({
@@ -37,7 +37,6 @@ async function go (licence) {
       regions,
       revokedDate,
       startDate,
-      // TODO: this has been added, is it needed ?
       updatedAt: new Date().toISOString()
     })
     .onConflict('licenceRef')

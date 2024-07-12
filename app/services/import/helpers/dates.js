@@ -6,6 +6,8 @@ function formatNaldToISO (date) {
     return null
   }
 
+  console.log('DATE', date)
+
   const [day, month, year] = date.split('/')
 
   const isoDateString = `${year}-${month}-${day}`
@@ -21,6 +23,7 @@ function formatNaldToISO (date) {
 function isValidDate (dateString) {
   const date = new Date(dateString)
 
+  // TODO: test this does not move leap year
   return !isNaN(date.getTime())
 }
 

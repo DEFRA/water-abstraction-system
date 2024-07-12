@@ -25,47 +25,22 @@ const regions = {
  * @param {string} licence - The licence reference of the licence
  * @returns {Promise<Object>} an object representing the `licence` needed to persist the licence
  */
-function go (licence) {
-  return {
-    licence: _mapLicence(licence.licence)
-  }
-}
+function go (licence, licenceVersions = []) {
+  console.log('LV', licenceVersions)
 
-const mapNull = (str) => { return str === 'null' ? null : str }
-
-function endDates (licence) {
-  const endDates = [
-    licence.EXPIRY_DATE,
-    licence.REV_DATE,
-    licence.LAPSED_DATE
-  ]
-    .map(mapNull)
-    .filter((value) => { return value })
-    .map(formatNaldToISO)
-
-  return getMinDate(endDates)
+  return _mapLicence(licence, licenceVersions)
 }
 
 function _mapLicence (licence, licenceVersions) {
   return {
-    licenceRef: licence.LIC_NO,
-    // TODO: need the licence versions
-    startDate: mapStartDate(licence, licenceVersions),
-    endDate: endDates(licence),
-    // TODO: why is this empty ?
-    documents: [],
-    // TODO: why is this empty ?
-    agreements: [],
-    externalId: `${licence.FGAC_REGION_CODE}:${licence.ID}`,
-    waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC'),
-    regions: getRegionData(licence),
-    // TODO: needed ?
-    regionCode: parseInt(licence.FGAC_REGION_CODE, 10),
     expiredDate: formatNaldToISO(licence.EXPIRY_DATE),
     lapsedDate: formatNaldToISO(licence.LAPSED_DATE),
-    revokedDate: formatNaldToISO(licence.REV_DATE)
-    // TODO: is this stored ?
-    // _nald: licence
+    licenceRef: licence.LIC_NO,
+    naldRegionId: parseInt(licence.FGAC_REGION_CODE, 10),
+    regions: getRegionData(licence),
+    revokedDate: formatNaldToISO(licence.REV_DATE),
+    startDate: mapStartDate(licence, licenceVersions),
+    waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC')
   }
 }
 
@@ -77,21 +52,6 @@ const getRegionData = (licenceData) => {
   const localEnvironmentAgencyPlanCode = licenceData.AREP_LEAP_CODE
 
   return { historicalAreaCode, regionalChargeArea, standardUnitChargeCode, localEnvironmentAgencyPlanCode }
-}
-
-const getMinDate = (arr) => {
-  const sorted = getSortedDates(arr)
-
-  return sorted.length === 0 ? null : sorted[0]
-}
-
-const getSortedDates = (arr) => {
-  const sortedDates = arr
-    .sort(function (a, b) {
-      return new Date(b.date) - new Date(a.date)
-    })
-
-  return sortedDates
 }
 
 /**
@@ -110,16 +70,14 @@ const mapStartDate = (licence, licenceVersions) => {
   }
 
   // TODO: assume a licence versions must exists if no start date ORIG_EFF_DATE ?
+  // Not draft is handle in the database query ? should we keep here for resps
   return licenceVersions
-    .filter(isNotDraftLicenceVersion)
-    .map(getLicenceVersionStartDate)
+    .map((version) => {
+      return formatNaldToISO(version.EFF_ST_DATE)
+    })
     .sort()
     .shift()
 }
-
-const isNotDraftLicenceVersion = (licenceVersion) => { return licenceVersion.STATUS !== 'DRAFT' }
-
-const getLicenceVersionStartDate = (licenceVersion) => { return formatNaldToISO(licenceVersion.EFF_ST_DATE) }
 
 module.exports = {
   go

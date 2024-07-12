@@ -6,6 +6,7 @@
  */
 
 const FetchImportLicenceService = require('./fetch-licence-from-import.service.js')
+const FetchImportLicenceVersionsService = require('./fetch-licence-versions-from-import.service.js')
 const ImportServiceLicenceMapper = require('./mappers/import-service/licence.mapper.js')
 const PersistLicenceService = require('./persist-licence.service.js')
 
@@ -22,10 +23,14 @@ async function go (licenceRef) {
 
     console.log('Licence data', licenceData)
 
-    const mappedLicenceData = ImportServiceLicenceMapper.go(licenceData)
+    const { ID: licenceId, FGAC_REGION_CODE: regionCode } = licenceData
+
+    const licenceVersionsData = await FetchImportLicenceVersionsService.go(licenceId, regionCode)
+
+    const mappedLicenceData = ImportServiceLicenceMapper.go(licenceData, licenceVersionsData)
 
     console.log('Mapped licence data', mappedLicenceData)
-    // validate
+    // validate all here -
 
     // persist
     const savedLicence = await PersistLicenceService.go(mappedLicenceData)

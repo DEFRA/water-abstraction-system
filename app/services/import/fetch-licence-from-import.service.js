@@ -7,11 +7,7 @@
 const { db } = require('../../../db/db.js')
 
 async function go (licenceRef) {
-  const licence = await _getLicenceByRef(licenceRef)
-
-  return {
-    licence
-  }
+  return _getLicenceByRef(licenceRef)
 }
 
 async function _getLicenceByRef (licenceRef) {
