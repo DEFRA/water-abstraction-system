@@ -69,9 +69,8 @@ const mapStartDate = (licence, licenceVersions) => {
     return formatNaldToISO(licence.ORIG_EFF_DATE)
   }
 
-  // TODO: assume a licence versions must exists if no start date ORIG_EFF_DATE ?
-  // Not draft is handle in the database query ? should we keep here for resps
   return licenceVersions
+    .filter((version) => { return version.STATUS !== 'DRAFT' })
     .map((version) => {
       return formatNaldToISO(version.EFF_ST_DATE)
     })
