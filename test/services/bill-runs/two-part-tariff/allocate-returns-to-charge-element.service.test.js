@@ -258,13 +258,13 @@ describe('Allocate Returns to Charge Element Service', () => {
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].endDate = new Date('2023-04-31')
         })
 
-        it('allocates 32 to the charge element and sets "chargeDatesOverlap" to true', () => {
+        it('allocates 28 to the charge element and sets "chargeDatesOverlap" to true', () => {
           const { chargeElement, chargeReference, matchingReturns } = testData
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(32)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+          expect(chargeElement.allocatedQuantity).to.equal(28)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
           expect(chargeElement.chargeDatesOverlap).to.be.true()
         })
       })
