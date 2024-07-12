@@ -9,11 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchLicencePurposesService = require('../../../app/services/return-requirements/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
@@ -27,8 +26,6 @@ describe('Return Requirements - Submit Purpose service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     sessionData = {
       data: {
         checkPageVisited: false,
@@ -50,6 +47,11 @@ describe('Return Requirements - Submit Purpose service', () => {
     session = await SessionHelper.add(sessionData)
 
     yarStub = { flash: Sinon.stub() }
+
+    Sinon.stub(FetchPurposesService, 'go').resolves([
+      { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+      { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
+    ])
   })
 
   afterEach(() => {
@@ -60,14 +62,9 @@ describe('Return Requirements - Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
         payload = {
-          purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f']
+          purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f'],
+          'alias-14794d57-1acf-4c91-8b48-4b1ec68bfd6f': 'great warm machine'
         }
-
-        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
-          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
-        ])
       })
 
       it('saves the submitted value', async () => {
@@ -75,7 +72,9 @@ describe('Return Requirements - Submit Purpose service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].purposes).to.equal(['14794d57-1acf-4c91-8b48-4b1ec68bfd6f'])
+        expect(refreshedSession.requirements[0].purposes).to.equal([
+          { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
+        ])
       })
 
       describe('and the page has been not been visited', () => {
@@ -113,43 +112,69 @@ describe('Return Requirements - Submit Purpose service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
-        payload = {}
+      describe('because it is empty', () => {
+        beforeEach(async () => {
+          payload = {}
+        })
 
-        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
-          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
-        ])
+        it('returns page data for the view', async () => {
+          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+
+          expect(result).to.equal({
+            activeNavBar: 'search',
+            error: {
+              text: 'Select any purpose for the requirements for returns'
+            },
+            pageTitle: 'Select the purpose for the requirements for returns',
+            backLink: `/system/return-requirements/${session.id}/setup`,
+            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            licenceRef: '01/ABC',
+            purposes: [
+              { alias: '', checked: false, description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+              { alias: '', checked: false, description: 'Horticultural Watering', id: '49088608-ee9f-491a-8070-6831240945ac' }
+            ],
+            sessionId: session.id
+          })
+        })
       })
 
-      it('returns page data for the view', async () => {
-        const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+      describe('because they entered an alias that is too long', () => {
+        beforeEach(async () => {
+          payload = {
+            purposes: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
+            'alias-14794d57-1acf-4c91-8b48-4b1ec68bfd6f': 'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz'
+          }
+        })
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Select the purpose for the requirements for returns',
-          backLink: `/system/return-requirements/${session.id}/setup`,
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          error: {
-            text: 'Select any purpose for the requirements for returns'
-          },
-          licencePurposes: [{
-            description: 'Heat Pump',
-            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
-          },
-          {
-            description: 'Horticultural Watering',
-            id: '49088608-ee9f-491a-8070-6831240945ac'
-          },
-          {
-            description: 'Large Garden Watering',
-            id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d'
-          }],
-          licenceRef: '01/ABC',
-          purposes: '',
-          sessionId: session.id
-        }, { skip: ['sessionId', 'error'] })
+        it('returns page data for the view', async () => {
+          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+
+          expect(result).to.equal({
+            activeNavBar: 'search',
+            error: {
+              text: 'Purpose description must be 100 characters or less'
+            },
+            pageTitle: 'Select the purpose for the requirements for returns',
+            backLink: `/system/return-requirements/${session.id}/setup`,
+            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            licenceRef: '01/ABC',
+            purposes: [
+              {
+                alias: 'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz',
+                checked: true,
+                description: 'Heat Pump',
+                id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
+              },
+              {
+                alias: '',
+                checked: false,
+                description: 'Horticultural Watering',
+                id: '49088608-ee9f-491a-8070-6831240945ac'
+              }
+            ],
+            sessionId: session.id
+          })
+        })
       })
     })
   })
