@@ -23,11 +23,10 @@ const regions = {
  * Maps the import data to the desired format
  *
  * @param {string} licence - The licence reference of the licence
+ * @param {[]} licenceVersions - An array of licence versions
  * @returns {Promise<Object>} an object representing the `licence` needed to persist the licence
  */
 function go (licence, licenceVersions = []) {
-  console.log('LV', licenceVersions)
-
   return _mapLicence(licence, licenceVersions)
 }
 

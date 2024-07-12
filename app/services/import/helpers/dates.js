@@ -6,8 +6,6 @@ function formatNaldToISO (date) {
     return null
   }
 
-  console.log('DATE', date)
-
   const [day, month, year] = date.split('/')
 
   const isoDateString = `${year}-${month}-${day}`
