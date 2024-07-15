@@ -104,6 +104,7 @@ describe('Generate Return Version Requirements service', () => {
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[0].returnRequirementPurposes).to.have.length(1)
+      expect(result[0].returnRequirementPurposes[0].alias).to.be.null()
       expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(primaryPurposeId)
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(purposeId)
       expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(secondaryPurposeId)
@@ -204,6 +205,8 @@ describe('Generate Return Version Requirements service', () => {
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[1].returnRequirementPurposes).to.have.length(2)
+      expect(result[1].returnRequirementPurposes[0].alias).to.be.null()
+      expect(result[1].returnRequirementPurposes[1].alias).to.equal('This is the second purpose test alias')
       expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(primaryPurposeOneId)
       expect(result[1].returnRequirementPurposes[1].primaryPurposeId).to.equal(primaryPurposeTwoId)
       expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(purposeOneId)
@@ -283,7 +286,10 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
         '12345'
       ],
       purposes: [
-        purposeOneId
+        {
+          id: purposeOneId,
+          alias: ''
+        }
       ],
       returnsCycle: 'winter-and-all-year',
       siteDescription: 'Site Number One',
@@ -307,8 +313,14 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
       '67890'
     ],
     purposes: [
-      purposeOneId,
-      purposeTwoId
+      {
+        id: purposeOneId,
+        alias: ''
+      },
+      {
+        id: purposeTwoId,
+        alias: 'This is the second purpose test alias'
+      }
     ],
     returnsCycle: 'summer',
     siteDescription: 'Site Number Two',

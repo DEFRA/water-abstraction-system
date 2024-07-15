@@ -82,6 +82,7 @@ describe('Persist Return Version service', () => {
       const purposeData = returnVersionData.returnRequirements[0].returnRequirementPurposes[0]
 
       expect(returnRequirementPurpose).to.have.length(1)
+      expect(returnRequirementPurpose[0].alias).to.equal(purposeData.alias)
       expect(returnRequirementPurpose[0].primaryPurposeId).to.equal(purposeData.primaryPurposeId)
       expect(returnRequirementPurpose[0].purposeId).to.equal(purposeData.purposeId)
       expect(returnRequirementPurpose[0].secondaryPurposeId).to.equal(purposeData.secondaryPurposeId)
@@ -118,6 +119,7 @@ function _generateReturnVersionData () {
         ],
         returnRequirementPurposes: [
           {
+            alias: 'This is a purpose alias',
             primaryPurposeId: generateUUID(),
             purposeId: generateUUID(),
             secondaryPurposeId: generateUUID()
