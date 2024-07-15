@@ -5,7 +5,7 @@
  * @module LegacyImportLicenceMapper
  */
 
-const { formatNaldToISO } = require('../helpers/dates.js')
+const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 const { regions } = require('./constants.js')
 
 /**
@@ -21,12 +21,12 @@ function go (licence, licenceVersions = []) {
 
 function _mapLicence (licence, licenceVersions) {
   return {
-    expiredDate: formatNaldToISO(licence.EXPIRY_DATE),
-    lapsedDate: formatNaldToISO(licence.LAPSED_DATE),
+    expiredDate: formatStandardDateToISO(licence.EXPIRY_DATE),
+    lapsedDate: formatStandardDateToISO(licence.LAPSED_DATE),
     licenceRef: licence.LIC_NO,
     naldRegionId: parseInt(licence.FGAC_REGION_CODE, 10),
     regions: _regionData(licence),
-    revokedDate: formatNaldToISO(licence.REV_DATE),
+    revokedDate: formatStandardDateToISO(licence.REV_DATE),
     startDate: _startDate(licence, licenceVersions),
     waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC')
   }
@@ -62,13 +62,13 @@ const _regionData = (licenceData) => {
  */
 const _startDate = (licence, licenceVersions) => {
   if (licence.ORIG_EFF_DATE !== 'null') {
-    return formatNaldToISO(licence.ORIG_EFF_DATE)
+    return formatStandardDateToISO(licence.ORIG_EFF_DATE)
   }
 
   return licenceVersions
     .filter((version) => { return version.STATUS !== 'DRAFT' })
     .map((version) => {
-      return formatNaldToISO(version.EFF_ST_DATE)
+      return formatStandardDateToISO(version.EFF_ST_DATE)
     })
     .sort()
     .shift()
