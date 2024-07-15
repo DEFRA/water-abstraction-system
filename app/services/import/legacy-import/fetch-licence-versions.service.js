@@ -42,7 +42,7 @@ module.exports = {
 }
 
 /**
- * A legacy licence version
+ * A legacy licence version - the only data we require
  * @typedef {Object} LegacyLicenceVersionsType
  *
  * @property {string } EFF_ST_DATE - date in UK format or 'null'
