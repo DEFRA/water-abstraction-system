@@ -11,7 +11,7 @@ const { regions } = require('./constants.js')
 /**
  * Maps the import data to the desired format
  *
- * @param {string} licence - The licence reference of the licence
+ * @param {LegacyLicenceType} licence
  * @param {LegacyLicenceVersionsArray} licenceVersions
  * @returns {ValidLicenceType}
  */

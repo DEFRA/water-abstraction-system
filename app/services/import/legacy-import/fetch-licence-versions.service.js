@@ -22,7 +22,7 @@ async function _getLicenceVersions (licenceId, regionCode) {
 
   const { rows } = await db.raw(query)
 
-  return mapUsedColumns(rows)
+  return select(rows)
 }
 
 /**
@@ -31,7 +31,7 @@ async function _getLicenceVersions (licenceId, regionCode) {
  * @param {{}} rows - the licence version columns
  * @returns {LegacyLicenceVersionsArray}
  */
-function mapUsedColumns (rows) {
+function select (rows) {
   return rows.map((row) => {
     return {
       EFF_ST_DATE: row.EFF_ST_DATE
@@ -44,7 +44,7 @@ module.exports = {
 }
 
 /**
- * A legacy licence version - the only data we require
+ * A legacy licence version
  * @typedef {Object} LegacyLicenceVersionsType
  *
  * @property {string} EFF_ST_DATE - date in UK format | 'null'
