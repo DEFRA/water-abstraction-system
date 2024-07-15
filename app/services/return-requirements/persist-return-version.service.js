@@ -73,6 +73,7 @@ async function _persistReturnRequirementsPoints (returnRequirementPoints, return
 async function _persistReturnRequirementsPurposes (returnRequirementPurposes, returnRequirementId) {
   for (const returnRequirementPurpose of returnRequirementPurposes) {
     await ReturnRequirementPurposeModel.query().insert({
+      alias: returnRequirementPurpose.alias,
       primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
       purposeId: returnRequirementPurpose.purposeId,
       returnRequirementId,

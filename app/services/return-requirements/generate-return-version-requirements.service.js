@@ -92,21 +92,22 @@ function _generateReturnRequirementPoints (licencePoints, requirementExternalId,
   return returnRequirementPoints
 }
 
-async function _generateReturnRequirementPurposes (licenceId, purposeIds) {
+async function _generateReturnRequirementPurposes (licenceId, purposes) {
   const returnRequirementPurposes = []
 
-  for (const purposeId of purposeIds) {
+  for (const purpose of purposes) {
     const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query()
       .select('primaryPurposeId', 'secondaryPurposeId')
       .innerJoinRelated('licenceVersionPurposes')
       .where('licenceId', licenceId)
       .andWhere('status', 'current')
-      .andWhere('purposeId', purposeId)
+      .andWhere('purposeId', purpose.id)
       .first()
 
     const returnRequirementPurpose = {
+      alias: purpose.alias !== '' ? purpose.alias : null,
       primaryPurposeId,
-      purposeId,
+      purposeId: purpose.id,
       secondaryPurposeId
     }
 
