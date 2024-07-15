@@ -1,6 +1,6 @@
 'use strict'
 
-const ImportLicenceService = require('../services/import/licence.service.js')
+const LegacyLicenceService = require('../services/import/legacy-licence.service.js')
 
 /**
  * Controller for /import
@@ -9,7 +9,7 @@ const ImportLicenceService = require('../services/import/licence.service.js')
 async function licence (request, h) {
   const { licenceRef } = request.payload
 
-  await ImportLicenceService.go(licenceRef)
+  await LegacyLicenceService.go(licenceRef)
 
   return h.response().code(204)
 }

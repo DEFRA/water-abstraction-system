@@ -2,29 +2,18 @@
 
 /**
  * Maps the import data to the desired format
- * @module ImportServiceLicenceMapper
+ * @module LegacyImportLicenceMapper
  */
 
-const { formatNaldToISO } = require('../../helpers/dates.js')
-
-const regions = {
-  AN: 'Anglian',
-  MD: 'Midlands',
-  NO: 'Northumbria',
-  NW: 'North West',
-  SO: 'Southern',
-  SW: 'South West (incl Wessex)',
-  TH: 'Thames',
-  WL: 'Wales',
-  YO: 'Yorkshire'
-}
+const { formatNaldToISO } = require('../helpers/dates.js')
+const { regions } = require('./constants.js')
 
 /**
  * Maps the import data to the desired format
  *
  * @param {string} licence - The licence reference of the licence
  * @param {[]} licenceVersions - An array of licence versions
- * @returns {Promise<Object>} an object representing the `licence` needed to persist the licence
+ * @returns {MappedLicence} an object representing the `licence` needed to persist the licence
  */
 function go (licence, licenceVersions = []) {
   return _mapLicence(licence, licenceVersions)
@@ -36,14 +25,20 @@ function _mapLicence (licence, licenceVersions) {
     lapsedDate: formatNaldToISO(licence.LAPSED_DATE),
     licenceRef: licence.LIC_NO,
     naldRegionId: parseInt(licence.FGAC_REGION_CODE, 10),
-    regions: getRegionData(licence),
+    regions: _regionData(licence),
     revokedDate: formatNaldToISO(licence.REV_DATE),
-    startDate: mapStartDate(licence, licenceVersions),
+    startDate: _startDate(licence, licenceVersions),
     waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC')
   }
 }
 
-const getRegionData = (licenceData) => {
+/**
+ * Creates a JSON object of the region data
+ *
+ * @param {Object} licenceData
+ * @return {RegionsType}
+ */
+const _regionData = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE
   const regionPrefix = licenceData.AREP_EIUC_CODE.substr(0, 2)
   const regionalChargeArea = regions[regionPrefix]
@@ -59,11 +54,13 @@ const getRegionData = (licenceData) => {
  * Otherwise the start date of the earliest non-draft licence
  * version is used.
  *
+ * It is assumed one of these will always exist
+ *
  * @param {Object} licence
  * @param {Object} licenceVersions
  * @return {String} YYYY-MM-DD
  */
-const mapStartDate = (licence, licenceVersions) => {
+const _startDate = (licence, licenceVersions) => {
   if (licence.ORIG_EFF_DATE !== 'null') {
     return formatNaldToISO(licence.ORIG_EFF_DATE)
   }
@@ -80,3 +77,28 @@ const mapStartDate = (licence, licenceVersions) => {
 module.exports = {
   go
 }
+
+/**
+ * A licence mapped to store in the database
+ * @typedef {Object} RegionsType
+ *
+ * @property {string} regionalChargeArea
+ * @property {string} localEnvironmentAgencyPlanCode
+ * @property {string} historicalAreaCode
+ * @property {string} standardUnitChargeCode
+ *
+ */
+
+/**
+ * A licence mapped to store in the database
+ * @typedef {Object} MappedLicence
+ *
+ * @property {string | null} expiredDate
+ * @property {string | null} lapsedDate
+ * @property {string} licenceRef
+ * @property {number} naldRegionId
+ * @property {RegionsType} regions
+ * @property {string | null} revokedDate
+ * @property {string} startDate
+ * @property {boolean} waterUndertaker
+ */

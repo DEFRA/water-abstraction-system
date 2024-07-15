@@ -1,6 +1,7 @@
 'use strict'
 
 // 21/01/2006 to 2006-01-21
+//  rename to format UK to ISO
 function formatNaldToISO (date) {
   if (date === 'null') {
     return null

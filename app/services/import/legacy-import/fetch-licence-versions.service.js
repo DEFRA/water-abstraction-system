@@ -2,9 +2,9 @@
 
 /**
  * Service for /import/licence
- * @module FetchImportLicenceVersionsService
+ * @module FetchLegacyImportLicenceVersionsService
  */
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 async function go (licenceId, regionCode) {
   return _getLicenceVersions(licenceId, regionCode)

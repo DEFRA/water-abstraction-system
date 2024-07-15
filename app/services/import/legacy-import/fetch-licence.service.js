@@ -2,16 +2,16 @@
 
 /**
  * Service for /import/licence
- * @module FetchImportLicenceService
+ * @module FetchLegacyImportLicenceService
  */
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 async function go (licenceRef) {
   return _getLicenceByRef(licenceRef)
 }
 
 async function _getLicenceByRef (licenceRef) {
-  // TODO: granular select  ?
+  // TODO: granular select  ? map data to simplify if needs be
   const query = `
       SELECT *
       FROM import."NALD_ABS_LICENCES" l

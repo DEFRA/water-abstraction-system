@@ -13,7 +13,7 @@ const FixtureVersions = require('../../_fixtures/versions.js')
 
 // Thing under test
 const ImportServiceLicenceMapper =
-  require('../../../../../app/services/import/mappers/import-service/licence.mapper.js')
+  require('../../../../../app/services/import/legacy-import/licence.mapper.js')
 
 describe.only('Licence mapper', () => {
   let licence
