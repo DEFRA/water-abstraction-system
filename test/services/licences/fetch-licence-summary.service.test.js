@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
@@ -19,7 +18,6 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -36,14 +34,11 @@ describe('Fetch Licence Summary service', () => {
   let licenceVersion
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
-  let licenceVersionPurposeConditionType
   let permitLicence
   let purpose
   let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     region = await RegionHelper.add()
 
     licence = await LicenceHelper.add({
@@ -61,7 +56,6 @@ describe('Fetch Licence Summary service', () => {
     })
 
     purpose = await PurposeHelper.add()
-    licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.add()
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,
@@ -70,7 +64,7 @@ describe('Fetch Licence Summary service', () => {
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
-      licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
+      licenceVersionPurposeConditionTypeId: '4c0b378d-a9c2-4b50-b1bd-9aeefe988f93'
     })
 
     licenceHolderSeed = await LicenceHolderSeeder.seed(licence.licenceRef)
@@ -147,8 +141,8 @@ describe('Fetch Licence Summary service', () => {
               licenceVersionPurposeConditions: [{
                 id: licenceVersionPurposeCondition.id,
                 licenceVersionPurposeConditionType: {
-                  id: licenceVersionPurposeConditionType.id,
-                  displayTitle: 'Link between split licences'
+                  id: '4c0b378d-a9c2-4b50-b1bd-9aeefe988f93',
+                  displayTitle: 'Aggregate condition link between licences'
                 }
               }]
             }]

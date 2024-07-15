@@ -9,6 +9,7 @@
  */
 
 const { db, dbConfig } = require('../../db/db.js')
+const ReferenceDataSeeder = require('../../db/seeds/reference-data.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -25,8 +26,11 @@ async function clean () {
 
   for (const schema of schemas) {
     const tables = await _tableNames(schema)
+
     await db.raw(`TRUNCATE TABLE ${tables.join(',')} RESTART IDENTITY;`)
   }
+  // TODO: when all calls this function are removed from the tests remove this call
+  await ReferenceDataSeeder.seed()
 }
 
 /**
@@ -43,12 +47,14 @@ async function clean () {
 async function wipe () {
   // Drop the public views first
   const viewNames = await _viewNames('public')
+
   for (const viewName of viewNames) {
     await db.raw(`DROP VIEW IF EXISTS ${viewName};`)
   }
 
   // Then drop the public tables (including the migration management tables)
   const tableNames = await _tableNames('public')
+
   tableNames.push(..._migrationTables())
   for (const tableName of tableNames) {
     await db.raw(`DROP TABLE IF EXISTS ${tableName};`)
