@@ -10,7 +10,6 @@ const RegionModel = require('../../models/region.model.js')
 
 async function go (licence) {
   const {
-
     expiredDate,
     lapsedDate,
     licenceRef,

@@ -15,7 +15,7 @@ const FixtureVersions = require('../_fixtures/versions.js')
 const LegacyImportLicenceMapper =
   require('../../../../app/services/import/legacy-import/licence.mapper.js')
 
-describe('Licence mapper', () => {
+describe('Legacy import licence mapper', () => {
   let licence
 
   beforeEach(() => {

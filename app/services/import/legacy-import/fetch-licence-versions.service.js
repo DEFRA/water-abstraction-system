@@ -6,7 +6,9 @@
  */
 const { db } = require('../../../../db/db.js')
 
-async function go (licenceId, regionCode) {
+async function go (licenceData) {
+  const { ID: licenceId, FGAC_REGION_CODE: regionCode } = licenceData
+
   return _getLicenceVersions(licenceId, regionCode)
 }
 
@@ -45,7 +47,7 @@ module.exports = {
  * A legacy licence version - the only data we require
  * @typedef {Object} LegacyLicenceVersionsType
  *
- * @property {string } EFF_ST_DATE - date in UK format or 'null'
+ * @property {string} EFF_ST_DATE - date in UK format | 'null'
  */
 
 /**
