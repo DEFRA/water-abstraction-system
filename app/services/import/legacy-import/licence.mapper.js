@@ -56,8 +56,8 @@ const _regionData = (licenceData) => {
  *
  * It is assumed one of these will always exist
  *
- * @param {Object} licence
- * @param {Object} licenceVersions
+ * @param {LegacyLicenceType} licence
+ * @param {LegacyLicenceVersionsArray} licenceVersions
  * @return {String} YYYY-MM-DD
  */
 const _startDate = (licence, licenceVersions) => {
