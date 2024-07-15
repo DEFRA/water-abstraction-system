@@ -12,8 +12,8 @@ const { regions } = require('./constants.js')
  * Maps the import data to the desired format
  *
  * @param {string} licence - The licence reference of the licence
- * @param {[]} licenceVersions - An array of licence versions
- * @returns {MappedLicence} an object representing the `licence` needed to persist the licence
+ * @param {LegacyLicenceVersionsArray} licenceVersions
+ * @returns {ValidLicenceType}
  */
 function go (licence, licenceVersions = []) {
   return _mapLicence(licence, licenceVersions)
@@ -77,28 +77,3 @@ const _startDate = (licence, licenceVersions) => {
 module.exports = {
   go
 }
-
-/**
- * A licence mapped to store in the database
- * @typedef {Object} RegionsType
- *
- * @property {string} regionalChargeArea
- * @property {string} localEnvironmentAgencyPlanCode
- * @property {string} historicalAreaCode
- * @property {string} standardUnitChargeCode
- *
- */
-
-/**
- * A licence mapped to store in the database
- * @typedef {Object} MappedLicence
- *
- * @property {string | null} expiredDate
- * @property {string | null} lapsedDate
- * @property {string} licenceRef
- * @property {number} naldRegionId
- * @property {RegionsType} regions
- * @property {string | null} revokedDate
- * @property {string} startDate
- * @property {boolean} waterUndertaker
- */

@@ -11,7 +11,7 @@ const LicenceValidatorService = require('./licence-validator.service.js')
 /**
  * Validates and persists licence
  *
- * The licence should be mapped and in the coreect format before being saved
+ * The licence should be mapped and in the correct format before being saved
  *
  * @param {Object} licenceData - The mapped licence data from the data source
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.

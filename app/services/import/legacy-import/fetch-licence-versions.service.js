@@ -23,7 +23,12 @@ async function _getLicenceVersions (licenceId, regionCode) {
   return mapUsedColumns(rows)
 }
 
-//  These are need as the parser id lower casing any select args
+/**
+ * Maps licence versions to the required format / data
+ *
+ * @param {{}} rows - the licence version columns
+ * @returns {LegacyLicenceVersionsArray}
+ */
 function mapUsedColumns (rows) {
   return rows.map((row) => {
     return {
@@ -35,3 +40,15 @@ function mapUsedColumns (rows) {
 module.exports = {
   go
 }
+
+/**
+ * A legacy licence version
+ * @typedef {Object} LegacyLicenceVersionsType
+ *
+ * @property {string } EFF_ST_DATE - date in UK format or 'null'
+ */
+
+/**
+ * An array of legacy licence versions.
+ * @typedef {LegacyLicenceVersionsType[]} LegacyLicenceVersionsArray
+ */
