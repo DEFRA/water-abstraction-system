@@ -26,7 +26,7 @@ describe('Legacy import licence mapper', () => {
     const results = LegacyImportLicenceMapper.go(licence)
 
     expect(results).to.equal({
-      licenceRef: '2/27/15/359',
+      licenceRef: licence.LIC_NO,
       startDate: '2005-06-03',
       waterUndertaker: false,
       regions: {
