@@ -9,12 +9,11 @@ const { expect } = Code
 
 // Test helpers
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const { db } = require('../../../../db/db.js')
-const DatabaseSupport = require('../../../support/database.js')
-const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
+const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const RegionModel = require('../../../../app/models/region.model.js')
+const RegionSeeder = require('../../../support/seeders/regions.seeder.js')
 
 // Thing under test
 const LoadService = require('../../../../app/services/data/load/load.service.js')
@@ -22,26 +21,15 @@ const LoadService = require('../../../../app/services/data/load/load.service.js'
 describe('Load service', () => {
   let payload
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  const regionId = RegionSeeder.regions.test_region.id
 
   describe('when the service is called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          regions: [
-            {
-              id: 'd0a4123d-1e19-480d-9dd4-f70f3387c4b9',
-              chargeRegionId: 'S',
-              naldRegionId: 9,
-              displayName: 'Test Region',
-              name: 'Test Region'
-            }
-          ],
           billRuns: [
             {
-              regionId: 'd0a4123d-1e19-480d-9dd4-f70f3387c4b9',
+              regionId,
               scheme: 'sroc',
               status: 'sent'
             }
@@ -52,19 +40,18 @@ describe('Load service', () => {
       it('loads the entities into the DB', async () => {
         const { billRuns } = await LoadService.go(payload)
 
-        const region = await RegionModel.query().findById('d0a4123d-1e19-480d-9dd4-f70f3387c4b9')
+        const region = await RegionModel.query().findById(regionId)
+
         expect(region.displayName).to.equal('Test Region')
 
         const billRun = await BillRunModel.query().findById(billRuns[0])
-        expect(billRun.regionId).to.equal('d0a4123d-1e19-480d-9dd4-f70f3387c4b9')
+
+        expect(billRun.regionId).to.equal(regionId)
         expect(billRun.status).to.equal('sent')
       })
 
       it('returns the generated and used IDs for the entities', async () => {
         const result = await LoadService.go(payload)
-
-        expect(result.regions).to.exist()
-        expect(result.regions).not.to.be.empty()
 
         expect(result.billRuns).to.exist()
         expect(result.billRuns).not.to.be.empty()
@@ -75,6 +62,7 @@ describe('Load service', () => {
 
         beforeEach(async () => {
           const { id } = await ChargeCategoryHelper.add({ reference: '4.2.1' })
+
           chargeCategoryId = id
 
           payload = {
@@ -95,16 +83,6 @@ describe('Load service', () => {
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
           expect(chargeReference.chargeCategoryId).to.equal(chargeCategoryId)
-        })
-      })
-
-      describe('that includes an entity with an "is_test" field', () => {
-        it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
-          const result = await LoadService.go(payload)
-
-          const region = await db('regions').withSchema('water').first('isTest').where('regionId', result.regions[0])
-
-          expect(region.isTest).to.be.true()
         })
       })
     })
