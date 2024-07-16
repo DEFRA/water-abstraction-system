@@ -34,7 +34,7 @@ describe('Return Requirements - Check service', () => {
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
-        requirements: [],
+        requirements: [{}],
         startDateOptions: 'licenceStartDate',
         reason: 'major-change'
       }

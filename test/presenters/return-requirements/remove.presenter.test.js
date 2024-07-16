@@ -43,8 +43,8 @@ describe('Return Requirements - Remove presenter', () => {
           'start-abstraction-period-day': '1',
           'start-abstraction-period-month': '4'
         },
-        frequencyReported: 'monthly',
-        frequencyCollected: 'monthly',
+        frequencyReported: 'month',
+        frequencyCollected: 'month',
         agreementsExceptions: [
           'none'
         ]
@@ -91,8 +91,8 @@ describe('Return Requirements - Remove presenter', () => {
             'start-abstraction-period-day': '12',
             'start-abstraction-period-month': '07'
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'weekly',
+          frequencyReported: 'month',
+          frequencyCollected: 'week',
           agreementsExceptions: [
             'transfer-re-abstraction-scheme',
             'two-part-tariff'

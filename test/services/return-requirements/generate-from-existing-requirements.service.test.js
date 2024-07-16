@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const RequirementsForReturnsSeed = require('../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
@@ -17,13 +16,11 @@ const GenerateFromExistingRequirementsService = require('../../../app/services/r
 describe('Return Requirements - Generate From Existing Requirements service', () => {
   let returnVersion
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      returnVersion = await RequirementsForReturnsSeed.seed()
+      const seedData = await RequirementsForReturnsSeed.seed()
+
+      returnVersion = seedData.returnVersion
     })
 
     it('returns the details of the its return requirements transformed for use in the journey', async () => {
@@ -32,7 +29,11 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
       expect(result).to.equal([
         {
           points: ['1234'],
-          purposes: ['1a1a68cc-b1f5-43db-8d1a-3452425bcc68'],
+          purposes: [{
+            alias: returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias,
+            description: 'Spray Irrigation - Storage',
+            id: returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId
+          }],
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'FIRST BOREHOLE AT AVALON',
           abstractionPeriod: {
@@ -41,13 +42,17 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
             'start-abstraction-period-day': 1,
             'start-abstraction-period-month': 4
           },
-          frequencyReported: 'weekly',
-          frequencyCollected: 'weekly',
+          frequencyReported: 'week',
+          frequencyCollected: 'week',
           agreementsExceptions: ['none']
         },
         {
           points: ['4321'],
-          purposes: ['91bac151-1c95-4ae5-b0bb-490980396e24'],
+          purposes: [{
+            alias: '',
+            description: 'Spray Irrigation - Storage',
+            id: returnVersion.returnRequirements[1].returnRequirementPurposes[0].purposeId
+          }],
           returnsCycle: 'summer',
           siteDescription: 'SECOND BOREHOLE AT AVALON',
           abstractionPeriod: {
@@ -56,8 +61,8 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
             'start-abstraction-period-day': 1,
             'start-abstraction-period-month': 4
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'weekly',
+          frequencyReported: 'month',
+          frequencyCollected: 'week',
           agreementsExceptions: [
             '56-returns-exception',
             'gravity-fill',

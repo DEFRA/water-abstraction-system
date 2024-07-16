@@ -96,6 +96,20 @@
   {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+
+      {# Bookmarks - only displays when there us more than 1 return requirement #}
+      {% if requirements.length > 1 %}
+        <div class="govuk-body govuk-!-margin-bottom-6">
+          <ul>
+            {% for requirement in requirements %}
+              {% set requirementIndex = loop.index0 %}
+              <li><a href="#requirement-{{ requirementIndex }}">{{ requirement.siteDescription }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {# Add another requirement button #}
       <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
         {{ govukButton({
           text: "Add another requirement",
@@ -132,6 +146,9 @@
               card: {
                 title: {
                   text: requirement.siteDescription
+                },
+                attributes: {
+                  id: 'requirement-' + rowIndex
                 }
               },
               attributes: {

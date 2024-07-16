@@ -104,7 +104,7 @@ describe('Return Requirements presenter', () => {
             requirement.agreementsExceptions = ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception']
           })
 
-          it('returns the options display text joined with an ", and" "Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception"', () => {
+          it('returns the options display text joined with an ", and" (Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception)', () => {
             const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
 
             const { agreementsExceptions } = result.requirements[0]
@@ -219,8 +219,8 @@ function _requirement () {
     agreementsExceptions: [
       'gravity-fill'
     ],
-    frequencyCollected: 'daily',
-    frequencyReported: 'daily',
+    frequencyCollected: 'day',
+    frequencyReported: 'day',
     points: [
       '9000031'
     ],

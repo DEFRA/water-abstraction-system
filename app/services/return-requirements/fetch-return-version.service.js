@@ -14,14 +14,11 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {string} returnVersionId - The UUID of the selected return version to get requirements for
  *
- * @returns {Promise<ReturnVersionModel[]>}
- * The return version, licence, return requirements (requirement, points, purposes)
- *
+ * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
+ * points, purposes)
  */
 async function go (returnVersionId) {
-  const returnVersion = await _fetch(returnVersionId)
-
-  return returnVersion
+  return _fetch(returnVersionId)
 }
 
 async function _fetch (returnVersionId) {
@@ -30,7 +27,7 @@ async function _fetch (returnVersionId) {
     .select([
       'createdAt',
       'id',
-      'multiple_upload',
+      'multipleUpload',
       'notes',
       'reason',
       'startDate',
@@ -39,6 +36,7 @@ async function _fetch (returnVersionId) {
     .withGraphFetched('user')
     .modifyGraph('user', (builder) => {
       builder.select([
+        'id',
         'username'
       ])
     })
@@ -68,22 +66,30 @@ async function _fetch (returnVersionId) {
         'twoPartTariff'
       ])
     })
-    .withGraphFetched('returnRequirements.[returnRequirementPoints as points]')
-    .modifyGraph('returnRequirements.[returnRequirementPoints as points]', (builder) => {
+    .withGraphFetched('returnRequirements.returnRequirementPoints')
+    .modifyGraph('returnRequirements.returnRequirementPoints', (builder) => {
       builder.select([
         'description',
+        'id',
         'ngr1',
         'ngr2',
         'ngr3',
         'ngr4'
       ])
     })
-    .withGraphFetched('returnRequirements.[returnRequirementPurposes as purposes.[purpose as purposeDetails]]')
-    .modifyGraph('returnRequirements.[returnRequirementPurposes as purposes]', (builder) => {
-      builder.select(['id'])
+    .withGraphFetched('returnRequirements.returnRequirementPurposes')
+    .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
+      builder.select([
+        'alias',
+        'id'
+      ])
     })
-    .modifyGraph('returnRequirements.[returnRequirementPurposes as purposes.[purpose as purposeDetails]]', (builder) => {
-      builder.select(['description'])
+    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
+    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
+      builder.select([
+        'description',
+        'id'
+      ])
     })
 }
 

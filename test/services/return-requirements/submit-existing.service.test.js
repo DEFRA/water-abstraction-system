@@ -119,8 +119,8 @@ function _transformedReturnRequirement () {
       'start-abstraction-period-day': 1,
       'start-abstraction-period-month': 4
     },
-    frequencyReported: 'weekly',
-    frequencyCollected: 'weekly',
+    frequencyReported: 'week',
+    frequencyCollected: 'week',
     agreementsExceptions: ['none']
   }
 }

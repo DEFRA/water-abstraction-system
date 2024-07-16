@@ -36,12 +36,8 @@ describe('Return Requirements - Remove service', () => {
         },
         journey: 'returns-required',
         requirements: [{
-          points: [
-            'At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'
-          ],
-          purposes: [
-            'Mineral Washing'
-          ],
+          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
+          purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
@@ -50,8 +46,8 @@ describe('Return Requirements - Remove service', () => {
             'start-abstraction-period-day': '1',
             'start-abstraction-period-month': '4'
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'monthly',
+          frequencyReported: 'month',
+          frequencyCollected: 'month',
           agreementsExceptions: [
             'none'
           ]

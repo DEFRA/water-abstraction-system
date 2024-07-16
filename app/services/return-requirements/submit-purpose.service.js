@@ -5,7 +5,7 @@
  * @module SubmitPurposeService
  */
 
-const FetchLicencePurposesService = require('./fetch-licence-purposes.service.js')
+const FetchPurposesService = require('./fetch-purposes.service.js')
 const GeneralLib = require('../../lib/general.lib.js')
 const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
@@ -30,7 +30,7 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const licencePurposes = await FetchLicencePurposesService.go(session.licence.id)
+  const licencePurposes = await FetchPurposesService.go(session.licence.id)
 
   _handleOneOptionSelected(payload)
 
