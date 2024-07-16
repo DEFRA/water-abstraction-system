@@ -64,13 +64,7 @@ const regions = {
     display_name: 'Wales'
   },
   test_region: {
-    id: '51dfb3e0-9815-4fb9-b6c1-d1f6c8e56273',
-    charge_region_id: 'S',
-    nald_region_id: 9,
-    name: 'Test Region',
-    display_name: 'Test Region'
-  },
-  test_region_alt: {
+    // this id corresponds to the id used in the acceptance tests
     id: 'd0a4123d-1e19-480d-9dd4-f70f3387c4b9',
     charge_region_id: 'S',
     nald_region_id: 9,
@@ -86,7 +80,7 @@ function createValueStringFromRegions () {
     valueString += `('${regions[regionsKey].id}', '${regions[regionsKey].charge_region_id}', '${regions[regionsKey].nald_region_id}', '${regions[regionsKey].name}', '${regions[regionsKey].display_name}')`
 
     // Add comma to all but the last value
-    valueString += (regionsKey === 'test_region_alt' ? '' : ',')
+    valueString += (regionsKey === 'test_region' ? '' : ',')
   }
 
   return valueString

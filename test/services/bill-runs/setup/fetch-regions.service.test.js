@@ -27,7 +27,6 @@ describe('Bill Runs Setup Fetch Regions service', () => {
         { id: RegionSeeder.regions.southern.id, displayName: RegionSeeder.regions.southern.display_name },
         { id: RegionSeeder.regions.south_west.id, displayName: RegionSeeder.regions.south_west.display_name },
         { id: RegionSeeder.regions.test_region.id, displayName: RegionSeeder.regions.test_region.display_name },
-        { id: RegionSeeder.regions.test_region_alt.id, displayName: RegionSeeder.regions.test_region_alt.display_name },
         { id: RegionSeeder.regions.thames.id, displayName: RegionSeeder.regions.thames.display_name },
         { id: RegionSeeder.regions.ea_wales.id, displayName: RegionSeeder.regions.ea_wales.display_name }
       ]
