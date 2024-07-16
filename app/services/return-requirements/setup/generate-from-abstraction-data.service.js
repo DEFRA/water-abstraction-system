@@ -6,7 +6,6 @@
  */
 
 const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
@@ -125,19 +124,19 @@ function _frequencyCollected (licence, licenceVersionPurpose) {
 
   // Licensee is a water company or the purpose is for electricity generation
   if (waterUndertaker || licenceVersionPurpose.$electricityGeneration()) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   // Licensee has a two-part tariff agreement and the purpose is two-part tariff
   if (twoPartTariffAgreement && TWO_PART_IRRIGATION_IDS.includes(purpose.legacyId)) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
-    return returnRequirementFrequencies.week
+    return 'week'
   }
 
-  return returnRequirementFrequencies.month
+  return 'month'
 }
 
 /**
@@ -154,14 +153,14 @@ function _frequencyReported (licence, licenceVersionPurpose) {
 
   // Licensee is a water company or the purpose is for electricity generation
   if (waterUndertaker || licenceVersionPurpose.$electricityGeneration()) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
-    return returnRequirementFrequencies.week
+    return 'week'
   }
 
-  return returnRequirementFrequencies.month
+  return 'month'
 }
 
 /**

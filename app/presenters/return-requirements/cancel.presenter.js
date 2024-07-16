@@ -6,7 +6,7 @@
 */
 
 const { formatLongDate } = require('../base.presenter.js')
-const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
+const { returnRequirementFrequencies, returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/cancel` page
@@ -38,7 +38,7 @@ function _returnRequirements (journey, requirements) {
     const { frequencyReported, returnsCycle, siteDescription } = requirement
     const cycle = returnsCycle === 'summer' ? 'Summer' : 'Winter and all year'
 
-    return `${cycle} ${frequencyReported} requirements for returns, ${siteDescription}.`
+    return `${cycle} ${returnRequirementFrequencies[frequencyReported]} requirements for returns, ${siteDescription}.`
   })
 }
 

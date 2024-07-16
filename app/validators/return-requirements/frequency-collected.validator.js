@@ -23,9 +23,9 @@ function go (payload) {
   const frequencyCollected = payload.frequencyCollected
 
   const VALID_VALUES = [
-    'daily',
-    'weekly',
-    'monthly'
+    'day',
+    'week',
+    'month'
   ]
 
   const errorMessage = 'Select how often readings or volumes are collected'
