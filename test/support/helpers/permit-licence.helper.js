@@ -39,7 +39,7 @@ async function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const licenceRef = generateLicenceRef()
+  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const defaults = {
     licenceStatusId: 1,
     licenceTypeId: 8,
