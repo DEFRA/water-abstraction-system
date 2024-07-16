@@ -44,8 +44,8 @@ describe('Return Requirements - Submit Cancel service', () => {
             'start-abstraction-period-day': '1',
             'start-abstraction-period-month': '4'
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'monthly',
+          frequencyReported: 'month',
+          frequencyCollected: 'month',
           agreementsExceptions: [
             'none'
           ]

@@ -42,8 +42,8 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
             'start-abstraction-period-day': 1,
             'start-abstraction-period-month': 4
           },
-          frequencyReported: 'weekly',
-          frequencyCollected: 'weekly',
+          frequencyReported: 'week',
+          frequencyCollected: 'week',
           agreementsExceptions: ['none']
         },
         {
@@ -61,8 +61,8 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
             'start-abstraction-period-day': 1,
             'start-abstraction-period-month': 4
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'weekly',
+          frequencyReported: 'month',
+          frequencyCollected: 'week',
           agreementsExceptions: [
             '56-returns-exception',
             'gravity-fill',

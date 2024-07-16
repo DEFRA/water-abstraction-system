@@ -24,9 +24,9 @@ function go (payload) {
   const frequencyReported = payload.frequencyReported
 
   const VALID_VALUES = [
-    'daily',
-    'weekly',
-    'monthly'
+    'day',
+    'week',
+    'month'
   ]
 
   const errorMessage = 'Select how often readings or volumes are reported'

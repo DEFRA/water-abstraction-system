@@ -16,14 +16,14 @@ describe('Frequency reported validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyReported: 'monthly'
+        frequencyReported: 'month'
       }
     })
 
     it('confirms the data is valid', async () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.value.frequencyReported).to.equal('monthly')
+      expect(result.value.frequencyReported).to.equal('month')
       expect(result.error).not.to.exist()
     })
   })

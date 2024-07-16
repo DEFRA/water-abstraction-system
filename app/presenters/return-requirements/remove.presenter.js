@@ -6,6 +6,7 @@
 */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/remove/{requirementIndex}` page
@@ -39,7 +40,7 @@ function _formattedReturnRequirement (requirement) {
   const { frequencyReported, returnsCycle, siteDescription } = requirement
   const cycle = returnsCycle === 'summer' ? 'Summer' : 'Winter and all year'
 
-  return `${cycle} ${frequencyReported} requirements for returns, ${siteDescription}.`
+  return `${cycle} ${returnRequirementFrequencies[frequencyReported]} requirements for returns, ${siteDescription}.`
 }
 
 function _startDate (session) {
