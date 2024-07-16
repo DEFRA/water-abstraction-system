@@ -13,20 +13,33 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
 const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const RegionModel = require('../../../../app/models/region.model.js')
-const RegionSeeder = require('../../../support/seeders/regions.seeder.js')
+const { db } = require('../../../../db/db.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const LoadService = require('../../../../app/services/data/load/load.service.js')
 
 describe('Load service', () => {
   let payload
+  let regionId
 
-  const regionId = RegionSeeder.regions.test_region.id
+  beforeEach(() => {
+    regionId = generateUUID()
+  })
 
   describe('when the service is called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
+          regions: [
+            {
+              id: regionId,
+              chargeRegionId: 'S',
+              naldRegionId: 9,
+              displayName: 'Test Region',
+              name: 'Test Region'
+            }
+          ],
           billRuns: [
             {
               regionId,
@@ -52,6 +65,9 @@ describe('Load service', () => {
 
       it('returns the generated and used IDs for the entities', async () => {
         const result = await LoadService.go(payload)
+
+        expect(result.regions).to.exist()
+        expect(result.regions).not.to.be.empty()
 
         expect(result.billRuns).to.exist()
         expect(result.billRuns).not.to.be.empty()
@@ -83,6 +99,16 @@ describe('Load service', () => {
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
           expect(chargeReference.chargeCategoryId).to.equal(chargeCategoryId)
+        })
+      })
+
+      describe('that includes an entity with an "is_test" field', () => {
+        it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
+          const result = await LoadService.go(payload)
+
+          const region = await db('regions').withSchema('water').first('isTest').where('regionId', result.regions[0])
+
+          expect(region.isTest).to.be.true()
         })
       })
     })
