@@ -15,7 +15,7 @@ async function run () {
   console.log('Database clean for tests')
 
   try {
-    // await Database.clean()
+    await Database.clean()
     console.log('Database cleaned')
   } catch (error) {
     console.log(error)
