@@ -10,8 +10,8 @@ const { expect } = Code
 const { randomInteger } = require('../../support/general.js')
 
 // Test helpers
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../../app/models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 
 // Thing under test
 const LicenceVersionPurposeConditionService = require('../../../app/services/import/licence-version-purpose-condition.service.js')
