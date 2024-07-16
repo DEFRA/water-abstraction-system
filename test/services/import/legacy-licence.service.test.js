@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -12,33 +13,33 @@ const FetchLegacyImportLicenceService = require('../../../app/services/import/le
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLicence = require('./_fixtures/licence.js')
 const FixtureVersions = require('./_fixtures/versions.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
-const Sinon = require('sinon')
 
-describe('Legacy import licence service', () => {
-  const licenceRef = generateLicenceRef()
+describe.only('Legacy import licence service', () => {
+  const licenceRef = FixtureLicence.LIC_NO
 
   let region
 
   beforeEach(async () => {
-    region = await RegionHelper.add()
+    region = await RegionHelper.add({
+      chargeRegionId: 3,
+      naldRegionId: 3
+    })
 
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
       ...FixtureLicence,
-      LIC_NO: licenceRef,
       FGAC_REGION_CODE: region.naldRegionId
     })
 
     Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves([...FixtureVersions])
   })
 
-  it('returns the matching agreements data', async () => {
+  it('returns the matching licence data', async () => {
     const results = await LegacyImportLicenceService.go(licenceRef)
 
     const licence = await LicenceModel.query().findById(results.id)
