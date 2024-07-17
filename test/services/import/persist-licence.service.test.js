@@ -8,32 +8,29 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const PersistLicenceService =
   require('../../../app/services/import/persist-licence.service.js')
 
-describe.only('Persist licence service', () => {
+describe('Persist licence service', () => {
   let region
   let licence
 
   beforeEach(async () => {
-    region = await RegionHelper.add({
-      chargeRegionId: 3,
-      naldRegionId: 3
-    })
+    region = RegionsSeeder.regions.test_region
   })
 
-  describe('when the licence ref does not already exist ', () => {
+  describe('when the licence ref does not exist', () => {
     beforeEach(() => {
       licence = {
         expiredDate: '2015-03-31',
         lapsedDate: null,
         licenceRef: generateLicenceRef(),
-        naldRegionId: region.naldRegionId,
+        naldRegionId: region.nald_region_id,
         regions: {
           historicalAreaCode: 'RIDIN',
           regionalChargeArea: 'Yorkshire',
@@ -72,13 +69,13 @@ describe.only('Persist licence service', () => {
     })
   })
 
-  describe('when the licence ref does already exist ', () => {
+  describe('when the licence ref already exist', () => {
     beforeEach(async () => {
       licence = {
         expiredDate: '2015-03-31',
         lapsedDate: null,
         licenceRef: generateLicenceRef(),
-        naldRegionId: region.naldRegionId,
+        naldRegionId: region.nald_region_id,
         regions: {
           historicalAreaCode: 'RIDIN',
           regionalChargeArea: 'Yorkshire',
@@ -94,10 +91,10 @@ describe.only('Persist licence service', () => {
       await PersistLicenceService.go(licence)
     })
 
-    it('returns newly updated licence (waterUndertaker to true)', async () => {
+    it('returns newly updated licence', async () => {
       const results = await PersistLicenceService.go({
         licenceRef: licence.licenceRef,
-        naldRegionId: region.naldRegionId,
+        naldRegionId: region.nald_region_id,
         //  not null constraints
         waterUndertaker: true,
         regions: licence.regions,
@@ -123,6 +120,8 @@ describe.only('Persist licence service', () => {
         updatedAt: savedLicence.updatedAt.toISOString(),
         waterUndertaker: true
       })
+
+      expect(results.waterUndertaker).to.be.true()
     })
   })
 })

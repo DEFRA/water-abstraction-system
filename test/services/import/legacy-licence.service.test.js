@@ -14,7 +14,7 @@ const FetchLegacyImportLicenceVersionsService = require('../../../app/services/i
 const FixtureLicence = require('./_fixtures/licence.js')
 const FixtureVersions = require('./_fixtures/versions.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 
 // Thing under test
 const LegacyImportLicenceService =
@@ -23,17 +23,12 @@ const LegacyImportLicenceService =
 describe.only('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
-  let region
+  const region = RegionsSeeder.regions.test_region
 
   beforeEach(async () => {
-    region = await RegionHelper.add({
-      chargeRegionId: 3,
-      naldRegionId: 3
-    })
-
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
       ...FixtureLicence,
-      FGAC_REGION_CODE: region.naldRegionId
+      FGAC_REGION_CODE: region.nald_region_id
     })
 
     Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves([...FixtureVersions])
