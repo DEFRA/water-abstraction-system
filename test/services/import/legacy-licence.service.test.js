@@ -20,7 +20,7 @@ const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
-describe.only('Legacy import licence service', () => {
+describe('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
   const region = RegionsSeeder.regions.test_region
