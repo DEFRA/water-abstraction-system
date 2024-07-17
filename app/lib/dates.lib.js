@@ -92,7 +92,9 @@ function _isValidLeapYearDate (dateString) {
 }
 
 function _isLeapYear (year) {
-  if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
+  const set400 = 400
+
+  if ((year % 4 === 0 && year % 100 !== 0) || (year % set400 === 0)) {
     return true
   }
 

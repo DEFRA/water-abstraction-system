@@ -15,10 +15,13 @@ const isValidISODate = (value) => {
     throw new Error('date must be in the format YYYY-MM-DD')
   }
 
-  const [year, month, day] = value.split('-')
+  const [, month, day] = value.split('-')
+
+  const maxMonths = 12
+  const maxDays = 31
 
   // Basic check for valid month and day values (can be extended for more robust validation)
-  if (month < 1 || month > 12 || day < 1 || day > 31) {
+  if (month < 1 || month > maxMonths || day < 1 || day > maxDays) {
     throw new Error('date must be a valid date')
   }
 
