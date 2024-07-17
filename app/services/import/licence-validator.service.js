@@ -8,7 +8,7 @@
 /**
  * Validates a licence is in the correct shape and format to perist in the databasse
  *
- * @param {ValidLicenceType} licence - The licence to validator
+ * @param {ImportLicenceType} licence - The licence to validator
  * @returns {} a licence is the licence is valid, other wise throw an error
  */
 function go (licence) {
@@ -21,7 +21,7 @@ module.exports = {
 
 /**
  * A valid licence that is in the correct shape / format to save in the database
- * @typedef {Object} ValidLicenceType
+ * @typedef {Object} ImportLicenceType
  *
  * @property {string | null} expiredDate
  * @property {string | null} lapsedDate

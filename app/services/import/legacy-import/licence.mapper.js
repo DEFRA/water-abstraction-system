@@ -13,7 +13,7 @@ const { regions } = require('./constants.js')
  *
  * @param {LegacyLicenceType} licence
  * @param {LegacyLicenceVersionsArray} licenceVersions
- * @returns {ValidLicenceType}
+ * @returns {ImportLicenceType}
  */
 function go (licence, licenceVersions = []) {
   return _mapLicence(licence, licenceVersions)
