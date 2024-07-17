@@ -8,7 +8,7 @@
 const FetchLegacyImportLicenceService = require('./legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('./legacy-import/fetch-licence-versions.service.js')
 const LegacyImportLicenceMapper = require('./legacy-import/licence.mapper.js')
-const LicenceValidatorService = require('./licence-validator.service.js')
+const ImportLicenceValidatorService = require('./licence-validator.service.js')
 const PersistLicenceService = require('./persist-licence.service.js')
 
 /**
@@ -30,9 +30,9 @@ async function go (licenceRef) {
 
   console.debug('Mapped imported licence data: ', mappedLicenceData)
 
-  const validatedLicence = LicenceValidatorService.go(mappedLicenceData)
+  ImportLicenceValidatorService.go(mappedLicenceData)
 
-  const savedLicence = await PersistLicenceService.go(validatedLicence)
+  const savedLicence = await PersistLicenceService.go(mappedLicenceData)
 
   console.debug('Saved Licence: ', savedLicence)
 

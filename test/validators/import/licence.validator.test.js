@@ -8,7 +8,7 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { validLicenceRequiredOnly } = require('./_fixtures/valid-licence.fixture.js')
 
 // Thing under test
 const ImportLicenceValidator = require('../../../app/validators/import/licence.validator.js')
@@ -16,20 +16,13 @@ const ImportLicenceValidator = require('../../../app/validators/import/licence.v
 describe('Import licence validator', () => {
   let licence
 
-  const requiredFields = {
-    licenceRef: generateLicenceRef(),
-    naldRegionId: 1,
-    startDate: '2001-01-01',
-    waterUndertaker: true
-  }
-
   before(async () => {
     licence = {
-      ...requiredFields
+      ...validLicenceRequiredOnly
     }
   })
 
-  it('will not throw if all the required fields validations are met', () => {
+  it('should not throw if all the required fields validations are met', () => {
     expect(() => {
       return ImportLicenceValidator.go({
         ...licence
@@ -114,7 +107,7 @@ describe('Import licence validator', () => {
   })
 
   describe('"licenceRef" property', () => {
-    it('will throw an error - licenceRef - must be a string', async () => {
+    it('should throw an error - licenceRef - must be a string', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 1
@@ -122,13 +115,13 @@ describe('Import licence validator', () => {
       }).to.throw('"licenceRef" must be a string')
     })
 
-    it('will throw an error - licenceRef - is required', async () => {
+    it('should throw an error - licenceRef - is required', async () => {
       expect(() => { return ImportLicenceValidator.go({}) }).to.throw('"licenceRef" is required')
     })
   })
 
   describe('"naldRegionId" property', () => {
-    it('will throw an error - naldRegionId - must be a number', async () => {
+    it('should throw an error - naldRegionId - must be a number', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 'l',
@@ -137,7 +130,7 @@ describe('Import licence validator', () => {
       }).to.throw('"naldRegionId" must be a number')
     })
 
-    it('will throw an error - naldRegionId - is required', async () => {
+    it('should throw an error - naldRegionId - is required', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 'l'
