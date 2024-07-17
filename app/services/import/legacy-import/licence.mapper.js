@@ -25,7 +25,7 @@ function _mapLicence (licence, licenceVersions) {
     lapsedDate: formatStandardDateToISO(licence.LAPSED_DATE),
     licenceRef: licence.LIC_NO,
     naldRegionId: parseInt(licence.FGAC_REGION_CODE, 10),
-    regions: _regionData(licence),
+    regions: _regions(licence),
     revokedDate: formatStandardDateToISO(licence.REV_DATE),
     startDate: _startDate(licence, licenceVersions),
     waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC')
@@ -38,7 +38,7 @@ function _mapLicence (licence, licenceVersions) {
  * @param {Object} licenceData
  * @return {RegionsType}
  */
-const _regionData = (licenceData) => {
+const _regions = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE
   const regionPrefix = licenceData.AREP_EIUC_CODE.substr(0, 2)
   const regionalChargeArea = regions[regionPrefix]
