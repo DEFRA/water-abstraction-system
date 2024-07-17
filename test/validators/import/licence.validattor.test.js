@@ -13,7 +13,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 // Thing under test
 const ImportLicenceValidator = require('../../../app/validators/import/licence.validator.js')
 
-describe.only('Import licence validator', () => {
+describe('Import licence validator', () => {
   let licence
 
   const requiredFields = {
@@ -29,7 +29,7 @@ describe.only('Import licence validator', () => {
     }
   })
 
-  it('will not throw is all the required fields validations are met', () => {
+  it('will not throw if all the required fields validations are met', () => {
     expect(() => {
       return ImportLicenceValidator.go({
         ...licence
@@ -38,7 +38,7 @@ describe.only('Import licence validator', () => {
   })
 
   describe('"expiredDate" property', () => {
-    it('will return an error if "expiredDate" is not a string (can be null)', async () => {
+    it('should throw an error if "expiredDate" is not a string or null', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -47,7 +47,7 @@ describe.only('Import licence validator', () => {
       }).to.throw('"expiredDate" must be a string')
     })
 
-    it('will return an error if "expiredDate" is not in the correct format', async () => {
+    it('should throw an error if "expiredDate" is not in the correct format YYYY-MM-DD', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -56,7 +56,7 @@ describe.only('Import licence validator', () => {
       }).to.throw('"expiredDate" failed custom validation because date must be in the format YYYY-MM-DD')
     })
 
-    it('will not return an error if "expiredDate" is null', async () => {
+    it('should not throw an error if "expiredDate" is null', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -65,7 +65,7 @@ describe.only('Import licence validator', () => {
       }).to.not.throw()
     })
 
-    it('will not return an error if "expiredDate" is valid date string', async () => {
+    it('should not throw an error if "expiredDate" is valid date string', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -76,7 +76,7 @@ describe.only('Import licence validator', () => {
   })
 
   describe('"lapsedDate" property', () => {
-    it('will return an error if "lapsedDate" is not a string (can be null)', async () => {
+    it('should throw an error if "expiredDate" is not a string or null', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -85,7 +85,7 @@ describe.only('Import licence validator', () => {
       }).to.throw('"lapsedDate" must be a string')
     })
 
-    it('will return an error if "lapsedDate" is not in the correct format', async () => {
+    it('should throw an error if "lapsedDate" is not in the correct format YYYY-MM-DD', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -94,7 +94,7 @@ describe.only('Import licence validator', () => {
       }).to.throw('"lapsedDate" failed custom validation because date must be in the format YYYY-MM-DD')
     })
 
-    it('will not return an error if "lapsedDate" is null', async () => {
+    it('should not throw an error if "lapsedDate" is null', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -103,7 +103,7 @@ describe.only('Import licence validator', () => {
       }).to.not.throw()
     })
 
-    it('will not return an error if "lapsedDate" is valid date string', async () => {
+    it('should not throw an error if "lapsedDate" is valid date string', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
@@ -114,7 +114,7 @@ describe.only('Import licence validator', () => {
   })
 
   describe('"licenceRef" property', () => {
-    it('will return an error - licenceRef - must be a string', async () => {
+    it('will throw an error - licenceRef - must be a string', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 1
@@ -122,8 +122,205 @@ describe.only('Import licence validator', () => {
       }).to.throw('"licenceRef" must be a string')
     })
 
-    it('will return an error - licenceRef - is required', async () => {
+    it('will throw an error - licenceRef - is required', async () => {
       expect(() => { return ImportLicenceValidator.go({}) }).to.throw('"licenceRef" is required')
+    })
+  })
+
+  describe('"naldRegionId" property', () => {
+    it('will throw an error - naldRegionId - must be a number', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          licenceRef: 'l',
+          naldRegionId: 'one'
+        })
+      }).to.throw('"naldRegionId" must be a number')
+    })
+
+    it('will throw an error - naldRegionId - is required', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          licenceRef: 'l'
+        })
+      }).to.throw('"naldRegionId" is required')
+    })
+  })
+
+  describe('"regions" property', () => {
+    describe('"regions.regionalChargeArea" property', () => {
+      it('should throw an error if "regions.regionalChargeArea" is not a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { regionalChargeArea: 1 }
+          })
+        }).to.throw('"regions.regionalChargeArea" must be a string')
+      })
+
+      it('should not throw an error if "regions.regionalChargeArea" is a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { regionalChargeArea: 'a string' }
+          })
+        }).to.not.throw()
+      })
+    })
+
+    describe('"regions.localEnvironmentAgencyPlanCode" property', () => {
+      it('should throw an error if "regions.localEnvironmentAgencyPlanCode" is not a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { localEnvironmentAgencyPlanCode: 1 }
+          })
+        }).to.throw('"regions.localEnvironmentAgencyPlanCode" must be a string')
+      })
+
+      it('should not throw an error if "regions.regionalChargeArea" is a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { localEnvironmentAgencyPlanCode: 'a string' }
+          })
+        }).to.not.throw()
+      })
+    })
+
+    describe('"regions.historicalAreaCode" property', () => {
+      it('should throw an error if "regions.historicalAreaCode" is not a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { historicalAreaCode: 1 }
+          })
+        }).to.throw('"regions.historicalAreaCode" must be a string')
+      })
+
+      it('should not throw an error if "regions.historicalAreaCode" is a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { historicalAreaCode: 'a string' }
+          })
+        }).to.not.throw()
+      })
+    })
+
+    describe('"regions.standardUnitChargeCode" property', () => {
+      it('should throw an error if "regions.standardUnitChargeCode" is not a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { standardUnitChargeCode: 1 }
+          })
+        }).to.throw('"regions.standardUnitChargeCode" must be a string')
+      })
+
+      it('should not throw an error if "regions.standardUnitChargeCode" is a string', async () => {
+        expect(() => {
+          return ImportLicenceValidator.go({
+            ...licence,
+            regions: { standardUnitChargeCode: 'a string' }
+          })
+        }).to.not.throw()
+      })
+    })
+  })
+
+  describe('"revokedDate" property', () => {
+    it('should throw an error if "revokedDate" is not a string or null', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          revokedDate: 1
+        })
+      }).to.throw('"revokedDate" must be a string')
+    })
+
+    it('should throw an error if "revokedDate" is not in the correct format YYYY-MM-DD', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          revokedDate: '01/01/2001'
+        })
+      }).to.throw('"revokedDate" failed custom validation because date must be in the format YYYY-MM-DD')
+    })
+
+    it('should not throw an error if "revokedDate" is null', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          revokedDate: null
+        })
+      }).to.not.throw()
+    })
+
+    it('should not throw an error if "revokedDate" is valid date string', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          revokedDate: '2001-01-01'
+        })
+      }).to.not.throw()
+    })
+  })
+
+  describe('"startDate" property', () => {
+    it('should throw an error if "startDate" is not a string', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          startDate: 1
+        })
+      }).to.throw('"startDate" must be a string')
+    })
+
+    it('should throw an error if "startDate" is not in the correct format YYYY-MM-DD', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          startDate: '01/01/2001'
+        })
+      }).to.throw('"startDate" failed custom validation because date must be in the format YYYY-MM-DD')
+    })
+
+    it('should throw an error if "startDate" is null', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          startDate: null
+        })
+      }).to.throw('"startDate" must be a string')
+    })
+
+    it('should not throw an error if "startDate" is valid date string', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          startDate: '2001-01-01'
+        })
+      }).to.not.throw()
+    })
+  })
+
+  describe('"waterUndertaker" property', () => {
+    it('should throw an error if "waterUndertaker" is not a boolean', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          waterUndertaker: 1
+        })
+      }).to.throw('"waterUndertaker" must be a boolean')
+    })
+
+    it('should not throw an error if "waterUndertaker" is boolean', async () => {
+      expect(() => {
+        return ImportLicenceValidator.go({
+          ...licence,
+          waterUndertaker: true
+        })
+      }).to.not.throw()
     })
   })
 })

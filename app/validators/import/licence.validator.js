@@ -28,8 +28,8 @@ function go (data) {
       historicalAreaCode: Joi.string(),
       standardUnitChargeCode: Joi.string()
     }),
-    revokedDate: Joi.string(),
-    startDate: Joi.string().required(),
+    revokedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
+    startDate: Joi.string().required().custom(CustomDateValidator.isValidISODate),
     waterUndertaker: Joi.boolean().required()
   })
 
