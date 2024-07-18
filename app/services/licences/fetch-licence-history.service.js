@@ -7,6 +7,12 @@ async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
   const results = await _fetchEntries(licenceId)
 
+  console.log('🚀🚀🚀 ~ results:', results)
+
+  const testKnex = await _fetchEntries2(licenceId)
+
+  console.log('🚀🚀🚀 ~ testKnex:', testKnex)
+
   return {
     entries: results.rows,
     licence
@@ -21,6 +27,24 @@ async function _fetchLicence (licenceId) {
       'licenceRef',
       'createdAt'
     ])
+}
+
+async function _fetchEntries2 (licenceId) {
+  const licenceEntries = await db
+    .withSchema('public')
+    .select(
+      'licences.id AS licence_id',
+      db.raw("'licence-version' AS entry_type"),
+      'licence_versions.id AS entry_id',
+      db.raw("'' AS reason"),
+      'licence_versions.created_at',
+      db.raw("'' AS created_by"),
+      db.raw("'' AS note"),
+      'licence_versions.issue AS version_number'
+    )
+    .from('licences')
+
+  return licenceEntries
 }
 
 async function _fetchEntries (licenceId) {
