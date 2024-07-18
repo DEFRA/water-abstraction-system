@@ -34,7 +34,14 @@ async function _getLicenceVersions (licenceId, regionCode) {
 function select (rows) {
   return rows.map((row) => {
     return {
-      EFF_ST_DATE: row.EFF_ST_DATE
+      EFF_END_DATE: row.EFF_END_DATE,
+      EFF_ST_DATE: row.EFF_ST_DATE,
+      INCR_NO: row.INCR_NO,
+      ISSUE_NO: row.ISSUE_NO,
+      STATUS: row.STATUS,
+      //  can use region code from licence ?
+      FGAC_REGION_CODE: row.FGAC_REGION_CODE,
+      AABL_ID: row.AABL_ID
     }
   })
 }
@@ -47,7 +54,13 @@ module.exports = {
  * A legacy licence version
  * @typedef {Object} LegacyLicenceVersionsType
  *
- * @property {string} EFF_ST_DATE - date in UK format | 'null'
+ * @property {string} EFF_END_DATE - date in UK format - can be 'null'
+ * @property {string} EFF_ST_DATE - date in UK format
+ * @property {string} INCR_NO - a number between 1 - 5
+ * @property {string} ISSUE_NO - a number - linked to the purpose id ?
+ * @property {string} STATUS - enum - 'DRAFT', 'SUPER', 'CURR' (Draft will not be selected)
+ * @property {string} FGAC_REGION_CODE
+ * @property {string} AABL_ID
  */
 
 /**

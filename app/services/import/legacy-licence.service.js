@@ -7,9 +7,11 @@
 
 const FetchLegacyImportLicenceService = require('./legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('./legacy-import/fetch-licence-versions.service.js')
-const LegacyImportLicenceMapper = require('./legacy-import/licence.mapper.js')
 const ImportLicenceValidatorService = require('./licence-validator.service.js')
+const LegacyImportLicenceMapper = require('./legacy-import/licence.mapper.js')
+const LegacyImportLicenceVersionMapper = require('./legacy-import/licence-versions.mapper.js')
 const PersistLicenceService = require('./persist-licence.service.js')
+const PersistLicenceVersionsService = require('./persist-licence-versions.service.js')
 
 /**
  * Imports a licence from the legacy import tables. Maps and validates the data and then saves to the database.
@@ -28,13 +30,19 @@ async function go (licenceRef) {
 
   const mappedLicenceData = await LegacyImportLicenceMapper.go(licenceData, licenceVersionsData)
 
+  const mappedLicenceVersionsData = await LegacyImportLicenceVersionMapper.go(licenceVersionsData)
+
   console.debug('Mapped imported licence data: ', mappedLicenceData)
+
+  console.debug('Mapped imported licence versions data: ', mappedLicenceVersionsData)
 
   ImportLicenceValidatorService.go(mappedLicenceData)
 
   const savedLicence = await PersistLicenceService.go(mappedLicenceData)
+  const savedLicenceVersions = await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
 
   console.debug('Saved Licence: ', savedLicence)
+  console.debug('Saved Licence versions: ', savedLicenceVersions)
 
   return savedLicence
 }
