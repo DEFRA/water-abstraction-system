@@ -16,7 +16,7 @@ describe('Frequency Collected validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        frequencyCollected: 'monthly'
+        frequencyCollected: 'month'
       }
     })
 
@@ -24,7 +24,7 @@ describe('Frequency Collected validator', () => {
       const result = FrequencyCollectedValidator.go(payload)
 
       expect(result.error).not.to.exist()
-      expect(result.value.frequencyCollected).to.equal('monthly')
+      expect(result.value.frequencyCollected).to.equal('month')
     })
   })
 
