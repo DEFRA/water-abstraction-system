@@ -152,6 +152,7 @@ describe('Review Licence presenter', () => {
       describe('when a return has a status of "due"', () => {
         beforeEach(() => {
           licence[0].reviewReturns[0].returnStatus = 'due'
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns[0].returnStatus = 'due'
         })
 
         it('changes the status text to "overdue"', () => {
@@ -164,6 +165,12 @@ describe('Review Licence presenter', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.matchedReturns[0].returnTotal).to.equal('/')
+        })
+
+        it('formats the charge elements return total correctly', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].returnVolume).to.equal(['(10031343)'])
         })
 
         it('formats the returns link correctly', () => {
