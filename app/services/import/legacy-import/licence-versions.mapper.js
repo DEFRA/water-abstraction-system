@@ -23,12 +23,18 @@ const createExternalId = (licenceVersion) => {
  * Maps the import licence versions data to the desired format
  *
  * @param {LegacyLicenceVersionsArray} licenceVersions
- * @returns {}
+ * @returns {ImportLicenceVersionType[]}
  */
 function go (licenceVersions) {
   return _mapLicenceVersions(licenceVersions)
 }
 
+/**
+ * Iterates the import licence versions
+ *
+ * @param {LegacyLicenceVersionsArray} licenceVersions
+ * @returns {ImportLicenceVersionType[]}
+ */
 function _mapLicenceVersions (licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
     const issue = licenceVersion.ISSUE_NO // mapped to the legacy purpose id -
@@ -48,27 +54,35 @@ function _mapLicenceVersions (licenceVersions) {
   })
 }
 
+/**
+ * Iterates the import licence versions purposes
+ *
+ * @param {LegacyLicenceVersionsType} licenceVersion
+ * @returns {ImportLicenceVersionPurposeType}
+ */
 function _mapPurposes (licenceVersion) {
   return licenceVersion.purposes.map((purpose) => {
-    return mapLicencePurpose(purpose)
+    return _mapPurpose(purpose)
   })
 }
 
-module.exports = {
-  go
-}
-
-const mapLicencePurpose = (purpose) => {
+/**
+ * Maps the import licence versions purposes data to the desired format
+ *
+ * @param {LegacyLicenceVersionsPurposesType} purpose
+ * @returns {ImportLicenceVersionPurposeType}
+ */
+const _mapPurpose = (purpose) => {
   return {
-    abstractionPeriodEndDay: purpose.PERIOD_END_DAY,
-    abstractionPeriodEndMonth: purpose.PERIOD_END_MONTH,
-    abstractionPeriodStartDay: purpose.PERIOD_ST_DAY,
-    abstractionPeriodStartMonth: purpose.PERIOD_ST_MONTH,
-    annualQuantity: purpose.ANNUAL_QTY === 'null' ? null : purpose.ANNUAL_QTY,
-    dailyQuantity: purpose.DAILY_QTY === 'null' ? null : purpose.DAILY_QTY,
+    abstractionPeriodEndDay: Number(purpose.PERIOD_END_DAY),
+    abstractionPeriodEndMonth: Number(purpose.PERIOD_END_MONTH),
+    abstractionPeriodStartDay: Number(purpose.PERIOD_ST_DAY),
+    abstractionPeriodStartMonth: Number(purpose.PERIOD_ST_MONTH),
+    annualQuantity: purpose.ANNUAL_QTY === 'null' ? null : Number(purpose.ANNUAL_QTY),
+    dailyQuantity: purpose.DAILY_QTY === 'null' ? null : Number(purpose.DAILY_QTY),
     externalId: `${purpose.FGAC_REGION_CODE}:${purpose.ID}`,
-    hourlyQuantity: purpose.HOURLY_QTY === 'null' ? null : purpose.HOURLY_QTY,
-    instantQuantity: purpose.INST_QTY === 'null' ? null : purpose.INST_QTY,
+    hourlyQuantity: purpose.HOURLY_QTY === 'null' ? null : Number(purpose.HOURLY_QTY),
+    instantQuantity: purpose.INST_QTY === 'null' ? null : Number(purpose.INST_QTY),
     notes: purpose.NOTES === 'null' ? null : purpose.NOTES,
     primaryPurposeId: purpose.APUR_APPR_CODE,
     secondaryPurposeId: purpose.APUR_APSE_CODE,
@@ -76,4 +90,8 @@ const mapLicencePurpose = (purpose) => {
     timeLimitedEndDate: formatStandardDateToISO(purpose.TIMELTD_END_DATE),
     timeLimitedStartDate: formatStandardDateToISO(purpose.TIMELTD_ST_DATE)
   }
+}
+
+module.exports = {
+  go
 }

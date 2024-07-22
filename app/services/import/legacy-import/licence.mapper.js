@@ -36,7 +36,7 @@ function _mapLicence (licence, licenceVersions) {
  * Creates a JSON object of the region data
  *
  * @param {Object} licenceData
- * @return {RegionsType}
+ * @return {ImportRegionType}
  */
 const _regions = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE

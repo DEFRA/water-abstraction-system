@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Persists the licence versions
+ * Persists the licence versions, purposes and conditions
  * @module PersistLicenceVersionsService
  */
 
@@ -14,7 +14,7 @@ const PurposeModel = require('../../models/purpose.model.js')
 /**
  * Saves the licence versions
  *
- * @param {LegacyLicenceVersionsArray} licenceVersions
+ * @param {ImportLicenceVersionType[]} licenceVersions
  * @param {string} licenceId
  */
 async function go (licenceVersions, licenceId) {

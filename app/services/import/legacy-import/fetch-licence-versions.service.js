@@ -79,9 +79,30 @@ module.exports = {
  * @property {string} STATUS - enum - 'DRAFT', 'SUPER', 'CURR' (Draft will not be selected)
  * @property {string} FGAC_REGION_CODE
  * @property {string} AABL_ID
+ * @property {LegacyLicenceVersionsPurposesType} purposes
  */
 
 /**
  * An array of legacy licence versions.
  * @typedef {LegacyLicenceVersionsType[]} LegacyLicenceVersionsArray
+ */
+
+/**
+ * @typedef {Object} LegacyLicenceVersionsPurposesType
+ * @property {string} PERIOD_END_DAY - The end day of the period.
+ * @property {string} PERIOD_END_MONTH - The end month of the period.
+ * @property {string} PERIOD_ST_DAY - The start day of the period.
+ * @property {string} PERIOD_ST_MONTH - The start month of the period.
+ * @property {string} ANNUAL_QTY - The annual quantity.
+ * @property {string} DAILY_QTY - The daily quantity.
+ * @property {string} FGAC_REGION_CODE - The FGAC region code.
+ * @property {string} ID - The identifier.
+ * @property {string} HOURLY_QTY - The hourly quantity.
+ * @property {string} INST_QTY - The instant quantity.
+ * @property {string} NOTES - Additional notes.
+ * @property {string} APUR_APPR_CODE - The APUR approval code.
+ * @property {string} APUR_APSE_CODE - The APUR secondary code.
+ * @property {string} APUR_APUS_CODE - The APUR usage code.
+ * @property {string} TIMELTD_END_DATE - The time-limited end date.
+ * @property {string} TIMELTD_ST_DATE - The time-limited start date.
  */
