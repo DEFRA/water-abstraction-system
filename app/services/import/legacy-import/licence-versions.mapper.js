@@ -59,10 +59,6 @@ module.exports = {
 }
 
 const mapLicencePurpose = (purpose) => {
-  // double check no longer needed because of update sql
-  // issue: purpose.AABV_ISSUE_NO,
-  //   increment: purpose.AABV_INCR_NO,
-
   return {
     abstractionPeriodEndDay: purpose.PERIOD_END_DAY,
     abstractionPeriodEndMonth: purpose.PERIOD_END_MONTH,
