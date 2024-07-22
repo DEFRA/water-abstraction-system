@@ -35,6 +35,7 @@ async function _getLicenceByRef (licenceRef) {
  * @param {any} licence
  * @returns {LegacyLicenceType}
  */
+// TODO: remove this for the select
 function select (licence) {
   return {
     AREP_AREA_CODE: licence.AREP_AREA_CODE,

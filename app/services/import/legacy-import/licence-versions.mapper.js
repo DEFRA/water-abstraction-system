@@ -6,7 +6,6 @@
  */
 
 const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
-const { purpose } = require('../../../controllers/return-requirements.controller')
 
 const statuses = {
   CURR: 'current',
@@ -75,9 +74,9 @@ const mapLicencePurpose = (purpose) => {
     hourlyQuantity: purpose.HOURLY_QTY === 'null' ? null : purpose.HOURLY_QTY,
     instantQuantity: purpose.INST_QTY === 'null' ? null : purpose.INST_QTY,
     notes: purpose.NOTES === 'null' ? null : purpose.NOTES,
-    purposePrimary: purpose.APUR_APPR_CODE, // need to map to the legacy id
-    purposeSecondary: purpose.APUR_APSE_CODE, // need to map to the legacy id
-    purposeUse: purpose.APUR_APUS_CODE, // need to map ?
+    primaryPurposeId: purpose.APUR_APPR_CODE,
+    secondaryPurposeId: purpose.APUR_APSE_CODE,
+    purposeId: purpose.APUR_APUS_CODE,
     timeLimitedEndDate: formatStandardDateToISO(purpose.TIMELTD_END_DATE),
     timeLimitedStartDate: formatStandardDateToISO(purpose.TIMELTD_ST_DATE)
   }
