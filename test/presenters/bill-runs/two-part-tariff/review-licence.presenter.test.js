@@ -170,7 +170,7 @@ describe('Review Licence presenter', () => {
         it('formats the charge elements return total correctly', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
-          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].returnVolume).to.equal(['(10031343)'])
+          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].returnVolume).to.equal(['Overdue (10031343)'])
         })
 
         it('formats the returns link correctly', () => {
