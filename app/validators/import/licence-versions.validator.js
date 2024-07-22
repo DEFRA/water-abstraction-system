@@ -6,10 +6,9 @@
 
 const Joi = require('joi')
 
-const CustomDateValidator = require('../custom/date.validators.js')
-
 /**
- * Checks that the data for inserting/updating the water.licence table is valid
+ * Checks that the data for inserting/updating the public.licence_versions
+ * and public.licence_versions_purposes table is valid
  *
  * @param {ImportLicenceVersionType[]} data The data to be validated
  *
