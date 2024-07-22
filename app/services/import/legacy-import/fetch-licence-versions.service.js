@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  * Returns the licence version purposes
  *
  * @param {LegacyLicenceType} licenceData - the licence
- * @returns {LegacyLicenceVersionsArray}
+ * @returns {Promise<LegacyLicenceVersionsArray>}
  */
 async function go (licenceData) {
   const { ID: licenceId, FGAC_REGION_CODE: regionCode } = licenceData
