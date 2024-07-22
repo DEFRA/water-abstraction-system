@@ -36,3 +36,5 @@ async function go (licenceVersions, licenceId) {
 module.exports = {
   go
 }
+
+// primairy, secondary, purpose use(purpose id)

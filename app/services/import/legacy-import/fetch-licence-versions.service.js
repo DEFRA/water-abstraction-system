@@ -6,6 +6,14 @@
  */
 const { db } = require('../../../../db/db.js')
 
+/**
+ * Gets the licence versions
+ *
+ * Returns the licence version purposes
+ *
+ * @param {LegacyLicenceType} licenceData - the licence
+ * @returns {LegacyLicenceVersionsArray}
+ */
 async function go (licenceData) {
   const { ID: licenceId, FGAC_REGION_CODE: regionCode } = licenceData
 
@@ -14,36 +22,46 @@ async function go (licenceData) {
 
 async function _getLicenceVersions (licenceId, regionCode) {
   const query = `
-      SELECT *
-      FROM import."NALD_ABS_LIC_VERSIONS" v
-      WHERE v."FGAC_REGION_CODE" = '${regionCode}'
-        AND v."AABL_ID" = '${licenceId}'
-        AND v."STATUS" <> 'DRAFT';`
+      SELECT versions."EFF_END_DATE",
+             versions."EFF_ST_DATE",
+             versions."INCR_NO",
+             versions."ISSUE_NO",
+             versions."STATUS",
+             versions."FGAC_REGION_CODE",
+             versions."AABL_ID",
+             (SELECT json_agg(json_build_object(
+               'PERIOD_END_DAY', purposes."PERIOD_END_DAY",
+               'PERIOD_END_MONTH', purposes."PERIOD_END_MONTH",
+               'PERIOD_ST_DAY', purposes."PERIOD_ST_DAY",
+               'PERIOD_ST_MONTH', purposes."PERIOD_ST_MONTH",
+               'ANNUAL_QTY', purposes."ANNUAL_QTY",
+               'DAILY_QTY', purposes."DAILY_QTY",
+               'FGAC_REGION_CODE', purposes."FGAC_REGION_CODE",
+               'ID', purposes."ID",
+               'HOURLY_QTY', purposes."HOURLY_QTY",
+               'INST_QTY', purposes."INST_QTY",
+               'NOTES', purposes."NOTES",
+               'APUR_APPR_CODE', purposes."APUR_APPR_CODE",
+               'APUR_APSE_CODE', purposes."APUR_APSE_CODE",
+               'APUR_APUS_CODE', purposes."APUR_APUS_CODE",
+               'TIMELTD_END_DATE', purposes."TIMELTD_END_DATE",
+               'TIMELTD_ST_DATE', purposes."TIMELTD_ST_DATE"
+                              )
+                     )
+              FROM import."NALD_ABS_LIC_PURPOSES" purposes
+              WHERE purposes."AABV_AABL_ID" = versions."AABL_ID"
+                AND purposes."AABV_ISSUE_NO" = versions."ISSUE_NO"
+                AND purposes."AABV_INCR_NO" = versions."INCR_NO"
+                AND purposes."FGAC_REGION_CODE" = versions."FGAC_REGION_CODE") AS purposes
+      FROM import."NALD_ABS_LIC_VERSIONS" versions
+      WHERE versions."FGAC_REGION_CODE" = '${regionCode}'
+        AND versions."AABL_ID" = '${licenceId}'
+        AND versions."STATUS" <> 'DRAFT';
+  `
 
   const { rows } = await db.raw(query)
 
-  return select(rows)
-}
-
-/**
- * Maps licence versions to the required format / data
- *
- * @param {{}} rows - the licence version columns
- * @returns {LegacyLicenceVersionsArray}
- */
-function select (rows) {
-  return rows.map((row) => {
-    return {
-      EFF_END_DATE: row.EFF_END_DATE,
-      EFF_ST_DATE: row.EFF_ST_DATE,
-      INCR_NO: row.INCR_NO,
-      ISSUE_NO: row.ISSUE_NO,
-      STATUS: row.STATUS,
-      //  can use region code from licence ?
-      FGAC_REGION_CODE: row.FGAC_REGION_CODE,
-      AABL_ID: row.AABL_ID
-    }
-  })
+  return rows
 }
 
 module.exports = {
