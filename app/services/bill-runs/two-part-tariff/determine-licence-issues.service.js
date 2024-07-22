@@ -26,8 +26,10 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
  * @param {module:LicenceModel} licence - The two-part tariff licence to determine issues for
  */
 function go (licence) {
+  console.log('Licence :', licence)
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
+  console.log('Charge Versions :', chargeVersions)
   const allReturnIssues = _determineReturnLogsIssues(licenceReturnLogs, licence)
   const allElementIssues = _determineChargeElementsIssues(chargeVersions, licenceReturnLogs)
 
@@ -131,8 +133,14 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
     status = 'review'
   }
 
-  // Issue Some returns not received
-  if (_someReturnsNotReceived(returnLogs, licenceReturnLogs)) {
+  // Issue Some returns not received / No returns received
+  const { noReturnsReceived, someReturnsNotReceived } = _returnsReceivedStatus(returnLogs, licenceReturnLogs)
+
+  if (noReturnsReceived) {
+    elementIssues.push(twoPartTariffReviewIssues['no-returns-received'])
+  }
+
+  if (someReturnsNotReceived) {
     elementIssues.push(twoPartTariffReviewIssues['some-returns-not-received'])
   }
 
@@ -143,6 +151,37 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   }
 
   return { elementIssues, status }
+}
+
+function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
+  // An array of only the returnLogIds matched to the charge element we are adding the issues for
+  const returnLogIds = returnLogs.map((returnLog) => {
+    return returnLog.returnId
+  })
+
+  // Filters out the returnLogs on the licence to only return the matching returns for our charge element
+  const matchingReturnLogs = licenceReturnLogs.filter((licenceReturnLog) => {
+    return returnLogIds.includes(licenceReturnLog.id)
+  })
+
+  const noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
+    return matchingReturnLog.status === 'due'
+  })
+
+  const someReturnsNotReceived = matchingReturnLogs.
+
+  if (noReturnsReceived) {
+    return {
+      someReturnsNotReceived: false,
+      noReturnsReceived: true
+    }
+  } else
+
+  return {
+    someReturnsNotReceived: dueReturnLogs.length > 0,
+    noReturnsReceived
+  }
+
 }
 
 /**
