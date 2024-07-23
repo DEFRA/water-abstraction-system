@@ -26,10 +26,8 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
  * @param {module:LicenceModel} licence - The two-part tariff licence to determine issues for
  */
 function go (licence) {
-  console.log('Licence :', licence)
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
-  console.log('Charge Versions :', chargeVersions)
   const allReturnIssues = _determineReturnLogsIssues(licenceReturnLogs, licence)
   const allElementIssues = _determineChargeElementsIssues(chargeVersions, licenceReturnLogs)
 
