@@ -151,41 +151,6 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   return { elementIssues, status }
 }
 
-function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
-  const returnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnId
-  })
-
-  // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
-  // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
-  // the status is available
-  const matchingReturnLogs = licenceReturnLogs.filter((licenceReturnLog) => {
-    return returnLogIds.includes(licenceReturnLog.id)
-  })
-
-  let noReturnsReceived
-
-  if (matchingReturnLogs.length > 0) {
-    // If no returnsReceived is true, it means every returnLog matched to the charge element has a status of `due`
-    noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
-      return matchingReturnLog.status === 'due'
-    })
-  } else {
-    noReturnsReceived = false
-  }
-
-  // If someReturnsNotReceived is true it means either some of the returnLogs matched to the element have a status of
-  // due, or all of them
-  const someReturnsNotReceived = matchingReturnLogs.some((matchingReturnLog) => {
-    return matchingReturnLog.status === 'due'
-  })
-
-  return {
-    someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived,
-    noReturnsReceived
-  }
-}
-
 /**
  * Returns a list of issues that would put a licence into a status of 'review'
  *
@@ -261,14 +226,46 @@ function _returnLogIssues (returnLog, licence) {
   return returnLogIssues
 }
 
-function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
+/**
+ * Determines the received status of returns matched to a charge element.
+ *
+ * - If no matching returns have a status of 'due', `noReturnsReceived` and 'someReturnsNotReceived is `false`.
+ * - If some of the matching returns, but not all, have a status of 'due', `someReturnsNotReceived` is `true`.
+ * - If all matching returns have a status of 'due', `noReturnsReceived` is `true`.
+ */
+function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
   const returnLogIds = returnLogs.map((returnLog) => {
     return returnLog.returnId
   })
 
-  return licenceReturnLogs.some((licenceReturnLog) => {
-    return returnLogIds.includes(licenceReturnLog.id) && licenceReturnLog.status === 'due'
+  // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
+  // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
+  // the status is available
+  const matchingReturnLogs = licenceReturnLogs.filter((licenceReturnLog) => {
+    return returnLogIds.includes(licenceReturnLog.id)
   })
+
+  let noReturnsReceived
+
+  if (matchingReturnLogs.length > 0) {
+    // If no returnsReceived is true, it means every returnLog matched to the charge element has a status of `due`
+    noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
+      return matchingReturnLog.status === 'due'
+    })
+  } else {
+    noReturnsReceived = false
+  }
+
+  // If someReturnsNotReceived is true it means either some of the returnLogs matched to the element have a status of
+  // due, or all of them
+  const someReturnsNotReceived = matchingReturnLogs.some((matchingReturnLog) => {
+    return matchingReturnLog.status === 'due'
+  })
+
+  return {
+    someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived,
+    noReturnsReceived
+  }
 }
 
 module.exports = {
