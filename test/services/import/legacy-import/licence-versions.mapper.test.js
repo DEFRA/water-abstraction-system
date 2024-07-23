@@ -15,7 +15,7 @@ const FixtureLicenceVersionPurposes = require('../_fixtures/licence-version-purp
 const LegacyImportLicenceVersionMapper =
   require('../../../../app/services/import/legacy-import/licence-versions.mapper.js')
 
-describe.only('Legacy import licence versions mapper', () => {
+describe('Legacy import licence versions mapper', () => {
   let licenceVersions
   let purpose
   let version
@@ -145,7 +145,7 @@ describe.only('Legacy import licence versions mapper', () => {
       })
     })
 
-    describe('licence versions purposes ', () => {
+    describe('licence versions "purposes" ', () => {
       describe('the "abstractionPeriodEndDay" property', () => {
         describe('when purpose has PERIOD_END_DAY', () => {
           it('returns PERIOD_END_DAY as a number', () => {
@@ -301,13 +301,117 @@ describe.only('Legacy import licence versions mapper', () => {
         })
       })
 
-      //           externalId: '3:10000004',
-      //           notes: null,
-      //           primaryPurposeId: 'I',
-      //           purposeId: '160',
-      //           secondaryPurposeId: 'OTI',
-      //           timeLimitedEndDate: null,
-      //           timeLimitedStartDate: null
+      describe('the "externalId" property', () => {
+        describe('when the purpose has FGAC_REGION_CODE, ID', () => {
+          it('returns externalId in the format {FGAC_REGION_CODE}:{ID}', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.externalId).to.equal('3:10000004')
+          })
+        })
+      })
+
+      describe('the "notes" property', () => {
+        describe('when purpose has NOTES is "null"', () => {
+          it('returns null', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.notes).to.be.null()
+          })
+        })
+
+        describe('when purpose has NOTES', () => {
+          beforeEach(() => {
+            licenceVersions[0].purposes = [
+              { ...purpose, NOTES: 'a b c' }
+            ]
+          })
+
+          it('returns notes', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.notes).to.equal('a b c')
+          })
+        })
+      })
+
+      describe('the "primaryPurposeId" property', () => {
+        describe('when purpose has APUR_APPR_CODE', () => {
+          it('returns the legacy primaryPurposeId', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.primaryPurposeId).to.equal('I')
+          })
+        })
+      })
+
+      describe('the "purposeId" property', () => {
+        describe('when purpose has APUR_APUS_CODE', () => {
+          it('returns the legacy purposeId', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.purposeId).to.equal('160')
+          })
+        })
+      })
+
+      describe('the "secondaryPurposeId" property', () => {
+        describe('when purpose has APUR_APSE_CODE', () => {
+          it('returns the legacy secondaryPurposeId', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.secondaryPurposeId).to.equal('OTI')
+          })
+        })
+      })
+
+      describe('the "timeLimitedEndDate" property', () => {
+        describe('when purpose has TIMELTD_END_DATE', () => {
+          beforeEach(() => {
+            licenceVersions[0].purposes = [
+              { ...purpose, TIMELTD_END_DATE: '31/03/2015' }
+            ]
+          })
+
+          it('returns the time Limited End Date in the ISO format', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.timeLimitedEndDate).to.equal('2015-03-31')
+          })
+        })
+
+        describe('when purpose has TIMELTD_END_DATE', () => {
+          it('returns null', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.timeLimitedEndDate).to.be.null()
+          })
+        })
+      })
+
+      describe('the "timeLimitedStartDate" property', () => {
+        describe('when purpose has TIMELTD_ST_DATE', () => {
+          beforeEach(() => {
+            licenceVersions[0].purposes = [
+              { ...purpose, TIMELTD_ST_DATE: '31/03/2015' }
+            ]
+          })
+
+          it('returns the time Limited End Date in the ISO format', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.timeLimitedStartDate).to.equal('2015-03-31')
+          })
+        })
+
+        describe('when purpose has TIMELTD_ST_DATE', () => {
+          it('returns null', () => {
+            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+
+            expect(result.timeLimitedStartDate).to.be.null()
+          })
+        })
+      })
     })
   })
 })
