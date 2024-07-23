@@ -35,14 +35,12 @@ function go (data) {
   })
 
   const schema = Joi.array().items({
-    createdAt: Joi.date().iso().required(),
     endDate: Joi.date().iso().required().allow(null),
     externalId: Joi.string().required(),
     increment: Joi.number().required(),
     issue: Joi.number().required(),
     startDate: Joi.date().iso().required().allow(null),
     status: Joi.string().required(),
-    updatedAt: Joi.date().iso().required(),
     purposes: Joi.array().items(purposeSchema).required()
   })
 

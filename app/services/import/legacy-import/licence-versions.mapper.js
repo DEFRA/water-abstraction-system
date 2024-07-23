@@ -10,12 +10,14 @@ const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 const statuses = {
   CURR: 'current',
   SUPER: 'superseded',
-  DRAFT: 'draft'
+  DRAFT: 'draft' // todo: check this can be removed as it the sql does not get draft status
 }
 
 const createExternalId = (licenceVersion) => {
   const { FGAC_REGION_CODE, AABL_ID, ISSUE_NO, INCR_NO } = licenceVersion
 
+  //  todo: should we throw here if we can't build up ?
+  // todo: ask if this is used else where
   return `${FGAC_REGION_CODE}:${AABL_ID}:${ISSUE_NO}:${INCR_NO}`
 }
 
@@ -41,14 +43,13 @@ function _mapLicenceVersions (licenceVersions) {
     const increment = licenceVersion.INCR_NO
 
     return {
-      createdAt: new Date().toISOString(),
       endDate: formatStandardDateToISO(licenceVersion.EFF_END_DATE),
       externalId: createExternalId(licenceVersion),
+      // todo: do we still need to store these ? increment / issue
       increment: Number(increment),
       issue: Number(issue),
       startDate: formatStandardDateToISO(licenceVersion.EFF_ST_DATE),
       status: statuses[licenceVersion.STATUS],
-      updatedAt: new Date().toISOString(),
       purposes: _mapPurposes(licenceVersion)
     }
   })
