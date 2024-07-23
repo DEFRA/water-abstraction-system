@@ -12,26 +12,37 @@ const { expect } = Code
 const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLicence = require('./_fixtures/licence.js')
-const FixtureVersions = require('./_fixtures/versions.js')
+const FixtureVersion = require('./_fixtures/versions.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 
 // Thing under test
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
+const FixtureLicenceVersionPurposes = require('./_fixtures/licence-version-purposes.fixture')
+const FixtureVersions = require('./_fixtures/versions')
 
-describe('Legacy import licence service', () => {
+describe.only('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
   const region = RegionsSeeder.regions.test_region
 
-  beforeEach(async () => {
+  let licenceVersions
+  let purpose
+  let version
+
+  beforeEach(() => {
+    purpose = FixtureLicenceVersionPurposes
+    version = FixtureVersions
+
+    licenceVersions = [{ ...version, purposes: [{ ...purpose }] }]
+
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
       ...FixtureLicence,
       FGAC_REGION_CODE: region.nald_region_id
     })
 
-    Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves([...FixtureVersions])
+    Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves(licenceVersions)
   })
 
   it('returns the matching licence data', async () => {
