@@ -19,6 +19,13 @@
     }) }}
   {% endif %}
 
+  {% if workflowWarning %}
+    {{ govukWarningText({
+      text: "This licence has changed and needs the set up reviewed before it can be billed.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
+
   {% if notification %}
     {% if notification %}
       {{ govukNotificationBanner({

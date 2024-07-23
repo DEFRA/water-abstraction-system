@@ -38,7 +38,8 @@ function go (licence, auth) {
     pageTitle: `Licence ${licenceRef}`,
     registeredTo,
     roles: _authRoles(auth),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    workflowWarning: _generateWorkflowWarningMessage()
   }
 }
 
@@ -88,6 +89,10 @@ function _generateWarningMessage (ends) {
   }
 
   return `This licence expired on ${formatLongDate(date)}`
+}
+
+function _generateWorkflowWarningMessage (auth) {
+  console.log('🚀🚀🚀 ~ auth:', auth)
 }
 
 module.exports = {
