@@ -249,22 +249,20 @@ function _returnLogIssues (returnLog, licence) {
 function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
   const matchingReturnLogs = _getMatchingReturns(returnLogs, licenceReturnLogs)
 
-  let noReturnsReceived
-
-  if (matchingReturnLogs.length > 0) {
-    // If no returnsReceived is true, it means every returnLog matched to the charge element has a status of `due`
-    noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
-      return matchingReturnLog.status === 'due'
-    })
-  } else {
-    noReturnsReceived = false
-  }
-
   // If someReturnsNotReceived is true it means either some of the returnLogs matched to the element have a status of
   // due, or all of them
   const someReturnsNotReceived = matchingReturnLogs.some((matchingReturnLog) => {
     return matchingReturnLog.status === 'due'
   })
+
+  let noReturnsReceived = false
+
+  if (someReturnsNotReceived) {
+    // If no returnsReceived is true, it means every returnLog matched to the charge element has a status of `due`
+    noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
+      return matchingReturnLog.status === 'due'
+    })
+  }
 
   return {
     someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived,
