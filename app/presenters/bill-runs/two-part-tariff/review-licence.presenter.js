@@ -200,7 +200,6 @@ function _prepareChargeData (licence, billRun) {
         reviewChargeVersion.chargePeriodStartDate,
         reviewChargeVersion.chargePeriodEndDate
       ),
-      licenceHolderName: licence[0].licenceHolder,
       chargeElementCount: _chargeElementCount(reviewChargeVersion),
       billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
       chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)

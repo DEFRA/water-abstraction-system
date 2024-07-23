@@ -66,7 +66,6 @@ describe('Review Licence presenter', () => {
           {
             financialYear: '2022 to 2023',
             chargePeriodDate: '1 April 2022 to 5 June 2022',
-            licenceHolderName: 'Licence Holder Ltd',
             chargeElementCount: 1,
             billingAccountDetails: {
               billingAccountId: 'a17ae69b-8074-4d27-80bf-074f4c79a05a',
