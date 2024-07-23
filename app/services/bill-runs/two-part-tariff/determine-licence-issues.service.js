@@ -151,6 +151,19 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   return { elementIssues, status }
 }
 
+function _getMatchingReturns (returnLogs, licenceReturnLogs) {
+  const returnLogIds = returnLogs.map((returnLog) => {
+    return returnLog.returnId
+  })
+
+  // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
+  // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
+  // the status is available
+  return licenceReturnLogs.filter((licenceReturnLog) => {
+    return returnLogIds.includes(licenceReturnLog.id)
+  })
+}
+
 /**
  * Returns a list of issues that would put a licence into a status of 'review'
  *
@@ -234,16 +247,7 @@ function _returnLogIssues (returnLog, licence) {
  * - If all matching returns have a status of 'due', `noReturnsReceived` is `true`.
  */
 function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
-  const returnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnId
-  })
-
-  // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
-  // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
-  // the status is available
-  const matchingReturnLogs = licenceReturnLogs.filter((licenceReturnLog) => {
-    return returnLogIds.includes(licenceReturnLog.id)
-  })
+  const matchingReturnLogs = _getMatchingReturns(returnLogs, licenceReturnLogs)
 
   let noReturnsReceived
 
