@@ -93,7 +93,9 @@ async function _returnRequirement (
 
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '420' })
+  const purpose = PurposesSeeder.data.find((purpose) => {
+    return purpose.legacyId === '420'
+  })
 
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
     purposeId: purpose.id, returnRequirementId, alias

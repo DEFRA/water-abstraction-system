@@ -6,7 +6,11 @@ function buildSeedValueString (keys, data) {
   data.forEach((obj, i) => {
     valueString += '('
     keys.forEach((key, index) => {
-      valueString += `'${obj[key]}'`
+      if (key === 'createdAt' || key === 'updatedAt') {
+        valueString += `'${obj[key].toISOString()}'`
+      } else {
+        valueString += `'${obj[key]}'`
+      }
 
       if (index < keys.length - 1) {
         valueString += ','
