@@ -13,7 +13,6 @@ const BillModel = require('../../app/models/bill.model.js')
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
-const DatabaseSupport = require('../support/database.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
@@ -24,10 +23,6 @@ const BillRunModel = require('../../app/models/bill-run.model.js')
 
 describe('Bill Run model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -81,6 +76,7 @@ describe('Bill Run model', () => {
         testBills = []
         for (let i = 0; i < 2; i++) {
           const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: id })
+
           testBills.push(bill)
         }
       })
@@ -117,6 +113,7 @@ describe('Bill Run model', () => {
         testBillRunVolumes = []
         for (let i = 0; i < 2; i++) {
           const billRunVolume = await BillRunVolumeHelper.add({ billRunId: id })
+
           testBillRunVolumes.push(billRunVolume)
         }
       })
@@ -153,6 +150,7 @@ describe('Bill Run model', () => {
         testReviewLicences = []
         for (let i = 0; i < 2; i++) {
           const reviewLicence = await ReviewLicenceHelper.add({ billRunId: id })
+
           testReviewLicences.push(reviewLicence)
         }
       })
