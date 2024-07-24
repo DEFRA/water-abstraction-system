@@ -13,12 +13,9 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
@@ -26,7 +23,7 @@ const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 
-describe.only('Licence Version Purposes model', () => {
+describe('Licence Version Purposes model', () => {
   let testRecord
   let secondaryPurposeId
   let primaryPurposeId
@@ -223,11 +220,19 @@ describe.only('Licence Version Purposes model', () => {
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposesSeeder.data[0]
       invalidSecondaryPurpose = SecondaryPurposeSeeder.data[0]
-      invalidPurpose = PurposesSeeder.data.find((purpose) => { return purpose.legacy_id === '400' })
+      invalidPurpose = PurposesSeeder.data.find((purpose) => {
+        return purpose.legacy_id === '400'
+      })
 
-      validPrimaryPurpose = PrimaryPurposesSeeder.data.find(({ legacyId }) => { return legacyId === 'P' })
-      validSecondaryPurpose = SecondaryPurposeSeeder.data.find(({ legacyId }) => { return legacyId === 'ELC' })
-      validPurpose = PurposesSeeder.data.find((purpose) => { return purpose.legacy_id === '200' })
+      validPrimaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
+        return primaryPurpose.legacy_id === 'P'
+      })
+      validSecondaryPurpose = SecondaryPurposeSeeder.data.find((secondaryPurpose) => {
+        return secondaryPurpose.legacy_id === 'ELC'
+      })
+      validPurpose = PurposesSeeder.data.find((purpose) => {
+        return purpose.legacy_id === '200'
+      })
 
       console.log('i', invalidPrimaryPurpose, invalidSecondaryPurpose, invalidPurpose)
     })
