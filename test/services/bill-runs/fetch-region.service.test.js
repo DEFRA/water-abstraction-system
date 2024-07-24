@@ -15,7 +15,7 @@ const FetchRegionService = require('../../../app/services/bill-runs/fetch-region
 
 describe('Fetch Region service', () => {
   const region = RegionsSeeder.data.find((region) => {
-    return region.displayName === 'displayName'
+    return region.displayName === 'Test Region'
   })
 
   describe('when there is a region with a matching NALD region id', () => {

@@ -22,7 +22,7 @@ describe('Persist licence service', () => {
 
   beforeEach(async () => {
     region = RegionsSeeder.data.find((region) => {
-      return region.displayName === 'displayName'
+      return region.displayName === 'Test Region'
     })
   })
 

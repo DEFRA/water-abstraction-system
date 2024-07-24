@@ -24,7 +24,7 @@ describe('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
   const region = RegionsSeeder.data.find((region) => {
-    return region.displayName === 'displayName'
+    return region.displayName === 'Test Region'
   })
 
   beforeEach(async () => {
