@@ -13,8 +13,8 @@ const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
+const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -45,6 +45,7 @@ describe('Licence Version model', () => {
         testLicence = await LicenceHelper.add()
 
         const { id: licenceId } = testLicence
+
         testRecord = await LicenceVersionHelper.add({ licenceId })
       })
 
@@ -73,9 +74,10 @@ describe('Licence Version model', () => {
 
       beforeEach(async () => {
         testRecord = await LicenceVersionHelper.add()
-        purpose = await PurposeHelper.add()
+        purpose = PurposesSeeder.data[0]
 
         const { id } = testRecord
+
         await LicenceVersionPurposesHelper.add({
           licenceVersionId: id,
           purposeId: purpose.id

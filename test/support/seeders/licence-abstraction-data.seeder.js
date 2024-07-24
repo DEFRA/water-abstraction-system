@@ -4,16 +4,18 @@
  * @module LicenceAbstractionDataSeeder
  */
 
+const SecondaryPurposesSeeder = require('./secondary-purpose.seeder.js')
+const PrimaryPurposesSeeder = require('./primary-purpose.seeder.js')
+const PurposesSeeder = require('./purposes.seeder.js')
+
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
-const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
+const { purpose } = require('../../../app/controllers/return-requirements.controller')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -190,43 +192,19 @@ async function _permitLicence (licenceRef) {
 }
 
 async function _purposes () {
-  const { id: heatPumpId } = await PurposeHelper.add({
-    legacyId: '200',
-    description: 'Heat Pump',
-    twoPartTariff: false
-  })
+  const { id: heatPumpId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '200' })
 
-  const { id: sprayIrrigationDirectId } = await PurposeHelper.add({
-    legacyId: '400',
-    description: 'Spray Irrigation - Direct',
-    twoPartTariff: true
-  })
+  const { id: sprayIrrigationDirectId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '400' })
 
-  const { id: vegetableWashingId } = await PurposeHelper.add({
-    legacyId: '460',
-    description: 'Vegetable washing',
-    twoPartTariff: false
-  })
+  const { id: vegetableWashingId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '460' })
 
-  const { id: primaryAgricultureId } = await PrimaryPurposeHelper.add({
-    legacyId: 'A',
-    description: 'Agriculture'
-  })
+  const { id: primaryAgricultureId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'A' })
 
-  const { id: primaryElectricityId } = await PrimaryPurposeHelper.add({
-    legacyId: 'P',
-    description: 'Production Of Energy'
-  })
+  const { id: primaryElectricityId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'P' })
 
-  const { id: secondaryAgricultureId } = await SecondaryPurposeHelper.add({
-    legacyId: 'AGR',
-    description: 'General Agriculture'
-  })
+  const { id: secondaryAgricultureId } = SecondaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'AGR' })
 
-  const { id: secondaryElectricityId } = await SecondaryPurposeHelper.add({
-    legacyId: 'ELC',
-    description: 'Electricity'
-  })
+  const { id: secondaryElectricityId } = SecondaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'ELC' })
 
   return {
     purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },

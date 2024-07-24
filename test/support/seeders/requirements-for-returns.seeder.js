@@ -4,14 +4,14 @@
  * @module RequirementsForReturnsSeeder
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
+const PurposesSeeder = require('../seeders/purposes.seeder.js')
+const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
-const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 const UserHelper = require('../helpers/user.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -93,7 +93,9 @@ async function _returnRequirement (
 
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = await PurposeHelper.add()
+  const purpose = PurposesSeeder.data.find((purpose) => {
+    return purpose.legacyId === '420'
+  })
 
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
     purposeId: purpose.id, returnRequirementId, alias
