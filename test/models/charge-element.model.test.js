@@ -11,7 +11,6 @@ const { expect } = Code
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
@@ -22,10 +21,6 @@ const ChargeElementModel = require('../../app/models/charge-element.model.js')
 
 describe('Charge Element model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

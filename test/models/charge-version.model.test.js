@@ -17,7 +17,6 @@ const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
@@ -28,10 +27,6 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
 describe('Charge Version model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -54,6 +49,7 @@ describe('Charge Version model', () => {
         testBillingAccount = await BillingAccountHelper.add()
 
         const { id: billingAccountId } = testBillingAccount
+
         testRecord = await ChargeVersionHelper.add({ billingAccountId })
       })
 
@@ -86,6 +82,7 @@ describe('Charge Version model', () => {
         testBillRunChargeVersionYears = []
         for (let i = 0; i < 2; i++) {
           const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId: testRecord.id })
+
           testBillRunChargeVersionYears.push(billRunChargeVersionYear)
         }
       })
@@ -119,6 +116,7 @@ describe('Charge Version model', () => {
         testChangeReason = await ChangeReasonHelper.add()
 
         const { id: changeReasonId } = testChangeReason
+
         testRecord = await ChargeVersionHelper.add({ changeReasonId })
       })
 
@@ -151,6 +149,7 @@ describe('Charge Version model', () => {
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
           const chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: testRecord.id })
+
           testChargeReferences.push(chargeReference)
         }
       })
@@ -184,6 +183,7 @@ describe('Charge Version model', () => {
         testLicence = await LicenceHelper.add()
 
         const { id: licenceId } = testLicence
+
         testRecord = await ChargeVersionHelper.add({ licenceId })
       })
 
@@ -216,6 +216,7 @@ describe('Charge Version model', () => {
         testReviewChargeVersions = []
         for (let i = 0; i < 2; i++) {
           const reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId: testRecord.id })
+
           testReviewChargeVersions.push(reviewChargeVersion)
         }
       })

@@ -17,7 +17,6 @@ const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseSupport = require('../support/database.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
@@ -30,10 +29,6 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 
 describe('Charge Reference model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

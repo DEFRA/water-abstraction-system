@@ -11,7 +11,6 @@ const { expect } = Code
 const AddressHelper = require('../support/helpers/address.helper.js')
 const AddressModel = require('../../app/models/address.model.js')
 const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
-const DatabaseSupport = require('../support/database.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
@@ -22,10 +21,6 @@ const CompanyAddressModel = require('../../app/models/company-address.model.js')
 
 describe('Company Address model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -48,6 +43,7 @@ describe('Company Address model', () => {
         testAddress = await AddressHelper.add()
 
         const { id: addressId } = testAddress
+
         testRecord = await CompanyAddressHelper.add({ addressId })
       })
 
@@ -78,6 +74,7 @@ describe('Company Address model', () => {
         testCompany = await CompanyHelper.add()
 
         const { id: companyId } = testCompany
+
         testRecord = await CompanyAddressHelper.add({ companyId })
       })
 
@@ -108,6 +105,7 @@ describe('Company Address model', () => {
         testLicenceRole = await LicenceRoleHelper.add()
 
         const { id: licenceRoleId } = testLicenceRole
+
         testRecord = await CompanyAddressHelper.add({ licenceRoleId })
       })
 
