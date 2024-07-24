@@ -54,6 +54,12 @@ async function _fetchLicence (id) {
       ])
     })
     .modify('registeredToAndLicenceName')
+    .withGraphFetched('workflows')
+    .modifyGraph('workflows', (builder) => {
+      builder.select([
+        'workflows.status'
+      ])
+    })
 
   return result
 }
