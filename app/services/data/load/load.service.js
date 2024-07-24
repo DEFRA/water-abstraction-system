@@ -316,8 +316,9 @@ async function _applyLookups (instance) {
  */
 async function setDueDate (instance, key) {
   const futureDate = new Date()
+  const additionalMonths = 3
 
-  futureDate.setMonth(futureDate.getMonth() + 3)
+  futureDate.setMonth(futureDate.getMonth() + additionalMonths)
 
   instance[key] = futureDate.toISOString()
 }
