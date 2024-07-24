@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPointModel = require('../../app/models/return-requirement-point.model.js')
@@ -22,10 +21,6 @@ const ReturnRequirementModel = require('../../app/models/return-requirement.mode
 
 describe('Return Requirement model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -52,6 +47,7 @@ describe('Return Requirement model', () => {
           const returnRequirementPoint = await ReturnRequirementPointHelper.add(
             { description: `TEST RET PNT ${i}`, returnRequirementId: testRecord.id }
           )
+
           testReturnRequirementPoints.push(returnRequirementPoint)
         }
       })
@@ -89,6 +85,7 @@ describe('Return Requirement model', () => {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add(
             { alias: `TEST RET REQ ${i}`, returnRequirementId: testRecord.id }
           )
+
           testReturnRequirementPurposes.push(returnRequirementPurpose)
         }
       })
