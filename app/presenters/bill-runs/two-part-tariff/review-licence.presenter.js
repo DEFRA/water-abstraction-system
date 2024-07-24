@@ -250,6 +250,8 @@ function _prepareReturnVolume (reviewChargeElement) {
     reviewReturns.forEach((reviewReturn) => {
       if (reviewReturn.returnStatus === 'due') {
         returnVolumes.push(`overdue (${reviewReturn.returnReference})`)
+      } else if (reviewReturn.returnStatus === 'void') {
+        returnVolumes.push(`void (${reviewReturn.returnReference})`)
       } else {
         returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
       }
