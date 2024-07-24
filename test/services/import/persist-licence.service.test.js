@@ -21,7 +21,9 @@ describe('Persist licence service', () => {
   let licence
 
   beforeEach(async () => {
-    region = RegionsSeeder.regions.test_region
+    region = RegionsSeeder.data.find((region) => {
+      return region.displayName === 'displayName'
+    })
   })
 
   describe('when the licence ref does not exist', () => {
@@ -30,7 +32,7 @@ describe('Persist licence service', () => {
         expiredDate: '2015-03-31',
         lapsedDate: null,
         licenceRef: generateLicenceRef(),
-        naldRegionId: region.nald_region_id,
+        naldRegionId: region.naldRegionId,
         regions: {
           historicalAreaCode: 'RIDIN',
           regionalChargeArea: 'Yorkshire',
@@ -75,7 +77,7 @@ describe('Persist licence service', () => {
         expiredDate: '2015-03-31',
         lapsedDate: null,
         licenceRef: generateLicenceRef(),
-        naldRegionId: region.nald_region_id,
+        naldRegionId: region.naldRegionId,
         regions: {
           historicalAreaCode: 'RIDIN',
           regionalChargeArea: 'Yorkshire',
@@ -94,7 +96,7 @@ describe('Persist licence service', () => {
     it('returns newly updated licence', async () => {
       const results = await PersistLicenceService.go({
         licenceRef: licence.licenceRef,
-        naldRegionId: region.nald_region_id,
+        naldRegionId: region.naldRegionId,
         //  not null constraints
         waterUndertaker: true,
         regions: licence.regions,

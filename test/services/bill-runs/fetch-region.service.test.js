@@ -14,13 +14,15 @@ const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
 
 describe('Fetch Region service', () => {
-  const { anglian } = RegionsSeeder.regions
+  const region = RegionsSeeder.data.find((region) => {
+    return region.displayName === 'displayName'
+  })
 
   describe('when there is a region with a matching NALD region id', () => {
     it('returns results', async () => {
-      const result = await FetchRegionService.go(anglian.nald_region_id)
+      const result = await FetchRegionService.go(region.naldRegionId)
 
-      expect(result.id).to.equal(anglian.id)
+      expect(result.id).to.equal(region.id)
     })
   })
 
