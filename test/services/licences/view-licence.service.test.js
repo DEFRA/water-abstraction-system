@@ -48,7 +48,8 @@ describe('View Licence service', () => {
           pageTitle: 'Licence 01/130/R01',
           registeredTo: null,
           roles: null,
-          warning: null
+          warning: null,
+          workflowWarning: true
         })
       })
     })
@@ -132,6 +133,7 @@ describe('View Licence service', () => {
         const today = new Date()
         // 86400000 is one day in milliseconds
         const tomorrow = new Date(today.getTime() + 86400000)
+
         fetchLicenceResult.ends = { date: tomorrow, priority: 1, reason: 'revoked' }
 
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -155,6 +157,7 @@ function _testLicence () {
     licenceName: 'Unregistered licence',
     registeredTo: null,
     startDate: new Date('2013-03-07'),
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
+    workflows: [{ status: 'to_setup' }]
   })
 }

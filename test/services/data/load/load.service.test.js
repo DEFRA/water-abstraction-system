@@ -9,21 +9,22 @@ const { expect } = Code
 
 // Test helpers
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const { db } = require('../../../../db/db.js')
-const DatabaseSupport = require('../../../support/database.js')
-const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
+const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const RegionModel = require('../../../../app/models/region.model.js')
+const { db } = require('../../../../db/db.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const LoadService = require('../../../../app/services/data/load/load.service.js')
 
 describe('Load service', () => {
   let payload
+  let regionId
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
+  beforeEach(() => {
+    regionId = generateUUID()
   })
 
   describe('when the service is called', () => {
@@ -32,7 +33,7 @@ describe('Load service', () => {
         payload = {
           regions: [
             {
-              id: 'd0a4123d-1e19-480d-9dd4-f70f3387c4b9',
+              id: regionId,
               chargeRegionId: 'S',
               naldRegionId: 9,
               displayName: 'Test Region',
@@ -41,7 +42,7 @@ describe('Load service', () => {
           ],
           billRuns: [
             {
-              regionId: 'd0a4123d-1e19-480d-9dd4-f70f3387c4b9',
+              regionId,
               scheme: 'sroc',
               status: 'sent'
             }
@@ -52,11 +53,13 @@ describe('Load service', () => {
       it('loads the entities into the DB', async () => {
         const { billRuns } = await LoadService.go(payload)
 
-        const region = await RegionModel.query().findById('d0a4123d-1e19-480d-9dd4-f70f3387c4b9')
+        const region = await RegionModel.query().findById(regionId)
+
         expect(region.displayName).to.equal('Test Region')
 
         const billRun = await BillRunModel.query().findById(billRuns[0])
-        expect(billRun.regionId).to.equal('d0a4123d-1e19-480d-9dd4-f70f3387c4b9')
+
+        expect(billRun.regionId).to.equal(regionId)
         expect(billRun.status).to.equal('sent')
       })
 
@@ -75,6 +78,7 @@ describe('Load service', () => {
 
         beforeEach(async () => {
           const { id } = await ChargeCategoryHelper.add({ reference: '4.2.1' })
+
           chargeCategoryId = id
 
           payload = {

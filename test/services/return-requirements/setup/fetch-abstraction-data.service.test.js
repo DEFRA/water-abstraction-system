@@ -72,7 +72,7 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 dailyQuantity: 2675,
                 externalId: '1:10065381',
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { description: 'Vegetable washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
+                purpose: { description: 'Vegetable Washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
               },
               {

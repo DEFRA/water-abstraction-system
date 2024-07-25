@@ -19,6 +19,13 @@
     }) }}
   {% endif %}
 
+  {% if (workflowWarning === true) and ((roles and 'billing' in roles) or (roles and 'view_charge_versions' in roles))%}
+    {{ govukWarningText({
+      text: "This licence has changed and needs the set up reviewed before it can be billed.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
+
   {% if notification %}
     {% if notification %}
       {{ govukNotificationBanner({

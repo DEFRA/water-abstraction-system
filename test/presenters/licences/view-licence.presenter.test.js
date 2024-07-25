@@ -35,7 +35,8 @@ describe('View Licence presenter', () => {
         pageTitle: 'Licence 01/123',
         registeredTo: null,
         roles: null,
-        warning: null
+        warning: null,
+        workflowWarning: true
       })
     })
   })
@@ -139,6 +140,45 @@ describe('View Licence presenter', () => {
       })
     })
   })
+
+  describe('the workflowWarning property', () => {
+    describe('when the licence does not have a workflow', () => {
+      beforeEach(() => {
+        licence.workflows = []
+      })
+
+      it('returns false', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.workflowWarning).to.equal(false)
+      })
+    })
+
+    describe('when the licence has a workflow but the status is not `to_setup`', () => {
+      beforeEach(() => {
+        licence.workflows[0].status = 'changes_requested'
+      })
+
+      it('returns false', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.workflowWarning).to.equal(false)
+      })
+    })
+
+    describe('when the licence has a workflow and the status is `to_setup`', () => {
+      beforeEach(() => {
+        licence.workflows[0].status = 'to_setup'
+      })
+
+      it('returns true', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.workflowWarning).to.equal(true)
+      })
+    })
+  })
+
   describe('the "notification" property', () => {
     describe('when the licence will not be in the next supplementary bill run', () => {
       it('returns NULL', () => {
@@ -254,6 +294,7 @@ function _licence () {
     },
     region: { displayName: 'Narnia' },
     registeredTo: null,
-    startDate: new Date('2019-04-01')
+    startDate: new Date('2019-04-01'),
+    workflows: [{ status: 'to_setup' }]
   }
 }

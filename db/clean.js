@@ -18,6 +18,7 @@ async function run () {
     await Database.clean()
     console.log('Database cleaned')
   } catch (error) {
+    console.log(error)
     process.exit(1)
   } finally {
     Database.closeConnection()

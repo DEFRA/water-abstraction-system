@@ -127,6 +127,63 @@ describe('Determine Licence Issues Service', () => {
       })
     })
 
+    describe('with a charge element', () => {
+      beforeEach(() => {
+        licence = _generateNoIssuesLicenceData()
+        licence.returnLogs[0].status = 'due'
+      })
+
+      describe('that has one matching return', () => {
+        describe('and the return status is "due"', () => {
+          it('sets the issue "No returns received" on the charge element', () => {
+            DetermineLicenceIssuesService.go(licence)
+
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['No returns received'])
+          })
+        })
+      })
+
+      describe('that has two matching returns', () => {
+        beforeEach(() => {
+          licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[1] = { returnId: '2345' }
+          licence.returnLogs[1] = {
+            id: '2345',
+            abstractionOutsidePeriod: false,
+            underQuery: false,
+            status: 'completed',
+            quantity: 1,
+            allocatedQuantity: 1,
+            receivedDate: new Date('2024 01 01'),
+            dueDate: new Date('2024 01 01')
+          }
+        })
+
+        describe('one with a return status of "due"', () => {
+          beforeEach(() => {
+            licence.returnLogs[1].status = 'completed'
+          })
+
+          it('sets the issue "Some returns not received" on the charge element', () => {
+            DetermineLicenceIssuesService.go(licence)
+
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Some returns not received'])
+          })
+        })
+
+        describe('both with a return status of "due"', () => {
+          beforeEach(() => {
+            licence.returnLogs[1].status = 'due'
+          })
+
+          it('sets the issue "No returns received" on the charge element', () => {
+            DetermineLicenceIssuesService.go(licence)
+
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['No returns received'])
+          })
+        })
+      })
+    })
+
     describe('that has 1 issue on the returns', () => {
       describe('and the issues is a "review" status', () => {
         // Note: a licence can't have 1 issue on a charge element as the only issue on the element that is not a
