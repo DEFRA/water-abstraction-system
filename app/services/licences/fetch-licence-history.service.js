@@ -7,11 +7,9 @@ async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
   const results = await _fetchEntries(licenceId)
 
-  console.log('🚀🚀🚀 ~ results:', results)
+  const testEntries2 = await _fetchEntries2(licenceId)
 
-  const testKnex = await _fetchEntries2(licenceId)
-
-  console.log('🚀🚀🚀 ~ testKnex:', testKnex)
+  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2)
 
   return {
     entries: results.rows,
@@ -30,19 +28,29 @@ async function _fetchLicence (licenceId) {
 }
 
 async function _fetchEntries2 (licenceId) {
-  const licenceEntries = await db
-    .withSchema('public')
-    .select(
-      'licences.id AS licence_id',
-      db.raw("'licence-version' AS entry_type"),
-      'licence_versions.id AS entry_id',
-      db.raw("'' AS reason"),
-      'licence_versions.created_at',
-      db.raw("'' AS created_by"),
-      db.raw("'' AS note"),
-      'licence_versions.issue AS version_number'
-    )
-    .from('licences')
+  const licenceEntries = LicenceModel.query()
+    .findById(licenceId)
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (builder) => {
+      builder.orderBy([
+        { column: 'createdAt', order: 'desc' },
+        { column: 'issue', order: 'desc' }
+      ])
+    })
+    .withGraphFetched('chargeVersions')
+    .modifyGraph('chargeVersions', (builder) => {
+      builder.orderBy([
+        { column: 'createdAt', order: 'desc' },
+        { column: 'versionNumber', order: 'desc' }
+      ])
+    })
+    .withGraphFetched('returnVersions')
+    .modifyGraph('returnVersions', (builder) => {
+      builder.orderBy([
+        { column: 'createdAt', order: 'desc' },
+        { column: 'version', order: 'desc' }
+      ])
+    })
 
   return licenceEntries
 }
