@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
@@ -18,10 +17,6 @@ const LicenceDocumentHeaderModel = require('../../app/models/licence-document-he
 
 describe('Licence Document Header model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -44,6 +39,7 @@ describe('Licence Document Header model', () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceRef } = testLicence
+
         testRecord = await LicenceDocumentHeaderHelper.add({ licenceRef })
       })
 

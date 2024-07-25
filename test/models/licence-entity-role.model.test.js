@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
@@ -18,10 +17,6 @@ const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.mod
 
 describe('Licence Entity Role model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -44,6 +39,7 @@ describe('Licence Entity Role model', () => {
         testCompanyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
         const { id: companyEntityId } = testCompanyEntity
+
         testRecord = await LicenceEntityRoleHelper.add({ companyEntityId })
       })
 
@@ -74,6 +70,7 @@ describe('Licence Entity Role model', () => {
         testLicenceEntity = await LicenceEntityHelper.add()
 
         const { id: licenceEntityId } = testLicenceEntity
+
         testRecord = await LicenceEntityRoleHelper.add({ licenceEntityId })
       })
 
@@ -104,6 +101,7 @@ describe('Licence Entity Role model', () => {
         testRegimeEntity = await LicenceEntityHelper.add({ type: 'regime' })
 
         const { id: regimeEntityId } = testRegimeEntity
+
         testRecord = await LicenceEntityRoleHelper.add({ regimeEntityId })
       })
 

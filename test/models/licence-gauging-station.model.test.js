@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const GaugingStationHelper = require('../support/helpers/gauging-station.helper.js')
 const GaugingStationModel = require('../../app/models/gauging-station.model.js')
 const LicenceGaugingStationHelper = require('../support/helpers/licence-gauging-station.helper.js')
@@ -20,10 +19,6 @@ const LicenceGaugingStationModel = require('../../app/models/licence-gauging-sta
 
 describe('Licence Gauging Station model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -46,6 +41,7 @@ describe('Licence Gauging Station model', () => {
         testGaugingStation = await GaugingStationHelper.add()
 
         const { id: gaugingStationId } = testGaugingStation
+
         testRecord = await LicenceGaugingStationHelper.add({ gaugingStationId })
       })
 
@@ -76,6 +72,7 @@ describe('Licence Gauging Station model', () => {
         testLicence = await LicenceHelper.add()
 
         const { id: licenceId } = testLicence
+
         testRecord = await LicenceGaugingStationHelper.add({ licenceId })
       })
 

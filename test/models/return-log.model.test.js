@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
@@ -22,8 +21,6 @@ describe('Return Log model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await ReturnLogHelper.add()
   })
 
@@ -44,6 +41,7 @@ describe('Return Log model', () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceRef } = testLicence
+
         testRecord = await ReturnLogHelper.add({ licenceRef })
       })
 
@@ -77,6 +75,7 @@ describe('Return Log model', () => {
         for (let i = 0; i < 2; i++) {
           const version = i
           const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId, version })
+
           returnSubmissions.push(returnSubmission)
         }
       })

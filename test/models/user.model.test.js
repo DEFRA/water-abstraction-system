@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -27,13 +27,9 @@ const UserModel = require('../../app/models/user.model.js')
 describe('User model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await UserHelper.add()
+      testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
     })
 
     it('can successfully run a basic query', async () => {
@@ -49,7 +45,7 @@ describe('User model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add()
+        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         testGroup = await GroupHelper.add()
         await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
       })
@@ -80,11 +76,12 @@ describe('User model', () => {
       let testReturnVersions
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add()
+        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
 
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
           const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.id })
+
           testReturnVersions.push(returnVersion)
         }
       })
@@ -115,7 +112,7 @@ describe('User model', () => {
       let testRole
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add()
+        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         testRole = await RoleHelper.add()
         await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
       })
@@ -146,7 +143,7 @@ describe('User model', () => {
       let testUserGroup
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add()
+        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
       })
 
@@ -176,7 +173,7 @@ describe('User model', () => {
       let testUserRole
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add()
+        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
       })
 

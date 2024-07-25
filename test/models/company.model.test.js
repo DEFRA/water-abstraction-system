@@ -17,7 +17,6 @@ const CompanyAddressModel = require('../../app/models/company-address.model.js')
 const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
@@ -26,10 +25,6 @@ const CompanyModel = require('../../app/models/company.model.js')
 
 describe('Company model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -58,6 +53,7 @@ describe('Company model', () => {
           // billingAccountId and start date
           const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
           const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, companyId })
+
           testBillingAccountAddresses.push(billingAccountAddress)
         }
       })
@@ -94,6 +90,7 @@ describe('Company model', () => {
         testBillingAccounts = []
         for (let i = 0; i < 2; i++) {
           const billingAccount = await BillingAccountHelper.add({ companyId })
+
           testBillingAccounts.push(billingAccount)
         }
       })
@@ -131,6 +128,7 @@ describe('Company model', () => {
         testCompanyAddresses = []
         for (let i = 0; i < 2; i++) {
           const companyAddress = await CompanyAddressHelper.add({ companyId })
+
           testCompanyAddresses.push(companyAddress)
         }
       })
@@ -168,6 +166,7 @@ describe('Company model', () => {
         testCompanyContacts = []
         for (let i = 0; i < 2; i++) {
           const companyContact = await CompanyContactHelper.add({ companyId })
+
           testCompanyContacts.push(companyContact)
         }
       })
@@ -205,6 +204,7 @@ describe('Company model', () => {
         testLicenceDocumentRoles = []
         for (let i = 0; i < 2; i++) {
           const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId })
+
           testLicenceDocumentRoles.push(licenceDocumentRole)
         }
       })
