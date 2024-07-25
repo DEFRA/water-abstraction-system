@@ -46,6 +46,7 @@ describe('Region model', () => {
         testBillRuns = []
         for (let i = 0; i < 2; i++) {
           const billRun = await BillRunHelper.add({ regionId: id })
+
           testBillRuns.push(billRun)
         }
       })
@@ -81,6 +82,7 @@ describe('Region model', () => {
         testLicences = []
         for (let i = 0; i < 2; i++) {
           const licence = await LicenceHelper.add({ licenceRef: `0${i}/123`, regionId: id })
+
           testLicences.push(licence)
         }
       })
