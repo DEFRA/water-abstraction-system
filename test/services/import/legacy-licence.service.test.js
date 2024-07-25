@@ -25,7 +25,9 @@ const FixtureVersions = require('./_fixtures/versions')
 describe.only('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
-  const region = RegionsSeeder.regions.test_region
+  const region = RegionsSeeder.data.find((region) => {
+    return region.displayName === 'Test Region'
+  })
 
   let licenceVersions
   let purpose
@@ -39,7 +41,7 @@ describe.only('Legacy import licence service', () => {
 
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
       ...FixtureLicence,
-      FGAC_REGION_CODE: region.nald_region_id
+      FGAC_REGION_CODE: region.naldRegionId
     })
 
     Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves(licenceVersions)

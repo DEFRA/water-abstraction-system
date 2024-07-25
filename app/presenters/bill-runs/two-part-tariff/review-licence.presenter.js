@@ -200,7 +200,6 @@ function _prepareChargeData (licence, billRun) {
         reviewChargeVersion.chargePeriodStartDate,
         reviewChargeVersion.chargePeriodEndDate
       ),
-      licenceHolderName: licence[0].licenceHolder,
       chargeElementCount: _chargeElementCount(reviewChargeVersion),
       billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
       chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)
@@ -249,7 +248,13 @@ function _prepareReturnVolume (reviewChargeElement) {
 
   if (reviewReturns) {
     reviewReturns.forEach((reviewReturn) => {
-      returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
+      if (reviewReturn.returnStatus === 'due') {
+        returnVolumes.push(`overdue (${reviewReturn.returnReference})`)
+      } else if (reviewReturn.returnStatus === 'void') {
+        returnVolumes.push(`void (${reviewReturn.returnReference})`)
+      } else {
+        returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
+      }
     })
   }
 
