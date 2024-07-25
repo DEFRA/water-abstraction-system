@@ -15,6 +15,7 @@ async function licence (request, h) {
 
   return h.response().code(204)
   // } catch (error) {
+  // log licence ref error in logs ?
   //   return Boom.badImplementation(error.message)
   // }
 }

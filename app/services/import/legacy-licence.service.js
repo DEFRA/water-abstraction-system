@@ -23,28 +23,17 @@ async function go (licenceRef) {
   console.debug('Importing licence ref: ', licenceRef)
   const licenceData = await FetchLegacyImportLicenceService.go(licenceRef)
 
-  console.debug('Imported licence data: ', licenceData)
   const licenceVersionsData = await FetchLegacyImportLicenceVersionsService.go(licenceData)
-
-  console.debug('Imported licence versions data: ', licenceVersionsData)
 
   const mappedLicenceData = LegacyImportLicenceMapper.go(licenceData, licenceVersionsData)
 
   const mappedLicenceVersionsData = LegacyImportLicenceVersionMapper.go(licenceVersionsData)
 
-  console.debug('Mapped imported licence data: ', mappedLicenceData)
-
-  console.debug('Mapped imported licence versions data: ', mappedLicenceVersionsData)
-
   ImportLicenceValidatorService.go(mappedLicenceData, mappedLicenceVersionsData)
 
   const savedLicence = await PersistLicenceService.go(mappedLicenceData)
-  const savedLicenceVersions = await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
 
-  console.debug('Saved Licence: ', savedLicence)
-  console.debug('Saved Licence versions: ', savedLicenceVersions)
-
-  return savedLicence
+  await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
 }
 
 module.exports = {
