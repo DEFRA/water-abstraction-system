@@ -9,17 +9,17 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillModel = require('../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
+const BillModel = require('../../../app/models/bill.model.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../../app/models/purpose.model.js')
+const PurposeSeeder = require('../../support/seeders/purposes.seeder.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
@@ -91,9 +91,10 @@ describe('Fetch Bill Licence service', () => {
     describe('and it is for an SROC bill run', () => {
       beforeEach(async () => {
         linkedChargeReference = await ChargeReferenceHelper.add()
-        linkedPurpose = await PurposeHelper.add()
+        linkedPurpose = PurposeSeeder.data[0]
 
         const { id: chargeReferenceId } = linkedChargeReference
+
         await Promise.all([
           ChargeElementHelper.add({ chargeReferenceId, purposeId: linkedPurpose.id }),
           ChargeElementHelper.add({ chargeReferenceId, purposeId: linkedPurpose.id })
@@ -139,14 +140,17 @@ describe('Fetch Bill Licence service', () => {
 
         for (let i = 0; i < returnedTransactions.length; i++) {
           const { chargeReference: returnedChargeReference } = returnedTransactions[i]
+
           expect(returnedChargeReference.id).to.equal(linkedChargeReference.id)
           expect(returnedChargeReference).to.be.an.instanceOf(ChargeReferenceModel)
 
           const { chargeElements: returnedChargeElements } = returnedChargeReference
+
           expect(returnedChargeElements).to.have.length(2)
           expect(returnedChargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
 
           const { purpose: returnedPurpose } = returnedChargeElements[0]
+
           expect(returnedPurpose.id).to.equal(linkedPurpose.id)
           expect(returnedPurpose).to.be.an.instanceOf(PurposeModel)
         }
@@ -155,7 +159,7 @@ describe('Fetch Bill Licence service', () => {
 
     describe('and it is for a PRESROC bill run', () => {
       beforeEach(async () => {
-        linkedPurpose = await PurposeHelper.add()
+        linkedPurpose = PurposeSeeder.data[0]
         linkedChargeReference = await ChargeReferenceHelper.add({ purposeId: linkedPurpose.id })
 
         const { id: chargeReferenceId } = linkedChargeReference
@@ -199,14 +203,17 @@ describe('Fetch Bill Licence service', () => {
 
         for (let i = 0; i < returnedTransactions.length; i++) {
           const { chargeReference: returnedChargeReference } = returnedTransactions[i]
+
           expect(returnedChargeReference.id).to.equal(linkedChargeReference.id)
           expect(returnedChargeReference).to.be.an.instanceOf(ChargeReferenceModel)
 
           const { purpose: returnedPurpose } = returnedChargeReference
+
           expect(returnedPurpose.id).to.equal(linkedPurpose.id)
           expect(returnedPurpose).to.be.an.instanceOf(PurposeModel)
 
           const { chargeElements: returnedChargeElements } = returnedChargeReference
+
           expect(returnedChargeElements).to.be.empty()
         }
       })

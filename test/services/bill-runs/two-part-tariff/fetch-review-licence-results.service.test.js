@@ -16,13 +16,13 @@ const ChargeReferenceHelper = require('../../../support/helpers/charge-reference
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
+const PurposesSeeder = require('../../../support/seeders/purposes.seeder.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
 
@@ -84,7 +84,7 @@ describe('Fetch Review Licence Results Service', () => {
           chargeReferenceId: chargeReference.id
         })
 
-        purpose = await PurposeHelper.add()
+        purpose = PurposesSeeder.data[0]
         chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id, purposeId: purpose.id })
         reviewChargeElement = await ReviewChargeElementHelper.add({
           reviewChargeReferenceId: reviewChargeReference.id,
