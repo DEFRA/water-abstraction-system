@@ -19,17 +19,12 @@ describe('Bill Runs Setup Fetch Regions service', () => {
       const results = await FetchRegionsService.go()
 
       // This is necessary because other region helpers are adding regions into the database as part of their tests.
-      const expectedRegions = [
-        { id: RegionSeeder.regions.anglian.id, displayName: RegionSeeder.regions.anglian.display_name },
-        { id: RegionSeeder.regions.midlands.id, displayName: RegionSeeder.regions.midlands.display_name },
-        { id: RegionSeeder.regions.north_east.id, displayName: RegionSeeder.regions.north_east.display_name },
-        { id: RegionSeeder.regions.north_west.id, displayName: RegionSeeder.regions.north_west.display_name },
-        { id: RegionSeeder.regions.southern.id, displayName: RegionSeeder.regions.southern.display_name },
-        { id: RegionSeeder.regions.south_west.id, displayName: RegionSeeder.regions.south_west.display_name },
-        { id: RegionSeeder.regions.test_region.id, displayName: RegionSeeder.regions.test_region.display_name },
-        { id: RegionSeeder.regions.thames.id, displayName: RegionSeeder.regions.thames.display_name },
-        { id: RegionSeeder.regions.ea_wales.id, displayName: RegionSeeder.regions.ea_wales.display_name }
-      ]
+      const expectedRegions = RegionSeeder.data.map((region) => {
+        return {
+          id: region.id,
+          displayName: region.displayName
+        }
+      })
 
       // This should be removed and do an exact check when the others tests have been migrated to use the seeded regions
       expectedRegions.forEach((expectedRegion) => {
