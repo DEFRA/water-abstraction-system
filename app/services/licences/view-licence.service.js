@@ -20,8 +20,6 @@ async function go (licenceId, auth) {
 
   const pageData = ViewLicencePresenter.go(licenceData, auth)
 
-  console.log('🚀🚀🚀 ~ pageData:', pageData)
-
   return {
     ...pageData
   }
