@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const EventHelper = require('../support/helpers/event.helper.js')
 const EventModel = require('../../app/models/event.model.js')
 const ScheduledNotificationHelper = require('../support/helpers/scheduled-notification.helper.js')
@@ -18,10 +17,6 @@ const ScheduledNotificationModel = require('../../app/models/scheduled-notificat
 
 describe('Scheduled Notification model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

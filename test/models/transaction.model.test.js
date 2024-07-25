@@ -12,7 +12,6 @@ const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 
 // Thing under test
@@ -22,8 +21,6 @@ describe('Transaction model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await TransactionHelper.add()
   })
 
@@ -44,6 +41,7 @@ describe('Transaction model', () => {
         testBillLicence = await BillLicenceHelper.add()
 
         const { id: billLicenceId } = testBillLicence
+
         testRecord = await TransactionHelper.add({ billLicenceId })
       })
 
@@ -74,6 +72,7 @@ describe('Transaction model', () => {
         testChargeReference = await ChargeReferenceHelper.add()
 
         const { id: chargeReferenceId } = testChargeReference
+
         testRecord = await TransactionHelper.add({ chargeReferenceId })
       })
 

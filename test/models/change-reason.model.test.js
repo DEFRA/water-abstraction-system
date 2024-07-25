@@ -11,7 +11,6 @@ const { expect } = Code
 const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
@@ -20,8 +19,6 @@ describe('Change Reason model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await ChangeReasonHelper.add()
   })
 
@@ -44,6 +41,7 @@ describe('Change Reason model', () => {
         testChargeVersions = []
         for (let i = 0; i < 2; i++) {
           const chargeVersion = await ChargeVersionHelper.add({ changeReasonId: id })
+
           testChargeVersions.push(chargeVersion)
         }
       })

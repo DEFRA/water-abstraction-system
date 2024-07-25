@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
@@ -24,10 +24,6 @@ const RoleModel = require('../../app/models/role.model.js')
 
 describe('Role model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -139,7 +135,7 @@ describe('Role model', () => {
 
       beforeEach(async () => {
         testRecord = await RoleHelper.add()
-        testUser = await UserHelper.add()
+        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         await UserRoleHelper.add({ userId: testUser.id, roleId: testRecord.id })
       })
 

@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -24,10 +23,6 @@ const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 
 describe('Review Licence model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -111,6 +106,7 @@ describe('Review Licence model', () => {
         reviewChargeVersions = []
         for (let i = 0; i < 2; i++) {
           const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId })
+
           reviewChargeVersions.push(reviewChargeVersion)
         }
       })
@@ -147,6 +143,7 @@ describe('Review Licence model', () => {
         reviewReturns = []
         for (let i = 0; i < 2; i++) {
           const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId })
+
           reviewReturns.push(reviewReturn)
         }
       })

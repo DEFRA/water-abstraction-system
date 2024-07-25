@@ -12,7 +12,6 @@ const CompanyAddressHelper = require('../support/helpers/company-address.helper.
 const CompanyAddressModel = require('../../app/models/company-address.model.js')
 const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
@@ -22,10 +21,6 @@ const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 
 describe('Licence Role model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -52,6 +47,7 @@ describe('Licence Role model', () => {
         testCompanyAddresses = []
         for (let i = 0; i < 2; i++) {
           const companyAddress = await CompanyAddressHelper.add({ licenceRoleId })
+
           testCompanyAddresses.push(companyAddress)
         }
       })
@@ -89,6 +85,7 @@ describe('Licence Role model', () => {
         testCompanyContacts = []
         for (let i = 0; i < 2; i++) {
           const companyContact = await CompanyContactHelper.add({ licenceRoleId })
+
           testCompanyContacts.push(companyContact)
         }
       })
@@ -126,6 +123,7 @@ describe('Licence Role model', () => {
         testLicenceDocumentRoles = []
         for (let i = 0; i < 2; i++) {
           const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceRoleId })
+
           testLicenceDocumentRoles.push(licenceDocumentRole)
         }
       })

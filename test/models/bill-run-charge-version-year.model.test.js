@@ -13,17 +13,12 @@ const BillRunModel = require('../../app/models/bill-run.model.js')
 const BillRunChargeVersionYearHelper = require('../support/helpers/bill-run-charge-version-year.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
 
 describe('Bill Run Charge Version Year model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -46,6 +41,7 @@ describe('Bill Run Charge Version Year model', () => {
         testBillRun = await BillRunHelper.add()
 
         const { id: billRunId } = testBillRun
+
         testRecord = await BillRunChargeVersionYearHelper.add({ billRunId })
       })
 
@@ -76,6 +72,7 @@ describe('Bill Run Charge Version Year model', () => {
         testChargeVersion = await ChargeVersionHelper.add()
 
         const { id: chargeVersionId } = testChargeVersion
+
         testRecord = await BillRunChargeVersionYearHelper.add({ chargeVersionId })
       })
 
