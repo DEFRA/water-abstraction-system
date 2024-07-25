@@ -8,26 +8,21 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
-const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
+const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
-const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
+const SecondaryPurposesSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 
 // Thing under test
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
 describe('Return Requirement Purpose model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -47,10 +42,9 @@ describe('Return Requirement Purpose model', () => {
       let testPrimaryPurpose
 
       beforeEach(async () => {
-        testPrimaryPurpose = await PrimaryPurposeHelper.add()
+        testPrimaryPurpose = PrimaryPurposesSeeder.data[0]
 
-        const { id: primaryPurposeId } = testPrimaryPurpose
-        testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId })
+        testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId: testPrimaryPurpose.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -77,9 +71,10 @@ describe('Return Requirement Purpose model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = await PurposeHelper.add()
+        testPurpose = PurposesSeeder.data[0]
 
         const { id: purposeId } = testPurpose
+
         testRecord = await ReturnRequirementPurposeHelper.add({ purposeId })
       })
 
@@ -110,6 +105,7 @@ describe('Return Requirement Purpose model', () => {
         testReturnRequirement = await ReturnRequirementHelper.add()
 
         const { id: returnRequirementId } = testReturnRequirement
+
         testRecord = await ReturnRequirementPurposeHelper.add({ returnRequirementId })
       })
 
@@ -138,9 +134,10 @@ describe('Return Requirement Purpose model', () => {
     let testSecondaryPurpose
 
     beforeEach(async () => {
-      testSecondaryPurpose = await SecondaryPurposeHelper.add()
+      testSecondaryPurpose = SecondaryPurposesSeeder.data[0]
 
       const { id: secondaryPurposeId } = testSecondaryPurpose
+
       testRecord = await ReturnRequirementPurposeHelper.add({ secondaryPurposeId })
     })
 
