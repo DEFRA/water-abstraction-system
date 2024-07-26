@@ -19,17 +19,17 @@ async function go (licenceRef) {
 async function _getLicenceByRef (licenceRef) {
   const query = `
       SELECT
-          licence.AREP_AREA_CODE,
-          licence.AREP_EIUC_CODE,
-          licence.AREP_LEAP_CODE,
-          licence.AREP_SUC_CODE,
-          licence.EXPIRY_DATE,
-          licence.FGAC_REGION_CODE,
-          licence.ID,
-          licence.LAPSED_DATE,
-          licence.LIC_NO,
-          licence.ORIG_EFF_DATE,
-          licence.REV_DATE
+          licence."AREP_AREA_CODE",
+          licence."AREP_EIUC_CODE",
+          licence."AREP_LEAP_CODE",
+          licence."AREP_SUC_CODE",
+          licence."EXPIRY_DATE",
+          licence."FGAC_REGION_CODE",
+          licence."ID",
+          licence."LAPSED_DATE",
+          licence."LIC_NO",
+          licence."ORIG_EFF_DATE",
+          licence."REV_DATE"
       FROM import."NALD_ABS_LICENCES" licence
       WHERE licence."LIC_NO" = '${licenceRef}';
   `

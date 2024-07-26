@@ -17,28 +17,28 @@ const CustomDateValidator = require('../custom/date.validators.js')
  *
  */
 function go (data) {
-  const schema = Joi.object({
-    expiredDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    lapsedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    licenceRef: Joi.string().required(),
-    naldRegionId: Joi.number().required(),
-    regions: Joi.object({
-      regionalChargeArea: Joi.string(),
-      localEnvironmentAgencyPlanCode: Joi.string(),
-      historicalAreaCode: Joi.string(),
-      standardUnitChargeCode: Joi.string()
-    }),
-    revokedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    startDate: Joi.string().required().custom(CustomDateValidator.isValidISODate),
-    waterUndertaker: Joi.boolean().required()
-  })
-
-  const result = schema.validate(data)
+  const result = _schema.validate(data)
 
   if (Object.hasOwn(result, 'error')) {
     throw new Error(result.error.details[0].message)
   }
 }
+
+const _schema = Joi.object({
+  expiredDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
+  lapsedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
+  licenceRef: Joi.string().required(),
+  naldRegionId: Joi.number().required(),
+  regions: Joi.object({
+    regionalChargeArea: Joi.string(),
+    localEnvironmentAgencyPlanCode: Joi.string(),
+    historicalAreaCode: Joi.string(),
+    standardUnitChargeCode: Joi.string()
+  }),
+  revokedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
+  startDate: Joi.string().required().custom(CustomDateValidator.isValidISODate),
+  waterUndertaker: Joi.boolean().required()
+})
 
 module.exports = {
   go
