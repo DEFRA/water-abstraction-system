@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Maps the import licence versions data to the desired format
+ * Maps the import licence versions and licence versions purposes data
  * @module LegacyImportLicenceVersionMapper
  */
 
