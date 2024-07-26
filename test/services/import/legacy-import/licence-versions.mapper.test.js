@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureVersions = require('../_fixtures/versions.js')
+const FixtureVersions = require('../_fixtures/licence-version.js')
 const FixtureLicenceVersionPurposes = require('../_fixtures/licence-version-purposes.fixture.js')
 
 // Thing under test

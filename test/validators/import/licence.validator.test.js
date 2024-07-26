@@ -13,7 +13,7 @@ const { validLicenceRequiredOnly } = require('./_fixtures/valid-licence.fixture.
 // Thing under test
 const ImportLicenceValidator = require('../../../app/validators/import/licence.validator.js')
 
-describe.only('Import licence validator', () => {
+describe('Import licence validator', () => {
   let licence
 
   before(async () => {

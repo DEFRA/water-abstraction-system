@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const FixtureLicence = require('../_fixtures/licence.js')
-const FixtureVersion = require('../_fixtures/versions.js')
+const FixtureVersion = require('../_fixtures/licence-version.js')
 
 // Thing under test
 const LegacyImportLicenceMapper =
