@@ -64,7 +64,7 @@ function _mapPurposes (licenceVersion) {
 }
 
 /**
- * Maps the import licence versions purposes data to the desired format
+ * Maps the import licence versions purposes data
  *
  * @param {LegacyLicenceVersionsPurposesType} purpose
  * @returns {ImportLicenceVersionPurposeType}
