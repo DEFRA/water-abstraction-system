@@ -9,7 +9,7 @@ const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 
 const statuses = {
   CURR: 'current',
-  SUPER: 'superseded',
+  SUPER: 'superseded'
 }
 
 const createExternalId = (licenceVersion) => {
