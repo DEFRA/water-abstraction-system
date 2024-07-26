@@ -23,14 +23,14 @@ async function go (licenceData) {
 async function _getLicenceVersions (licenceId, regionCode) {
   const query = `
       SELECT
-           versions."EFF_END_DATE",
-           versions."EFF_ST_DATE",
-           versions."INCR_NO",
-           versions."ISSUE_NO",
-           versions."STATUS",
-           versions."FGAC_REGION_CODE",
-           versions."AABL_ID",
-           (SELECT json_agg(json_build_object(
+            versions."EFF_END_DATE",
+            versions."EFF_ST_DATE",
+            versions."INCR_NO",
+            versions."ISSUE_NO",
+            versions."STATUS",
+            versions."FGAC_REGION_CODE",
+            versions."AABL_ID",
+            (SELECT json_agg(json_build_object(
              'PERIOD_END_DAY', purposes."PERIOD_END_DAY",
              'PERIOD_END_MONTH', purposes."PERIOD_END_MONTH",
              'PERIOD_ST_DAY', purposes."PERIOD_ST_DAY",
