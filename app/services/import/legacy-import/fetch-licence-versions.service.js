@@ -97,7 +97,7 @@ module.exports = {
  * @property {string} ANNUAL_QTY - The annual quantity.
  * @property {string} DAILY_QTY - The daily quantity.
  * @property {string} FGAC_REGION_CODE - The FGAC region code.
- * @property {string} ID - The identifier.
+ * @property {string} ID
  * @property {string} HOURLY_QTY - The hourly quantity.
  * @property {string} INST_QTY - The instant quantity.
  * @property {string} NOTES - Additional notes.
