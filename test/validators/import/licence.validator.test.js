@@ -13,7 +13,7 @@ const { validLicenceRequiredOnly } = require('./_fixtures/valid-licence.fixture.
 // Thing under test
 const ImportLicenceValidator = require('../../../app/validators/import/licence.validator.js')
 
-describe('Import licence validator', () => {
+describe.only('Import licence validator', () => {
   let licence
 
   before(async () => {
@@ -37,16 +37,16 @@ describe('Import licence validator', () => {
           ...licence,
           expiredDate: 1
         })
-      }).to.throw('"expiredDate" must be a string')
+      }).to.throw('"expiredDate" must be a valid date')
     })
 
-    it('should throw an error if "expiredDate" is not in the correct format YYYY-MM-DD', async () => {
+    it('should throw an error if "expiredDate" does not meet ISO 8601', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
           expiredDate: '01/01/2001'
         })
-      }).to.throw('"expiredDate" failed custom validation because date must be in the format YYYY-MM-DD')
+      }).to.throw('"expiredDate" must be in ISO 8601 date format')
     })
 
     it('should not throw an error if "expiredDate" is null', async () => {
@@ -75,16 +75,16 @@ describe('Import licence validator', () => {
           ...licence,
           lapsedDate: 1
         })
-      }).to.throw('"lapsedDate" must be a string')
+      }).to.throw('"lapsedDate" must be a valid date')
     })
 
-    it('should throw an error if "lapsedDate" is not in the correct format YYYY-MM-DD', async () => {
+    it('should throw an error if "lapsedDate" does not meet ISO 8601', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
           lapsedDate: '01/01/2001'
         })
-      }).to.throw('"lapsedDate" failed custom validation because date must be in the format YYYY-MM-DD')
+      }).to.throw('"lapsedDate" must be in ISO 8601 date format')
     })
 
     it('should not throw an error if "lapsedDate" is null', async () => {
@@ -228,16 +228,16 @@ describe('Import licence validator', () => {
           ...licence,
           revokedDate: 1
         })
-      }).to.throw('"revokedDate" must be a string')
+      }).to.throw('"revokedDate" must be a valid date')
     })
 
-    it('should throw an error if "revokedDate" is not in the correct format YYYY-MM-DD', async () => {
+    it('should throw an error if "revokedDate" does not meet ISO 8601', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
           revokedDate: '01/01/2001'
         })
-      }).to.throw('"revokedDate" failed custom validation because date must be in the format YYYY-MM-DD')
+      }).to.throw('"revokedDate" must be in ISO 8601 date format')
     })
 
     it('should not throw an error if "revokedDate" is null', async () => {
@@ -266,16 +266,16 @@ describe('Import licence validator', () => {
           ...licence,
           startDate: 1
         })
-      }).to.throw('"startDate" must be a string')
+      }).to.throw('"startDate" must be a valid date')
     })
 
-    it('should throw an error if "startDate" is not in the correct format YYYY-MM-DD', async () => {
+    it('should throw an error if "startDate" does not meet ISO 8601', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           ...licence,
           startDate: '01/01/2001'
         })
-      }).to.throw('"startDate" failed custom validation because date must be in the format YYYY-MM-DD')
+      }).to.throw('"startDate" must be in ISO 8601 date format')
     })
 
     it('should throw an error if "startDate" is null', async () => {
@@ -284,7 +284,7 @@ describe('Import licence validator', () => {
           ...licence,
           startDate: null
         })
-      }).to.throw('"startDate" must be a string')
+      }).to.throw('"startDate" must be a valid date')
     })
 
     it('should not throw an error if "startDate" is valid date string', async () => {

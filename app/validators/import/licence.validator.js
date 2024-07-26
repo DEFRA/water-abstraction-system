@@ -6,8 +6,6 @@
 
 const Joi = require('joi')
 
-const CustomDateValidator = require('../custom/date.validators.js')
-
 /**
  * Checks that the data for inserting/updating the public.licence table is valid
  *
@@ -25,8 +23,8 @@ function go (data) {
 }
 
 const _schema = Joi.object({
-  expiredDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-  lapsedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
+  expiredDate: Joi.date().iso().allow(null),
+  lapsedDate: Joi.date().iso().allow(null),
   licenceRef: Joi.string().required(),
   naldRegionId: Joi.number().required(),
   regions: Joi.object({
@@ -35,8 +33,8 @@ const _schema = Joi.object({
     historicalAreaCode: Joi.string(),
     standardUnitChargeCode: Joi.string()
   }),
-  revokedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-  startDate: Joi.string().required().custom(CustomDateValidator.isValidISODate),
+  revokedDate: Joi.date().iso().allow(null),
+  startDate: Joi.date().iso().required(),
   waterUndertaker: Joi.boolean().required()
 })
 
