@@ -32,17 +32,20 @@ async function _fetchEntries2 (licenceId) {
     .findById(licenceId)
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
-      builder.orderBy([
-        { column: 'createdAt', order: 'desc' },
-        { column: 'issue', order: 'desc' }
-      ])
+      builder
+        .orderBy([
+          { column: 'createdAt', order: 'desc' },
+          { column: 'issue', order: 'desc' }
+        ])
     })
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.orderBy([
-        { column: 'createdAt', order: 'desc' },
-        { column: 'versionNumber', order: 'desc' }
-      ])
+      builder.leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
+        .select('chargeVersions.*', 'water.notes.text')
+        .orderBy([
+          { column: 'createdAt', order: 'desc' },
+          { column: 'versionNumber', order: 'desc' }
+        ])
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
