@@ -6,6 +6,11 @@
 
 const Joi = require('joi')
 
+const calender = {
+  totalDaysInMonth: 31,
+  totalMonthsInYear: 12
+}
+
 /**
  * Checks that the data for inserting/updating the public.licence_versions
  * and public.licence_versions_purposes table is valid
@@ -20,10 +25,10 @@ function go (data) {
     primaryPurposeId: Joi.string().required(),
     secondaryPurposeId: Joi.string().required(),
     purposeId: Joi.string().required(),
-    abstractionPeriodStartDay: Joi.number().integer().min(1).max(31).required(),
-    abstractionPeriodStartMonth: Joi.number().integer().min(1).max(12).required(),
-    abstractionPeriodEndDay: Joi.number().integer().min(1).max(31).required(),
-    abstractionPeriodEndMonth: Joi.number().integer().min(1).max(12).required(),
+    abstractionPeriodStartDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
+    abstractionPeriodStartMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
+    abstractionPeriodEndDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
+    abstractionPeriodEndMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
     timeLimitedStartDate: Joi.date().iso().allow(null),
     timeLimitedEndDate: Joi.date().iso().allow(null),
     notes: Joi.string().allow(null),

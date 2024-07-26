@@ -16,13 +16,11 @@ const statuses = {
 const createExternalId = (licenceVersion) => {
   const { FGAC_REGION_CODE, AABL_ID, ISSUE_NO, INCR_NO } = licenceVersion
 
-  //  todo: should we throw here if we can't build up ?
-  // todo: ask if this is used else where
   return `${FGAC_REGION_CODE}:${AABL_ID}:${ISSUE_NO}:${INCR_NO}`
 }
 
 /**
- * Maps the import licence versions data to the desired format
+ * Maps the import licence versions data
  *
  * @param {LegacyLicenceVersionsArray} licenceVersions
  * @returns {ImportLicenceVersionType[]}
@@ -45,7 +43,6 @@ function _mapLicenceVersions (licenceVersions) {
     return {
       endDate: formatStandardDateToISO(licenceVersion.EFF_END_DATE),
       externalId: createExternalId(licenceVersion),
-      // todo: do we still need to store these ? increment / issue
       increment: Number(increment),
       issue: Number(issue),
       startDate: formatStandardDateToISO(licenceVersion.EFF_ST_DATE),
