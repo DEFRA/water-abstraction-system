@@ -10,7 +10,6 @@ const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 const statuses = {
   CURR: 'current',
   SUPER: 'superseded',
-  DRAFT: 'draft' // todo: check this can be removed as it the sql does not get draft status
 }
 
 const createExternalId = (licenceVersion) => {
