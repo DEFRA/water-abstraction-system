@@ -1,15 +1,19 @@
 'use strict'
 
 const { db } = require('../../../db/db.js')
+const { ref } = require('objection')
+
 const LicenceModel = require('../../models/licence.model.js')
 
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
   const results = await _fetchEntries(licenceId)
 
+  console.log('🚀🚀🚀 ~ results:', results)
+
   const testEntries2 = await _fetchEntries2(licenceId)
 
-  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2)
+  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2.chargeVersions)
 
   return {
     entries: results.rows,
@@ -40,11 +44,21 @@ async function _fetchEntries2 (licenceId) {
     })
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
-        .select('chargeVersions.*', 'water.notes.text')
+      builder
+        .select(
+          'chargeVersions.licenceId as licence_id',
+          'water.notes.text as note',
+          'water.changeReasons.description as reason',
+          'chargeVersions.id as entry_id',
+          'createdAt as created_at',
+          'versionNumber as version_number',
+          ref('createdBy:email').castText().as('created_by')
+        )
+        .leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
+        .leftJoin('water.changeReasons', 'changeReasons.changeReasonId', '=', 'chargeVersions.changeReasonId')
         .orderBy([
-          { column: 'createdAt', order: 'desc' },
-          { column: 'versionNumber', order: 'desc' }
+          { column: 'chargeVersions.createdAt', order: 'desc' },
+          { column: 'chargeVersions.versionNumber', order: 'desc' }
         ])
     })
     .withGraphFetched('returnVersions')
