@@ -11,7 +11,7 @@ const { db } = require('../../../../db/db.js')
  *
  * Returns the legacy licence version purposes
  *
- * @param {LegacyLicenceType} licenceData - the licence
+ * @param {LegacyLicenceType} licenceData
  * @returns {Promise<LegacyLicenceVersionsArray>}
  */
 async function go (licenceData) {
