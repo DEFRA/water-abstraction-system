@@ -12,7 +12,7 @@ const SecondaryPurposeModel = require('../../models/secondary-purpose.model.js')
 const PurposeModel = require('../../models/purpose.model.js')
 
 /**
- * Saves the licence versions
+ * Saves the licence versions, purposes and conditions
  *
  * @param {ImportLicenceVersionType[]} licenceVersions
  * @param {string} licenceId

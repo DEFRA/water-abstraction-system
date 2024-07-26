@@ -172,7 +172,7 @@ describe('Legacy import licence service', () => {
           })
       })
 
-      it('checks the purposes id, primary purpose id and secondary purpose id match to the legacy id provided', async () => {
+      it('checks the purposes id, primary purpose id and secondary purpose id match the legacy id provided', async () => {
         await LegacyImportLicenceService.go(licenceRef)
 
         const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()

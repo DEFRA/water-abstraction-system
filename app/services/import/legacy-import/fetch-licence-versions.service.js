@@ -7,11 +7,11 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Gets the licence versions
+ * Gets the legacy licence versions
  *
- * Returns the licence version purposes
+ * Returns the legacy licence version purposes
  *
- * @param {LegacyLicenceType} licenceData - the licence
+ * @param {LegacyLicenceType} licenceData
  * @returns {Promise<LegacyLicenceVersionsArray>}
  */
 async function go (licenceData) {
@@ -76,7 +76,7 @@ module.exports = {
  * @property {string} EFF_END_DATE - date in UK format - can be 'null'
  * @property {string} EFF_ST_DATE - date in UK format
  * @property {string} INCR_NO - a number between 1 - 5
- * @property {string} ISSUE_NO - a number - linked to the purpose id ?
+ * @property {string} ISSUE_NO - a number
  * @property {string} STATUS - enum - 'DRAFT', 'SUPER', 'CURR' (Draft will not be selected)
  * @property {string} FGAC_REGION_CODE
  * @property {string} AABL_ID
@@ -97,7 +97,7 @@ module.exports = {
  * @property {string} ANNUAL_QTY - The annual quantity.
  * @property {string} DAILY_QTY - The daily quantity.
  * @property {string} FGAC_REGION_CODE - The FGAC region code.
- * @property {string} ID - The identifier.
+ * @property {string} ID
  * @property {string} HOURLY_QTY - The hourly quantity.
  * @property {string} INST_QTY - The instant quantity.
  * @property {string} NOTES - Additional notes.

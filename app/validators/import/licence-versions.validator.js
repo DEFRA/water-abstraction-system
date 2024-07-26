@@ -34,7 +34,7 @@ const _isValidStatus = (value) => {
     return value
   }
 
-  throw new Error(`status must be one of ${validStatues.toString()}`)
+  throw new Error(`Status must be one of ${validStatues.toString()}`)
 }
 
 const _purposeSchema = Joi.object({

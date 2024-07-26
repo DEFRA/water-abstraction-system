@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Maps the import licence versions data to the desired format
+ * Maps the import licence versions and licence versions purposes data
  * @module LegacyImportLicenceVersionMapper
  */
 
@@ -9,8 +9,7 @@ const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 
 const statuses = {
   CURR: 'current',
-  SUPER: 'superseded',
-  DRAFT: 'draft' // todo: check this can be removed as it the sql does not get draft status
+  SUPER: 'superseded'
 }
 
 const createExternalId = (licenceVersion) => {
@@ -37,7 +36,7 @@ function go (licenceVersions) {
  */
 function _mapLicenceVersions (licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
-    const issue = licenceVersion.ISSUE_NO // mapped to the legacy purpose id -
+    const issue = licenceVersion.ISSUE_NO
     const increment = licenceVersion.INCR_NO
 
     return {
@@ -65,7 +64,7 @@ function _mapPurposes (licenceVersion) {
 }
 
 /**
- * Maps the import licence versions purposes data to the desired format
+ * Maps the import licence versions purposes data
  *
  * @param {LegacyLicenceVersionsPurposesType} purpose
  * @returns {ImportLicenceVersionPurposeType}
