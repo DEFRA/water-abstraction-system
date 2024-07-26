@@ -7,7 +7,7 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Gets the licence versions
+ * Gets the legacy licence versions
  *
  * Returns the licence version purposes
  *
