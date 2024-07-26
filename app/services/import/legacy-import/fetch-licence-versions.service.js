@@ -76,7 +76,7 @@ module.exports = {
  * @property {string} EFF_END_DATE - date in UK format - can be 'null'
  * @property {string} EFF_ST_DATE - date in UK format
  * @property {string} INCR_NO - a number between 1 - 5
- * @property {string} ISSUE_NO - a number - linked to the purpose id ?
+ * @property {string} ISSUE_NO - a number
  * @property {string} STATUS - enum - 'DRAFT', 'SUPER', 'CURR' (Draft will not be selected)
  * @property {string} FGAC_REGION_CODE
  * @property {string} AABL_ID
