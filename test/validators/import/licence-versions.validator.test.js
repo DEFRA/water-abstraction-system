@@ -227,7 +227,7 @@ describe('Import licence versions validator', () => {
               status: 'draft'
             }
           ])
-        }).to.throw('"[0].status" failed custom validation because status must be one of current,superseded')
+        }).to.throw('"[0].status" failed custom validation because Status must be one of current,superseded')
       })
 
       it('should not throw an error if "status" is a valid status', async () => {
