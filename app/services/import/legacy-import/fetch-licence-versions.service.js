@@ -9,7 +9,7 @@ const { db } = require('../../../../db/db.js')
 /**
  * Gets the legacy licence versions
  *
- * Returns the licence version purposes
+ * Returns the legacy licence version purposes
  *
  * @param {LegacyLicenceType} licenceData - the licence
  * @returns {Promise<LegacyLicenceVersionsArray>}
