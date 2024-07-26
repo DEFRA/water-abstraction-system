@@ -36,7 +36,7 @@ function go (licenceVersions) {
  */
 function _mapLicenceVersions (licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
-    const issue = licenceVersion.ISSUE_NO // mapped to the legacy purpose id -
+    const issue = licenceVersion.ISSUE_NO
     const increment = licenceVersion.INCR_NO
 
     return {
