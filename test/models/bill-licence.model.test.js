@@ -11,7 +11,6 @@ const { expect } = Code
 const BillHelper = require('../support/helpers/bill.helper.js')
 const BillModel = require('../../app/models/bill.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
@@ -24,8 +23,6 @@ describe('Bill Licence model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await BillLicenceHelper.add()
   })
 
@@ -46,6 +43,7 @@ describe('Bill Licence model', () => {
         testBill = await BillHelper.add()
 
         const { id: billId } = testBill
+
         testRecord = await BillLicenceHelper.add({ billId })
       })
 
@@ -79,6 +77,7 @@ describe('Bill Licence model', () => {
         testTransactions = []
         for (let i = 0; i < 2; i++) {
           const transaction = await TransactionHelper.add({ billLicenceId: id })
+
           testTransactions.push(transaction)
         }
       })
@@ -112,6 +111,7 @@ describe('Bill Licence model', () => {
         testLicence = await LicenceHelper.add()
 
         const { id: licenceId } = testLicence
+
         testRecord = await BillLicenceHelper.add({ licenceId })
       })
 

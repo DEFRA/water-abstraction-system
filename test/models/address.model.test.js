@@ -13,7 +13,6 @@ const BillingAccountAddressHelper = require('../support/helpers/billing-account-
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
 const CompanyAddressModel = require('../../app/models/company-address.model.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
@@ -22,10 +21,6 @@ const AddressModel = require('../../app/models/address.model.js')
 
 describe('Address model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -54,6 +49,7 @@ describe('Address model', () => {
           // billingAccountId and start date
           const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
           const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, addressId })
+
           testBillingAccountAddresses.push(billingAccountAddress)
         }
       })
@@ -91,6 +87,7 @@ describe('Address model', () => {
         testCompanyAddresses = []
         for (let i = 0; i < 2; i++) {
           const companyAddress = await CompanyAddressHelper.add({ addressId })
+
           testCompanyAddresses.push(companyAddress)
         }
       })
@@ -128,6 +125,7 @@ describe('Address model', () => {
         testLicenceDocumentRoles = []
         for (let i = 0; i < 2; i++) {
           const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })
+
           testLicenceDocumentRoles.push(licenceDocumentRole)
         }
       })

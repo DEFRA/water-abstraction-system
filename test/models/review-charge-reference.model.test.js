@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
@@ -24,8 +23,6 @@ describe('Review Charge reference model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await ReviewChargeReferenceHelper.add()
   })
 

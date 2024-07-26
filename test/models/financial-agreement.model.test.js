@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
@@ -18,10 +17,6 @@ const FinancialAgreementModel = require('../../app/models/financial-agreement.mo
 
 describe('Financial Agreement model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -46,6 +41,7 @@ describe('Financial Agreement model', () => {
         testLicenceAgreements = []
         for (let i = 0; i < 2; i++) {
           const licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId: testRecord.id })
+
           testLicenceAgreements.push(licenceAgreement)
         }
       })

@@ -13,17 +13,12 @@ const BillRunModel = require('../../app/models/bill-run.model.js')
 const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
 
 describe('Bill Run Volume model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -46,6 +41,7 @@ describe('Bill Run Volume model', () => {
         testBillRun = await BillRunHelper.add()
 
         const { id: billRunId } = testBillRun
+
         testRecord = await BillRunVolumeHelper.add({ billRunId })
       })
 
@@ -76,6 +72,7 @@ describe('Bill Run Volume model', () => {
         testChargeReference = await ChargeReferenceHelper.add()
 
         const { id: chargeReferenceId } = testChargeReference
+
         testRecord = await BillRunVolumeHelper.add({ chargeReferenceId })
       })
 

@@ -14,7 +14,6 @@ const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
@@ -26,10 +25,6 @@ const LicenceDocumentRoleModel = require('../../app/models/licence-document-role
 
 describe('Licence Document Role model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -52,6 +47,7 @@ describe('Licence Document Role model', () => {
         testAddress = await AddressHelper.add()
 
         const { id: addressId } = testAddress
+
         testRecord = await LicenceDocumentRoleHelper.add({ addressId })
       })
 
@@ -82,6 +78,7 @@ describe('Licence Document Role model', () => {
         testCompany = await CompanyHelper.add()
 
         const { id: companyId } = testCompany
+
         testRecord = await LicenceDocumentRoleHelper.add({ companyId })
       })
 
@@ -112,6 +109,7 @@ describe('Licence Document Role model', () => {
         testContact = await ContactHelper.add()
 
         const { id: contactId } = testContact
+
         testRecord = await LicenceDocumentRoleHelper.add({ contactId })
       })
 
@@ -142,6 +140,7 @@ describe('Licence Document Role model', () => {
         testLicenceDocument = await LicenceDocumentHelper.add()
 
         const { id: licenceDocumentId } = testLicenceDocument
+
         testRecord = await LicenceDocumentRoleHelper.add({ licenceDocumentId })
       })
 
@@ -172,6 +171,7 @@ describe('Licence Document Role model', () => {
         testLicenceRole = await LicenceRoleHelper.add()
 
         const { id: licenceRoleId } = testLicenceRole
+
         testRecord = await LicenceDocumentRoleHelper.add({ licenceRoleId })
       })
 
