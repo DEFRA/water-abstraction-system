@@ -8,7 +8,7 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureValidLicenceVersions = require('../../services/import/_fixtures/import-licence-versions.fixture.js')
+const FixtureImportLicenceVersions = require('../../services/import/_fixtures/import-licence-versions.fixture.js')
 
 // Thing under test
 const ImportLicenceVersionsValidator = require('../../../app/validators/import/licence-versions.validator.js')
@@ -20,10 +20,11 @@ describe('Import licence versions validator', () => {
   let licenceVersionsAndPurposes
 
   before(async () => {
-    licenceVersion = FixtureValidLicenceVersions.importLicenceVersion()
-    licenceVersionPurpose = FixtureValidLicenceVersions.importLicenceVersionPurpose()
-    licenceVersionPurposes = [{ ...FixtureValidLicenceVersions.importLicenceVersionPurpose() }]
-    licenceVersionsAndPurposes = [...FixtureValidLicenceVersions.importLicenceVersionsAndPurposes()]
+    licenceVersionsAndPurposes = FixtureImportLicenceVersions.create()
+
+    licenceVersion = licenceVersionsAndPurposes[0]
+    licenceVersionPurpose = licenceVersion.purposes[0]
+    licenceVersionPurposes = licenceVersion.purposes
   })
 
   it('should not throw if all the required fields validations are met', () => {

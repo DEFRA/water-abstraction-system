@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureLegacyLicenceVersionPurposes = require('./_fixtures/legacy-licence-version-purposes.fixture.js')
 const FixtureImportLicenceVersions = require('./_fixtures/import-licence-versions.fixture.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
@@ -32,26 +31,21 @@ describe('Persist licence versions and licence versions purposes service', () =>
   beforeEach(async () => {
     licence = await LicenceHelper.add()
 
-    licenceVersion = { ...FixtureImportLicenceVersions.importLicenceVersion() }
-    licenceVersionsPurpose = { ...FixtureImportLicenceVersions.importLicenceVersionPurpose() }
+    licenceVersionsAndPurposes = FixtureImportLicenceVersions.create()
 
-    licenceVersionsAndPurposes = [
-      {
-        ...licenceVersion,
-        purposes: []
-      }
-    ]
+    licenceVersion = { ...licenceVersionsAndPurposes[0] }
+    licenceVersionsPurpose = { ...licenceVersion.purposes[0] }
 
     primaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
-      return primaryPurpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APPR_CODE
+      return primaryPurpose.legacyId === licenceVersionsPurpose.primaryPurposeId
     })
 
     purpose = PurposesSeeder.data.find((purpose) => {
-      return purpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APUS_CODE
+      return purpose.legacyId === licenceVersionsPurpose.purposeId
     })
 
     secondaryPurpose = SecondaryPurposesSeeder.data.find((secondaryPurpose) => {
-      return secondaryPurpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APSE_CODE
+      return secondaryPurpose.legacyId === licenceVersionsPurpose.secondaryPurposeId
     })
   })
 
@@ -62,6 +56,9 @@ describe('Persist licence versions and licence versions purposes service', () =>
       const savedLicenceVersion = await LicenceVersionModel.query()
         .select('*')
         .where('externalId', licenceVersion.externalId).first()
+        .withGraphFetched('licenceVersionPurposes')
+
+      const [savedLicenceVersionPurpose] = savedLicenceVersion.licenceVersionPurposes
 
       expect(result).to.equal({
         createdAt: savedLicenceVersion.createdAt.toISOString(),
@@ -71,23 +68,59 @@ describe('Persist licence versions and licence versions purposes service', () =>
         increment: 0,
         issue: 100,
         licenceId: licence.id,
-        purposes: [],
+        purposes: [
+          {
+            id: savedLicenceVersionPurpose.id,
+            licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
+            primaryPurposeId: primaryPurpose.id,
+            secondaryPurposeId: secondaryPurpose.id,
+            purposeId: purpose.id,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            timeLimitedStartDate: '2001-01-03',
+            timeLimitedEndDate: '2001-01-02',
+            notes: ' a note on purposes',
+            instantQuantity: 120,
+            dailyQuantity: 1500.2,
+            hourlyQuantity: 140.929,
+            annualQuantity: 545520,
+            externalId: licenceVersionsPurpose.externalId,
+            createdAt: savedLicenceVersionPurpose.createdAt.toISOString(),
+            updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
+          }
+        ],
         startDate: '2001-01-01',
         status: 'superseded',
         updatedAt: savedLicenceVersion.updatedAt.toISOString()
       })
     })
 
-    describe('and has purposes', () => {
+    describe('and does not have "purposes"', () => {
       beforeEach(() => {
         licenceVersionsAndPurposes = [
           {
             ...licenceVersion,
-            purposes: [{ ...licenceVersionsPurpose }]
+            purposes: []
           }
         ]
       })
 
+      it('does not return purposes', async () => {
+        const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposes, licence.id)
+
+        const savedLicenceVersionPurposes = await LicenceVersionModel.query()
+          .select('*')
+          .where('externalId', licenceVersion.externalId).first()
+          .withGraphFetched('licenceVersionPurposes')
+
+        expect(result.purposes).to.equal([])
+        expect(savedLicenceVersionPurposes.licenceVersionPurposes).to.equal([])
+      })
+    })
+
+    describe('and has "purposes"', () => {
       it('returns the created purposes', async () => {
         const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposes, licence.id)
 
@@ -114,9 +147,8 @@ describe('Persist licence versions and licence versions purposes service', () =>
             notes: ' a note on purposes',
             instantQuantity: 120,
             dailyQuantity: 1500.2,
-            hourlyQuantity: 140.93,
+            hourlyQuantity: 140.929,
             annualQuantity: 545520,
-            // should this be unique ? db says so ?
             externalId: licenceVersionsPurpose.externalId,
             createdAt: savedLicenceVersionPurpose.createdAt.toISOString(),
             updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
@@ -135,18 +167,21 @@ describe('Persist licence versions and licence versions purposes service', () =>
       licenceVersionsAndPurposesUpdated = [
         {
           ...licenceVersion,
-          purposes: [],
+          purposes: [{ ...licenceVersionsPurpose }],
           increment: 1
         }
       ]
     })
 
-    it('returns the created licence version with updated values', async () => {
+    it('returns the updated licence version and purposes', async () => {
       const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
 
       const savedLicenceVersion = await LicenceVersionModel.query()
         .select('*')
         .where('externalId', licenceVersion.externalId).first()
+        .withGraphFetched('licenceVersionPurposes')
+
+      const [savedLicenceVersionPurpose] = savedLicenceVersion.licenceVersionPurposes
 
       expect(result).to.equal({
         endDate: '2002-01-01',
@@ -155,16 +190,108 @@ describe('Persist licence versions and licence versions purposes service', () =>
         increment: 1,
         issue: 100,
         licenceId: licence.id,
-        purposes: [],
+        purposes: [
+          {
+            id: savedLicenceVersionPurpose.id,
+            licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
+            primaryPurposeId: primaryPurpose.id,
+            secondaryPurposeId: secondaryPurpose.id,
+            purposeId: purpose.id,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            timeLimitedStartDate: '2001-01-03',
+            timeLimitedEndDate: '2001-01-02',
+            notes: ' a note on purposes',
+            instantQuantity: 120,
+            dailyQuantity: 1500.2,
+            hourlyQuantity: 140.929,
+            annualQuantity: 545520,
+            externalId: licenceVersionsPurpose.externalId,
+            createdAt: savedLicenceVersionPurpose.createdAt.toISOString(),
+            updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
+          }
+        ],
         startDate: '2001-01-01',
         status: 'superseded',
         updatedAt: savedLicenceVersion.updatedAt.toISOString()
       }, { skip: ['createdAt'] })
+    })
+
+    it('returns the updated licence version increment', async () => {
+      const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
 
       expect(result.increment).to.equal(1)
     })
-  })
 
-  // todo: add these tests
-  // licence exists - purpose newly created and purpose updated ?
+    describe('and does not have purposes', () => {
+      beforeEach(async () => {
+        await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
+
+        licenceVersionsAndPurposesUpdated[0].purposes = []
+      })
+
+      it('returns the updated licence version and no purposes', async () => {
+        const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
+
+        const savedLicenceVersion = await LicenceVersionModel.query()
+          .select('*')
+          .where('externalId', licenceVersion.externalId).first()
+
+        expect(result).to.equal({
+          endDate: '2002-01-01',
+          externalId: licenceVersion.externalId,
+          id: result.id,
+          increment: 1,
+          issue: 100,
+          licenceId: licence.id,
+          purposes: [],
+          startDate: '2001-01-01',
+          status: 'superseded',
+          updatedAt: savedLicenceVersion.updatedAt.toISOString()
+        }, { skip: ['createdAt'] })
+
+        expect(result.increment).to.equal(1)
+      })
+    })
+
+    describe('and has purposes', () => {
+      it('returns the updated licence version purposes', async () => {
+        const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
+
+        const savedLicenceVersion = await LicenceVersionModel.query()
+          .select('*')
+          .where('externalId', licenceVersion.externalId).first()
+          .withGraphFetched('licenceVersionPurposes')
+
+        const [savedLicenceVersionPurpose] = savedLicenceVersion.licenceVersionPurposes
+
+        expect(result.purposes).to.equal([
+          {
+            id: savedLicenceVersionPurpose.id,
+            licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
+            primaryPurposeId: primaryPurpose.id,
+            secondaryPurposeId: secondaryPurpose.id,
+            purposeId: purpose.id,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            timeLimitedStartDate: '2001-01-03',
+            timeLimitedEndDate: '2001-01-02',
+            notes: ' a note on purposes',
+            instantQuantity: 120,
+            dailyQuantity: 1500.2,
+            hourlyQuantity: 140.929,
+            annualQuantity: 545520,
+            externalId: licenceVersionsPurpose.externalId,
+            updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
+          }
+        ], { skip: ['createdAt'] })
+
+        expect(result.increment).to.equal(1)
+      })
+    })
+  })
 })

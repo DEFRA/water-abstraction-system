@@ -2,7 +2,7 @@
 
 const { randomInteger } = require('../../../support/general.js')
 
-function importLicenceVersionPurpose () {
+function _createLicenceVersionPurpose () {
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
@@ -22,7 +22,7 @@ function importLicenceVersionPurpose () {
   }
 }
 
-function importLicenceVersion () {
+function _createtLicenceVersion () {
   return {
     endDate: '2002-01-01',
     externalId: `9:${randomInteger(10000, 99999)}:1:0`,
@@ -33,14 +33,17 @@ function importLicenceVersion () {
   }
 }
 
-function importLicenceVersionsAndPurposes () {
-  return [
-    { ...importLicenceVersion(), purposes: [{ ...importLicenceVersionPurpose() }] }
+function create (data) {
+  const defaults = [
+    {
+      ..._createtLicenceVersion(),
+      purposes: [{ ..._createLicenceVersionPurpose() }]
+    }
   ]
+
+  return [...defaults]
 }
 
 module.exports = {
-  importLicenceVersionPurpose,
-  importLicenceVersion,
-  importLicenceVersionsAndPurposes
+  create
 }
