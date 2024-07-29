@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const FixtureLegacyLicenceVersionPurposes = require('./_fixtures/legacy-licence-version-purposes.fixture.js')
-const FixtureValidLicenceVersions = require('./_fixtures/import-licence-versions.fixture.js')
+const FixtureImportLicenceVersions = require('./_fixtures/import-licence-versions.fixture.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const PrimaryPurposesSeeder = require('../../support/seeders/primary-purpose.seeder.js')
@@ -21,9 +21,10 @@ const PersistLicenceVersionsService =
   require('../../../app/services/import/persist-licence-versions.service.js')
 
 describe('Persist licence versions and licence versions purposes service', () => {
-  let licenceVersionsAndPurposes
   let licence
-
+  let licenceVersion
+  let licenceVersionsPurpose
+  let licenceVersionsAndPurposes
   let primaryPurpose
   let purpose
   let secondaryPurpose
@@ -31,9 +32,12 @@ describe('Persist licence versions and licence versions purposes service', () =>
   beforeEach(async () => {
     licence = await LicenceHelper.add()
 
+    licenceVersion = { ...FixtureImportLicenceVersions.importLicenceVersion() }
+    licenceVersionsPurpose = { ...FixtureImportLicenceVersions.importLicenceVersionPurpose() }
+
     licenceVersionsAndPurposes = [
       {
-        ...FixtureValidLicenceVersions.importLicenceVersion,
+        ...licenceVersion,
         purposes: []
       }
     ]
@@ -57,12 +61,12 @@ describe('Persist licence versions and licence versions purposes service', () =>
 
       const savedLicenceVersion = await LicenceVersionModel.query()
         .select('*')
-        .where('externalId', FixtureValidLicenceVersions.importLicenceVersion.externalId).first()
+        .where('externalId', licenceVersion.externalId).first()
 
       expect(result).to.equal({
         createdAt: savedLicenceVersion.createdAt.toISOString(),
         endDate: '2002-01-01',
-        externalId: FixtureValidLicenceVersions.importLicenceVersion.externalId,
+        externalId: licenceVersion.externalId,
         id: result.id,
         increment: 0,
         issue: 100,
@@ -78,43 +82,46 @@ describe('Persist licence versions and licence versions purposes service', () =>
       beforeEach(() => {
         licenceVersionsAndPurposes = [
           {
-            ...FixtureValidLicenceVersions.importLicenceVersion,
-            purposes: [{ ...FixtureValidLicenceVersions.importLicenceVersionPurpose }]
+            ...licenceVersion,
+            purposes: [{ ...licenceVersionsPurpose }]
           }
         ]
       })
 
-      it('returns the updated licence version', async () => {
+      it('returns the created purposes', async () => {
         const [result] = await PersistLicenceVersionsService.go(licenceVersionsAndPurposes, licence.id)
 
         const savedLicenceVersionPurposes = await LicenceVersionModel.query()
           .select('*')
-          .where('externalId', FixtureValidLicenceVersions.importLicenceVersion.externalId).first()
+          .where('externalId', licenceVersion.externalId).first()
           .withGraphFetched('licenceVersionPurposes')
 
         const [savedLicenceVersionPurpose] = savedLicenceVersionPurposes.licenceVersionPurposes
 
-        expect(result.purposes[0]).to.equal({
-          id: savedLicenceVersionPurpose.id,
-          licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
-          primaryPurposeId: primaryPurpose.id,
-          secondaryPurposeId: secondaryPurpose.id,
-          purposeId: purpose.id,
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
-          timeLimitedStartDate: '2001-01-03',
-          timeLimitedEndDate: '2001-01-02',
-          notes: ' a note on purposes',
-          instantQuantity: 120,
-          dailyQuantity: 1500.2,
-          hourlyQuantity: 140.93,
-          annualQuantity: 545520,
-          externalId: '3:10000004',
-          createdAt: savedLicenceVersionPurpose.createdAt.toISOString(),
-          updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
-        })
+        expect(result.purposes).to.equal([
+          {
+            id: savedLicenceVersionPurpose.id,
+            licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
+            primaryPurposeId: primaryPurpose.id,
+            secondaryPurposeId: secondaryPurpose.id,
+            purposeId: purpose.id,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            timeLimitedStartDate: '2001-01-03',
+            timeLimitedEndDate: '2001-01-02',
+            notes: ' a note on purposes',
+            instantQuantity: 120,
+            dailyQuantity: 1500.2,
+            hourlyQuantity: 140.93,
+            annualQuantity: 545520,
+            // should this be unique ? db says so ?
+            externalId: licenceVersionsPurpose.externalId,
+            createdAt: savedLicenceVersionPurpose.createdAt.toISOString(),
+            updatedAt: savedLicenceVersionPurpose.updatedAt.toISOString()
+          }
+        ])
       })
     })
   })
@@ -127,7 +134,7 @@ describe('Persist licence versions and licence versions purposes service', () =>
 
       licenceVersionsAndPurposesUpdated = [
         {
-          ...FixtureValidLicenceVersions.importLicenceVersion,
+          ...licenceVersion,
           purposes: [],
           increment: 1
         }
@@ -139,11 +146,11 @@ describe('Persist licence versions and licence versions purposes service', () =>
 
       const savedLicenceVersion = await LicenceVersionModel.query()
         .select('*')
-        .where('externalId', FixtureValidLicenceVersions.importLicenceVersion.externalId).first()
+        .where('externalId', licenceVersion.externalId).first()
 
       expect(result).to.equal({
         endDate: '2002-01-01',
-        externalId: FixtureValidLicenceVersions.importLicenceVersion.externalId,
+        externalId: licenceVersion.externalId,
         id: result.id,
         increment: 1,
         issue: 100,

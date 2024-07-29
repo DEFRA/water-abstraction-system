@@ -20,10 +20,10 @@ describe('Import licence versions validator', () => {
   let licenceVersionsAndPurposes
 
   before(async () => {
-    licenceVersion = FixtureValidLicenceVersions.importLicenceVersion
-    licenceVersionPurpose = FixtureValidLicenceVersions.importLicenceVersionPurpose
-    licenceVersionPurposes = [{ ...FixtureValidLicenceVersions.importLicenceVersionPurpose }]
-    licenceVersionsAndPurposes = [...FixtureValidLicenceVersions.importLicenceVersionsAndPurposes]
+    licenceVersion = FixtureValidLicenceVersions.importLicenceVersion()
+    licenceVersionPurpose = FixtureValidLicenceVersions.importLicenceVersionPurpose()
+    licenceVersionPurposes = [{ ...FixtureValidLicenceVersions.importLicenceVersionPurpose() }]
+    licenceVersionsAndPurposes = [...FixtureValidLicenceVersions.importLicenceVersionsAndPurposes()]
   })
 
   it('should not throw if all the required fields validations are met', () => {
