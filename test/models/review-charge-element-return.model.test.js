@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
 
 // Thing under test
@@ -16,10 +15,6 @@ const ReviewChargeElementReturnModel = require('../../app/models/review-charge-e
 
 describe('Review Charge Element Return model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

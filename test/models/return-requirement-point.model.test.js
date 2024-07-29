@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
@@ -18,10 +17,6 @@ const ReturnRequirementPointModel = require('../../app/models/return-requirement
 
 describe('Return Requirement Point model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -44,6 +39,7 @@ describe('Return Requirement Point model', () => {
         testReturnRequirement = await ReturnRequirementHelper.add()
 
         const { id: returnRequirementId } = testReturnRequirement
+
         testRecord = await ReturnRequirementPointHelper.add({ returnRequirementId })
       })
 

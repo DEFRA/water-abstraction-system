@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const RoleModel = require('../../app/models/role.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
@@ -20,10 +20,6 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 
 describe('User Role model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -71,7 +67,7 @@ describe('User Role model', () => {
       let testUser
 
       beforeEach(async () => {
-        testUser = await UserHelper.add()
+        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         testRecord = await UserRoleHelper.add({ userId: testUser.id })
       })
 

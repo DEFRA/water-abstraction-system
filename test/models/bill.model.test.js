@@ -15,17 +15,12 @@ const BillRunModel = require('../../app/models/bill-run.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillModel = require('../../app/models/bill.model.js')
 
 describe('Bill model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -48,6 +43,7 @@ describe('Bill model', () => {
         testBillingAccount = await BillingAccountHelper.add()
 
         const { id: billingAccountId } = testBillingAccount
+
         testRecord = await BillHelper.add({ billingAccountId })
       })
 
@@ -109,6 +105,7 @@ describe('Bill model', () => {
         testBillLicences = []
         for (let i = 0; i < 2; i++) {
           const billLicence = await BillLicenceHelper.add({ billId: id })
+
           testBillLicences.push(billLicence)
         }
       })

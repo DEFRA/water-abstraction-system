@@ -4,11 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
@@ -24,10 +24,6 @@ const GroupModel = require('../../app/models/group.model.js')
 
 describe('Group model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -137,9 +133,9 @@ describe('Group model', () => {
     describe('when linking through user groups to users', () => {
       let testUser
 
-      beforeEach(async () => {
+      before(async () => {
         testRecord = await GroupHelper.add()
-        testUser = await UserHelper.add()
+        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         await UserGroupHelper.add({ userId: testUser.id, groupId: testRecord.id })
       })
 
