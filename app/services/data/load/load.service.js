@@ -307,16 +307,16 @@ async function _applyLookups (instance) {
 /**
  * Sets a future date for a specified property in the given instance
  *
- * This function calculates a date three months from the current date and sets the value of the specified key in the
- * instance to this future date, formatted as an ISO string. The reason for setting a date in the future is primarily
- * for returns dueDates. A return is only considered due, and not overdue, if the status of the return is due and the
- * current date has not surpassed the returns dueDate.
+ * This function calculates a date months in advance from the current date and sets the value of the specified key in
+ * the instance to this future date, formatted as an ISO string. The reason for setting a date in the future is
+ * primarily for returns dueDates. A return is only considered due, and not overdue, if the status of the return is due
+ * and the current date has not surpassed the returns dueDate.
  *
  * Some of our returns acceptance tests require a dynamically created date to test the returns status.
  */
 async function setDueDate (instance, key) {
   const futureDate = new Date()
-  const additionalMonths = 3
+  const additionalMonths = instance[key].dueDateHelper
 
   futureDate.setMonth(futureDate.getMonth() + additionalMonths)
 

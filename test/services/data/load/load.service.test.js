@@ -13,6 +13,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
 const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const RegionModel = require('../../../../app/models/region.model.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const { db } = require('../../../../db/db.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -102,6 +103,36 @@ describe('Load service', () => {
         })
       })
 
+      describe('that includes an entity instance with a due date helper', () => {
+        beforeEach(async () => {
+          payload = {
+            returnLogs: [
+              {
+                id: 'v3:3:AT/CURR/MONTHLY/02:9999997:2021-01-01:2021-02-28',
+                returnReference: 9999997,
+                licenceRef: 'AT/CURR/MONTHLY/02',
+                metadata: {},
+                startDate: '2021-01-01',
+                dueDate: {
+                  dueDateHelper: 3
+                }
+              }
+            ]
+          }
+        })
+
+        it('transforms the due date into a future date value', async () => {
+          await LoadService.go(payload)
+
+          const returnLog = await ReturnLogModel.query().findById('v3:3:AT/CURR/MONTHLY/02:9999997:2021-01-01:2021-02-28')
+
+          const dateInThreeMonths = _dateInThreeMonths()
+
+          expect(returnLog.dueDate).to.equal(dateInThreeMonths)
+          expect(returnLog.dueDate).to.be.an.instanceOf(Date)
+        })
+      })
+
       describe('that includes an entity with an "is_test" field', () => {
         it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
           const result = await LoadService.go(payload)
@@ -135,3 +166,12 @@ describe('Load service', () => {
     })
   })
 })
+
+function _dateInThreeMonths () {
+  const futureDate = new Date()
+
+  futureDate.setMonth(futureDate.getMonth() + 3)
+  futureDate.setHours(0, 0, 0, 0)
+
+  return futureDate
+}
