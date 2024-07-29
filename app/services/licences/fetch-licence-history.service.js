@@ -9,15 +9,12 @@ async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
   const results = await _fetchEntries(licenceId)
 
-  console.log('🚀🚀🚀 ~ results:', results)
-
   const testEntries2 = await _fetchEntries2(licenceId)
-
-  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2)
 
   return {
     entries: results.rows,
-    licence
+    licence,
+    testEntries2
   }
 }
 
@@ -39,9 +36,10 @@ async function _fetchEntries2 (licenceId) {
       builder
         .select(
           'licenceVersions.licenceId as licenceId',
-          db.raw("'licence-version' as entryType"),
+          db.raw("'licence-version' as entry_type"),
           'licenceVersions.id as entry_id',
           db.raw("'' as reason"),
+          'licenceVersions.createdAt as created_at',
           db.raw("'' as createdBy"),
           db.raw("'' as note"),
           'issue as version_number'
@@ -56,17 +54,17 @@ async function _fetchEntries2 (licenceId) {
       builder
         .select(
           'chargeVersions.licenceId as licenceId',
-          db.raw("'charge-version' as entryType"),
+          db.raw("'charge-version' as entry_type"),
           'chargeVersions.id as entry_id',
           'public.changeReasons.description as reason',
-          'createdAt as created_at',
+          'chargeVersions.createdAt as created_at',
           ref('createdBy:email').castText().as('created_by'),
           'water.notes.text as note',
           'versionNumber as version_number',
           'chargeVersions.source as source'
         )
         .leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
-        .leftJoin('public.changeReasons', 'changeReasons.changeReasonId', '=', 'chargeVersions.changeReasonId')
+        .leftJoin('public.changeReasons', 'changeReasons.id', '=', 'chargeVersions.changeReasonId')
         .orderBy([
           { column: 'chargeVersions.createdAt', order: 'desc' },
           { column: 'chargeVersions.versionNumber', order: 'desc' }
@@ -77,7 +75,7 @@ async function _fetchEntries2 (licenceId) {
       builder
         .select(
           'returnVersions.licenceId as licenceId',
-          db.raw("'return-version' as entryType"),
+          db.raw("'return-version' as entry_type"),
           'returnVersions.id as entry_id',
           'reason',
           'returnVersions.createdAt as created_at',
