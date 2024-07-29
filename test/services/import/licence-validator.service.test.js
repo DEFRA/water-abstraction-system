@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureValidImportLicence = require('../../validators/import/_fixtures/valid-licence.fixture.js')
+const FixtureValidImportLicence = require('./_fixtures/import-licence.fixture.js')
 
 // Thing under test
 const ImportLicenceValidatorService =
@@ -19,7 +19,7 @@ describe('Import licence validator service', () => {
 
   beforeEach(async () => {
     licence = {
-      ...FixtureValidImportLicence.validLicenceRequiredOnly
+      ...FixtureValidImportLicence.importLicenceRequiredOnly
     }
   })
 

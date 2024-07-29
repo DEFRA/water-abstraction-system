@@ -21,13 +21,15 @@ async function go (licenceVersions, licenceId) {
   return Promise.all(licenceVersions.map(async (version) => {
     const versionResult = await _saveLicenceVersion(version, licenceId)
 
-    return Promise.all(version.purposes.map(async (purpose) => {
-      return _saveLicencePurposes(purpose, versionResult.id)
+    Promise.all(version.purposes.map(async (purpose) => {
+      return _saveLicenceVersionPurposes(purpose, versionResult.id)
     }))
+
+    return { ...versionResult }
   }))
 }
 
-async function _saveLicencePurposes (purpose, licenceVersionId) {
+async function _saveLicenceVersionPurposes (purpose, licenceVersionId) {
   const primaryPurpose = await PrimaryPurposeModel.query()
     .select('id')
     .where('legacyId', purpose.primaryPurposeId)
@@ -64,7 +66,6 @@ async function _saveLicencePurposes (purpose, licenceVersionId) {
       'abstractionPeriodStartMonth',
       'annualQuantity',
       'dailyQuantity',
-      'externalId',
       'hourlyQuantity',
       'instantQuantity',
       'notes',

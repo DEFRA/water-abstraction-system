@@ -1,6 +1,6 @@
 'use strict'
 
-const version = {
+const legacyLicenceVersionFixture = {
   EFF_END_DATE: '04/06/2007',
   EFF_ST_DATE: '05/06/2005',
   INCR_NO: '0',
@@ -11,4 +11,4 @@ const version = {
   purposes: []
 }
 
-module.exports = version
+module.exports = legacyLicenceVersionFixture

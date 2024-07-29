@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureVersions = require('../_fixtures/licence-version.js')
-const FixtureLicenceVersionPurposes = require('../_fixtures/licence-version-purposes.fixture.js')
+const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
+const FixtureLegacyLicenceVersionPurposes = require('../_fixtures/legacy-licence-version-purposes.fixture.js')
 
 // Thing under test
 const LegacyImportLicenceVersionMapper =
@@ -21,8 +21,8 @@ describe('Legacy import licence versions mapper', () => {
   let version
 
   beforeEach(() => {
-    purpose = FixtureLicenceVersionPurposes
-    version = FixtureVersions
+    purpose = FixtureLegacyLicenceVersionPurposes
+    version = FixtureLegacyLicenceVersion
 
     licenceVersions = [{ ...version, purposes: [{ ...purpose }] }]
   })

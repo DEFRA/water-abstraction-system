@@ -1,6 +1,8 @@
 'use strict'
 
-const validLicencePurposes = [
+const { randomInteger } = require('../../../support/general.js')
+
+const importLicenceVersionPurposes = [
   {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
@@ -20,21 +22,21 @@ const validLicencePurposes = [
   }
 ]
 
-const validLicenceVersion = {
+const importLicenceVersion = {
   endDate: '2002-01-01',
-  externalId: '3:10000003:100:0',
+  externalId: `9:${randomInteger(10000, 99999)}:1:0`,
   increment: 0,
   issue: 100,
   startDate: '2001-01-01',
   status: 'superseded'
 }
 
-const validLicenceVersionsAndPurposes = [
-  { ...validLicenceVersion, purposes: [...validLicencePurposes] }
+const importLicenceVersionsAndPurposes = [
+  { ...importLicenceVersion, purposes: [...importLicenceVersionPurposes] }
 ]
 
 module.exports = {
-  validLicencePurposes,
-  validLicenceVersion,
-  validLicenceVersionsAndPurposes
+  importLicenceVersionPurposes,
+  importLicenceVersion,
+  importLicenceVersionsAndPurposes
 }

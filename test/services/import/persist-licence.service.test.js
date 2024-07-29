@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const FixtureImportLicence = require('./_fixtures/import-licence.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const PersistLicenceService =
@@ -21,34 +21,20 @@ describe('Persist licence service', () => {
   let licence
 
   beforeEach(async () => {
+    licence = { ...FixtureImportLicence.importLicence }
+
     region = RegionsSeeder.data.find((region) => {
       return region.displayName === 'Test Region'
     })
   })
 
   describe('when the licence ref does not exist', () => {
-    beforeEach(() => {
-      licence = {
-        expiredDate: '2015-03-31',
-        lapsedDate: null,
-        licenceRef: generateLicenceRef(),
-        naldRegionId: region.naldRegionId,
-        regions: {
-          historicalAreaCode: 'RIDIN',
-          regionalChargeArea: 'Yorkshire',
-          standardUnitChargeCode: 'YORKI',
-          localEnvironmentAgencyPlanCode: 'AIREL'
-        },
-        revokedDate: null,
-        startDate: '2005-06-03',
-        waterUndertaker: false
-      }
-    })
-
     it('returns the created licence', async () => {
       const results = await PersistLicenceService.go(licence)
 
-      const savedLicence = await LicenceModel.query().findById(results.id)
+      const savedLicence = await LicenceModel.query()
+        .select('*')
+        .where('licenceRef', licence.licenceRef).first()
 
       expect(results).to.equal({
         expiredDate: '2015-03-31',
@@ -73,22 +59,6 @@ describe('Persist licence service', () => {
 
   describe('when the licence ref already exist', () => {
     beforeEach(async () => {
-      licence = {
-        expiredDate: '2015-03-31',
-        lapsedDate: null,
-        licenceRef: generateLicenceRef(),
-        naldRegionId: region.naldRegionId,
-        regions: {
-          historicalAreaCode: 'RIDIN',
-          regionalChargeArea: 'Yorkshire',
-          standardUnitChargeCode: 'YORKI',
-          localEnvironmentAgencyPlanCode: 'AIREL'
-        },
-        revokedDate: null,
-        startDate: '2005-06-03',
-        waterUndertaker: false
-      }
-
       // create a licence that exists already (DB rule to only allow on occurrence of licence ref)
       await PersistLicenceService.go(licence)
     })
@@ -103,7 +73,9 @@ describe('Persist licence service', () => {
         startDate: '2005-06-03'
       })
 
-      const savedLicence = await LicenceModel.query().findById(results.id)
+      const savedLicence = await LicenceModel.query()
+        .select('*')
+        .where('licenceRef', licence.licenceRef).first()
 
       expect(results).to.equal({
         expiredDate: undefined,

@@ -12,12 +12,6 @@ const statuses = {
   SUPER: 'superseded'
 }
 
-const createExternalId = (licenceVersion) => {
-  const { FGAC_REGION_CODE, AABL_ID, ISSUE_NO, INCR_NO } = licenceVersion
-
-  return `${FGAC_REGION_CODE}:${AABL_ID}:${ISSUE_NO}:${INCR_NO}`
-}
-
 /**
  * Maps the import licence versions data
  *
@@ -28,8 +22,14 @@ function go (licenceVersions) {
   return _mapLicenceVersions(licenceVersions)
 }
 
+const _createExternalId = (licenceVersion) => {
+  const { FGAC_REGION_CODE, AABL_ID, ISSUE_NO, INCR_NO } = licenceVersion
+
+  return `${FGAC_REGION_CODE}:${AABL_ID}:${ISSUE_NO}:${INCR_NO}`
+}
+
 /**
- * Iterates the import licence versions
+ * Iterates the import licence versions and formats the licence version
  *
  * @param {LegacyLicenceVersionsArray} licenceVersions
  * @returns {ImportLicenceVersionType[]}
@@ -41,7 +41,7 @@ function _mapLicenceVersions (licenceVersions) {
 
     return {
       endDate: formatStandardDateToISO(licenceVersion.EFF_END_DATE),
-      externalId: createExternalId(licenceVersion),
+      externalId: _createExternalId(licenceVersion),
       increment: Number(increment),
       issue: Number(issue),
       startDate: formatStandardDateToISO(licenceVersion.EFF_ST_DATE),
@@ -52,7 +52,7 @@ function _mapLicenceVersions (licenceVersions) {
 }
 
 /**
- * Iterates the import licence versions purposes
+ * Iterates the import licence version purposes
  *
  * @param {LegacyLicenceVersionsType} licenceVersion
  * @returns {ImportLicenceVersionPurposeType}

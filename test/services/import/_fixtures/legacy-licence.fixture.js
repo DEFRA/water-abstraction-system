@@ -2,7 +2,7 @@
 
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
-const licence = {
+const legacyLicenceFixture = {
   AREP_AREA_CODE: 'RIDIN',
   AREP_EIUC_CODE: 'YOOTH',
   AREP_LEAP_CODE: 'AIREL',
@@ -16,4 +16,4 @@ const licence = {
   REV_DATE: 'null'
 }
 
-module.exports = licence
+module.exports = legacyLicenceFixture

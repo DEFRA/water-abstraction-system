@@ -41,14 +41,12 @@ async function go (licence) {
     .onConflict('licenceRef')
     .merge([
       'expiredDate',
-      'waterUndertaker',
       'lapsedDate',
-      'licenceRef',
-      'regionId',
       'regions',
       'revokedDate',
       'startDate',
-      'updatedAt'
+      'updatedAt',
+      'waterUndertaker'
     ])
 }
 
