@@ -1,0 +1,81 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + licenceId + '/summary'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <span class="govuk-caption-l">Licence number {{ licenceRef }}</span>
+  <h1 class="govuk-heading-l">Licence contact details: {{ licenceName }} </h1>
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro displayAddress(address) %}
+  {% if address.address1 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address1 }}</p>
+  {% endif %}
+  {% if address.address2 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address2 }}</p>
+  {% endif %}
+  {% if address.address3 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address3 }}</p>
+  {% endif %}
+  {% if address.address4 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address4 }}</p>
+  {% endif %}
+  {% if address.address5 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address5 }}</p>
+  {% endif %}
+  {% if address.address6 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address6 }}</p>
+  {% endif %}
+  {% if address.country %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.country }}</p>
+  {% endif %}
+  {% if address.postcode %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.postcode }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% for licenceContact in licenceContacts %}
+  {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+
+  <h3 class="govuk-heading-m">{{ licenceContact.communicationType }}</h3>
+  <hr class="govuk-section-break govuk-section-break--visible">
+
+  {{ govukSummaryList({
+  rows: [{
+      key: {
+        text: "Name",
+        classes:"govuk-!-font-weight-regular"
+      },
+      value: {
+        text: licenceContact.name
+      }
+    },
+    {
+      key: {
+        text: "Address",
+        classes:"govuk-!-font-weight-regular"
+      },
+      value: {
+        html: displayAddress(licenceContact.address)
+      }
+    }]
+}) }}
+
+
+{% endfor %}
+
+
+
+{% endblock %}
