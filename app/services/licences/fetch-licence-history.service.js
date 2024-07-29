@@ -13,7 +13,7 @@ async function go (licenceId) {
 
   const testEntries2 = await _fetchEntries2(licenceId)
 
-  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2.chargeVersions)
+  console.log('🚀🚀🚀 ~ testEntries2:', testEntries2)
 
   return {
     entries: results.rows,
@@ -74,10 +74,22 @@ async function _fetchEntries2 (licenceId) {
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
-      builder.orderBy([
-        { column: 'createdAt', order: 'desc' },
-        { column: 'version', order: 'desc' }
-      ])
+      builder
+        .select(
+          'returnVersions.licenceId as licenceId',
+          db.raw("'return-version' as entryType"),
+          'returnVersions.id as entry_id',
+          'reason',
+          'returnVersions.createdAt as created_at',
+          'users.username as created_by',
+          'notes',
+          'version as version_number'
+        )
+        .leftJoin('public.users', 'users.id', '=', 'returnVersions.createdBy')
+        .orderBy([
+          { column: 'createdAt', order: 'desc' },
+          { column: 'version', order: 'desc' }
+        ])
     })
 
   return licenceEntries
