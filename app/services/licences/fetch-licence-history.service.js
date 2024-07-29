@@ -37,6 +37,15 @@ async function _fetchEntries2 (licenceId) {
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
       builder
+        .select(
+          'licenceVersions.licenceId as licenceId',
+          db.raw("'licence-version' as entryType"),
+          'licenceVersions.id as entry_id',
+          db.raw("'' as reason"),
+          db.raw("'' as createdBy"),
+          db.raw("'' as note"),
+          'issue as version_number'
+        )
         .orderBy([
           { column: 'createdAt', order: 'desc' },
           { column: 'issue', order: 'desc' }
