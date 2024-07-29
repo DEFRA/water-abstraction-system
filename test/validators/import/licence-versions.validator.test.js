@@ -21,8 +21,8 @@ describe('Import licence versions validator', () => {
 
   before(async () => {
     licenceVersion = FixtureValidLicenceVersions.importLicenceVersion
-    licenceVersionPurpose = FixtureValidLicenceVersions.importLicenceVersionPurposes[0]
-    licenceVersionPurposes = FixtureValidLicenceVersions.importLicenceVersionPurposes
+    licenceVersionPurpose = FixtureValidLicenceVersions.importLicenceVersionPurpose
+    licenceVersionPurposes = [{ ...FixtureValidLicenceVersions.importLicenceVersionPurpose }]
     licenceVersionsAndPurposes = [...FixtureValidLicenceVersions.importLicenceVersionsAndPurposes]
   })
 

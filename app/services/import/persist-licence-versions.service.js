@@ -19,13 +19,17 @@ const PurposeModel = require('../../models/purpose.model.js')
  */
 async function go (licenceVersions, licenceId) {
   return Promise.all(licenceVersions.map(async (version) => {
+    const purposes = version.purposes
+
+    delete version.purposes
+
     const versionResult = await _saveLicenceVersion(version, licenceId)
 
-    Promise.all(version.purposes.map(async (purpose) => {
+    const licenceVersionPurposes = await Promise.all(purposes.map(async (purpose) => {
       return _saveLicenceVersionPurposes(purpose, versionResult.id)
     }))
 
-    return { ...versionResult }
+    return { ...versionResult, purposes: licenceVersionPurposes }
   }))
 }
 

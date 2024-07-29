@@ -2,7 +2,7 @@
 
 const { randomInteger } = require('../../../support/general.js')
 
-const importLicenceVersionPurposes = [
+const importLicenceVersionPurpose =
   {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
@@ -20,7 +20,6 @@ const importLicenceVersionPurposes = [
     timeLimitedEndDate: '2001-01-02',
     timeLimitedStartDate: '2001-01-03'
   }
-]
 
 const importLicenceVersion = {
   endDate: '2002-01-01',
@@ -32,11 +31,11 @@ const importLicenceVersion = {
 }
 
 const importLicenceVersionsAndPurposes = [
-  { ...importLicenceVersion, purposes: [...importLicenceVersionPurposes] }
+  { ...importLicenceVersion, purposes: [{ ...importLicenceVersionPurpose }] }
 ]
 
 module.exports = {
-  importLicenceVersionPurposes,
+  importLicenceVersionPurpose,
   importLicenceVersion,
   importLicenceVersionsAndPurposes
 }
