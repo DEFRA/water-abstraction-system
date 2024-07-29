@@ -5,7 +5,10 @@ const ViewLicenceHistoryPresenter = require('../../presenters/licences/view-lice
 
 async function go (licenceId) {
   const history = await FetchLicenceHistoryService.go(licenceId)
+
   const pageData = ViewLicenceHistoryPresenter.go(history)
+
+  console.log('🚀🚀🚀 ~ pageData:', pageData)
 
   return {
     ...pageData
