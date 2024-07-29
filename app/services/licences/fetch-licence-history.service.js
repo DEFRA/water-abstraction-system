@@ -55,16 +55,18 @@ async function _fetchEntries2 (licenceId) {
     .modifyGraph('chargeVersions', (builder) => {
       builder
         .select(
-          'chargeVersions.licenceId as licence_id',
-          'water.notes.text as note',
-          'water.changeReasons.description as reason',
+          'chargeVersions.licenceId as licenceId',
+          db.raw("'charge-version' as entryType"),
           'chargeVersions.id as entry_id',
+          'public.changeReasons.description as reason',
           'createdAt as created_at',
+          ref('createdBy:email').castText().as('created_by'),
+          'water.notes.text as note',
           'versionNumber as version_number',
-          ref('createdBy:email').castText().as('created_by')
+          'chargeVersions.source as source'
         )
         .leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
-        .leftJoin('water.changeReasons', 'changeReasons.changeReasonId', '=', 'chargeVersions.changeReasonId')
+        .leftJoin('public.changeReasons', 'changeReasons.changeReasonId', '=', 'chargeVersions.changeReasonId')
         .orderBy([
           { column: 'chargeVersions.createdAt', order: 'desc' },
           { column: 'chargeVersions.versionNumber', order: 'desc' }
