@@ -6,7 +6,7 @@
  */
 
 const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
-const { regions } = require('./constants.js')
+const { naldRegions } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Maps the import data to the desired format
@@ -41,7 +41,7 @@ function _mapLicence (licence, licenceVersions) {
 const _regions = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE
   const regionPrefix = licenceData.AREP_EIUC_CODE.substr(0, 2)
-  const regionalChargeArea = regions[regionPrefix]
+  const regionalChargeArea = naldRegions[regionPrefix]
   const standardUnitChargeCode = licenceData.AREP_SUC_CODE
   const localEnvironmentAgencyPlanCode = licenceData.AREP_LEAP_CODE
 
