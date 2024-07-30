@@ -21,7 +21,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  */
 async function go (sessionData, userId) {
   const returnVersion = await _generateReturnVersion(sessionData, userId)
-  const returnRequirements = await GenerateReturnVersionRequirementsService.go(sessionData.licence.id, sessionData.requirements)
+  const returnRequirements = await _generateReturnRequirements(sessionData)
 
   return {
     returnRequirements,
@@ -37,6 +37,15 @@ function _calculateStartDate (sessionData) {
   }
 
   return sessionData.licence.currentVersionStartDate
+}
+
+async function _generateReturnRequirements (sessionData) {
+  // When no returns are required a return version is created without any return requirements
+  if (sessionData.journey === 'no-returns-required') {
+    return []
+  }
+
+  return await GenerateReturnVersionRequirementsService.go(sessionData.licence.id, sessionData.requirements)
 }
 
 async function _generateReturnVersion (sessionData, userId) {
