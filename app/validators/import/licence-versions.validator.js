@@ -37,25 +37,30 @@ const _isValidStatus = (value) => {
   throw new Error(`Status must be one of ${validStatues.toString()}`)
 }
 
-const _purposeSchema = Joi.object({
-  primaryPurposeId: Joi.string().required(),
-  secondaryPurposeId: Joi.string().required(),
-  purposeId: Joi.string().required(),
-  abstractionPeriodStartDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
-  abstractionPeriodStartMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
-  abstractionPeriodEndDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
-  abstractionPeriodEndMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
-  timeLimitedStartDate: Joi.date().iso().allow(null),
-  timeLimitedEndDate: Joi.date().iso().allow(null),
-  notes: Joi.string().allow(null),
-  annualQuantity: Joi.number().allow(null),
-  externalId: Joi.string().required(),
-  instantQuantity: Joi.number().allow(null),
-  hourlyQuantity: Joi.number().allow(null),
-  dailyQuantity: Joi.number().allow(null)
-}).required().label('Licence versions purpose')
+const _purposeSchema =
+  Joi.array().min(1).items(
+    Joi.object({
+      primaryPurposeId: Joi.string().required(),
+      secondaryPurposeId: Joi.string().required(),
+      purposeId: Joi.string().required(),
+      abstractionPeriodStartDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
+      abstractionPeriodStartMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
+      abstractionPeriodEndDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
+      abstractionPeriodEndMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
+      timeLimitedStartDate: Joi.date().iso().allow(null),
+      timeLimitedEndDate: Joi.date().iso().allow(null),
+      notes: Joi.string().allow(null),
+      annualQuantity: Joi.number().allow(null),
+      externalId: Joi.string().required(),
+      instantQuantity: Joi.number().allow(null),
+      hourlyQuantity: Joi.number().allow(null),
+      dailyQuantity: Joi.number().allow(null)
+    }).label('Licence versions purpose')
+  ).label('Licence versions purposes').messages({
+    'array.min': 'A licence version must have at least one Licence version purpose'
+  })
 
-const _schema = Joi.array().items(
+const _schema = Joi.array().min(1).items(
   Joi.object({
     endDate: Joi.date().iso().required().allow(null),
     externalId: Joi.string().required(),
@@ -63,10 +68,14 @@ const _schema = Joi.array().items(
     issue: Joi.number().required(),
     startDate: Joi.date().iso().required(),
     status: Joi.string().required().custom(_isValidStatus),
-    purposes: Joi.array().items(_purposeSchema).label('Licence versions purposes')
-  }).required()
+    purposes: _purposeSchema
+  })
     .label('Licence version')
-).label('Licence versions')
+)
+  .label('Licence versions')
+  .messages({
+    'array.min': 'A licence must have at least one Licence version'
+  })
 
 module.exports = {
   go

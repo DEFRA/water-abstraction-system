@@ -36,7 +36,7 @@ describe('Import licence versions validator', () => {
   it('should throw if there are no licence versions', () => {
     expect(() => {
       return ImportLicenceVersionsValidator.go([])
-    }).to.throw('"Licence versions" does not contain [Licence version]')
+    }).to.throw('A licence must have at least one Licence version')
   })
 
   describe('the "version"', () => {
@@ -312,7 +312,7 @@ describe('Import licence versions validator', () => {
         it('should throw if there are no licence versions', () => {
           expect(() => {
             return ImportLicenceVersionsValidator.go(licenceVersionNoPurposes)
-          }).to.throw('"Licence versions purposes" does not contain [Licence versions purpose]')
+          }).to.throw('A licence version must have at least one Licence version purpose')
         })
       })
 
