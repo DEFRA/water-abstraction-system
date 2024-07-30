@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
-const FixtureLegacyLicenceVersionPurposes = require('../_fixtures/legacy-licence-version-purposes.fixture.js')
+const FixtureLegacyLicenceVersionPurpose = require('../_fixtures/legacy-licence-version-purpose.fixture.js')
 
 // Thing under test
 const LegacyImportLicenceVersionMapper =
@@ -21,8 +21,8 @@ describe('Legacy import licence versions mapper', () => {
   let version
 
   beforeEach(() => {
-    purpose = FixtureLegacyLicenceVersionPurposes
-    version = FixtureLegacyLicenceVersion
+    purpose = FixtureLegacyLicenceVersionPurpose.create()
+    version = FixtureLegacyLicenceVersion.create()
 
     licenceVersions = [{ ...version, purposes: [{ ...purpose }] }]
   })

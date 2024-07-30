@@ -12,7 +12,7 @@ const { expect } = Code
 const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLegacyLicence = require('./_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersionPurposes = require('./_fixtures/legacy-licence-version-purposes.fixture.js')
+const FixtureLegacyLicenceVersionPurpose = require('./_fixtures/legacy-licence-version-purpose.fixture.js')
 const FixtureLegacyLicenceVersion = require('./_fixtures/legacy-licence-version.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PrimaryPurposesSeeder = require('../../support/seeders/primary-purpose.seeder.js')
@@ -25,24 +25,27 @@ const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
 describe('Legacy import licence service', () => {
-  const licenceRef = FixtureLegacyLicence.LIC_NO
-
   const region = RegionsSeeder.data.find((region) => {
     return region.displayName === 'Test Region'
   })
 
-  let licenceVersions
+  let legacyLicence
+  let licenceRef
   let licenceVersionPurpose
+  let licenceVersions
   let version
 
   before(() => {
-    licenceVersionPurpose = FixtureLegacyLicenceVersionPurposes
-    version = FixtureLegacyLicenceVersion
+    legacyLicence = FixtureLegacyLicence.create()
+    licenceRef = legacyLicence.LIC_NO
+
+    licenceVersionPurpose = FixtureLegacyLicenceVersionPurpose.create()
+    version = FixtureLegacyLicenceVersion.create()
 
     licenceVersions = [{ ...version, purposes: [{ ...licenceVersionPurpose }] }]
 
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
-      ...FixtureLegacyLicence,
+      ...legacyLicence,
       FGAC_REGION_CODE: region.naldRegionId
     })
 
@@ -124,15 +127,15 @@ describe('Legacy import licence service', () => {
 
       beforeEach(() => {
         primaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
-          return primaryPurpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APPR_CODE
+          return primaryPurpose.legacyId === licenceVersionPurpose.APUR_APPR_CODE
         })
 
         purpose = PurposesSeeder.data.find((purpose) => {
-          return purpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APUS_CODE
+          return purpose.legacyId === licenceVersionPurpose.APUR_APUS_CODE
         })
 
         secondaryPurpose = SecondaryPurposesSeeder.data.find((secondaryPurpose) => {
-          return secondaryPurpose.legacyId === FixtureLegacyLicenceVersionPurposes.APUR_APSE_CODE
+          return secondaryPurpose.legacyId === licenceVersionPurpose.APUR_APSE_CODE
         })
       })
 

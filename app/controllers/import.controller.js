@@ -10,13 +10,9 @@ const Boom = require('@hapi/boom')
 async function licence (request, h) {
   const { licenceRef } = request.payload
 
-  try {
-    await LegacyImportLicenceService.go(licenceRef)
+  LegacyImportLicenceService.go(licenceRef)
 
-    return h.response().code(204)
-  } catch (error) {
-    return Boom.badImplementation(`Licence ref: ${licenceRef} failed with error - ${error.message}`)
-  }
+  return h.response().code(204)
 }
 
 module.exports = {

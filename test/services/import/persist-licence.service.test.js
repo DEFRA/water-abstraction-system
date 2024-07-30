@@ -21,7 +21,7 @@ describe('Persist licence service', () => {
   let licence
 
   beforeEach(async () => {
-    licence = { ...FixtureImportLicence.importLicence }
+    licence = { ...FixtureImportLicence.create() }
 
     region = RegionsSeeder.data.find((region) => {
       return region.displayName === 'Test Region'

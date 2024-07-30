@@ -19,7 +19,7 @@ describe('Legacy import licence mapper', () => {
   let licence
 
   beforeEach(() => {
-    licence = { ...FixtureLegacyLicence }
+    licence = { ...FixtureLegacyLicence.create() }
   })
 
   it('returns the matching agreements data', () => {
@@ -154,7 +154,7 @@ describe('Legacy import licence mapper', () => {
         describe('then start date of the earliest non-draft licence version is used', () => {
           it('returns the start date in the ISO format', () => {
             //  need to add licence versions
-            const result = LegacyImportLicenceMapper.go(licence, [{ ...FixtureLegacyLicenceVersion }])
+            const result = LegacyImportLicenceMapper.go(licence, [{ ...FixtureLegacyLicenceVersion.create() }])
 
             expect(result.startDate).to.equal('2005-06-05')
           })
