@@ -24,7 +24,7 @@ const SecondaryPurposesSeeder = require('../../support/seeders/secondary-purpose
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
-describe('Legacy import licence service', () => {
+describe.only('Legacy import licence service', () => {
   const licenceRef = FixtureLegacyLicence.LIC_NO
 
   const region = RegionsSeeder.data.find((region) => {
@@ -170,21 +170,6 @@ describe('Legacy import licence service', () => {
             createdAt: new Date(licenceVersionPurpose.createdAt),
             updatedAt: new Date(licenceVersionPurpose.updatedAt)
           })
-      })
-
-      it('checks the purposes id, primary purpose id and secondary purpose id match the legacy id provided', async () => {
-        await LegacyImportLicenceService.go(licenceRef)
-
-        const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()
-          .withGraphFetched('licenceVersions').withGraphFetched('licenceVersions.licenceVersionPurposes')
-
-        const [licenceVersion] = licence.licenceVersions
-        const { licenceVersionPurposes } = licenceVersion
-        const [licenceVersionPurpose] = licenceVersionPurposes
-
-        expect(licenceVersionPurpose.primaryPurposeId).to.equal(primaryPurpose.id)
-        expect(licenceVersionPurpose.secondaryPurposeId).to.equal(secondaryPurpose.id)
-        expect(licenceVersionPurpose.purposeId).to.equal(purpose.id)
       })
     })
   })

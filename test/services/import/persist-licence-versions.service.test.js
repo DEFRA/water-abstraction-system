@@ -292,6 +292,21 @@ describe('Persist licence versions and licence versions purposes service', () =>
 
         expect(result.increment).to.equal(1)
       })
+
+      it('checks the purposes id, primary purpose id and secondary purpose id match the legacy id provided', async () => {
+        await PersistLicenceVersionsService.go(licenceVersionsAndPurposesUpdated, licence.id)
+
+        const savedLicenceVersion = await LicenceVersionModel.query()
+          .select('*')
+          .where('externalId', licenceVersion.externalId).first()
+          .withGraphFetched('licenceVersionPurposes')
+
+        const [savedLicenceVersionPurpose] = savedLicenceVersion.licenceVersionPurposes
+
+        expect(savedLicenceVersionPurpose.primaryPurposeId).to.equal(primaryPurpose.id)
+        expect(savedLicenceVersionPurpose.secondaryPurposeId).to.equal(secondaryPurpose.id)
+        expect(savedLicenceVersionPurpose.purposeId).to.equal(purpose.id)
+      })
     })
   })
 })
