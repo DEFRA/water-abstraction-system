@@ -24,7 +24,7 @@ const SecondaryPurposesSeeder = require('../../support/seeders/secondary-purpose
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
-describe.only('Legacy import licence service', () => {
+describe('Legacy import licence service', () => {
   const licenceRef = FixtureLegacyLicence.LIC_NO
 
   const region = RegionsSeeder.data.find((region) => {

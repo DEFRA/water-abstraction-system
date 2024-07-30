@@ -28,10 +28,10 @@ const _schema = Joi.object({
   licenceRef: Joi.string().required(),
   naldRegionId: Joi.number().required(),
   regions: Joi.object({
-    regionalChargeArea: Joi.string(),
-    localEnvironmentAgencyPlanCode: Joi.string(),
-    historicalAreaCode: Joi.string(),
-    standardUnitChargeCode: Joi.string()
+    regionalChargeArea: Joi.string().required(),
+    localEnvironmentAgencyPlanCode: Joi.string().required(),
+    historicalAreaCode: Joi.string().required(),
+    standardUnitChargeCode: Joi.string().required()
   }),
   revokedDate: Joi.date().iso().allow(null),
   startDate: Joi.date().iso().required(),

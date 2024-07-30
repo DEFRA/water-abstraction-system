@@ -145,7 +145,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { regionalChargeArea: 1 }
+            regions: { ...licence.regions, regionalChargeArea: 1 }
           })
         }).to.throw('"regions.regionalChargeArea" must be a string')
       })
@@ -154,7 +154,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { regionalChargeArea: 'a string' }
+            regions: { ...licence.regions, regionalChargeArea: 'a string' }
           })
         }).to.not.throw()
       })
@@ -165,7 +165,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { localEnvironmentAgencyPlanCode: 1 }
+            regions: { ...licence.regions, localEnvironmentAgencyPlanCode: 1 }
           })
         }).to.throw('"regions.localEnvironmentAgencyPlanCode" must be a string')
       })
@@ -174,7 +174,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { localEnvironmentAgencyPlanCode: 'a string' }
+            regions: { ...licence.regions, localEnvironmentAgencyPlanCode: 'a string' }
           })
         }).to.not.throw()
       })
@@ -185,7 +185,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { historicalAreaCode: 1 }
+            regions: { ...licence.regions, historicalAreaCode: 1 }
           })
         }).to.throw('"regions.historicalAreaCode" must be a string')
       })
@@ -194,7 +194,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { historicalAreaCode: 'a string' }
+            regions: { ...licence.regions, historicalAreaCode: 'a string' }
           })
         }).to.not.throw()
       })
@@ -205,7 +205,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { standardUnitChargeCode: 1 }
+            regions: { ...licence.regions, standardUnitChargeCode: 1 }
           })
         }).to.throw('"regions.standardUnitChargeCode" must be a string')
       })
@@ -214,7 +214,7 @@ describe('Import licence validator', () => {
         expect(() => {
           return ImportLicenceValidator.go({
             ...licence,
-            regions: { standardUnitChargeCode: 'a string' }
+            regions: { ...licence.regions, standardUnitChargeCode: 'a string' }
           })
         }).to.not.throw()
       })

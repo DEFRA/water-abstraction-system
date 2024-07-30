@@ -27,7 +27,13 @@ const importLicenceRequiredOnly = {
   licenceRef: generateLicenceRef(),
   naldRegionId: region.naldRegionId,
   startDate: '2001-01-01',
-  waterUndertaker: true
+  waterUndertaker: true,
+  regions: {
+    historicalAreaCode: 'RIDIN',
+    regionalChargeArea: 'Yorkshire',
+    standardUnitChargeCode: 'YORKI',
+    localEnvironmentAgencyPlanCode: 'AIREL'
+  }
 }
 
 module.exports = {
