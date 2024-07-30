@@ -65,7 +65,7 @@ describe('Import controller', () => {
           Sinon.stub(LegacyImportLicenceService, 'go').rejects()
         })
 
-        it('redirects to select return start date page', async () => {
+        it('returns the error 500', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(500)
