@@ -48,10 +48,10 @@ module.exports = {
  *
  * @typedef {Object} LegacyLicenceType
  *
- * @property {string} AREP_AREA_CODE - historicalAreaCode
- * @property {string} AREP_EIUC_CODE - regionPrefix / regionalChargeArea
- * @property {string} AREP_LEAP_CODE - localEnvironmentAgencyPlanCode
- * @property {string} AREP_SUC_CODE - standardUnitChargeCode
+ * @property {string} AREP_AREA_CODE - regions - historicalAreaCode
+ * @property {string} AREP_EIUC_CODE - regions -regionPrefix / regionalChargeArea
+ * @property {string} AREP_LEAP_CODE - regions -localEnvironmentAgencyPlanCode
+ * @property {string} AREP_SUC_CODE - regions -standardUnitChargeCode
  * @property {string} EXPIRY_DATE
  * @property {string} ID
  * @property {string} LAPSED_DATE
