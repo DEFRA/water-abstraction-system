@@ -45,7 +45,12 @@ async function _generateReturnRequirements (sessionData) {
     return []
   }
 
-  return GenerateReturnVersionRequirementsService.go(sessionData.licence.id, sessionData.requirements)
+  const returnRequirements = await GenerateReturnVersionRequirementsService.go(
+    sessionData.licence.id,
+    sessionData.requirements
+  )
+
+  return returnRequirements
 }
 
 async function _generateReturnVersion (sessionData, userId) {
