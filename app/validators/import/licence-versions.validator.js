@@ -53,17 +53,20 @@ const _purposeSchema = Joi.object({
   instantQuantity: Joi.number().allow(null),
   hourlyQuantity: Joi.number().allow(null),
   dailyQuantity: Joi.number().allow(null)
-})
+}).required().label('Licence versions purpose')
 
-const _schema = Joi.array().items({
-  endDate: Joi.date().iso().required().allow(null),
-  externalId: Joi.string().required(),
-  increment: Joi.number().required(),
-  issue: Joi.number().required(),
-  startDate: Joi.date().iso().required(),
-  status: Joi.string().required().custom(_isValidStatus),
-  purposes: Joi.array().items(_purposeSchema).required()
-})
+const _schema = Joi.array().items(
+  Joi.object({
+    endDate: Joi.date().iso().required().allow(null),
+    externalId: Joi.string().required(),
+    increment: Joi.number().required(),
+    issue: Joi.number().required(),
+    startDate: Joi.date().iso().required(),
+    status: Joi.string().required().custom(_isValidStatus),
+    purposes: Joi.array().items(_purposeSchema).label('Licence versions purposes')
+  }).required()
+    .label('Licence version')
+).label('Licence versions')
 
 module.exports = {
   go

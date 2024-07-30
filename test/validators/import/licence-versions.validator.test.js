@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -31,6 +31,12 @@ describe('Import licence versions validator', () => {
     expect(() => {
       return ImportLicenceVersionsValidator.go(licenceVersionsAndPurposes)
     }).to.not.throw()
+  })
+
+  it('should throw if there are no licence versions', () => {
+    expect(() => {
+      return ImportLicenceVersionsValidator.go([])
+    }).to.throw('"Licence versions" does not contain [Licence version]')
   })
 
   describe('the "version"', () => {
@@ -294,6 +300,22 @@ describe('Import licence versions validator', () => {
     })
 
     describe('"purposes" property', () => {
+      describe('when no purposes a', () => {
+        let licenceVersionNoPurposes
+
+        beforeEach(() => {
+          licenceVersionNoPurposes = FixtureImportLicenceVersions.create()
+
+          licenceVersionNoPurposes[0].purposes = []
+        })
+
+        it('should throw if there are no licence versions', () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go(licenceVersionNoPurposes)
+          }).to.throw('"Licence versions purposes" does not contain [Licence versions purpose]')
+        })
+      })
+
       describe('"abstractionPeriodEndDay" property', () => {
         it('should throw an error if "abstractionPeriodEndDay" is not a number', async () => {
           expect(() => {
