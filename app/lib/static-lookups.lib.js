@@ -48,7 +48,7 @@ const returnRequirementReasons = {
   'succession-or-transfer-of-licence': 'Succession or transfer of licence',
   'succession-to-remainder-licence-or-licence-apportionment': 'Succession to remainder licence or licence apportionment',
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable',
-  'transfer-licence': 'Transfer licence'
+  'licence-conditions-do-not-require-returns': 'Licence conditions do not require returns'
 }
 
 const sources = [

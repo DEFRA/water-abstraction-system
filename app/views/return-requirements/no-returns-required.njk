@@ -53,9 +53,9 @@
             checked: reason == 'returns-exception'
           },
           {
-            text: 'Transfer licence',
-            value: 'transfer-licence',
-            checked: reason == 'transfer-licence'
+            text: 'Licence conditions do not require returns',
+            value: 'licence-conditions-do-not-require-returns',
+            checked: reason == 'licence-conditions-do-not-require-returns'
           }
         ]
       }) }}
@@ -63,6 +63,4 @@
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
   </div>
-
-
 {% endblock %}

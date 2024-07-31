@@ -8,7 +8,7 @@
 const NoReturnsRequiredPresenter = require('../../presenters/return-requirements/no-returns-required.presenter.js')
 const NoReturnsRequiredValidator = require('../../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../../models/session.model.js')
-const GeneralLib = require('../../lib/general.lib')
+const GeneralLib = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/no-returns-required` page
