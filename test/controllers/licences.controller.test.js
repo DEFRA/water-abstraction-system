@@ -23,7 +23,7 @@ const ViewLicenceSummaryService = require('../../app/services/licences/view-lice
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Licences controller', () => {
+describe('Licences controller', () => {
   let options
   let server
 
