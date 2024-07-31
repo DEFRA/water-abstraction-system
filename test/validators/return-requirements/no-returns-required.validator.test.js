@@ -13,7 +13,7 @@ const NoReturnsRequiredValidator = require('../../../app/validators/return-requi
 describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = NoReturnsRequiredValidator.go({ reason: 'transfer-licence' })
+      const result = NoReturnsRequiredValidator.go({ reason: 'licence-conditions-do-not-require-returns' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()

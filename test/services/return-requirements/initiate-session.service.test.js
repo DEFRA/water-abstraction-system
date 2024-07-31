@@ -116,7 +116,7 @@ describe('Return Requirements - Initiate Session service', () => {
       describe('and has return versions but they do not have requirements (so cannot be copied from)', () => {
         beforeEach(async () => {
           await ReturnVersionHelper.add({
-            licenceId: licence.id, reason: 'transfer-licence', startDate: new Date('2021-10-11'), status: 'current'
+            licenceId: licence.id, reason: 'returns-exception', startDate: new Date('2021-10-11'), status: 'current'
           })
         })
 
