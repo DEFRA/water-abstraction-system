@@ -29,6 +29,8 @@
 
   <div class="govuk-body">
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
       {% set regionItems = [] %}
       {% for region in regions %}
         {% set regionItem = { text: region.displayName, value: region.id, checked: region.id == selectedRegion } %}

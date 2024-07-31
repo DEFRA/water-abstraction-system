@@ -111,6 +111,8 @@
 
       {# Add another requirement button #}
       <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukButton({
           text: "Add another requirement",
           classes: "govuk-button--secondary",
@@ -319,6 +321,8 @@
   {% endif %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     <div class="govuk-body">
       {% if returnsRequired %}
         {{ govukSummaryList({

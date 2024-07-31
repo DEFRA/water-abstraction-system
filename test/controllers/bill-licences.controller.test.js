@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const RemoveBillLicenceService = require('../../app/services/bill-licences/remove-bill-licence.service.js')
 const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
@@ -39,7 +42,7 @@ describe('Bill Licences controller', () => {
   describe('/bill-licences', () => {
     describe('GET', () => {
       beforeEach(() => {
-        options = _options('GET')
+        options = _options()
       })
 
       describe('when the request succeeds', () => {
@@ -81,7 +84,7 @@ describe('Bill Licences controller', () => {
   describe('/bill-licences/{billLicenceId}/remove', () => {
     describe('GET', () => {
       beforeEach(() => {
-        options = _options('GET', 'remove')
+        options = _options('remove')
 
         Sinon.stub(RemoveBillLicenceService, 'go').resolves({
           pageTitle: "You're about to remove AT/SROC/SUPB/02 from the bill run"
@@ -100,7 +103,7 @@ describe('Bill Licences controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options('POST', 'remove')
+        options = postRequestOptions('/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316/remove')
 
         Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
           '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
@@ -119,12 +122,12 @@ describe('Bill Licences controller', () => {
   })
 })
 
-function _options (method, path) {
+function _options (path) {
   const root = '/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316'
   const url = path ? `${root}/${path}` : root
 
   return {
-    method,
+    method: 'GET',
     url,
     auth: {
       strategy: 'session',

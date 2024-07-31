@@ -35,6 +35,8 @@
   {% endset %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     <div class="govuk-body">
       {{ govukCheckboxes({
         name: "additionalSubmissionOptions",

@@ -50,6 +50,8 @@
       }}
 
       <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukInput({
           label: {
             text: "Authorised volume",
