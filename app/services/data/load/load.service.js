@@ -284,9 +284,6 @@ async function go (payload) {
  * `instance.regimeEntityId` we'll confirm it is an object with a `schema:` property. We then replace the value of
  * `instance.regimeEntityId` with the result of a query based on the details provided. In this case `SELECT entity_id
  * FROM crm.entity WHERE entity_type = 'regime'`.
- *
- * Additionally, if a property has a `dueDateHelper` key, we replace its value with a future date using the setDueDate
-*  function.
  */
 async function _applyLookups (instance) {
   const keys = Object.keys(instance)
@@ -297,30 +294,7 @@ async function _applyLookups (instance) {
 
       instance[key] = await _selector(schema, table, select, lookup, value)
     }
-
-    if (instance[key].dueDateHelper) {
-      setDueDate(instance, key)
-    }
   }
-}
-
-/**
- * Sets a future date for a specified property in the given instance
- *
- * This function calculates a date months in advance from the current date and sets the value of the specified key in
- * the instance to this future date, formatted as an ISO string. The reason for setting a date in the future is
- * primarily for returns dueDates. A return is only considered due, and not overdue, if the status of the return is due
- * and the current date has not surpassed the returns dueDate.
- *
- * Some of our returns acceptance tests require a dynamically created date to test the returns status.
- */
-async function setDueDate (instance, key) {
-  const futureDate = new Date()
-  const additionalMonths = instance[key].dueDateHelper
-
-  futureDate.setMonth(futureDate.getMonth() + additionalMonths)
-
-  instance[key] = futureDate.toISOString()
 }
 
 /**
