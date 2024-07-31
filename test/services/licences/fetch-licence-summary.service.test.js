@@ -18,6 +18,7 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposesConditionsTypeSeeder = require('../../support/seeders/licence-version-purpose-condition-types.seeder.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const PurposeSeeder = require('../../support/seeders/purposes.seeder.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -34,11 +35,16 @@ describe('Fetch Licence Summary service', () => {
   let licenceVersion
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
+  let licenceVersionPurposeConditionType
   let permitLicence
   let purpose
   let region
 
   beforeEach(async () => {
+    licenceVersionPurposeConditionType = LicenceVersionPurposesConditionsTypeSeeder.data.find((conditionType) => {
+      return conditionType.displayTitle === 'Aggregate condition link between licences'
+    })
+
     region = await RegionHelper.add()
 
     licence = await LicenceHelper.add({
@@ -64,7 +70,7 @@ describe('Fetch Licence Summary service', () => {
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
-      licenceVersionPurposeConditionTypeId: '4c0b378d-a9c2-4b50-b1bd-9aeefe988f93'
+      licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
     })
 
     licenceHolderSeed = await LicenceHolderSeeder.seed(licence.licenceRef)
@@ -141,7 +147,7 @@ describe('Fetch Licence Summary service', () => {
               licenceVersionPurposeConditions: [{
                 id: licenceVersionPurposeCondition.id,
                 licenceVersionPurposeConditionType: {
-                  id: '4c0b378d-a9c2-4b50-b1bd-9aeefe988f93',
+                  id: licenceVersionPurposeConditionType.id,
                   displayTitle: 'Aggregate condition link between licences'
                 }
               }]
