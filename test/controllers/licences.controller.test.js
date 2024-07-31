@@ -339,7 +339,7 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Make licence non-chargeable')
 
         // Agreements
-        expect(response.payload).to.contain('Agreements')
+        expect(response.payload).to.contain('Charging agreements')
         // Agreements table headers
         expect(response.payload).to.contain('Agreement')
         expect(response.payload).to.contain('Date signed')
@@ -367,7 +367,7 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
         expect(response.payload).to.contain('Charge information')
         expect(response.payload).to.contain('No charge information for this licence.')
-        expect(response.payload).to.contain('Agreements')
+        expect(response.payload).to.contain('Charging agreements')
         expect(response.payload).to.contain('No agreements for this licence.')
       })
     })
