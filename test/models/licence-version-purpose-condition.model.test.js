@@ -9,9 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
+const LicenceVersionPurposesConditionsTypeSeeder = require('../support/seeders/licence-version-purpose-condition-types.seeder.js')
 
 // Thing under test
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
@@ -65,11 +66,11 @@ describe('Licence Version Purpose Condition model', () => {
     })
 
     describe('when linking to licence version purpose condition type', () => {
-      const testLicenceVersionPurposeConditionTypeId = '4eac5d7e-21e4-475c-8108-3e0c2ece181f'
+      const licenceVersionPurposeConditionType = LicenceVersionPurposesConditionsTypeSeeder.data[0]
 
       beforeEach(async () => {
         testRecord = await LicenceVersionPurposeConditionHelper.add({
-          licenceVersionPurposeConditionTypeId: testLicenceVersionPurposeConditionTypeId
+          licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
         })
       })
 
@@ -89,7 +90,7 @@ describe('Licence Version Purpose Condition model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceVersionPurposeConditionType).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
-        expect(result.licenceVersionPurposeConditionType.id).to.equal(testLicenceVersionPurposeConditionTypeId)
+        expect(result.licenceVersionPurposeConditionType.id).to.equal(licenceVersionPurposeConditionType.id)
       })
     })
   })
