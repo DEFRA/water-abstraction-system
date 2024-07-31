@@ -18,7 +18,7 @@ async function seed () {
   await db.raw(`
     INSERT INTO  public.purposes (id, legacy_id, description, loss_factor, two_part_tariff, created_at, updated_at)
       VALUES ${buildSeedValueString(keys, data)}
-          ON CONFLICT (legacy_id)
+    ON CONFLICT (legacy_id)
     DO UPDATE SET
     description = excluded.description,
     loss_factor = excluded.loss_factor,
