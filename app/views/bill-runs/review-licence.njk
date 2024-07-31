@@ -122,6 +122,8 @@
   {% endif %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     <div class="govuk-button-group">
     {{ govukButton({
       text: statusButtonText,

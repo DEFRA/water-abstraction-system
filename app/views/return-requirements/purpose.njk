@@ -41,6 +41,8 @@
 
 <div>
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     {% set checkBoxItems = [] %}
     {% for purpose in purposes %}
       {# Set an easier to use index. Also means we can refer to it inside our loop #}
