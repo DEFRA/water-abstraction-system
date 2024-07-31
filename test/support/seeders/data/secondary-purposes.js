@@ -4,7 +4,7 @@ module.exports = [
   {
     id: '2457bfeb-a120-4b57-802a-46494bd22f82',
     legacyId: 'AGR',
-    description: 'General Agriculture 1',
+    description: 'General Agriculture',
     createdAt: new Date('2024-07-22'),
     updatedAt: new Date('2024-07-22')
   },
