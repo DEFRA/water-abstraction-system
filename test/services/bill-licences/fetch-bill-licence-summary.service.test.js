@@ -15,14 +15,15 @@ const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js'
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const DatabaseSupport = require('../../support/database.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 
 // Thing under test
 const FetchBillLicenceSummaryService = require('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
 
 describe('Fetch Bill Licence Summary service', () => {
+  let accountNumber
   let agentCompanyId
   let billId
   let billingAccountId
@@ -31,43 +32,55 @@ describe('Fetch Bill Licence Summary service', () => {
   let billRunId
   let companyId
   let contactId
+  let licenceRef
   let regionId
   let transactionId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    const region = RegionsSeeder.data.find((region) => {
+      return region.displayName === 'Test Region'
+    })
+
+    regionId = region.id
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     const company = await CompanyHelper.add()
+
     companyId = company.id
 
-    const billingAccount = await BillingAccountHelper.add({ accountNumber: 'T65757520A', companyId })
+    const billingAccount = await BillingAccountHelper.add({ companyId })
+
     billingAccountId = billingAccount.id
+    accountNumber = billingAccount.accountNumber
 
     const agentCompany = await CompanyHelper.add({ name: 'Agent Company Ltd' })
+
     agentCompanyId = agentCompany.id
 
     const contact = await ContactHelper.add()
+
     contactId = contact.id
 
     const billingAccountAddress = await BillingAccountAddressHelper.add({
       billingAccountId, companyId: agentCompanyId, contactId, endDate: null
     })
-    billingAccountAddressId = billingAccountAddress.id
 
-    const region = await RegionHelper.add({ displayName: 'Stormlands' })
-    regionId = region.id
+    billingAccountAddressId = billingAccountAddress.id
 
     const billRun = await BillRunHelper.add({
       billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId
     })
+
     billRunId = billRun.id
 
-    const bill = await BillHelper.add({ accountNumber: 'T65757520A', billingAccountId, billRunId })
+    const bill = await BillHelper.add({ accountNumber, billingAccountId, billRunId })
+
     billId = bill.id
 
-    billLicence = await BillLicenceHelper.add({ billId, licenceRef: '01/86/26/9400' })
+    billLicence = await BillLicenceHelper.add({ billId, licenceRef })
 
     const transaction = await TransactionHelper.add({ billLicenceId: billLicence.id, netAmount: 1000.10 })
+
     transactionId = transaction.id
   })
 
@@ -80,13 +93,13 @@ describe('Fetch Bill Licence Summary service', () => {
       expect(result).to.equal({
         id: billLicence.id,
         licenceId: billLicence.licenceId,
-        licenceRef: '01/86/26/9400',
+        licenceRef,
         bill: {
           id: billId,
-          accountNumber: 'T65757520A',
+          accountNumber,
           billingAccount: {
             id: billingAccountId,
-            accountNumber: 'T65757520A',
+            accountNumber,
             company: {
               id: companyId,
               name: 'Example Trading Ltd',
@@ -124,7 +137,7 @@ describe('Fetch Bill Licence Summary service', () => {
             toFinancialYearEnding: 2023,
             region: {
               id: regionId,
-              displayName: 'Stormlands'
+              displayName: 'Test Region'
             }
           }
         },
