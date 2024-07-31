@@ -28,7 +28,7 @@ const Crumb = require('@hapi/crumb')
  * so unreadable to the client) than it rejects the request. In our service the user will see a 404 as that is the
  * default for an 'unauthorised' request.
  *
- * We have Crumb enable by default for all endpoints to avoid us forgetting to protect a html form. However, this means
+ * We have Crumb enabled by default for all endpoints to avoid us forgetting to protect a html form. However, this means
  * it performs the check for _all_ POST requests. Our service exposes API-only POST endpoints which do not expect a
  * payload. For this, the route config must include the following to disable Crumb.
  *
