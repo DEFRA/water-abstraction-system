@@ -5,6 +5,7 @@
  * @module PersistReturnVersionService
  */
 
+const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 const ReturnRequirementPointModel = require('../../models/return-requirement-point.model.js')
 const ReturnRequirementPurposeModel = require('../../models/return-requirement-purpose.model.js')
@@ -21,6 +22,10 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  */
 async function go (returnVersionData, returnVersionsExist) {
   const { returnRequirements, returnVersion } = returnVersionData
+
+  if (returnVersionsExist) {
+    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(returnVersion.startDate)
+  }
 
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion).returning('id')
 
