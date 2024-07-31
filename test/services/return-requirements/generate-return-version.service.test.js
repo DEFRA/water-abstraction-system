@@ -136,4 +136,42 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.version).to.equal(1)
     })
   })
+
+  describe('when called with session data from the "no-returns-required" journey', () => {
+    beforeEach(async () => {
+      licenceId = generateUUID()
+
+      sessionData = {
+        reason: 'returns-exception',
+        journey: 'no-returns-required',
+        licence: {
+          id: licenceId,
+          endDate: null,
+          startDate: '2023-02-13T00:00:00.000Z',
+          licenceRef: '99/99/9999',
+          licenceHolder: 'A licence holder',
+          returnVersions: [],
+          currentVersionStartDate: '2023-02-13T00:00:00.000Z'
+        },
+        requirements: [{}],
+        checkPageVisited: true,
+        startDateOptions: 'licenceStartDate'
+      }
+    })
+
+    it('generates the data required to populate a record in the "return_version" table', async () => {
+      const result = await GenerateReturnVersionService.go(sessionData, userId)
+
+      expect(result.returnRequirements).to.equal([])
+      expect(result.returnVersion.createdBy).to.equal(userId)
+      expect(result.returnVersion.endDate).to.be.null()
+      expect(result.returnVersion.licenceId).to.equal(licenceId)
+      expect(result.returnVersion.multipleUpload).to.be.false()
+      expect(result.returnVersion.notes).to.be.undefined()
+      expect(result.returnVersion.reason).to.equal(sessionData.reason)
+      expect(result.returnVersion.startDate).to.equal(sessionData.licence.currentVersionStartDate)
+      expect(result.returnVersion.status).to.equal('current')
+      expect(result.returnVersion.version).to.equal(1)
+    })
+  })
 })
