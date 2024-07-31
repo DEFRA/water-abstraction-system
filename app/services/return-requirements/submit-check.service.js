@@ -26,12 +26,13 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)
+  const returnVersionsExist = session.data.licence.returnVersions.length > 0
 
   await _validateLicence(session.licence.id)
 
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
 
-  await PersistReturnVersionService.go(returnVersionData)
+  await PersistReturnVersionService.go(returnVersionData, returnVersionsExist)
 
   await SessionModel.query().deleteById(sessionId)
 

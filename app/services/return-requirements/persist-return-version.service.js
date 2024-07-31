@@ -19,7 +19,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {Object} returnVersionData - The return version data required to persist a new return version for a licence
  */
-async function go (returnVersionData) {
+async function go (returnVersionData, returnVersionsExist) {
   const { returnRequirements, returnVersion } = returnVersionData
 
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion).returning('id')
