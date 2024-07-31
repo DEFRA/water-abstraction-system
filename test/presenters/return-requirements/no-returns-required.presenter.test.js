@@ -69,13 +69,13 @@ describe('Return Requirements - No Returns Required presenter', () => {
   describe('the "reason" property', () => {
     describe('when the user has previously submitted a reason', () => {
       beforeEach(() => {
-        session.reason = 'transfer-licence'
+        session.reason = 'licence-conditions-do-not-require-returns'
       })
 
       it('returns a populated reason', () => {
         const result = NoReturnsRequiredPresenter.go(session)
 
-        expect(result.reason).to.equal('transfer-licence')
+        expect(result.reason).to.equal('licence-conditions-do-not-require-returns')
       })
     })
 
