@@ -17,7 +17,7 @@ function buildSeedValueString (keys, data) {
           valueString += ','
         }
       } catch (e) {
-        console.log('Failed: ', obj)
+        console.error('Failed: ', obj)
       }
     })
 
