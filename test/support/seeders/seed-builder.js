@@ -6,14 +6,18 @@ function buildSeedValueString (keys, data) {
   data.forEach((obj, i) => {
     valueString += '('
     keys.forEach((key, index) => {
-      if (key === 'createdAt' || key === 'updatedAt') {
-        valueString += `'${obj[key].toISOString()}'`
-      } else {
-        valueString += `'${obj[key]}'`
-      }
+      try {
+        if (key === 'createdAt' || key === 'updatedAt') {
+          valueString += `'${obj[key].toISOString()}'`
+        } else {
+          valueString += `'${obj[key]}'`
+        }
 
-      if (index < keys.length - 1) {
-        valueString += ','
+        if (index < keys.length - 1) {
+          valueString += ','
+        }
+      } catch (e) {
+        console.error('Failed: ', obj)
       }
     })
 
