@@ -17,7 +17,7 @@ const FetchAgreementsService = require('../../../app/services/licences/fetch-agr
 
 describe('Fetch Agreements service', () => {
   const licenceRef = '01/12/34/1000'
-  let licenceAgreementData
+  let financialAgreement
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -25,23 +25,21 @@ describe('Fetch Agreements service', () => {
 
   describe('when the licence has agreements data', () => {
     beforeEach(async () => {
-      const financialAgreement = await FinancialAgreementHelper.add({
+      financialAgreement = await FinancialAgreementHelper.add({
         id: '970168ce-06c3-4823-b84d-9da30b742bb8',
         code: 'S127'
       })
-
-      licenceAgreementData = {
-        endDate: new Date('2040-05-01'),
-        financialAgreementId: financialAgreement.id,
-        licenceRef,
-        startDate: new Date('2022-04-01'),
-        signedOn: new Date('2022-04-01')
-      }
     })
 
     describe('and the agreement has not been deleted', () => {
       beforeEach(async () => {
-        await LicenceAgreementHelper.add(licenceAgreementData)
+        await LicenceAgreementHelper.add({
+          endDate: new Date('2040-05-01'),
+          financialAgreementId: financialAgreement.id,
+          licenceRef,
+          startDate: new Date('2022-04-01'),
+          signedOn: new Date('2022-04-01')
+        })
       })
 
       it('returns the matching agreements data', async () => {
@@ -58,7 +56,14 @@ describe('Fetch Agreements service', () => {
 
     describe('and the agreement has been deleted', () => {
       beforeEach(async () => {
-        await LicenceAgreementHelper.add(licenceAgreementData.deletedAt = new Date())
+        await LicenceAgreementHelper.add({
+          endDate: new Date('2040-05-01'),
+          financialAgreementId: financialAgreement.id,
+          licenceRef,
+          startDate: new Date('2022-04-01'),
+          signedOn: new Date('2022-04-01'),
+          deletedAt: new Date()
+        })
       })
 
       it('does not return the agreements data', async () => {
