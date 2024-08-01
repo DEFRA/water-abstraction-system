@@ -58,7 +58,7 @@ describe('Fetch Agreements service', () => {
 
     describe('and the agreement has been deleted', () => {
       beforeEach(async () => {
-        await LicenceAgreementHelper.add(licenceAgreementData.deletedAt = new Date('2024-07-31 13:06:27.666'))
+        await LicenceAgreementHelper.add(licenceAgreementData.deletedAt = new Date())
       })
 
       it('does not return the agreements data', async () => {
