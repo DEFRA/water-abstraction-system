@@ -9,8 +9,9 @@ const Joi = require('joi')
 
 const VALID_VALUES = [
   'abstraction-below-100-cubic-metres-per-day',
+  'licence-conditions-do-not-require-returns',
   'returns-exception',
-  'licence-conditions-do-not-require-returns'
+  'temporary-trade'
 ]
 
 /**
