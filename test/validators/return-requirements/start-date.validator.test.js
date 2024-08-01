@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const StartDateValidator = require('../../../app/validators/return-requirements/start-date.validator.js')
 
-describe('Start Date validator', () => {
+describe.only('Start Date validator', () => {
   const licenceEndDate = '2023-12-31T00:00:00.000Z'
   const licenceStartDate = '2023-01-01T00:00:00.000Z'
 
@@ -150,11 +150,11 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = '2022'
         })
 
-        it('fails validation with the message "Start date must be after the original licence start date"', () => {
+        it('fails validation with the message "Start date must be on or after the original licence start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Start date must be after the original licence start date')
+          expect(result.error.details[0].message).to.equal('Start date must be on or after the original licence start date')
         })
       })
 
