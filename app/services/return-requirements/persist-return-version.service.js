@@ -19,6 +19,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * create a new return version for a licence.
  *
  * @param {Object} returnVersionData - The return version data required to persist a new return version for a licence
+ * @param {Boolean} returnVersionsExist - Will be `true` if there are existing return versions for the licence
  */
 async function go (returnVersionData, returnVersionsExist) {
   const { returnRequirements, returnVersion } = returnVersionData
@@ -27,7 +28,7 @@ async function go (returnVersionData, returnVersionsExist) {
     returnVersion.endDate = await ProcessExistingReturnVersionsService.go(returnVersion.startDate)
   }
 
-  const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion).returning('id')
+  const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
 
   await _persistReturnRequirements(returnRequirements, returnVersionId)
 }
@@ -53,7 +54,6 @@ async function _persistReturnRequirements (returnRequirements, returnVersionId) 
         summer: returnRequirement.summer,
         twoPartTariff: returnRequirement.twoPartTariff
       })
-      .returning('id')
 
     await _persistReturnRequirementsPoints(returnRequirement.returnRequirementPoints, returnRequirementId)
     await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId)
