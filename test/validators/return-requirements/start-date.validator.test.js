@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const StartDateValidator = require('../../../app/validators/return-requirements/start-date.validator.js')
 
-describe.only('Start Date validator', () => {
+describe('Start Date validator', () => {
   const licenceEndDate = '2023-12-31T00:00:00.000Z'
   const licenceStartDate = '2023-01-01T00:00:00.000Z'
 
