@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const LoadService = require('../../app/services/data/load/load.service.js')
 const SeedService = require('../../app/services/data/seed/seed.service.js')
@@ -66,17 +69,9 @@ describe('Data controller', () => {
     describe('POST', () => {
       const licenceRef = '01/120'
 
-      beforeEach(() => {
-        options = {
-          method: 'POST',
-          url: '/data/deduplicate',
-          auth
-        }
-      })
-
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          options.payload = { 'licence-ref': licenceRef }
+          options = postRequestOptions('/data/deduplicate', { 'licence-ref': licenceRef })
 
           Sinon.stub(SubmitDeduplicateService, 'go').resolves({ licenceRef })
         })
@@ -91,7 +86,7 @@ describe('Data controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          options.payload = {}
+          options = postRequestOptions('/data/deduplicate')
 
           Sinon.stub(SubmitDeduplicateService, 'go').resolves({
             error: { text: 'Enter a licence reference to de-dupe' }

@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const RemoveBillService = require('../../app/services/bills/remove-bill.service.js')
 const SubmitRemoveBillService = require('../../app/services/bills/submit-remove-bill.service.js')
@@ -17,6 +20,8 @@ const ViewBillService = require('../../app/services/bills/view-bill.service.js')
 const { init } = require('../../app/server.js')
 
 describe('Bills controller', () => {
+  const rootPath = '/bills/64924759-8142-4a08-9d1e-1e902cd9d316'
+
   let options
   let server
 
@@ -39,7 +44,14 @@ describe('Bills controller', () => {
   describe('/bills', () => {
     describe('GET', () => {
       beforeEach(() => {
-        options = _options('GET')
+        options = {
+          method: 'GET',
+          url: rootPath,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
       })
 
       describe('when the request succeeds', () => {
@@ -77,7 +89,14 @@ describe('Bills controller', () => {
   describe('/bill/{billId}/remove', () => {
     describe('GET', () => {
       beforeEach(() => {
-        options = _options('GET', 'remove')
+        options = {
+          method: 'GET',
+          url: `${rootPath}/remove`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
 
         Sinon.stub(RemoveBillService, 'go').resolves({
           pageTitle: "You're about to remove the bill for T65757520A from the bill run"
@@ -96,7 +115,7 @@ describe('Bills controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options('POST', 'remove')
+        options = postRequestOptions(`${rootPath}/remove`)
 
         Sinon.stub(SubmitRemoveBillService, 'go').resolves(
           '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing'
@@ -114,20 +133,6 @@ describe('Bills controller', () => {
     })
   })
 })
-
-function _options (method, path) {
-  const root = '/bills/64924759-8142-4a08-9d1e-1e902cd9d316'
-  const url = path ? `${root}/${path}` : root
-
-  return {
-    method,
-    url,
-    auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
-  }
-}
 
 function _testMultiLicenceBill () {
   return {
