@@ -11,7 +11,10 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   },
   {
@@ -22,7 +25,10 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   },
   {
@@ -33,7 +39,10 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   },
   {
@@ -44,7 +53,10 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   }
 ]

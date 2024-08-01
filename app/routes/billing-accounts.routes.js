@@ -15,6 +15,9 @@ const routes = [
         access: {
           scope: ['manage_billing_accounts']
         }
+      },
+      plugins: {
+        crumb: false
       }
     }
   }
