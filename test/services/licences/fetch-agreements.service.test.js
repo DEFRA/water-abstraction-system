@@ -13,11 +13,11 @@ const FinancialAgreementHelper = require('../../support/helpers/financial-agreem
 const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
 
 // Thing under test
-const FetchAgreementsService =
-  require('../../../app/services/licences/fetch-agreements.service.js')
+const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 
 describe('Fetch Agreements service', () => {
   const licenceRef = '01/12/34/1000'
+  let licenceAgreementData
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -30,24 +30,42 @@ describe('Fetch Agreements service', () => {
         code: 'S127'
       })
 
-      await LicenceAgreementHelper.add({
+      licenceAgreementData = {
         endDate: new Date('2040-05-01'),
         financialAgreementId: financialAgreement.id,
         licenceRef,
         startDate: new Date('2022-04-01'),
         signedOn: new Date('2022-04-01')
+      }
+    })
+
+    describe('and the agreement has not been deleted', () => {
+      beforeEach(async () => {
+        await LicenceAgreementHelper.add(licenceAgreementData)
+      })
+
+      it('returns the matching agreements data', async () => {
+        const results = await FetchAgreementsService.go(licenceRef)
+
+        expect(results[0]).to.equal({
+          startDate: new Date('2022-04-01'),
+          signedOn: new Date('2022-04-01'),
+          endDate: new Date('2040-05-01'),
+          financialAgreement: { id: '970168ce-06c3-4823-b84d-9da30b742bb8', code: 'S127' }
+        }, { skip: ['id'] })
       })
     })
 
-    it('returns the matching agreements data', async () => {
-      const results = await FetchAgreementsService.go(licenceRef)
+    describe('and the agreement has been deleted', () => {
+      beforeEach(async () => {
+        await LicenceAgreementHelper.add(licenceAgreementData.deletedAt = new Date('2024-07-31 13:06:27.666'))
+      })
 
-      expect(results[0]).to.equal({
-        startDate: new Date('2022-04-01'),
-        signedOn: new Date('2022-04-01'),
-        endDate: new Date('2040-05-01'),
-        financialAgreement: { id: '970168ce-06c3-4823-b84d-9da30b742bb8', code: 'S127' }
-      }, { skip: ['id'] })
+      it('does not return the agreements data', async () => {
+        const results = await FetchAgreementsService.go(licenceRef)
+
+        expect(results).to.be.empty()
+      })
     })
   })
 })
