@@ -21,7 +21,7 @@ async function go (licenceRef) {
 async function _fetch (licenceRef) {
   return LicenceAgreementModel.query()
     .where('licenceRef', licenceRef)
-    .whereNull('deleted_at')
+    .whereNull('deletedAt')
     .select([
       'id',
       'startDate',
