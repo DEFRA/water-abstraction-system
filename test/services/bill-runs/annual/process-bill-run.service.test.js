@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,6 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 
 // Things we need to stub
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const DatabaseSupport = require('../../../support/database.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
@@ -31,14 +30,15 @@ describe('Annual Process Bill Run service', () => {
   let billRun
   let notifierStub
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
+  before(async () => {
     const financialYearEnd = billingPeriod.startDate.getFullYear()
 
     billRun = await BillRunHelper.add({
       batchType: 'annual', fromFinancialYearEnding: financialYearEnd, toFinancialYearEnding: financialYearEnd
     })
+  })
 
+  beforeEach(async () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
