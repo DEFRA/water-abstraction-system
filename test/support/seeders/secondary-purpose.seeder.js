@@ -17,7 +17,11 @@ const keys = ['id', 'legacyId', 'description', 'createdAt', 'updatedAt']
 async function seed () {
   await db.raw(`
     INSERT INTO  public.secondary_purposes (id, legacy_id, description, created_at, updated_at)
-      VALUES ${buildSeedValueString(keys, data)};
+      VALUES ${buildSeedValueString(keys, data)}
+    ON CONFLICT (legacy_id)
+    DO UPDATE SET
+    description = excluded.description,
+    updated_at = now()
   `
   )
 }
