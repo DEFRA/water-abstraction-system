@@ -18,6 +18,8 @@
 
   <div class="govuk-body">
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
       {{ govukInput({
         classes: 'govuk-!-width-one-third',
         errorMessage: error,

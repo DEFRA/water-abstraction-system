@@ -11,7 +11,10 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   }
 ]

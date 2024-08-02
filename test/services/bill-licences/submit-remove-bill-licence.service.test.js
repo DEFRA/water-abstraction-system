@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 
 // Things we need to stub
 const LegacyDeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
@@ -27,8 +26,6 @@ describe('Submit Remove Bill Licence service', () => {
   let legacyDeleteBillLicenceRequestStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     bill = await BillHelper.add()
     billLicence = await BillLicenceHelper.add({ billId: bill.id })
 

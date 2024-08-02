@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
 const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
@@ -407,13 +410,5 @@ function _getOptions (path) {
 }
 
 function _postOptions (path, payload) {
-  return {
-    method: 'POST',
-    url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`,
-    auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    },
-    payload
-  }
+  return postRequestOptions(`/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`, payload)
 }

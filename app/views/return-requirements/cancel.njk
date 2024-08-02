@@ -56,6 +56,7 @@
     <p class="govuk-!-margin-bottom-7"></p>
 
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
       <input type="hidden" id="licence-id" name="licenceId" value="{{ licenceId }}" />
 
       {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
