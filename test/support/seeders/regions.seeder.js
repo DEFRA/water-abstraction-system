@@ -28,13 +28,14 @@ async function seed () {
                 AND nald_region_id = '${data[index].naldRegionId}';
 
               INSERT INTO public.regions (id, charge_region_id, nald_region_id, name, display_name, created_at, updated_at)
-              SELECT '${data[index].id}',
-                     '${data[index].chargeRegionId}',
-                     '${data[index].naldRegionId}',
-                     '${data[index].name}',
-                     '${data[index].displayName}',
-                     '${data[index].createdAt.toISOString()}',
-                     now()
+              SELECT
+                      '${data[index].id}',
+                      '${data[index].chargeRegionId}',
+                      '${data[index].naldRegionId}',
+                      '${data[index].name}',
+                      '${data[index].displayName}',
+                      '${data[index].createdAt.toISOString()}',
+                      now()
               WHERE NOT EXISTS (SELECT 1
                                 FROM public.regions
                                 WHERE charge_region_id = '${data[index].chargeRegionId}'
