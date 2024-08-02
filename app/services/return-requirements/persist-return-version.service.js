@@ -25,7 +25,10 @@ async function go (returnVersionData, returnVersionsExist) {
   const { returnRequirements, returnVersion } = returnVersionData
 
   if (returnVersionsExist) {
-    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(returnVersion.startDate)
+    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(
+      returnVersion.licenceId,
+      returnVersion.startDate
+    )
   }
 
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
