@@ -4,7 +4,7 @@
  * @module SecondaryPurposesSeeder
  */
 
-const data = require('./data/secondary-purposes.js')
+const data = require('./data/secondary-purposes.data.js')
 const { buildSeedValueString } = require('./seed-builder.js')
 const { db } = require('../../../db/db.js')
 
