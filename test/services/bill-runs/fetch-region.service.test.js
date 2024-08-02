@@ -7,14 +7,14 @@ const Code = require('@hapi/code')
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
+// Test data
+const Regions = require('../../../db/seeds/data/regions.js')
 
 // Thing under test
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
 
 describe('Fetch Region service', () => {
-  const region = RegionsSeeder.data.find((region) => {
+  const region = Regions.data.find((region) => {
     return region.displayName === 'Test Region'
   })
 

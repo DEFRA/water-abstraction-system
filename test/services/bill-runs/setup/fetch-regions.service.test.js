@@ -7,8 +7,8 @@ const Code = require('@hapi/code')
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const RegionSeeder = require('../../../support/seeders/regions.seeder.js')
+// Test data
+const Regions = require('../../../../db/seeds/data/regions.js')
 
 // Thing under test
 const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
@@ -19,7 +19,7 @@ describe('Bill Runs Setup Fetch Regions service', () => {
       const results = await FetchRegionsService.go()
 
       // This is necessary because other region helpers are adding regions into the database as part of their tests.
-      const expectedRegions = RegionSeeder.data.map((region) => {
+      const expectedRegions = Regions.data.map((region) => {
         return {
           id: region.id,
           displayName: region.displayName

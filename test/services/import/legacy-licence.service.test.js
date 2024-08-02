@@ -8,13 +8,15 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Regions = require('../../../db/seeds/data/regions.js')
+
 // Test helpers
 const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLicence = require('./_fixtures/licence.js')
 const FixtureVersions = require('./_fixtures/versions.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 
 // Thing under test
 const LegacyImportLicenceService =
@@ -23,7 +25,7 @@ const LegacyImportLicenceService =
 describe('Legacy import licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
-  const region = RegionsSeeder.data.find((region) => {
+  const region = Regions.data.find((region) => {
     return region.displayName === 'Test Region'
   })
 

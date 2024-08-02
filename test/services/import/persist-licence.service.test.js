@@ -7,9 +7,11 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Regions = require('../../../db/seeds/data/regions.js')
+
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -21,7 +23,7 @@ describe('Persist licence service', () => {
   let licence
 
   beforeEach(async () => {
-    region = RegionsSeeder.data.find((region) => {
+    region = Regions.data.find((region) => {
       return region.displayName === 'Test Region'
     })
   })
