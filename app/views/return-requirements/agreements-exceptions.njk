@@ -37,6 +37,8 @@
   </div>
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     {{ govukCheckboxes({
       name: "agreementsExceptions",
       hint: {

@@ -62,12 +62,12 @@ function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
       .date()
       .format(['YYYY-MM-DD'])
       .required()
-      .greater(licenceStartDate)
+      .min(licenceStartDate)
       .less(licenceEndDate || '9999-12-31')
       .messages({
         'date.base': 'Enter a real start date',
         'date.format': 'Enter a real start date',
-        'date.greater': 'Start date must be after the original licence start date',
+        'date.min': 'Start date must be on or after the original licence start date',
         'date.less': 'Start date must be before the licence end date'
       }),
     otherwise: Joi.forbidden()

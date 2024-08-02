@@ -36,6 +36,8 @@
   </div>
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     {{ govukRadios({
       name: "returnsCycle",
       errorMessage: error,

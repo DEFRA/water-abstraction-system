@@ -33,10 +33,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{pageTitle}}</h1>
 
       <p class="govuk-body">
-        {{ statusTag(licence.status) }}
+        <span data-test='licence-holder'>Licence holder {{ licence.licenceHolder }} </span>
+        <div>{{ statusTag(licence.status) }}</div>
       </p>
     </div>
   </div>
@@ -121,6 +122,8 @@
   {% endif %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     <div class="govuk-button-group">
     {{ govukButton({
       text: statusButtonText,
@@ -347,7 +350,6 @@
         <section id="charge-version-{{chargeVersionIndex}}">
           <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
         </section>
-        <div class="govuk-caption-m" data-test='licence-holder'>{{chargeVersion.licenceHolderName}}</div>
 
         {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
         {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element " %}
@@ -376,7 +378,7 @@
 
         {{ govukDetails({
           attributes: { 'data-test': 'billing-account-details' },
-          summaryText: "Billing account details",
+          summaryText: chargeVersion.billingAccountDetails.accountName + " billing account details",
           html: billingAccountText
         }) }}
 

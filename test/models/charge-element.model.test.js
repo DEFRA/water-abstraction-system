@@ -11,21 +11,16 @@ const { expect } = Code
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
+const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 
 // Thing under test
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 
 describe('Charge Element model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -48,6 +43,7 @@ describe('Charge Element model', () => {
         testChargeReference = await ChargeReferenceHelper.add()
 
         const { id: chargeReferenceId } = testChargeReference
+
         testRecord = await ChargeElementHelper.add({ chargeReferenceId })
       })
 
@@ -75,9 +71,10 @@ describe('Charge Element model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = await PurposeHelper.add()
+        testPurpose = PurposesSeeder.data[0]
 
         const { id: purposeId } = testPurpose
+
         testRecord = await ChargeElementHelper.add({ purposeId })
       })
 
@@ -110,6 +107,7 @@ describe('Charge Element model', () => {
         testReviewChargeElements = []
         for (let i = 0; i < 2; i++) {
           const reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId: testRecord.id })
+
           testReviewChargeElements.push(reviewChargeElement)
         }
       })

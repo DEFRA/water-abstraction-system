@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -22,8 +21,6 @@ describe('Region model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await RegionHelper.add()
   })
 
@@ -46,6 +43,7 @@ describe('Region model', () => {
         testBillRuns = []
         for (let i = 0; i < 2; i++) {
           const billRun = await BillRunHelper.add({ regionId: id })
+
           testBillRuns.push(billRun)
         }
       })
@@ -80,7 +78,8 @@ describe('Region model', () => {
 
         testLicences = []
         for (let i = 0; i < 2; i++) {
-          const licence = await LicenceHelper.add({ licenceRef: `0${i}/123`, regionId: id })
+          const licence = await LicenceHelper.add({ licenceRef: LicenceHelper.generateLicenceRef(), regionId: id })
+
           testLicences.push(licence)
         }
       })

@@ -51,6 +51,7 @@ function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
   const timestamp = timestampForPostgres()
+  const receivedDate = data.receivedDate ? data.receivedDate : null
 
   const defaults = {
     id: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
@@ -59,11 +60,11 @@ function defaults (data = {}) {
     endDate: new Date('2023-03-31'),
     licenceRef,
     metadata: {},
-    receivedDate: new Date('2023-04-12'),
+    receivedDate,
     returnReference,
     returnsFrequency: 'month',
     startDate: new Date('2022-04-01'),
-    status: 'completed',
+    status: 'due',
     updatedAt: timestamp
   }
 

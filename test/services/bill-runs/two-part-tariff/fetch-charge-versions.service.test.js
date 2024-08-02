@@ -13,16 +13,16 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
+const PurposeSeeder = require('../../../support/seeders/purposes.seeder.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service')
+const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
   const billingPeriod = {
@@ -34,14 +34,19 @@ describe('Fetch Charge Versions service', () => {
 
   let chargeCategoryId
   let regionId
+  let purposeId
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
+    purposeId = PurposeSeeder.data.find((purpose) => { return purpose.legacyId === '420' }).id
+
     const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
+
     chargeCategoryId = chargeCategory.id
 
     const region = await RegionHelper.add()
+
     regionId = region.id
   })
 
@@ -64,9 +69,6 @@ describe('Fetch Charge Versions service', () => {
         chargeCategoryId,
         adjustments: { s127: true, aggregate: 0.562114443 }
       })
-
-      const purposeId = '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b'
-      await PurposeHelper.add({ id: purposeId, legacyId: '420' })
 
       await ChargeElementHelper.add({
         id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
@@ -92,6 +94,7 @@ describe('Fetch Charge Versions service', () => {
         chargeCategoryId,
         adjustments: { s127: true }
       })
+
       await ChargeElementHelper.add({
         chargeReferenceId: chargeReference.id,
         authorisedAnnualQuantity: 100,
@@ -158,7 +161,7 @@ describe('Fetch Charge Versions service', () => {
               abstractionPeriodEndMonth: 3,
               authorisedAnnualQuantity: 200,
               purpose: {
-                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                id: purposeId,
                 legacyId: '420',
                 description: 'Spray Irrigation - Storage'
               }
@@ -172,7 +175,7 @@ describe('Fetch Charge Versions service', () => {
               abstractionPeriodEndMonth: 3,
               authorisedAnnualQuantity: 100,
               purpose: {
-                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                id: purposeId,
                 legacyId: '420',
                 description: 'Spray Irrigation - Storage'
               }

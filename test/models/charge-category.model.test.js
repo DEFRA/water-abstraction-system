@@ -11,7 +11,6 @@ const { expect } = Code
 const ChargeCategoryHelper = require('../support/helpers/charge-category.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
@@ -20,8 +19,6 @@ describe('Charge Category model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await ChargeCategoryHelper.add()
   })
 
@@ -44,6 +41,7 @@ describe('Charge Category model', () => {
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
           const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeCategoryId: id })
+
           testChargeReferences.push(chargeReference)
         }
       })

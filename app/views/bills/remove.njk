@@ -103,6 +103,8 @@
       }}
 
       <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukButton({ text: "Remove this bill", preventDoubleClick: true }) }}
       </form>
     </div>
