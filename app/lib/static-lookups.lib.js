@@ -38,6 +38,7 @@ const returnRequirementReasons = {
   'change-to-special-agreement': 'Change to special agreement',
   'error-correction': 'Error correction',
   'extension-of-licence-validity': 'Limited extension of licence validity (LEV)',
+  'licence-conditions-do-not-require-returns': 'Licence conditions do not require returns',
   'major-change': 'Major change',
   'minor-change': 'Minor change',
   'name-or-address-change': 'Licence holder name or address change',
@@ -47,8 +48,8 @@ const returnRequirementReasons = {
   'returns-exception': 'Returns exception',
   'succession-or-transfer-of-licence': 'Succession or transfer of licence',
   'succession-to-remainder-licence-or-licence-apportionment': 'Succession to remainder licence or licence apportionment',
-  'transfer-and-now-chargeable': 'Licence transferred and now chargeable',
-  'transfer-licence': 'Transfer licence'
+  'temporary-trade': 'Temporary trade',
+  'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
 /**

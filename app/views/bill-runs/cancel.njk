@@ -70,6 +70,8 @@
       }}
 
       <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukButton({ text: "Cancel bill run" }) }}
       </form>
     </div>

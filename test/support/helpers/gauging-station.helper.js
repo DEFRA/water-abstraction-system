@@ -6,6 +6,7 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const GaugingStationModel = require('../../../app/models/gauging-station.model.js')
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new gauging-station entity
@@ -17,6 +18,7 @@ const GaugingStationModel = require('../../../app/models/gauging-station.model.j
  * - `long` - -0.15477
  * - `gridReference` - TL2664640047
  * - `label` - MEVAGISSEY FIRE STATION
+ * - `createdAt` - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -39,12 +41,15 @@ async function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const timestamp = timestampForPostgres()
+
   const defaults = {
     hydrologyStationId: generateUUID(),
     lat: 52.04436,
     long: -0.15477,
     gridReference: 'TL2664640047',
-    label: 'MEVAGISSEY FIRE STATION'
+    label: 'MEVAGISSEY FIRE STATION',
+    createdAt: timestamp
   }
 
   return {

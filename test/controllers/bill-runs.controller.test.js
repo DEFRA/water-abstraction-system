@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const AmendAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 const AmendAuthorisedVolumeService = require('../../app/services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
@@ -115,14 +118,15 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options('POST')
-        options.url = '/bill-runs'
-        options.payload = {
-          type: 'supplementary',
-          scheme: 'sroc',
-          region: '07ae7f3a-2677-4102-b352-cc006828948c',
-          user: 'test.user@defra.gov.uk'
-        }
+        options = postRequestOptions(
+          '/bill-runs',
+          {
+            type: 'supplementary',
+            scheme: 'sroc',
+            region: '07ae7f3a-2677-4102-b352-cc006828948c',
+            user: 'test.user@defra.gov.uk'
+          }
+        )
       })
 
       describe('when a request is valid', () => {
@@ -183,7 +187,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET')
+        options = _getRequestOptions()
       })
 
       describe('when the request succeeds', () => {
@@ -224,7 +228,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/cancel', () => {
     describe('GET /bill-runs/{id}/cancel', () => {
       beforeEach(async () => {
-        options = _options('GET', 'cancel')
+        options = _getRequestOptions('cancel')
       })
 
       describe('when a request is valid', () => {
@@ -248,7 +252,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST /bill-runs/{id}/cancel', () => {
       beforeEach(() => {
-        options = _options('POST', 'cancel')
+        options = _postRequestOptions('cancel')
       })
 
       describe('when a request is valid', () => {
@@ -287,7 +291,7 @@ describe('Bill Runs controller', () => {
 
     describe('GET /bill-runs/{id}/remove/{licenceId}', () => {
       beforeEach(async () => {
-        options = _options('GET', `remove/${licenceId}`)
+        options = _getRequestOptions(`remove/${licenceId}`)
       })
 
       describe('when a request is valid', () => {
@@ -322,7 +326,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST /bill-runs/{id}/remove/{licenceId}', () => {
       beforeEach(() => {
-        options = _options('POST', `remove/${licenceId}`)
+        options = _postRequestOptions(`remove/${licenceId}`)
       })
 
       describe('when a request is valid and licences still remain in the bill run', () => {
@@ -359,7 +363,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid with no pagination', () => {
         beforeEach(() => {
-          options = _options('GET', 'review')
+          options = _getRequestOptions('review')
           ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
         })
 
@@ -378,7 +382,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid with pagination', () => {
         beforeEach(() => {
-          options = _options('GET', 'review?page=2')
+          options = _getRequestOptions('review?page=2')
           ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
         })
 
@@ -398,7 +402,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(async () => {
-        options = _options('POST', 'review')
+        options = _postRequestOptions('review')
       })
 
       describe('when a request is valid', () => {
@@ -421,7 +425,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
+        options = _getRequestOptions('review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
       })
 
       describe('when a request is valid', () => {
@@ -442,7 +446,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(async () => {
-        options = _options('POST', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
+        options = _postRequestOptions('review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
       })
 
       describe('when a request is valid', () => {
@@ -463,8 +467,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options(
-          'GET',
+        options = _getRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
       })
 
@@ -488,8 +491,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options(
-          'GET',
+        options = _getRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-adjustment-factor')
       })
 
@@ -511,8 +513,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options(
-          'POST',
+        options = _postRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-adjustment-factor'
         )
       })
@@ -553,8 +554,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options(
-          'GET',
+        options = _getRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-authorised-volume')
       })
 
@@ -576,8 +576,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options(
-          'POST',
+        options = _postRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-authorised-volume'
         )
       })
@@ -618,8 +617,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options(
-          'GET',
+        options = _getRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
         )
       })
@@ -644,8 +642,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options(
-          'GET',
+        options = _getRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
         )
       })
@@ -680,8 +677,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options(
-          'POST',
+        options = _postRequestOptions(
           'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
         )
       })
@@ -725,7 +721,7 @@ describe('Bill Runs controller', () => {
       const reviewChargeReferenceId = '7c09753d-f606-4deb-a929-4bc8aa7acb8d'
 
       beforeEach(async () => {
-        options = _options('GET', `review/${licenceId}/preview-charge/${reviewChargeReferenceId}`)
+        options = _getRequestOptions(`review/${licenceId}/preview-charge/${reviewChargeReferenceId}`)
       })
 
       describe('when a request is valid', () => {
@@ -748,7 +744,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/send', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'send')
+        options = _getRequestOptions('send')
       })
 
       describe('when a request is valid', () => {
@@ -772,7 +768,7 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options('POST', 'send')
+        options = _postRequestOptions('send')
       })
 
       describe('when a request is valid', () => {
@@ -809,7 +805,7 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/two-part-tariff', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'two-part-tariff')
+        options = _getRequestOptions('two-part-tariff')
       })
 
       describe('when a request is valid', () => {
@@ -843,20 +839,6 @@ describe('Bill Runs controller', () => {
     })
   })
 })
-
-function _options (method, path) {
-  const root = '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28'
-  const url = path ? `${root}/${path}` : root
-
-  return {
-    method,
-    url,
-    auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
-  }
-}
 
 function _authorisedVolumeData () {
   return {
@@ -907,6 +889,27 @@ function _chargeReferenceData () {
       adjustments: ['Aggregate factor (0.5)']
     }
   }
+}
+
+function _getRequestOptions (path) {
+  const root = '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28'
+  const url = path ? `${root}/${path}` : root
+
+  return {
+    method: 'GET',
+    url,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    }
+  }
+}
+
+function _postRequestOptions (path) {
+  const root = '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28'
+  const url = path ? `${root}/${path}` : root
+
+  return postRequestOptions(url)
 }
 
 function _licenceReviewData () {
