@@ -4,50 +4,70 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const FinancialAgreementHelper = require('../../support/helpers/financial-agreement.helper.js')
 const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
 
 // Thing under test
-const FetchAgreementsService =
-  require('../../../app/services/licences/fetch-agreements.service.js')
+const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 
 describe('Fetch Agreements service', () => {
-  const licenceRef = '01/12/34/1000'
+  const endDate = new Date('2040-05-01')
+  const signedOn = new Date('2022-04-01')
+  const startDate = new Date('2022-04-01')
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let licenceAgreement
+  let financialAgreement
 
   describe('when the licence has agreements data', () => {
-    beforeEach(async () => {
-      const financialAgreement = await FinancialAgreementHelper.add({
-        id: '970168ce-06c3-4823-b84d-9da30b742bb8',
-        code: 'S127'
+    before(async () => {
+      financialAgreement = await FinancialAgreementHelper.add()
+    })
+
+    describe('and the agreement has not been deleted', () => {
+      beforeEach(async () => {
+        licenceAgreement = await LicenceAgreementHelper.add({
+          endDate,
+          financialAgreementId: financialAgreement.id,
+          startDate,
+          signedOn
+        })
       })
 
-      await LicenceAgreementHelper.add({
-        endDate: new Date('2040-05-01'),
-        financialAgreementId: financialAgreement.id,
-        licenceRef,
-        startDate: new Date('2022-04-01'),
-        signedOn: new Date('2022-04-01')
+      it('returns the matching agreements data', async () => {
+        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+
+        expect(results[0]).to.equal({
+          endDate,
+          financialAgreement: {
+            id: financialAgreement.id,
+            code: financialAgreement.code
+          },
+          startDate,
+          signedOn
+        }, { skip: ['id'] })
       })
     })
 
-    it('returns the matching agreements data', async () => {
-      const results = await FetchAgreementsService.go(licenceRef)
+    describe('and the agreement has been deleted', () => {
+      beforeEach(async () => {
+        licenceAgreement = await LicenceAgreementHelper.add({
+          endDate,
+          financialAgreementId: financialAgreement.id,
+          startDate,
+          signedOn,
+          deletedAt: new Date()
+        })
+      })
 
-      expect(results[0]).to.equal({
-        startDate: new Date('2022-04-01'),
-        signedOn: new Date('2022-04-01'),
-        endDate: new Date('2040-05-01'),
-        financialAgreement: { id: '970168ce-06c3-4823-b84d-9da30b742bb8', code: 'S127' }
-      }, { skip: ['id'] })
+      it('does not return the agreements data', async () => {
+        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+
+        expect(results).to.be.empty()
+      })
     })
   })
 })
