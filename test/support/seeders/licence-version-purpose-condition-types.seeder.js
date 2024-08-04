@@ -4,7 +4,7 @@
  * @module LicenceVersionPurposeConditionTypeSeeder
  */
 
-const data = require('./data/licence-versions-purposes-condition-types.js')
+const data = require('./data/licence-versions-purposes-condition-types.data.js')
 const { buildSeedValueString } = require('./seed-builder.js')
 const { db } = require('../../../db/db.js')
 

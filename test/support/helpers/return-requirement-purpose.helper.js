@@ -9,6 +9,9 @@ const { randomInteger } = require('../general.js')
 const { generatePrimaryPurpose } = require('./primary-purpose.helper.js')
 const { generatePurposeCode } = require('./purpose.helper.js')
 const { generateSecondaryPurpose } = require('./secondary-purpose.helper.js')
+const primaryPurposesData = require('../seeders/data/primary-purposes.data.js')
+const purposeData = require('../seeders/data/purposes.data.js')
+const secondaryPurposeData = require('../seeders/data/secondary-purposes.data.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
 
 /**
@@ -47,9 +50,9 @@ function defaults (data = {}) {
 
   const defaults = {
     externalId,
-    purposeId: generateUUID(),
-    primaryPurposeId: generateUUID(),
-    secondaryPurposeId: generateUUID(),
+    purposeId: _getRandomOption(purposeData),
+    primaryPurposeId: _getRandomOption(primaryPurposesData),
+    secondaryPurposeId: _getRandomOption(secondaryPurposeData),
     returnRequirementId: generateUUID()
   }
 
@@ -65,6 +68,12 @@ function _generatePrimaryCode () {
 
 function _generateSecondaryCode () {
   return generateSecondaryPurpose().code
+}
+
+function _getRandomOption (data) {
+  const randomOne = randomInteger(0, data.length - 1)
+
+  return data[randomOne].id
 }
 
 module.exports = {
