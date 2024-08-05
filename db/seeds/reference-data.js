@@ -1,7 +1,7 @@
 'use strict'
 
 const LicenceVersionPurposeConditionTypeSeeder = require('../../test/support/seeders/licence-version-purpose-condition-types.seeder.js')
-const PurposesSeeder = require('../../test/support/seeders/purposes.seeder.js')
+const PurposesSeeder = require('./03-purposes.js')
 const PrimaryPurposesSeeder = require('../../test/support/seeders/primary-purpose.seeder.js')
 const RegionsSeeder = require('./02-regions.js')
 const SecondaryPurposesSeeder = require('../../test/support/seeders/secondary-purpose.seeder.js')
