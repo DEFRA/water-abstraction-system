@@ -50,7 +50,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 
   const checkThreeResult = await _checkThree(licenceId, returnVersionStartDate)
   if (checkThreeResult) {
-    return
+    return null
   }
 
   const checkFourResult = await _checkFour(currentReturnVersions, licenceId, returnVersionStartDate)
