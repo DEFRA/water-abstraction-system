@@ -4,7 +4,7 @@ const LicenceVersionPurposeConditionTypeSeeder = require('../../test/support/see
 const PurposesSeeder = require('./03-purposes.js')
 const PrimaryPurposesSeeder = require('./04-primary-purposes.js')
 const RegionsSeeder = require('./02-regions.js')
-const SecondaryPurposesSeeder = require('../../test/support/seeders/secondary-purpose.seeder.js')
+const SecondaryPurposesSeeder = require('./05-secondary-purposes.js')
 
 async function seed () {
   await LicenceVersionPurposeConditionTypeSeeder.seed()
