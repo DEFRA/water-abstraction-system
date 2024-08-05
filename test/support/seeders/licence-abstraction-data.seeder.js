@@ -4,10 +4,6 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-const SecondaryPurposesSeeder = require('./secondary-purpose.seeder.js')
-const PrimaryPurposesSeeder = require('./primary-purpose.seeder.js')
-const Purposes = require('../../../db/seeds/data/purposes.js')
-
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
@@ -15,6 +11,11 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
+
+// Test data
+const SecondaryPurposesSeeder = require('./secondary-purpose.seeder.js')
+const PrimaryPurposes = require('../../../db/seeds/data/primary-purposes.js')
+const Purposes = require('../../../db/seeds/data/purposes.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -197,9 +198,9 @@ async function _purposes () {
 
   const { id: vegetableWashingId } = Purposes.data.find((purpose) => { return purpose.legacyId === '460' })
 
-  const { id: primaryAgricultureId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'A' })
+  const { id: primaryAgricultureId } = PrimaryPurposes.data.find((purpose) => { return purpose.legacyId === 'A' })
 
-  const { id: primaryElectricityId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'P' })
+  const { id: primaryElectricityId } = PrimaryPurposes.data.find((purpose) => { return purpose.legacyId === 'P' })
 
   const { id: secondaryAgricultureId } = SecondaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'AGR' })
 

@@ -7,10 +7,12 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
+
 // Test helpers
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const PrimaryPurposeHelper = require('../support/seeders/primary-purpose.seeder.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
@@ -22,7 +24,7 @@ describe('Primary Purpose model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = PrimaryPurposeHelper.data[0]
+      testRecord = PrimaryPurposes.data[0]
     })
 
     it('can successfully run a basic query', async () => {
@@ -38,7 +40,7 @@ describe('Primary Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = PrimaryPurposeHelper.data[0]
+        testRecord = PrimaryPurposes.data[0]
 
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
@@ -76,7 +78,7 @@ describe('Primary Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = PrimaryPurposeHelper.data[0]
+        testRecord = PrimaryPurposes.data[0]
 
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {

@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
+const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
 const Purposes = require('../../db/seeds/data/purposes.js')
 
 // Test helpers
@@ -17,7 +18,6 @@ const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
@@ -32,7 +32,7 @@ describe('Licence Version Purposes model', () => {
   let purposeId
 
   beforeEach(() => {
-    primaryPurposeId = PrimaryPurposesSeeder.data[0].id
+    primaryPurposeId = PrimaryPurposes.data[0].id
     secondaryPurposeId = SecondaryPurposeSeeder.data[0].id
     purposeId = Purposes.data[0].id
   })
@@ -220,13 +220,13 @@ describe('Licence Version Purposes model', () => {
     let validSecondaryPurpose
 
     beforeEach(() => {
-      invalidPrimaryPurpose = PrimaryPurposesSeeder.data[0]
+      invalidPrimaryPurpose = PrimaryPurposes.data[0]
       invalidSecondaryPurpose = SecondaryPurposeSeeder.data[0]
       invalidPurpose = Purposes.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
 
-      validPrimaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
+      validPrimaryPurpose = PrimaryPurposes.data.find((primaryPurpose) => {
         return primaryPurpose.legacyId === 'P'
       })
       validSecondaryPurpose = SecondaryPurposeSeeder.data.find((secondaryPurpose) => {

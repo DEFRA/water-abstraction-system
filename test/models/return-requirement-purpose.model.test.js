@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
+const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
 const Purposes = require('../../db/seeds/data/purposes.js')
 
 // Test helpers
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
@@ -44,7 +44,7 @@ describe('Return Requirement Purpose model', () => {
       let testPrimaryPurpose
 
       beforeEach(async () => {
-        testPrimaryPurpose = PrimaryPurposesSeeder.data[0]
+        testPrimaryPurpose = PrimaryPurposes.data[0]
 
         testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId: testPrimaryPurpose.id })
       })
@@ -65,7 +65,7 @@ describe('Return Requirement Purpose model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
-        expect(result.primaryPurpose.id).to.equal(testPrimaryPurpose.id)
+        expect(result.primaryPurpose).to.equal(testPrimaryPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
