@@ -9,7 +9,12 @@
  */
 
 const { db, dbConfig } = require('../../db/db.js')
-const ReferenceDataSeeder = require('../../db/seeds/reference-data.js')
+
+const LicenceVersionPurposeConditionTypeSeeder = require('../../db/seeds/06-licence-version-purpose-condition-types.js')
+const PurposesSeeder = require('../../db/seeds/03-purposes.js')
+const PrimaryPurposesSeeder = require('../../db/seeds/04-primary-purposes.js')
+const RegionsSeeder = require('../../db/seeds/02-regions.js')
+const SecondaryPurposesSeeder = require('../../db/seeds/05-secondary-purposes.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -29,8 +34,9 @@ async function clean () {
 
     await db.raw(`TRUNCATE TABLE ${tables.join(',')} RESTART IDENTITY;`)
   }
-  // TODO: when all calls this function are removed from the tests remove this call
-  await ReferenceDataSeeder.seed()
+
+  // TODO: when all calls to DatabaseSupport.clean() (this function) have been removed from the tests we can drop this
+  await _seed()
 }
 
 /**
@@ -68,6 +74,14 @@ async function wipe () {
 
 function _migrationTables () {
   return [dbConfig.migrations.tableName, `${dbConfig.migrations.tableName}_lock`]
+}
+
+async function _seed () {
+  await LicenceVersionPurposeConditionTypeSeeder.seed()
+  await RegionsSeeder.seed()
+  await PurposesSeeder.seed()
+  await PrimaryPurposesSeeder.seed()
+  await SecondaryPurposesSeeder.seed()
 }
 
 async function _tableNames (schema) {
