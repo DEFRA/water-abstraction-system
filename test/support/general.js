@@ -77,7 +77,26 @@ function randomInteger (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+/**
+ * Select a random entry from an array of entries
+ *
+ * Was built when we started using real reference data within the unit tests, for example, regions and purposes.
+ *
+ * Where we want to select a real value but don't care which, this can be used by the helper so select a random entry
+ * from the reference data.
+ *
+ * @param {Object[]} data - an array of values to randomly select from
+ *
+ * @returns a random entry from the data provided
+ */
+function selectRandomEntry (data) {
+  const randomIndex = randomInteger(0, data.length - 1)
+
+  return data[randomIndex]
+}
+
 module.exports = {
   postRequestOptions,
-  randomInteger
+  randomInteger,
+  selectRandomEntry
 }
