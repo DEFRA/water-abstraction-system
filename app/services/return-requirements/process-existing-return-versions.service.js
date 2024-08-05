@@ -33,113 +33,72 @@ function _addDaysToDate (date, days) {
 }
 
 async function _processExistingReturnVersions (licenceId, returnVersionStartDate) {
+  let newReturnVersionEndDate = null
+  let matchedReturnVersion
+
   const currentReturnVersions = await ReturnVersionModel.query()
-    .select('id', 'endDate')
+    .select('id', 'startDate', 'endDate')
     .where('licenceId', licenceId)
     .andWhere('status', 'current')
 
-  const checkOneResult = await _checkOne(licenceId, returnVersionStartDate)
-  if (checkOneResult) {
-    return null
+  // When a `current` return version exists with a start date less than the new one, and it has no end date. Then the
+  // end date of the existing return version is set to the new version's start date minus 1 day, and no end date is
+  // applied to the new return version
+  matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
+    return currentReturnVersion.startDate < returnVersionStartDate && currentReturnVersion.endDate === null
+  })
+
+  if (matchedReturnVersion) {
+    _updateExistingReturnVersions(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+
+    return newReturnVersionEndDate
   }
 
-  const checkTwoResult = await _checkTwo(currentReturnVersions, licenceId, returnVersionStartDate)
-  if (checkTwoResult) {
-    return checkTwoResult
+  // When a `current` return version exists with a start date less than the new one, and it has an end date which is
+  // greater than the new one’s start date. Then the end date of the existing return version is updated to the new
+  // version’s start date minus 1 day, and the end date of the new return version is set to the existing one's end date
+  // (prior to being updated)
+  matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
+    return currentReturnVersion.startDate < returnVersionStartDate &&
+      currentReturnVersion.endDate > returnVersionStartDate
+  })
+
+  if (matchedReturnVersion) {
+    newReturnVersionEndDate = matchedReturnVersion.endDate
+    _updateExistingReturnVersions(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+
+    return newReturnVersionEndDate
   }
 
-  const checkThreeResult = await _checkThree(licenceId, returnVersionStartDate)
-  if (checkThreeResult) {
-    return null
+  // When a `current` return version exists with a start date matching the new one, and it has no end date. The status
+  // of the existing return version is updated to `superseded` and no end date is applied to the new return version
+  matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
+    return currentReturnVersion.startDate === returnVersionStartDate && currentReturnVersion.endDate === null
+  })
+
+  if (matchedReturnVersion) {
+    _updateExistingReturnVersions(matchedReturnVersion.id, { status: 'superseded' })
+
+    return newReturnVersionEndDate
   }
 
-  const checkFourResult = await _checkFour(currentReturnVersions, licenceId, returnVersionStartDate)
+  // When a `current` return version exists with a matching start date to the new one, and it has an end date. Then the
+  // status of the existing return version is updated to `superseded` and the end date of the new return version is set
+  // to the existing one’s end date
+  matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
+    return currentReturnVersion.startDate === returnVersionStartDate && currentReturnVersion.endDate !== null
+  })
 
-  return checkFourResult
-}
+  if (matchedReturnVersion) {
+    newReturnVersionEndDate = matchedReturnVersion.endDate
+    _updateExistingReturnVersions(matchedReturnVersion.id, { status: 'superseded' })
 
-/**
- * When a `current` return version exists with a start date less than the new one, and it has no end date. Then the end
- * date of the existing return version is set to the new version's start date minus 1 day, and no end date is applied to
- * the new return version
- */
-async function _checkOne (licenceId, returnVersionStartDate) {
-  const result = await ReturnVersionModel.query()
-    .update({ endDate: _addDaysToDate(returnVersionStartDate, -1) })
-    .where('licenceId', licenceId)
-    .andWhere('status', 'current')
-    .andWhere('startDate', '<', returnVersionStartDate)
-    .whereNull('endDate')
-
-  if (result > 0) {
-    return true
-  }
-}
-
-/**
- * When a `current` return version exists with a start date less than the new one, and it has an end date which is
- * greater than the new one’s start date. Then the end date of the existing return version is updated to the new
- * version’s start date minus 1 day, and the end date of the new return version is set to the existing one's end date
- * (prior to being updated)
- */
-async function _checkTwo (currentReturnVersions, licenceId, returnVersionStartDate) {
-  const result = await ReturnVersionModel.query()
-    .returning('id')
-    .update({ endDate: _addDaysToDate(returnVersionStartDate, -1) })
-    .where('licenceId', licenceId)
-    .andWhere('status', 'current')
-    .andWhere('startDate', '<', returnVersionStartDate)
-    .andWhere('endDate', '>', returnVersionStartDate)
-
-  if (result.length > 0) {
-    // Find the updated return version's original end date so this can be used as the end date of the new return version
-    const { endDate } = currentReturnVersions.find((currentReturnVersion) => {
-      return currentReturnVersion.id === result[0].id
-    })
-
-    return endDate
+    return newReturnVersionEndDate
   }
 }
 
-/**
- * When a `current` return version exists with a matching start date to the new one, and it has no end date. The status
- * of the existing return version is updated to `superseded` and no end date is applied to the new return version
- */
-async function _checkThree (licenceId, returnVersionStartDate) {
-  const result = await ReturnVersionModel.query()
-    .update({ status: 'superseded' })
-    .where('licenceId', licenceId)
-    .andWhere('status', 'current')
-    .andWhere('startDate', returnVersionStartDate)
-    .whereNull('endDate')
-
-  if (result > 0) {
-    return true
-  }
-}
-
-/**
- * When a `current` return version exists with a matching start date to the new one, and it has an end date. Then the
- * status of the existing return version is updated to `superseded` and the end date of the new return version is set to
- * the existing one’s end date
- */
-async function _checkFour (currentReturnVersions, licenceId, returnVersionStartDate) {
-  const result = await ReturnVersionModel.query()
-    .returning('id')
-    .update({ status: 'superseded' })
-    .where('licenceId', licenceId)
-    .andWhere('status', 'current')
-    .andWhere('startDate', returnVersionStartDate)
-    .whereNotNull('endDate')
-
-  if (result.length > 0) {
-    // Find the updated return version's original end date so this can be used as the end date of the new return version
-    const { endDate } = currentReturnVersions.find((currentReturnVersion) => {
-      return currentReturnVersion.id === result[0].id
-    })
-
-    return endDate
-  }
+async function _updateExistingReturnVersions (id, updateData) {
+  await ReturnVersionModel.query().update(updateData).where({ id })
 }
 
 module.exports = {
