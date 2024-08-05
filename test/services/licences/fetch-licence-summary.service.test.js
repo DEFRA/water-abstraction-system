@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
+const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
 const Purposes = require('../../../db/seeds/data/purposes.js')
 
 // Test helpers
@@ -21,7 +22,6 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposesConditionsTypeSeeder = require('../../support/seeders/licence-version-purpose-condition-types.seeder.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
@@ -43,7 +43,7 @@ describe('Fetch Licence Summary service', () => {
   let region
 
   beforeEach(async () => {
-    licenceVersionPurposeConditionType = LicenceVersionPurposesConditionsTypeSeeder.data.find((conditionType) => {
+    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypes.data.find((conditionType) => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
 
