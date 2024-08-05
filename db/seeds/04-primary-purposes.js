@@ -9,9 +9,9 @@ async function seed () {
   }
 }
 
-async function _upsert (purpose) {
+async function _upsert (primaryPurpose) {
   return PrimaryPurposeModel.query()
-    .insert(purpose)
+    .insert(primaryPurpose)
     .onConflict('legacyId')
     .merge(['description'])
 }
