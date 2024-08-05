@@ -1,5 +1,6 @@
 'use strict'
 
+const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const SecondaryPurposes = require('./data/secondary-purposes.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
@@ -11,9 +12,9 @@ async function seed () {
 
 async function _upsert (secondaryPurpose) {
   return SecondaryPurposeModel.query()
-    .insert(secondaryPurpose)
+    .insert({ ...secondaryPurpose, updatedAt: timestampForPostgres() })
     .onConflict('legacyId')
-    .merge(['description'])
+    .merge(['description', 'updatedAt'])
 }
 
 module.exports = {

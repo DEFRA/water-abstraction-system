@@ -2,6 +2,7 @@
 
 const { db } = require('../db.js')
 
+const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const Regions = require('./data/regions.js')
 const RegionModel = require('../../app/models/region.model.js')
 
@@ -48,7 +49,7 @@ async function _update (region) {
   const { chargeRegionId, displayName, naldRegionId, name } = region
 
   return RegionModel.query()
-    .patch({ displayName, name })
+    .patch({ displayName, name, updatedAt: timestampForPostgres() })
     .where('chargeRegionId', chargeRegionId)
     .andWhere('naldRegionId', naldRegionId)
 }
