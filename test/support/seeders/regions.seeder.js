@@ -21,7 +21,7 @@ async function seed () {
               UPDATE public.regions
               SET charge_region_id = '${data[index].chargeRegionId}',
                   nald_region_id   = '${data[index].naldRegionId}',
-                  name             = 'fella',
+                  name             = '${data[index].name}',
                   display_name     = '${data[index].displayName}',
                   updated_at       = now()
               WHERE charge_region_id = '${data[index].chargeRegionId}'
