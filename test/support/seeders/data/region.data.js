@@ -80,7 +80,6 @@ module.exports = [
     name: 'Test Region',
     displayName: 'Test Region',
     createdAt: new Date('2024-07-18'),
-    updatedAt: new Date('2024-07-18'),
-    isTest: true
+    updatedAt: new Date('2024-07-18')
   }
 ]
