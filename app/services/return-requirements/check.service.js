@@ -46,7 +46,11 @@ async function _markCheckPageVisited (session) {
 async function _returnRequirements (session) {
   const { licence, requirements, journey } = session
 
-  const points = await FetchPointsService.go(licence.id)
+  let points = []
+
+  if (journey === 'returns-required') {
+    points = await FetchPointsService.go(licence.id)
+  }
 
   return ReturnRequirementsPresenter.go(requirements, points, journey)
 }
