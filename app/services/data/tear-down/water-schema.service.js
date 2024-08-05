@@ -246,12 +246,6 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
-    "water"."regions"
-  WHERE
-    "is_test" = TRUE;
-
-  DELETE
-  FROM
     "water"."purposes_primary"
   WHERE
     "is_test" = TRUE;
