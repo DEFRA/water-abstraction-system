@@ -10,6 +10,7 @@ const { expect } = Code
 // Test data
 const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
 const Purposes = require('../../db/seeds/data/purposes.js')
+const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
@@ -20,7 +21,6 @@ const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
-const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
@@ -33,7 +33,7 @@ describe('Licence Version Purposes model', () => {
 
   beforeEach(() => {
     primaryPurposeId = PrimaryPurposes.data[0].id
-    secondaryPurposeId = SecondaryPurposeSeeder.data[0].id
+    secondaryPurposeId = SecondaryPurposes.data[0].id
     purposeId = Purposes.data[0].id
   })
 
@@ -221,7 +221,7 @@ describe('Licence Version Purposes model', () => {
 
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposes.data[0]
-      invalidSecondaryPurpose = SecondaryPurposeSeeder.data[0]
+      invalidSecondaryPurpose = SecondaryPurposes.data[0]
       invalidPurpose = Purposes.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
@@ -229,7 +229,7 @@ describe('Licence Version Purposes model', () => {
       validPrimaryPurpose = PrimaryPurposes.data.find((primaryPurpose) => {
         return primaryPurpose.legacyId === 'P'
       })
-      validSecondaryPurpose = SecondaryPurposeSeeder.data.find((secondaryPurpose) => {
+      validSecondaryPurpose = SecondaryPurposes.data.find((secondaryPurpose) => {
         return secondaryPurpose.legacyId === 'ELC'
       })
       validPurpose = Purposes.data.find((purpose) => {
