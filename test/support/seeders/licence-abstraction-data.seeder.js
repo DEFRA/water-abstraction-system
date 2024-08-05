@@ -6,7 +6,7 @@
 
 const SecondaryPurposesSeeder = require('./secondary-purpose.seeder.js')
 const PrimaryPurposesSeeder = require('./primary-purpose.seeder.js')
-const Purposes = require('../../../db/seeds/03-purposes.js')
+const Purposes = require('../../../db/seeds/data/purposes.js')
 
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')

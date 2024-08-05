@@ -208,7 +208,7 @@ describe('Charge Reference model', () => {
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

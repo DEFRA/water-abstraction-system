@@ -99,7 +99,7 @@ describe('Licence Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purposes[0]).to.be.an.instanceOf(PurposeModel)
-        expect(result.purposes).to.equal([purpose])
+        expect(result.purposes).to.equal([purpose], { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })

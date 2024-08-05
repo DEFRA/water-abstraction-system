@@ -96,7 +96,7 @@ describe('Charge Element model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
