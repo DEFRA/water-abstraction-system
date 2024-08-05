@@ -33,7 +33,7 @@ function _addDaysToDate (date, days) {
 }
 
 async function _processExistingReturnVersions (licenceId, returnVersionStartDate) {
-  let newReturnVersionEndDate
+  let newReturnVersionEndDate = null
   let matchedReturnVersion
 
   const currentReturnVersions = await ReturnVersionModel.query()
@@ -49,7 +49,6 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   })
 
   if (matchedReturnVersion) {
-    newReturnVersionEndDate = null
     _updateExistingReturnVersions(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
 
     return newReturnVersionEndDate
@@ -78,7 +77,6 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   })
 
   if (matchedReturnVersion) {
-    newReturnVersionEndDate = null
     _updateExistingReturnVersions(matchedReturnVersion.id, { status: 'superseded' })
 
     return newReturnVersionEndDate
@@ -97,6 +95,8 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 
     return newReturnVersionEndDate
   }
+
+  return newReturnVersionEndDate
 }
 
 async function _updateExistingReturnVersions (id, updateData) {
