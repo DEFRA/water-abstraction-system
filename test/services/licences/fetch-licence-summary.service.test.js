@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../../db/seeds/data/purposes.js')
+
 // Test helpers
 const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
@@ -20,7 +23,6 @@ const LicenceVersionPurposeConditionHelper = require('../../support/helpers/lice
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposesConditionsTypeSeeder = require('../../support/seeders/licence-version-purpose-condition-types.seeder.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
-const PurposeSeeder = require('../../support/seeders/purposes.seeder.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -61,7 +63,7 @@ describe('Fetch Licence Summary service', () => {
       licenceId: licence.id, startDate: new Date('2022-05-01')
     })
 
-    purpose = PurposeSeeder.data[0]
+    purpose = Purposes.data[0]
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,

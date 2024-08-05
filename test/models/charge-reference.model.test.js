@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../db/seeds/data/purposes.js')
+
 // Test helpers
 const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
@@ -18,7 +21,6 @@ const ChargeReferenceHelper = require('../support/helpers/charge-reference.helpe
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
@@ -183,7 +185,7 @@ describe('Charge Reference model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = PurposesSeeder.data[0]
+        testPurpose = Purposes.data[0]
 
         const { id: purposeId } = testPurpose
 

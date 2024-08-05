@@ -7,11 +7,13 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../db/seeds/data/purposes.js')
+
 // Test helpers
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
@@ -71,7 +73,7 @@ describe('Return Requirement Purpose model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = PurposesSeeder.data[0]
+        testPurpose = Purposes.data[0]
 
         const { id: purposeId } = testPurpose
 

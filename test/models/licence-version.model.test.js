@@ -7,13 +7,15 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../db/seeds/data/purposes.js')
+
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -71,7 +73,7 @@ describe('Licence Version model', () => {
 
       beforeEach(async () => {
         testRecord = await LicenceVersionHelper.add()
-        purpose = PurposesSeeder.data[0]
+        purpose = Purposes.data[0]
 
         const { id } = testRecord
 

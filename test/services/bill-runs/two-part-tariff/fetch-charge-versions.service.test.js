@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../../../db/seeds/data/purposes.js')
+
 // Test helpers
 const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
@@ -17,7 +20,6 @@ const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
-const PurposeSeeder = require('../../../support/seeders/purposes.seeder.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
@@ -39,7 +41,7 @@ describe('Fetch Charge Versions service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    purposeId = PurposeSeeder.data.find((purpose) => { return purpose.legacyId === '420' }).id
+    purposeId = Purposes.data.find((purpose) => { return purpose.legacyId === '420' }).id
 
     const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
 

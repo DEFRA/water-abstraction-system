@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test data
+const Purposes = require('../../db/seeds/data/purposes.js')
+
 // Test helpers
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -16,7 +19,6 @@ const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 
@@ -32,7 +34,7 @@ describe('Licence Version Purposes model', () => {
   beforeEach(() => {
     primaryPurposeId = PrimaryPurposesSeeder.data[0].id
     secondaryPurposeId = SecondaryPurposeSeeder.data[0].id
-    purposeId = PurposesSeeder.data[0].id
+    purposeId = Purposes.data[0].id
   })
 
   describe('Basic query', () => {
@@ -220,7 +222,7 @@ describe('Licence Version Purposes model', () => {
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposesSeeder.data[0]
       invalidSecondaryPurpose = SecondaryPurposeSeeder.data[0]
-      invalidPurpose = PurposesSeeder.data.find((purpose) => {
+      invalidPurpose = Purposes.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
 
@@ -230,7 +232,7 @@ describe('Licence Version Purposes model', () => {
       validSecondaryPurpose = SecondaryPurposeSeeder.data.find((secondaryPurpose) => {
         return secondaryPurpose.legacyId === 'ELC'
       })
-      validPurpose = PurposesSeeder.data.find((purpose) => {
+      validPurpose = Purposes.data.find((purpose) => {
         return purpose.legacyId === '200'
       })
     })

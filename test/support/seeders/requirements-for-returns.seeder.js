@@ -5,7 +5,7 @@
  */
 
 const LicenceHelper = require('../helpers/licence.helper.js')
-const PurposesSeeder = require('../seeders/purposes.seeder.js')
+const Purposes = require('../../../db/seeds/data/purposes.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
@@ -93,7 +93,7 @@ async function _returnRequirement (
 
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = PurposesSeeder.data.find((purpose) => {
+  const purpose = Purposes.data.find((purpose) => {
     return purpose.legacyId === '420'
   })
 
