@@ -22,6 +22,10 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 // Thing under test
 const RoleModel = require('../../app/models/role.model.js')
 
+const GROUP_ROLE_SUPER_AR_USER_INDEX = 16
+const GROUP_SUPER_INDEX = 5
+const ROLE_AR_USER_INDEX = 6
+
 describe('Role model', () => {
   let testRecord
 
@@ -43,8 +47,9 @@ describe('Role model', () => {
       let testGroupRole
 
       beforeEach(async () => {
-        testRecord = RoleHelper.select()
-        testGroupRole = await GroupRoleHelper.add({ roleId: testRecord.id })
+        // This combination has one match in group roles and so ensures we only get one result making testing clearer
+        testRecord = RoleHelper.select(ROLE_AR_USER_INDEX)
+        testGroupRole = GroupRoleHelper.select(GROUP_ROLE_SUPER_AR_USER_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -65,7 +70,7 @@ describe('Role model', () => {
         expect(result.groupRoles).to.be.an.array()
         expect(result.groupRoles).to.have.length(1)
         expect(result.groupRoles[0]).to.be.an.instanceOf(GroupRoleModel)
-        expect(result.groupRoles[0]).to.equal(testGroupRole)
+        expect(result.groupRoles[0]).to.equal(testGroupRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -103,9 +108,9 @@ describe('Role model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testRecord = RoleHelper.select()
-        testGroup = GroupHelper.select()
-        await GroupRoleHelper.add({ roleId: testRecord.id, groupId: testGroup.id })
+        // This combination has one match in group roles and so ensures we only get one result making testing clearer
+        testRecord = RoleHelper.select(ROLE_AR_USER_INDEX)
+        testGroup = GroupHelper.select(GROUP_SUPER_INDEX)
       })
 
       it('can successfully run a related query', async () => {

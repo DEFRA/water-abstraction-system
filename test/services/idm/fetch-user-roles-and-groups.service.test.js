@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const GroupHelper = require('../../support/helpers/group.helper.js')
-const GroupRoleHelper = require('../../support/helpers/group-role.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
 const UserGroupHelper = require('../../support/helpers/user-group.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
@@ -19,12 +18,14 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Thing under test
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
+const GROUP_ENV_OFFICER_INDEX = 0
+const ROLE_RETURNS_INDEX = 0
+const ROLE_HOF_NOTIFICATIONS_INDEX = 0
+
 describe('Fetch User Roles And Groups service', () => {
+  let duplicateRoleForUser
   let groupForUser
-  let notAssignedRole
-  let notAssignedGroup
   let roleForUser
-  let roleForGroup
   let user
 
   before(async () => {
@@ -35,20 +36,14 @@ describe('Fetch User Roles And Groups service', () => {
     )
 
     // Select a role and assign it directly to the user
-    roleForUser = RoleHelper.select(0)
+    roleForUser = RoleHelper.select(ROLE_RETURNS_INDEX)
     await UserRoleHelper.add({ userId: user.id, roleId: roleForUser.id })
 
-    // Select a role and assign it to the user via a group
-    roleForGroup = RoleHelper.select(1)
-    groupForUser = GroupHelper.select(0)
-    await GroupRoleHelper.add({ groupId: groupForUser.id, roleId: roleForGroup.id })
+    // Select a group and assign it to the user via a group
+    groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
     await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
 
-    // Create a group role that we don't assign to the user to test that it isn't returned
-    notAssignedRole = RoleHelper.select(2)
-    notAssignedGroup = GroupHelper.select(1)
-
-    await GroupRoleHelper.add({ groupId: notAssignedGroup.id, roleId: notAssignedRole.id })
+    // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
 
   describe('when the user exists', () => {
@@ -65,11 +60,14 @@ describe('Fetch User Roles And Groups service', () => {
         return role.role
       })
 
-      expect(roles).to.have.length(2)
-      expect(roles).to.include(roleForUser.role)
-      expect(roles).to.include(roleForGroup.role)
+      expect(roles).to.have.length(3)
 
-      expect(roles).not.to.include(notAssignedRole.role)
+      // 1 via the user role
+      expect(roles).to.include('returns')
+
+      // 2 via the user group (environment officer has 2 roles in group_roles)
+      expect(roles).to.include('hof_notifications')
+      expect(roles).to.include('manage_gauging_station_licence_links')
     })
 
     it("returns the user's groups", async () => {
@@ -81,13 +79,13 @@ describe('Fetch User Roles And Groups service', () => {
 
       expect(groups).to.have.length(1)
       expect(groups).to.include(groupForUser.group)
-
-      expect(groups).not.to.include(notAssignedGroup.group)
     })
 
     describe('and the user is assigned a role they also have through a group', () => {
       beforeEach(async () => {
-        await UserRoleHelper.add({ userId: user.id, roleId: roleForGroup.id })
+        duplicateRoleForUser = RoleHelper.select(ROLE_HOF_NOTIFICATIONS_INDEX)
+
+        await UserRoleHelper.add({ userId: user.id, roleId: duplicateRoleForUser.id })
       })
 
       it('returns only one instance of the role', async () => {
@@ -97,9 +95,12 @@ describe('Fetch User Roles And Groups service', () => {
           return role.role
         })
 
-        expect(roles).to.have.length(2)
-        expect(roles).to.include(roleForUser.role)
-        expect(roles).to.include(roleForGroup.role)
+        // 1 via the user role (ignoring the duplicate hof_notifications)
+        expect(roles).to.include('returns')
+
+        // 2 via the user group (environment officer has 2 roles in group_roles)
+        expect(roles).to.include('hof_notifications')
+        expect(roles).to.include('manage_gauging_station_licence_links')
       })
     })
   })

@@ -22,7 +22,7 @@ describe('Group Role model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await GroupRoleHelper.add()
+      testRecord = GroupRoleHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -39,8 +39,8 @@ describe('Group Role model', () => {
       let testRole
 
       beforeEach(async () => {
-        testRole = RoleHelper.select()
-        testRecord = await GroupRoleHelper.add({ roleId: testRole.id })
+        testRole = RoleHelper.select(RoleHelper.DEFAULT_INDEX)
+        testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -67,8 +67,8 @@ describe('Group Role model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testGroup = GroupHelper.select()
-        testRecord = await GroupRoleHelper.add({ groupId: testGroup.id })
+        testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
+        testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
       })
 
       it('can successfully run a related query', async () => {
