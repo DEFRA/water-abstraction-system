@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
 
-describe.only('View Licence History presenter', () => {
+describe('View Licence History presenter', () => {
   let licenceHistory
 
   beforeEach(() => {
