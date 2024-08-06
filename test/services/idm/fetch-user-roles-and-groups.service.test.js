@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -20,98 +20,107 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
 describe('Fetch User Roles And Groups service', () => {
-  let testRoleForUser
-  let testRoleForGroup
-  let testUser
-  let testGroup
+  let groupForUser
+  let notAssignedRole
+  let notAssignedGroup
+  let roleForUser
+  let roleForGroup
+  let user
 
-  beforeEach(async () => {
-    testUser = await UserHelper.add(
+  before(async () => {
+    user = await UserHelper.add(
       {
         username: `${generateUUID()}@test.com`
       }
     )
 
-    // Create a role and assign it directly to the user
-    testRoleForUser = await RoleHelper.add({ role: 'role_for_user' })
-    await UserRoleHelper.add({ userId: testUser.id, roleId: testRoleForUser.id })
+    // Select a role and assign it directly to the user
+    roleForUser = RoleHelper.select(0)
+    await UserRoleHelper.add({ userId: user.id, roleId: roleForUser.id })
 
-    // Create a role and assign it to the user via a group
-    testRoleForGroup = await RoleHelper.add({ role: 'role_for_group' })
-    testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
-    await GroupRoleHelper.add({ groupId: testGroup.id, roleId: testRoleForGroup.id })
-    await UserGroupHelper.add({ userId: testUser.id, groupId: testGroup.id })
+    // Select a role and assign it to the user via a group
+    roleForGroup = RoleHelper.select(1)
+    groupForUser = GroupHelper.select(0)
+    await GroupRoleHelper.add({ groupId: groupForUser.id, roleId: roleForGroup.id })
+    await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
 
-    // Create things that we don't assign to the user to test that they aren't returned
-    await RoleHelper.add({ role: 'not_assigned_role' })
-    const notAssignedGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX + 1)
-    const notAssignedGroupRole = await RoleHelper.add({ role: 'not_assigned_group_role' })
+    // Create a group role that we don't assign to the user to test that it isn't returned
+    notAssignedRole = RoleHelper.select(2)
+    notAssignedGroup = GroupHelper.select(1)
 
-    await GroupRoleHelper.add({ groupId: notAssignedGroup.id, roleId: notAssignedGroupRole.id })
+    await GroupRoleHelper.add({ groupId: notAssignedGroup.id, roleId: notAssignedRole.id })
   })
 
   describe('when the user exists', () => {
     it('returns the user', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(testUser.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.id)
 
-      expect(result.user).to.equal(testUser)
+      expect(result.user).to.equal(user)
     })
 
     it("returns the user's roles", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(testUser.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.id)
 
       const roles = result.roles.map((role) => {
         return role.role
       })
 
       expect(roles).to.have.length(2)
-      expect(roles).to.only.include(['role_for_user', 'role_for_group'])
+      expect(roles).to.include(roleForUser.role)
+      expect(roles).to.include(roleForGroup.role)
+
+      expect(roles).not.to.include(notAssignedRole.role)
     })
 
     it("returns the user's groups", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(testUser.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.id)
 
       const groups = result.groups.map((group) => {
         return group.group
       })
 
       expect(groups).to.have.length(1)
-      expect(groups).to.equal(['billing_and_data'])
+      expect(groups).to.include(groupForUser.group)
+
+      expect(groups).not.to.include(notAssignedGroup.group)
     })
 
     describe('and the user is assigned a role they also have through a group', () => {
       beforeEach(async () => {
-        await UserRoleHelper.add({ userId: testUser.id, roleId: testRoleForGroup.id })
+        await UserRoleHelper.add({ userId: user.id, roleId: roleForGroup.id })
       })
 
       it('returns only one instance of the role', async () => {
-        const result = await FetchUserRolesAndGroupsService.go(testUser.id)
+        const result = await FetchUserRolesAndGroupsService.go(user.id)
 
         const roles = result.roles.map((role) => {
           return role.role
         })
 
         expect(roles).to.have.length(2)
-        expect(roles).to.only.include(['role_for_user', 'role_for_group'])
+        expect(roles).to.include(roleForUser.role)
+        expect(roles).to.include(roleForGroup.role)
       })
     })
   })
 
   describe('when the user does not exist', () => {
+    const unknownUserId = 0
+
     it('returns "null" for "user"', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(0)
+      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
       expect(result.user).to.be.null()
     })
 
     it('returns an empty roles array', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(0)
+      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
       expect(result.roles).to.be.empty()
     })
 
     it('returns an empty groups array', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(0)
+      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
       expect(result.groups).to.be.empty()
     })
