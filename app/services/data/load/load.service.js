@@ -46,7 +46,6 @@ const LicenceVersionHelper = require('../../../../test/support/helpers/licence-v
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
 const PurposeHelper = require('../../../../test/support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../../test/support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
 const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../../test/support/helpers/return-requirement-purpose.helper.js')
@@ -110,7 +109,6 @@ const LOAD_HELPERS = {
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   permitLicences: { helper: PermitLicenceHelper, test: false },
   purposes: { helper: PurposeHelper, test: true, legacy: { schema: 'water', table: 'purposes_uses', id: 'purpose_use_id' } },
-  regions: { helper: RegionHelper, test: true, legacy: { schema: 'water', table: 'regions', id: 'region_id' } },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
   returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
   returnRequirementPurposes: { helper: ReturnRequirementPurposeHelper, test: false },
@@ -289,10 +287,15 @@ async function _applyLookups (instance) {
   const keys = Object.keys(instance)
 
   for (const key of keys) {
-    if (instance[key].schema) {
-      const { schema, table, lookup, value, select } = instance[key]
+    try {
+      if (instance[key].schema) {
+        const { schema, table, lookup, value, select } = instance[key]
 
-      instance[key] = await _selector(schema, table, select, lookup, value)
+        instance[key] = await _selector(schema, table, select, lookup, value)
+      }
+    } catch (error) {
+      console.log('🚀 ~ _applyLookups ~ error:', instance)
+      throw error
     }
   }
 }
