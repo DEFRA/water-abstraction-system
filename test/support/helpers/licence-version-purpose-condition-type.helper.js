@@ -5,35 +5,9 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const LicenceVersionPurposeConditionTypeModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
 
 const DEFAULT_INDEX = 0
-
-/**
- * Add a new licence version purpose condition type
- *
- * If no `data` is provided, default values will be used. These are
- *
- * - `code` - COMB
- * - `subcode` - LINK
- * - `description` - Condition To Indicate Licence  Split On Nald
- * - `subcodeDescription` - Link Between Split Licences
- * - `displayTitle` - Link between split licences
- * - `createdAt` - new Date()
- * - `updatedAt` - new Date()
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {Promise<module:LicenceVersionPurposeConditionTypeModel>} The instance of the newly created record
- */
-async function add (data = {}) {
-  const insertData = defaults(data)
-
-  return LicenceVersionPurposeConditionTypeModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
 
 /**
  * Returns the defaults used
@@ -75,7 +49,6 @@ function select (index = -1) {
 }
 
 module.exports = {
-  add,
   data: LicenceVersionPurposeConditionTypes.data,
   DEFAULT_INDEX,
   defaults,
