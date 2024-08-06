@@ -27,7 +27,7 @@ describe('Role model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await RoleHelper.add()
+      testRecord = RoleHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -43,7 +43,7 @@ describe('Role model', () => {
       let testGroupRole
 
       beforeEach(async () => {
-        testRecord = await RoleHelper.add()
+        testRecord = RoleHelper.select()
         testGroupRole = await GroupRoleHelper.add({ roleId: testRecord.id })
       })
 
@@ -73,7 +73,7 @@ describe('Role model', () => {
       let testUserRole
 
       beforeEach(async () => {
-        testRecord = await RoleHelper.add()
+        testRecord = RoleHelper.select()
         testUserRole = await UserRoleHelper.add({ roleId: testRecord.id })
       })
 
@@ -103,7 +103,7 @@ describe('Role model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testRecord = await RoleHelper.add()
+        testRecord = RoleHelper.select()
         testGroup = GroupHelper.select()
         await GroupRoleHelper.add({ roleId: testRecord.id, groupId: testGroup.id })
       })
@@ -134,7 +134,7 @@ describe('Role model', () => {
       let testUser
 
       beforeEach(async () => {
-        testRecord = await RoleHelper.add()
+        testRecord = RoleHelper.select()
         testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
         await UserRoleHelper.add({ userId: testUser.id, roleId: testRecord.id })
       })

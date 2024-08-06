@@ -39,7 +39,7 @@ describe('Group Role model', () => {
       let testRole
 
       beforeEach(async () => {
-        testRole = await RoleHelper.add()
+        testRole = RoleHelper.select()
         testRecord = await GroupRoleHelper.add({ roleId: testRole.id })
       })
 
@@ -59,7 +59,7 @@ describe('Group Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.role).to.be.an.instanceOf(RoleModel)
-        expect(result.role).to.equal(testRole)
+        expect(result.role).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

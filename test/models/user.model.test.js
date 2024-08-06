@@ -113,7 +113,7 @@ describe('User model', () => {
 
       beforeEach(async () => {
         testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testRole = await RoleHelper.add()
+        testRole = RoleHelper.select()
         await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
       })
 
@@ -135,7 +135,7 @@ describe('User model', () => {
         expect(result.roles).to.be.an.array()
         expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole)
+        expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
