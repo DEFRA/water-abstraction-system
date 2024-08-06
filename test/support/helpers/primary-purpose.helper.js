@@ -5,30 +5,9 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const PrimaryPurposeModel = require('../../../app/models/primary-purpose.model.js')
 const PrimaryPurposes = require('../../../db/seeds/data/primary-purposes.js')
 
 const DEFAULT_INDEX = 0
-
-/**
- * Add a new primary purpose
- *
- * If no `data` is provided, default values will be used. These are
- *
- * - `legacyId` - [randomly selected - A]
- * - `description` - [randomly selected - Agriculture]
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {Promise<module:PurposeModel>} The instance of the newly created record
- */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return PrimaryPurposeModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
 
 /**
  * Returns the defaults used
@@ -70,7 +49,6 @@ function select (index = -1) {
 }
 
 module.exports = {
-  add,
   data: PrimaryPurposes.data,
   DEFAULT_INDEX,
   defaults,
