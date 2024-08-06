@@ -49,7 +49,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   })
 
   if (matchedReturnVersion) {
-    _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
 
     return newReturnVersionEndDate
   }
@@ -65,7 +65,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 
   if (matchedReturnVersion) {
     newReturnVersionEndDate = matchedReturnVersion.endDate
-    _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
 
     return newReturnVersionEndDate
   }
@@ -78,7 +78,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   })
 
   if (matchedReturnVersion) {
-    _updateExistingReturnVersion(matchedReturnVersion.id, { status: 'superseded' })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { status: 'superseded' })
 
     return newReturnVersionEndDate
   }
@@ -93,7 +93,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 
   if (matchedReturnVersion) {
     newReturnVersionEndDate = matchedReturnVersion.endDate
-    _updateExistingReturnVersion(matchedReturnVersion.id, { status: 'superseded' })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { status: 'superseded' })
 
     return newReturnVersionEndDate
   }
@@ -102,7 +102,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 }
 
 async function _updateExistingReturnVersion (id, updateData) {
-  await ReturnVersionModel.query().update(updateData).where({ id })
+  return ReturnVersionModel.query().patch(updateData).where({ id })
 }
 
 module.exports = {
