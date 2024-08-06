@@ -5,32 +5,9 @@
  */
 
 const { randomInteger, selectRandomEntry } = require('../general.js')
-const PurposeModel = require('../../../app/models/purpose.model.js')
 const Purposes = require('../../../db/seeds/data/purposes.js')
 
 const DEFAULT_INDEX = 39
-
-/**
- * Add a new purpose
- *
- * If no `data` is provided, default values will be used. These are
- *
- * - `legacyId` - [randomly generated - 420]
- * - `description` - Spray Irrigation - Storage
- * - `lossFactor` - high
- * - `twoPartTariff` - true
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {Promise<module:PurposeModel>} The instance of the newly created record
- */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return PurposeModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
 
 /**
  * Returns the defaults used
@@ -78,7 +55,6 @@ function generatePurposeCode () {
 }
 
 module.exports = {
-  add,
   DEFAULT_INDEX,
   data: Purposes.data,
   defaults,
