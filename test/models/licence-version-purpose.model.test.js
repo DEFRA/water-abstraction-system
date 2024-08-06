@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
-const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
 const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
@@ -17,6 +16,7 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
@@ -32,7 +32,7 @@ describe('Licence Version Purposes model', () => {
   let purposeId
 
   beforeEach(() => {
-    primaryPurposeId = PrimaryPurposes.data[0].id
+    primaryPurposeId = PrimaryPurposeHelper.select().id
     secondaryPurposeId = SecondaryPurposes.data[0].id
     purposeId = PurposeHelper.select().id
   })
@@ -220,13 +220,13 @@ describe('Licence Version Purposes model', () => {
     let validSecondaryPurpose
 
     beforeEach(() => {
-      invalidPrimaryPurpose = PrimaryPurposes.data[0]
+      invalidPrimaryPurpose = PrimaryPurposeHelper.select(0)
       invalidSecondaryPurpose = SecondaryPurposes.data[0]
       invalidPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
 
-      validPrimaryPurpose = PrimaryPurposes.data.find((primaryPurpose) => {
+      validPrimaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
         return primaryPurpose.legacyId === 'P'
       })
       validSecondaryPurpose = SecondaryPurposes.data.find((secondaryPurpose) => {

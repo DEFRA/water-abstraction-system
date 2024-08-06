@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
-const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
 const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
@@ -44,7 +44,7 @@ describe('Return Requirement Purpose model', () => {
       let testPrimaryPurpose
 
       beforeEach(async () => {
-        testPrimaryPurpose = PrimaryPurposes.data[0]
+        testPrimaryPurpose = PrimaryPurposeHelper.select()
 
         testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId: testPrimaryPurpose.id })
       })
