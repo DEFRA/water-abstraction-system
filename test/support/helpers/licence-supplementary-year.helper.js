@@ -8,7 +8,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceSupplementaryYearModel = require('../../../app/models/licence-supplementary-year.model.js')
 
 /**
- * Add a new review licence record for 2pt matching
+ * Add a new licence supplementary year record
  *
  * If no `data` is provided, default values will be used. These are
  *
