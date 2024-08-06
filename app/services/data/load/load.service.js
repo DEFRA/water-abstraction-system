@@ -29,7 +29,6 @@ const ContactHelper = require('../../../../test/support/helpers/contact.helper.j
 const EventHelper = require('../../../../test/support/helpers/event.helper.js')
 const FinancialAgreementHelper = require('../../../../test/support/helpers/financial-agreement.helper.js')
 const GaugingStationHelper = require('../../../../test/support/helpers/gauging-station.helper.js')
-const GroupRoleHelper = require('../../../../test/support/helpers/group-role.helper.js')
 const LicenceAgreementHelper = require('../../../../test/support/helpers/licence-agreement.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
 const LicenceDocumentRoleHelper = require('../../../../test/support/helpers/licence-document-role.helper.js')
@@ -88,7 +87,6 @@ const LOAD_HELPERS = {
   events: { helper: EventHelper, test: false },
   financialAgreements: { helper: FinancialAgreementHelper, test: true, legacy: { schema: 'water', table: 'financial_agreement_types', id: 'financial_agreement_type_id' } },
   gaugingStations: { helper: GaugingStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
-  groupRoles: { helper: GroupRoleHelper, test: false },
   licenceAgreements: { helper: LicenceAgreementHelper, test: true, legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' } },
   licenceDocumentHeaders: { helper: LicenceDocumentHeaderHelper, test: false },
   licenceDocumentRoles: { helper: LicenceDocumentRoleHelper, test: true, legacy: { schema: 'crm_v2', table: 'document_roles', id: 'document_role_id' } },

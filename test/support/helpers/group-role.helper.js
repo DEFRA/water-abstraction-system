@@ -5,30 +5,9 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const GroupRoleModel = require('../../../app/models/group-role.model.js')
 const GroupRoles = require('../../../db/seeds/data/group-roles.js')
 
 const DEFAULT_INDEX = 18
-
-/**
- * Add a new group role
- *
- * If no `data` is provided, default values will be used. These are
- *
- * - `groupId` - [random UUID]
- * - `roleId` - [random UUID]
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {Promise<module:GroupRoleModel>} The instance of the newly created record
- */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return GroupRoleModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
 
 /**
  * Returns the defaults used
@@ -70,7 +49,6 @@ function select (index = -1) {
 }
 
 module.exports = {
-  add,
   data: GroupRoles.data,
   DEFAULT_INDEX,
   defaults,
