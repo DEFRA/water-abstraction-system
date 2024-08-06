@@ -4,7 +4,6 @@
  * @module RegionHelper
  */
 
-const { randomInteger } = require('../general.js')
 const { selectRandomEntry } = require('../general.js')
 const RegionModel = require('../../../app/models/region.model.js')
 const Regions = require('../../../db/seeds/data/regions.js')
@@ -50,16 +49,6 @@ function defaults (data = {}) {
   }
 }
 
-function generateChargeRegionId (naldRegionId = null) {
-  if (!naldRegionId) {
-    naldRegionId = randomInteger(1, 8)
-  }
-
-  const chargeRegionIds = ['A', 'B', 'Y', 'N', 'E', 'S', 'T', 'W']
-
-  return chargeRegionIds[naldRegionId - 1]
-}
-
 function select (index = -1) {
   if (index > -1) {
     return Regions.data[index]
@@ -72,7 +61,6 @@ module.exports = {
   add,
   data: Regions.data,
   defaults,
-  generateChargeRegionId,
   select,
   TEST_REGION_INDEX
 }
