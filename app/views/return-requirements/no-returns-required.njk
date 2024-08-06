@@ -29,6 +29,8 @@
 
   <div class="govuk-body">
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
       {{ govukRadios({
         name: "reason",
         errorMessage: error,
@@ -46,14 +48,19 @@
             checked: reason == 'abstraction-below-100-cubic-metres-per-day'
           },
           {
+            text: 'Licence conditions do not require returns',
+            value: 'licence-conditions-do-not-require-returns',
+            checked: reason == 'licence-conditions-do-not-require-returns'
+          },
+          {
             text: 'Returns exception',
             value: 'returns-exception',
             checked: reason == 'returns-exception'
           },
           {
-            text: 'Transfer licence',
-            value: 'transfer-licence',
-            checked: reason == 'transfer-licence'
+            text: 'Temporary trade',
+            value: 'temporary-trade',
+            checked: reason == 'temporary-trade'
           }
         ]
       }) }}
@@ -61,6 +68,4 @@
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
   </div>
-
-
 {% endblock %}

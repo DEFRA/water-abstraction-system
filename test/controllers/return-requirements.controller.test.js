@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const AdditionalSubmissionOptionsService = require('../../app/services/return-requirements/additional-submission-options.service.js')
@@ -499,6 +502,7 @@ describe('Return requirements controller', () => {
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
+
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Why are no returns required?')
         })
@@ -957,7 +961,7 @@ describe('Return requirements controller', () => {
           })
 
           it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(postRequestOptions(`/return-requirements/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('There is a problem')
@@ -970,20 +974,20 @@ describe('Return requirements controller', () => {
           })
 
           it('redirects to /system/return-requirements/{sessionId}/reason', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(postRequestOptions(`/return-requirements/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/reason')
           })
         })
 
-        describe('and and the page has not been visited previously ', () => {
+        describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitStartDateService, 'go').resolves({})
           })
 
           it('redirects to /system/return-requirements/{sessionId}/no-returns-required', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(postRequestOptions(`/return-requirements/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/no-returns-required')
@@ -996,7 +1000,7 @@ describe('Return requirements controller', () => {
           })
 
           it('redirects to /system/return-requirements/{sessionId}/check', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(postRequestOptions(`/return-requirements/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
@@ -1027,6 +1031,7 @@ describe('Return requirements controller', () => {
               credentials: { scope: ['billing'] }
             }
           })
+
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Requirements for returns valid from')
         })
@@ -1059,13 +1064,5 @@ function _postOptions (path, index = -1, payload) {
     url = `${url}/${index}`
   }
 
-  return {
-    method: 'POST',
-    url,
-    auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    },
-    payload
-  }
+  return postRequestOptions(url, payload)
 }

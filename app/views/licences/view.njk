@@ -46,35 +46,35 @@
       Contents
     </h2>
     <ul class="govuk-tabs__list">
-      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}">
+      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_summary">
         <a class="govuk-tabs__tab" href="summary">
           Summary
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}">
+      <li class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_contact">
         <a class="govuk-tabs__tab" href="contact-details">
           Contact details
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}">
+      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_returns">
         <a class="govuk-tabs__tab" href="returns">
           Returns
         </a>
       </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}">
+      <li class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_communications">
         <a class="govuk-tabs__tab" href="communications">
           Communications
         </a>
       </li>
       {% if roles and 'billing' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}">
+        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_bills">
           <a class="govuk-tabs__tab" href="bills">
             Bills
           </a>
         </li>
       {% endif %}
       {% if roles and 'view_charge_versions' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}">
+        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_licence_set_up">
           <a class="govuk-tabs__tab" href="set-up">
             Licence set up
           </a>
