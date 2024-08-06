@@ -5,11 +5,11 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { randomInteger, selectRandomEntry } = require('../general.js')
+const { randomInteger } = require('../general.js')
 const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
 const PurposeHelper = require('./purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
-const SecondaryPurposes = require('../../../db/seeds/data/secondary-purposes.js')
+const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
 
 /**
  * Add a new return requirement purpose
@@ -45,7 +45,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const purpose = PurposeHelper.select()
   const primaryPurpose = PrimaryPurposeHelper.select()
-  const secondaryPurpose = selectRandomEntry(SecondaryPurposes.data)
+  const secondaryPurpose = SecondaryPurposeHelper.select()
 
   const externalId = `9:${randomInteger(100, 99999)}:${primaryPurpose.legacyId}:${secondaryPurpose.legacyId}:${purpose.legacyId}`
 

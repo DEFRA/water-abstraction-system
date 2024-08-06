@@ -8,19 +8,19 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test data
-const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 describe('Secondary Purpose model', () => {
-  const testRecordId = SecondaryPurposes.data[0].id
+  const testRecordId = SecondaryPurposeHelper.select().id
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {

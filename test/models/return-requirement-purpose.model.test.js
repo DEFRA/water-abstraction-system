@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
-
 // Test helpers
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
@@ -18,6 +15,7 @@ const PurposeModel = require('../../app/models/purpose.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 // Thing under test
@@ -136,7 +134,7 @@ describe('Return Requirement Purpose model', () => {
     let testSecondaryPurpose
 
     beforeEach(async () => {
-      testSecondaryPurpose = SecondaryPurposes.data[0]
+      testSecondaryPurpose = SecondaryPurposeHelper.select()
 
       const { id: secondaryPurposeId } = testSecondaryPurpose
 

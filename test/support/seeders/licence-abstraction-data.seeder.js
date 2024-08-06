@@ -13,9 +13,7 @@ const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
 const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
-
-// Test data
-const SecondaryPurposes = require('../../../db/seeds/data/secondary-purposes.js')
+const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -202,9 +200,9 @@ async function _purposes () {
 
   const { id: primaryElectricityId } = PrimaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'P' })
 
-  const { id: secondaryAgricultureId } = SecondaryPurposes.data.find((purpose) => { return purpose.legacyId === 'AGR' })
+  const { id: secondaryAgricultureId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'AGR' })
 
-  const { id: secondaryElectricityId } = SecondaryPurposes.data.find((purpose) => { return purpose.legacyId === 'ELC' })
+  const { id: secondaryElectricityId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'ELC' })
 
   return {
     purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },

@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
-
 // Test helpers
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -20,12 +17,13 @@ const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 
-describe('Licence Version Purposes model', () => {
+describe('Licence Version Purpose model', () => {
   let testRecord
   let secondaryPurposeId
   let primaryPurposeId
@@ -33,7 +31,7 @@ describe('Licence Version Purposes model', () => {
 
   beforeEach(() => {
     primaryPurposeId = PrimaryPurposeHelper.select().id
-    secondaryPurposeId = SecondaryPurposes.data[0].id
+    secondaryPurposeId = SecondaryPurposeHelper.select().id
     purposeId = PurposeHelper.select().id
   })
 
@@ -221,7 +219,7 @@ describe('Licence Version Purposes model', () => {
 
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposeHelper.select(0)
-      invalidSecondaryPurpose = SecondaryPurposes.data[0]
+      invalidSecondaryPurpose = SecondaryPurposeHelper.select()
       invalidPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
@@ -229,7 +227,7 @@ describe('Licence Version Purposes model', () => {
       validPrimaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
         return primaryPurpose.legacyId === 'P'
       })
-      validSecondaryPurpose = SecondaryPurposes.data.find((secondaryPurpose) => {
+      validSecondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
         return secondaryPurpose.legacyId === 'ELC'
       })
       validPurpose = PurposeHelper.data.find((purpose) => {
