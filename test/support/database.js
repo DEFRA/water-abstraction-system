@@ -10,6 +10,7 @@
 
 const { db, dbConfig } = require('../../db/db.js')
 
+const GroupsSeeder = require('../../db/seeds/07-groups.js')
 const LicenceVersionPurposeConditionTypeSeeder = require('../../db/seeds/06-licence-version-purpose-condition-types.js')
 const PurposesSeeder = require('../../db/seeds/03-purposes.js')
 const PrimaryPurposesSeeder = require('../../db/seeds/04-primary-purposes.js')
@@ -77,11 +78,12 @@ function _migrationTables () {
 }
 
 async function _seed () {
-  await LicenceVersionPurposeConditionTypeSeeder.seed()
   await RegionsSeeder.seed()
   await PurposesSeeder.seed()
   await PrimaryPurposesSeeder.seed()
   await SecondaryPurposesSeeder.seed()
+  await LicenceVersionPurposeConditionTypeSeeder.seed()
+  await GroupsSeeder.seed()
 }
 
 async function _tableNames (schema) {
