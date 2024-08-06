@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Regions = require('../../../db/seeds/data/regions.js')
-
 // Test helpers
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
@@ -19,6 +16,7 @@ const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 
 // Thing under test
@@ -39,9 +37,7 @@ describe('Fetch Bill Licence Summary service', () => {
   let transactionId
 
   beforeEach(async () => {
-    const region = Regions.data.find((region) => {
-      return region.displayName === 'Test Region'
-    })
+    const region = RegionHelper.select(8)
 
     regionId = region.id
     licenceRef = LicenceHelper.generateLicenceRef()

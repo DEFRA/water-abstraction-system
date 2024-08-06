@@ -8,26 +8,22 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Regions = require('../../../db/seeds/data/regions.js')
-
 // Test helpers
 const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLicence = require('./_fixtures/licence.js')
 const FixtureVersions = require('./_fixtures/versions.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
-const LegacyImportLicenceService =
+const LegacyLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
-describe('Legacy import licence service', () => {
+describe('Import - Legacy Licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
-  const region = Regions.data.find((region) => {
-    return region.displayName === 'Test Region'
-  })
+  const region = RegionHelper.select(8)
 
   beforeEach(async () => {
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
@@ -39,7 +35,7 @@ describe('Legacy import licence service', () => {
   })
 
   it('returns the matching licence data', async () => {
-    const results = await LegacyImportLicenceService.go(licenceRef)
+    const results = await LegacyLicenceService.go(licenceRef)
 
     const licence = await LicenceModel.query().findById(results.id)
 

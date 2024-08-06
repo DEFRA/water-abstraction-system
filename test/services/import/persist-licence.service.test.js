@@ -7,25 +7,21 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Regions = require('../../../db/seeds/data/regions.js')
-
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const PersistLicenceService =
   require('../../../app/services/import/persist-licence.service.js')
 
-describe('Persist licence service', () => {
+describe('Import - Persist Licence service', () => {
   let region
   let licence
 
   beforeEach(async () => {
-    region = Regions.data.find((region) => {
-      return region.displayName === 'Test Region'
-    })
+    region = RegionHelper.select(8)
   })
 
   describe('when the licence ref does not exist', () => {

@@ -7,16 +7,14 @@ const Code = require('@hapi/code')
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Regions = require('../../../db/seeds/data/regions.js')
+// Test helpers
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
 
 describe('Fetch Region service', () => {
-  const region = Regions.data.find((region) => {
-    return region.displayName === 'Test Region'
-  })
+  const region = RegionHelper.select(8)
 
   describe('when there is a region with a matching NALD region id', () => {
     it('returns results', async () => {
