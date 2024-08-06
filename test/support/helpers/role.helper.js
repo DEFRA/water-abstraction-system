@@ -18,10 +18,7 @@ const DEFAULT_INDEX = 8
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const defaults = {
-    role: 'billing',
-    description: 'Administer billing'
-  }
+  const defaults = select(DEFAULT_INDEX)
 
   return {
     ...defaults,
