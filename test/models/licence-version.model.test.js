@@ -18,7 +18,7 @@ const PurposeModel = require('../../app/models/purpose.model.js')
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
-describe.only('Licence Version model', () => {
+describe('Licence Version model', () => {
   let testRecord
 
   beforeEach(async () => {
