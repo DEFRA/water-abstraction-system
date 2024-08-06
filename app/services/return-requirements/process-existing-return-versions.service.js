@@ -10,9 +10,9 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
  *
- * Depending on the `startdate` of the new return version that is to be inserted. The existing return versions may need
- * their `status` and/or `endDate` to be updated. An `endDate` may also need to be calculated for the new return version
- * if it is to be inserted between existing ones.
+ * Depending on the `startDate` of the new return version that is to be inserted. An existing return version may need
+ * its `status` or `endDate` to be updated. An `endDate` may also need to be calculated for the new return version if
+ * it is to be inserted between existing return versions, or is superseding an existing one that has an `endDate`.
  *
  * @param {String} licenceId - The UUID of the licence the requirements are for
  * @param {Date} returnVersionStartDate - The date that the new return version starts

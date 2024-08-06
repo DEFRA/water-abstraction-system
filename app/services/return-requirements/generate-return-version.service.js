@@ -15,7 +15,6 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * Creates the data needed to populate the `return_versions`, `return_requirements`, `return_requirement_points` and
  * `return_requirement_purposes` tables.
  *
- * @param {Boolean} returnVersionsExist - Will be `true` if there are existing return versions for the licence
  * @param {string} sessionData - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  *
