@@ -56,7 +56,6 @@ const ReviewChargeReferenceHelper = require('../../../../test/support/helpers/re
 const ReviewChargeVersionHelper = require('../../../../test/support/helpers/review-charge-version.helper.js')
 const ReviewLicenceHelper = require('../../../../test/support/helpers/review-licence.helper.js')
 const ReviewReturnHelper = require('../../../../test/support/helpers/review-return.helper.js')
-const RoleHelper = require('../../../../test/support/helpers/role.helper.js')
 const ScheduledNotificationHelper = require('../../../../test/support/helpers/scheduled-notification.helper.js')
 const SessionHelper = require('../../../../test/support/helpers/session.helper.js')
 const TransactionHelper = require('../../../../test/support/helpers/transaction.helper.js')
@@ -116,7 +115,6 @@ const LOAD_HELPERS = {
   reviewChargeVersions: { helper: ReviewChargeVersionHelper, test: false },
   reviewLicences: { helper: ReviewLicenceHelper, test: false },
   reviewReturns: { helper: ReviewReturnHelper, test: false },
-  roles: { helper: RoleHelper, test: false },
   scheduledNotifications: { helper: ScheduledNotificationHelper },
   sessions: { helper: SessionHelper, test: false },
   transactions: { helper: TransactionHelper, test: false },
