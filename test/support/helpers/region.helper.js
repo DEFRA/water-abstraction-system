@@ -68,6 +68,7 @@ function select (index = -1) {
 
 module.exports = {
   add,
+  data: Regions.data,
   defaults,
   generateChargeRegionId,
   select
