@@ -45,12 +45,13 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceVersions, returnVersions, startDate } = licence
+  const { hasPermitVersion, id, licenceRef, licenceVersions, returnVersions, startDate } = licence
   const ends = licence.$ends()
 
   return {
     checkPageVisited: false,
     licence: {
+      hasPermitVersion,
       id,
       currentVersionStartDate: _currentVersionStartDate(licenceVersions),
       endDate: ends ? ends.date : null,
@@ -68,13 +69,20 @@ async function _fetchLicence (licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
     .select([
-      'id',
+      'licences.id',
       'expiredDate',
       'lapsedDate',
-      'licenceRef',
+      'licences.licenceRef',
       'revokedDate',
-      'startDate'
+      'licences.startDate',
+      LicenceModel.raw(`
+        (CASE
+          WHEN licence_data_value->'data'->>'current_version' IS NOT NULL THEN TRUE
+          ELSE false
+        END) AS has_permit_version
+      `)
     ])
+    .innerJoinRelated('permitLicence')
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
       builder

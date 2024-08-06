@@ -46,7 +46,7 @@
             value: "use-abstraction-data",
             text: "Start by using abstraction data",
             checked: "use-abstraction-data" === setup
-          },
+          } if displayUseAbstractionData,
           {
             value: "use-existing-requirements",
             text: "Copy existing requirements",
@@ -54,7 +54,7 @@
           } if displayCopyExisting,
           {
             divider: "or"
-          },
+          } if displayUseAbstractionData or displayCopyExisting,
           {
             value: "set-up-manually",
             text: "Set up manually",
