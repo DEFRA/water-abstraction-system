@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module PurposeHelper
+ * @module PrimaryPurposeHelper
  */
 
 const { selectRandomEntry } = require('../general.js')
