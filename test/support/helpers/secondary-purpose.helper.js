@@ -4,35 +4,11 @@
  * @module SecondaryPurposeHelper
  */
 
-const { randomInteger, selectRandomEntry } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
 const SecondaryPurposeModel = require('../../../app/models/secondary-purpose.model.js')
 const SecondaryPurposes = require('../../../db/seeds/data/secondary-purposes.js')
 
 const DEFAULT_INDEX = 0
-
-// NOTE: This is only a subset. There 63 of these codes that could be used. Taken from water.purposes_secondary
-const SECONDARY_PURPOSES = [
-  { code: 'AGR', description: 'General Agriculture' },
-  { code: 'AQF', description: 'Aquaculture Fish' },
-  { code: 'AQP', description: 'Aquaculture Plant' },
-  { code: 'BRW', description: 'Breweries/Wine' },
-  { code: 'BUS', description: 'Business Parks' },
-  { code: 'CHE', description: 'Chemicals' },
-  { code: 'CON', description: 'Construction' },
-  { code: 'CRN', description: 'Crown And Government' },
-  { code: 'DAR', description: 'Dairies' },
-  { code: 'ELC', description: 'Electricity' },
-  { code: 'EXT', description: 'Extractive' },
-  { code: 'FAD', description: 'Food & Drink' },
-  { code: 'FOR', description: 'Forestry' },
-  { code: 'GOF', description: 'Golf Courses' },
-  { code: 'HOL', description: 'Holiday Sites, Camp Sites & Tourist Attractions' },
-  { code: 'HOS', description: 'Hospitals' },
-  { code: 'PAD', description: 'Public Administration' },
-  { code: 'PAP', description: 'Paper And Printing' },
-  { code: 'PET', description: 'Petrochemicals' },
-  { code: 'PRI', description: 'Private Non-Industrial' }
-]
 
 /**
  * Add a new secondary purpose
@@ -71,10 +47,6 @@ function defaults (data = {}) {
   }
 }
 
-function generateSecondaryPurpose () {
-  return SECONDARY_PURPOSES[randomInteger(0, 7)]
-}
-
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *
@@ -102,6 +74,5 @@ module.exports = {
   data: SecondaryPurposes.data,
   DEFAULT_INDEX,
   defaults,
-  generateSecondaryPurpose,
   select
 }
