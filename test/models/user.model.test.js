@@ -46,7 +46,7 @@ describe('User model', () => {
 
       beforeEach(async () => {
         testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testGroup = await GroupHelper.add()
+        testGroup = GroupHelper.select()
         await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
       })
 
@@ -68,7 +68,7 @@ describe('User model', () => {
         expect(result.groups).to.be.an.array()
         expect(result.groups).to.have.length(1)
         expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup)
+        expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

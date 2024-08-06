@@ -38,13 +38,13 @@ describe('Fetch User Roles And Groups service', () => {
 
     // Create a role and assign it to the user via a group
     testRoleForGroup = await RoleHelper.add({ role: 'role_for_group' })
-    testGroup = await GroupHelper.add()
+    testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
     await GroupRoleHelper.add({ groupId: testGroup.id, roleId: testRoleForGroup.id })
     await UserGroupHelper.add({ userId: testUser.id, groupId: testGroup.id })
 
     // Create things that we don't assign to the user to test that they aren't returned
     await RoleHelper.add({ role: 'not_assigned_role' })
-    const notAssignedGroup = await GroupHelper.add({ group: 'not_assigned' })
+    const notAssignedGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX + 1)
     const notAssignedGroupRole = await RoleHelper.add({ role: 'not_assigned_group_role' })
 
     await GroupRoleHelper.add({ groupId: notAssignedGroup.id, roleId: notAssignedGroupRole.id })
@@ -76,7 +76,7 @@ describe('Fetch User Roles And Groups service', () => {
       })
 
       expect(groups).to.have.length(1)
-      expect(groups).to.equal(['wirs'])
+      expect(groups).to.equal(['billing_and_data'])
     })
 
     describe('and the user is assigned a role they also have through a group', () => {

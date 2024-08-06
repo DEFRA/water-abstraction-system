@@ -39,7 +39,7 @@ describe('User Group model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testGroup = await GroupHelper.add()
+        testGroup = GroupHelper.select()
         testRecord = await UserGroupHelper.add({ groupId: testGroup.id })
       })
 
@@ -59,7 +59,7 @@ describe('User Group model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup)
+        expect(result.group).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
