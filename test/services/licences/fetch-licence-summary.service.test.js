@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test data
 const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
-const Purposes = require('../../../db/seeds/data/purposes.js')
 
 // Test helpers
 const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
@@ -23,6 +22,7 @@ const LicenceVersionHelper = require('../../support/helpers/licence-version.help
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -63,7 +63,7 @@ describe('Fetch Licence Summary service', () => {
       licenceId: licence.id, startDate: new Date('2022-05-01')
     })
 
-    purpose = Purposes.data[0]
+    purpose = PurposeHelper.select()
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,

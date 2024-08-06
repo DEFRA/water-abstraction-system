@@ -9,11 +9,11 @@ const { expect } = Code
 
 // Test data
 const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
-const Purposes = require('../../db/seeds/data/purposes.js')
 const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
@@ -73,7 +73,7 @@ describe('Return Requirement Purpose model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = Purposes.data[0]
+        testPurpose = PurposeHelper.select()
 
         const { id: purposeId } = testPurpose
 

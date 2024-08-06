@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Purposes = require('../../db/seeds/data/purposes.js')
-
 // Test helpers
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
@@ -17,6 +14,7 @@ const ChargeReferenceHelper = require('../support/helpers/charge-reference.helpe
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
@@ -28,7 +26,7 @@ describe('Purpose model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = Purposes.data[0]
+      testRecord = PurposeHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -44,7 +42,7 @@ describe('Purpose model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        testRecord = Purposes.data[0]
+        testRecord = PurposeHelper.select()
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
@@ -80,7 +78,7 @@ describe('Purpose model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        testRecord = Purposes.data[0]
+        testRecord = PurposeHelper.select()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
@@ -116,7 +114,7 @@ describe('Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = Purposes.data[0]
+        testRecord = PurposeHelper.select()
 
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
@@ -152,7 +150,7 @@ describe('Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = Purposes.data[0]
+        testRecord = PurposeHelper.select()
 
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {

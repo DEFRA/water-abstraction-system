@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Purposes = require('../../../db/seeds/data/purposes.js')
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -21,6 +18,7 @@ const ChargeElementHelper = require('../../support/helpers/charge-element.helper
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../../app/models/purpose.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
@@ -93,7 +91,7 @@ describe('Fetch Bill Licence service', () => {
     describe('and it is for an SROC bill run', () => {
       beforeEach(async () => {
         linkedChargeReference = await ChargeReferenceHelper.add()
-        linkedPurpose = Purposes.data[0]
+        linkedPurpose = PurposeHelper.select()
 
         const { id: chargeReferenceId } = linkedChargeReference
 
@@ -161,7 +159,7 @@ describe('Fetch Bill Licence service', () => {
 
     describe('and it is for a PRESROC bill run', () => {
       beforeEach(async () => {
-        linkedPurpose = Purposes.data[0]
+        linkedPurpose = PurposeHelper.select()
         linkedChargeReference = await ChargeReferenceHelper.add({ purposeId: linkedPurpose.id })
 
         const { id: chargeReferenceId } = linkedChargeReference

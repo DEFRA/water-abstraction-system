@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test data
 const PrimaryPurposes = require('../../db/seeds/data/primary-purposes.js')
-const Purposes = require('../../db/seeds/data/purposes.js')
 const SecondaryPurposes = require('../../db/seeds/data/secondary-purposes.js')
 
 // Test helpers
@@ -19,6 +18,7 @@ const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
@@ -34,7 +34,7 @@ describe('Licence Version Purposes model', () => {
   beforeEach(() => {
     primaryPurposeId = PrimaryPurposes.data[0].id
     secondaryPurposeId = SecondaryPurposes.data[0].id
-    purposeId = Purposes.data[0].id
+    purposeId = PurposeHelper.select().id
   })
 
   describe('Basic query', () => {
@@ -222,7 +222,7 @@ describe('Licence Version Purposes model', () => {
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposes.data[0]
       invalidSecondaryPurpose = SecondaryPurposes.data[0]
-      invalidPurpose = Purposes.data.find((purpose) => {
+      invalidPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
 
@@ -232,7 +232,7 @@ describe('Licence Version Purposes model', () => {
       validSecondaryPurpose = SecondaryPurposes.data.find((secondaryPurpose) => {
         return secondaryPurpose.legacyId === 'ELC'
       })
-      validPurpose = Purposes.data.find((purpose) => {
+      validPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '200'
       })
     })

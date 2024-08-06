@@ -7,12 +7,10 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const Purposes = require('../../../db/seeds/data/purposes.js')
-
 // Test helpers
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 
 // Thing under test
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
@@ -27,9 +25,9 @@ describe('Return Requirements - Fetch Purposes service', () => {
 
     // we purposefully don't add them in alphabetical order so we can test they get sorted by the service
     purposes = [
-      { ...Purposes.data.find((purpose) => { return purpose.description === 'Large Garden Watering' }) },
-      { ...Purposes.data.find((purpose) => { return purpose.description === 'Heat Pump' }) },
-      { ...Purposes.data.find((purpose) => { return purpose.description === 'Horticultural Watering' }) }
+      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Large Garden Watering' }) },
+      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Heat Pump' }) },
+      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Horticultural Watering' }) }
     ]
 
     // Create the licenceVersionPurposes. Note - two of them are for the same purpose. This is common in the service

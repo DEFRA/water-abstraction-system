@@ -7,7 +7,7 @@
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger, selectRandomEntry } = require('../general.js')
 const PrimaryPurposes = require('../../../db/seeds/data/primary-purposes.js')
-const Purposes = require('../../../db/seeds/data/purposes.js')
+const PurposeHelper = require('./purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
 const SecondaryPurposes = require('../../../db/seeds/data/secondary-purposes.js')
 
@@ -43,7 +43,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const purpose = selectRandomEntry(Purposes.data)
+  const purpose = PurposeHelper.select()
   const primaryPurpose = selectRandomEntry(PrimaryPurposes.data)
   const secondaryPurpose = selectRandomEntry(SecondaryPurposes.data)
 

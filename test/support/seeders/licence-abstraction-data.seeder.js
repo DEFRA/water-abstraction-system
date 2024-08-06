@@ -10,12 +10,12 @@ const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
+const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
 
 // Test data
 const SecondaryPurposes = require('../../../db/seeds/data/secondary-purposes.js')
 const PrimaryPurposes = require('../../../db/seeds/data/primary-purposes.js')
-const Purposes = require('../../../db/seeds/data/purposes.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -192,11 +192,11 @@ async function _permitLicence (licenceRef) {
 }
 
 async function _purposes () {
-  const { id: heatPumpId } = Purposes.data.find((purpose) => { return purpose.legacyId === '200' })
+  const { id: heatPumpId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '200' })
 
-  const { id: sprayIrrigationDirectId } = Purposes.data.find((purpose) => { return purpose.legacyId === '400' })
+  const { id: sprayIrrigationDirectId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '400' })
 
-  const { id: vegetableWashingId } = Purposes.data.find((purpose) => { return purpose.legacyId === '460' })
+  const { id: vegetableWashingId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '460' })
 
   const { id: primaryAgricultureId } = PrimaryPurposes.data.find((purpose) => { return purpose.legacyId === 'A' })
 
