@@ -9,6 +9,8 @@ const { selectRandomEntry } = require('../general.js')
 const RegionModel = require('../../../app/models/region.model.js')
 const Regions = require('../../../db/seeds/data/regions.js')
 
+const TEST_REGION_INDEX = 8
+
 /**
  * Add a new region
  *
@@ -40,7 +42,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const defaults = select(8)
+  const defaults = select(TEST_REGION_INDEX)
 
   return {
     ...defaults,
@@ -71,5 +73,6 @@ module.exports = {
   data: Regions.data,
   defaults,
   generateChargeRegionId,
-  select
+  select,
+  TEST_REGION_INDEX
 }
