@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
-
 // Test helpers
 const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
@@ -20,6 +17,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
@@ -43,7 +41,7 @@ describe('Fetch Licence Summary service', () => {
   let region
 
   beforeEach(async () => {
-    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypes.data.find((conditionType) => {
+    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
 
