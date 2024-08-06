@@ -287,15 +287,10 @@ async function _applyLookups (instance) {
   const keys = Object.keys(instance)
 
   for (const key of keys) {
-    try {
-      if (instance[key].schema) {
-        const { schema, table, lookup, value, select } = instance[key]
+    if (instance[key].schema) {
+      const { schema, table, lookup, value, select } = instance[key]
 
-        instance[key] = await _selector(schema, table, select, lookup, value)
-      }
-    } catch (error) {
-      console.log('🚀 ~ _applyLookups ~ error:', instance)
-      throw error
+      instance[key] = await _selector(schema, table, select, lookup, value)
     }
   }
 }
