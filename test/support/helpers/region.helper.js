@@ -5,7 +5,9 @@
  */
 
 const { randomInteger } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
 const RegionModel = require('../../../app/models/region.model.js')
+const Regions = require('../../../db/seeds/data/regions.js')
 
 /**
  * Add a new region
@@ -38,13 +40,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const naldRegionId = randomInteger(1, 8)
-  const defaults = {
-    chargeRegionId: generateChargeRegionId(naldRegionId),
-    naldRegionId,
-    name: 'Kingdom of Avalon',
-    displayName: 'Avalon'
-  }
+  const defaults = select(8)
 
   return {
     ...defaults,
@@ -62,8 +58,17 @@ function generateChargeRegionId (naldRegionId = null) {
   return chargeRegionIds[naldRegionId - 1]
 }
 
+function select (index = -1) {
+  if (index > -1) {
+    return Regions.data[index]
+  }
+
+  return selectRandomEntry(Regions.data)
+}
+
 module.exports = {
   add,
   defaults,
-  generateChargeRegionId
+  generateChargeRegionId,
+  select
 }
