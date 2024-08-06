@@ -7,18 +7,16 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const LicenceVersionPurposesConditionTypes = require('../../db/seeds/data/licence-version-purpose-condition-types.js')
-
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
 
 // Thing under test
 const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
 
 describe('Licence Version Purposes Condition Type model', () => {
-  const licenceVersionPurposeConditionType = LicenceVersionPurposesConditionTypes.data[0]
+  const licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {

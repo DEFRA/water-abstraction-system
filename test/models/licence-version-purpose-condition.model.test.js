@@ -7,11 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test data
-const LicenceVersionPurposesConditionTypes = require('../../db/seeds/data/licence-version-purpose-condition-types.js')
-
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
@@ -68,7 +66,7 @@ describe('Licence Version Purpose Condition model', () => {
     })
 
     describe('when linking to licence version purpose condition type', () => {
-      const licenceVersionPurposeConditionType = LicenceVersionPurposesConditionTypes.data[0]
+      const licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
 
       beforeEach(async () => {
         testRecord = await LicenceVersionPurposeConditionHelper.add({
