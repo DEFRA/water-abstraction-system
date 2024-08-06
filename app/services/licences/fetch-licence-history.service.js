@@ -61,7 +61,7 @@ async function _fetchLicenceVersions (licenceId) {
       'licenceVersions.id as entry_id',
       db.raw("'' as reason"),
       'licenceVersions.createdAt as created_at',
-      db.raw("'' as createdBy"),
+      db.raw("'' as created_by"),
       db.raw("'' as note"),
       'issue as version_number'
     )
