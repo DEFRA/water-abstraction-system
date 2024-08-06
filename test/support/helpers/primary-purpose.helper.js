@@ -4,23 +4,11 @@
  * @module PurposeHelper
  */
 
-const { randomInteger, selectRandomEntry } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
 const PrimaryPurposeModel = require('../../../app/models/primary-purpose.model.js')
 const PrimaryPurposes = require('../../../db/seeds/data/primary-purposes.js')
 
 const DEFAULT_INDEX = 0
-
-// NOTE: Taken from water.purposes_primary
-const PRIMARY_PURPOSES = [
-  { code: 'A', description: 'Agriculture' },
-  { code: 'E', description: 'Environmental' },
-  { code: 'I', description: 'Industrial, Commercial And Public Services' },
-  { code: 'M', description: 'Amenity' },
-  { code: 'P', description: 'Production Of Energy' },
-  { code: 'W', description: 'Water Supply' },
-  { code: 'X', description: 'Impounding' },
-  { code: 'C', description: 'Crown And Government' }
-]
 
 /**
  * Add a new primary purpose
@@ -81,15 +69,10 @@ function select (index = -1) {
   return selectRandomEntry(PrimaryPurposes.data)
 }
 
-function generatePrimaryPurpose () {
-  return PRIMARY_PURPOSES[randomInteger(0, 7)]
-}
-
 module.exports = {
   add,
   data: PrimaryPurposes.data,
   DEFAULT_INDEX,
   defaults,
-  generatePrimaryPurpose,
   select
 }
