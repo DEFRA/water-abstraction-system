@@ -6,29 +6,8 @@
 
 const { selectRandomEntry } = require('../general.js')
 const Groups = require('../../../db/seeds/data/groups.js')
-const GroupModel = require('../../../app/models/group.model.js')
 
 const DEFAULT_INDEX = 1
-
-/**
- * Add a new group
- *
- * If no `data` is provided, default values will be used. These are
- *
- * - `group` - wirs
- * - `description` - Waste Industry Regulatory Services
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {Promise<module:GroupModel>} The instance of the newly created record
- */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return GroupModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
 
 /**
  * Returns the defaults used
@@ -70,7 +49,6 @@ function select (index = -1) {
 }
 
 module.exports = {
-  add,
   data: Groups.data,
   DEFAULT_INDEX,
   defaults,
