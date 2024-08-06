@@ -14,6 +14,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 
 // Things we need to stub
 const GenerateReturnVersionRequirementsService = require('../../../app/services/return-requirements/generate-return-version-requirements.service.js')
+const ProcessExistingReturnVersionsService = require('../../../app/services/return-requirements/process-existing-return-versions.service.js')
 
 // Thing under test
 const GenerateReturnVersionService = require('../../../app/services/return-requirements/generate-return-version.service.js')
@@ -22,6 +23,7 @@ describe('Generate Return Version service', () => {
   const userId = 12345
 
   let licenceId
+  let returnVersionsExist
   let sessionData
 
   beforeEach(async () => {
@@ -35,10 +37,7 @@ describe('Generate Return Version service', () => {
   describe('when called with the minimum possible session data and previous return versions exist', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
-
-      await ReturnVersionHelper.add({ licenceId, version: 100 })
-      await ReturnVersionHelper.add({ licenceId, version: 102 })
-
+      returnVersionsExist = true
       sessionData = {
         setup: 'use-existing-requirements',
         reason: 'minor-change',
@@ -67,19 +66,24 @@ describe('Generate Return Version service', () => {
         checkPageVisited: true,
         startDateOptions: 'licenceStartDate'
       }
+
+      await ReturnVersionHelper.add({ licenceId, version: 100 })
+      await ReturnVersionHelper.add({ licenceId, version: 102 })
+
+      Sinon.stub(ProcessExistingReturnVersionsService, 'go').resolves('2024-04-01T00:00:00.000Z')
     })
 
     it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+      const result = await GenerateReturnVersionService.go(returnVersionsExist, sessionData, userId)
 
       expect(result.returnRequirements).to.equal('return requirements data')
       expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.be.null()
+      expect(result.returnVersion.endDate).to.equal('2024-04-01T00:00:00.000Z')
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(sessionData.licence.currentVersionStartDate)
+      expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
@@ -89,7 +93,7 @@ describe('Generate Return Version service', () => {
   describe('when called with the maximum possible session data and no previous return versions exist', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
-
+      returnVersionsExist = false
       sessionData = {
         note: {
           content: 'This is a test note',
@@ -119,7 +123,7 @@ describe('Generate Return Version service', () => {
     })
 
     it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+      const result = await GenerateReturnVersionService.go(returnVersionsExist, sessionData, userId)
 
       expect(result.returnRequirements).to.equal('return requirements data')
       expect(result.returnVersion.createdBy).to.equal(userId)
@@ -140,7 +144,7 @@ describe('Generate Return Version service', () => {
   describe('when called with session data from the "no-returns-required" journey', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
-
+      returnVersionsExist = false
       sessionData = {
         reason: 'returns-exception',
         journey: 'no-returns-required',
@@ -160,7 +164,7 @@ describe('Generate Return Version service', () => {
     })
 
     it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+      const result = await GenerateReturnVersionService.go(returnVersionsExist, sessionData, userId)
 
       expect(result.returnRequirements).to.equal([])
       expect(result.returnVersion.createdBy).to.equal(userId)
@@ -169,7 +173,7 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(sessionData.licence.currentVersionStartDate)
+      expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
       expect(result.returnVersion.status).to.equal('current')
       expect(result.returnVersion.version).to.equal(1)
     })
