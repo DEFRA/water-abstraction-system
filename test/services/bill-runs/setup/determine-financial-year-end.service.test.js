@@ -27,7 +27,8 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
     currentFinancialYearEnd = currentFinancialYear.endDate.getFullYear()
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
+
     regionId = region.id
   })
 

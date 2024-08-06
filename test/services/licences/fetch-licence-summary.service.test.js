@@ -47,7 +47,7 @@ describe('Fetch Licence Summary service', () => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
 
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
 
     licence = await LicenceHelper.add({
       expiredDate: null,
@@ -117,7 +117,7 @@ describe('Fetch Licence Summary service', () => {
         startDate: new Date('2022-01-01'),
         region: {
           id: region.id,
-          displayName: 'Avalon'
+          displayName: region.displayName
         },
         permitLicence: {
           id: permitLicence.id,

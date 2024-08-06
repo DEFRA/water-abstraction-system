@@ -31,7 +31,7 @@ describe('Charging Module Create Transaction presenter', () => {
 
   describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
 
       // NOTE: In the context the presenter is used it is from a Licence instance returned by
       // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
@@ -40,6 +40,7 @@ describe('Charging Module Create Transaction presenter', () => {
         regionId: region.id,
         regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
       })
+
       licence = await LicenceModel.query()
         .findById(tempLicence.id)
         .select([

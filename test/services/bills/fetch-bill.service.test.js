@@ -31,7 +31,7 @@ describe('Fetch Bill service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    linkedRegion = await RegionHelper.add()
+    linkedRegion = RegionHelper.select()
     linkedBillRun = await BillRunHelper.add({ regionId: linkedRegion.id })
 
     testBill = await BillHelper.add({ billRunId: linkedBillRun.id })

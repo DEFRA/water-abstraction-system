@@ -48,7 +48,7 @@ describe('Fetch Review Licence Results Service', () => {
 
   describe('when there is a valid bill run', () => {
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
     })
 

@@ -47,7 +47,7 @@ describe('Fetch Charge Versions service', () => {
 
     chargeCategoryId = chargeCategory.id
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
 
     regionId = region.id
   })

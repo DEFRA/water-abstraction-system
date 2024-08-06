@@ -38,7 +38,7 @@ const Purposes = require('../../../db/seeds/data/purposes.js')
 async function seed (licenceRef) {
   const records = {}
 
-  const { id: regionId } = await RegionHelper.add({ naldRegionId: 1 })
+  const { id: regionId } = RegionHelper.select()
   const { id: licenceId } = await LicenceHelper.add({ licenceRef, regionId })
 
   records.regionId = regionId
