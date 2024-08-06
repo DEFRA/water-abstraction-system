@@ -6,6 +6,7 @@
  */
 
 const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
+const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
@@ -14,13 +15,14 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * Creates the data needed to populate the `return_versions`, `return_requirements`, `return_requirement_points` and
  * `return_requirement_purposes` tables.
  *
+ * @param {Boolean} returnVersionsExist - Will be `true` if there are existing return versions for the licence
  * @param {string} sessionData - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  *
  * @returns {Promise<Object>} The new return version and requirement data for a licence
  */
-async function go (sessionData, userId) {
-  const returnVersion = await _generateReturnVersion(sessionData, userId)
+async function go (returnVersionsExist, sessionData, userId) {
+  const returnVersion = await _generateReturnVersion(returnVersionsExist, sessionData, userId)
   const returnRequirements = await _generateReturnRequirements(sessionData)
 
   return {
@@ -36,7 +38,7 @@ function _calculateStartDate (sessionData) {
     return new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
   }
 
-  return sessionData.licence.currentVersionStartDate
+  return new Date(sessionData.licence.currentVersionStartDate)
 }
 
 async function _generateReturnRequirements (sessionData) {
@@ -53,15 +55,22 @@ async function _generateReturnRequirements (sessionData) {
   return returnRequirements
 }
 
-async function _generateReturnVersion (sessionData, userId) {
+async function _generateReturnVersion (returnVersionsExist, sessionData, userId) {
+  const startDate = _calculateStartDate(sessionData)
+  let endDate = null
+
+  if (returnVersionsExist) {
+    endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
+  }
+
   return {
     createdBy: userId,
-    endDate: null,
+    endDate,
     licenceId: sessionData.licence.id,
     multipleUpload: _multipleUpload(sessionData?.additionalSubmissionOptions),
     notes: sessionData?.note?.content,
     reason: sessionData.reason,
-    startDate: _calculateStartDate(sessionData),
+    startDate,
     status: 'current',
     version: await _nextVersionNumber(sessionData.licence.id)
   }

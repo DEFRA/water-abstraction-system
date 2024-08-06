@@ -5,7 +5,6 @@
  * @module PersistReturnVersionService
  */
 
-const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 const ReturnRequirementPointModel = require('../../models/return-requirement-point.model.js')
 const ReturnRequirementPurposeModel = require('../../models/return-requirement-purpose.model.js')
@@ -19,17 +18,9 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * create a new return version for a licence.
  *
  * @param {Object} returnVersionData - The return version data required to persist a new return version for a licence
- * @param {Boolean} returnVersionsExist - Will be `true` if there are existing return versions for the licence
  */
-async function go (returnVersionData, returnVersionsExist) {
+async function go (returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
-
-  if (returnVersionsExist) {
-    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(
-      returnVersion.licenceId,
-      returnVersion.startDate
-    )
-  }
 
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
 

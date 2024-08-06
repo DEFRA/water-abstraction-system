@@ -73,7 +73,8 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   // When a `current` return version exists with a start date matching the new one, and it has no end date. The status
   // of the existing return version is updated to `superseded` and no end date is applied to the new return version
   matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
-    return currentReturnVersion.startDate === returnVersionStartDate && currentReturnVersion.endDate === null
+    return currentReturnVersion.startDate.getTime() === returnVersionStartDate.getTime() &&
+      currentReturnVersion.endDate === null
   })
 
   if (matchedReturnVersion) {
@@ -86,7 +87,8 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   // status of the existing return version is updated to `superseded` and the end date of the new return version is set
   // to the existing one’s end date
   matchedReturnVersion = currentReturnVersions.find((currentReturnVersion) => {
-    return currentReturnVersion.startDate === returnVersionStartDate && currentReturnVersion.endDate !== null
+    return currentReturnVersion.startDate.getTime() === returnVersionStartDate.getTime() &&
+      currentReturnVersion.endDate !== null
   })
 
   if (matchedReturnVersion) {
