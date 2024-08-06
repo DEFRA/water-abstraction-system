@@ -13,9 +13,7 @@ function go (history) {
 }
 
 function _entries (entries) {
-  const { licenceVersions, chargeVersions, returnVersions } = entries
-
-  const sortedEntries = _sortEntriesByCreatedAt([...licenceVersions, ...chargeVersions, ...returnVersions])
+  const sortedEntries = _sortEntriesByCreatedAt(entries)
 
   const mappedEntries = _mapEntries(sortedEntries)
 
