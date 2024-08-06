@@ -4,7 +4,7 @@
  * @module PurposeHelper
  */
 
-const { randomInteger, selectRandomEntry } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
 const Purposes = require('../../../db/seeds/data/purposes.js')
 
 const DEFAULT_INDEX = 39
@@ -48,16 +48,9 @@ function select (index = -1) {
   return selectRandomEntry(Purposes.data)
 }
 
-function generatePurposeCode () {
-  const numbering = randomInteger(1, 999)
-
-  return `${numbering}0`
-}
-
 module.exports = {
   data: Purposes.data,
   DEFAULT_INDEX,
   defaults,
-  generatePurposeCode,
   select
 }
