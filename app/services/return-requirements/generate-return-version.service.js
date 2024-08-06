@@ -21,7 +21,9 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<Object>} The new return version and requirement data for a licence
  */
-async function go (returnVersionsExist, sessionData, userId) {
+async function go (sessionData, userId) {
+  const returnVersionsExist = sessionData.licence.returnVersions.length > 0
+
   const returnVersion = await _generateReturnVersion(returnVersionsExist, sessionData, userId)
   const returnRequirements = await _generateReturnRequirements(sessionData)
 
