@@ -7,6 +7,7 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const LicenceModel = require('../../../models/licence.model.js')
+const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
 const RemoveReviewDataService = require('./remove-review-data.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
@@ -27,7 +28,9 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 async function go (billRunId, licenceId, yar) {
   await RemoveReviewDataService.go(billRunId, licenceId)
 
-  const licenceRef = await _flagForSupplementaryBilling(licenceId)
+  await _flagForSupplementaryBilling(licenceId, billRunId)
+
+  const licenceRef = await _fetchLicenceRef(licenceId)
 
   const allLicencesRemoved = await _allLicencesRemoved(billRunId)
 
@@ -53,13 +56,25 @@ async function _allLicencesRemoved (billRunId) {
   return false
 }
 
-async function _flagForSupplementaryBilling (licenceId) {
+async function _fetchLicenceRef (licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
-    .patch({ includeInSrocTptBilling: true })
     .returning('licenceRef')
 
   return licence.licenceRef
+}
+
+async function _flagForSupplementaryBilling (licenceId, billRunId) {
+  const financialYearEnd = await BillRunModel.query()
+    .findById(billRunId)
+    .returning('toFinancialYearEnding')
+
+  await LicenceSupplementaryYearModel.query()
+    .insert({
+      licenceId,
+      twoPartTariff: true,
+      financialYearEnd: financialYearEnd.toFinancialYearEnding
+    })
 }
 
 module.exports = {
