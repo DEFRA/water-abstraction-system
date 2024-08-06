@@ -55,8 +55,8 @@ function generatePurposeCode () {
 }
 
 module.exports = {
-  DEFAULT_INDEX,
   data: Purposes.data,
+  DEFAULT_INDEX,
   defaults,
   generatePurposeCode,
   select

@@ -21,7 +21,7 @@ describe('Import - Persist Licence service', () => {
   let licence
 
   beforeEach(async () => {
-    region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
+    region = RegionHelper.select(RegionHelper.DEFAULT_INDEX)
   })
 
   describe('when the licence ref does not exist', () => {

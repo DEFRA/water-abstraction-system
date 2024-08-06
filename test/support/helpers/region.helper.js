@@ -7,7 +7,7 @@
 const { selectRandomEntry } = require('../general.js')
 const Regions = require('../../../db/seeds/data/regions.js')
 
-const TEST_REGION_INDEX = 8
+const DEFAULT_INDEX = 8
 
 /**
  * Returns the defaults used
@@ -18,7 +18,7 @@ const TEST_REGION_INDEX = 8
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const defaults = select(TEST_REGION_INDEX)
+  const defaults = select(DEFAULT_INDEX)
 
   return {
     ...defaults,
@@ -50,7 +50,7 @@ function select (index = -1) {
 
 module.exports = {
   data: Regions.data,
+  DEFAULT_INDEX,
   defaults,
-  select,
-  TEST_REGION_INDEX
+  select
 }

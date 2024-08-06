@@ -37,7 +37,7 @@ describe('Fetch Bill Licence Summary service', () => {
   let transactionId
 
   beforeEach(async () => {
-    const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
+    const region = RegionHelper.select(RegionHelper.DEFAULT_INDEX)
 
     regionId = region.id
     licenceRef = LicenceHelper.generateLicenceRef()
