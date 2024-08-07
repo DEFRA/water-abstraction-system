@@ -5,7 +5,6 @@
  */
 
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
-const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
@@ -64,24 +63,8 @@ async function seed (optionalLicenceRef = undefined) {
 }
 
 async function _financialAgreements () {
-  let section126 = await FinancialAgreementModel.query().select().where('code', 'S126').limit(1).first()
-  let twoPartTariff = await FinancialAgreementModel.query().select().where('code', 'S127').limit(1).first()
-
-  // This is temporary whilst the clean is called by other tests.
-  // TODO: remove this when all database cleans have been removed
-  if (!section126) {
-    section126 = await FinancialAgreementHelper.add({
-      code: 'S126',
-      description: 'Section 126'
-    })
-  }
-
-  if (!twoPartTariff) {
-    twoPartTariff = await FinancialAgreementHelper.add({
-      code: 'S127',
-      description: 'Section 127 (Two Part Tariff)'
-    })
-  }
+  const section126 = FinancialAgreementHelper.select(2)
+  const twoPartTariff = FinancialAgreementHelper.select(FinancialAgreementHelper.DEFAULT_INDEX)
 
   return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
