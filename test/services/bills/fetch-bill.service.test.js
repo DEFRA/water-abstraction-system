@@ -28,7 +28,7 @@ describe('Fetch Bill service', () => {
   let unlinkedBillLicence
 
   beforeEach(async () => {
-    linkedRegion = await RegionHelper.add()
+    linkedRegion = RegionHelper.select()
     linkedBillRun = await BillRunHelper.add({ regionId: linkedRegion.id })
 
     testBill = await BillHelper.add({ billRunId: linkedBillRun.id })

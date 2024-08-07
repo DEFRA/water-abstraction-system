@@ -17,7 +17,7 @@ const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
-const PurposeSeeder = require('../../../support/seeders/purposes.seeder.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
@@ -39,13 +39,13 @@ describe('Fetch Charge Versions service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    purposeId = PurposeSeeder.data.find((purpose) => { return purpose.legacyId === '420' }).id
+    purposeId = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '420' }).id
 
     const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
 
     chargeCategoryId = chargeCategory.id
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
 
     regionId = region.id
   })

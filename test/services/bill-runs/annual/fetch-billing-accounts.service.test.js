@@ -38,7 +38,7 @@ describe('Fetch Billing Accounts service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    region = await RegionHelper.add({ chargeRegionId: 'W' })
+    region = RegionHelper.select()
     regionId = region.id
 
     licence = await LicenceHelper.add({ regionId })
@@ -110,7 +110,7 @@ describe('Fetch Billing Accounts service', () => {
         expect(licence.historicalAreaCode).to.equal('SAAR')
         expect(licence.regionalChargeArea).to.equal('Southern')
         expect(licence.region.id).to.equal(regionId)
-        expect(licence.region.chargeRegionId).to.equal('W')
+        expect(licence.region.chargeRegionId).to.equal(region.chargeRegionId)
       })
 
       it('includes the change reason in each result', async () => {

@@ -23,7 +23,7 @@ describe('Create Bill Run service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
   })
 
   describe('when the defaults are not overridden', () => {

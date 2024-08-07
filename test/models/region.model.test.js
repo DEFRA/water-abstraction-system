@@ -20,8 +20,8 @@ const RegionModel = require('../../app/models/region.model.js')
 describe('Region model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await RegionHelper.add()
+  beforeEach(() => {
+    testRecord = RegionHelper.select()
   })
 
   describe('Basic query', () => {
