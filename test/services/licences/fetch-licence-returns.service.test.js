@@ -8,19 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const LicenceHelper = require('../../support/helpers/licence.helper')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
+const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
 
 describe('Fetch licence returns service', () => {
-  const licenceId = 'fef693fd-eb6f-478d-9f79-ab24749c5dc6'
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  let licenceId
 
   describe('when the licence has return logs', () => {
     const dueDate = new Date('2020-04-01')
@@ -28,7 +24,7 @@ describe('Fetch licence returns service', () => {
     const startDate = new Date('2020-02-01')
     const latestDueDate = new Date('2020-05-01')
     const firstReturn = {
-      id: '5fef371e-d0b5-4fd5-a7ff-a67d04b3f451',
+      id: generateUUID(),
       dueDate,
       endDate,
       metadata: '323',
@@ -39,15 +35,15 @@ describe('Fetch licence returns service', () => {
 
     const latestReturn = {
       ...firstReturn,
-      id: 'b80f87a3-a274-4232-b536-750670d79928',
+      id: generateUUID(),
       returnReference: '123',
       dueDate: latestDueDate
     }
 
     beforeEach(async () => {
-      const license = await LicenceHelper.add({
-        id: licenceId
-      })
+      const license = await LicenceHelper.add()
+
+      licenceId = license.id
 
       firstReturn.licenceRef = license.licenceRef
       latestReturn.licenceRef = license.licenceRef
