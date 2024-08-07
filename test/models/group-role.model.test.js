@@ -17,16 +17,20 @@ const RoleModel = require('../../app/models/role.model.js')
 // Thing under test
 const GroupRoleModel = require('../../app/models/group-role.model.js')
 
+const GROUP_BILLING_DATA_INDEX = 1
+const GROUP_ROLE_BILLING_DATA_INDEX = 18
+const ROLE_BILLING_INDEX = 8
+
 describe('Group Role model', () => {
   let testGroup
   let testRecord
   let testRole
 
   before(async () => {
-    testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
+    testRecord = GroupRoleHelper.select(GROUP_ROLE_BILLING_DATA_INDEX)
 
-    testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
-    testRole = RoleHelper.select(RoleHelper.DEFAULT_INDEX)
+    testGroup = GroupHelper.select(GROUP_BILLING_DATA_INDEX)
+    testRole = RoleHelper.select(ROLE_BILLING_INDEX)
   })
 
   describe('Basic query', () => {

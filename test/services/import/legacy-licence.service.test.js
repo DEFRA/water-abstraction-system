@@ -23,7 +23,7 @@ const LegacyLicenceService =
 describe('Import - Legacy Licence service', () => {
   const licenceRef = FixtureLicence.LIC_NO
 
-  const region = RegionHelper.select(RegionHelper.DEFAULT_INDEX)
+  const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   beforeEach(async () => {
     Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({

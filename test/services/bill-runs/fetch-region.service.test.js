@@ -14,7 +14,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
 
 describe('Fetch Region service', () => {
-  const region = RegionHelper.select(RegionHelper.DEFAULT_INDEX)
+  const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   describe('when there is a region with a matching NALD region id', () => {
     it('returns results', async () => {

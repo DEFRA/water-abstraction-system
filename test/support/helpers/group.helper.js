@@ -7,25 +7,6 @@
 const { selectRandomEntry } = require('../general.js')
 const Groups = require('../../../db/seeds/data/groups.js')
 
-const DEFAULT_INDEX = 1
-
-/**
- * Returns the defaults used
- *
- * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
- * for use in tests to avoid having to duplicate values.
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- */
-function defaults (data = {}) {
-  const defaults = select(DEFAULT_INDEX)
-
-  return {
-    ...defaults,
-    ...data
-  }
-}
-
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *
@@ -50,7 +31,5 @@ function select (index = -1) {
 
 module.exports = {
   data: Groups.data,
-  DEFAULT_INDEX,
-  defaults,
   select
 }
