@@ -1,8 +1,9 @@
 'use strict'
 
-const LegacyImportLicenceService = require('../services/import/legacy-licence.service.js')
-const FeatureFlags = require('../../config/feature-flags.config.js')
 const Boom = require('@hapi/boom')
+
+const FeatureFlags = require('../../config/feature-flags.config.js')
+const LegacyImportLicenceService = require('../services/import/legacy-licence.service.js')
 
 /**
  * Controller for /import
