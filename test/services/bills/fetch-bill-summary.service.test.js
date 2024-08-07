@@ -8,14 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
+const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -26,21 +25,20 @@ describe('Fetch Bill Summary service', () => {
 
   let agentCompanyId
   let bill
-  let billingAccountId
-  let billingAccountAddressId
   let billRunId
+  let billingAccount
+  let billingAccountAddressId
+  let billingAccountId
   let companyId
   let contactId
   let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const company = await CompanyHelper.add()
 
     companyId = company.id
 
-    const billingAccount = await BillingAccountHelper.add({ accountNumber: 'T65757520A', companyId })
+    billingAccount = await BillingAccountHelper.add({ companyId })
 
     billingAccountId = billingAccount.id
 
@@ -66,7 +64,9 @@ describe('Fetch Bill Summary service', () => {
 
     billRunId = billRun.id
 
-    bill = await BillHelper.add({ accountNumber: 'T65757520A', billingAccountId, billRunId, netAmount: 1045 })
+    bill = await BillHelper
+      .add({ accountNumber: billingAccount.accountNumber, billingAccountId, billRunId, netAmount: 1045 })
+
     const billId = bill.id
 
     for (let i = 0; i < 2; i++) {
@@ -85,7 +85,7 @@ describe('Fetch Bill Summary service', () => {
         netAmount: 1045,
         billingAccount: {
           id: billingAccountId,
-          accountNumber: 'T65757520A',
+          accountNumber: billingAccount.accountNumber,
           company: {
             id: companyId,
             name: 'Example Trading Ltd',

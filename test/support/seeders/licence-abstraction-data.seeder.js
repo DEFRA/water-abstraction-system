@@ -5,6 +5,7 @@
  */
 
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
+const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
@@ -14,6 +15,9 @@ const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const { generateLicenceVersionExternalId } = require('../helpers/licence-version.helper.js')
+const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-version-purpose.helper.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -29,12 +33,18 @@ const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
  *   points and the rest 1
  *
- * @param {String} licenceRef - The licence reference to use for the seeded licence
+ * @param {String | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
  *
  * @returns {Promise<Object>} all the named IDs for then seeded records in an object
  */
-async function seed (licenceRef) {
+async function seed (optionalLicenceRef = undefined) {
   const records = {}
+
+  let licenceRef = generateLicenceRef()
+
+  if (optionalLicenceRef) {
+    licenceRef = optionalLicenceRef
+  }
 
   const { id: regionId } = RegionHelper.select()
   const { id: licenceId } = await LicenceHelper.add({ licenceRef, regionId })
@@ -54,17 +64,26 @@ async function seed (licenceRef) {
 }
 
 async function _financialAgreements () {
-  const { id: section126Id } = await FinancialAgreementHelper.add({
-    code: 'S126',
-    description: 'Section 126'
-  })
+  let section126 = await FinancialAgreementModel.query().select().where('code', 'S126').limit(1).first()
+  let twoPartTariff = await FinancialAgreementModel.query().select().where('code', 'S127').limit(1).first()
 
-  const { id: twoPartTariffId } = await FinancialAgreementHelper.add({
-    code: 'S127',
-    description: 'Section 127 (Two Part Tariff)'
-  })
+  // This is temporary whilst the clean is called by other tests.
+  // TODO: remove this when all database cleans have been removed
+  if (!section126) {
+    section126 = await FinancialAgreementHelper.add({
+      code: 'S126',
+      description: 'Section 126'
+    })
+  }
 
-  return { section126Id, twoPartTariffId }
+  if (!twoPartTariff) {
+    twoPartTariff = await FinancialAgreementHelper.add({
+      code: 'S127',
+      description: 'Section 127 (Two Part Tariff)'
+    })
+  }
+
+  return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
 
 async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
@@ -85,7 +104,7 @@ async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
 async function _licenceVersions (licenceId) {
   const { id: supersededId } = await LicenceVersionHelper.add({
     endDate: new Date('2022-04-31'),
-    externalId: '1:100234:100:0',
+    externalId: generateLicenceVersionExternalId(),
     issue: 100,
     licenceId,
     startDate: new Date('2021-10-11'),
@@ -93,7 +112,7 @@ async function _licenceVersions (licenceId) {
   })
 
   const { id: currentId } = await LicenceVersionHelper.add({
-    externalId: '1:100234:101:0',
+    externalId: generateLicenceVersionExternalId(),
     issue: 101,
     licenceId,
     startDate: new Date('2022-05-01'),
@@ -104,34 +123,34 @@ async function _licenceVersions (licenceId) {
 }
 
 async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
-  const { id: electricityId } = await LicenceVersionPurposeHelper.add({
+  const electricity = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 455,
-    externalId: '1:10065380',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryElectricityId,
     purposeId: allPurposes.purposes.heatPumpId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryElectricityId
   })
 
-  const { id: standardId } = await LicenceVersionPurposeHelper.add({
+  const standard = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 2675,
-    externalId: '1:10065381',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
     purposeId: allPurposes.purposes.vegetableWashingId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryAgricultureId
   })
 
-  const { id: twoPartTariffId } = await LicenceVersionPurposeHelper.add({
+  const twoPartTariff = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 300,
-    externalId: '1:10065382',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
     purposeId: allPurposes.purposes.sprayIrrigationDirectId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryAgricultureId
   })
 
-  return { electricityId, standardId, twoPartTariffId }
+  return { electricity, standard, twoPartTariff }
 }
 
 async function _permitLicence (licenceRef) {
