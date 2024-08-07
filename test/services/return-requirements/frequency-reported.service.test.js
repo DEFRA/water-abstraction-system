@@ -20,8 +20,6 @@ describe('Return Requirements - Frequency Reported service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,

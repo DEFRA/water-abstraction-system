@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -21,8 +20,6 @@ describe('Return Requirements - Submit Additional Submission Options service', (
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
