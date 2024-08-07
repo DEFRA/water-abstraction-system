@@ -9,11 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillModel = require('../../../app/models/bill.model.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const RegionModel = require('../../../app/models/region.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
@@ -29,8 +28,6 @@ describe('Fetch Bill service', () => {
   let unlinkedBillLicence
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     linkedRegion = await RegionHelper.add()
     linkedBillRun = await BillRunHelper.add({ regionId: linkedRegion.id })
 
