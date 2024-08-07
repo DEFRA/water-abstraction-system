@@ -27,7 +27,6 @@ const CompanyContactHelper = require('../../../../test/support/helpers/company-c
 const CompanyHelper = require('../../../../test/support/helpers/company.helper.js')
 const ContactHelper = require('../../../../test/support/helpers/contact.helper.js')
 const EventHelper = require('../../../../test/support/helpers/event.helper.js')
-const FinancialAgreementHelper = require('../../../../test/support/helpers/financial-agreement.helper.js')
 const GaugingStationHelper = require('../../../../test/support/helpers/gauging-station.helper.js')
 const LicenceAgreementHelper = require('../../../../test/support/helpers/licence-agreement.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
@@ -86,7 +85,6 @@ const LOAD_HELPERS = {
   companies: { helper: CompanyHelper, test: true, legacy: { schema: 'crm_v2', table: 'companies', id: 'company_id' } },
   contacts: { helper: ContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'contacts', id: 'contact_id' } },
   events: { helper: EventHelper, test: false },
-  financialAgreements: { helper: FinancialAgreementHelper, test: true, legacy: { schema: 'water', table: 'financial_agreement_types', id: 'financial_agreement_type_id' } },
   gaugingStations: { helper: GaugingStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
   licenceAgreements: { helper: LicenceAgreementHelper, test: true, legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' } },
   licenceDocumentHeaders: { helper: LicenceDocumentHeaderHelper, test: false },
