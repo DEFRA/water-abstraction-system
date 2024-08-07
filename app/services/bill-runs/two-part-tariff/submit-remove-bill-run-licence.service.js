@@ -33,7 +33,7 @@ async function go (billRunId, licenceId, yar) {
   const allLicencesRemoved = await _allLicencesRemoved(billRunId)
 
   if (!allLicencesRemoved) {
-    const licenceRef = await _fetchLicenceRef(licenceId)
+    const { licenceRef } = await LicenceModel.query().findById(licenceId)
 
     // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
     // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of
@@ -54,14 +54,6 @@ async function _allLicencesRemoved (billRunId) {
   }
 
   return false
-}
-
-async function _fetchLicenceRef (licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .returning('licenceRef')
-
-  return licence.licenceRef
 }
 
 async function _flagForSupplementaryBilling (licenceId, billRunId) {
