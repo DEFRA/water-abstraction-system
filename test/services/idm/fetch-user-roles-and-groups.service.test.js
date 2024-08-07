@@ -36,7 +36,6 @@ describe('Fetch User Roles And Groups service', () => {
 
     // Select a group and assign it to the user via a group
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
-    // await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
