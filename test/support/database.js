@@ -10,6 +10,7 @@
 
 const { db, dbConfig } = require('../../db/db.js')
 
+const FinancialAgreementsSeeder = require('../../db/seeds/11-financial-agreements.seed.js')
 const GroupRolesSeeder = require('../../db/seeds/08-group-roles.seed.js')
 const GroupsSeeder = require('../../db/seeds/06-groups.seed.js')
 const LicenceVersionPurposeConditionTypeSeeder = require('../../db/seeds/05-licence-version-purpose-condition-types.seed.js')
@@ -93,6 +94,7 @@ async function _seed () {
   await GroupRolesSeeder.seed()
   await UsersSeeder.seed()
   await UserGroupsSeeder.seed()
+  await FinancialAgreementsSeeder.seed()
 }
 
 async function _tableNames (schema) {
