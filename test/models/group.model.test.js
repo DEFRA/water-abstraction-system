@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, before } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -28,13 +28,22 @@ const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('Group model', () => {
+  let testGroupRole
   let testRecord
+  let testRole
+  let testUser
+  let testUserGroup
+
+  before(async () => {
+    testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
+
+    testGroupRole = GroupRoleHelper.select(GROUP_ROLE_WIRS_RTNS_INDEX)
+    testRole = RoleHelper.select(ROLE_RTNS_INDEX)
+    testUser = UserHelper.select(USER_WIRS_INDEX)
+    testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = GroupHelper.select()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await GroupModel.query().findById(testRecord.id)
 
@@ -45,15 +54,6 @@ describe('Group model', () => {
 
   describe('Relationships', () => {
     describe('when linking to group roles', () => {
-      let testGroupRole
-
-      beforeEach(async () => {
-        // Index 2 is wirs
-        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
-        // Index 5 is group wirs & role returns. wirs only has one entry in group roles
-        testGroupRole = GroupRoleHelper.select(GROUP_ROLE_WIRS_RTNS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('groupRoles')
@@ -77,13 +77,6 @@ describe('Group model', () => {
     })
 
     describe('when linking through group roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
-        testRole = RoleHelper.select(ROLE_RTNS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('roles')
@@ -107,13 +100,6 @@ describe('Group model', () => {
     })
 
     describe('when linking to user groups', () => {
-      let testUserGroup
-
-      beforeEach(async () => {
-        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
-        testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('userGroups')
@@ -137,13 +123,6 @@ describe('Group model', () => {
     })
 
     describe('when linking through user groups to users', () => {
-      let testUser
-
-      before(async () => {
-        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
-        testUser = UserHelper.select(USER_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('users')

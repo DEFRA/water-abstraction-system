@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -24,17 +24,28 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 const UserModel = require('../../app/models/user.model.js')
 
 const GROUP_WIRS_INDEX = 2
+const ROLE_RETURNS_INDEX = 0
 const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('User model', () => {
+  let testGroup
   let testRecord
+  let testRole
+  let testUserRole
+  let testUserGroup
+
+  before(async () => {
+    testRecord = UserHelper.select(USER_WIRS_INDEX)
+
+    testRole = RoleHelper.select(ROLE_RETURNS_INDEX)
+    testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
+    testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+
+    testUserRole = await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = UserHelper.select()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserModel.query().findById(testRecord.id)
 
@@ -45,13 +56,6 @@ describe('User model', () => {
 
   describe('Relationships', () => {
     describe('when linking through user groups to groups', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testRecord = UserHelper.select(USER_WIRS_INDEX)
-        testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('groups')
@@ -78,8 +82,6 @@ describe('User model', () => {
       let testReturnVersions
 
       beforeEach(async () => {
-        testRecord = UserHelper.select()
-
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
           const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.id })
@@ -111,14 +113,6 @@ describe('User model', () => {
     })
 
     describe('when linking through user roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = UserHelper.select()
-        testRole = RoleHelper.select()
-        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('roles')
@@ -142,13 +136,6 @@ describe('User model', () => {
     })
 
     describe('when linking to user groups', () => {
-      let testUserGroup
-
-      beforeEach(async () => {
-        testRecord = UserHelper.select(USER_WIRS_INDEX)
-        testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('userGroups')
@@ -172,13 +159,6 @@ describe('User model', () => {
     })
 
     describe('when linking to user roles', () => {
-      let testUserRole
-
-      beforeEach(async () => {
-        testRecord = UserHelper.select()
-        testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('userRoles')

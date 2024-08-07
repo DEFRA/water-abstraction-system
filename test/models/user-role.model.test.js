@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,14 +17,21 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const UserRoleModel = require('../../app/models/user-role.model.js')
 
+const ROLE_RENEWAL_NOTIFICATIONS_INDEX = 5
+const USER_NPS_INDEX = 6
+
 describe('User Role model', () => {
   let testRecord
+  let testRole
+  let testUser
+
+  before(async () => {
+    testRole = RoleHelper.select(ROLE_RENEWAL_NOTIFICATIONS_INDEX)
+    testUser = UserHelper.select(USER_NPS_INDEX)
+    testRecord = await UserRoleHelper.add({ roleId: testRole.id, userId: testUser.id })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await UserRoleHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserRoleModel.query().findById(testRecord.id)
 
@@ -35,13 +42,6 @@ describe('User Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to role', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRole = RoleHelper.select()
-        testRecord = await UserRoleHelper.add({ roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserRoleModel.query()
           .innerJoinRelated('role')
@@ -63,13 +63,6 @@ describe('User Role model', () => {
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = UserHelper.select()
-        testRecord = await UserRoleHelper.add({ userId: testUser.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserRoleModel.query()
           .innerJoinRelated('user')

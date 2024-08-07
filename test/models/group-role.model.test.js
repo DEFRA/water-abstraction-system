@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -18,13 +18,18 @@ const RoleModel = require('../../app/models/role.model.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
 
 describe('Group Role model', () => {
+  let testGroup
   let testRecord
+  let testRole
+
+  before(async () => {
+    testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
+
+    testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
+    testRole = RoleHelper.select(RoleHelper.DEFAULT_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = GroupRoleHelper.select()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await GroupRoleModel.query()
         .findById(testRecord.id)
@@ -36,13 +41,6 @@ describe('Group Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to role', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRole = RoleHelper.select(RoleHelper.DEFAULT_INDEX)
-        testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query()
           .innerJoinRelated('role')
@@ -64,13 +62,6 @@ describe('Group Role model', () => {
     })
 
     describe('when linking to group', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testGroup = GroupHelper.select(GroupHelper.DEFAULT_INDEX)
-        testRecord = GroupRoleHelper.select(GroupRoleHelper.DEFAULT_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query()
           .innerJoinRelated('group')

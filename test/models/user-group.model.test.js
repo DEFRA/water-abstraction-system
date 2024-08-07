@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,18 @@ const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('User Group model', () => {
+  let testGroup
   let testRecord
+  let testUser
+
+  before(async () => {
+    testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+
+    testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
+    testUser = UserHelper.select(USER_WIRS_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = UserGroupHelper.select()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserGroupModel.query().findById(testRecord.id)
 
@@ -39,13 +44,6 @@ describe('User Group model', () => {
 
   describe('Relationships', () => {
     describe('when linking to group', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
-        testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('group')
@@ -67,13 +65,6 @@ describe('User Group model', () => {
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = UserHelper.select(USER_WIRS_INDEX)
-        testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('user')
