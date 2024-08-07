@@ -1,7 +1,7 @@
 'use strict'
 
 const LegacyImportLicenceService = require('../services/import/legacy-licence.service.js')
-const { enableSystemImportLegacyLicence } = require('../../config/feature-flags.config.js')
+const FeatureFlags = require('../../config/feature-flags.config.js')
 const Boom = require('@hapi/boom')
 
 /**
@@ -12,7 +12,7 @@ async function licence (request, h) {
   try {
     const { licenceRef } = request.payload
 
-    if (enableSystemImportLegacyLicence) {
+    if (FeatureFlags.enableSystemImportLegacyLicence) {
       await LegacyImportLicenceService.go(licenceRef)
     }
 
