@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,6 @@ const ChargeElementHelper = require('../../../support/helpers/charge-element.hel
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
@@ -28,42 +27,39 @@ const FetchBillingAccountsService = require('../../../../app/services/bill-runs/
 describe('Fetch Billing Accounts service', () => {
   const billingPeriod = determineCurrentFinancialYear()
 
-  let billingAccount
-  let billingAccountId
-  let licence
-  let licenceId
   let region
   let regionId
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-
+  before(async () => {
     region = await RegionHelper.add({ chargeRegionId: 'W' })
     regionId = region.id
-
-    licence = await LicenceHelper.add({ regionId })
-    licenceId = licence.id
-
-    billingAccount = await BillingAccountHelper.add()
-    billingAccountId = billingAccount.id
   })
 
   describe('when there are billing accounts that should be considered for annual billing', () => {
+    let billingAccount
+    let billingAccountId
     let changeReason
     let chargeCategory
     let chargeElement
     let chargeReference
     let chargeVersion
+    let licence
+    let licenceId
 
-    beforeEach(async () => {
+    before(async () => {
+      billingAccount = await BillingAccountHelper.add()
+      billingAccountId = billingAccount.id
+
+      licence = await LicenceHelper.add({ regionId })
+      licenceId = licence.id
+
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
-      const { id: licenceId, licenceRef } = licence
       const { id: changeReasonId } = changeReason
 
-      chargeVersion = await ChargeVersionHelper.add(
-        { startDate: new Date('2023-11-01'), changeReasonId, billingAccountId, licenceId, licenceRef }
-      )
+      chargeVersion = await ChargeVersionHelper.add({
+        startDate: new Date('2023-11-01'), changeReasonId, billingAccountId, licenceId, licenceRef: licence.licenceRef
+      })
       const { id: chargeVersionId } = chargeVersion
 
       chargeCategory = await ChargeCategoryHelper.add()
@@ -175,16 +171,30 @@ describe('Fetch Billing Accounts service', () => {
     })
   })
 
-  describe('when there are no billing accounts that should be considered for the annual bill run', () => {
+  describe('when there are billing accounts that should not be considered for the annual bill run', () => {
+    let billingAccount
+    let billingAccountId
+    let licence
+    let licenceId
+
+    before(async () => {
+      billingAccount = await BillingAccountHelper.add()
+      billingAccountId = billingAccount.id
+
+      licence = await LicenceHelper.add({ regionId })
+      licenceId = licence.id
+    })
+
     describe('because all their charge versions do not have a status of "current"', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({ status: 'draft', billingAccountId, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -193,10 +203,11 @@ describe('Fetch Billing Accounts service', () => {
         await ChargeVersionHelper.add({ scheme: 'alcs', billingAccountId, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -210,10 +221,11 @@ describe('Fetch Billing Accounts service', () => {
         )
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -227,10 +239,11 @@ describe('Fetch Billing Accounts service', () => {
         )
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -242,10 +255,11 @@ describe('Fetch Billing Accounts service', () => {
         await ChargeVersionHelper.add({ billingAccountId, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -257,10 +271,11 @@ describe('Fetch Billing Accounts service', () => {
         await ChargeVersionHelper.add({ billingAccountId, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
 
@@ -270,10 +285,11 @@ describe('Fetch Billing Accounts service', () => {
         await WorkflowHelper.add({ licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return them in the results', async () => {
         const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-        expect(results).to.be.empty()
+        expect(results).to.have.length(1)
+        expect(results[0].id).not.to.equal(billingAccountId)
       })
     })
   })

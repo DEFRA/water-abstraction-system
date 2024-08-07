@@ -9,9 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
+const { determineCurrentFinancialYear, generateUUID } = require('../../../../app/lib/general.lib.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const BillModel = require('../../../../app/models/bill.model.js')
@@ -25,18 +26,15 @@ const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/
 
 describe('Annual Process billing period service', () => {
   const billingPeriod = determineCurrentFinancialYear()
-  const billRun = {
-    id: '8e0d4c8b-e9fe-4238-8f3e-dfca743316ef',
-    externalId: 'f6e052f5-37f9-43f3-a649-ff6398cec1a3'
-  }
 
+  let billRun
   let billingAccount
   let chargingModuleCreateTransactionRequestStub
 
   beforeEach(async () => {
     // NOTE: Although we don't rely on the helpers to create the data we pass into the service it does persist the
     // results. If we don't clean the DB it causes the tests to fail because of unique constraints on the legacy tables.
-    await DatabaseSupport.clean()
+    // await DatabaseSupport.clean()
 
     chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
   })
@@ -47,6 +45,10 @@ describe('Annual Process billing period service', () => {
 
   describe('when the service is called', () => {
     describe('and there are no billing accounts to process', () => {
+      beforeEach(() => {
+        billRun = _billRun()
+      })
+
       it('returns false (bill run is empty)', async () => {
         const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
 
@@ -56,22 +58,23 @@ describe('Annual Process billing period service', () => {
 
     describe('and there are billing accounts to process', () => {
       beforeEach(async () => {
-        billingAccount = _testBillingAccount()
-
         chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
-          ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
+          ..._chargingModuleResponse(generateUUID())
         })
         chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
-          ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
+          ..._chargingModuleResponse(generateUUID())
         })
       })
 
       describe('and they are billable', () => {
         beforeEach(async () => {
+          billRun = _billRun()
+          billingAccount = _billingAccount()
+
           // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
           // new one when processing a billing account. To to that we need a billing account with 2 charge versions
           // linked to the same licence
-          billingAccount.chargeVersions = [_testChargeVersion(billingAccount.id), _testChargeVersion(billingAccount.id)]
+          billingAccount.chargeVersions = [_chargeVersion(billingAccount.id), _chargeVersion(billingAccount.id)]
         })
 
         it('returns true (bill run is not empty)', async () => {
@@ -83,41 +86,43 @@ describe('Annual Process billing period service', () => {
 
       describe('and they are partially billable (some bill licences generate 0 transactions)', () => {
         beforeEach(() => {
+          billRun = _billRun()
+          billingAccount = _billingAccount()
+
           // Create a charge version with an abstraction period that starts in June but which is linked to a licence
           // that was revoked at the start of May. The engine should calculate 0 billable days and therefore not attempt
           // to create a bill licence for this record.
-          const unbillableChargeVersion = _testChargeVersion(billingAccount.id)
-          unbillableChargeVersion.licence.id = 'c3726e99-935e-4a36-ab2f-eef8bda9293a'
+          const unbillableChargeVersion = _chargeVersion(billingAccount.id)
+
+          unbillableChargeVersion.licence.id = generateUUID()
           unbillableChargeVersion.licence.revokedDate = new Date(billingPeriod.startDate.getFullYear(), 4, 1)
           unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartDay = 1
           unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartMonth = 6
 
           billingAccount.chargeVersions = [
-            _testChargeVersion(billingAccount.id),
-            _testChargeVersion(billingAccount.id),
+            _chargeVersion(billingAccount.id),
             unbillableChargeVersion
           ]
         })
 
-        it('returns true (bill run is not empty)', async () => {
+        it('returns true (bill run is not empty) and only persists the bill licences with transactions', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
           expect(result).to.be.true()
-        })
 
-        it('only persists the bill licences with transactions', async () => {
-          await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const bill = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
 
-          const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
-
-          expect(result.billLicences.length).to.equal(1)
-          expect(result.billLicences[0].licenceId).to.equal(billingAccount.chargeVersions[0].licence.id)
+          expect(bill.billLicences.length).to.equal(1)
+          expect(bill.billLicences[0].licenceId).to.equal(billingAccount.chargeVersions[0].licence.id)
         })
       })
 
       describe('but they are not billable', () => {
         beforeEach(async () => {
-          const chargeVersion = _testChargeVersion(billingAccount.id)
+          billRun = _billRun()
+          billingAccount = _billingAccount()
+
+          const chargeVersion = _chargeVersion(billingAccount.id)
 
           // We update the billing account's charge information so that the engine calculates a charge period that
           // starts after the abstraction period i.e. nothing to bill
@@ -138,8 +143,9 @@ describe('Annual Process billing period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      billingAccount = _testBillingAccount()
-      billingAccount.chargeVersions = [_testChargeVersion(billingAccount.id)]
+      billRun = _billRun()
+      billingAccount = _billingAccount()
+      billingAccount.chargeVersions = [_chargeVersion(billingAccount.id)]
     })
 
     describe('because generating the calculated transactions fails', () => {
@@ -174,6 +180,13 @@ describe('Annual Process billing period service', () => {
   })
 })
 
+function _billRun () {
+  return {
+    id: generateUUID(),
+    externalId: generateUUID()
+  }
+}
+
 function _chargingModuleResponse (transactionId) {
   return {
     succeeded: true,
@@ -183,14 +196,14 @@ function _chargingModuleResponse (transactionId) {
   }
 }
 
-function _testBillingAccount () {
+function _billingAccount () {
   return {
-    id: '973a5852-9c06-4c14-b1e2-d32b88d3e878',
-    accountNumber: 'T71117364A'
+    id: generateUUID(),
+    accountNumber: BillingAccountHelper.generateAccountNumber()
   }
 }
 
-function _testChargeVersion (billingAccountId) {
+function _chargeVersion (billingAccountId) {
   return {
     id: generateUUID(),
     scheme: 'sroc',
@@ -199,8 +212,8 @@ function _testChargeVersion (billingAccountId) {
     billingAccountId,
     status: 'current',
     licence: {
-      id: '1b605a4e-a065-4b17-80eb-47179b99a4e8',
-      licenceRef: '01/684',
+      id: generateUUID(),
+      licenceRef: LicenceHelper.generateLicenceRef(),
       waterUndertaker: true,
       historicalAreaCode: 'SAAR',
       regionalChargeArea: 'Southern',
@@ -229,8 +242,8 @@ function _testChargeVersion (billingAccountId) {
         additionalCharges: { isSupplyPublicWater: true },
         description: 'Mineral washing',
         chargeCategory: {
-          id: 'cc4a66da-efdb-4882-b18a-daf000131349',
-          reference: '4.4.1',
+          id: generateUUID(),
+          reference: ChargeCategoryHelper.generateChargeReference(),
           shortDescription: 'Low loss, non-tidal, up to and including 5,000 ML/yr'
         },
         chargeElements: [
