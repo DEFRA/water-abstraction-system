@@ -1,35 +1,56 @@
 'use strict'
 
-const { ForeignKeyViolationError } = require('db-errors')
-
+const { db } = require('../db.js')
+const { data: Groups } = require('./data/groups.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
 const GroupRoles = require('./data/group-roles.js')
+const { data: Roles } = require('./data/roles.js')
 
 async function seed () {
   for (const groupRole of GroupRoles.data) {
-    await _upsert(groupRole)
+    const { group, role } = _names(groupRole)
+
+    const exists = await _exists(group, role)
+
+    if (!exists) {
+      await _insert(groupRole.id, group, role)
+    }
   }
 }
 
-async function _upsert (groupRole) {
-  // NOTE: `group_roles` is simply a many-to-many table that links groups and roles in the IDM schema. It will have
-  // been populated when the legacy migrations are run. So, in most environments we would expect either the onConflict
-  // to trigger, which we ignore. Else, the role and group IDs we're using don't cause a conflict because they don't
-  // match the groups and roles that have already been populated. When this happens a ForeignKeyViolationError will
-  // be thrown, which we ignore because again, it means the database is already seeded.
-  //
-  // When seeding the test DB, or in a blank DB however, the seeding should complete without issue.
-  return GroupRoleModel.query()
-    .insert(groupRole)
-    .onConflict(['groupId', 'roleId'])
-    .ignore()
-    .onError(async (error, _builder) => {
-      if (error instanceof ForeignKeyViolationError) {
-        return { error: 'Group or Role ID is unknown most likely due to database already being seeded.' }
-      }
+async function _exists (group, role) {
+  const result = await GroupRoleModel.query()
+    .select('groupRoles.id')
+    .innerJoinRelated('group')
+    .innerJoinRelated('role')
+    .where('group.group', group)
+    .andWhere('role.role', role)
+    .limit(1)
+    .first()
 
-      return Promise.reject(error)
-    })
+  return !!result
+}
+
+async function _insert (id, group, role) {
+  return db.raw(`
+    INSERT INTO public.group_roles (id, group_id, role_id)
+    SELECT
+      (?) AS id,
+      (SELECT id FROM public."groups" g WHERE g."group" = ?) AS group_id,
+      (SELECT id FROM public.roles r WHERE r.role = ?) AS role_id;
+    `, [id, group, role])
+}
+
+function _names (groupRole) {
+  const { group } = Groups.find((group) => {
+    return group.id === groupRole.groupId
+  })
+
+  const { role } = Roles.find((role) => {
+    return role.id === groupRole.roleId
+  })
+
+  return { group, role }
 }
 
 module.exports = {
