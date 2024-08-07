@@ -30,11 +30,11 @@ async function go (billRunId, licenceId, yar) {
 
   await _flagForSupplementaryBilling(licenceId, billRunId)
 
-  const licenceRef = await _fetchLicenceRef(licenceId)
-
   const allLicencesRemoved = await _allLicencesRemoved(billRunId)
 
   if (!allLicencesRemoved) {
+    const licenceRef = await _fetchLicenceRef(licenceId)
+
     // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
     // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of
     // "Review licences". As the banner isn't displayed on the "Bill runs" page the message would remain in the cookie.
@@ -69,7 +69,7 @@ async function _flagForSupplementaryBilling (licenceId, billRunId) {
     .findById(billRunId)
     .returning('toFinancialYearEnding')
 
-  await LicenceSupplementaryYearModel.query()
+  return LicenceSupplementaryYearModel.query()
     .insert({
       licenceId,
       twoPartTariff: true,
