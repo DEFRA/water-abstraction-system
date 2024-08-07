@@ -15,6 +15,16 @@ async function _deleteAllTestData () {
   return db.raw(`
   DELETE
   FROM
+    "public"."licence_supplementary_years" AS "lsy"
+      USING "public"."licences" AS "l",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "lsy"."licence_id" = "l"."id"
+    AND "l"."region_id" = "r"."id";
+
+  DELETE
+  FROM
     "public"."review_returns" AS "rr"
       USING "public"."review_licences" AS "rl",
     "public"."bill_runs" AS "br",
