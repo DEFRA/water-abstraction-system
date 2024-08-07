@@ -5,6 +5,7 @@
  */
 
 const { randomInteger, selectRandomEntry } = require('../general.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const UserModel = require('../../../app/models/user.model.js')
 const Users = require('../../../db/seeds/data/users.js')
 
@@ -15,7 +16,7 @@ const DEFAULT_INDEX = 4
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `username` - billing.data@wrls.gov.uk
+ * - `username` - [random UUID]@wrls.gov.uk
  * - `password` - P@55word (note that this is salted and hashed before being persisted)
  * - `resetRequired` - 0
  * - `badLogins` - 0
@@ -45,7 +46,13 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const defaults = select(DEFAULT_INDEX)
+  const defaults = {
+    username: `${generateUUID()}@wrls.gov.uk`,
+    password: 'P@55word',
+    resetRequired: 0,
+    badLogins: 0,
+    application: 'water_admin'
+  }
 
   return {
     ...defaults,
