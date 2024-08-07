@@ -2,10 +2,10 @@
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { db } = require('../db.js')
-const Roles = require('./data/roles.js')
+const { data: roles } = require('./data/roles.js')
 
 async function seed () {
-  for (const role of Roles.data) {
+  for (const role of roles) {
     await _upsert(role)
   }
 }

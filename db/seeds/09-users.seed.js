@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs')
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const Users = require('./data/users.js')
+const { data: users } = require('./data/users.js')
 const UserModel = require('../../app/models/user.model.js')
 
 const DatabaseConfig = require('../../config/database.config.js')
@@ -17,7 +17,7 @@ async function seed () {
 
   const password = _generateHashedPassword()
 
-  for (const user of Users.data) {
+  for (const user of users) {
     await _upsert(user, password)
   }
 }

@@ -1,11 +1,11 @@
 'use strict'
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const SecondaryPurposes = require('./data/secondary-purposes.js')
+const { data: secondaryPurposes } = require('./data/secondary-purposes.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 async function seed () {
-  for (const purpose of SecondaryPurposes.data) {
+  for (const purpose of secondaryPurposes) {
     await _upsert(purpose)
   }
 }

@@ -5,7 +5,7 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
+const { data: licenceVersionPurposeConditionTypes } = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -23,13 +23,13 @@ const LicenceVersionPurposeConditionTypes = require('../../../db/seeds/data/lice
  */
 function select (index = -1) {
   if (index > -1) {
-    return LicenceVersionPurposeConditionTypes.data[index]
+    return licenceVersionPurposeConditionTypes[index]
   }
 
-  return selectRandomEntry(LicenceVersionPurposeConditionTypes.data)
+  return selectRandomEntry(licenceVersionPurposeConditionTypes)
 }
 
 module.exports = {
-  data: LicenceVersionPurposeConditionTypes.data,
+  data: licenceVersionPurposeConditionTypes,
   select
 }

@@ -7,7 +7,7 @@
 const { randomInteger, selectRandomEntry } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const UserModel = require('../../../app/models/user.model.js')
-const Users = require('../../../db/seeds/data/users.js')
+const { data: users } = require('../../../db/seeds/data/users.js')
 
 const DEFAULT_INDEX = 4
 
@@ -81,15 +81,15 @@ function generateUserId () {
  */
 function select (index = -1) {
   if (index > -1) {
-    return Users.data[index]
+    return users[index]
   }
 
-  return selectRandomEntry(Users.data)
+  return selectRandomEntry(users)
 }
 
 module.exports = {
   add,
-  data: Users.data,
+  data: users,
   DEFAULT_INDEX,
   defaults,
   generateUserId,

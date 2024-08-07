@@ -4,7 +4,7 @@
  * @module FinancialAgreementHelper
  */
 
-const FinancialAgreements = require('../../../db/seeds/data/financial-agreements.js')
+const { data: financialAgreements } = require('../../../db/seeds/data/financial-agreements.js')
 const { selectRandomEntry } = require('../general.js')
 
 /**
@@ -23,13 +23,13 @@ const { selectRandomEntry } = require('../general.js')
  */
 function select (index = -1) {
   if (index > -1) {
-    return FinancialAgreements.data[index]
+    return financialAgreements[index]
   }
 
-  return selectRandomEntry(FinancialAgreements.data)
+  return selectRandomEntry(financialAgreements)
 }
 
 module.exports = {
-  data: FinancialAgreements.data,
+  data: financialAgreements,
   select
 }

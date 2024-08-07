@@ -1,13 +1,13 @@
 'use strict'
 
 const { db } = require('../db.js')
-const { data: Groups } = require('./data/groups.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
-const GroupRoles = require('./data/group-roles.js')
-const { data: Roles } = require('./data/roles.js')
+const { data: groupRoles } = require('./data/group-roles.js')
+const { data: groups } = require('./data/groups.js')
+const { data: roles } = require('./data/roles.js')
 
 async function seed () {
-  for (const groupRole of GroupRoles.data) {
+  for (const groupRole of groupRoles) {
     const { group, role } = _names(groupRole)
 
     const exists = await _exists(group, role)
@@ -42,11 +42,11 @@ async function _insert (id, group, role) {
 }
 
 function _names (groupRole) {
-  const { group } = Groups.find((group) => {
+  const { group } = groups.find((group) => {
     return group.id === groupRole.groupId
   })
 
-  const { role } = Roles.find((role) => {
+  const { role } = roles.find((role) => {
     return role.id === groupRole.roleId
   })
 

@@ -1,11 +1,11 @@
 'use strict'
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const FinancialAgreements = require('./data/financial-agreements.js')
+const { data: financialAgreements } = require('./data/financial-agreements.js')
 const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
 
 async function seed () {
-  for (const financialAgreement of FinancialAgreements.data) {
+  for (const financialAgreement of financialAgreements) {
     await _upsert(financialAgreement)
   }
 }

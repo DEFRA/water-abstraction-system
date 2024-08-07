@@ -5,7 +5,7 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const Roles = require('../../../db/seeds/data/roles.js')
+const { data: roles } = require('../../../db/seeds/data/roles.js')
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -23,13 +23,13 @@ const Roles = require('../../../db/seeds/data/roles.js')
  */
 function select (index = -1) {
   if (index > -1) {
-    return Roles.data[index]
+    return roles[index]
   }
 
-  return selectRandomEntry(Roles.data)
+  return selectRandomEntry(roles)
 }
 
 module.exports = {
-  data: Roles.data,
+  data: roles,
   select
 }

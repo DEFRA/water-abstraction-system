@@ -5,7 +5,7 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const Regions = require('../../../db/seeds/data/regions.js')
+const { data: regions } = require('../../../db/seeds/data/regions.js')
 
 const TEST_REGION_INDEX = 8
 
@@ -25,14 +25,14 @@ const TEST_REGION_INDEX = 8
  */
 function select (index = -1) {
   if (index > -1) {
-    return Regions.data[index]
+    return regions[index]
   }
 
-  return selectRandomEntry(Regions.data)
+  return selectRandomEntry(regions)
 }
 
 module.exports = {
-  data: Regions.data,
+  data: regions,
   select,
   TEST_REGION_INDEX
 }

@@ -3,11 +3,11 @@
 const { db } = require('../db.js')
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const Regions = require('./data/regions.js')
+const { data: regions } = require('./data/regions.js')
 const RegionModel = require('../../app/models/region.model.js')
 
 async function seed () {
-  for (const region of Regions.data) {
+  for (const region of regions) {
     const exists = await _exists(region)
 
     if (exists) {

@@ -1,10 +1,10 @@
 'use strict'
 
 const { db } = require('../db.js')
-const { data: Groups } = require('./data/groups.js')
+const { data: groups } = require('./data/groups.js')
 const UserGroupModel = require('../../app/models/user-group.model.js')
-const UserGroups = require('./data/user-groups.js')
-const { data: Users } = require('./data/users.js')
+const { data: userGroups } = require('./data/user-groups.js')
+const { data: users } = require('./data/users.js')
 
 const ServerConfig = require('../../config/server.config.js')
 
@@ -14,7 +14,7 @@ async function seed () {
     return
   }
 
-  for (const userGroup of UserGroups.data) {
+  for (const userGroup of userGroups) {
     const { group, username } = _names(userGroup)
 
     const exists = await _exists(group, username)
@@ -49,11 +49,11 @@ async function _insert (id, group, username) {
 }
 
 function _names (userGroup) {
-  const { group } = Groups.find((group) => {
+  const { group } = groups.find((group) => {
     return group.id === userGroup.groupId
   })
 
-  const { username } = Users.find((user) => {
+  const { username } = users.find((user) => {
     return user.id === userGroup.userId
   })
 
