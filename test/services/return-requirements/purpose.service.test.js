@@ -24,8 +24,6 @@ describe('Return Requirements - Purpose service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     Sinon.stub(FetchPurposesService, 'go').resolves([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }

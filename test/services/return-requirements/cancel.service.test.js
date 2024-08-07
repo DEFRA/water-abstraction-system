@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const CancelService = require('../../../app/services/return-requirements/cancel.service.js')
@@ -18,10 +18,8 @@ describe('Return Requirements - Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
-      id: '61e07498-f309-4829-96a9-72084a54996d',
+      id: generateUUID(),
       data: {
         checkPageVisited: false,
         licence: {
@@ -68,14 +66,15 @@ describe('Return Requirements - Cancel service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'You are about to cancel these requirements for returns',
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
-        licenceRef: '01/ABC',
+        backLink: `/system/return-requirements/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        pageTitle: 'You are about to cancel these requirements for returns',
         reason: 'Major change',
         returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],
+        sessionId: session.id,
         startDate: '1 January 2023'
-      }, { skip: ['sessionId'] })
+      })
     })
   })
 })

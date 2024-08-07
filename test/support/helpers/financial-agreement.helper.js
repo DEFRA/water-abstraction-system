@@ -50,7 +50,7 @@ function defaults (data = {}) {
 }
 
 function generateFinancialAgreementCode () {
-  return `S${randomInteger(100, 199)}`
+  return `S${randomInteger(100, 999)}`
 }
 
 module.exports = {
