@@ -7,8 +7,14 @@ const Users = require('./data/users.js')
 const UserModel = require('../../app/models/user.model.js')
 
 const DatabaseConfig = require('../../config/database.config.js')
+const ServerConfig = require('../../config/server.config.js')
 
 async function seed () {
+  // These users are for use in our non-production environments only
+  if (ServerConfig.environment === 'production') {
+    return
+  }
+
   const password = _generateHashedPassword()
 
   for (const user of Users.data) {

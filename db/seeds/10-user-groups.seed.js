@@ -6,7 +6,14 @@ const UserGroupModel = require('../../app/models/user-group.model.js')
 const UserGroups = require('./data/user-groups.js')
 const { data: Users } = require('./data/users.js')
 
+const ServerConfig = require('../../config/server.config.js')
+
 async function seed () {
+  // These user groups relate to users that are only for use in our non-production environments
+  if (ServerConfig.environment === 'production') {
+    return
+  }
+
   for (const userGroup of UserGroups.data) {
     const { group, username } = _names(userGroup)
 
