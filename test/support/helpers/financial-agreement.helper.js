@@ -5,7 +5,7 @@
  */
 
 const FinancialAgreements = require('../../../db/seeds/data/financial-agreements.js')
-const { randomInteger, selectRandomEntry } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
 
 const DEFAULT_INDEX = 3
 
@@ -24,10 +24,6 @@ function defaults (data = {}) {
     ...defaults,
     ...data
   }
-}
-
-function generateFinancialAgreementCode () {
-  return `S${randomInteger(100, 999)}`
 }
 
 /**
@@ -56,6 +52,5 @@ module.exports = {
   data: FinancialAgreements.data,
   DEFAULT_INDEX,
   defaults,
-  generateFinancialAgreementCode,
   select
 }
