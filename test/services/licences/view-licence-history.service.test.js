@@ -15,13 +15,12 @@ const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/vi
 // Thing under test
 const ViewLicenceHistoryService = require('../../../app/services/licences/view-licence-history.service.js')
 
-describe.only('View Licence History service', () => {
+describe('View Licence History service', () => {
   const licenceId = '91aff99a-3204-4727-86bd-7bdf3ef24533'
 
-  beforeEach(async () => {
+  beforeEach(() => {
     Sinon.stub(FetchLicenceHistoryService, 'go').returns(_testFetchLicenceHistory())
-
-    Sinon.stub(ViewLicenceHistoryPresenter, 'go').resolves(_testFormattedLicenceHistory())
+    Sinon.stub(ViewLicenceHistoryPresenter, 'go').returns(_testFormattedLicenceHistory())
   })
 
   afterEach(() => {
@@ -31,9 +30,8 @@ describe.only('View Licence History service', () => {
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
       const result = await ViewLicenceHistoryService.go(licenceId)
-      console.log('🚀🚀🚀 ~ result:', result)
 
-      expect(result).to.equal(_testFetchLicenceHistory())
+      expect(result).to.equal(_testFormattedLicenceHistory())
     })
   })
 })
