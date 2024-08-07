@@ -64,7 +64,7 @@ async function seed (optionalLicenceRef = undefined) {
 
 async function _financialAgreements () {
   const section126 = FinancialAgreementHelper.select(2)
-  const twoPartTariff = FinancialAgreementHelper.select(FinancialAgreementHelper.DEFAULT_INDEX)
+  const twoPartTariff = FinancialAgreementHelper.select(3)
 
   return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
