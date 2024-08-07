@@ -9,6 +9,7 @@ const PrimaryPurposesSeeder = require('./primary-purpose.seeder.js')
 const PurposesSeeder = require('./purposes.seeder.js')
 
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
+const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
@@ -16,10 +17,8 @@ const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateFinancialAgreementCode } = require('../helpers/financial-agreement.helper')
-const { generateLicenceVersionExternalId } = require('../helpers/licence-version.helper')
-const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-version-purpose.helper')
-const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
+const { generateLicenceVersionExternalId } = require('../helpers/licence-version.helper.js')
+const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-version-purpose.helper.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -66,8 +65,24 @@ async function seed (optionalLicenceRef = undefined) {
 }
 
 async function _financialAgreements () {
-  const section126 = await FinancialAgreementModel.query().select().where('code', 'S126').limit(1).first()
-  const twoPartTariff = await FinancialAgreementModel.query().select().where('code', 'S127').limit(1).first()
+  let section126 = await FinancialAgreementModel.query().select().where('code', 'S126').limit(1).first()
+  let twoPartTariff = await FinancialAgreementModel.query().select().where('code', 'S127').limit(1).first()
+
+  // This is temporary whilst the clean is called by other tests.
+  // TODO: remove this when all database cleans have been removed
+  if (!section126) {
+    section126 = await FinancialAgreementHelper.add({
+      code: 'S126',
+      description: 'Section 126'
+    })
+  }
+
+  if (!twoPartTariff) {
+    twoPartTariff = await FinancialAgreementHelper.add({
+      code: 'S127',
+      description: 'Section 127 (Two Part Tariff)'
+    })
+  }
 
   return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
