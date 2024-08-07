@@ -65,15 +65,14 @@ async function _fetchLicenceRef (licenceId) {
 }
 
 async function _flagForSupplementaryBilling (licenceId, billRunId) {
-  const financialYearEnd = await BillRunModel.query()
+  const { toFinancialYearEnding } = await BillRunModel.query()
     .findById(billRunId)
-    .returning('toFinancialYearEnding')
 
   return LicenceSupplementaryYearModel.query()
     .insert({
       licenceId,
       twoPartTariff: true,
-      financialYearEnd: financialYearEnd.toFinancialYearEnding
+      financialYearEnd: toFinancialYearEnding
     })
 }
 
