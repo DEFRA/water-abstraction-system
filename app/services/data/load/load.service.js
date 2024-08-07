@@ -39,6 +39,7 @@ const LicenceEntityRoleHelper = require('../../../../test/support/helpers/licenc
 const LicenceEntityHelper = require('../../../../test/support/helpers/licence-entity.helper.js')
 const LicenceGaugingStationHelper = require('../../../../test/support/helpers/licence-gauging-station.helper.js')
 const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role.helper.js')
+const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../../../test/support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../../test/support/helpers/licence-version-purpose.helper.js')
@@ -103,6 +104,7 @@ const LOAD_HELPERS = {
   licenceEntities: { helper: LicenceEntityHelper, test: false },
   licenceGaugingStations: { helper: LicenceGaugingStationHelper, test: true, legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' } },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
+  LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionPurposeConditionTypes: { helper: LicenceVersionPurposeConditionTypeHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
   licenceVersionPurposes: { helper: LicenceVersionPurposeHelper, test: true, legacy: { schema: 'water', table: 'licence_version_purposes', id: 'licence_version_purpose_id' } },
