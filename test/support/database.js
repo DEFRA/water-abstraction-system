@@ -18,6 +18,7 @@ const PrimaryPurposesSeeder = require('../../db/seeds/04-primary-purposes.js')
 const RegionsSeeder = require('../../db/seeds/02-regions.js')
 const RolesSeeder = require('../../db/seeds/08-roles.js')
 const SecondaryPurposesSeeder = require('../../db/seeds/05-secondary-purposes.js')
+const UsersSeeder = require('../../db/seeds/10-users.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -80,6 +81,7 @@ function _migrationTables () {
 }
 
 async function _seed () {
+  // NOTE: Order matches the order they are seeded via Knex seeding. Do not alphabetize!
   await RegionsSeeder.seed()
   await PurposesSeeder.seed()
   await PrimaryPurposesSeeder.seed()
@@ -88,6 +90,7 @@ async function _seed () {
   await GroupsSeeder.seed()
   await RolesSeeder.seed()
   await GroupRolesSeeder.seed()
+  await UsersSeeder.seed()
 }
 
 async function _tableNames (schema) {
