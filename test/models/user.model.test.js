@@ -24,6 +24,7 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 const UserModel = require('../../app/models/user.model.js')
 
 const GROUP_WIRS_INDEX = 2
+const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('User model', () => {
@@ -145,7 +146,7 @@ describe('User model', () => {
 
       beforeEach(async () => {
         testRecord = UserHelper.select(USER_WIRS_INDEX)
-        testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
+        testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -166,7 +167,7 @@ describe('User model', () => {
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup)
+        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

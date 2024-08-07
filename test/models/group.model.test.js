@@ -24,6 +24,7 @@ const GroupModel = require('../../app/models/group.model.js')
 const GROUP_ROLE_WIRS_RTNS_INDEX = 5
 const GROUP_WIRS_INDEX = 2
 const ROLE_RTNS_INDEX = 0
+const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('Group model', () => {
@@ -109,8 +110,8 @@ describe('Group model', () => {
       let testUserGroup
 
       beforeEach(async () => {
-        testRecord = GroupHelper.select()
-        testUserGroup = await UserGroupHelper.add({ groupId: testRecord.id })
+        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
+        testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -131,7 +132,7 @@ describe('Group model', () => {
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup)
+        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

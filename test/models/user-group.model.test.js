@@ -17,12 +17,16 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const UserGroupModel = require('../../app/models/user-group.model.js')
 
+const GROUP_WIRS_INDEX = 2
+const USER_GROUP_WIRS_INDEX = 3
+const USER_WIRS_INDEX = 3
+
 describe('User Group model', () => {
   let testRecord
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await UserGroupHelper.add()
+      testRecord = UserGroupHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -38,8 +42,8 @@ describe('User Group model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testGroup = GroupHelper.select()
-        testRecord = await UserGroupHelper.add({ groupId: testGroup.id })
+        testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
+        testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -66,8 +70,8 @@ describe('User Group model', () => {
       let testUser
 
       beforeEach(async () => {
-        testUser = UserHelper.select()
-        testRecord = await UserGroupHelper.add({ userId: testUser.id })
+        testUser = UserHelper.select(USER_WIRS_INDEX)
+        testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
