@@ -8,7 +8,6 @@ const { describe, it, beforeEach, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
@@ -25,6 +24,7 @@ const GroupModel = require('../../app/models/group.model.js')
 const GROUP_ROLE_WIRS_RTNS_INDEX = 5
 const GROUP_WIRS_INDEX = 2
 const ROLE_RTNS_INDEX = 0
+const USER_WIRS_INDEX = 3
 
 describe('Group model', () => {
   let testRecord
@@ -139,9 +139,8 @@ describe('Group model', () => {
       let testUser
 
       before(async () => {
-        testRecord = GroupHelper.select()
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        await UserGroupHelper.add({ userId: testUser.id, groupId: testRecord.id })
+        testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
+        testUser = UserHelper.select(USER_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -162,7 +161,7 @@ describe('Group model', () => {
         expect(result.users).to.be.an.array()
         expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser)
+        expect(result.users[0]).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
       })
     })
   })

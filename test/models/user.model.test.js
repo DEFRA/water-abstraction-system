@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -24,12 +23,15 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 // Thing under test
 const UserModel = require('../../app/models/user.model.js')
 
+const GROUP_WIRS_INDEX = 2
+const USER_WIRS_INDEX = 3
+
 describe('User model', () => {
   let testRecord
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+      testRecord = UserHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -45,9 +47,8 @@ describe('User model', () => {
       let testGroup
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testGroup = GroupHelper.select()
-        await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
+        testRecord = UserHelper.select(USER_WIRS_INDEX)
+        testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
       })
 
       it('can successfully run a related query', async () => {
@@ -76,7 +77,7 @@ describe('User model', () => {
       let testReturnVersions
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testRecord = UserHelper.select()
 
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
@@ -112,7 +113,7 @@ describe('User model', () => {
       let testRole
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testRecord = UserHelper.select()
         testRole = RoleHelper.select()
         await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
       })
@@ -143,7 +144,7 @@ describe('User model', () => {
       let testUserGroup
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testRecord = UserHelper.select(USER_WIRS_INDEX)
         testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
       })
 
@@ -173,7 +174,7 @@ describe('User model', () => {
       let testUserRole
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testRecord = UserHelper.select()
         testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
       })
 

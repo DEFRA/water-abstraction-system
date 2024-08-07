@@ -11,7 +11,6 @@ const ReturnRequirementPointHelper = require('../helpers/return-requirement-poin
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 const UserHelper = require('../helpers/user.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -32,8 +31,8 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * it is linked to
  */
 async function seed () {
-  // Create a user
-  const user = await UserHelper.add({ username: `${generateUUID()}@wrls.gov.uk` })
+  // Select a user
+  const user = UserHelper.select()
 
   // Create a licence
   const licence = await LicenceHelper.add()

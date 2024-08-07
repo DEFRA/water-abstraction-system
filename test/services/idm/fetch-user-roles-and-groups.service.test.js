@@ -10,10 +10,8 @@ const { expect } = Code
 // Test helpers
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
-const UserGroupHelper = require('../../support/helpers/user-group.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 const UserRoleHelper = require('../../support/helpers/user-role.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
@@ -21,6 +19,7 @@ const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-
 const GROUP_ENV_OFFICER_INDEX = 0
 const ROLE_RETURNS_INDEX = 0
 const ROLE_HOF_NOTIFICATIONS_INDEX = 0
+const USER_ENV_OFFICER_INDEX = 2
 
 describe('Fetch User Roles And Groups service', () => {
   let duplicateRoleForUser
@@ -29,11 +28,7 @@ describe('Fetch User Roles And Groups service', () => {
   let user
 
   before(async () => {
-    user = await UserHelper.add(
-      {
-        username: `${generateUUID()}@test.com`
-      }
-    )
+    user = UserHelper.select(USER_ENV_OFFICER_INDEX)
 
     // Select a role and assign it directly to the user
     roleForUser = RoleHelper.select(ROLE_RETURNS_INDEX)
@@ -41,7 +36,7 @@ describe('Fetch User Roles And Groups service', () => {
 
     // Select a group and assign it to the user via a group
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
-    await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
+    // await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
@@ -50,7 +45,7 @@ describe('Fetch User Roles And Groups service', () => {
     it('returns the user', async () => {
       const result = await FetchUserRolesAndGroupsService.go(user.id)
 
-      expect(result.user).to.equal(user)
+      expect(result.user).to.equal(user, { skip: ['createdAt', 'password', 'updatedAt'] })
     })
 
     it("returns the user's roles", async () => {

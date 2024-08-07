@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
@@ -140,7 +139,7 @@ describe('Role model', () => {
 
       beforeEach(async () => {
         testRecord = RoleHelper.select()
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testUser = UserHelper.select()
         await UserRoleHelper.add({ userId: testUser.id, roleId: testRecord.id })
       })
 
@@ -162,7 +161,7 @@ describe('Role model', () => {
         expect(result.users).to.be.an.array()
         expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser)
+        expect(result.users[0]).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
       })
     })
   })
