@@ -12,22 +12,20 @@ const { expect } = Code
 const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
 const FixtureLegacyLicence = require('./_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersionPurpose = require('./_fixtures/legacy-licence-version-purpose.fixture.js')
 const FixtureLegacyLicenceVersion = require('./_fixtures/legacy-licence-version.fixture.js')
+const FixtureLegacyLicenceVersionPurpose = require('./_fixtures/legacy-licence-version-purpose.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const PrimaryPurposesSeeder = require('../../support/seeders/primary-purpose.seeder.js')
-const PurposesSeeder = require('../../support/seeders/purposes.seeder.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
-const SecondaryPurposesSeeder = require('../../support/seeders/secondary-purpose.seeder.js')
+const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
 const LegacyImportLicenceService =
   require('../../../app/services/import/legacy-licence.service.js')
 
 describe('Legacy import licence service', () => {
-  const region = RegionsSeeder.data.find((region) => {
-    return region.displayName === 'Test Region'
-  })
+  const region = RegionHelper.select()
 
   let legacyLicence
   let licenceRef
@@ -64,7 +62,6 @@ describe('Legacy import licence service', () => {
         id: licence.id,
         includeInPresrocBilling: 'no',
         includeInSrocBilling: false,
-        includeInSrocTptBilling: false,
         lapsedDate: null,
         licenceRef,
         regionId: region.id,
@@ -89,7 +86,6 @@ describe('Legacy import licence service', () => {
 
       expect(licence.includeInPresrocBilling).to.equal('no')
       expect(licence.includeInSrocBilling).to.be.false()
-      expect(licence.includeInSrocTptBilling).to.be.false()
       expect(licence.suspendFromBilling).to.be.false()
     })
   })
@@ -126,15 +122,15 @@ describe('Legacy import licence service', () => {
       let secondaryPurpose
 
       beforeEach(() => {
-        primaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
+        primaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
           return primaryPurpose.legacyId === licenceVersionPurpose.APUR_APPR_CODE
         })
 
-        purpose = PurposesSeeder.data.find((purpose) => {
+        purpose = PurposeHelper.data.find((purpose) => {
           return purpose.legacyId === licenceVersionPurpose.APUR_APUS_CODE
         })
 
-        secondaryPurpose = SecondaryPurposesSeeder.data.find((secondaryPurpose) => {
+        secondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
           return secondaryPurpose.legacyId === licenceVersionPurpose.APUR_APSE_CODE
         })
       })
