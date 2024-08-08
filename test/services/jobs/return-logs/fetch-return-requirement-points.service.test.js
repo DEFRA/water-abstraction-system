@@ -4,27 +4,22 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
 
 // Thing under test
-const FetchReturnRequirementPointsService = require('../../../app/services/return-logs/fetch-return-requirement-points.service.js')
+const FetchReturnRequirementPointsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirement-points.service.js')
 
 describe('Fetch Return Requirement Points service', () => {
   let testRecord1
   let testRecord2
   let testRecord3
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('Basic query', () => {
-    beforeEach(async () => {
+    before(async () => {
       testRecord1 = await ReturnRequirementPointHelper.add({ description: 'POND B OF BEESTON' })
       testRecord2 = await ReturnRequirementPointHelper.add({ description: 'POND S OF BEESTON', returnRequirementId: '9338e87e-0b8c-411b-8975-8e1d859642be' })
       testRecord3 = await ReturnRequirementPointHelper.add({ description: 'POND A OF BEESTON', returnRequirementId: '9338e87e-0b8c-411b-8975-8e1d859642be' })

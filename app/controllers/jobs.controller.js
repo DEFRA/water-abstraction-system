@@ -9,6 +9,7 @@ const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
+const CreateReturnLogsService = require('../services/jobs/return-logs/create-return-logs.service.js')
 
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3
@@ -39,9 +40,16 @@ async function timeLimited (_request, h) {
   return h.response().code(204)
 }
 
+async function returnLogs (_request, h) {
+  CreateReturnLogsService.go()
+
+  return h.response().code(204)
+}
+
 module.exports = {
   exportDb,
   licenceUpdates,
+  returnLogs,
   sessionCleanup,
   timeLimited
 }

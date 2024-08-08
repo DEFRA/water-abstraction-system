@@ -58,6 +58,20 @@ const routes = [
         crumb: false
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/jobs/return-logs',
+    options: {
+      handler: JobsController.returnLogs,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 

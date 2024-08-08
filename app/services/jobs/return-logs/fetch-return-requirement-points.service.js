@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches purposes data needed for creating the return logs
- * @module FetchReturnRequirementPurposesService
+ * Fetches point data needed for creating the return logs
+ * @module FetchReturnRequirementPointsService
  */
 
-const ReturnRequirementPurposeModel = require('../../models/return-requirement-purpose.model.js')
+const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
 
 /**
- * Fetch the matching purposes for the given return requirement id
+ * Fetch the matching points for the given return requirement id
  *
  * @param {string} returnRequirementId The UUID of the return requirement to search for
  *
@@ -34,8 +34,15 @@ function _data (results) {
 }
 
 async function _fetch (id) {
-  return ReturnRequirementPurposeModel.query()
+  return ReturnRequirementPointModel.query()
     .where('returnRequirementId', id)
+    .select([
+      'description',
+      'ngr1',
+      'ngr2',
+      'ngr3',
+      'ngr4'
+    ])
 }
 
 module.exports = {

@@ -6,7 +6,6 @@
  */
 
 const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchReturnsService = require('../return-logs/fetch-licences-without-returns.service.js')
 const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
 
 /**
@@ -18,7 +17,6 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  */
 async function go (licenceId, auth) {
   const licenceData = await FetchLicenceService.go(licenceId)
-  const returnLogs = await FetchReturnsService.go()
 
   const pageData = ViewLicencePresenter.go(licenceData, auth)
 
