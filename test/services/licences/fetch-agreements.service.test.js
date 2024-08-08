@@ -14,6 +14,8 @@ const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.
 // Thing under test
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 
+const FINANCIAL_AGREEMENT_S130U_INDEX = 5
+
 describe('Fetch Agreements service', () => {
   const endDate = new Date('2040-05-01')
   const signedOn = new Date('2022-04-01')
@@ -24,7 +26,7 @@ describe('Fetch Agreements service', () => {
 
   describe('when the licence has agreements data', () => {
     before(async () => {
-      financialAgreement = await FinancialAgreementHelper.add()
+      financialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_S130U_INDEX)
     })
 
     describe('and the agreement has not been deleted', () => {

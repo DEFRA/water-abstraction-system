@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -16,14 +15,12 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
 
-describe('Return Requirements - Return requirements Fetch Points service', () => {
+describe('Return Requirements - Fetch Points service', () => {
   let licence
   let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
 
     // Create the initial licenceId
     licence = await LicenceHelper.add({

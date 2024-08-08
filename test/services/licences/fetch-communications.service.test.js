@@ -8,23 +8,21 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
 const ScheduledNotificationModel = require('../../support/helpers/scheduled-notification.helper.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchCommunicationsService =
   require('../../../app/services/licences/fetch-communications.service.js')
 
 describe('Fetch Communications service', () => {
-  const licenceRef = '01/01'
+  const licenceRef = generateLicenceRef()
 
   let event
   let scheduledNotification
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     event = await EventHelper.add({
       createdAt: new Date('2024-06-01'),
       licences: JSON.stringify([licenceRef]),
