@@ -41,7 +41,7 @@ async function go (licenceRef) {
     await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
     calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
   } catch (error) {
-    return Boom.badImplementation(`Licence ref: ${licenceRef} failed with error - ${error.message}`)
+    Boom.badImplementation(`Licence ref: ${licenceRef} failed with error - ${error.message}`)
   }
 }
 
