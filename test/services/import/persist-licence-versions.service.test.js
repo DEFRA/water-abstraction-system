@@ -11,9 +11,9 @@ const { expect } = Code
 const FixtureImportLicenceVersions = require('./_fixtures/import-licence-versions.fixture.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const PrimaryPurposesSeeder = require('../../support/seeders/primary-purpose.seeder.js')
-const PurposesSeeder = require('../../support/seeders/purposes.seeder.js')
-const SecondaryPurposesSeeder = require('../../support/seeders/secondary-purpose.seeder.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
+const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
 const PersistLicenceVersionsService =
@@ -36,15 +36,15 @@ describe('Persist licence versions and licence versions purposes service', () =>
     licenceVersion = { ...licenceVersionsAndPurposes[0] }
     licenceVersionsPurpose = { ...licenceVersion.purposes[0] }
 
-    primaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
+    primaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
       return primaryPurpose.legacyId === licenceVersionsPurpose.primaryPurposeId
     })
 
-    purpose = PurposesSeeder.data.find((purpose) => {
+    purpose = PurposeHelper.data.find((purpose) => {
       return purpose.legacyId === licenceVersionsPurpose.purposeId
     })
 
-    secondaryPurpose = SecondaryPurposesSeeder.data.find((secondaryPurpose) => {
+    secondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
       return secondaryPurpose.legacyId === licenceVersionsPurpose.secondaryPurposeId
     })
   })

@@ -1,9 +1,9 @@
 'use strict'
 
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const RegionsSeeder = require('../../../support/seeders/regions.seeder.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 
-const region = RegionsSeeder.data.find((region) => {
+const region = RegionHelper.data.find((region) => {
   return region.displayName === 'Test Region'
 })
 

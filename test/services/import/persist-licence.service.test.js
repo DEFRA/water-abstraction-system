@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const FixtureImportLicence = require('./_fixtures/import-licence.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const PersistLicenceService =
@@ -23,7 +23,7 @@ describe('Persist licence service', () => {
   beforeEach(async () => {
     licence = { ...FixtureImportLicence.create() }
 
-    region = RegionsSeeder.data.find((region) => {
+    region = RegionHelper.data.find((region) => {
       return region.displayName === 'Test Region'
     })
   })
