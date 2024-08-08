@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const LegacyImportLicenceService = require('../../app/services/import/legacy-licence.service.js')
 
 // For running our service
@@ -46,15 +47,52 @@ describe('Import controller', () => {
         }
       })
 
-      describe('when a request is valid', () => {
+      describe('when the feature flag "enableSystemLicenceView" is true', () => {
         beforeEach(() => {
-          Sinon.stub(LegacyImportLicenceService, 'go').resolves()
+          Sinon.stub(FeatureFlagsConfig, 'enableSystemImportLegacyLicence').value(true)
         })
 
-        it('redirects to select return start date page', async () => {
-          const response = await server.inject(options)
+        describe('when a request is valid', () => {
+          beforeEach(() => {
+            Sinon.stub(LegacyImportLicenceService, 'go').resolves()
+          })
 
-          expect(response.statusCode).to.equal(204)
+          it('returns a 204 response code', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(204)
+          })
+        })
+
+        describe('when a request does include the licence ref', () => {
+          beforeEach(() => {
+            options.payload = {}
+
+            Sinon.stub(LegacyImportLicenceService, 'go').rejects()
+          })
+
+          it('redirects to select return start date page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(500)
+          })
+        })
+      })
+
+      describe('when the feature flag "enableSystemLicenceView" is false', () => {
+        beforeEach(() => {
+          Sinon.stub(LegacyImportLicenceService, 'go')
+
+          Sinon.stub(FeatureFlagsConfig, 'enableSystemImportLegacyLicence').value(false)
+        })
+
+        describe('when a request is valid', () => {
+          it('returns a 204 status code', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(204)
+            expect(LegacyImportLicenceService.go.called).to.be.false()
+          })
         })
       })
     })

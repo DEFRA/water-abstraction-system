@@ -11,7 +11,6 @@ const { expect } = Code
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -26,19 +25,18 @@ describe('Fetch Customer Contacts service', () => {
   let contactId
   let licenceId
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when the licence has customer contact details', () => {
     beforeEach(async () => {
       const licence = await LicenceHelper.add()
+
       licenceId = licence.id
 
       const company = await CompanyHelper.add()
+
       companyId = company.id
 
       const contact = await ContactHelper.add()
+
       contactId = contact.id
 
       const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })

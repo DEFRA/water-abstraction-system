@@ -26,7 +26,8 @@ describe('Fetch Time Limited Licences service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
+
     regionId = region.id
   })
 
@@ -37,13 +38,16 @@ describe('Fetch Time Limited Licences service', () => {
 
     beforeEach(async () => {
       const licence = await LicenceHelper.add({ regionId })
+
       licenceId = licence.id
 
       const licenceVersion = await LicenceVersionHelper.add({ licenceId })
+
       licenceVersionId = licenceVersion.id
 
       // This creates a 'current' SROC charge version
       const chargeVersion = await ChargeVersionHelper.add({ licenceId })
+
       chargeVersionId = chargeVersion.id
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({ chargeVersionId })

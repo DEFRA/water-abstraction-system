@@ -309,7 +309,7 @@ describe('Licence model', () => {
       let testRegion
 
       beforeEach(async () => {
-        testRegion = await RegionHelper.add()
+        testRegion = RegionHelper.select()
 
         const { id: regionId } = testRegion
 
@@ -332,7 +332,7 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
+        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
