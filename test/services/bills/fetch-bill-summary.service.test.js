@@ -31,7 +31,7 @@ describe('Fetch Bill Summary service', () => {
   let billingAccountId
   let companyId
   let contactId
-  let regionId
+  let region
 
   beforeEach(async () => {
     const company = await CompanyHelper.add()
@@ -56,12 +56,10 @@ describe('Fetch Bill Summary service', () => {
 
     billingAccountAddressId = billingAccountAddress.id
 
-    const region = await RegionHelper.add({ displayName: 'Stormlands' })
-
-    regionId = region.id
+    region = RegionHelper.select()
 
     const billRun = await BillRunHelper.add({
-      billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId
+      billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId: region.id
     })
 
     billRunId = billRun.id
@@ -72,8 +70,7 @@ describe('Fetch Bill Summary service', () => {
     const billId = bill.id
 
     for (let i = 0; i < 2; i++) {
-      const billLicence = await BillLicenceHelper
-        .add({ billId, licenceRef: `01/0${i + 1}/26/9400` })
+      const billLicence = await BillLicenceHelper.add({ billId, licenceRef: `01/0${i + 1}/26/9400` })
 
       billLicences.push(billLicence)
     }
@@ -129,8 +126,8 @@ describe('Fetch Bill Summary service', () => {
           status: 'ready',
           toFinancialYearEnding: 2023,
           region: {
-            id: regionId,
-            displayName: 'Stormlands'
+            id: region.id,
+            displayName: region.displayName
           }
         }
       })

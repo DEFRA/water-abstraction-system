@@ -41,7 +41,7 @@ describe('Fetch Bill Run Licences service', () => {
     let region
 
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
 
       testLicenceReady = await ReviewLicenceHelper.add({

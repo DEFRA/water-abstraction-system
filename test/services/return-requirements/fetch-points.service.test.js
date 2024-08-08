@@ -15,12 +15,12 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
 
-describe('Return Requirements - Return requirements Fetch Points service', () => {
+describe('Return Requirements - Fetch Points service', () => {
   let licence
   let region
 
   beforeEach(async () => {
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
 
     // Create the initial licenceId
     licence = await LicenceHelper.add({

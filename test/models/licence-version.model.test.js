@@ -12,8 +12,8 @@ const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -71,7 +71,7 @@ describe('Licence Version model', () => {
 
       beforeEach(async () => {
         testRecord = await LicenceVersionHelper.add()
-        purpose = PurposesSeeder.data[0]
+        purpose = PurposeHelper.select()
 
         const { id } = testRecord
 
@@ -97,7 +97,7 @@ describe('Licence Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purposes[0]).to.be.an.instanceOf(PurposeModel)
-        expect(result.purposes).to.equal([purpose])
+        expect(result.purposes).to.equal([purpose], { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })
