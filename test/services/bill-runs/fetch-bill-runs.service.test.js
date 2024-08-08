@@ -19,13 +19,12 @@ const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill
 
 describe('Fetch Bill Runs service', () => {
   let page
-  let regionId
+  let region
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const region = await RegionHelper.add()
-    regionId = region.id
+    region = RegionHelper.select()
 
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
     Sinon.replace(DatabaseConfig, 'defaultPageSize', 3)
@@ -38,11 +37,11 @@ describe('Fetch Bill Runs service', () => {
   describe('when there are bill runs', () => {
     beforeEach(async () => {
       await Promise.all([
-        _addBillRun(1005, new Date('2024-03-01'), 10000, 1, 2, regionId),
-        _addBillRun(1002, new Date('2023-01-01'), 20000, 3, 4, regionId),
-        _addBillRun(1003, new Date('2024-01-01'), 30000, 5, 6, regionId),
-        _addBillRun(1001, new Date('2022-10-01'), 30000, 7, 8, regionId),
-        _addBillRun(1004, new Date('2024-02-01'), 30000, 9, 10, regionId)
+        _addBillRun(1005, new Date('2024-03-01'), 10000, 1, 2, region.id),
+        _addBillRun(1002, new Date('2023-01-01'), 20000, 3, 4, region.id),
+        _addBillRun(1003, new Date('2024-01-01'), 30000, 5, 6, region.id),
+        _addBillRun(1001, new Date('2022-10-01'), 30000, 7, 8, region.id),
+        _addBillRun(1004, new Date('2024-02-01'), 30000, 9, 10, region.id)
       ])
     })
 
@@ -64,7 +63,7 @@ describe('Fetch Bill Runs service', () => {
             status: 'sent',
             summer: false,
             numberOfBills: 7,
-            region: 'Avalon'
+            region: region.displayName
           },
           {
             batchType: 'supplementary',
@@ -75,7 +74,7 @@ describe('Fetch Bill Runs service', () => {
             status: 'sent',
             summer: false,
             numberOfBills: 15,
-            region: 'Avalon'
+            region: region.displayName
           }
         ], { skip: ['id'] })
         expect(result.total).to.equal(5)
