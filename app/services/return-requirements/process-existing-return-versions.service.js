@@ -26,9 +26,9 @@ async function go (licenceId, returnVersionStartDate) {
   return endDate
 }
 
-function _addDaysToDate (date, days) {
+function _subtractDaysFromDate (date, days) {
   const result = new Date(date)
-  result.setDate(result.getDate() + days)
+  result.setDate(result.getDate() - days)
   return result
 }
 
@@ -49,7 +49,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
   })
 
   if (matchedReturnVersion) {
-    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _subtractDaysFromDate(returnVersionStartDate, 1) })
 
     return newReturnVersionEndDate
   }
@@ -65,7 +65,7 @@ async function _processExistingReturnVersions (licenceId, returnVersionStartDate
 
   if (matchedReturnVersion) {
     newReturnVersionEndDate = matchedReturnVersion.endDate
-    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _addDaysToDate(returnVersionStartDate, -1) })
+    await _updateExistingReturnVersion(matchedReturnVersion.id, { endDate: _subtractDaysFromDate(returnVersionStartDate, 1) })
 
     return newReturnVersionEndDate
   }
