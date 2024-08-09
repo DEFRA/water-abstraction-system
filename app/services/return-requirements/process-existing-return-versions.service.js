@@ -73,16 +73,16 @@ async function go (licenceId, newVersionStartDate) {
  * 1 day. We don't care about the end date because the new return version doesn't need one.
  */
 async function _endLatestVersion (previousVersions, newVersionStartDate, endDate) {
-  const match = previousVersions.find((previousVersion) => {
+  const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate < newVersionStartDate &&
       previousVersion.endDate === null
   })
 
-  if (match) {
-    return _update(match.id, { endDate })
+  if (!matchedReturnVersion) {
+    return null
   }
 
-  return null
+  return matchedReturnVersion.$query().patch({ endDate })
 }
 
 /**
@@ -110,18 +110,20 @@ async function _endLatestVersion (previousVersions, newVersionStartDate, endDate
  * we are _inserting between versions_.
  */
 async function _insertBetweenVersions (previousVersions, newVersionStartDate, endDate) {
-  const match = previousVersions.find((previousVersion) => {
+  const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate < newVersionStartDate &&
       previousVersion.endDate > newVersionStartDate
   })
 
-  if (match) {
-    await _update(match.id, { endDate })
-
-    return match.endDate
+  if (!matchedReturnVersion) {
+    return null
   }
 
-  return null
+  const newVersionEndDate = matchedReturnVersion.endDate
+
+  await matchedReturnVersion.$query().patch({ endDate })
+
+  return newVersionEndDate
 }
 
 function _previousVersionEndDate (newVersionStartDate) {
@@ -166,7 +168,7 @@ function _previousVersions (licenceId) {
  * because the new return version doesn't need one.
  */
 async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
-  const match = previousVersions.find((previousVersion) => {
+  const matchedReturnVersion = previousVersions.find((previousVersion) => {
     // NOTE: When you use the equality operator JavaScript will check for reference equality. Dates being objects this
     // will always return false, even though they refer to the exact same time. This means you need to convert them to
     // a more primitive value like a string or number first. `getTime()` seems to be the winner according to
@@ -175,11 +177,11 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
       previousVersion.endDate === null
   })
 
-  if (match) {
-    return _update(match.id, { status: 'superseded' })
+  if (!matchedReturnVersion) {
+    return null
   }
 
-  return null
+  return matchedReturnVersion.$query().patch({ status: 'superseded' })
 }
 
 /**
@@ -207,22 +209,20 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
  * previous version_.
  */
 async function _replacePreviousVersion (previousVersions, newVersionStartDate) {
-  const match = previousVersions.find((previousVersion) => {
+  const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
       previousVersion.endDate > newVersionStartDate
   })
 
-  if (match) {
-    await _update(match.id, { status: 'superseded' })
-
-    return match.endDate
+  if (!matchedReturnVersion) {
+    return null
   }
 
-  return null
-}
+  const newVersionEndDate = matchedReturnVersion.endDate
 
-async function _update (id, payload) {
-  return ReturnVersionModel.query().patch(payload).where({ id })
+  await matchedReturnVersion.$query().patch({ status: 'superseded' })
+
+  return newVersionEndDate
 }
 
 module.exports = {
