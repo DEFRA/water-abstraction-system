@@ -28,8 +28,34 @@ describe('Persist licence service', () => {
     })
   })
 
+  it('returns the licence', async () => {
+    const result = await PersistLicenceService.go(licence)
+
+    const savedLicence = await LicenceModel.query()
+      .select('*')
+      .where('licenceRef', licence.licenceRef).first()
+
+    expect(result).to.equal({
+      expiredDate: '2015-03-31',
+      id: savedLicence.id,
+      lapsedDate: null,
+      licenceRef: licence.licenceRef,
+      regionId: region.id,
+      regions: {
+        historicalAreaCode: 'RIDIN',
+        localEnvironmentAgencyPlanCode: 'AIREL',
+        regionalChargeArea: 'Yorkshire',
+        standardUnitChargeCode: 'YORKI'
+      },
+      revokedDate: null,
+      startDate: '2005-06-03',
+      updatedAt: savedLicence.updatedAt.toISOString(),
+      waterUndertaker: false
+    })
+  })
+
   describe('when the licence ref does not exist', () => {
-    it('returns the created licence', async () => {
+    it('creates the licence', async () => {
       await PersistLicenceService.go(licence)
 
       const savedLicence = await LicenceModel.query()
@@ -67,7 +93,7 @@ describe('Persist licence service', () => {
       await PersistLicenceService.go(licence)
     })
 
-    it('returns newly updated licence', async () => {
+    it('updates the licence', async () => {
       await PersistLicenceService.go({
         licenceRef: licence.licenceRef,
         naldRegionId: region.naldRegionId,

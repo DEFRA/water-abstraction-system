@@ -48,6 +48,8 @@ describe('Legacy import licence service', () => {
     })
 
     Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves(licenceVersions)
+
+    global.GlobalNotifier = { omfg: Sinon.stub() }
   })
 
   describe('the "licence" data is imported and saved to the database', () => {
@@ -103,7 +105,7 @@ describe('Legacy import licence service', () => {
 
       expect(licenceVersion).to.equal(
         {
-          createdAt: new Date(licenceVersion.createdAt),
+          createdAt: licenceVersion.createdAt,
           endDate: new Date('2007-06-04'),
           externalId: '3:10000003:100:0',
           id: licenceVersion.id,
@@ -112,7 +114,7 @@ describe('Legacy import licence service', () => {
           licenceId: licence.id,
           startDate: new Date('2005-06-05'),
           status: 'superseded',
-          updatedAt: new Date(licenceVersion.updatedAt)
+          updatedAt: licenceVersion.updatedAt
         })
     })
 
@@ -163,7 +165,7 @@ describe('Legacy import licence service', () => {
             notes: null,
             instantQuantity: null,
             dailyQuantity: 1500.2,
-            hourlyQuantity: 140.93,
+            hourlyQuantity: 140.929,
             annualQuantity: 545520,
             externalId: '3:10000004',
             createdAt: new Date(licenceVersionPurpose.createdAt),
