@@ -21,6 +21,7 @@ exports.up = function (knex) {
       table.boolean('multiple_upload').notNullable().defaultTo(false)
       table.text('notes')
       table.integer('created_by')
+      table.jsonb('mod_log').notNullable().defaultTo({})
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
