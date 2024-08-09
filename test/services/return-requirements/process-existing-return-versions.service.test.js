@@ -18,13 +18,13 @@ const ProcessExistingReturnVersionsService = require('../../../app/services/retu
 describe('Process Existing Return Versions service', () => {
   let existingReturnVersionId
   let licenceId
-  let returnVersionStartDate
+  let newVersionStartDate
 
-  describe('When a "current" return version has a "startDate" < "returnVersionStartDate" and no "endDate"', () => {
+  describe('When a "current" return version has a "startDate" < "newVersionStartDate" and no "endDate"', () => {
     beforeEach(async () => {
       existingReturnVersionId = generateUUID()
       licenceId = generateUUID()
-      returnVersionStartDate = new Date('2024-06-01')
+      newVersionStartDate = new Date('2024-06-01')
 
       await ReturnVersionHelper.add({
         id: existingReturnVersionId,
@@ -35,7 +35,7 @@ describe('Process Existing Return Versions service', () => {
     })
 
     it('sets the "endDate" of the existing record, a null "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, returnVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
       const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
 
       expect(result).to.be.null()
@@ -43,11 +43,11 @@ describe('Process Existing Return Versions service', () => {
     })
   })
 
-  describe('When a "current" return version has a "startDate" < "returnVersionStartDate" and an "endDate" greater', () => {
+  describe('When a "current" return version has a "startDate" < "newVersionStartDate" and an "endDate" greater', () => {
     beforeEach(async () => {
       existingReturnVersionId = generateUUID()
       licenceId = generateUUID()
-      returnVersionStartDate = new Date('2024-06-01')
+      newVersionStartDate = new Date('2024-06-01')
 
       await ReturnVersionHelper.add({
         id: existingReturnVersionId,
@@ -58,7 +58,7 @@ describe('Process Existing Return Versions service', () => {
     })
 
     it('sets the "endDate" of the existing record and an "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, returnVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
       const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
 
       expect(result).to.equal(new Date('2024-07-01'))
@@ -66,11 +66,11 @@ describe('Process Existing Return Versions service', () => {
     })
   })
 
-  describe('When a "current" return version has a "startDate" === "returnVersionStartDate" and no "endDate"', () => {
+  describe('When a "current" return version has a "startDate" === "newVersionStartDate" and no "endDate"', () => {
     beforeEach(async () => {
       existingReturnVersionId = generateUUID()
       licenceId = generateUUID()
-      returnVersionStartDate = new Date('2024-04-01')
+      newVersionStartDate = new Date('2024-04-01')
 
       await ReturnVersionHelper.add({
         id: existingReturnVersionId,
@@ -81,7 +81,7 @@ describe('Process Existing Return Versions service', () => {
     })
 
     it('sets the "status" of the existing record, a null end date is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, returnVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
       const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
 
       expect(result).to.be.null()
@@ -89,11 +89,11 @@ describe('Process Existing Return Versions service', () => {
     })
   })
 
-  describe('When a "current" return version has a "startDate" === "returnVersionStartDate" and an "endDate"', () => {
+  describe('When a "current" return version has a "startDate" === "newVersionStartDate" and an "endDate"', () => {
     beforeEach(async () => {
       existingReturnVersionId = generateUUID()
       licenceId = generateUUID()
-      returnVersionStartDate = new Date('2024-04-01')
+      newVersionStartDate = new Date('2024-04-01')
 
       await ReturnVersionHelper.add({
         id: existingReturnVersionId,
@@ -104,7 +104,7 @@ describe('Process Existing Return Versions service', () => {
     })
 
     it('sets the "status" of the existing record and an "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, returnVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
       const existingReturnVersion = await ReturnVersionModel.query().findById(existingReturnVersionId)
 
       expect(result).to.equal(new Date('2024-07-01'))
