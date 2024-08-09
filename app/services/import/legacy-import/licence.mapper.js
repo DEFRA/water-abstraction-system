@@ -11,9 +11,9 @@ const { naldRegions } = require('../../../lib/static-lookups.lib.js')
 /**
  * Maps the import data to the desired format
  *
- * @param { object} licence - the legacy licence
- * @param { array <object> } licenceVersions - the legacy licence versions and purposes
- * @returns { object }
+ * @param {object} licence - the legacy licence
+ * @param {object[]} licenceVersions - the legacy licence versions and purposes
+ * @returns {object}
  */
 function go (licence, licenceVersions = []) {
   return _mapLicence(licence, licenceVersions)
@@ -54,8 +54,8 @@ const _regions = (licenceData) => {
  *
  * It is assumed one of these will always exist
  *
- * @param { object } licence
- * @param { array <object> } licenceVersions
+ * @param {object} licence - the legacy licence data
+ * @param {object[]} licenceVersions - the legacy licence versions
  * @return {String} YYYY-MM-DD
  */
 const _startDate = (licence, licenceVersions) => {

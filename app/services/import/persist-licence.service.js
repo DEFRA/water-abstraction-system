@@ -8,6 +8,12 @@
 const LicenceModel = require('../../models/licence.model.js')
 const RegionModel = require('../../models/region.model.js')
 
+/**
+ * Saves the licence versions, purposes and conditions
+ *
+ * @param {object} licence - the mapped and validated licence to persist
+ * @returns {Promise<module:LicenceModel>}
+ */
 async function go (licence) {
   const {
     expiredDate,

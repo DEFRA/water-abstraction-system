@@ -13,8 +13,8 @@ const ImportLicenceVersionsValidator = require('../../validators/import/licence-
  *
  * If the validation fails throw an error
  *
- * @param { object } licence - The licence to validate
- * @param { array <object> } licenceVersions - The licence versions to validate
+ * @param {object} licence - The licence to validate
+ * @param {object[]} licenceVersions - The licence versions to validate
  */
 function go (licence, licenceVersions) {
   ImportLicenceValidator.go(licence)

@@ -11,7 +11,7 @@ const { db } = require('../../../../db/db.js')
  *
  * Returns the legacy licence version purposes.
  *
- * @param { object } licenceData - The data related to the licence.
+ * @param {object} licenceData - The data related to the licence.
  * @returns {Promise<Array<{
  *   EFF_END_DATE: string,
  *   EFF_ST_DATE: string,

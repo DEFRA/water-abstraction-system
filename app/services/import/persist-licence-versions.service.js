@@ -14,8 +14,8 @@ const PurposeModel = require('../../models/purpose.model.js')
 /**
  * Saves the licence versions, purposes and conditions
  *
- * @param { array <object> } licenceVersions
- * @param { string } licenceId
+ * @param {object[]} licenceVersions
+ * @param {string} licenceId
  */
 async function go (licenceVersions, licenceId) {
   await Promise.all(licenceVersions.map(async (version) => {

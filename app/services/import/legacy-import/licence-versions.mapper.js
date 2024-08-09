@@ -15,8 +15,8 @@ const statuses = {
 /**
  * Maps the import licence versions data
  *
- * @param { array <object> } licenceVersions - the legacy licence versions and purposes
- * @returns { array <object> } - mapped licence versions
+ * @param {object[]} licenceVersions - the legacy licence versions and purposes
+ * @returns {object[]} - mapped licence versions
  */
 function go (licenceVersions) {
   return _mapLicenceVersions(licenceVersions)

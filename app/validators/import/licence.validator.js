@@ -24,7 +24,7 @@ const Joi = require('joi')
  *   startDate: string,
  *   waterUndertaker: boolean
  * }} data - The mapped licence data
- * @returns { void }
+ * @returns {void}
  * @throws {Error} - throw an error if any of the validations fail
  */
 
