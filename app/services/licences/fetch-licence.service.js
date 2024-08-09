@@ -50,7 +50,8 @@ async function _fetchLicence (id) {
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select([
-        'licenceDocumentHeaders.id'
+        'licenceDocumentHeaders.id',
+        'licenceDocumentHeaders.metadata'
       ])
     })
     .modify('registeredToAndLicenceName')
