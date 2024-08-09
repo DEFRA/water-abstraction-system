@@ -67,6 +67,7 @@ async function go (billRun, billingPeriod, billingAccounts) {
     // supplementary it is extremely unlikely an annual bill run would generate no bills. But we play it safe and don't
     // make that assumption.
     const results = await Promise.all(processes)
+
     if (!billRunIsPopulated) {
       billRunIsPopulated = results.some((result) => {
         return result
@@ -142,6 +143,7 @@ function _extractBillableLicences (allBillLicences) {
 
   allBillLicences.forEach((billLicence) => {
     const { id, billId, licenceId, licenceRef, billable } = billLicence
+
     if (billable) {
       billableBillLicences.push({ id, billId, licenceId, licenceRef })
     }

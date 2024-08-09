@@ -154,6 +154,7 @@ async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId
   // `endDate` to be today - 1 (yesterday). The following works it all out even if we're over a month or year boundary
   // and no moment() in sight! Thanks to https://stackoverflow.com/a/1296374 for how to do this
   const endDate = new Date()
+
   endDate.setDate(timestamp.getDate() - 1)
 
   await BillingAccountAddressModel.query(trx)

@@ -5,7 +5,7 @@
  * @module LegacyDbSnakeCaseMappersLib
  */
 
-const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/utils/identifierMapping')
+const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/utils/identifierMapping.js')
 
 /**
  * Return an object containing Knex postProcessResponse() and wrapIdentifier() hooks used in Db query and result parsing
