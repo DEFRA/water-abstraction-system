@@ -118,6 +118,11 @@ $govuk-global-styles: true;
     white-space: nowrap;
   }
 }
+// Used in tables where we want to include 2 rows as one, it removes the separator from the first row when applied
+.table__cell--include {
+  border-bottom: none !important;
+}
+
 
 // ========== ========== ========== ========== ==========
 // Widths
