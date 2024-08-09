@@ -26,7 +26,7 @@ async function go (licence) {
     .limit(1)
     .first()
 
-  return LicenceModel.query()
+  await LicenceModel.query()
     .insert({
       expiredDate,
       waterUndertaker,

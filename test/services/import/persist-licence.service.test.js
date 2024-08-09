@@ -30,15 +30,18 @@ describe('Persist licence service', () => {
 
   describe('when the licence ref does not exist', () => {
     it('returns the created licence', async () => {
-      const results = await PersistLicenceService.go(licence)
+      await PersistLicenceService.go(licence)
 
       const savedLicence = await LicenceModel.query()
         .select('*')
         .where('licenceRef', licence.licenceRef).first()
 
-      expect(results).to.equal({
-        expiredDate: '2015-03-31',
+      expect(savedLicence).to.equal({
+        createdAt: savedLicence.createdAt,
+        expiredDate: new Date('2015-03-31'),
         id: savedLicence.id,
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
         regionId: region.id,
@@ -49,8 +52,9 @@ describe('Persist licence service', () => {
           standardUnitChargeCode: 'YORKI'
         },
         revokedDate: null,
-        startDate: '2005-06-03',
-        updatedAt: savedLicence.updatedAt.toISOString(),
+        startDate: new Date('2005-06-03'),
+        suspendFromBilling: false,
+        updatedAt: savedLicence.updatedAt,
         waterUndertaker: false
       }
       )
@@ -64,7 +68,7 @@ describe('Persist licence service', () => {
     })
 
     it('returns newly updated licence', async () => {
-      const results = await PersistLicenceService.go({
+      await PersistLicenceService.go({
         licenceRef: licence.licenceRef,
         naldRegionId: region.naldRegionId,
         //  not null constraints
@@ -77,10 +81,13 @@ describe('Persist licence service', () => {
         .select('*')
         .where('licenceRef', licence.licenceRef).first()
 
-      expect(results).to.equal({
-        expiredDate: undefined,
+      expect(savedLicence).to.equal({
+        createdAt: savedLicence.createdAt,
+        expiredDate: null,
         id: savedLicence.id,
-        lapsedDate: undefined,
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
+        lapsedDate: null,
         licenceRef: licence.licenceRef,
         regionId: region.id,
         regions: {
@@ -89,13 +96,14 @@ describe('Persist licence service', () => {
           regionalChargeArea: 'Yorkshire',
           standardUnitChargeCode: 'YORKI'
         },
-        revokedDate: undefined,
-        startDate: '2005-06-03',
-        updatedAt: savedLicence.updatedAt.toISOString(),
+        revokedDate: null,
+        startDate: new Date('2005-06-03'),
+        suspendFromBilling: false,
+        updatedAt: savedLicence.updatedAt,
         waterUndertaker: true
       })
 
-      expect(results.waterUndertaker).to.be.true()
+      expect(savedLicence.waterUndertaker).to.be.true()
     })
   })
 })

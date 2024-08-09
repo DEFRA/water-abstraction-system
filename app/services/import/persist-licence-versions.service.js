@@ -14,22 +14,20 @@ const PurposeModel = require('../../models/purpose.model.js')
 /**
  * Saves the licence versions, purposes and conditions
  *
- * @param {ImportLicenceVersionType[]} licenceVersions
- * @param {string} licenceId
+ * @param { array <object> } licenceVersions
+ * @param { string } licenceId
  */
 async function go (licenceVersions, licenceId) {
-  return Promise.all(licenceVersions.map(async (version) => {
+  await Promise.all(licenceVersions.map(async (version) => {
     const purposes = version.purposes
 
     delete version.purposes
 
     const versionResult = await _saveLicenceVersion(version, licenceId)
 
-    const licenceVersionPurposes = await Promise.all(purposes.map(async (purpose) => {
+    await Promise.all(purposes.map(async (purpose) => {
       return _saveLicenceVersionPurposes(purpose, versionResult.id)
     }))
-
-    return { ...versionResult, purposes: licenceVersionPurposes }
   }))
 }
 
@@ -52,7 +50,7 @@ async function _saveLicenceVersionPurposes (purpose, licenceVersionId) {
     .first()
     .limit(1)
 
-  return LicenceVersionPurposeModel.query()
+  await LicenceVersionPurposeModel.query()
     .insert({
       licenceVersionId,
       ...purpose,
