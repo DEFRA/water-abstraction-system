@@ -19,7 +19,7 @@ const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.
 const PersistLicenceVersionsService =
   require('../../../app/services/import/persist-licence-versions.service.js')
 
-describe.only('Persist licence versions and licence versions purposes service', () => {
+describe('Persist licence versions and licence versions purposes service', () => {
   let licence
   let licenceVersion
   let licenceVersionsPurpose
@@ -68,7 +68,7 @@ describe.only('Persist licence versions and licence versions purposes service', 
         increment: 0,
         issue: 100,
         licenceId: licence.id,
-        purposes: [
+        licenceVersionPurposes: [
           {
             id: savedLicenceVersionPurpose.id,
             licenceVersionId: savedLicenceVersionPurpose.licenceVersionId,
