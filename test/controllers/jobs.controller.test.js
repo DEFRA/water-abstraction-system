@@ -13,6 +13,7 @@ const ExportService = require('../../app/services/jobs/export/export.service.js'
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
+const CreateReturnLogsService = require('../../app/services/jobs/return-logs/create-return-logs.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -106,6 +107,26 @@ describe('Jobs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe.only('/jobs/return-logs', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/return-logs' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(CreateReturnLogsService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {
