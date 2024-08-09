@@ -5,7 +5,6 @@
  * @module LegacyImportLicenceService
  */
 
-const Boom = require('@hapi/boom')
 const FetchLegacyImportLicenceService = require('./legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('./legacy-import/fetch-licence-versions.service.js')
 const ImportLicenceValidatorService = require('./licence-validator.service.js')
@@ -25,7 +24,6 @@ async function go (licenceRef) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    console.debug('Importing licence ref: ', licenceRef)
     const licenceData = await FetchLegacyImportLicenceService.go(licenceRef)
 
     const licenceVersionsData = await FetchLegacyImportLicenceVersionsService.go(licenceData)
@@ -41,7 +39,7 @@ async function go (licenceRef) {
     await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
     calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
   } catch (error) {
-    Boom.badImplementation(`Licence ref: ${licenceRef} failed with error - ${error.message}`)
+    global.GlobalNotifier.omfg('Licence import failed', { licenceRef }, error)
   }
 }
 

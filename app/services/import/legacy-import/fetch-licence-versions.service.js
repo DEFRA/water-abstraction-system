@@ -55,12 +55,12 @@ async function _getLicenceVersions (licenceId, regionCode) {
                 AND purposes."AABV_INCR_NO" = versions."INCR_NO"
                 AND purposes."FGAC_REGION_CODE" = versions."FGAC_REGION_CODE") AS purposes
       FROM import."NALD_ABS_LIC_VERSIONS" versions
-      WHERE versions."FGAC_REGION_CODE" = '${regionCode}'
-        AND versions."AABL_ID" = '${licenceId}'
+      WHERE versions."FGAC_REGION_CODE" = ?
+        AND versions."AABL_ID" = ?
         AND versions."STATUS" <> 'DRAFT';
   `
 
-  const { rows } = await db.raw(query)
+  const { rows } = await db.raw(query, [regionCode, licenceId])
 
   return rows
 }

@@ -31,10 +31,10 @@ async function _getLicenceByRef (licenceRef) {
           licence."ORIG_EFF_DATE",
           licence."REV_DATE"
       FROM import."NALD_ABS_LICENCES" licence
-      WHERE licence."LIC_NO" = '${licenceRef}';
+      WHERE licence."LIC_NO" = ?;
   `
 
-  const { rows: [row] } = await db.raw(query)
+  const { rows: [row] } = await db.raw(query, [licenceRef])
 
   return row
 }
