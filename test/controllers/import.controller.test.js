@@ -63,25 +63,11 @@ describe('Import controller', () => {
             expect(response.statusCode).to.equal(204)
           })
         })
-
-        describe('when a request does include the licence ref', () => {
-          beforeEach(() => {
-            options.payload = {}
-
-            Sinon.stub(LegacyImportLicenceService, 'go').rejects()
-          })
-
-          it('redirects to select return start date page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(500)
-          })
-        })
       })
 
       describe('when the feature flag "enableSystemLicenceView" is false', () => {
         beforeEach(() => {
-          Sinon.stub(LegacyImportLicenceService, 'go')
+          Sinon.stub(LegacyImportLicenceService, 'go').resolves()
 
           Sinon.stub(FeatureFlagsConfig, 'enableSystemImportLegacyLicence').value(false)
         })

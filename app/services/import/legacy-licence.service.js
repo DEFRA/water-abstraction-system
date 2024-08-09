@@ -7,9 +7,12 @@
 
 const FetchLegacyImportLicenceService = require('./legacy-import/fetch-licence.service.js')
 const FetchLegacyImportLicenceVersionsService = require('./legacy-import/fetch-licence-versions.service.js')
-const LegacyImportLicenceMapper = require('./legacy-import/licence.mapper.js')
 const ImportLicenceValidatorService = require('./licence-validator.service.js')
+const LegacyImportLicenceMapper = require('./legacy-import/licence.mapper.js')
+const LegacyImportLicenceVersionMapper = require('./legacy-import/licence-versions.mapper.js')
 const PersistLicenceService = require('./persist-licence.service.js')
+const PersistLicenceVersionsService = require('./persist-licence-versions.service.js')
+const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../lib/general.lib.js')
 
 /**
  * Imports a licence from the legacy import tables. Maps and validates the data and then saves to the database.
@@ -18,25 +21,26 @@ const PersistLicenceService = require('./persist-licence.service.js')
  * @returns {Promise<Object>} an object representing the saved licence in the database
  */
 async function go (licenceRef) {
-  console.debug('Importing licence ref: ', licenceRef)
-  const licenceData = await FetchLegacyImportLicenceService.go(licenceRef)
+  try {
+    const startTime = currentTimeInNanoseconds()
 
-  console.debug('Imported licence data: ', licenceData)
-  const licenceVersionsData = await FetchLegacyImportLicenceVersionsService.go(licenceData)
+    const licenceData = await FetchLegacyImportLicenceService.go(licenceRef)
 
-  console.debug('Imported licence versions data: ', licenceVersionsData)
+    const licenceVersionsData = await FetchLegacyImportLicenceVersionsService.go(licenceData)
 
-  const mappedLicenceData = await LegacyImportLicenceMapper.go(licenceData, licenceVersionsData)
+    const mappedLicenceData = LegacyImportLicenceMapper.go(licenceData, licenceVersionsData)
 
-  console.debug('Mapped imported licence data: ', mappedLicenceData)
+    const mappedLicenceVersionsData = LegacyImportLicenceVersionMapper.go(licenceVersionsData)
 
-  ImportLicenceValidatorService.go(mappedLicenceData)
+    ImportLicenceValidatorService.go(mappedLicenceData, mappedLicenceVersionsData)
 
-  const savedLicence = await PersistLicenceService.go(mappedLicenceData)
+    const savedLicence = await PersistLicenceService.go(mappedLicenceData)
 
-  console.debug('Saved Licence: ', savedLicence)
-
-  return savedLicence
+    await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
+    calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Licence import failed', { licenceRef }, error)
+  }
 }
 
 module.exports = {

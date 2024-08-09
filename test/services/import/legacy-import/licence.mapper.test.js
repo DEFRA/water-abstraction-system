@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureLicence = require('../_fixtures/licence.js')
-const FixtureVersions = require('../_fixtures/versions.js')
+const FixtureLegacyLicence = require('../_fixtures/legacy-licence.fixture.js')
+const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
 
 // Thing under test
 const LegacyImportLicenceMapper =
@@ -19,7 +19,7 @@ describe('Legacy import licence mapper', () => {
   let licence
 
   beforeEach(() => {
-    licence = { ...FixtureLicence }
+    licence = { ...FixtureLegacyLicence.create() }
   })
 
   it('returns the matching agreements data', () => {
@@ -154,7 +154,7 @@ describe('Legacy import licence mapper', () => {
         describe('then start date of the earliest non-draft licence version is used', () => {
           it('returns the start date in the ISO format', () => {
             //  need to add licence versions
-            const result = LegacyImportLicenceMapper.go(licence, FixtureVersions)
+            const result = LegacyImportLicenceMapper.go(licence, [{ ...FixtureLegacyLicenceVersion.create() }])
 
             expect(result.startDate).to.equal('2005-06-05')
           })

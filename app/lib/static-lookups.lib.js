@@ -52,6 +52,22 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
+/**
+ * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
+ *
+ */
+const naldRegions = {
+  AN: 'Anglian',
+  MD: 'Midlands',
+  NO: 'Northumbria',
+  NW: 'North West',
+  SO: 'Southern',
+  SW: 'South West (incl Wessex)',
+  TH: 'Thames',
+  WL: 'Wales',
+  YO: 'Yorkshire'
+}
+
 const sources = [
   'nald',
   'wrls'
@@ -79,6 +95,7 @@ module.exports = {
   organisationTypes,
   returnRequirementFrequencies,
   returnRequirementReasons,
+  naldRegions,
   sources,
   twoPartTariffReviewIssues
 }
