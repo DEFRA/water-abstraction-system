@@ -53,7 +53,7 @@ function defaults (data = {}) {
     abstractionPeriodStartMonth: 1,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    externalId: `9:${randomInteger(10000, 99999)}`,
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId: generateUUID(),
     primaryPurposeId: generateUUID(),
     purposeId: generateUUID(),
@@ -69,7 +69,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateLicenceVersionPurposeExternalId () {
+  return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLicenceVersionPurposeExternalId
 }

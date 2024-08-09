@@ -16,36 +16,37 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const SendBillRunService = require('../../../app/services/bill-runs/send-bill-run.service.js')
 
 describe('Send Bill Run service', () => {
-  let testBillRunId
+  let billRunId
+  let region
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const { id: regionId } = await RegionHelper.add()
+    region = RegionHelper.select()
     const billRun = await BillRunHelper.add({
       billRunNumber: 10101,
       createdAt: new Date('2024-02-28'),
       externalId: 'f54e53f0-37a0-400f-9f0e-bf8575c17668',
-      regionId,
+      regionId: region.id,
       status: 'ready'
     })
 
-    testBillRunId = billRun.id
+    billRunId = billRun.id
   })
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data and format it for use in the send bill run page', async () => {
-      const result = await SendBillRunService.go(testBillRunId)
+      const result = await SendBillRunService.go(billRunId)
 
       expect(result).to.equal({
-        billRunId: testBillRunId,
+        billRunId,
         billRunNumber: 10101,
         billRunStatus: 'ready',
         billRunType: 'Supplementary',
         chargeScheme: 'Current',
         dateCreated: '28 February 2024',
         financialYear: '2022 to 2023',
-        region: 'Avalon'
+        region: region.displayName
       })
     })
   })

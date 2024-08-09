@@ -22,7 +22,8 @@ describe('Fetch Matching Bill Run service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
+
     regionId = region.id
   })
 
@@ -32,6 +33,7 @@ describe('Fetch Matching Bill Run service', () => {
         describe('and a bill run for the same financial year exists', () => {
           beforeEach(async () => {
             const billRun = await BillRunHelper.add({ regionId, batchType: 'annual', status: 'sent', toFinancialYearEnding: 2024 })
+
             matchingBillRunId = billRun.id
           })
 
@@ -77,6 +79,7 @@ describe('Fetch Matching Bill Run service', () => {
               const billRun = await BillRunHelper.add({
                 regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2023
               })
+
               matchingBillRunId = billRun.id
             })
 
@@ -96,6 +99,7 @@ describe('Fetch Matching Bill Run service', () => {
             let billRun = await BillRunHelper.add({
               regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: true
             })
+
             matchingSummerBillRunId = billRun.id
 
             billRun = await BillRunHelper.add({

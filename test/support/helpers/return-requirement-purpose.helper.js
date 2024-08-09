@@ -6,13 +6,10 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
-const { generatePrimaryPurpose } = require('./primary-purpose.helper.js')
-const { generatePurposeCode } = require('./purpose.helper.js')
-const { generateSecondaryPurpose } = require('./secondary-purpose.helper.js')
-const primaryPurposesData = require('../seeders/data/primary-purposes.data.js')
-const purposeData = require('../seeders/data/purposes.data.js')
-const secondaryPurposeData = require('../seeders/data/secondary-purposes.data.js')
+const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
+const PurposeHelper = require('./purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
+const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
 
 /**
  * Add a new return requirement purpose
@@ -20,9 +17,9 @@ const ReturnRequirementPurposeModel = require('../../../app/models/return-requir
  * If no `data` is provided, default values will be used. These are
  *
  * - `externalId` - [randomly generated - 9:99999:A:AGR:400]
- * - `purposeId` - [random UUID]
- * - `primaryPurposeId` - [random UUID]
- * - `secondaryPurposeId` - [random UUID]
+ * - `purposeId` - [randomly selected UUID from purposes]
+ * - `primaryPurposeId` - [randomly selected UUID from primary purposes]
+ * - `secondaryPurposeId` - [randomly selected UUID from secondary purposes]
  * - `returnRequirementId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -46,13 +43,17 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const externalId = `9:${randomInteger(100, 99999)}:${_generatePrimaryCode()}:${_generateSecondaryCode()}:${generatePurposeCode()}`
+  const purpose = PurposeHelper.select()
+  const primaryPurpose = PrimaryPurposeHelper.select()
+  const secondaryPurpose = SecondaryPurposeHelper.select()
+
+  const externalId = `9:${randomInteger(100, 99999)}:${primaryPurpose.legacyId}:${secondaryPurpose.legacyId}:${purpose.legacyId}`
 
   const defaults = {
     externalId,
-    purposeId: _getRandomOption(purposeData),
-    primaryPurposeId: _getRandomOption(primaryPurposesData),
-    secondaryPurposeId: _getRandomOption(secondaryPurposeData),
+    purposeId: purpose.id,
+    primaryPurposeId: primaryPurpose.id,
+    secondaryPurposeId: secondaryPurpose.id,
     returnRequirementId: generateUUID()
   }
 
@@ -60,20 +61,6 @@ function defaults (data = {}) {
     ...defaults,
     ...data
   }
-}
-
-function _generatePrimaryCode () {
-  return generatePrimaryPurpose().code
-}
-
-function _generateSecondaryCode () {
-  return generateSecondaryPurpose().code
-}
-
-function _getRandomOption (data) {
-  const randomOne = randomInteger(0, data.length - 1)
-
-  return data[randomOne].id
 }
 
 module.exports = {

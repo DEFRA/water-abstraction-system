@@ -16,17 +16,18 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const CancelBillRunService = require('../../../app/services/bill-runs/cancel-bill-run.service.js')
 
 describe('Cancel Bill Run service', () => {
+  let region
   let testBillRunId
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const { id: regionId } = await RegionHelper.add()
+    region = RegionHelper.select()
     const billRun = await BillRunHelper.add({
       billRunNumber: 10101,
       createdAt: new Date('2024-02-28'),
       externalId: 'f54e53f0-37a0-400f-9f0e-bf8575c17668',
-      regionId,
+      regionId: region.id,
       status: 'ready'
     })
 
@@ -46,7 +47,7 @@ describe('Cancel Bill Run service', () => {
         chargeScheme: 'Current',
         dateCreated: '28 February 2024',
         financialYear: '2022 to 2023',
-        region: 'Avalon'
+        region: region.displayName
       })
     })
   })

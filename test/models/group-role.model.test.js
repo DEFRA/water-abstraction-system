@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,14 +17,23 @@ const RoleModel = require('../../app/models/role.model.js')
 // Thing under test
 const GroupRoleModel = require('../../app/models/group-role.model.js')
 
+const GROUP_BILLING_DATA_INDEX = 1
+const GROUP_ROLE_BILLING_DATA_INDEX = 18
+const ROLE_BILLING_INDEX = 8
+
 describe('Group Role model', () => {
+  let testGroup
   let testRecord
+  let testRole
+
+  before(async () => {
+    testRecord = GroupRoleHelper.select(GROUP_ROLE_BILLING_DATA_INDEX)
+
+    testGroup = GroupHelper.select(GROUP_BILLING_DATA_INDEX)
+    testRole = RoleHelper.select(ROLE_BILLING_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await GroupRoleHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await GroupRoleModel.query()
         .findById(testRecord.id)
@@ -36,13 +45,6 @@ describe('Group Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to role', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRole = await RoleHelper.add()
-        testRecord = await GroupRoleHelper.add({ roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query()
           .innerJoinRelated('role')
@@ -59,18 +61,11 @@ describe('Group Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.role).to.be.an.instanceOf(RoleModel)
-        expect(result.role).to.equal(testRole)
+        expect(result.role).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to group', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testGroup = await GroupHelper.add()
-        testRecord = await GroupRoleHelper.add({ groupId: testGroup.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query()
           .innerJoinRelated('group')
@@ -87,7 +82,7 @@ describe('Group Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup)
+        expect(result.group).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })

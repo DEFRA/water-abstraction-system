@@ -51,7 +51,7 @@ function defaults (data = {}) {
     increment: 0,
     status: 'current',
     startDate: new Date('2022-01-01'),
-    externalId: `9:${randomInteger(10000, 99999)}:1:0`,
+    externalId: generateLicenceVersionExternalId(),
     createdAt: timestamp,
     updatedAt: timestamp
   }
@@ -62,7 +62,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateLicenceVersionExternalId () {
+  return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}:1:0`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLicenceVersionExternalId
 }
