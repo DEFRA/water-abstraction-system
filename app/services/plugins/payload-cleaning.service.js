@@ -105,6 +105,7 @@ function _cleanObject (obj) {
 
   for (const [key, value] of Object.entries(obj)) {
     let result
+
     if (typeof value === 'object') {
       if (Array.isArray(value)) {
         result = _cleanArray(value)
@@ -202,6 +203,7 @@ function _keepValue (value) {
 function _cleanValue (value) {
   if (typeof value === 'string') {
     let cleanedValue = Sanitizer.sanitize(value)
+
     cleanedValue = cleanedValue.trim()
     cleanedValue = Sanitizer.unescapeEntities(cleanedValue)
 

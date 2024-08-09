@@ -97,6 +97,7 @@ describe('Fetch Licence Updates service', () => {
           licenceId: licence.id, licenceRef: licence.licenceRef, scheme: 'alcs'
         })
         const billRun = await BillRunHelper.add({ scheme: 'alcs' })
+
         await BillRunChargeVersionYearHelper.add({ billRunId: billRun.id, chargeVersionId: chargeVersion.id })
       })
 
@@ -123,6 +124,7 @@ describe('Fetch Licence Updates service', () => {
 
 function _threeMonthsAgo () {
   const today = new Date()
+
   today.setMonth(today.getMonth() - 3)
 
   return today.toISOString()

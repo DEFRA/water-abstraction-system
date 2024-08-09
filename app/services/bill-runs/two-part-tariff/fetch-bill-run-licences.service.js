@@ -46,7 +46,9 @@ async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceSta
   return { billRun, licences }
 }
 
-function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress) {
+function _applyFilters (
+  reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress
+) {
   if (filterIssues) {
     _filterIssues(filterIssues, reviewLicenceQuery)
   }
@@ -84,7 +86,9 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1) {
+async function _fetchBillRunLicences (
+  id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1
+) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)

@@ -45,6 +45,7 @@ describe('Fetch Previous Transactions service', () => {
     describe('for the same licence and billing account', () => {
       beforeEach(async () => {
         const billLicenceId = await _createBillRunAndBillAndBillLicence(billRunSetupValues)
+
         await TransactionHelper.add({ billLicenceId, chargeCategoryCode })
       })
 

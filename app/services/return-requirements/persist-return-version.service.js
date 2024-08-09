@@ -22,7 +22,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 async function go (returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
 
-  const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion).returning('id')
+  const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
 
   await _persistReturnRequirements(returnRequirements, returnVersionId)
 
@@ -62,7 +62,6 @@ async function _persistReturnRequirements (returnRequirements, returnVersionId) 
         summer: returnRequirement.summer,
         twoPartTariff: returnRequirement.twoPartTariff
       })
-      .returning('id')
 
     await _persistReturnRequirementsPoints(returnRequirement.returnRequirementPoints, returnRequirementId)
     await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId)

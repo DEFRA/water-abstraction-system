@@ -33,6 +33,7 @@ describe('Payload cleaning service', () => {
       }
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
+
       expect(cleanedObject.details.firstName).to.equal('Bert')
 
       expect(cleanedObject.details.lastName).to.equal('Ernie')
@@ -207,6 +208,7 @@ describe('Payload cleaning service', () => {
       }
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
+
       expect(cleanedObject.codes).to.equal(['ABD1', 'C2'])
     })
 
