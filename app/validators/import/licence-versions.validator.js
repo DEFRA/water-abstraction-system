@@ -14,12 +14,38 @@ const validStatues = ['current', 'superseded']
 
 /**
  * Checks that the data for inserting/updating the public.licence_versions
- * and public.licence_versions_purposes table is valid
+ * and public.licence_versions_purposes table is valid.
  *
- * @param {ImportLicenceVersionType[]} data The data to be validated
+ * @param {Array<{
+ *   createdAt: string,
+ *   endDate: string | null,
+ *   externalId: string,
+ *   increment: number,
+ *   issue: number,
+ *   startDate: string | null,
+ *   status: string,
+ *   updatedAt: string,
+ *   purposes: Array<{
+ *     abstractionPeriodEndDay: number,
+ *     abstractionPeriodEndMonth: number,
+ *     abstractionPeriodStartDay: number,
+ *     abstractionPeriodStartMonth: number,
+ *     annualQuantity: number | null,
+ *     dailyQuantity: number | null,
+ *     externalId: string,
+ *     hourlyQuantity: number | null,
+ *     instantQuantity: number | null,
+ *     notes: string | null,
+ *     primaryPurposeId: string,
+ *     secondaryPurposeId: string,
+ *     purposeId: string,
+ *     timeLimitedEndDate: string | null,
+ *     timeLimitedStartDate: string | null
+ *   }>
+ * }>} data - The data to be validated.
  *
- * Throws an error if anything fails
- *
+ * @returns {void}
+ * @throws {Error} If validation fails.
  */
 function go (data) {
   const result = _schema.validate(data)

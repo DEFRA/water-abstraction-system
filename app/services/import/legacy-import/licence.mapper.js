@@ -11,9 +11,9 @@ const { naldRegions } = require('../../../lib/static-lookups.lib.js')
 /**
  * Maps the import data to the desired format
  *
- * @param {LegacyLicenceType} licence
- * @param {LegacyLicenceVersionsArray} licenceVersions
- * @returns {ImportLicenceType}
+ * @param { object} licence - the legacy licence
+ * @param { array <object> } licenceVersions - the legacy licence versions and purposes
+ * @returns { object }
  */
 function go (licence, licenceVersions = []) {
   return _mapLicence(licence, licenceVersions)
@@ -34,9 +34,7 @@ function _mapLicence (licence, licenceVersions) {
 
 /**
  * Creates a JSON object of the region data
- *
- * @param {Object} licenceData
- * @return {ImportRegionType}
+ * This is stored as a JSON object in the licence.regions column.
  */
 const _regions = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE
@@ -56,8 +54,8 @@ const _regions = (licenceData) => {
  *
  * It is assumed one of these will always exist
  *
- * @param {LegacyLicenceType} licence
- * @param {LegacyLicenceVersionsArray} licenceVersions
+ * @param { object } licence
+ * @param { array <object> } licenceVersions
  * @return {String} YYYY-MM-DD
  */
 const _startDate = (licence, licenceVersions) => {

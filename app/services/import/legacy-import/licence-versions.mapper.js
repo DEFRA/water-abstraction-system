@@ -15,8 +15,8 @@ const statuses = {
 /**
  * Maps the import licence versions data
  *
- * @param {LegacyLicenceVersionsArray} licenceVersions
- * @returns {ImportLicenceVersionType[]}
+ * @param { array <object> } licenceVersions - the legacy licence versions and purposes
+ * @returns { array <object> } - mapped licence versions
  */
 function go (licenceVersions) {
   return _mapLicenceVersions(licenceVersions)
@@ -28,12 +28,6 @@ const _createExternalId = (licenceVersion) => {
   return `${FGAC_REGION_CODE}:${AABL_ID}:${ISSUE_NO}:${INCR_NO}`
 }
 
-/**
- * Iterates the import licence versions and formats the licence version
- *
- * @param {LegacyLicenceVersionsArray} licenceVersions
- * @returns {ImportLicenceVersionType[]}
- */
 function _mapLicenceVersions (licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
     const issue = licenceVersion.ISSUE_NO
@@ -51,24 +45,12 @@ function _mapLicenceVersions (licenceVersions) {
   })
 }
 
-/**
- * Iterates the import licence version purposes
- *
- * @param {LegacyLicenceVersionsType} licenceVersion
- * @returns {ImportLicenceVersionPurposeType}
- */
 function _mapPurposes (licenceVersion) {
   return licenceVersion.purposes.map((purpose) => {
     return _mapPurpose(purpose)
   })
 }
 
-/**
- * Maps the import licence versions purposes data
- *
- * @param {LegacyLicenceVersionsPurposesType} purpose
- * @returns {ImportLicenceVersionPurposeType}
- */
 const _mapPurpose = (purpose) => {
   return {
     abstractionPeriodEndDay: Number(purpose.PERIOD_END_DAY),
