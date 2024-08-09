@@ -25,6 +25,20 @@ async function go (returnVersionData) {
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion).returning('id')
 
   await _persistReturnRequirements(returnRequirements, returnVersionId)
+
+  if (_checkForTwoPartTariff(returnRequirements)) {
+    _addSupplementaryFlagToLicence(returnVersion)
+  }
+}
+
+async function _addSupplementaryFlagToLicence (returnVersion) {
+  //
+}
+
+function _checkForTwoPartTariff (returnRequirements) {
+  return returnRequirements.some((returnRequirement) => {
+    return returnRequirement.twoPartTariff === true
+  })
 }
 
 async function _persistReturnRequirements (returnRequirements, returnVersionId) {
