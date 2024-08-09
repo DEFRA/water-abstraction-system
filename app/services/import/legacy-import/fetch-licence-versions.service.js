@@ -48,32 +48,33 @@ async function go (licenceData) {
 
 async function _getLicenceVersions (licenceId, regionCode) {
   const query = `
-      SELECT versions."EFF_END_DATE",
-             versions."EFF_ST_DATE",
-             versions."INCR_NO",
-             versions."ISSUE_NO",
-             versions."STATUS",
-             versions."FGAC_REGION_CODE",
-             versions."AABL_ID",
-             (SELECT json_agg(json_build_object(
-                     'PERIOD_END_DAY', purposes."PERIOD_END_DAY",
-                     'PERIOD_END_MONTH', purposes."PERIOD_END_MONTH",
-                     'PERIOD_ST_DAY', purposes."PERIOD_ST_DAY",
-                     'PERIOD_ST_MONTH', purposes."PERIOD_ST_MONTH",
-                     'ANNUAL_QTY', purposes."ANNUAL_QTY",
-                     'DAILY_QTY', purposes."DAILY_QTY",
-                     'FGAC_REGION_CODE', purposes."FGAC_REGION_CODE",
-                     'ID', purposes."ID",
-                     'HOURLY_QTY', purposes."HOURLY_QTY",
-                     'INST_QTY', purposes."INST_QTY",
-                     'NOTES', purposes."NOTES",
-                     'APUR_APPR_CODE', purposes."APUR_APPR_CODE",
-                     'APUR_APSE_CODE', purposes."APUR_APSE_CODE",
-                     'APUR_APUS_CODE', purposes."APUR_APUS_CODE",
-                     'TIMELTD_END_DATE', purposes."TIMELTD_END_DATE",
-                     'TIMELTD_ST_DATE', purposes."TIMELTD_ST_DATE"
-                              )
-                     )
+      SELECT
+            versions."EFF_END_DATE",
+            versions."EFF_ST_DATE",
+            versions."INCR_NO",
+            versions."ISSUE_NO",
+            versions."STATUS",
+            versions."FGAC_REGION_CODE",
+            versions."AABL_ID",
+            (SELECT json_agg(json_build_object(
+                  'PERIOD_END_DAY', purposes."PERIOD_END_DAY",
+                  'PERIOD_END_MONTH', purposes."PERIOD_END_MONTH",
+                  'PERIOD_ST_DAY', purposes."PERIOD_ST_DAY",
+                  'PERIOD_ST_MONTH', purposes."PERIOD_ST_MONTH",
+                  'ANNUAL_QTY', purposes."ANNUAL_QTY",
+                  'DAILY_QTY', purposes."DAILY_QTY",
+                  'FGAC_REGION_CODE', purposes."FGAC_REGION_CODE",
+                  'ID', purposes."ID",
+                  'HOURLY_QTY', purposes."HOURLY_QTY",
+                  'INST_QTY', purposes."INST_QTY",
+                  'NOTES', purposes."NOTES",
+                  'APUR_APPR_CODE', purposes."APUR_APPR_CODE",
+                  'APUR_APSE_CODE', purposes."APUR_APSE_CODE",
+                  'APUR_APUS_CODE', purposes."APUR_APUS_CODE",
+                  'TIMELTD_END_DATE', purposes."TIMELTD_END_DATE",
+                  'TIMELTD_ST_DATE', purposes."TIMELTD_ST_DATE"
+                    )
+                )
               FROM import."NALD_ABS_LIC_PURPOSES" purposes
               WHERE purposes."AABV_AABL_ID" = versions."AABL_ID"
                 AND purposes."AABV_ISSUE_NO" = versions."ISSUE_NO"
