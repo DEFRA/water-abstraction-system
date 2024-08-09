@@ -78,6 +78,7 @@ describe('Write table to file service', () => {
 
       const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/water'
+
       filePath = path.join(__dirname, fileName)
     })
 

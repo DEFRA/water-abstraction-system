@@ -42,6 +42,7 @@ describe('Generate Transactions service', () => {
     const { id: chargeCategoryId } = chargeCategory
 
     const baseChargeReference = await ChargeReferenceHelper.add({ chargeCategoryId })
+
     chargeElement = await ChargeElementHelper.add({ chargeReferenceId: baseChargeReference.id })
     chargeReference = await baseChargeReference.$query()
       .withGraphFetched('chargeCategory')

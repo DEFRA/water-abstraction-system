@@ -35,6 +35,7 @@ async function go (payload) {
   }
 
   const parsedLicenceRef = licenceRef.trim().toUpperCase()
+
   await DeDuplicateService.go(parsedLicenceRef)
 
   return {

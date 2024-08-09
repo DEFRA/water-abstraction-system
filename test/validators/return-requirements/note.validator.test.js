@@ -47,6 +47,7 @@ describe('Note validator', () => {
             Lorem ipsum dolor sit amet consectetur adipiscing elit
             Lorem ipsum dolor sit amet consectetur adipiscing elit`
         })
+
         expect(result.value).to.exist()
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('Enter no more than 500 characters')
