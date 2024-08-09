@@ -1,0 +1,81 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: '/licences/' + licenceId + '/summary'
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <span class="govuk-caption-l">Licence number {{ licenceRef }}
+  </span>
+  <h1 class="govuk-heading-l">Licence contact details: {{ licenceName }}
+  </h1>
+
+  {% from "govuk/components/table/macro.njk" import govukTable %}
+
+  {% macro displayAddress(contact) %}
+    {% if contact.addressLine1 %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.addressLine1 }}</p>
+    {% endif %}
+    {% if contact.addressLine2 %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.addressLine2 }}</p>
+    {% endif %}
+    {% if contact.addressLine3 %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.addressLine3 }}</p>
+    {% endif %}
+    {% if contact.addressLine4 %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.addressLine4 }}</p>
+    {% endif %}
+    {% if contact.town %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.town }}</p>
+    {% endif %}
+    {% if contact.county %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.county }}</p>
+    {% endif %}
+    {% if contact.postcode %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.postcode }}</p>
+    {% endif %}
+    {{ contact.country }}
+  {% endmacro %}
+
+  {% for contact in metadata.contacts %}
+    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: contact.role
+        }
+      },
+      rows: [{
+        key: {
+          text: "Name",
+          classes:"govuk-!-font-weight-regular"
+        },
+        value: {
+          text:  contact.name
+        }
+      },
+      {
+        key: {
+          text: "Address",
+          classes:"govuk-!-font-weight-regular"
+        },
+        value: {
+          html: displayAddress(contact)
+        }
+      }
+      ]
+}) }}
+
+  {% endfor %}
+
+{% endblock %}
