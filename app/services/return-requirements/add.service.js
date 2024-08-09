@@ -33,6 +33,7 @@ async function _save (session) {
 
   return session.$update()
 }
+
 module.exports = {
   go
 }

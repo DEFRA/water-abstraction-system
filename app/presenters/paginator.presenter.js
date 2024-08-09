@@ -195,6 +195,7 @@ function _items (selectedPageNumber, numberOfPages, path) {
   const paginatorType = _paginatorType(selectedPageNumber, numberOfPages)
 
   let items
+
   switch (paginatorType) {
     case COMPLEX_START_PAGINATOR:
       items = _complexPaginatorStart(selectedPageNumber, numberOfPages, path)
