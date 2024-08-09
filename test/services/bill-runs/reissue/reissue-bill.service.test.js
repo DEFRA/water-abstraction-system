@@ -194,6 +194,7 @@ describe('Reissue Bill service', () => {
 
       it("to the existing value if it's populated", async () => {
         const originalBillId = generateUUID()
+
         await sourceBill.$query().patch({ originalBillId })
 
         await ReissueBillService.go(sourceBill, reissueBillRun)

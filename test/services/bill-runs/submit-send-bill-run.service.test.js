@@ -106,9 +106,11 @@ describe('Submit Send Bill Run service', () => {
           await setTimeout(delay)
 
           const refreshedFirstBill = await firstBill.$query()
+
           expect(refreshedFirstBill.invoiceNumber).to.equal('WAI1000429')
 
           const refreshedSecondBill = await secondBill.$query()
+
           expect(refreshedSecondBill.invoiceNumber).to.equal('WAI1000428')
         })
 

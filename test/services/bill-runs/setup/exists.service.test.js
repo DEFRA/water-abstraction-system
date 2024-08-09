@@ -28,6 +28,7 @@ describe('Bill Runs Setup Exists service', () => {
     await DatabaseSupport.clean()
 
     const { endDate } = determineCurrentFinancialYear()
+
     currentFinancialEndYear = endDate.getFullYear()
   })
 

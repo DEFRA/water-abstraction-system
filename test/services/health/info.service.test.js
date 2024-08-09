@@ -120,6 +120,7 @@ describe('Info service', () => {
           return execStub
         })
       }
+
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -180,6 +181,7 @@ describe('Info service', () => {
           return execStub
         })
       }
+
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -235,6 +237,7 @@ describe('Info service', () => {
             return execStub
           })
         }
+
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
@@ -266,6 +269,7 @@ describe('Info service', () => {
             return execStub
           })
         }
+
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
@@ -307,6 +311,7 @@ describe('Info service', () => {
           return execStub
         })
       }
+
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -368,6 +373,7 @@ describe('Info service', () => {
           return execStub
         })
       }
+
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
 
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })

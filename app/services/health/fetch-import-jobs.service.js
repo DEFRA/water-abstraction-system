@@ -80,6 +80,7 @@ async function go () {
  */
 function _subtractDaysFromCurrentDate (days) {
   const date = new Date()
+
   date.setDate(date.getDate() - days)
 
   return date
