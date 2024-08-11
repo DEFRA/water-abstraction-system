@@ -9,8 +9,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitRemoveService = require('../../../app/services/return-requirements/submit-remove.service.js')
@@ -22,10 +22,8 @@ describe('Return Requirements - Submit Remove service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
-      id: '61e07498-f309-4829-96a9-72084a54996d',
+      id: generateUUID(),
       data: {
         checkPageVisited: false,
         licence: {
@@ -38,12 +36,8 @@ describe('Return Requirements - Submit Remove service', () => {
         },
         journey: 'returns-required',
         requirements: [{
-          points: [
-            'At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'
-          ],
-          purposes: [
-            'Mineral Washing'
-          ],
+          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
+          purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
           returnsCycle: 'winter-and-all-year',
           siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
@@ -52,8 +46,8 @@ describe('Return Requirements - Submit Remove service', () => {
             'start-abstraction-period-day': '1',
             'start-abstraction-period-month': '4'
           },
-          frequencyReported: 'monthly',
-          frequencyCollected: 'monthly',
+          frequencyReported: 'month',
+          frequencyCollected: 'month',
           agreementsExceptions: [
             'none'
           ]

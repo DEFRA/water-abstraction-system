@@ -35,24 +35,26 @@
   </div>
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     {{ govukRadios({
       name: "frequencyReported",
       errorMessage: error,
       items: [
         {
-          value: "daily",
+          value: "day",
           text: "Daily",
-          checked: "daily" === frequencyReported
+          checked: "day" === frequencyReported
         },
         {
-          value: "weekly",
+          value: "week",
           text: "Weekly",
-          checked: "weekly" === frequencyReported
+          checked: "week" === frequencyReported
         },
         {
-          value: "monthly",
+          value: "month",
           text: "Monthly",
-          checked: "monthly" === frequencyReported
+          checked: "month" === frequencyReported
         }
       ]
     }) }}

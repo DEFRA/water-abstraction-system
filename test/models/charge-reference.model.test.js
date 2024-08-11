@@ -17,11 +17,10 @@ const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseSupport = require('../support/database.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
+const PurposeModel = require('../../app/models/purpose.model.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../app/models/transaction.model.js')
 
@@ -30,10 +29,6 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 
 describe('Charge Reference model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -59,6 +54,7 @@ describe('Charge Reference model', () => {
         testBillRunVolumes = []
         for (let i = 0; i < 2; i++) {
           const billRunVolume = await BillRunVolumeHelper.add({ chargeReferenceId: id })
+
           testBillRunVolumes.push(billRunVolume)
         }
       })
@@ -92,6 +88,7 @@ describe('Charge Reference model', () => {
         testChargeCategory = await ChargeCategoryHelper.add()
 
         const { id: chargeCategoryId } = testChargeCategory
+
         testRecord = await ChargeReferenceHelper.add({ chargeCategoryId })
       })
 
@@ -124,6 +121,7 @@ describe('Charge Reference model', () => {
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
           const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: testRecord.id })
+
           testChargeElements.push(chargeElement)
         }
       })
@@ -157,6 +155,7 @@ describe('Charge Reference model', () => {
         testChargeVersion = await ChargeVersionHelper.add()
 
         const { id: chargeVersionId } = testChargeVersion
+
         testRecord = await ChargeReferenceHelper.add({ chargeVersionId })
       })
 
@@ -184,9 +183,10 @@ describe('Charge Reference model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = await PurposeHelper.add()
+        testPurpose = PurposeHelper.select()
 
         const { id: purposeId } = testPurpose
+
         testRecord = await ChargeReferenceHelper.add({ purposeId })
       })
 
@@ -206,7 +206,7 @@ describe('Charge Reference model', () => {
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -219,6 +219,7 @@ describe('Charge Reference model', () => {
         testReviewChargeReferences = []
         for (let i = 0; i < 2; i++) {
           const reviewChargeReference = await ReviewChargeReferenceHelper.add({ chargeReferenceId: testRecord.id })
+
           testReviewChargeReferences.push(reviewChargeReference)
         }
       })
@@ -254,6 +255,7 @@ describe('Charge Reference model', () => {
         testTransactions = []
         for (let i = 0; i < 2; i++) {
           const transaction = await TransactionHelper.add({ chargeReferenceId: testRecord.id })
+
           testTransactions.push(transaction)
         }
       })

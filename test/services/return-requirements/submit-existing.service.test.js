@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -24,8 +23,6 @@ describe('Return Requirements - Submit Existing service', () => {
   let sessionData
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     sessionData = {
       data: {
         checkPageVisited: false,
@@ -119,8 +116,8 @@ function _transformedReturnRequirement () {
       'start-abstraction-period-day': 1,
       'start-abstraction-period-month': 4
     },
-    frequencyReported: 'weekly',
-    frequencyCollected: 'weekly',
+    frequencyReported: 'week',
+    frequencyCollected: 'week',
     agreementsExceptions: ['none']
   }
 }

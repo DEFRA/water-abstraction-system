@@ -63,6 +63,7 @@ function _billingPeriods (billRunType, financialYear) {
   // It means we'll never pick a PRESROC for our billing periods. But also we are future proofed should we still be
   // here in 2029!
   const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (years.endYear - NO_OF_YEARS_TO_LOOK_BACK))
+
   while (earliestSrocFinYearEnd <= years.endYear) {
     _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
 

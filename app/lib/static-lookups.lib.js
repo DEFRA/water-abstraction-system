@@ -34,8 +34,11 @@ const returnRequirementFrequencies = {
 
 const returnRequirementReasons = {
   'abstraction-below-100-cubic-metres-per-day': 'Abstraction amount below 100 cubic metres per day',
+  'change-to-return-requirements': 'Change to requirements for returns',
   'change-to-special-agreement': 'Change to special agreement',
+  'error-correction': 'Error correction',
   'extension-of-licence-validity': 'Limited extension of licence validity (LEV)',
+  'licence-conditions-do-not-require-returns': 'Licence conditions do not require returns',
   'major-change': 'Major change',
   'minor-change': 'Minor change',
   'name-or-address-change': 'Licence holder name or address change',
@@ -45,8 +48,8 @@ const returnRequirementReasons = {
   'returns-exception': 'Returns exception',
   'succession-or-transfer-of-licence': 'Succession or transfer of licence',
   'succession-to-remainder-licence-or-licence-apportionment': 'Succession to remainder licence or licence apportionment',
-  'transfer-and-now-chargeable': 'Licence transferred and now chargeable',
-  'transfer-licence': 'Transfer licence'
+  'temporary-trade': 'Temporary trade',
+  'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
 const sources = [
@@ -65,7 +68,8 @@ const twoPartTariffReviewIssues = {
   'returns-late': 'Returns received late',
   'return-split-over-refs': 'Return split over charge references',
   'some-returns-not-received': 'Some returns not received',
-  'unable-to-match-return': 'Unable to match return'
+  'unable-to-match-return': 'Unable to match return',
+  'multiple-issues': 'Multiple issues'
 }
 
 module.exports = {

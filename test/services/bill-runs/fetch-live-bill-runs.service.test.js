@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -22,15 +22,13 @@ describe('Fetch Live Bill Runs service', () => {
   let financialYearEnding
   let regionId
 
-  beforeEach(async () => {
-    const region = await RegionHelper.add()
-
-    regionId = region.id
-  })
-
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
-      beforeEach(async () => {
+      before(async () => {
+        const region = RegionHelper.select(0)
+
+        regionId = region.id
+
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -80,7 +78,11 @@ describe('Fetch Live Bill Runs service', () => {
     })
 
     describe('and it is for the previous year (SROC)', () => {
-      beforeEach(async () => {
+      before(async () => {
+        const region = RegionHelper.select(1)
+
+        regionId = region.id
+
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -129,7 +131,11 @@ describe('Fetch Live Bill Runs service', () => {
     })
 
     describe('and it is for the last PRESROC year (PRESROC)', () => {
-      beforeEach(async () => {
+      before(async () => {
+        const region = RegionHelper.select(2)
+
+        regionId = region.id
+
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -179,6 +185,12 @@ describe('Fetch Live Bill Runs service', () => {
   })
 
   describe('when there are no live bill runs', () => {
+    beforeEach(async () => {
+      const region = RegionHelper.select(3)
+
+      regionId = region.id
+    })
+
     it('returns no matches', async () => {
       const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 

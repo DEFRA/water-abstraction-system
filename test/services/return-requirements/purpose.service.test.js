@@ -9,11 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchLicencePurposesService = require('../../../app/services/return-requirements/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
 // Thing under test
 const PurposeService = require('../../../app/services/return-requirements/purpose.service.js')
@@ -24,9 +23,7 @@ describe('Return Requirements - Purpose service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
-    Sinon.stub(FetchLicencePurposesService, 'go').resolves([
+    Sinon.stub(FetchPurposesService, 'go').resolves([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
     ])
@@ -69,14 +66,13 @@ describe('Return Requirements - Purpose service', () => {
         pageTitle: 'Select the purpose for the requirements for returns',
         backLink: `/system/return-requirements/${session.id}/setup`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePurposes: [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
-        ],
         licenceRef: '01/ABC',
-        purposes: '',
+        purposes: [
+          { alias: '', checked: false, description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+          { alias: '', checked: false, description: 'Horticultural Watering', id: '49088608-ee9f-491a-8070-6831240945ac' }
+        ],
         sessionId: session.id
-      }, { skip: ['sessionId'] })
+      })
     })
   })
 })

@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
@@ -21,13 +20,9 @@ const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 describe('Primary Purpose model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await PrimaryPurposeHelper.add()
+      testRecord = PrimaryPurposeHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -43,13 +38,14 @@ describe('Primary Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = await PrimaryPurposeHelper.add()
+        testRecord = PrimaryPurposeHelper.select()
 
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
           const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
             notes: `TEST licence Version purpose ${i}`, primaryPurposeId: testRecord.id
           })
+
           testLicenceVersionPurposes.push(licenceVersionPurpose)
         }
       })
@@ -80,13 +76,14 @@ describe('Primary Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = await PrimaryPurposeHelper.add()
+        testRecord = PrimaryPurposeHelper.select()
 
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
             alias: `TEST return requirement purpose ${i}`, primaryPurposeId: testRecord.id
           })
+
           testReturnRequirementPurposes.push(returnRequirementPurpose)
         }
       })

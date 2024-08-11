@@ -14,7 +14,6 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -46,10 +45,6 @@ const LicenceModel = require('../../app/models/licence.model.js')
 describe('Licence model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('Basic query', () => {
     beforeEach(async () => {
       testRecord = await LicenceHelper.add()
@@ -75,6 +70,7 @@ describe('Licence model', () => {
           const billLicence = await BillLicenceHelper.add({
             licenceRef: testRecord.licenceRef, licenceId: testRecord.id
           })
+
           testBillLicences.push(billLicence)
         }
       })
@@ -112,6 +108,7 @@ describe('Licence model', () => {
           const chargeVersion = await ChargeVersionHelper.add({
             licenceRef: testRecord.licenceRef, licenceId: testRecord.id
           })
+
           testChargeVersions.push(chargeVersion)
         }
       })
@@ -147,6 +144,7 @@ describe('Licence model', () => {
         testLicenceAgreements = []
         for (let i = 0; i < 2; i++) {
           const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef: testRecord.licenceRef })
+
           testLicenceAgreements.push(licenceAgreement)
         }
       })
@@ -180,6 +178,7 @@ describe('Licence model', () => {
         testLicenceDocument = await LicenceDocumentHelper.add()
 
         const { licenceRef } = testLicenceDocument
+
         testRecord = await LicenceHelper.add({ licenceRef })
       })
 
@@ -210,6 +209,7 @@ describe('Licence model', () => {
         testLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add()
 
         const { licenceRef } = testLicenceDocumentHeader
+
         testRecord = await LicenceHelper.add({ licenceRef })
       })
 
@@ -242,6 +242,7 @@ describe('Licence model', () => {
         testLicenceGaugingStations = []
         for (let i = 0; i < 2; i++) {
           const licenceGaugingStation = await LicenceGaugingStationHelper.add({ licenceId: testRecord.id })
+
           testLicenceGaugingStations.push(licenceGaugingStation)
         }
       })
@@ -277,6 +278,7 @@ describe('Licence model', () => {
         testLicenceVersions = []
         for (let i = 0; i < 2; i++) {
           const licenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id })
+
           testLicenceVersions.push(licenceVersion)
         }
       })
@@ -307,9 +309,10 @@ describe('Licence model', () => {
       let testRegion
 
       beforeEach(async () => {
-        testRegion = await RegionHelper.add()
+        testRegion = RegionHelper.select()
 
         const { id: regionId } = testRegion
+
         testRecord = await LicenceHelper.add({ regionId })
       })
 
@@ -329,7 +332,7 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
+        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -342,6 +345,7 @@ describe('Licence model', () => {
         testReturnLogs = []
         for (let i = 0; i < 2; i++) {
           const returnLog = await ReturnLogHelper.add({ licenceRef: testRecord.licenceRef })
+
           testReturnLogs.push(returnLog)
         }
       })
@@ -377,6 +381,7 @@ describe('Licence model', () => {
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
           const returnVersion = await ReturnVersionHelper.add({ licenceId: testRecord.id })
+
           testReturnVersions.push(returnVersion)
         }
       })
@@ -412,6 +417,7 @@ describe('Licence model', () => {
         testReviewLicences = []
         for (let i = 0; i < 2; i++) {
           const reviewLicence = await ReviewLicenceHelper.add({ licenceId: testRecord.id })
+
           testReviewLicences.push(reviewLicence)
         }
       })
@@ -447,6 +453,7 @@ describe('Licence model', () => {
         testWorkflows = []
         for (let i = 0; i < 2; i++) {
           const workflow = await WorkflowHelper.add({ licenceId: testRecord.id })
+
           testWorkflows.push(workflow)
         }
       })

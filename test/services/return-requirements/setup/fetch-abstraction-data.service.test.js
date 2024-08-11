@@ -8,20 +8,17 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceAbstractionDataSeeder = require('../../../support/seeders/licence-abstraction-data.seeder.js')
 const LicenceAgreementModel = require('../../../../app/models/licence-agreement.model.js')
 
 // Thing under test
 const FetchAbstractionDataService = require('../../../../app/services/return-requirements/setup/fetch-abstraction-data.service.js')
 
-describe('Return Requirements - Return requirements Fetch Points service', () => {
+describe('Return Requirements - Fetch Abstraction Data service', () => {
   let seedIds
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
-    seedIds = await LicenceAbstractionDataSeeder.seed('01/12/34/1000')
+    seedIds = await LicenceAbstractionDataSeeder.seed()
   })
 
   describe('when called', () => {
@@ -52,39 +49,39 @@ describe('Return Requirements - Return requirements Fetch Points service', () =>
             status: 'current',
             licenceVersionPurposes: [
               {
-                id: seedIds.licenceVersionPurposes.electricityId,
+                id: seedIds.licenceVersionPurposes.electricity.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 455,
-                externalId: '1:10065380',
+                externalId: seedIds.licenceVersionPurposes.electricity.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryElectricityId, legacyId: 'P' },
-                purpose: { id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
+                purpose: { description: 'Heat Pump', id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' }
               },
               {
-                id: seedIds.licenceVersionPurposes.standardId,
+                id: seedIds.licenceVersionPurposes.standard.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 2675,
-                externalId: '1:10065381',
+                externalId: seedIds.licenceVersionPurposes.standard.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
+                purpose: { description: 'Vegetable Washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
               },
               {
-                id: seedIds.licenceVersionPurposes.twoPartTariffId,
+                id: seedIds.licenceVersionPurposes.twoPartTariff.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 300,
-                externalId: '1:10065382',
+                externalId: seedIds.licenceVersionPurposes.twoPartTariff.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
+                purpose: { description: 'Spray Irrigation - Direct', id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
               }
             ]

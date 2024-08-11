@@ -9,7 +9,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -22,8 +22,6 @@ describe('Return Requirements - Submit Start Date service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     sessionData = {
       data: {
         checkPageVisited: false,
@@ -126,6 +124,8 @@ describe('Return Requirements - Submit Start Date service', () => {
     describe('with an invalid payload', () => {
       beforeEach(async () => {
         payload = {}
+
+        Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
       })
 
       it('returns the page data for the view', async () => {
@@ -137,7 +137,7 @@ describe('Return Requirements - Submit Start Date service', () => {
           anotherStartDateDay: null,
           anotherStartDateMonth: null,
           anotherStartDateYear: null,
-          backLink: '/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d#charge',
+          backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licenceVersionStartDate: '1 January 2023',

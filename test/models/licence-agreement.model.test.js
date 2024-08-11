@@ -4,11 +4,10 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
 const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
@@ -18,12 +17,10 @@ const LicenceModel = require('../../app/models/licence.model.js')
 // Thing under test
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 
+const FINANCIAL_AGREEMENT_MCHG_INDEX = 6
+
 describe('Licence Agreement model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -42,10 +39,11 @@ describe('Licence Agreement model', () => {
     describe('when linking to financial agreement', () => {
       let testFinancialAgreement
 
-      beforeEach(async () => {
-        testFinancialAgreement = await FinancialAgreementHelper.add()
+      before(async () => {
+        testFinancialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MCHG_INDEX)
 
         const { id: financialAgreementId } = testFinancialAgreement
+
         testRecord = await LicenceAgreementHelper.add({ financialAgreementId })
       })
 
@@ -65,7 +63,7 @@ describe('Licence Agreement model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.financialAgreement).to.be.an.instanceOf(FinancialAgreementModel)
-        expect(result.financialAgreement).to.equal(testFinancialAgreement)
+        expect(result.financialAgreement).to.equal(testFinancialAgreement, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -76,6 +74,7 @@ describe('Licence Agreement model', () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceRef } = testLicence
+
         testRecord = await LicenceAgreementHelper.add({ licenceRef })
       })
 

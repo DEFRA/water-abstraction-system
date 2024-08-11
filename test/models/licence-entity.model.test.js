@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
@@ -18,10 +17,6 @@ const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 
 describe('Licence Entity model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -48,6 +43,7 @@ describe('Licence Entity model', () => {
         testLicenceEntityRoles = []
         for (let i = 0; i < 2; i++) {
           const licenceEntityRole = await LicenceEntityRoleHelper.add({ licenceEntityId })
+
           testLicenceEntityRoles.push(licenceEntityRole)
         }
       })

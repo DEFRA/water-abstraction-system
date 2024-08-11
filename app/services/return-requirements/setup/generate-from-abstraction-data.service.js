@@ -6,7 +6,6 @@
  */
 
 const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
@@ -125,19 +124,19 @@ function _frequencyCollected (licence, licenceVersionPurpose) {
 
   // Licensee is a water company or the purpose is for electricity generation
   if (waterUndertaker || licenceVersionPurpose.$electricityGeneration()) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   // Licensee has a two-part tariff agreement and the purpose is two-part tariff
   if (twoPartTariffAgreement && TWO_PART_IRRIGATION_IDS.includes(purpose.legacyId)) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
-    return returnRequirementFrequencies.week
+    return 'week'
   }
 
-  return returnRequirementFrequencies.month
+  return 'month'
 }
 
 /**
@@ -154,14 +153,14 @@ function _frequencyReported (licence, licenceVersionPurpose) {
 
   // Licensee is a water company or the purpose is for electricity generation
   if (waterUndertaker || licenceVersionPurpose.$electricityGeneration()) {
-    return returnRequirementFrequencies.day
+    return 'day'
   }
 
   if (dailyQuantity > DAILY_CUBIC_METRES_THRESHOLD) {
-    return returnRequirementFrequencies.week
+    return 'week'
   }
 
-  return returnRequirementFrequencies.month
+  return 'month'
 }
 
 /**
@@ -204,7 +203,7 @@ function _points (matchingPermitPurpose) {
  * > This is from the abs data the local name on the point
  *
  * The problem is a purpose can have multiple points. So, we grab all the local name values for each point in the
- * matched permit purpose, strip out any nulls or undefined and then join them with ' - ' to form the site description.
+ * matched permit purpose, strip out any nulls or undefined and then select the first one to form the site description.
  */
 function _siteDescription (matchingPermitPurpose) {
   const localNames = matchingPermitPurpose.purposePoints.map((purposePoint) => {
@@ -213,8 +212,8 @@ function _siteDescription (matchingPermitPurpose) {
 
   // NOTE: This is doing two things at once. It first filters the local names by passing each one to Boolean(). It will
   // return true or false depending on whether the value is 'truthy'. In our case this means null or undefined will be
-  // stripped from the array. What's left it calls `.join()` on.
-  return localNames.filter(Boolean).join(' - ')
+  // stripped from the array. From whats left we select the first one.
+  return localNames.filter(Boolean)[0]
 }
 
 /**
@@ -240,7 +239,7 @@ function _transformForSetup (licence) {
 
     return {
       points: _points(matchingPermitPurpose),
-      purposes: [purpose.id],
+      purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(startMonth, endMonth),
       siteDescription: _siteDescription(matchingPermitPurpose),
       abstractionPeriod: {

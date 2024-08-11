@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
@@ -19,22 +18,14 @@ const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.hel
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 describe('Secondary Purpose model', () => {
-  let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
+  const testRecordId = SecondaryPurposeHelper.select().id
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await SecondaryPurposeHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
-      const result = await SecondaryPurposeModel.query().findById(testRecord.id)
+      const result = await SecondaryPurposeModel.query().findById(testRecordId)
 
       expect(result).to.be.an.instanceOf(SecondaryPurposeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result.id).to.equal(testRecordId)
     })
   })
 
@@ -43,13 +34,12 @@ describe('Secondary Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = await SecondaryPurposeHelper.add()
-
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
           const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-            notes: `TEST licence Version purpose ${i}`, secondaryPurposeId: testRecord.id
+            notes: `TEST licence Version purpose ${i}`, secondaryPurposeId: testRecordId
           })
+
           testLicenceVersionPurposes.push(licenceVersionPurpose)
         }
       })
@@ -63,11 +53,11 @@ describe('Secondary Purpose model', () => {
 
       it('can eager load the bill licences', async () => {
         const result = await SecondaryPurposeModel.query()
-          .findById(testRecord.id)
+          .findById(testRecordId)
           .withGraphFetched('licenceVersionPurposes')
 
         expect(result).to.be.instanceOf(SecondaryPurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.id).to.equal(testRecordId)
 
         expect(result.licenceVersionPurposes).to.be.an.array()
         expect(result.licenceVersionPurposes[0]).to.be.an.instanceOf(LicenceVersionPurposeModel)
@@ -80,13 +70,12 @@ describe('Secondary Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = await SecondaryPurposeHelper.add()
-
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-            alias: `TEST return requirement purpose ${i}`, secondaryPurposeId: testRecord.id
+            alias: `TEST return requirement purpose ${i}`, secondaryPurposeId: testRecordId
           })
+
           testReturnRequirementPurposes.push(returnRequirementPurpose)
         }
       })
@@ -100,11 +89,11 @@ describe('Secondary Purpose model', () => {
 
       it('can eager load the bill licences', async () => {
         const result = await SecondaryPurposeModel.query()
-          .findById(testRecord.id)
+          .findById(testRecordId)
           .withGraphFetched('returnRequirementPurposes')
 
         expect(result).to.be.instanceOf(SecondaryPurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.id).to.equal(testRecordId)
 
         expect(result.returnRequirementPurposes).to.be.an.array()
         expect(result.returnRequirementPurposes[0]).to.be.an.instanceOf(ReturnRequirementPurposeModel)

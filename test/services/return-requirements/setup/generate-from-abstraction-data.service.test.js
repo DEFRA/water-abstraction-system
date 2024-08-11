@@ -39,22 +39,28 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         expect(result).to.equal([
           {
             points: ['10030400', '10030401'],
-            purposes: ['24939b40-a187-4bd1-9222-f552a3af6368'],
+            purposes: [{
+              alias: '', description: 'Heat Pump', id: '24939b40-a187-4bd1-9222-f552a3af6368'
+            }],
             returnsCycle: 'summer',
-            siteDescription: 'INTAKE POINT - OUT TAKE POINT',
+            siteDescription: 'INTAKE POINT',
             abstractionPeriod: {
               'end-abstraction-period-day': 31,
               'end-abstraction-period-month': 10,
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 4
             },
-            frequencyReported: 'daily',
-            frequencyCollected: 'daily',
+            frequencyReported: 'day',
+            frequencyCollected: 'day',
             agreementsExceptions: ['none']
           },
           {
             points: ['10030500'],
-            purposes: ['e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'],
+            purposes: [{
+              alias: '',
+              description: 'Vegetable Washing',
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
+            }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {
@@ -63,13 +69,17 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 11
             },
-            frequencyReported: 'weekly',
-            frequencyCollected: 'weekly',
+            frequencyReported: 'week',
+            frequencyCollected: 'week',
             agreementsExceptions: ['none']
           },
           {
             points: ['10030600'],
-            purposes: ['76c8c08c-4fef-421a-83d6-16d8000311a4'],
+            purposes: [{
+              alias: '',
+              description: 'Spray Irrigation - Direct',
+              id: '76c8c08c-4fef-421a-83d6-16d8000311a4'
+            }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'MAIN INTAKE',
             abstractionPeriod: {
@@ -78,8 +88,8 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
               'start-abstraction-period-day': 1,
               'start-abstraction-period-month': 5
             },
-            frequencyReported: 'monthly',
-            frequencyCollected: 'monthly',
+            frequencyReported: 'month',
+            frequencyCollected: 'month',
             agreementsExceptions: ['none']
           }
         ])
@@ -102,15 +112,15 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
       })
 
-      it('sets the collection frequency to "daily" for the two-part tariff spray purpose', async () => {
+      it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId)
 
         // We assert the others haven't changed because of this
-        expect(result[0].frequencyCollected).to.equal('daily')
-        expect(result[1].frequencyCollected).to.equal('weekly')
+        expect(result[0].frequencyCollected).to.equal('day')
+        expect(result[1].frequencyCollected).to.equal('week')
 
         // We then assert that the 3rd requirement has changed because of this
-        expect(result[2].frequencyCollected).to.equal('daily')
+        expect(result[2].frequencyCollected).to.equal('day')
       })
     })
 
@@ -122,15 +132,15 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
       })
 
-      it('sets the collection and reporting frequencies to "daily"', async () => {
+      it('sets the collection and reporting frequencies to "day"', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId)
 
-        expect(result[0].frequencyCollected).to.equal('daily')
-        expect(result[0].frequencyReported).to.equal('daily')
-        expect(result[1].frequencyCollected).to.equal('daily')
-        expect(result[1].frequencyReported).to.equal('daily')
-        expect(result[2].frequencyCollected).to.equal('daily')
-        expect(result[2].frequencyReported).to.equal('daily')
+        expect(result[0].frequencyCollected).to.equal('day')
+        expect(result[0].frequencyReported).to.equal('day')
+        expect(result[1].frequencyCollected).to.equal('day')
+        expect(result[1].frequencyReported).to.equal('day')
+        expect(result[2].frequencyCollected).to.equal('day')
+        expect(result[2].frequencyReported).to.equal('day')
       })
     })
   })
@@ -179,7 +189,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 455,
             externalId: '1:10065380',
             primaryPurpose: { id: 'd7c327ce-246d-4370-a6fe-1f2c6ba7a22a', legacyId: 'P' },
-            purpose: { id: '24939b40-a187-4bd1-9222-f552a3af6368', legacyId: '200', twoPartTariff: false },
+            purpose: {
+              id: '24939b40-a187-4bd1-9222-f552a3af6368',
+              description: 'Heat Pump',
+              legacyId: '200',
+              twoPartTariff: false
+            },
             secondaryPurpose: { id: '235ed780-f535-4b8d-b367-b5438ac130e9', legacyId: 'ELC' }
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -191,7 +206,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 2675,
             externalId: '1:10065381',
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
-            purpose: { id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f', legacyId: '460', twoPartTariff: false },
+            purpose: {
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f',
+              description: 'Vegetable Washing',
+              legacyId: '460',
+              twoPartTariff: false
+            },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -203,7 +223,12 @@ function _fetchResult (licenceId) {
             dailyQuantity: 300,
             externalId: '1:10065382',
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
-            purpose: { id: '76c8c08c-4fef-421a-83d6-16d8000311a4', legacyId: '400', twoPartTariff: true },
+            purpose: {
+              id: '76c8c08c-4fef-421a-83d6-16d8000311a4',
+              description: 'Spray Irrigation - Direct',
+              legacyId: '400',
+              twoPartTariff: true
+            },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           })
         ]

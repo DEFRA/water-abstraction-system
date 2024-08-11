@@ -56,6 +56,7 @@ async function go (userId) {
  */
 function _extractRolesAndGroupsFromUser (user) {
   const { roles, groups } = user
+
   delete user.roles
   delete user.groups
 
@@ -71,6 +72,7 @@ function _extractRolesAndGroupsFromUser (user) {
 function _extractRolesFromGroups (groups) {
   return groups.flatMap((group) => {
     const { roles } = group
+
     delete group.roles
 
     return roles

@@ -27,6 +27,8 @@
 
   <div class="govuk-body">
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
       {{ govukRadios({
         name: "reason",
         errorMessage: error,
@@ -39,9 +41,19 @@
         },
         items: [
           {
+            text: 'Change to requirements for returns',
+            value: 'change-to-return-requirements',
+            checked: 'change-to-return-requirements' === reason
+          },
+          {
             text: 'Change to special agreement',
             value: 'change-to-special-agreement',
             checked: 'change-to-special-agreement' === reason
+          },
+          {
+            text: 'Error correction',
+            value: 'error-correction',
+            checked: 'error-correction' === reason
           },
           {
             text: 'Licence holder name or address change',

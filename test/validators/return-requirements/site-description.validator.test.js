@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SiteDescriptionValidator = require('../../../app/validators/return-requirements/site-description.validator')
+const SiteDescriptionValidator = require('../../../app/validators/return-requirements/site-description.validator.js')
 
 describe('Site Description validator', () => {
   let payload

@@ -3,12 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -18,8 +19,6 @@ describe('Return Requirements - Start Date service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
@@ -35,6 +34,8 @@ describe('Return Requirements - Start Date service', () => {
         requirements: [{}]
       }
     })
+
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
   })
 
   describe('when called', () => {
@@ -53,7 +54,7 @@ describe('Return Requirements - Start Date service', () => {
         anotherStartDateDay: null,
         anotherStartDateMonth: null,
         anotherStartDateYear: null,
-        backLink: '/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d#charge',
+        backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',

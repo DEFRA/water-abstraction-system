@@ -6,7 +6,6 @@
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Fetches an existing return version and generates setup return requirements from it
@@ -91,8 +90,16 @@ async function _fetch (returnVersionId) {
     .withGraphFetched('returnRequirements.returnRequirementPurposes')
     .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
       builder.select([
+        'alias',
         'id',
         'purposeId'
+      ])
+    })
+    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
+    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
+      builder.select([
+        'id',
+        'description'
       ])
     })
 }
@@ -105,7 +112,13 @@ function _points (returnRequirementPoints) {
 
 function _purposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    return returnRequirementPurpose.purposeId
+    const { description, id } = returnRequirementPurpose.purpose
+
+    return {
+      alias: returnRequirementPurpose.alias || '',
+      description,
+      id
+    }
   })
 }
 
@@ -137,8 +150,8 @@ function _transformForSetup (returnVersion) {
         'start-abstraction-period-day': abstractionPeriodStartDay,
         'start-abstraction-period-month': abstractionPeriodStartMonth
       },
-      frequencyReported: returnRequirementFrequencies[reportingFrequency],
-      frequencyCollected: returnRequirementFrequencies[collectionFrequency],
+      frequencyReported: reportingFrequency,
+      frequencyCollected: collectionFrequency,
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })

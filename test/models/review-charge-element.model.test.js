@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
-const DatabaseSupport = require('../support/database.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
@@ -23,10 +22,6 @@ const ReviewChargeElementModel = require('../../app/models/review-charge-element
 
 describe('Review Charge Element model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -49,6 +44,7 @@ describe('Review Charge Element model', () => {
         testReviewChargeReference = await ReviewChargeReferenceHelper.add()
 
         const { id: reviewChargeReferenceId } = testReviewChargeReference
+
         testRecord = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
       })
 
@@ -82,6 +78,7 @@ describe('Review Charge Element model', () => {
         testReviewReturns = []
         for (let i = 0; i < 2; i++) {
           const testReviewReturn = await ReviewReturnHelper.add()
+
           testReviewReturns.push(testReviewReturn)
 
           await ReviewChargeElementReturnHelper.add({
@@ -120,6 +117,7 @@ describe('Review Charge Element model', () => {
         testChargeElement = await ChargeElementHelper.add()
 
         const { id: chargeElementId } = testChargeElement
+
         testRecord = await ReviewChargeElementHelper.add({ chargeElementId })
       })
 

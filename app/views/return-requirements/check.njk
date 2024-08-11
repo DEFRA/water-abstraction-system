@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
@@ -95,7 +96,23 @@
   {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+
+      {# Bookmarks - only displays when there us more than 1 return requirement #}
+      {% if requirements.length > 1 %}
+        <div class="govuk-body govuk-!-margin-bottom-6">
+          <ul>
+            {% for requirement in requirements %}
+              {% set requirementIndex = loop.index0 %}
+              <li><a href="#requirement-{{ requirementIndex }}">{{ requirement.siteDescription }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {# Add another requirement button #}
       <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukButton({
           text: "Add another requirement",
           classes: "govuk-button--secondary",
@@ -103,12 +120,37 @@
         }) }}
       </form>
       {% for requirement in requirements %}
+        {# Generate the points cell #}
+        {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
+        {# of points as the summary. Users must expand the block to get the full list. #}
+        {% set pointCell %}
+          {% set pointsList %}
+            {% set count = requirement.points | length %}
+            {{ newLine(requirement.points) }}
+          {% endset %}
+
+          {% if count > 5 %}
+            {{
+              govukDetails({
+                classes: 'govuk-!-margin-bottom-0',
+                summaryText: count + ' points',
+                html: pointsList
+              })
+            }}
+          {% else %}
+            {{ pointsList | safe }}
+          {% endif %}
+        {% endset %}
+
         {% set rowIndex = loop.index0 %}
         <div>
             {{ govukSummaryList({
               card: {
                 title: {
                   text: requirement.siteDescription
+                },
+                attributes: {
+                  id: 'requirement-' + rowIndex
                 }
               },
               attributes: {
@@ -139,7 +181,7 @@
                     text: "Points"
                   },
                   value: {
-                    html: '<span data-test="points-' + rowIndex + '">' + newLine(requirement.points) + '</span>'
+                    html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
                   },
                   actions: {
                     items: [
@@ -279,6 +321,8 @@
   {% endif %}
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     <div class="govuk-body">
       {% if returnsRequired %}
         {{ govukSummaryList({

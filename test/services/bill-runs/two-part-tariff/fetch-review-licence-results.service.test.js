@@ -19,10 +19,10 @@ const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
 
@@ -46,7 +46,7 @@ describe('Fetch Review Licence Results Service', () => {
 
   describe('when there is a valid bill run', () => {
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
     })
 
@@ -84,7 +84,7 @@ describe('Fetch Review Licence Results Service', () => {
           chargeReferenceId: chargeReference.id
         })
 
-        purpose = await PurposeHelper.add()
+        purpose = PurposeHelper.select()
         chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id, purposeId: purpose.id })
         reviewChargeElement = await ReviewChargeElementHelper.add({
           reviewChargeReferenceId: reviewChargeReference.id,

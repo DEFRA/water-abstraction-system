@@ -12,6 +12,10 @@ const { expect } = Code
 const SessionHelper = require('../../support/helpers/session.helper.js')
 const ExpandedError = require('../../../app/errors/expanded.error.js')
 
+// Things we need to stub
+const GenerateReturnVersionService = require('../../../app/services/return-requirements/generate-return-version.service.js')
+const PersistReturnVersionService = require('../../../app/services/return-requirements/persist-return-version.service.js')
+
 // Thing under test
 const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 const SubmitCheckService = require('../../../app/services/return-requirements/submit-check.service.js')
@@ -30,6 +34,7 @@ describe('Return Requirements - Submit Check service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
+          returnVersions: [],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -39,6 +44,9 @@ describe('Return Requirements - Submit Check service', () => {
       }
     })
     sessionId = session.id
+
+    Sinon.stub(GenerateReturnVersionService, 'go').resolves('returnVersionData')
+    Sinon.stub(PersistReturnVersionService, 'go').resolves()
   })
 
   afterEach(() => {

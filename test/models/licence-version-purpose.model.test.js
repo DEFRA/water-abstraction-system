@@ -8,9 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
@@ -24,11 +23,16 @@ const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 
-describe('Licence Version Purposes model', () => {
+describe('Licence Version Purpose model', () => {
   let testRecord
+  let secondaryPurposeId
+  let primaryPurposeId
+  let purposeId
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
+  beforeEach(() => {
+    primaryPurposeId = PrimaryPurposeHelper.select().id
+    secondaryPurposeId = SecondaryPurposeHelper.select().id
+    purposeId = PurposeHelper.select().id
   })
 
   describe('Basic query', () => {
@@ -115,13 +119,7 @@ describe('Licence Version Purposes model', () => {
     })
 
     describe('when linking to primary purpose', () => {
-      let testPrimaryPurpose
-
       beforeEach(async () => {
-        testPrimaryPurpose = await PrimaryPurposeHelper.add()
-
-        const { id: primaryPurposeId } = testPrimaryPurpose
-
         testRecord = await LicenceVersionPurposeHelper.add({ primaryPurposeId })
       })
 
@@ -141,18 +139,12 @@ describe('Licence Version Purposes model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
-        expect(result.primaryPurpose.id).to.equal(testPrimaryPurpose.id)
+        expect(result.primaryPurpose.id).to.equal(primaryPurposeId)
       })
     })
 
     describe('when linking to purpose', () => {
-      let testPurpose
-
       beforeEach(async () => {
-        testPurpose = await PurposeHelper.add()
-
-        const { id: purposeId } = testPurpose
-
         testRecord = await LicenceVersionPurposeHelper.add({ purposeId })
       })
 
@@ -172,18 +164,12 @@ describe('Licence Version Purposes model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose.id).to.equal(testPurpose.id)
+        expect(result.purpose.id).to.equal(purposeId)
       })
     })
 
     describe('when linking to secondary purpose', () => {
-      let testSecondaryPurpose
-
       beforeEach(async () => {
-        testSecondaryPurpose = await SecondaryPurposeHelper.add()
-
-        const { id: secondaryPurposeId } = testSecondaryPurpose
-
         testRecord = await LicenceVersionPurposeHelper.add({ secondaryPurposeId })
       })
 
@@ -203,7 +189,7 @@ describe('Licence Version Purposes model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.secondaryPurpose).to.be.an.instanceOf(SecondaryPurposeModel)
-        expect(result.secondaryPurpose.id).to.equal(testSecondaryPurpose.id)
+        expect(result.secondaryPurpose.id).to.equal(secondaryPurposeId)
       })
     })
   })
@@ -231,14 +217,22 @@ describe('Licence Version Purposes model', () => {
     let validPurpose
     let validSecondaryPurpose
 
-    beforeEach(async () => {
-      invalidPrimaryPurpose = await PrimaryPurposeHelper.add({ legacyId: 'A' })
-      invalidSecondaryPurpose = await SecondaryPurposeHelper.add({ legacyId: 'AGR' })
-      invalidPurpose = await PurposeHelper.add({ legacyId: '400' })
+    beforeEach(() => {
+      invalidPrimaryPurpose = PrimaryPurposeHelper.select(0)
+      invalidSecondaryPurpose = SecondaryPurposeHelper.select()
+      invalidPurpose = PurposeHelper.data.find((purpose) => {
+        return purpose.legacyId === '400'
+      })
 
-      validPrimaryPurpose = await PrimaryPurposeHelper.add({ legacyId: 'P' })
-      validSecondaryPurpose = await SecondaryPurposeHelper.add({ legacyId: 'ELC' })
-      validPurpose = await PurposeHelper.add({ legacyId: '200' })
+      validPrimaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
+        return primaryPurpose.legacyId === 'P'
+      })
+      validSecondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
+        return secondaryPurpose.legacyId === 'ELC'
+      })
+      validPurpose = PurposeHelper.data.find((purpose) => {
+        return purpose.legacyId === '200'
+      })
     })
 
     describe('but the primary purpose is not "P" (Production Of Energy)', () => {

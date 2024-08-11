@@ -62,13 +62,17 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
         chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
       }
 
-      chargeElement.allocatedQuantity = Big(chargeElement.allocatedQuantity).plus(qtyToAllocate).toNumber()
-      chargeElement.returnLogs[i].allocatedQuantity = Big(chargeElement.returnLogs[i].allocatedQuantity)
-        .plus(qtyToAllocate)
-        .toNumber()
-      matchedLine.unallocated = Big(matchedLine.unallocated).minus(qtyToAllocate).toNumber()
-      matchedReturn.allocatedQuantity = Big(matchedReturn.allocatedQuantity).plus(qtyToAllocate).toNumber()
-      chargeReference.allocatedQuantity = Big(chargeReference.allocatedQuantity).plus(qtyToAllocate).toNumber()
+      const lineWithinEndDate = _checkLineEndDate(matchedLine.endDate, chargeElement.abstractionPeriods)
+
+      if (lineWithinEndDate) {
+        chargeElement.allocatedQuantity = Big(chargeElement.allocatedQuantity).plus(qtyToAllocate).toNumber()
+        chargeElement.returnLogs[i].allocatedQuantity = Big(chargeElement.returnLogs[i].allocatedQuantity)
+          .plus(qtyToAllocate)
+          .toNumber()
+        matchedLine.unallocated = Big(matchedLine.unallocated).minus(qtyToAllocate).toNumber()
+        matchedReturn.allocatedQuantity = Big(matchedReturn.allocatedQuantity).plus(qtyToAllocate).toNumber()
+        chargeReference.allocatedQuantity = Big(chargeReference.allocatedQuantity).plus(qtyToAllocate).toNumber()
+      }
     }
   })
 }
@@ -109,6 +113,20 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
   }
 
   return (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate)
+}
+
+function _checkLineEndDate (lineEndDate, abstractionPeriods) {
+  // If the endDate of the return submission line is after the end date of the charge elements abstraction period then
+  // we do not want to allocate this. Here we are creating an array of the abstraction periods endDates (since there
+  // can be more than 1), then by doing Math.max we can compare the end of the abstraction period to the end date of
+  // the return submission line
+  const abstractionPeriodsEndDates = abstractionPeriods.map((abstractionPeriod) => {
+    return abstractionPeriod.endDate
+  })
+
+  const abstractionEndDate = new Date(Math.max(...abstractionPeriodsEndDates))
+
+  return lineEndDate <= abstractionEndDate
 }
 
 function _fullyAllocated (chargeElement, chargeReference) {

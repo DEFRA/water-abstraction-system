@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const EventHelper = require('../support/helpers/event.helper.js')
 
 // Thing under test
@@ -18,8 +17,6 @@ describe('Event model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRecord = await EventHelper.add()
   })
 

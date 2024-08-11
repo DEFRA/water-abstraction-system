@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
@@ -22,10 +21,6 @@ const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
 describe('Return Version model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -48,6 +43,7 @@ describe('Return Version model', () => {
         testLicence = await LicenceHelper.add()
 
         const { id: licenceId } = testLicence
+
         testRecord = await ReturnVersionHelper.add({ licenceId })
       })
 
@@ -82,6 +78,7 @@ describe('Return Version model', () => {
           const returnRequirement = await ReturnRequirementHelper.add(
             { siteDescription: `TEST RTN REQ ${i}`, returnVersionId: testRecord.id }
           )
+
           testReturnRequirements.push(returnRequirement)
         }
       })
@@ -112,9 +109,10 @@ describe('Return Version model', () => {
       let testUser
 
       beforeEach(async () => {
-        testUser = await UserHelper.add()
+        testUser = UserHelper.select()
 
         const { id: createdBy } = testUser
+
         testRecord = await ReturnVersionHelper.add({ createdBy })
       })
 
@@ -134,7 +132,7 @@ describe('Return Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
       })
     })
   })

@@ -23,7 +23,8 @@ function go (licence, auth) {
     licenceDocumentHeader,
     licenceName,
     licenceRef,
-    registeredTo
+    registeredTo,
+    workflows
   } = licence
 
   return {
@@ -38,7 +39,8 @@ function go (licence, auth) {
     pageTitle: `Licence ${licenceRef}`,
     registeredTo,
     roles: _authRoles(auth),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    workflowWarning: _generateWorkflowWarningMessage(workflows)
   }
 }
 
@@ -88,6 +90,12 @@ function _generateWarningMessage (ends) {
   }
 
   return `This licence expired on ${formatLongDate(date)}`
+}
+
+function _generateWorkflowWarningMessage (workflows) {
+  return workflows.some((workflow) => {
+    return workflow.status === 'to_setup'
+  })
 }
 
 module.exports = {

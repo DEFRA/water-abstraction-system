@@ -36,7 +36,10 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   },
   {
@@ -48,7 +51,10 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   },
   {
@@ -60,7 +66,10 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false
+      auth: false,
+      plugins: {
+        crumb: false
+      }
     }
   }
 ]

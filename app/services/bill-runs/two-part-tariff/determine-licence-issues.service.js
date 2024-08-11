@@ -131,8 +131,14 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
     status = 'review'
   }
 
-  // Issue Some returns not received
-  if (_someReturnsNotReceived(returnLogs, licenceReturnLogs)) {
+  // Issue Some returns not received / No returns received
+  const { noReturnsReceived, someReturnsNotReceived } = _returnsReceivedStatus(returnLogs, licenceReturnLogs)
+
+  if (noReturnsReceived) {
+    elementIssues.push(twoPartTariffReviewIssues['no-returns-received'])
+  }
+
+  if (someReturnsNotReceived) {
     elementIssues.push(twoPartTariffReviewIssues['some-returns-not-received'])
   }
 
@@ -143,6 +149,19 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   }
 
   return { elementIssues, status }
+}
+
+function _getMatchingReturns (returnLogs, licenceReturnLogs) {
+  const returnLogIds = returnLogs.map((returnLog) => {
+    return returnLog.returnId
+  })
+
+  // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
+  // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
+  // the status is available
+  return licenceReturnLogs.filter((licenceReturnLog) => {
+    return returnLogIds.includes(licenceReturnLog.id)
+  })
 }
 
 /**
@@ -171,6 +190,10 @@ function _getReviewStatuses () {
 function _licenceIssues (allElementIssues, allReturnIssues) {
   const allIssues = [...allElementIssues, ...allReturnIssues]
   const uniqueIssues = new Set(allIssues)
+
+  if (uniqueIssues.size > 1) {
+    uniqueIssues.add('Multiple issues')
+  }
 
   return [...uniqueIssues].sort()
 }
@@ -216,14 +239,32 @@ function _returnLogIssues (returnLog, licence) {
   return returnLogIssues
 }
 
-function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
-  const returnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnId
+/**
+ * Determines the received status of returns matched to a charge element.
+ *
+ * - If no matching returns have a status of 'due', `noReturnsReceived` and 'someReturnsNotReceived is `false`.
+ * - If some of the matching returns, but not all, have a status of 'due', `someReturnsNotReceived` is `true`.
+ * - If all matching returns have a status of 'due', `noReturnsReceived` is `true`.
+ */
+function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
+  const matchingReturnLogs = _getMatchingReturns(returnLogs, licenceReturnLogs)
+
+  const someReturnsNotReceived = matchingReturnLogs.some((matchingReturnLog) => {
+    return matchingReturnLog.status === 'due'
   })
 
-  return licenceReturnLogs.some((licenceReturnLog) => {
-    return returnLogIds.includes(licenceReturnLog.id) && licenceReturnLog.status === 'due'
-  })
+  let noReturnsReceived = false
+
+  if (someReturnsNotReceived) {
+    noReturnsReceived = matchingReturnLogs.every((matchingReturnLog) => {
+      return matchingReturnLog.status === 'due'
+    })
+  }
+
+  return {
+    someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived,
+    noReturnsReceived
+  }
 }
 
 module.exports = {

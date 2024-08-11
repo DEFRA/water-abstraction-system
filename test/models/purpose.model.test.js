@@ -12,7 +12,6 @@ const ChargeElementHelper = require('../support/helpers/charge-element.helper.js
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseSupport = require('../support/database.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
@@ -25,13 +24,9 @@ const PurposeModel = require('../../app/models/purpose.model.js')
 describe('Purpose model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await PurposeHelper.add()
+      testRecord = PurposeHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -47,11 +42,12 @@ describe('Purpose model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        testRecord = await PurposeHelper.add()
+        testRecord = PurposeHelper.select()
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
           const chargeElement = await ChargeElementHelper.add({ purposeId: testRecord.id })
+
           testChargeElements.push(chargeElement)
         }
       })
@@ -82,11 +78,12 @@ describe('Purpose model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        testRecord = await PurposeHelper.add()
+        testRecord = PurposeHelper.select()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
           const chargeReference = await ChargeReferenceHelper.add({ purposeId: testRecord.id })
+
           testChargeReferences.push(chargeReference)
         }
       })
@@ -117,11 +114,12 @@ describe('Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = await PurposeHelper.add()
+        testRecord = PurposeHelper.select()
 
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
           const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ purposeId: testRecord.id })
+
           testLicenceVersionPurposes.push(licenceVersionPurpose)
         }
       })
@@ -152,11 +150,12 @@ describe('Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = await PurposeHelper.add()
+        testRecord = PurposeHelper.select()
 
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ purposeId: testRecord.id })
+
           testReturnRequirementPurposes.push(returnRequirementPurpose)
         }
       })

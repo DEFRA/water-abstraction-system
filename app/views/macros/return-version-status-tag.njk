@@ -1,0 +1,27 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro statusTag(status, inline=false) %}
+  {# Default the text to the status as that covers most tags #}
+  {% set text = status %}
+
+  {% if status === 'current' %}
+    {% set color = "govuk-tag--green" %}
+    {% set text = 'approved' %}
+  {% elif status === 'superseded' %}
+    {% set color = "govuk-tag--grey" %}
+    {% set text = 'replaced' %}
+  {% else %}
+    {% set color = "govuk-tag--blue" %}
+  {% endif %}
+
+  {% if inline %}
+    {% set fontSize = "" %}
+  {% else %}
+    {% set fontSize = "govuk-!-font-size-27" %}
+  {% endif %}
+
+  {{ govukTag({
+    text: text,
+    classes: color + ' ' + fontSize
+  }) }}
+{% endmacro %}

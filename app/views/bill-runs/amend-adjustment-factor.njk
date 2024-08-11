@@ -72,6 +72,8 @@
       {% endif %}
 
       <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
         {{ govukInput({
           label: {
             text: "Aggregate factor",

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches points details needed for `/return-requirements/{sessionId}/points` page
+ * Fetches the points data for a licence
  * @module FetchPointsService
  */
 
@@ -10,11 +10,11 @@ const { ref } = require('objection')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetches points details needed for `/return-requirements/{sessionId}/points` page
+ * Fetches the points data for a licence
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} The points details for the matching licenceId
+ * @returns {Promise<Object>} The points data for the matching licenceId
  */
 async function go (licenceId) {
   const data = await _fetchPoints(licenceId)
@@ -25,12 +25,6 @@ async function go (licenceId) {
 async function _fetchPoints (licenceId) {
   const result = await LicenceModel.query()
     .findById(licenceId)
-    .withGraphFetched('region')
-    .modifyGraph('region', (builder) => {
-      builder.select([
-        'id'
-      ])
-    })
     .withGraphFetched('permitLicence')
     .modifyGraph('permitLicence', (builder) => {
       builder.select([
@@ -48,6 +42,7 @@ function _abstractPointsData (result) {
   result.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
       const pointDetail = point.point_detail
+
       pointsData.push(pointDetail)
     })
   })

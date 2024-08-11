@@ -131,6 +131,8 @@
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
 
     <form  method="post" action="review">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
       {# Filter by licence holder or licence number #}
       {{ govukInput({
         label: {
@@ -173,6 +175,12 @@
             text: "Checking query",
             checked: filter.issues.checkingQuery,
             attributes: { 'data-test': 'checking-query' }
+          },
+          {
+            value: "multiple-issues",
+            text: "Multiple issues",
+            checked: filter.issues.multipleIssues,
+            attributes: { 'data-test': 'multiple-issues' }
           },
           {
             value: "no-returns-received",
@@ -221,6 +229,37 @@
             text: "Unable to match return",
             checked: filter.issues.unableToMatchReturn,
             attributes: { 'data-test': 'unable-to-match-return' }
+          },
+          {
+            divider: "or"
+          },
+          {
+            value: "no-issues",
+            text: "No issues",
+            checked: filter.issues.noIssues,
+            attributes: { 'data-test': 'no-issues' },
+            behaviour: "exclusive"
+          }
+        ]
+      }) }}
+
+      {# Filter by licence progress #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        name: "filterProgress",
+        fieldset: {
+          legend: {
+            text: "Progress",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "in-progress",
+            text: "In progress",
+            checked: filter.inProgress,
+            attributes: { 'data-test': 'in-progress' }
           }
         ]
       }) }}

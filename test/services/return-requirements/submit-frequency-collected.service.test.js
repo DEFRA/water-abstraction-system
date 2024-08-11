@@ -9,7 +9,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -24,8 +23,6 @@ describe('Return Requirements - Submit Frequency Collected service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     sessionData = {
       data: {
         checkPageVisited: false,
@@ -53,7 +50,7 @@ describe('Return Requirements - Submit Frequency Collected service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          frequencyCollected: 'weekly'
+          frequencyCollected: 'week'
         }
       })
 
@@ -62,7 +59,7 @@ describe('Return Requirements - Submit Frequency Collected service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].frequencyCollected).to.equal('weekly')
+        expect(refreshedSession.requirements[0].frequencyCollected).to.equal('week')
       })
 
       describe('and the page has been not been visited', () => {

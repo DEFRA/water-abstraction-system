@@ -10,20 +10,19 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {module:PurposeModel[]} purposesData - The purposes for the licence
+ * @param {module:PurposeModel[]} licencePurposes - All the purposes for the licence
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, requirementIndex, purposesData) {
+function go (session, requirementIndex, licencePurposes) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
   return {
     backLink: _backLink(session),
     licenceId: licence.id,
-    licencePurposes: _licencePurposes(purposesData),
     licenceRef: licence.licenceRef,
-    purposes: requirement?.purposes ? requirement.purposes.join(',') : '',
+    purposes: _purposes(licencePurposes, requirement.purposes),
     sessionId
   }
 }
@@ -47,11 +46,17 @@ function _backLink (session) {
   return `/system/return-requirements/${id}/setup`
 }
 
-function _licencePurposes (purposesData) {
-  return purposesData.map((purpose) => {
+function _purposes (licencePurposes, requirementPurposes) {
+  return licencePurposes.map((licencePurpose) => {
+    const matchedRequirementPurpose = requirementPurposes?.find((requirementPurpose) => {
+      return requirementPurpose.id === licencePurpose.id
+    })
+
     return {
-      id: purpose.id,
-      description: purpose.description
+      alias: matchedRequirementPurpose?.alias ? matchedRequirementPurpose.alias : '',
+      checked: !!matchedRequirementPurpose,
+      description: licencePurpose.description,
+      id: licencePurpose.id
     }
   })
 }

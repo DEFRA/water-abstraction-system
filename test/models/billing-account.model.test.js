@@ -17,17 +17,12 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
 
 describe('Billing Account model', () => {
   let testRecord
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -56,6 +51,7 @@ describe('Billing Account model', () => {
           // billingAccountId and start date
           const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
           const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, billingAccountId })
+
           testBillingAccountAddresses.push(billingAccountAddress)
         }
       })
@@ -92,6 +88,7 @@ describe('Billing Account model', () => {
         testBills = []
         for (let i = 0; i < 2; i++) {
           const bill = await BillHelper.add({ billingAccountId })
+
           testBills.push(bill)
         }
       })
@@ -128,6 +125,7 @@ describe('Billing Account model', () => {
         testChargeVersions = []
         for (let i = 0; i < 2; i++) {
           const chargeVersion = await ChargeVersionHelper.add({ billingAccountId })
+
           testChargeVersions.push(chargeVersion)
         }
       })
