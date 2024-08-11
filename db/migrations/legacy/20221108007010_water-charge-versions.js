@@ -31,7 +31,6 @@ exports.up = function (knex) {
       table.jsonb('approved_by')
       table.uuid('licence_id').notNullable()
       table.uuid('note_id')
-      table.jsonb('mod_log').notNullable().defaultTo({})
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())

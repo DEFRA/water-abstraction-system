@@ -19,7 +19,6 @@ exports.up = function (knex) {
       table.date('end_date')
       table.string('external_id').notNullable().unique()
       table.boolean('is_test').notNullable().defaultTo(false)
-      table.jsonb('mod_log').notNullable().defaultTo({})
 
       // Legacy timestamps
       // NOTE: They are not automatically set
