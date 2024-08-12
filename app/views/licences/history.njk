@@ -9,7 +9,7 @@
   {% else %}
     <div>{{ entry.dateCreated }}</div>
   {% endif %}
-  <p class="govuk-body-s govuk-!-margin-bottom-0">{{ entry.type }}</p>
+  <p class="govuk-body-s govuk-!-margin-bottom-0">{{ entry.type.name }}</p>
 {% endmacro %}
 
 {% block breadcrumbs %}

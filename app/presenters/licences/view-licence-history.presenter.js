@@ -12,6 +12,16 @@ function go (history) {
   }
 }
 
+function _createdAt (entry) {
+  const { created_at: createdAt, mod_log: modLog } = entry
+
+  if (modLog.createdAt) {
+    return new Date(modLog.createdAt)
+  }
+
+  return createdAt
+}
+
 function _createdBy (entry) {
   const { created_by: createdBy, mod_log: modLog } = entry
 
@@ -26,29 +36,22 @@ function _createdBy (entry) {
   return 'Migrated from NALD'
 }
 
-function _dateCreated (entry) {
-  const { created_at: createdAt, mod_log: modLog } = entry
-
-  if (modLog.createdAt) {
-    const modLogCreated = new Date(modLog.createdAt)
-
-    return formatLongDate(modLogCreated)
-  }
-
-  return formatLongDate(createdAt)
-}
-
 function _entries (entries) {
-  return entries.map((entry) => {
+  const formattedEntries = entries.map((entry) => {
+    const createdAt = _createdAt(entry)
+
     return {
-      type: _type(entry.entry_type),
-      reason: _reason(entry),
-      dateCreated: _dateCreated(entry),
+      createdAt,
       createdBy: _createdBy(entry),
+      dateCreated: formatLongDate(createdAt),
       note: _note(entry),
-      link: _link(entry.entry_type, entry.entry_id, entry.licence_id)
+      link: _link(entry.entry_type, entry.entry_id, entry.licence_id),
+      reason: _reason(entry),
+      type: _type(entry.entry_type)
     }
   })
+
+  return _sortEntries(formattedEntries)
 }
 
 function _note (entry) {
@@ -87,16 +90,34 @@ function _reason (entry) {
   return null
 }
 
+function _sortEntries (entries) {
+  return entries.sort((entryA, entryB) => {
+    if (entryA.createdAt > entryB.createdAt) {
+      return -1
+    } else if (entryA.createdAt < entryB.createdAt) {
+      return 1
+    }
+
+    if (entryA.type.index > entryB.type.index) {
+      return -1
+    } else if (entryA.type.index < entryB.type.index) {
+      return 1
+    }
+
+    return 0
+  })
+}
+
 function _type (entryType) {
   if (entryType === 'charge-version') {
-    return 'Charge version'
+    return { index: 1, name: 'Charge version' }
   }
 
   if (entryType === 'return-version') {
-    return 'Return version'
+    return { index: 2, name: 'Return version' }
   }
 
-  return 'Licence version'
+  return { index: 0, name: 'Licence version' }
 }
 
 function _link (entryType, entryId, licenceId) {
