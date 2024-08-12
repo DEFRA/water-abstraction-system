@@ -4,7 +4,6 @@
  * @module NoteHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateUserId } = require('./user.helper.js')
 const NoteModel = require('../../../app/models/note.model.js')
 
@@ -13,11 +12,8 @@ const NoteModel = require('../../../app/models/note.model.js')
  *
  * If no `data` is provided, the default values will be used. These are
  *
- * - `text` - 'This is a test note'
+ * - `note` - 'This is a test note'
  * - `userId` - [randomly generated - 100001]
- * - `type` - 'Charge version'
- * - `typeId` - [random UUID]
- * - `licenceId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -41,11 +37,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    text: 'This is a test note',
-    userId: generateUserId(),
-    type: 'Charge version',
-    typeId: generateUUID(),
-    licenceId: generateUUID()
+    note: 'This is a test note',
+    userId: generateUserId()
   }
 
   return {
