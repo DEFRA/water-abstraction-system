@@ -29,6 +29,7 @@ async function go (headers, rows, schemaFolderPath, tableName) {
   const transformDataStream = _transformDataStream()
 
   const convertedHeaders = ConvertToCSVService.go(headers)
+
   writeToFileStream.write(convertedHeaders)
 
   await promisifiedPipeline(inputStream, transformDataStream, writeToFileStream)
@@ -44,6 +45,7 @@ function _transformDataStream () {
     objectMode: true,
     transform: function (row, _encoding, callback) {
       const datRow = ConvertToCSVService.go(Object.values(row))
+
       callback(null, datRow)
     }
   })

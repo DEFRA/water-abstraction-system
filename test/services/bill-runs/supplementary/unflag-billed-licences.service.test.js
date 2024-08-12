@@ -107,6 +107,7 @@ describe('Unflag Billed Licences service', () => {
       }
 
       const { id: billId } = await BillHelper.add({ billRunId: billRun.id })
+
       await BillLicenceHelper.add({ billId, licenceId: licenceInBillRunAndWorkflow.id })
       await BillLicenceHelper.add({ billId, licenceId: licenceInBillRunAndFlaggedAfterBillRunCreated.id })
       await BillLicenceHelper.add({ billId, licenceId: licenceInBillRun.id })

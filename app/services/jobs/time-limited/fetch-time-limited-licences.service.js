@@ -57,6 +57,7 @@ async function go () {
 
 function _offSetCurrentDateByDays (days) {
   const date = new Date()
+
   date.setDate(date.getDate() + days)
 
   return date

@@ -56,6 +56,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(annualBillRun)
 
         Sinon.stub(AnnualProcessBillRunService, 'go')
@@ -98,6 +99,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(supplementaryBillRun)
 
         Sinon.stub(SupplementaryProcessBillRunService, 'go')
@@ -140,6 +142,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffBillRun)
 
         Sinon.stub(TwoPartTariffProcessBillRunService, 'go')
