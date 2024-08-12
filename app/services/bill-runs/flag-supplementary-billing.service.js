@@ -5,23 +5,27 @@
  * @module FlagSupplementaryBillingService
  */
 
+const ChargeVersionModel = require('../../models/charge-version.model.js')
+
 /**
  * Orchestrates flagging a licence for supplementary billing
  *
  * @param {String} payload - The UUID for the bill run
  */
 async function go (payload) {
-  console.log('It WORKED!!!!')
-  const dataValidation = _validatePayload(payload)
-}
+  if (payload.chargeVersionId) {
+    const chargeVersion = await ChargeVersionModel.query()
+      .findById(payload.chargeVersionId)
+      .withGraphFetched('chargeReferences')
+      .modifyGraph('chargeReferences', (builder) => {
+        builder.select([
+          'id',
+          'section127Agreement',
+          'adjustments'
+        ])
+      })
 
-function _validatePayload (payload) {
-  if (payload.returnId) {
-    return true
-  } else if (payload.chargeVersionId) {
-    return true
-  } else {
-    return false
+    console.log('Charge Versions :', chargeVersion)
   }
 }
 

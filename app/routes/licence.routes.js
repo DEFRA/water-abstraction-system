@@ -70,6 +70,20 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/licences/supplementary-flag',
+    options: {
+      handler: LicencesController.submitSupplementaryFlag,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 

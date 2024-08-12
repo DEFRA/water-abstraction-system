@@ -284,21 +284,6 @@ const routes = [
         }
       }
     }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/supplementary-flag',
-    options: {
-      handler: BillRunsController.submitSupplementaryFlag,
-      app: {
-        plainOutput: true
-      },
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
   }
 ]
 

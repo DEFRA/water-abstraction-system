@@ -14,7 +14,6 @@ const CalculateChargeService = require('../services/bill-runs/two-part-tariff/ca
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
-const FlagSupplementaryBillingService = require('../services/bill-runs/flag-supplementary-billing.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
@@ -297,12 +296,6 @@ async function submitSend (request, h) {
   }
 }
 
-async function submitSupplementaryFlag (request, h) {
-  await FlagSupplementaryBillingService.go(request.payload)
-
-  return h.response().code(204)
-}
-
 async function twoPartTariff (request, h) {
   const { id } = request.params
 
@@ -351,7 +344,6 @@ module.exports = {
   submitRemoveLicence,
   submitReviewLicence,
   submitSend,
-  submitSupplementaryFlag,
   twoPartTariff,
   view
 }
