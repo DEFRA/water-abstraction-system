@@ -32,7 +32,7 @@ describe('Note model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge versions', () => {
+    describe('when linking to charge version', () => {
       beforeEach(async () => {
         testRecord = await NoteHelper.add()
         await ChargeVersionHelper.add({ noteId: testRecord.id })
@@ -40,7 +40,7 @@ describe('Note model', () => {
 
       it('can successfully run a related query', async () => {
         const query = await NoteModel.query()
-          .withGraphFetched('chargeVersions')
+          .withGraphFetched('chargeVersion')
 
         expect(query).to.exist()
       })

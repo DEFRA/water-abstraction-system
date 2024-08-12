@@ -16,7 +16,7 @@ class NoteModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      chargeVersions: {
+      chargeVersion: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-version.model',
         join: {
