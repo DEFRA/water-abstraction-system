@@ -34,9 +34,11 @@ describe('Calculate Charge service', () => {
     await DatabaseSupport.clean()
 
     const testLicence = await LicenceHelper.add({ waterUndertaker: true })
+
     licenceId = testLicence.id
 
     const testChargeCategory = await ChargeCategoryHelper.add()
+
     chargeCategoryReference = testChargeCategory.reference
 
     const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
@@ -53,6 +55,7 @@ describe('Calculate Charge service', () => {
       reviewChargeVersionId,
       chargeReferenceId
     })
+
     reviewChargeReferenceId = testReviewChargeReference.id
 
     await ReviewChargeElementHelper.add({ reviewChargeReferenceId, amendedAllocated: 25 })

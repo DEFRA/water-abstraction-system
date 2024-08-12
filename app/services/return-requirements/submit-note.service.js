@@ -32,6 +32,7 @@ async function go (sessionId, payload, user, yar) {
 
   if (!validationResult) {
     const notification = _notification(session, payload.note)
+
     await _save(session, payload, user)
 
     if (notification) {
