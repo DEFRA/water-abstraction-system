@@ -9,8 +9,6 @@ module.exports = {
     encoding: 'utf8',
     // We output the generated documentation to `docs/` instead of `out/` (the default)
     destination: 'docs/',
-    // Direct JSDoc to our package JSON to extract project name, version etc
-    package: 'package.json',
     // The README to present on the documentation home page. In lieu of anything else we give it the project's README
     readme: 'README.md',
     // Whether to recurse into subdirectories
