@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Model for notes (water.notes)
- * @module NoteModel
+ * Model for charge_version_notes (water.notes)
+ * @module ChargeVersionNote
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class NoteModel extends BaseModel {
+class ChargeVersionNote extends BaseModel {
   static get tableName () {
-    return 'notes'
+    return 'chargeVersionNotes'
   }
 
   static get relationMappings () {
@@ -20,7 +20,7 @@ class NoteModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-version.model',
         join: {
-          from: 'notes.id',
+          from: 'chargeVersionNotes.id',
           to: 'chargeVersions.noteId'
         }
       }
@@ -28,4 +28,4 @@ class NoteModel extends BaseModel {
   }
 }
 
-module.exports = NoteModel
+module.exports = ChargeVersionNote

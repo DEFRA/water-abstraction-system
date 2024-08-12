@@ -48,20 +48,20 @@ class ChargeVersionModel extends BaseModel {
           to: 'chargeReferences.chargeVersionId'
         }
       },
+      chargeVersionNote: {
+        relation: Model.HasOneRelation,
+        modelClass: 'charge-version-note.model',
+        join: {
+          from: 'chargeVersions.noteId',
+          to: 'chargeVersionNotes.id'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
         join: {
           from: 'chargeVersions.licenceId',
           to: 'licences.id'
-        }
-      },
-      note: {
-        relation: Model.HasOneRelation,
-        modelClass: 'note.model',
-        join: {
-          from: 'chargeVersions.noteId',
-          to: 'notes.id'
         }
       },
       reviewChargeVersions: {

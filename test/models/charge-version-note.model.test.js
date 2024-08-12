@@ -4,29 +4,29 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const NoteHelper = require('../support/helpers/note.helper.js')
+const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 
 // Thing under test
-const NoteModel = require('../../app/models/note.model.js')
+const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 
-describe('Note model', () => {
+describe('Charge Version Note model', () => {
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await NoteHelper.add()
-    })
+  before(async () => {
+    testRecord = await ChargeVersionNoteHelper.add()
+  })
 
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await NoteModel.query()
+      const result = await ChargeVersionNoteModel.query()
         .findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(NoteModel)
+      expect(result).to.be.an.instanceOf(ChargeVersionNoteModel)
       expect(result.id).to.be.equal(testRecord.id)
     })
   })
@@ -34,12 +34,11 @@ describe('Note model', () => {
   describe('Relationships', () => {
     describe('when linking to charge version', () => {
       beforeEach(async () => {
-        testRecord = await NoteHelper.add()
         await ChargeVersionHelper.add({ noteId: testRecord.id })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await NoteModel.query()
+        const query = await ChargeVersionNoteModel.query()
           .withGraphFetched('chargeVersion')
 
         expect(query).to.exist()

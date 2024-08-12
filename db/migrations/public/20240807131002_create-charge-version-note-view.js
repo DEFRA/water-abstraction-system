@@ -1,6 +1,6 @@
 'use strict'
 
-const viewName = 'notes'
+const viewName = 'charge_version_notes'
 
 exports.up = function (knex) {
   return knex

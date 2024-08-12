@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * @module NoteHelper
+ * @module ChargeVersionNoteHelper
  */
 
 const { generateUserId } = require('./user.helper.js')
-const NoteModel = require('../../../app/models/note.model.js')
+const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
 
 /**
- * Add a new note
+ * Add a new charge version note
  *
  * If no `data` is provided, the default values will be used. These are
  *
@@ -22,7 +22,7 @@ const NoteModel = require('../../../app/models/note.model.js')
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return NoteModel.query()
+  return ChargeVersionNoteModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
