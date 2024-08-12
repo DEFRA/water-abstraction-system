@@ -9,21 +9,19 @@ const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const PersistLicenceService =
   require('../../../app/services/import/persist-licence.service.js')
 
-describe('Persist licence service', () => {
+describe('Import - Persist Licence service', () => {
   let region
   let licence
 
   beforeEach(async () => {
-    region = RegionsSeeder.data.find((region) => {
-      return region.displayName === 'Test Region'
-    })
+    region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
   })
 
   describe('when the licence ref does not exist', () => {

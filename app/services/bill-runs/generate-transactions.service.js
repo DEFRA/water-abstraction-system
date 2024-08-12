@@ -60,6 +60,7 @@ function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLic
 
   if (!waterUndertaker) {
     const compensationTransaction = _compensationTransaction(standardTransaction)
+
     transactions.push(compensationTransaction)
   }
 

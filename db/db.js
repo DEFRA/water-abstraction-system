@@ -2,7 +2,7 @@
 
 const environment = process.env.NODE_ENV || 'development'
 
-const dbConfig = require('../knexfile.application')[environment]
+const dbConfig = require('../knexfile.application.js')[environment]
 
 // Where the 'pg' package has concern that parsing a DB value into its JavaScript equivalent will lead to a loss of
 // data it will return the value as a string. For example, a PostgreSQL BigInt has the range -9223372036854775808 to

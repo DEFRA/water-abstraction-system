@@ -30,6 +30,7 @@ describe('Determine Minimum Charge service', () => {
     describe('and the charge version change reason triggers a minimum charge', () => {
       beforeEach(async () => {
         const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
+
         chargeVersion = await ChargeVersionHelper.add({
           startDate: new Date('2023-04-01'),
           changeReasonId: changeReason.changeReasonId
@@ -48,6 +49,7 @@ describe('Determine Minimum Charge service', () => {
     describe('and the charge version change reason does not trigger a minimum charge', () => {
       beforeEach(async () => {
         const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: false })
+
         chargeVersion = await ChargeVersionHelper.add({
           startDate: new Date('2022-05-01'),
           changeReasonId: changeReason.changeReasonId
@@ -67,6 +69,7 @@ describe('Determine Minimum Charge service', () => {
   describe('where the charge version start date is not the same as the charge period', () => {
     beforeEach(async () => {
       const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
+
       chargeVersion = await ChargeVersionHelper.add({
         startDate: new Date('2022-03-01'),
         changeReasonId: changeReason.changeReasonId

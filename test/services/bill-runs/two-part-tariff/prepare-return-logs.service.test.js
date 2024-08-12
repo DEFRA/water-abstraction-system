@@ -96,6 +96,7 @@ describe('Prepare Return Logs Service', () => {
       describe('that have submission lines outside the abstraction period', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
+
           returnLog.returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
 
           Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
@@ -111,6 +112,7 @@ describe('Prepare Return Logs Service', () => {
       describe('that is a nil return', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
+
           returnLog.returnSubmissions[0].nilReturn = true
 
           Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])

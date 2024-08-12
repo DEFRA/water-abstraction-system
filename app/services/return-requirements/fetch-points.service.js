@@ -42,6 +42,7 @@ function _abstractPointsData (result) {
   result.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
       const pointDetail = point.point_detail
+
       pointsData.push(pointDetail)
     })
   })

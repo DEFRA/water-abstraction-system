@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -15,14 +15,16 @@ const LicenceAgreementModel = require('../../app/models/licence-agreement.model.
 // Thing under test
 const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
 
+const FINANCIAL_AGREEMENT_MVAL_INDEX = 7
+
 describe('Financial Agreement model', () => {
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await FinancialAgreementHelper.add()
-    })
+  before(async () => {
+    testRecord = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MVAL_INDEX)
+  })
 
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await FinancialAgreementModel.query().findById(testRecord.id)
 
@@ -35,9 +37,7 @@ describe('Financial Agreement model', () => {
     describe('when linking to licence agreements', () => {
       let testLicenceAgreements
 
-      beforeEach(async () => {
-        testRecord = await FinancialAgreementHelper.add()
-
+      before(async () => {
         testLicenceAgreements = []
         for (let i = 0; i < 2; i++) {
           const licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId: testRecord.id })

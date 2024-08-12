@@ -9,8 +9,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitRemoveService = require('../../../app/services/return-requirements/submit-remove.service.js')
@@ -22,10 +22,8 @@ describe('Return Requirements - Submit Remove service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
-      id: '61e07498-f309-4829-96a9-72084a54996d',
+      id: generateUUID(),
       data: {
         checkPageVisited: false,
         licence: {

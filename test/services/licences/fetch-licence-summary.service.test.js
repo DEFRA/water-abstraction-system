@@ -17,10 +17,10 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposesConditionsTypeSeeder = require('../../support/seeders/licence-version-purpose-condition-types.seeder.js')
 const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
-const PurposeSeeder = require('../../support/seeders/purposes.seeder.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -41,11 +41,11 @@ describe('Fetch Licence Summary service', () => {
   let region
 
   beforeEach(async () => {
-    licenceVersionPurposeConditionType = LicenceVersionPurposesConditionsTypeSeeder.data.find((conditionType) => {
+    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
 
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
 
     licence = await LicenceHelper.add({
       expiredDate: null,
@@ -61,7 +61,7 @@ describe('Fetch Licence Summary service', () => {
       licenceId: licence.id, startDate: new Date('2022-05-01')
     })
 
-    purpose = PurposeSeeder.data[0]
+    purpose = PurposeHelper.select()
 
     licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
       licenceVersionId: licenceVersion.id,
@@ -115,7 +115,7 @@ describe('Fetch Licence Summary service', () => {
         startDate: new Date('2022-01-01'),
         region: {
           id: region.id,
-          displayName: 'Avalon'
+          displayName: region.displayName
         },
         permitLicence: {
           id: permitLicence.id,

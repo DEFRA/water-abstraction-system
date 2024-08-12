@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
@@ -17,10 +16,6 @@ const FetchLicenceHasRequirementsService =
 
 describe('Fetch Licence Has Requirements service', () => {
   const licenceId = 'e004c0c9-0316-42fc-a6e3-5ae9a271b3c6'
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('when the licence has return versions', () => {
     beforeEach(async () => {

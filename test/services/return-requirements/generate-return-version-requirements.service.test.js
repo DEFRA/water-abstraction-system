@@ -21,17 +21,19 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const GenerateReturnVersionRequirementsService = require('../../../app/services/return-requirements/generate-return-version-requirements.service.js')
 
-describe('Generate Return Version Requirements service', () => {
+describe('Return Requirements - Generate Return Version Requirements service', () => {
   let licenceId
   let licencePoints
   let naldRegionId
   let requirements
 
   beforeEach(async () => {
-    const testRegion = await RegionHelper.add()
-    naldRegionId = testRegion.naldRegionId
+    const region = RegionHelper.select()
 
-    const testLicence = await LicenceHelper.add({ regionId: testRegion.id })
+    naldRegionId = region.naldRegionId
+
+    const testLicence = await LicenceHelper.add({ regionId: region.id })
+
     licenceId = testLicence.id
   })
 
