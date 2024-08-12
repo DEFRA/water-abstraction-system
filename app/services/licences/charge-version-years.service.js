@@ -2,7 +2,7 @@
 
 /**
  *
- * @module ChargeVersionFlaggingService
+ * @module ChargeVersionYearsService
  */
 
 const ChargeVersionModel = require('../../models/charge-version.model.js')
@@ -40,7 +40,7 @@ async function go (chargeVersionId) {
 }
 
 async function _getChargeVersion (chargeVersionId) {
-  return ChargeVersionModel.query()
+  const chargeVersion = await ChargeVersionModel.query()
     .findById(chargeVersionId)
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
@@ -56,6 +56,8 @@ async function _getChargeVersion (chargeVersionId) {
         'regionId'
       ])
     })
+
+  return chargeVersion
 }
 
 function _getFinancialYears (startDate, endDate) {

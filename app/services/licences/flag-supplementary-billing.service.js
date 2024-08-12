@@ -6,7 +6,7 @@
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
-const ChargeVersionFlaggingService = require('./charge-version-flagging.service.js')
+const ChargeVersionYearsService = require('./charge-version-years.service.js')
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
 /**
@@ -25,7 +25,7 @@ const LicenceSupplementaryYearModel = require('../../models/licence-supplementar
  */
 async function go (payload) {
   if (payload.chargeVersionId) {
-    const { licence, years } = await ChargeVersionFlaggingService.go(payload.chargeVersionId)
+    const { licence, years } = await ChargeVersionYearsService.go(payload.chargeVersionId)
 
     const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(years, licence.regionId)
 
