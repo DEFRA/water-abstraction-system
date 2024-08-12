@@ -56,7 +56,7 @@ class ChargeVersionModel extends BaseModel {
           to: 'licences.id'
         }
       },
-      notes: {
+      note: {
         relation: Model.HasOneRelation,
         modelClass: 'note.model',
         join: {
