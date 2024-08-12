@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
@@ -110,7 +109,7 @@ describe('Return Version model', () => {
       let testUser
 
       beforeEach(async () => {
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
+        testUser = UserHelper.select()
 
         const { id: createdBy } = testUser
 
@@ -133,7 +132,7 @@ describe('Return Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
       })
     })
   })

@@ -50,6 +50,7 @@ function _parseResult (result) {
 
   if (result.succeeded) {
     const data = JSON.parse(result.response.body)
+
     authentication.accessToken = data.access_token
     authentication.expiresIn = data.expires_in
   }

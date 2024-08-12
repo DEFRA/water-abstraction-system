@@ -62,6 +62,7 @@ async function go () {
 
 function _twoMonthsAgo () {
   const today = new Date()
+
   today.setMonth(today.getMonth() - 2)
 
   return today

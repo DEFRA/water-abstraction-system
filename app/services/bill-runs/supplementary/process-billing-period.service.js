@@ -119,6 +119,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
     // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
     if (chargeVersion.status === 'current') {
       const calculatedTransactions = _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion)
+
       acc[billLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 

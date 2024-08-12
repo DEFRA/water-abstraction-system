@@ -9,7 +9,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
@@ -20,8 +19,6 @@ describe('Return Requirements - Start Date service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,

@@ -5,13 +5,12 @@
  */
 
 const LicenceHelper = require('../helpers/licence.helper.js')
-const PurposesSeeder = require('../seeders/purposes.seeder.js')
+const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../helpers/return-version.helper.js')
 const UserHelper = require('../helpers/user.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -32,8 +31,8 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * it is linked to
  */
 async function seed () {
-  // Create a user
-  const user = await UserHelper.add({ username: `${generateUUID()}@wrls.gov.uk` })
+  // Select a user
+  const user = UserHelper.select()
 
   // Create a licence
   const licence = await LicenceHelper.add()
@@ -93,7 +92,7 @@ async function _returnRequirement (
 
   returnRequirement.returnRequirementPoints = [point]
 
-  const purpose = PurposesSeeder.data.find((purpose) => {
+  const purpose = PurposeHelper.data.find((purpose) => {
     return purpose.legacyId === '420'
   })
 

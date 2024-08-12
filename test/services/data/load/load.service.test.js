@@ -11,38 +11,44 @@ const { expect } = Code
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
-const ExpandedError = require('../../../../app/errors/expanded.error.js')
-const RegionModel = require('../../../../app/models/region.model.js')
 const { db } = require('../../../../db/db.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const ExpandedError = require('../../../../app/errors/expanded.error.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
 const LoadService = require('../../../../app/services/data/load/load.service.js')
 
 describe('Load service', () => {
+  let licenceRef
   let payload
-  let regionId
+  let region
 
   beforeEach(() => {
-    regionId = generateUUID()
+    licenceRef = LicenceHelper.generateLicenceRef()
+    region = RegionHelper.select()
   })
 
   describe('when the service is called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          regions: [
+          licences: [
             {
-              id: regionId,
-              chargeRegionId: 'S',
-              naldRegionId: 9,
-              displayName: 'Test Region',
-              name: 'Test Region'
+              licenceRef,
+              regionId: region.id,
+              regions: {
+                historicalAreaCode: 'SAAR',
+                regionalChargeArea: region.name
+              },
+              startDate: '2020-01-01',
+              waterUndertaker: false
             }
           ],
           billRuns: [
             {
-              regionId,
+              regionId: region.id,
               scheme: 'sroc',
               status: 'sent'
             }
@@ -51,23 +57,23 @@ describe('Load service', () => {
       })
 
       it('loads the entities into the DB', async () => {
-        const { billRuns } = await LoadService.go(payload)
+        const { billRuns, licences } = await LoadService.go(payload)
 
-        const region = await RegionModel.query().findById(regionId)
+        const licence = await LicenceModel.query().findById(licences[0])
 
-        expect(region.displayName).to.equal('Test Region')
+        expect(licence.licenceRef).to.equal(licenceRef)
 
         const billRun = await BillRunModel.query().findById(billRuns[0])
 
-        expect(billRun.regionId).to.equal(regionId)
+        expect(billRun.regionId).to.equal(region.id)
         expect(billRun.status).to.equal('sent')
       })
 
       it('returns the generated and used IDs for the entities', async () => {
         const result = await LoadService.go(payload)
 
-        expect(result.regions).to.exist()
-        expect(result.regions).not.to.be.empty()
+        expect(result.licences).to.exist()
+        expect(result.licences).not.to.be.empty()
 
         expect(result.billRuns).to.exist()
         expect(result.billRuns).not.to.be.empty()
@@ -106,9 +112,9 @@ describe('Load service', () => {
         it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
           const result = await LoadService.go(payload)
 
-          const region = await db('regions').withSchema('water').first('isTest').where('regionId', result.regions[0])
+          const licence = await db('licences').withSchema('water').first('isTest').where('licenceId', result.licences[0])
 
-          expect(region.isTest).to.be.true()
+          expect(licence.isTest).to.be.true()
         })
       })
     })

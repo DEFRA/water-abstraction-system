@@ -32,7 +32,7 @@ describe('Fetch Charge Versions service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
     regionId = region.id
   })
 
@@ -272,6 +272,7 @@ describe('Fetch Charge Versions service', () => {
         // This creates an SROC charge version linked to a licence. But the licence won't be marked for supplementary
         // billing
         const srocChargeVersion = await ChargeVersionHelper.add()
+
         testRecords = [srocChargeVersion]
       })
 
@@ -297,6 +298,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         const srocDraftChargeVersion = await ChargeVersionHelper.add({ status: 'draft', licenceId })
+
         testRecords = [srocDraftChargeVersion]
       })
 
@@ -322,6 +324,7 @@ describe('Fetch Charge Versions service', () => {
 
         // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
         const alcsChargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId })
+
         testRecords = [alcsChargeVersion]
       })
 
@@ -335,6 +338,7 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because none of them have a "billingAccountId"', () => {
       let licenceId
+
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -351,6 +355,7 @@ describe('Fetch Charge Versions service', () => {
         // This creates a charge version with no `billingAccountId`
         const nullBillingAccountIdChargeVersion = await ChargeVersionHelper
           .add({ billingAccountId: null, licenceId })
+
         testRecords = [nullBillingAccountIdChargeVersion]
       })
 
@@ -380,6 +385,7 @@ describe('Fetch Charge Versions service', () => {
         const srocChargeVersion = await ChargeVersionHelper.add(
           { startDate: new Date('2023-04-01'), licenceId }
         )
+
         testRecords = [srocChargeVersion]
       })
 
@@ -405,6 +411,7 @@ describe('Fetch Charge Versions service', () => {
 
         // This creates an SROC charge version linked to a licence with an different region than selected
         const otherRegionChargeVersion = await ChargeVersionHelper.add({ licenceId })
+
         testRecords = [otherRegionChargeVersion]
       })
 
@@ -429,6 +436,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         const chargeVersion = await ChargeVersionHelper.add({ licenceId })
+
         await WorkflowHelper.add({ licenceId })
 
         testRecords = [chargeVersion]

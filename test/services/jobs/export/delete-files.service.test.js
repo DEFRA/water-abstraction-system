@@ -45,6 +45,7 @@ describe('Delete Files service', () => {
       await DeleteFilesService.go(folderNameWithPath)
 
       const folderExists = fs.existsSync(folderNameWithPath)
+
       expect(folderExists).to.be.false()
     })
 
@@ -52,6 +53,7 @@ describe('Delete Files service', () => {
       await DeleteFilesService.go(folderNameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
+
       expect(fileExists).to.be.false()
     })
   })
@@ -69,6 +71,7 @@ describe('Delete Files service', () => {
       await DeleteFilesService.go(filenameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
+
       expect(fileExists).to.be.false()
     })
   })
@@ -84,6 +87,7 @@ describe('Delete Files service', () => {
   describe('When no file name is given', () => {
     it('throws an error', async () => {
       const noFile = false
+
       await DeleteFilesService.go(noFile)
 
       expect(notifierStub.omfg.calledWith(('Delete file service errored'))).to.be.true()

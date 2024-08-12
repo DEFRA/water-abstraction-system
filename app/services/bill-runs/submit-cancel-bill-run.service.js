@@ -42,6 +42,7 @@ async function go (billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const cannotBeDeleted = _cannotBeDeleted(billRun.status)
+
   if (cannotBeDeleted) {
     return
   }
