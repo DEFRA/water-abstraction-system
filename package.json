@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "build": "bin/build",
+    "docs": "jsdoc -c .jsdoc.js",
     "migrate:make": "knex migrate:make --",
     "migrate:make:test": "NODE_ENV=test knex migrate:make --migrations-directory db/migrations/legacy --",
     "migrate": "knex migrate:latest",
