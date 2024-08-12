@@ -147,16 +147,23 @@ describe('Legacy import licence mapper', () => {
         })
       })
       describe('when the licence ORIG_EFF_DATE is null', () => {
+        let licenceVersions
+
         beforeEach(() => {
           licence.ORIG_EFF_DATE = 'null'
+
+          licenceVersions = [
+            { ...FixtureLegacyLicenceVersion.create(), EFF_ST_DATE: '07/07/2001' },
+            // This licence version should be used by the sort as it is the earliest
+            { ...FixtureLegacyLicenceVersion.create(), EFF_ST_DATE: '01/01/2001' }
+          ]
         })
 
         describe('then start date of the earliest non-draft licence version is used', () => {
           it('returns the start date in the ISO format', () => {
-            //  need to add licence versions
-            const result = LegacyImportLicenceMapper.go(licence, [{ ...FixtureLegacyLicenceVersion.create() }])
+            const result = LegacyImportLicenceMapper.go(licence, licenceVersions)
 
-            expect(result.startDate).to.equal('2005-06-05')
+            expect(result.startDate).to.equal('2001-01-01')
           })
         })
       })

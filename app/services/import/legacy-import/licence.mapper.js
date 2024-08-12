@@ -68,7 +68,9 @@ const _startDate = (licence, licenceVersions) => {
     .map((version) => {
       return formatStandardDateToISO(version.EFF_ST_DATE)
     })
-    .sort()
+    .sort((a, b) => {
+      return new Date(a) - new Date(b)
+    })
     .shift()
 }
 
