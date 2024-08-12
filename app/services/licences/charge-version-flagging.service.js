@@ -99,7 +99,7 @@ function _getFinancialYears (startDate, endDate) {
 
 function _hasTwoPartTariffIndicators (chargeReferences) {
   return chargeReferences.some((chargeReference) => {
-    return chargeReference.adjustments
+    return chargeReference.adjustments.s127
   })
 }
 
