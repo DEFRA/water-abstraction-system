@@ -5,7 +5,7 @@
  * @module LicencesController
  */
 
-const FlagSupplementaryBillingService = require('../services/bill-runs/flag-supplementary-billing.service.js')
+const FlagSupplementaryBillingService = require('../services/licences/flag-supplementary-billing.service.js')
 const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
