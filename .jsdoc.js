@@ -21,7 +21,10 @@ module.exports = {
   // JSDoc plugins to load
   plugins: [
     // Supports converting the Markdown text in our comments to HTML in the documentation
-    'plugins/markdown'
+    'plugins/markdown',
+    // Removes all symbols that begin with an underscore from the doc output. This saves us having to comment all
+    // our private methods with a @private tag
+    'plugins/underscore'
   ],
   // Having enabled recurse in our options, we also need to tell JSDoc how deep to go
   recurseDepth: 10,
