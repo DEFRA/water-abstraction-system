@@ -27,10 +27,12 @@ async function go (payload) {
   if (payload.chargeVersionId) {
     const { licence, years } = await ChargeVersionYearsService.go(payload.chargeVersionId)
 
-    const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(years, licence.regionId)
+    if (years) {
+      const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(years, licence.regionId)
 
-    if (yearsForSupplementaryBilling.length > 0) {
-      await _persistSupplementaryBillingYears(yearsForSupplementaryBilling, licence.id)
+      if (yearsForSupplementaryBilling.length > 0) {
+        await _persistSupplementaryBillingYears(yearsForSupplementaryBilling, licence.id)
+      }
     }
   }
 }
