@@ -41,7 +41,10 @@ async function timeLimited (_request, h) {
 }
 
 async function returnLogs (_request, h) {
-  CreateReturnLogsService.go()
+  const isSummer = !!h.request.payload.isSummer
+  const { licenceReference } = h.request.payload
+
+  CreateReturnLogsService.go(isSummer, licenceReference)
 
   return h.response().code(204)
 }

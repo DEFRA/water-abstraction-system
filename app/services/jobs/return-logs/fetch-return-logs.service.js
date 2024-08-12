@@ -16,8 +16,8 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<Array>} the list of return requirement ids
  */
-async function go (isSummer) {
-  const requirementsForReturns = await _fetchReturnRequirements(isSummer)
+async function go (isSummer, licenceReference) {
+  const requirementsForReturns = await _fetchReturnRequirements(isSummer, licenceReference)
   const data = await _generateReturnLogPayload(requirementsForReturns)
 
   return data
@@ -41,7 +41,7 @@ async function _createMetaData (isSummer,
   const points = await FetchReturnRequirementPointsService.go(returnRequirementId)
   const purposes = await FetchReturnRequirementPurposesService.go(returnRequirementId)
 
-  return JSON.stringify({
+  return {
     description: siteDescritption,
     isCurrent: reason !== 'succession-or-transfer-of-licence',
     isFinal: _isFinal(endDate, isSummer),
@@ -60,7 +60,7 @@ async function _createMetaData (isSummer,
     points,
     purposes,
     version: 1
-  })
+  }
 }
 
 function _createReturnLogId (regionCode, licenceReference, legacyId, startDate, endDate) {
@@ -181,11 +181,13 @@ function _isFinal (endDate, isSummer) {
   return false
 }
 
-async function _fetchReturnRequirements (isSummer) {
+async function _fetchReturnRequirements (isSummer, licenceReference) {
   const cycleStartDate = _getCycleStartDate(isSummer)
 
   const externalIds = await ReturnLogModel.query()
-    .select(db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid"))
+    .select(['licenceRef',
+      db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")
+    ])
     .from('returns.returns as ret')
     .where('startDate', '>=', cycleStartDate)
 
@@ -199,7 +201,7 @@ async function _fetchReturnRequirements (isSummer) {
     'l.lapsed_date',
     'l.licence_ref',
     'l.revoked_date',
-    db.raw('l.regions->>\'historicalAreaCode\' as historicalAreaCode'),
+    db.raw('l.regions->>\'historicalAreaCode\' as areacode'),
     'rr.return_requirement_id',
     'rr.is_summer',
     'rr.is_upload',
@@ -236,6 +238,11 @@ async function _fetchReturnRequirements (isSummer) {
     })
     .whereNotIn('rr.external_id', externalIdsArray)
     .where('rr.is_summer', isSummer)
+    .modify(function (queryBuilder) {
+      if (licenceReference) {
+        queryBuilder.where('l.licenceRef', licenceReference)
+      }
+    })
 }
 
 module.exports = {

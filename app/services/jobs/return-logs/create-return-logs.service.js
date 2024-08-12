@@ -11,15 +11,16 @@ const SubmitReturnLogsService = require('./submit-return-logs.service.js')
 /**
  * Creates the return logs for the next cycle
  */
-async function go () {
+async function go (isSummer, licenceReference) {
   try {
-    const isSummer = false
-    const returnLogs = await FetchReturnLogsService.go(isSummer)
+    const returnLogs = await FetchReturnLogsService.go(isSummer, licenceReference)
 
     console.log(`There are ${returnLogs.length} number of return logs to be created.`)
     console.log(returnLogs[0])
 
-    // await SubmitReturnLogsService.go(returnLogs)
+    if (returnLogs.length > 0) {
+      await SubmitReturnLogsService.go(returnLogs)
+    }
   } catch (error) {
     global.GlobalNotifier.omfg('Create return logs job failed', null, error)
   }
