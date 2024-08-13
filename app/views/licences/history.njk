@@ -12,6 +12,12 @@
   <p class="govuk-body-s govuk-!-margin-bottom-0">{{ entry.type.name }}</p>
 {% endmacro %}
 
+{% macro formatNote(notes) %}
+  {% for note in notes %}
+    <p class="govuk-!-margin-bottom-0"> {{ note }}</p>
+  {% endfor %}
+{% endmacro %}
+
 {% block breadcrumbs %}
   {{ govukBackLink({
     text: 'Go back to summary',
@@ -34,7 +40,7 @@
       {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
       {% set rowIndex = loop.index0 %}
 
-      {% if entry.note %}
+      {% if entry.displayNote %}
         {% set classes = 'table__cell--include govuk-!-margin-bottom-0 govuk-!-padding-bottom-0' %}
       {% else %}
         {% set classes = '' %}
@@ -62,13 +68,13 @@
       {% set tableRows = (tableRows.push(dataRow), tableRows) %}
 
       {# Set note row #}
-      {% if entry.note %}
+      {% if entry.displayNote %}
         {% set noteCell %}
           {{
             govukDetails({
-              classes: 'govuk-!-margin-bottom-0',
+              classes: 'govuk-!-margin-bottom-0 ',
               summaryText: 'Note',
-              text: entry.note
+              html: formatNote(entry.notes)
             })
           }}
         {% endset %}
@@ -89,9 +95,9 @@
       attributes: { 'data-test': 'bills-table' },
       firstCellIsHeader: false,
       head: [
-        { text: 'Date and type' },
+        { text: 'Date and type', classes: 'govuk-!-width-one-quarter' },
         { text: 'Reason' },
-        { text: 'Created by' }
+        { text: 'Created by', classes: 'govuk-!-width-one-third' }
       ],
       rows: tableRows
     }) }}

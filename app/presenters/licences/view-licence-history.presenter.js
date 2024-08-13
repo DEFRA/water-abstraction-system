@@ -39,12 +39,14 @@ function _createdBy (entry) {
 function _entries (entries) {
   const formattedEntries = entries.map((entry) => {
     const createdAt = _createdAt(entry)
+    const notes = _notes(entry)
 
     return {
       createdAt,
       createdBy: _createdBy(entry),
       dateCreated: formatLongDate(createdAt),
-      note: _note(entry),
+      displayNote: notes.length > 0,
+      notes,
       link: _link(entry.entry_type, entry.entry_id, entry.licence_id),
       reason: _reason(entry),
       type: _type(entry.entry_type)
@@ -54,22 +56,13 @@ function _entries (entries) {
   return _sortEntries(formattedEntries)
 }
 
-function _note (entry) {
-  const { mod_log: modLog, note } = entry
+function _notes (entry) {
+  const notes = [entry.mod_log.note, entry.note]
 
-  if (modLog.note && note) {
-    return `${modLog.note} / ${note}`
-  }
-
-  if (note) {
+  // Filter out null or blank from the array
+  return notes.filter((note) => {
     return note
-  }
-
-  if (modLog.note) {
-    return modLog.note
-  }
-
-  return null
+  })
 }
 
 function _reason (entry) {
