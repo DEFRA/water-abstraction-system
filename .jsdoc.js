@@ -9,6 +9,10 @@ module.exports = {
     encoding: 'utf8',
     // We output the generated documentation to `docs/` instead of `out/` (the default)
     destination: 'docs/',
+    // Treat errors as fatal errors, and treat warnings as errors
+    // NOTE: We seem to get a 1 (error) exit code if there is a parsing issue irrespective of how this is set. It
+    // doesn't appear to effect the behaviour of JSDoc
+    pedantic: true,
     // The README to present on the documentation home page. In lieu of anything else we give it the project's README
     readme: 'README.md',
     // Whether to recurse into subdirectories
