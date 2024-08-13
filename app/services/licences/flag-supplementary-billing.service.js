@@ -1,39 +1,26 @@
 'use strict'
 
 /**
- * Orchestrates flagging a licence for supplementary billing
+ * Persists the years flagged on a licence for supplementary billing
  * @module FlagSupplementaryBillingService
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
-const ChargeVersionYearsService = require('./charge-version-years.service.js')
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
 /**
- * Orchestrates flagging a licence for supplementary billing based on the provided charge version.
+* Flags the years on a licence for supplementary billing if the relevant annual two-part tariff bill runs
+ * have already been sent. It verifies which years are eligible for supplementary billing based on the
+ * bill run status and persists these years for the given licence.
  *
- * If a `chargeVersionId` is present in the payload, the service calls `ChargeVersionFlaggingService` with this ID
- * to retrieve the associated licence and affected years.
- *
- * It then identifies years eligible for supplementary billing by filtering out those without an already sent annual
- * two-part tariff bill run.
- *
- * If any years are eligible, each year is persisted in the `LicenceSupplementaryYearModel` table with the
- * corresponding `licenceId`.
- *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {module:LicenceModel} licence - The licence where the change has come from
+ * @param {Object[]} years - An array of the years a change in the charge version or return affects
  */
-async function go (payload) {
-  if (payload.chargeVersionId) {
-    const { licence, years } = await ChargeVersionYearsService.go(payload.chargeVersionId)
+async function go (licence, years) {
+  const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(years, licence.regionId)
 
-    if (years) {
-      const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(years, licence.regionId)
-
-      if (yearsForSupplementaryBilling.length > 0) {
-        await _persistSupplementaryBillingYears(yearsForSupplementaryBilling, licence.id)
-      }
-    }
+  if (yearsForSupplementaryBilling.length > 0) {
+    await _persistSupplementaryBillingYears(yearsForSupplementaryBilling, licence.id)
   }
 }
 
@@ -47,6 +34,7 @@ async function _getSupplementaryBillingYears (years, regionId) {
 
   for (const year of years) {
     const annualTwoPartTariff = await BillRunModel.query()
+      .select('id')
       .where('regionId', regionId)
       .where('batchType', 'two_part_tariff')
       .where('status', 'sent')
