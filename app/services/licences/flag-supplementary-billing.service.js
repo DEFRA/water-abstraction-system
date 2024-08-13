@@ -30,20 +30,12 @@ async function go (licence, years) {
  * annual run.
  */
 async function _supplementaryBillingYears (regionId, years) {
-  const annualTwoPartTariffYears = []
-
-  for (const year of years) {
-    const annualTwoPartTariff = await BillRunModel.query()
-      .select('id')
-      .where('regionId', regionId)
-      .where('batchType', 'two_part_tariff')
-      .where('status', 'sent')
-      .where('toFinancialYearEnding', year)
-
-    if (annualTwoPartTariff.length > 0) {
-      annualTwoPartTariffYears.push(year)
-    }
-  }
+  const annualTwoPartTariffYears = await BillRunModel.query()
+    .distinct('toFinancialYearEnding')
+    .where('regionId', regionId)
+    .where('batchType', 'two_part_tariff')
+    .where('status', 'sent')
+    .whereIn('toFinancialYearEnding', years)
 
   return annualTwoPartTariffYears
 }
@@ -53,7 +45,7 @@ async function _persistSupplementaryBillingYears (licenceId, yearsForSupplementa
     await LicenceSupplementaryYearModel.query()
       .insert({
         licenceId,
-        financialYearEnd: year,
+        financialYearEnd: year.toFinancialYearEnding,
         twoPartTariff: true
       })
   }
