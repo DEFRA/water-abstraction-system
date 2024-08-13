@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
+const UserHelper = require('../support/helpers/user.helper.js')
 
 // Thing under test
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
@@ -40,6 +41,19 @@ describe('Charge Version Note model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionNoteModel.query()
           .withGraphFetched('chargeVersion')
+
+        expect(query).to.exist()
+      })
+    })
+
+    describe('when linking to user', () => {
+      beforeEach(async () => {
+        await UserHelper.add({ id: testRecord.userId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionNoteModel.query()
+          .withGraphFetched('user')
 
         expect(query).to.exist()
       })
