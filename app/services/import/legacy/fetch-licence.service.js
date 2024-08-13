@@ -2,25 +2,17 @@
 
 /**
  * Service for /import/licence
- * @module FetchLegacyImportLicenceService
+ * @module FetchLicenceService
  */
+
 const { db } = require('../../../../db/db.js')
 
 /**
  * Fetches the licence data for the licence ref from the import.NALD_ABS_LICENCES table
  *
  * @param {string} licenceRef - the licence ref
- * @returns {Promise<Object>} - A promise that resolves to an object with the following properties:
- * - {string} AREP_AREA_CODE - regions - historicalAreaCode
- * - {string} AREP_EIUC_CODE - regions - regionPrefix / regionalChargeArea
- * - {string} AREP_LEAP_CODE - regions - localEnvironmentAgencyPlanCode
- * - {string} AREP_SUC_CODE - regions - standardUnitChargeCode
- * - {string} EXPIRY_DATE
- * - {string} ID
- * - {string} LAPSED_DATE
- * - {string} LIC_NO
- * - {string} ORIG_EFF_DATE
- * - {string} REV_DATE
+ *
+ * @returns {Promise<ImportLegacyLicenceType>}
  */
 async function go (licenceRef) {
   return _getLicenceByRef(licenceRef)
@@ -52,3 +44,22 @@ async function _getLicenceByRef (licenceRef) {
 module.exports = {
   go
 }
+
+/**
+ * An Import legacy licence
+ *
+ * @typedef {Object} ImportLegacyLicenceType
+ *
+ * @property {string} AREP_AREA_CODE - historicalAreaCode
+ * @property {string} AREP_EIUC_CODE - regionPrefix / regionalChargeArea
+ * @property {string} AREP_LEAP_CODE - localEnvironmentAgencyPlanCode
+ * @property {string} AREP_SUC_CODE - standardUnitChargeCode
+ * @property {string} AREP_AREA_CODE - regions - historicalAreaCode
+ * @property {string} AREP_EIUC_CODE - regions - regionPrefix / regionalChargeArea
+ * @property {string} AREP_LEAP_CODE - regions - localEnvironmentAgencyPlanCode
+ * @property {string} AREP_SUC_CODE - regions - standardUnitChargeCode
+ * @property {string} EXPIRY_DATE
+ * @property {string} ID
+ * @property {string} LAPSED_DATE
+ * @property {string} LIC_NO - Licence Ref
+ */

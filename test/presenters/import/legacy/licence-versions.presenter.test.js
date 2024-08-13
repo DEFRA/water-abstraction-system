@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
-const FixtureLegacyLicenceVersionPurpose = require('../_fixtures/legacy-licence-version-purpose.fixture.js')
+const FixtureLegacyLicenceVersion = require('../../../services/import/_fixtures/legacy-licence-version.fixture.js')
+const FixtureLegacyLicenceVersionPurpose = require('../../../services/import/_fixtures/legacy-licence-version-purpose.fixture.js')
 
 // Thing under test
-const LegacyImportLicenceVersionMapper =
-  require('../../../../app/services/import/legacy-import/licence-versions.mapper.js')
+const LicenceVersionsPresenter =
+  require('../../../../app/presenters/import/legacy/licence-versions.presenter.js')
 
-describe('Legacy import licence versions mapper', () => {
+describe('Import legacy licence versions presenter', () => {
   let licenceVersions
   let purpose
   let version
@@ -28,7 +28,7 @@ describe('Legacy import licence versions mapper', () => {
   })
 
   it('returns the licence version', () => {
-    const results = LegacyImportLicenceVersionMapper.go(licenceVersions)
+    const results = LicenceVersionsPresenter.go(licenceVersions)
 
     expect(results).to.equal([{
       endDate: '2007-06-04',
@@ -63,7 +63,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "endDate" property', () => {
       describe('when the licence version has EFF_END_DATE', () => {
         it('returns EFF_END_DATE as the start date in the correct format', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.endDate).to.equal('2007-06-04')
         })
@@ -73,7 +73,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "externalId" property', () => {
       describe('when the licence version has FGAC_REGION_CODE, AABL_ID, ISSUE_NO, INCR_NO', () => {
         it('returns externalId in the format {FGAC_REGION_CODE}:{AABL_ID}:{ISSUE_NO}:{INCR_NO}', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.externalId).to.equal('3:10000003:100:0')
         })
@@ -83,7 +83,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "increment" property', () => {
       describe('when the licence version has INCR_NO', () => {
         it('returns INCR_NO as a number', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.increment).to.be.number()
           expect(result.increment).to.equal(0)
@@ -94,7 +94,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "increment" property', () => {
       describe('when the licence version has INCR_NO', () => {
         it('returns INCR_NO as a number', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.increment).to.be.number()
           expect(result.increment).to.equal(0)
@@ -105,7 +105,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "issue" property', () => {
       describe('when the licence version has ISSUE_NO', () => {
         it('returns ISSUE_NO as a number', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.issue).to.be.number()
           expect(result.issue).to.equal(100)
@@ -120,7 +120,7 @@ describe('Legacy import licence versions mapper', () => {
         })
 
         it('returns the status as "curren"t', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.status).to.equal('current')
         })
@@ -128,7 +128,7 @@ describe('Legacy import licence versions mapper', () => {
 
       describe('when the licence version has STATUS and is SUPER', () => {
         it('returns the status as "superseded"', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.status).to.equal('superseded')
         })
@@ -138,7 +138,7 @@ describe('Legacy import licence versions mapper', () => {
     describe('the "startDate" property', () => {
       describe('when the licence version has EFF_ST_DATE', () => {
         it('returns EFF_ST_DATE as the start date in the correct format', () => {
-          const [result] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+          const [result] = LicenceVersionsPresenter.go(licenceVersions)
 
           expect(result.startDate).to.equal('2005-06-05')
         })
@@ -149,7 +149,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "abstractionPeriodEndDay" property', () => {
         describe('when purpose has PERIOD_END_DAY', () => {
           it('returns PERIOD_END_DAY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.abstractionPeriodEndDay).to.be.number()
             expect(result.abstractionPeriodEndDay).to.equal(31)
@@ -160,7 +160,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "abstractionPeriodEndMonth" property', () => {
         describe('when purpose has PERIOD_END_MONTH', () => {
           it('returns PERIOD_END_MONTH as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.abstractionPeriodEndMonth).to.be.number()
             expect(result.abstractionPeriodEndMonth).to.equal(3)
@@ -171,7 +171,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "abstractionPeriodStartDay" property', () => {
         describe('when purpose has PERIOD_ST_DAY', () => {
           it('returns PERIOD_ST_DAY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.abstractionPeriodStartDay).to.be.number()
             expect(result.abstractionPeriodStartDay).to.equal(1)
@@ -182,7 +182,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "abstractionPeriodStartMonth" property', () => {
         describe('when purpose has PERIOD_ST_MONTH', () => {
           it('returns PERIOD_ST_MONTH as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.abstractionPeriodStartMonth).to.be.number()
             expect(result.abstractionPeriodStartMonth).to.equal(4)
@@ -193,7 +193,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "abstractionPeriodStartMonth" property', () => {
         describe('when purpose has PERIOD_ST_MONTH', () => {
           it('returns PERIOD_ST_MONTH as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.abstractionPeriodStartMonth).to.be.number()
             expect(result.abstractionPeriodStartMonth).to.equal(4)
@@ -210,7 +210,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.annualQuantity).to.be.null()
           })
@@ -218,7 +218,7 @@ describe('Legacy import licence versions mapper', () => {
 
         describe('when purpose has ANNUAL_QTY', () => {
           it('returns ANNUAL_QTY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.annualQuantity).to.be.number()
             expect(result.annualQuantity).to.equal(545520)
@@ -235,7 +235,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.dailyQuantity).to.be.null()
           })
@@ -243,7 +243,7 @@ describe('Legacy import licence versions mapper', () => {
 
         describe('when purpose has DAILY_QTY', () => {
           it('returns DAILY_QTY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.dailyQuantity).to.be.number()
             expect(result.dailyQuantity).to.equal(1500.2)
@@ -260,7 +260,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.hourlyQuantity).to.be.null()
           })
@@ -268,7 +268,7 @@ describe('Legacy import licence versions mapper', () => {
 
         describe('when purpose has HOURLY_QTY', () => {
           it('returns HOURLY_QTY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.hourlyQuantity).to.be.number()
             expect(result.hourlyQuantity).to.equal(140.929)
@@ -279,7 +279,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "instantQuantity" property', () => {
         describe('when purpose has INST_QTY is "null"', () => {
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.instantQuantity).to.be.null()
           })
@@ -293,7 +293,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns INST_QTY as a number', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.instantQuantity).to.be.number()
             expect(result.instantQuantity).to.equal(123)
@@ -304,7 +304,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "externalId" property', () => {
         describe('when the purpose has FGAC_REGION_CODE, ID', () => {
           it('returns externalId in the format {FGAC_REGION_CODE}:{ID}', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.externalId).to.equal('3:10000004')
           })
@@ -314,7 +314,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "notes" property', () => {
         describe('when purpose has NOTES is "null"', () => {
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.notes).to.be.null()
           })
@@ -328,7 +328,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns notes', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.notes).to.equal('a b c')
           })
@@ -338,7 +338,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "primaryPurposeId" property', () => {
         describe('when purpose has APUR_APPR_CODE', () => {
           it('returns the legacy primaryPurposeId', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.primaryPurposeId).to.equal('I')
           })
@@ -348,7 +348,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "purposeId" property', () => {
         describe('when purpose has APUR_APUS_CODE', () => {
           it('returns the legacy purposeId', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.purposeId).to.equal('160')
           })
@@ -358,7 +358,7 @@ describe('Legacy import licence versions mapper', () => {
       describe('the "secondaryPurposeId" property', () => {
         describe('when purpose has APUR_APSE_CODE', () => {
           it('returns the legacy secondaryPurposeId', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.secondaryPurposeId).to.equal('OTI')
           })
@@ -374,7 +374,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns the time Limited End Date in the ISO format', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.timeLimitedEndDate).to.equal('2015-03-31')
           })
@@ -382,7 +382,7 @@ describe('Legacy import licence versions mapper', () => {
 
         describe('when purpose has TIMELTD_END_DATE', () => {
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.timeLimitedEndDate).to.be.null()
           })
@@ -398,7 +398,7 @@ describe('Legacy import licence versions mapper', () => {
           })
 
           it('returns the time Limited End Date in the ISO format', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.timeLimitedStartDate).to.equal('2015-03-31')
           })
@@ -406,7 +406,7 @@ describe('Legacy import licence versions mapper', () => {
 
         describe('when purpose has TIMELTD_ST_DATE', () => {
           it('returns null', () => {
-            const [{ purposes: [result] }] = LegacyImportLicenceVersionMapper.go(licenceVersions)
+            const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
 
             expect(result.timeLimitedStartDate).to.be.null()
           })

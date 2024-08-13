@@ -12,8 +12,8 @@ const FixtureImportLicence = require('./_fixtures/import-licence.fixture.js')
 const FixtureImportLicenceVersion = require('./_fixtures/import-licence-versions.fixture.js')
 
 // Thing under test
-const ImportLicenceValidatorService =
-  require('../../../app/services/import/licence-validator.service.js')
+const ValidateLicenceService =
+  require('../../../app/services/import/validate-licence.service.js')
 
 describe('Import licence validator service', () => {
   let licence
@@ -28,7 +28,7 @@ describe('Import licence validator service', () => {
   })
 
   it('should not throw an error - licence is valid', async () => {
-    expect(() => { return ImportLicenceValidatorService.go(licence, licenceVersionsAndPurposes) }).to.not.throw()
+    expect(() => { return ValidateLicenceService.go(licence, licenceVersionsAndPurposes) }).to.not.throw()
   })
 
   describe('when a licence has badly formatted data', () => {
@@ -37,7 +37,7 @@ describe('Import licence validator service', () => {
     })
 
     it('should not throw an error - licence is valid', async () => {
-      expect(() => { return ImportLicenceValidatorService.go(licence, licenceVersionsAndPurposes) }).to.throw('"licenceRef" is required')
+      expect(() => { return ValidateLicenceService.go(licence, licenceVersionsAndPurposes) }).to.throw('"licenceRef" is required')
     })
   })
 })

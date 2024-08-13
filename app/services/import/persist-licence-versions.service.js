@@ -85,6 +85,7 @@ async function _saveLicenceVersion (version, licenceId) {
     .insert({
       ...version,
       licenceId,
+      // TODO: lift out to presenters
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     })

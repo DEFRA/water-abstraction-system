@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
-const LegacyImportLicenceService = require('../../app/services/import/legacy-licence.service.js')
+const LegacyImportLicenceService = require('../../app/services/import/legacy/process-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')

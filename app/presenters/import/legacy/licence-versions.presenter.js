@@ -2,7 +2,7 @@
 
 /**
  * Maps the import licence versions and licence versions purposes data
- * @module LegacyImportLicenceVersionMapper
+ * @module LicenceVersionsPresenter
  */
 
 const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
@@ -15,7 +15,7 @@ const statuses = {
 /**
  * Maps the import licence versions data
  *
- * @param {object[]} licenceVersions - the legacy licence versions and purposes
+ * @param {ImportLegacyLicenceVersionsType[]} licenceVersions - the legacy licence versions and purposes
  * @returns {object[]} - mapped licence versions
  */
 function go (licenceVersions) {

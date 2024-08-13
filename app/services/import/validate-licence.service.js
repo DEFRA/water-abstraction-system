@@ -2,7 +2,7 @@
 
 /**
  * Validates a import licence object
- * @module ImportLicenceValidatorService
+ * @module ValidateLicenceService
  */
 
 const ImportLicenceValidator = require('../../validators/import/licence.validator.js')

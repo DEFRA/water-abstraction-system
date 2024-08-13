@@ -2,7 +2,7 @@
 
 /**
  * Maps the import data to the desired format
- * @module LegacyImportLicenceMapper
+ * @module LicencePresenter
  */
 
 const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
@@ -11,8 +11,8 @@ const { naldRegions } = require('../../../lib/static-lookups.lib.js')
 /**
  * Maps the import data to the desired format
  *
- * @param {object} licence - the legacy licence
- * @param {object[]} licenceVersions - the legacy licence versions and purposes
+ * @param {ImportLegacyLicenceType} licence - the legacy licence
+ * @param {ImportLegacyLicenceVersionsType[]} licenceVersions - the legacy licence versions and purposes
  * @returns {object}
  */
 function go (licence, licenceVersions = []) {

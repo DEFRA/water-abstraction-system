@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureLegacyLicence = require('../_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
+const FixtureLegacyLicence = require('../../../services/import/_fixtures/legacy-licence.fixture.js')
+const FixtureLegacyLicenceVersion = require('../../../services/import/_fixtures/legacy-licence-version.fixture.js')
 
 // Thing under test
-const LegacyImportLicenceMapper =
-  require('../../../../app/services/import/legacy-import/licence.mapper.js')
+const LicencePresenter =
+  require('../../../../app/presenters/import/legacy/licence.presenter.js')
 
-describe('Legacy import licence mapper', () => {
+describe('Import legacy licence presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('Legacy import licence mapper', () => {
   })
 
   it('returns the matching agreements data', () => {
-    const results = LegacyImportLicenceMapper.go(licence)
+    const results = LicencePresenter.go(licence)
 
     expect(results).to.equal({
       licenceRef: licence.LIC_NO,
@@ -47,7 +47,7 @@ describe('Legacy import licence mapper', () => {
     describe('the "expiredDate" property', () => {
       describe('when the licence has an expiry date', () => {
         it('returns the licence expired date in the ISO format', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.expiredDate).to.equal('2015-03-31')
         })
@@ -58,7 +58,7 @@ describe('Legacy import licence mapper', () => {
           licence.EXPIRY_DATE = 'null'
         })
         it('returns null', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.expiredDate).to.be.null()
         })
@@ -72,7 +72,7 @@ describe('Legacy import licence mapper', () => {
         })
 
         it('returns the licence expired date in the ISO format', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.lapsedDate).to.equal('2006-09-01')
         })
@@ -80,7 +80,7 @@ describe('Legacy import licence mapper', () => {
 
       describe('when the licence does not have an lapsed date', () => {
         it('returns null', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.lapsedDate).to.be.null()
         })
@@ -89,7 +89,7 @@ describe('Legacy import licence mapper', () => {
 
     describe('the "licenceRef" property', () => {
       it('returns licence ref from the licence LIC_NO', () => {
-        const result = LegacyImportLicenceMapper.go(licence)
+        const result = LicencePresenter.go(licence)
 
         expect(result.licenceRef).to.equal(licence.LIC_NO)
       })
@@ -97,7 +97,7 @@ describe('Legacy import licence mapper', () => {
 
     describe('the "naldRegionId" property', () => {
       it('returns the FGAC_REGION_CODE as an integer assigned to naldRegionId', () => {
-        const result = LegacyImportLicenceMapper.go(licence)
+        const result = LicencePresenter.go(licence)
 
         expect(result.naldRegionId).to.equal(3)
       })
@@ -105,7 +105,7 @@ describe('Legacy import licence mapper', () => {
 
     describe('the "regions" property', () => {
       it('returns region', () => {
-        const result = LegacyImportLicenceMapper.go(licence)
+        const result = LicencePresenter.go(licence)
 
         expect(result.regions).to.equal({
           historicalAreaCode: 'RIDIN',
@@ -123,7 +123,7 @@ describe('Legacy import licence mapper', () => {
         })
 
         it('returns the licence revoked date in the ISO format', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.revokedDate).to.equal('2006-09-01')
         })
@@ -131,7 +131,7 @@ describe('Legacy import licence mapper', () => {
 
       describe('when the licence does not have an revoked date', () => {
         it('returns null', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.revokedDate).to.be.null()
         })
@@ -141,7 +141,7 @@ describe('Legacy import licence mapper', () => {
     describe('the "startDate" property', () => {
       describe('when the licence has ORIG_EFF_DATE', () => {
         it('returns ORIG_EFF_DATE as the start date in the correct format', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.startDate).to.equal('2005-06-03')
         })
@@ -161,7 +161,7 @@ describe('Legacy import licence mapper', () => {
 
         describe('then start date of the earliest non-draft licence version is used', () => {
           it('returns the start date in the ISO format', () => {
-            const result = LegacyImportLicenceMapper.go(licence, licenceVersions)
+            const result = LicencePresenter.go(licence, licenceVersions)
 
             expect(result.startDate).to.equal('2001-01-01')
           })
@@ -176,7 +176,7 @@ describe('Legacy import licence mapper', () => {
         })
 
         it('returns waterUndertaker as true', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.waterUndertaker).to.be.true()
         })
@@ -184,7 +184,7 @@ describe('Legacy import licence mapper', () => {
 
       describe('when the licence AREP_EIUC_CODE does not end with "SWC" ', () => {
         it('returns waterUndertaker as false', () => {
-          const result = LegacyImportLicenceMapper.go(licence)
+          const result = LicencePresenter.go(licence)
 
           expect(result.waterUndertaker).to.be.false()
         })

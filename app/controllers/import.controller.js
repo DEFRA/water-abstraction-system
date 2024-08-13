@@ -1,7 +1,7 @@
 'use strict'
 
 const FeatureFlags = require('../../config/feature-flags.config.js')
-const LegacyImportLicenceService = require('../services/import/legacy-licence.service.js')
+const ImportLegacyProcessLicenceService = require('../services/import/legacy/process-licence.service.js')
 
 /**
  * Controller for /import
@@ -11,7 +11,7 @@ async function licence (request, h) {
   const { licenceRef } = request.payload
 
   if (FeatureFlags.enableSystemImportLegacyLicence) {
-    LegacyImportLicenceService.go(licenceRef)
+    ImportLegacyProcessLicenceService.go(licenceRef)
   }
 
   return h.response().code(204)

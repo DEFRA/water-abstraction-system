@@ -9,22 +9,22 @@ const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FetchLegacyImportLicenceService = require('../../../app/services/import/legacy-import/fetch-licence.service.js')
-const FetchLegacyImportLicenceVersionsService = require('../../../app/services/import/legacy-import/fetch-licence-versions.service.js')
-const FixtureLegacyLicence = require('./_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersion = require('./_fixtures/legacy-licence-version.fixture.js')
-const FixtureLegacyLicenceVersionPurpose = require('./_fixtures/legacy-licence-version-purpose.fixture.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
+const FetchLicenceService = require('../../../../app/services/import/legacy/fetch-licence.service.js')
+const FetchLicenceVersionsService = require('../../../../app/services/import/legacy/fetch-licence-versions.service.js')
+const FixtureLegacyLicence = require('../_fixtures/legacy-licence.fixture.js')
+const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
+const FixtureLegacyLicenceVersionPurpose = require('../_fixtures/legacy-licence-version-purpose.fixture.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
+const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
+const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const LegacyImportLicenceService =
-  require('../../../app/services/import/legacy-licence.service.js')
+const ImportLegacyProcessLicenceService =
+  require('../../../../app/services/import/legacy/process-licence.service.js')
 
-describe('Legacy import licence service', () => {
+describe('Import legacy process licence service', () => {
   const region = RegionHelper.select()
 
   let legacyLicence
@@ -42,19 +42,19 @@ describe('Legacy import licence service', () => {
 
     licenceVersions = [{ ...version, purposes: [{ ...licenceVersionPurpose }] }]
 
-    Sinon.stub(FetchLegacyImportLicenceService, 'go').resolves({
+    Sinon.stub(FetchLicenceService, 'go').resolves({
       ...legacyLicence,
       FGAC_REGION_CODE: region.naldRegionId
     })
 
-    Sinon.stub(FetchLegacyImportLicenceVersionsService, 'go').resolves(licenceVersions)
+    Sinon.stub(FetchLicenceVersionsService, 'go').resolves(licenceVersions)
 
     global.GlobalNotifier = { omfg: Sinon.stub() }
   })
 
   describe('the "licence" data is imported and saved to the database', () => {
     it('returns the matching licence data', async () => {
-      await LegacyImportLicenceService.go(licenceRef)
+      await ImportLegacyProcessLicenceService.go(licenceRef)
 
       const licence = await LicenceModel.query().select('*').where('licenceRef', licenceRef).first()
 
@@ -82,7 +82,7 @@ describe('Legacy import licence service', () => {
     })
 
     it('returns defaulted columns', async () => {
-      await LegacyImportLicenceService.go(licenceRef)
+      await ImportLegacyProcessLicenceService.go(licenceRef)
 
       const licence = await LicenceModel.query().select('*').where('licenceRef', licenceRef).first()
 
@@ -94,7 +94,7 @@ describe('Legacy import licence service', () => {
 
   describe('the "licence versions" ', () => {
     it('returns the matching licence versions data', async () => {
-      await LegacyImportLicenceService.go(licenceRef)
+      await ImportLegacyProcessLicenceService.go(licenceRef)
 
       const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()
         .withGraphFetched('licenceVersions')
@@ -138,7 +138,7 @@ describe('Legacy import licence service', () => {
       })
 
       it('returns the matching licence versions purposes data', async () => {
-        await LegacyImportLicenceService.go(licenceRef)
+        await ImportLegacyProcessLicenceService.go(licenceRef)
 
         const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()
           .withGraphFetched('licenceVersions').withGraphFetched('licenceVersions.licenceVersionPurposes')
