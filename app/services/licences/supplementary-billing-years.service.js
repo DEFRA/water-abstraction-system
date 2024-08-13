@@ -5,7 +5,7 @@
  * @module SupplementaryBillingYearsService
  */
 
-const MONTHS_UNTIL_FINANCIAL_YEAR_START = 3
+const APRIL = 3
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 
 /**
@@ -44,12 +44,12 @@ function go (startDate, endDate) {
  * When flagging a licence for the supplementary bill run, we need to consider which financial years have been
  * impacted by the change. We only care about the financial year ends. So if the startDate for a new chargeVersion is
  * `2022-05-31`, the financial year end is considered to be `2023` since the financial years run April to March. Same
- * goes for if a charge versions endDate is `2024-04-05`, the financial year end is `2025`.
+ * goes for if a charge versions endDate is `2023-03-05`, the financial year end is `2023`.
  */
 function _getAdjustedFinancialYearEnd (date) {
   let year = date.getFullYear()
 
-  if (date.getMonth() >= MONTHS_UNTIL_FINANCIAL_YEAR_START) {
+  if (date.getMonth() >= APRIL) {
     year++
   }
 

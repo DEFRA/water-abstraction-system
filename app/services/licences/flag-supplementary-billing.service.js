@@ -17,7 +17,7 @@ const LicenceSupplementaryYearModel = require('../../models/licence-supplementar
  * @param {Object[]} years - An array of the years a change in the charge version or return affects
  */
 async function go (licence, years) {
-  const yearsForSupplementaryBilling = await _getSupplementaryBillingYears(licence.regionId, years)
+  const yearsForSupplementaryBilling = await _supplementaryBillingYears(licence.regionId, years)
 
   if (yearsForSupplementaryBilling.length > 0) {
     await _persistSupplementaryBillingYears(licence.id, yearsForSupplementaryBilling)
@@ -29,7 +29,7 @@ async function go (licence, years) {
  * supplementary bill run if the annual bill run hasn't been sent yet, as any licence changes will be handled in the
  * annual run.
  */
-async function _getSupplementaryBillingYears (regionId, years) {
+async function _supplementaryBillingYears (regionId, years) {
   const annualTwoPartTariffYears = []
 
   for (const year of years) {

@@ -92,7 +92,7 @@ async function viewReturns (request, h) {
   })
 }
 
-async function submitSupplementaryFlag (request, h) {
+async function supplementaryFlag (request, h) {
   await CheckSupplementaryBillingFlagService.go(request.payload)
 
   return h.response().code(204)
@@ -101,7 +101,7 @@ async function submitSupplementaryFlag (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  submitSupplementaryFlag,
+  supplementaryFlag,
   viewBills,
   viewCommunications,
   viewContacts,

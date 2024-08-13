@@ -26,23 +26,25 @@ const SupplementaryBillingYearsService = require('./supplementary-billing-years.
  * @param {Object} payload - The payload from the request to be validated
  */
 async function go (payload) {
-  if (payload.chargeVersionId) {
-    const { chargeReferences, licence, endDate, startDate } = await _getChargeVersion(payload.chargeVersionId)
-    const hasTwoPartTariffIndicator = _hasTwoPartTariffIndicators(chargeReferences)
+  if (!payload.chargeVersionId) {
+    return
+  }
 
-    if (!hasTwoPartTariffIndicator) {
-      return
-    }
+  const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
+  const hasTwoPartTariffIndicator = _hasTwoPartTariffIndicators(chargeReferences)
 
-    const years = await SupplementaryBillingYearsService.go(startDate, endDate)
+  if (!hasTwoPartTariffIndicator) {
+    return
+  }
 
-    if (years) {
-      await FlagSupplementaryBillingService.go(licence, years)
-    }
+  const years = await SupplementaryBillingYearsService.go(startDate, endDate)
+
+  if (years) {
+    await FlagSupplementaryBillingService.go(licence, years)
   }
 }
 
-async function _getChargeVersion (chargeVersionId) {
+async function _fetchChargeVersion (chargeVersionId) {
   return ChargeVersionModel.query()
     .findById(chargeVersionId)
     .withGraphFetched('chargeReferences')

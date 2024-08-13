@@ -75,7 +75,7 @@ const routes = [
     method: 'POST',
     path: '/licences/supplementary-flag',
     options: {
-      handler: LicencesController.submitSupplementaryFlag,
+      handler: LicencesController.supplementaryFlag,
       app: {
         plainOutput: true
       },
