@@ -31,9 +31,9 @@ async function go (payload) {
   }
 
   const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
-  const hasTwoPartTariffIndicator = _hasTwoPartTariffIndicators(chargeReferences)
+  const twoPartTariffIndicator = _twoPartTariffIndicators(chargeReferences)
 
-  if (!hasTwoPartTariffIndicator) {
+  if (!twoPartTariffIndicator) {
     return
   }
 
@@ -63,7 +63,7 @@ async function _fetchChargeVersion (chargeVersionId) {
     })
 }
 
-function _hasTwoPartTariffIndicators (chargeReferences) {
+function _twoPartTariffIndicators (chargeReferences) {
   return chargeReferences.some((chargeReference) => {
     return chargeReference.adjustments?.s127
   })
