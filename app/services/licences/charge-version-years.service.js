@@ -96,7 +96,7 @@ function _financialYearEndsToFlag (startDate, endDate) {
 
 function _hasTwoPartTariffIndicators (chargeReferences) {
   return chargeReferences.some((chargeReference) => {
-    return chargeReference.adjustments.s127
+    return chargeReference.adjustments?.s127
   })
 }
 
