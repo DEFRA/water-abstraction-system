@@ -115,6 +115,11 @@ jobs:
         run: |
           npm run lint
 
+      # Next generate docs. This checks any JSDoc changes are valid
+      - name: Run docs check
+        run: |
+          npm run docs
+
       - name: Database migrations
         run: |
           npm run migrate:test
