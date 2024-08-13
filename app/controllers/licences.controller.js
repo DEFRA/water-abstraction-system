@@ -93,7 +93,7 @@ async function viewReturns (request, h) {
 }
 
 async function supplementaryFlag (request, h) {
-  await CheckSupplementaryBillingFlagService.go(request.payload)
+  CheckSupplementaryBillingFlagService.go(request.payload)
 
   return h.response().code(204)
 }
