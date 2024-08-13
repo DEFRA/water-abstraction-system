@@ -23,6 +23,14 @@ class ChargeVersionNote extends BaseModel {
           from: 'chargeVersionNotes.id',
           to: 'chargeVersions.noteId'
         }
+      },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'chargeVersionNotes.userId',
+          to: 'users.id'
+        }
       }
     }
   }
