@@ -20,8 +20,7 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
  * If two-part tariff indicators are found, the function calculates the financial years impacted by the charge version's
  * start and end dates. It returns these years along with the associated licence information.
  *
- *
- * @param {String} chargeVersionId - The UUID of the charge version to check
+ * @param {String} chargeVersionId - The UUID of the newly created charge version
  *
  * @returns {Object} - An object with the impacted years and licence details of that charge version
  */
@@ -34,7 +33,7 @@ async function go (chargeVersionId) {
     return []
   }
 
-  const years = _getFinancialYears(startDate, endDate)
+  const years = _financialYearEndsToFlag(startDate, endDate)
 
   return {
     years,
@@ -43,7 +42,7 @@ async function go (chargeVersionId) {
 }
 
 async function _getChargeVersion (chargeVersionId) {
-  const chargeVersion = await ChargeVersionModel.query()
+  return ChargeVersionModel.query()
     .findById(chargeVersionId)
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
@@ -59,8 +58,6 @@ async function _getChargeVersion (chargeVersionId) {
         'regionId'
       ])
     })
-
-  return chargeVersion
 }
 
 /**
@@ -79,7 +76,7 @@ function _getAdjustedFinancialYearEnd (date) {
   return year
 }
 
-function _getFinancialYears (startDate, endDate) {
+function _financialYearEndsToFlag (startDate, endDate) {
   const years = []
 
   const startYear = _getAdjustedFinancialYearEnd(startDate)
