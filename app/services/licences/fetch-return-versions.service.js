@@ -29,7 +29,8 @@ async function _fetch (licenceId) {
     ])
     .where('licenceId', licenceId)
     .orderBy([
-      { column: 'startDate', order: 'desc' }
+      { column: 'startDate', order: 'desc' },
+      { column: 'version', order: 'desc' }
     ])
 }
 
