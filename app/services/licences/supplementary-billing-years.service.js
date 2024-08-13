@@ -25,9 +25,9 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 function go (startDate, endDate) {
   const years = []
 
-  const startYear = _getAdjustedFinancialYearEnd(startDate)
+  const startYear = _adjustedFinancialYearEnd(startDate)
   // As some changes don't have an end date we need to take this into consideration
-  const endYear = _getAdjustedFinancialYearEnd(endDate || new Date())
+  const endYear = _adjustedFinancialYearEnd(endDate || new Date())
 
   for (let year = startYear; year <= endYear; year++) {
     // SROC supplementary billing started in the financial year 2022/2023. Anything before this year is not considered
@@ -46,7 +46,7 @@ function go (startDate, endDate) {
  * `2022-05-31`, the financial year end is considered to be `2023` since the financial years run April to March. Same
  * goes for if a charge versions endDate is `2023-03-05`, the financial year end is `2023`.
  */
-function _getAdjustedFinancialYearEnd (date) {
+function _adjustedFinancialYearEnd (date) {
   let year = date.getFullYear()
 
   if (date.getMonth() >= APRIL) {
