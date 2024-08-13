@@ -10,11 +10,13 @@
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (contacts) {
+function go (licence) {
+  const { id: licenceId, licenceDocumentHeader, licenceRef } = licence
+
   return {
-    customerId: contacts.licenceRef,
-    customerName: contacts.licenceName,
-    licenceContacts: _licenceContacts(contacts)
+    licenceId,
+    licenceRef,
+    licenceContacts: _licenceContacts(licenceDocumentHeader)
   }
 }
 
@@ -26,12 +28,13 @@ function _licenceContactName (contact) {
   return contact.name
 }
 
-function _licenceContacts (contacts) {
-  const licenceContactData = contacts.metadata.contacts;
-  console.log("data in licenceContactData", licenceContactData);
+function _licenceContacts (licenceDocumentHeader) {
+  const licenceContactData = licenceDocumentHeader.metadata.contacts
+
+  console.log("data in licenceContactData", licenceContactData)
   const filteredContacts = licenceContactData.filter(data => {
     return data.role === 'Licence holder' || data.role === 'Returns to' || data.role === 'Licence contact'
-  });
+  })
 
   return filteredContacts.map((contact) => {
     return {

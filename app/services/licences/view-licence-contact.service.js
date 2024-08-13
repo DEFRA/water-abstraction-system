@@ -4,24 +4,45 @@
  * Orchestrates fetching and presenting the data needed for the view licence contact details link page
  * @module ViewLicenceContactService
  */
-const CustomerContactsPresenter = require('../../presenters/licences/licence-contact.presenter.js')
-const FetchLicenceContactService = require('./fetch-licence-contact.service.js')
+
+const LicenceContactPresenter = require('../../presenters/licences/licence-contact.presenter.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence contact details link page
  *
- * @param {string} id - The UUID of the licence
+ * @param {string} licenceId - The UUID of the licence
  *
+ * @returns {Promise<Object>} The view data for the licence contacts page
  */
+async function go (licenceId) {
+  const licence = await _fetchLicenceDetails(licenceId)
 
+  const formattedData = await LicenceContactPresenter.go(licence)
 
-
-async function go (id) {
-  const licenceContact = await FetchLicenceContactService.go(id)
-  const licenceContactData = await CustomerContactsPresenter.go(licenceContact)
-
-  return licenceContactData
+  return {
+    activeNavBar: 'search',
+    pageTitle: 'Licence contact details',
+    ...formattedData
+  }
 }
+
+async function _fetchLicenceDetails (licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select([
+      'id',
+      'licenceRef'
+    ])
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'id',
+        'metadata'
+      ])
+    })
+}
+
 module.exports = {
   go
 }
