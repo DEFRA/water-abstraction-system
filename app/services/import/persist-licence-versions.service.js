@@ -84,10 +84,7 @@ async function _saveLicenceVersion (version, licenceId) {
   return LicenceVersionModel.query()
     .insert({
       ...version,
-      licenceId,
-      // TODO: lift out to presenters
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      licenceId
     })
     .onConflict('externalId')
     .merge([

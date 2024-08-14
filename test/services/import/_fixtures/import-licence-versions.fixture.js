@@ -29,7 +29,9 @@ function _createtLicenceVersion () {
     increment: 0,
     issue: 100,
     startDate: '2001-01-01',
-    status: 'superseded'
+    status: 'superseded',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 }
 

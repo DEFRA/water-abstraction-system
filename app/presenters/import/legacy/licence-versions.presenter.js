@@ -40,7 +40,9 @@ function _mapLicenceVersions (licenceVersions) {
       issue: Number(issue),
       startDate: formatStandardDateToISO(licenceVersion.EFF_ST_DATE),
       status: statuses[licenceVersion.STATUS],
-      purposes: _mapPurposes(licenceVersion)
+      purposes: _mapPurposes(licenceVersion),
+      updatedAt: new Date(),
+      createdAt: new Date()
     }
   })
 }
