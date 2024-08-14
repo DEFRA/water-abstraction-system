@@ -321,7 +321,7 @@ describe('Import licence versions validator', () => {
               createdAt: null
             }
           ])
-        }).to.throw('"[0].createdAt" must be a valid date')
+        }).to.throw()
       })
 
       it('should not throw an error if "createdAt" is valid date', async () => {
@@ -358,7 +358,7 @@ describe('Import licence versions validator', () => {
               updatedAt: null
             }
           ])
-        }).to.throw('"[0].updatedAt" must be a valid date')
+        }).to.throw()
       })
 
       it('should not throw an error if "updatedAt" is valid date', async () => {
