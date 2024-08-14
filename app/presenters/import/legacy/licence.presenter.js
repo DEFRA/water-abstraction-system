@@ -24,7 +24,7 @@ function _mapLicence (licence, licenceVersions) {
     expiredDate: formatStandardDateToISO(licence.EXPIRY_DATE),
     lapsedDate: formatStandardDateToISO(licence.LAPSED_DATE),
     licenceRef: licence.LIC_NO,
-    naldRegionId: parseInt(licence.FGAC_REGION_CODE, 10),
+    regionId: parseInt(licence.FGAC_REGION_CODE, 10),
     regions: _regions(licence),
     revokedDate: formatStandardDateToISO(licence.REV_DATE),
     startDate: _startDate(licence, licenceVersions),

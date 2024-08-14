@@ -40,7 +40,7 @@ const _schema = Joi.object({
   expiredDate: Joi.date().iso().allow(null),
   lapsedDate: Joi.date().iso().allow(null),
   licenceRef: Joi.string().required(),
-  naldRegionId: Joi.number().required(),
+  regionId: Joi.number().required(),
   regions: Joi.object({
     regionalChargeArea: Joi.string().required(),
     localEnvironmentAgencyPlanCode: Joi.string().required(),

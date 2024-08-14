@@ -120,22 +120,22 @@ describe('Import licence validator', () => {
     })
   })
 
-  describe('"naldRegionId" property', () => {
-    it('should throw an error - naldRegionId - must be a number', async () => {
+  describe('"regionId" property', () => {
+    it('should throw an error - regionId - must be a number', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 'l',
-          naldRegionId: 'one'
+          regionId: 'one'
         })
-      }).to.throw('"naldRegionId" must be a number')
+      }).to.throw('"regionId" must be a number')
     })
 
-    it('should throw an error - naldRegionId - is required', async () => {
+    it('should throw an error - regionId - is required', async () => {
       expect(() => {
         return ImportLicenceValidator.go({
           licenceRef: 'l'
         })
-      }).to.throw('"naldRegionId" is required')
+      }).to.throw('"regionId" is required')
     })
   })
 

@@ -12,7 +12,7 @@ function importLicence () {
     expiredDate: '2015-03-31',
     lapsedDate: null,
     licenceRef: generateLicenceRef(),
-    naldRegionId: region.naldRegionId,
+    regionId: region.naldRegionId,
     regions: {
       historicalAreaCode: 'RIDIN',
       regionalChargeArea: 'Yorkshire',

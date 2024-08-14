@@ -49,7 +49,6 @@ describe('Persist licence service', () => {
       },
       revokedDate: null,
       startDate: '2005-06-03',
-      updatedAt: savedLicence.updatedAt.toISOString(),
       waterUndertaker: false
     })
   })
@@ -96,7 +95,7 @@ describe('Persist licence service', () => {
     it('updates the licence', async () => {
       await PersistLicenceService.go({
         licenceRef: licence.licenceRef,
-        naldRegionId: region.naldRegionId,
+        regionId: region.naldRegionId,
         //  not null constraints
         waterUndertaker: true,
         regions: licence.regions,

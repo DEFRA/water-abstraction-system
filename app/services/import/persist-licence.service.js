@@ -11,38 +11,20 @@ const RegionModel = require('../../models/region.model.js')
 /**
  * Saves the licence versions, purposes and conditions
  *
- * @param {object} licence - the mapped and validated licence to persist
+ * @param {object} licenceData - the mapped and validated licence to persist
  * @returns {Promise<module:LicenceModel>}
  */
-async function go (licence) {
-  const {
-    expiredDate,
-    lapsedDate,
-    licenceRef,
-    naldRegionId,
-    regions,
-    revokedDate,
-    startDate,
-    waterUndertaker
-  } = licence
-
+async function go (licenceData) {
   const region = await RegionModel.query()
     .select(['id'])
-    .where('naldRegionId', naldRegionId)
+    .where('naldRegionId', licenceData.regionId)
     .limit(1)
     .first()
 
   return LicenceModel.query()
     .insert({
-      expiredDate,
-      waterUndertaker,
-      lapsedDate,
-      licenceRef,
-      regionId: region.id,
-      regions,
-      revokedDate,
-      startDate,
-      updatedAt: new Date().toISOString()
+      ...licenceData,
+      regionId: region.id
     })
     .onConflict('licenceRef')
     .merge([

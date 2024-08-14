@@ -35,7 +35,7 @@ describe('Import legacy licence presenter', () => {
         standardUnitChargeCode: 'YORKI',
         localEnvironmentAgencyPlanCode: 'AIREL'
       },
-      naldRegionId: 3,
+      regionId: 3,
       expiredDate: '2015-03-31',
       lapsedDate: null,
       revokedDate: null
@@ -95,11 +95,11 @@ describe('Import legacy licence presenter', () => {
       })
     })
 
-    describe('the "naldRegionId" property', () => {
-      it('returns the FGAC_REGION_CODE as an integer assigned to naldRegionId', () => {
+    describe('the "regionId" property', () => {
+      it('returns the FGAC_REGION_CODE as an integer assigned to regionId', () => {
         const result = LicencePresenter.go(licence)
 
-        expect(result.naldRegionId).to.equal(3)
+        expect(result.regionId).to.equal(3)
       })
     })
 
