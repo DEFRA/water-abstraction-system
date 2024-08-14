@@ -4,13 +4,15 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
+const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const UserHelper = require('../support/helpers/user.helper.js')
+const UserModel = require('../../app/models/user.model.js')
 
 // Thing under test
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
@@ -18,7 +20,7 @@ const ChargeVersionNoteModel = require('../../app/models/charge-version-note.mod
 describe('Charge Version Note model', () => {
   let testRecord
 
-  before(async () => {
+  beforeEach(async () => {
     testRecord = await ChargeVersionNoteHelper.add()
   })
 
@@ -34,28 +36,56 @@ describe('Charge Version Note model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge version', () => {
+      let testChargeVersion
+
       beforeEach(async () => {
-        await ChargeVersionHelper.add({ noteId: testRecord.id })
+        testChargeVersion = await ChargeVersionHelper.add({ noteId: testRecord.id })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionNoteModel.query()
-          .withGraphFetched('chargeVersion')
+          .innerJoinRelated('chargeVersion')
 
         expect(query).to.exist()
+      })
+
+      it('can eager load the charge version', async () => {
+        const result = await ChargeVersionNoteModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersion')
+
+        expect(result).to.be.instanceOf(ChargeVersionNoteModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersion).to.be.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).to.equal(testChargeVersion)
       })
     })
 
     describe('when linking to user', () => {
+      let testUser
+
       beforeEach(async () => {
-        await UserHelper.add({ id: testRecord.userId })
+        testUser = await UserHelper.add({ id: testRecord.userId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionNoteModel.query()
-          .withGraphFetched('user')
+          .innerJoinRelated('user')
 
         expect(query).to.exist()
+      })
+
+      it('can eager load the user', async () => {
+        const result = await ChargeVersionNoteModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('user')
+
+        expect(result).to.be.instanceOf(ChargeVersionNoteModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.user).to.be.instanceOf(UserModel)
+        expect(result.user).to.equal(testUser)
       })
     })
   })
