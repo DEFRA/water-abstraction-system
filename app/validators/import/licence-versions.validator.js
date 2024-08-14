@@ -94,9 +94,7 @@ const _schema = Joi.array().min(1).items(
     issue: Joi.number().required(),
     startDate: Joi.date().iso().required(),
     status: Joi.string().required().custom(_isValidStatus),
-    purposes: _purposeSchema,
-    createdAt: Joi.date().required(),
-    updatedAt: Joi.date().required()
+    purposes: _purposeSchema
   })
     .label('Licence version')
 )

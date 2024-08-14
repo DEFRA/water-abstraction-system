@@ -61,7 +61,7 @@ describe('Persist licence versions and licence versions purposes service', () =>
       const [savedLicenceVersionPurpose] = savedLicenceVersion.licenceVersionPurposes
 
       expect(savedLicenceVersion).to.equal({
-        createdAt: licenceVersion.createdAt,
+        createdAt: savedLicenceVersion.createdAt,
         endDate: new Date('2002-01-01'),
         externalId: licenceVersion.externalId,
         id: savedLicenceVersion.id,
@@ -93,7 +93,7 @@ describe('Persist licence versions and licence versions purposes service', () =>
         ],
         startDate: new Date('2001-01-01'),
         status: 'superseded',
-        updatedAt: licenceVersion.updatedAt
+        updatedAt: savedLicenceVersion.updatedAt
       })
     })
 

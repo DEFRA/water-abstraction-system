@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,9 +16,6 @@ const LicenceVersionsPresenter =
   require('../../../../app/presenters/import/legacy/licence-versions.presenter.js')
 
 describe('Import legacy licence versions presenter', () => {
-  const testDate = new Date('2023-08-21')
-
-  let clock
   let licenceVersions
   let purpose
   let version
@@ -29,13 +25,6 @@ describe('Import legacy licence versions presenter', () => {
     version = FixtureLegacyLicenceVersion.create()
 
     licenceVersions = [{ ...version, purposes: [{ ...purpose }] }]
-
-    clock = Sinon.useFakeTimers(testDate)
-  })
-
-  afterEach(() => {
-    clock.restore()
-    Sinon.restore()
   })
 
   it('returns the licence version', () => {
@@ -66,9 +55,7 @@ describe('Import legacy licence versions presenter', () => {
         }
       ],
       startDate: '2005-06-05',
-      status: 'superseded',
-      createdAt: testDate,
-      updatedAt: testDate
+      status: 'superseded'
     }])
   })
 
