@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
@@ -13,23 +14,34 @@ const DetermineSupplementaryBillingYearsService = require('../../../app/services
 describe('Supplementary Billing Years Service', () => {
   let startDate
   let endDate
+  let clock
+  let testDate
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when given a start date beginning before April', () => {
     beforeEach(() => {
       startDate = new Date('2023-03-20')
     })
 
+    afterEach(() => {
+      clock.restore()
+    })
+
     describe('and no end date', () => {
       beforeEach(() => {
+        testDate = new Date('2024-03-31')
+        clock = Sinon.useFakeTimers(testDate)
+
         endDate = null
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
         const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
 
-        const financialYears = _financialYears()
-
-        expect(result).to.equal(financialYears)
+        expect(result).to.equal([2023, 2024])
       })
     })
 
@@ -63,17 +75,22 @@ describe('Supplementary Billing Years Service', () => {
       startDate = new Date('2022-04-20')
     })
 
+    afterEach(() => {
+      clock.restore()
+    })
+
     describe('and no end date', () => {
       beforeEach(() => {
+        testDate = new Date('2024-03-31')
+        clock = Sinon.useFakeTimers(testDate)
+
         endDate = null
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
         const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
 
-        const financialYears = _financialYears()
-
-        expect(result).to.equal(financialYears)
+        expect(result).to.equal([2023, 2024])
       })
     })
 
@@ -102,18 +119,3 @@ describe('Supplementary Billing Years Service', () => {
     })
   })
 })
-
-function _financialYears () {
-  let currentDate = new Date().getFullYear()
-
-  if (new Date().getMonth() >= 3) {
-    currentDate++
-  }
-  const years = []
-
-  for (let year = 2023; year <= currentDate; year++) {
-    years.push(year)
-  }
-
-  return years
-}
