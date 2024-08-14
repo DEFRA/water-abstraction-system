@@ -56,9 +56,7 @@ async function _saveLicenceVersionPurposes (purpose, licenceVersionId) {
       ...purpose,
       primaryPurposeId: primaryPurpose.id,
       secondaryPurposeId: secondaryPurpose.id,
-      purposeId: purposeUse.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      purposeId: purposeUse.id
     })
     .onConflict('externalId')
     .merge([
@@ -84,10 +82,7 @@ async function _saveLicenceVersion (version, licenceId) {
   return LicenceVersionModel.query()
     .insert({
       ...version,
-      licenceId,
-      // TODO: lift out to presenters
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      licenceId
     })
     .onConflict('externalId')
     .merge([
