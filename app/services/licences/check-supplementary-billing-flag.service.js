@@ -7,7 +7,7 @@
 
 const ChargeVersionModel = require('../../models/charge-version.model.js')
 const FlagSupplementaryBillingService = require('./flag-supplementary-billing.service.js')
-const SupplementaryBillingYearsService = require('./supplementary-billing-years.service.js')
+const DetermineSupplementaryBillingYearsService = require('./determine-supplementary-billing-years.service.js')
 
 /**
  * Orchestrates flagging a licence for supplementary billing based on the provided charge version.
@@ -16,8 +16,8 @@ const SupplementaryBillingYearsService = require('./supplementary-billing-years.
  * charge references and licence details.
  *
  * If the charge version has any two-part tariff indicators on any of its charge references then it calls the
- * `SupplementaryBillingYearsService` where it will work out which financial year ends have been affected by the change
- * in the charge version.
+ * `DetermineSupplementaryBillingYearsService` where it will work out which financial year ends have been affected by
+ * the change in the charge version.
  *
  * If there are years that have been affected, these are then passed to our `FlagSupplementaryBillingService`, which
  * checks if a bill run has already been sent for that affected year, and if it has it will then persist the flag in the
@@ -26,21 +26,25 @@ const SupplementaryBillingYearsService = require('./supplementary-billing-years.
  * @param {Object} payload - The payload from the request to be validated
  */
 async function go (payload) {
-  if (!payload.chargeVersionId) {
-    return
-  }
+  try {
+    if (!payload.chargeVersionId) {
+      return
+    }
 
-  const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
-  const twoPartTariffIndicator = _twoPartTariffIndicators(chargeReferences)
+    const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
+    const twoPartTariffIndicator = _twoPartTariffIndicators(chargeReferences)
 
-  if (!twoPartTariffIndicator) {
-    return
-  }
+    if (!twoPartTariffIndicator) {
+      return
+    }
 
-  const years = await SupplementaryBillingYearsService.go(startDate, endDate)
+    const years = await DetermineSupplementaryBillingYearsService.go(startDate, endDate)
 
-  if (years) {
-    await FlagSupplementaryBillingService.go(licence, years)
+    if (years) {
+      await FlagSupplementaryBillingService.go(licence, years)
+    }
+  } catch (error) {
+    global.GlobalNotifier.omfg('Supplementary Billing Flag failed', null, error)
   }
 }
 

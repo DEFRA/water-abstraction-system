@@ -16,7 +16,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const FlagSupplementaryBillingService = require('../../../app/services/licences/flag-supplementary-billing.service.js')
-const SupplementaryBillingYearsService = require('../../../app/services/licences/supplementary-billing-years.service.js')
+const DetermineSupplementaryBillingYearsService = require('../../../app/services/licences/determine-supplementary-billing-years.service.js')
 
 // Thing under test
 const CheckSupplementaryBillingFlagService = require('../../../app/services/licences/check-supplementary-billing-flag.service.js')
@@ -26,11 +26,11 @@ describe('Check Supplementary Billing Flag Service', () => {
   let chargeVersion
   let payload
   let licence
-  let supplementaryBillingYearsServiceStub
+  let determineSupplementaryBillingYearsServiceStub
   let flagSupplementaryBillingServiceStub
 
   beforeEach(async () => {
-    supplementaryBillingYearsServiceStub = Sinon.stub(SupplementaryBillingYearsService, 'go').resolves([2023])
+    determineSupplementaryBillingYearsServiceStub = Sinon.stub(DetermineSupplementaryBillingYearsService, 'go').resolves([2023])
     flagSupplementaryBillingServiceStub = Sinon.stub(FlagSupplementaryBillingService, 'go').resolves()
 
     region = await RegionHelper.select()
@@ -56,19 +56,19 @@ describe('Check Supplementary Billing Flag Service', () => {
           await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id, adjustments: { s127: true } })
         })
 
-        it('passes the charge versions start and end date to the "SupplementaryBillingYearsService"', async () => {
+        it('passes the charge versions start and end date to the "DetermineSupplementaryBillingYearsService"', async () => {
           await CheckSupplementaryBillingFlagService.go(payload)
 
           const startDate = chargeVersion.startDate
           const endDate = chargeVersion.endDate
 
-          expect(supplementaryBillingYearsServiceStub.calledWith(startDate, endDate)).to.be.true()
+          expect(determineSupplementaryBillingYearsServiceStub.calledWith(startDate, endDate)).to.be.true()
         })
 
-        it('it calls the "SupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
+        it('it calls the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
           await CheckSupplementaryBillingFlagService.go(payload)
 
-          expect(supplementaryBillingYearsServiceStub.called).to.be.true()
+          expect(determineSupplementaryBillingYearsServiceStub.called).to.be.true()
           expect(flagSupplementaryBillingServiceStub.called).to.be.true()
         })
       })
@@ -78,10 +78,10 @@ describe('Check Supplementary Billing Flag Service', () => {
           await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
         })
 
-        it('does not call the "SupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
+        it('does not call the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
           await CheckSupplementaryBillingFlagService.go(payload)
 
-          expect(supplementaryBillingYearsServiceStub.called).to.be.false()
+          expect(determineSupplementaryBillingYearsServiceStub.called).to.be.false()
           expect(flagSupplementaryBillingServiceStub.called).to.be.false()
         })
       })
