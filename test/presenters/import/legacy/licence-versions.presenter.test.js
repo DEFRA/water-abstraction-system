@@ -62,9 +62,7 @@ describe('Import legacy licence versions presenter', () => {
           purposeId: '160',
           secondaryPurposeId: 'OTI',
           timeLimitedEndDate: null,
-          timeLimitedStartDate: null,
-          createdAt: testDate,
-          updatedAt: testDate
+          timeLimitedStartDate: null
         }
       ],
       startDate: '2005-06-05',
@@ -425,24 +423,6 @@ describe('Import legacy licence versions presenter', () => {
 
             expect(result.timeLimitedStartDate).to.be.null()
           })
-        })
-      })
-
-      describe('the "createdAt" property', () => {
-        it('returns the current date', () => {
-          const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
-
-          expect(result.createdAt).to.be.date()
-          expect(result.createdAt).to.be.equal(testDate)
-        })
-      })
-
-      describe('the "updatedAt" property', () => {
-        it('returns the current date', () => {
-          const [{ purposes: [result] }] = LicenceVersionsPresenter.go(licenceVersions)
-
-          expect(result.updatedAt).to.be.date()
-          expect(result.updatedAt).to.be.equal(testDate)
         })
       })
     })

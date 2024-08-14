@@ -56,7 +56,9 @@ async function _saveLicenceVersionPurposes (purpose, licenceVersionId) {
       ...purpose,
       primaryPurposeId: primaryPurpose.id,
       secondaryPurposeId: secondaryPurpose.id,
-      purposeId: purposeUse.id
+      purposeId: purposeUse.id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     })
     .onConflict('externalId')
     .merge([

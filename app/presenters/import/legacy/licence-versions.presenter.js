@@ -69,9 +69,7 @@ const _mapPurpose = (purpose) => {
     secondaryPurposeId: purpose.APUR_APSE_CODE,
     purposeId: purpose.APUR_APUS_CODE,
     timeLimitedEndDate: formatStandardDateToISO(purpose.TIMELTD_END_DATE),
-    timeLimitedStartDate: formatStandardDateToISO(purpose.TIMELTD_ST_DATE),
-    updatedAt: new Date(),
-    createdAt: new Date()
+    timeLimitedStartDate: formatStandardDateToISO(purpose.TIMELTD_ST_DATE)
   }
 }
 
