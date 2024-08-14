@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -18,10 +18,15 @@ const UserModel = require('../../app/models/user.model.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 
 describe('Charge Version Note model', () => {
+  let testChargeVersion
   let testRecord
+  let testUser
 
-  beforeEach(async () => {
-    testRecord = await ChargeVersionNoteHelper.add()
+  before(async () => {
+    testUser = UserHelper.select()
+    console.log('🚀🚀🚀 ~ testUser:', testUser)
+    testRecord = await ChargeVersionNoteHelper.add({ userId: testUser.id })
+    testChargeVersion = await ChargeVersionHelper.add({ noteId: testRecord.id })
   })
 
   describe('Basic query', () => {
@@ -36,12 +41,6 @@ describe('Charge Version Note model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge version', () => {
-      let testChargeVersion
-
-      beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add({ noteId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionNoteModel.query()
           .innerJoinRelated('chargeVersion')
@@ -63,12 +62,6 @@ describe('Charge Version Note model', () => {
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = await UserHelper.add({ id: testRecord.userId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionNoteModel.query()
           .innerJoinRelated('user')
@@ -85,7 +78,7 @@ describe('Charge Version Note model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
       })
     })
   })
