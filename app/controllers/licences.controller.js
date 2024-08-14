@@ -67,10 +67,9 @@ async function viewLicenceContact (request, h) {
   const { id } = request.params
 
   const data = await ViewLicenceContactService.go(id)
-  console.log("print data", data)
 
   return h.view(ViewLicenceContactPage, {
-   ...data
+    ...data
   })
 }
 

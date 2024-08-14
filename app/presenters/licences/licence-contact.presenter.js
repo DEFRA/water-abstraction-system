@@ -20,9 +20,62 @@ function go (licence) {
   }
 }
 
+function _licenceContactAddress (contact) {
+  const contactAddress = []
+
+  if (contact.addressLine1) {
+    contactAddress.push(`${contact.addressLine1}`)
+  }
+  if (contact.addressLine2) {
+    contactAddress.push(`${contact.addressLine2}`)
+  }
+  if (contact.addressLine3) {
+    contactAddress.push(`${contact.addressLine3}`)
+  }
+  if (contact.addressLine4) {
+    contactAddress.push(`${contact.addressLine4}`)
+  }
+  if (contact.town) {
+    contactAddress.push(`${contact.town}`)
+  }
+  if (contact.county) {
+    contactAddress.push(`${contact.county}`)
+  }
+  if (contact.postcode) {
+    contactAddress.push(`${contact.postcode}`)
+  }
+  if (contact.country) {
+    contactAddress.push(`${contact.country}`)
+  }
+
+  return {
+    contactAddress
+  }
+}
+
 function _licenceContactName (contact) {
   if (contact.type === 'Person') {
-    return `${contact.forename || ''} ${contact.name}`.trim()
+    const initials = _determineInitials(contact)
+
+    const allNameParts = [
+      contact.salutation,
+      initials || contact.forename, // if we have initials use them else use firstName
+      contact.name
+    ]
+
+    function _determineInitials (contact) {
+      if (contact.initials) {
+        return contact.initials
+      }
+
+      return null
+    }
+
+    const onlyPopulatedNameParts = allNameParts.filter((item) => {
+      return item
+    })
+
+    return onlyPopulatedNameParts.join(' ')
   }
 
   return contact.name
@@ -30,24 +83,13 @@ function _licenceContactName (contact) {
 
 function _licenceContacts (licenceDocumentHeader) {
   const licenceContactData = licenceDocumentHeader.metadata.contacts
-
-  console.log("data in licenceContactData", licenceContactData)
-  const filteredContacts = licenceContactData.filter(data => {
+  const filteredContacts = licenceContactData.filter((data) => {
     return data.role === 'Licence holder' || data.role === 'Returns to' || data.role === 'Licence contact'
   })
 
   return filteredContacts.map((contact) => {
     return {
-      address: {
-        addressLine1: contact.addressLine1,
-        addressLine2: contact.addressLine2,
-        addressLine3: contact.addressLine3,
-        addressLine4: contact.addressLine4,
-        town: contact.town,
-        county: contact.county,
-        postcode: contact.postcode,
-        country: contact.country
-      },
+      address: _licenceContactAddress(contact),
       role: contact.role,
       name: _licenceContactName(contact)
     }
