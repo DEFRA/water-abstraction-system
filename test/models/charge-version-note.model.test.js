@@ -24,7 +24,6 @@ describe('Charge Version Note model', () => {
 
   before(async () => {
     testUser = UserHelper.select()
-    console.log('🚀🚀🚀 ~ testUser:', testUser)
     testRecord = await ChargeVersionNoteHelper.add({ userId: testUser.id })
     testChargeVersion = await ChargeVersionHelper.add({ noteId: testRecord.id })
   })
