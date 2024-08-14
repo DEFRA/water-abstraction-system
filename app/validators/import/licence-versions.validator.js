@@ -80,7 +80,9 @@ const _purposeSchema =
       externalId: Joi.string().required(),
       instantQuantity: Joi.number().allow(null),
       hourlyQuantity: Joi.number().allow(null),
-      dailyQuantity: Joi.number().allow(null)
+      dailyQuantity: Joi.number().allow(null),
+      createdAt: Joi.date().required(),
+      updatedAt: Joi.date().required()
     }).label('Licence versions purpose')
   ).label('Licence versions purposes').messages({
     'array.min': 'A licence version must have at least one Licence version purpose'

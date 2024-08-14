@@ -374,7 +374,7 @@ describe('Import licence versions validator', () => {
     })
 
     describe('"purposes" property', () => {
-      describe('when no purposes a', () => {
+      describe('when no purposes', () => {
         let licenceVersionNoPurposes
 
         beforeEach(() => {
@@ -1019,6 +1019,76 @@ describe('Import licence versions validator', () => {
               {
                 ...licenceVersion,
                 purposes: [{ ...licenceVersionPurpose, timeLimitedStartDate: '2001-01-01' }]
+              }
+            ])
+          }).to.not.throw()
+        })
+      })
+
+      describe('"createdAt" property', () => {
+        it('should throw an error if "createdAt" is not a valid date', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: [{ ...licenceVersionPurpose, createdAt: '' }]
+              }
+            ])
+          }).to.throw('"[0].purposes[0].createdAt" must be a valid date')
+        })
+
+        it('should throw an error if "createdAt" is null', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: [{ ...licenceVersionPurpose, createdAt: null }]
+              }
+            ])
+          }).to.throw('"[0].purposes[0].createdAt" must be a valid date')
+        })
+
+        it('should not throw an error if "createdAt" is valid date', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: licenceVersionPurposes
+              }
+            ])
+          }).to.not.throw()
+        })
+      })
+
+      describe('"updatedAt" property', () => {
+        it('should throw an error if "updatedAt" is not a valid date', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: [{ ...licenceVersionPurpose, updatedAt: '' }]
+              }
+            ])
+          }).to.throw('"[0].purposes[0].updatedAt" must be a valid date')
+        })
+
+        it('should throw an error if "updatedAt" is null', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: [{ ...licenceVersionPurpose, updatedAt: null }]
+              }
+            ])
+          }).to.throw('"[0].purposes[0].updatedAt" must be a valid date')
+        })
+
+        it('should not throw an error if "updatedAt" is valid date', async () => {
+          expect(() => {
+            return ImportLicenceVersionsValidator.go([
+              {
+                ...licenceVersion,
+                purposes: licenceVersionPurposes
               }
             ])
           }).to.not.throw()

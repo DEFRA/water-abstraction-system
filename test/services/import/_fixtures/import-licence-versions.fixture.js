@@ -18,7 +18,9 @@ function _createLicenceVersionPurpose () {
     secondaryPurposeId: 'OTI',
     purposeId: '160',
     timeLimitedEndDate: '2001-01-02',
-    timeLimitedStartDate: '2001-01-03'
+    timeLimitedStartDate: '2001-01-03',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 }
 
