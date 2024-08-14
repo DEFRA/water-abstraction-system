@@ -38,13 +38,13 @@ async function go (payload) {
       return
     }
 
-    const years = await DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+    const years = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
 
     if (years) {
       await FlagSupplementaryBillingService.go(licence, years)
     }
   } catch (error) {
-    global.GlobalNotifier.omfg('Supplementary Billing Flag failed', null, error)
+    global.GlobalNotifier.omfg('Supplementary Billing Flag failed', error)
   }
 }
 

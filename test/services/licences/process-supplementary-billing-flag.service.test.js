@@ -21,26 +21,27 @@ const DetermineSupplementaryBillingYearsService = require('../../../app/services
 // Thing under test
 const ProcessSupplementaryBillingFlagService = require('../../../app/services/licences/process-supplementary-billing-flag.service.js')
 
-describe('Check Supplementary Billing Flag Service', () => {
+describe('Process Supplementary Billing Flag Service', () => {
   let region
   let chargeVersion
   let payload
   let licence
   let determineSupplementaryBillingYearsServiceStub
   let flagSupplementaryBillingServiceStub
-
-  beforeEach(async () => {
-    determineSupplementaryBillingYearsServiceStub = Sinon.stub(DetermineSupplementaryBillingYearsService, 'go').resolves([2023])
-    flagSupplementaryBillingServiceStub = Sinon.stub(FlagSupplementaryBillingService, 'go').resolves()
-
-    region = await RegionHelper.select()
-  })
+  let notifierStub
 
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when given a valid payload', () => {
+    beforeEach(async () => {
+      determineSupplementaryBillingYearsServiceStub = Sinon.stub(DetermineSupplementaryBillingYearsService, 'go').resolves([2023])
+      flagSupplementaryBillingServiceStub = Sinon.stub(FlagSupplementaryBillingService, 'go').resolves()
+
+      region = await RegionHelper.select()
+    })
+
     describe('with a charge version id', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
@@ -85,6 +86,30 @@ describe('Check Supplementary Billing Flag Service', () => {
           expect(flagSupplementaryBillingServiceStub.called).to.be.false()
         })
       })
+    })
+  })
+
+  describe('when there is an error', () => {
+    beforeEach(() => {
+      // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+      // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+      // test we recreate the condition by setting it directly with our own stub
+      notifierStub = { omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
+
+      // To make the service fail, we have passed it a charge version that doesn't exist in the db
+      payload = {
+        chargeVersionId: '5db0060a-69ae-4312-a363-9cb580d19d92'
+      }
+    })
+
+    it('handles the error', async () => {
+      await ProcessSupplementaryBillingFlagService.go(payload)
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Supplementary Billing Flag failed')
+      expect(args[1]).to.be.an.error()
     })
   })
 })

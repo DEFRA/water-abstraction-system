@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const DetermineSupplementaryBillingYearsService = require('../../../app/services/licences/determine-supplementary-billing-years.service.js')
 
-describe('Supplementary Billing Years Service', () => {
+describe('Determine Supplementary Billing Years Service', () => {
   let startDate
   let endDate
   let clock
