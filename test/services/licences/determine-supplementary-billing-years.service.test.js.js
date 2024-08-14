@@ -17,8 +17,14 @@ describe('Determine Supplementary Billing Years Service', () => {
   let clock
   let testDate
 
+  beforeEach(() => {
+    testDate = new Date('2024-03-31')
+    clock = Sinon.useFakeTimers(testDate)
+  })
+
   afterEach(() => {
     Sinon.restore()
+    clock.restore()
   })
 
   describe('when given a start date beginning before April', () => {
@@ -26,15 +32,8 @@ describe('Determine Supplementary Billing Years Service', () => {
       startDate = new Date('2023-03-20')
     })
 
-    afterEach(() => {
-      clock.restore()
-    })
-
     describe('and no end date', () => {
       beforeEach(() => {
-        testDate = new Date('2024-03-31')
-        clock = Sinon.useFakeTimers(testDate)
-
         endDate = null
       })
 
@@ -75,15 +74,8 @@ describe('Determine Supplementary Billing Years Service', () => {
       startDate = new Date('2022-04-20')
     })
 
-    afterEach(() => {
-      clock.restore()
-    })
-
     describe('and no end date', () => {
       beforeEach(() => {
-        testDate = new Date('2024-03-31')
-        clock = Sinon.useFakeTimers(testDate)
-
         endDate = null
       })
 
