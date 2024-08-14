@@ -16,7 +16,6 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const FlagSupplementaryBillingService = require('../../../app/services/licences/flag-supplementary-billing.service.js')
-const DetermineSupplementaryBillingYearsService = require('../../../app/services/licences/determine-supplementary-billing-years.service.js')
 
 // Thing under test
 const ProcessSupplementaryBillingFlagService = require('../../../app/services/licences/process-supplementary-billing-flag.service.js')
@@ -26,7 +25,6 @@ describe('Process Supplementary Billing Flag Service', () => {
   let chargeVersion
   let payload
   let licence
-  let determineSupplementaryBillingYearsServiceStub
   let flagSupplementaryBillingServiceStub
   let notifierStub
 
@@ -36,7 +34,6 @@ describe('Process Supplementary Billing Flag Service', () => {
 
   describe('when given a valid payload', () => {
     beforeEach(async () => {
-      determineSupplementaryBillingYearsServiceStub = Sinon.stub(DetermineSupplementaryBillingYearsService, 'go').resolves([2023])
       flagSupplementaryBillingServiceStub = Sinon.stub(FlagSupplementaryBillingService, 'go').resolves()
 
       region = await RegionHelper.select()
@@ -45,7 +42,7 @@ describe('Process Supplementary Billing Flag Service', () => {
     describe('with a charge version id', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
-        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
+        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, endDate: '2023-31-03' })
 
         payload = {
           chargeVersionId: chargeVersion.id
@@ -57,32 +54,29 @@ describe('Process Supplementary Billing Flag Service', () => {
           await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id, adjustments: { s127: true } })
         })
 
-        it('passes the charge versions start and end date to the "DetermineSupplementaryBillingYearsService"', async () => {
+        it('marks the licence years needed supplementary billing', async () => {
           await ProcessSupplementaryBillingFlagService.go(payload)
+          const testYears = [2023]
+          const testLicence = {
+            id: licence.id,
+            regionId: region.id
+          }
 
-          const startDate = chargeVersion.startDate
-          const endDate = chargeVersion.endDate
-
-          expect(determineSupplementaryBillingYearsServiceStub.calledWith(startDate, endDate)).to.be.true()
-        })
-
-        it('it calls the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
-
-          expect(determineSupplementaryBillingYearsServiceStub.called).to.be.true()
           expect(flagSupplementaryBillingServiceStub.called).to.be.true()
+          expect(flagSupplementaryBillingServiceStub.calledWith(testLicence, testYears)).to.be.true()
         })
       })
+
+      // need to do another test, pass in pre srco 2pt years should be empty
 
       describe('without two-part tariff indicators', () => {
         beforeEach(async () => {
           await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
         })
 
-        it('does not call the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
+        it('does not mark the licence for supplementary billing', async () => {
           await ProcessSupplementaryBillingFlagService.go(payload)
 
-          expect(determineSupplementaryBillingYearsServiceStub.called).to.be.false()
           expect(flagSupplementaryBillingServiceStub.called).to.be.false()
         })
       })

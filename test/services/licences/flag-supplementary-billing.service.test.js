@@ -34,6 +34,17 @@ describe('Flag Supplementary Billing Service', () => {
 
   describe('when given licence details', () => {
     describe('and an array of years for supplementary billing', () => {
+      describe('and an annual two-part tariff bill run has not been sent for those years', () => {
+        it('does not persist the licence details in licenceSupplementaryYears table', async () => {
+          await FlagSupplementaryBillingService.go(licence, years)
+
+          const result = await LicenceSupplementaryYearModel.query()
+            .where('licenceId', licence.id)
+
+          expect(result).to.equal([])
+        })
+      })
+
       describe('and an annual two-part tariff bill run has been sent for those years', () => {
         beforeEach(async () => {
           await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId: region.id })
@@ -56,17 +67,6 @@ describe('Flag Supplementary Billing Service', () => {
           expect(result[1].billRunId).to.equal(null)
           expect(result[1].financialYearEnd).to.equal(2024)
           expect(result[1].twoPartTariff).to.equal(true)
-        })
-      })
-
-      describe('and an annual two-part tariff bill run has not been sent for those years', () => {
-        it('does not persist the licence details in licenceSupplementaryYears table', async () => {
-          await FlagSupplementaryBillingService.go(licence, years)
-
-          const result = await LicenceSupplementaryYearModel.query()
-            .where('licenceId', licence.id)
-
-          expect(result).to.equal([])
         })
       })
     })

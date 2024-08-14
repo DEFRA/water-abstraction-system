@@ -48,6 +48,8 @@ async function _persistSupplementaryBillingYears (licenceId, yearsForSupplementa
         financialYearEnd: year.toFinancialYearEnding,
         twoPartTariff: true
       })
+      // add where clause
+      // add test for this where clause 
   }
 }
 

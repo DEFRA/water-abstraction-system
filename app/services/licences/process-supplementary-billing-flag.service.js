@@ -31,10 +31,18 @@ async function go (payload) {
       return
     }
 
-    const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
-    const twoPartTariffIndicator = _twoPartTariffIndicators(chargeReferences)
+    // const { chargeReferences, licence, endDate, startDate } = await _fetchChargeVersion(payload.chargeVersionId)
+    // const twoPartTariffIndicator = _twoPartTariffIndicators(chargeReferences)
 
-    if (!twoPartTariffIndicator) {
+    let result
+
+    if (chargeVersionID) {
+      result = chargeVersionYearsService
+    } else if (returnVersionId) {
+      result = returnVersionYearService
+    }
+
+    if (!result.years) {
       return
     }
 
