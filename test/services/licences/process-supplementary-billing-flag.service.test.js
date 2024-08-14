@@ -109,7 +109,8 @@ describe('Process Supplementary Billing Flag Service', () => {
       const args = notifierStub.omfg.firstCall.args
 
       expect(args[0]).to.equal('Supplementary Billing Flag failed')
-      expect(args[1]).to.be.an.error()
+      expect(args[1]).to.equal(payload)
+      expect(args[2]).to.be.an.error()
     })
   })
 })
