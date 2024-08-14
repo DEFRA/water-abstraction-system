@@ -19,7 +19,7 @@ const FlagSupplementaryBillingService = require('../../../app/services/licences/
 const DetermineSupplementaryBillingYearsService = require('../../../app/services/licences/determine-supplementary-billing-years.service.js')
 
 // Thing under test
-const CheckSupplementaryBillingFlagService = require('../../../app/services/licences/check-supplementary-billing-flag.service.js')
+const ProcessSupplementaryBillingFlagService = require('../../../app/services/licences/process-supplementary-billing-flag.service.js')
 
 describe('Check Supplementary Billing Flag Service', () => {
   let region
@@ -57,7 +57,7 @@ describe('Check Supplementary Billing Flag Service', () => {
         })
 
         it('passes the charge versions start and end date to the "DetermineSupplementaryBillingYearsService"', async () => {
-          await CheckSupplementaryBillingFlagService.go(payload)
+          await ProcessSupplementaryBillingFlagService.go(payload)
 
           const startDate = chargeVersion.startDate
           const endDate = chargeVersion.endDate
@@ -66,7 +66,7 @@ describe('Check Supplementary Billing Flag Service', () => {
         })
 
         it('it calls the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
-          await CheckSupplementaryBillingFlagService.go(payload)
+          await ProcessSupplementaryBillingFlagService.go(payload)
 
           expect(determineSupplementaryBillingYearsServiceStub.called).to.be.true()
           expect(flagSupplementaryBillingServiceStub.called).to.be.true()
@@ -79,7 +79,7 @@ describe('Check Supplementary Billing Flag Service', () => {
         })
 
         it('does not call the "DetermineSupplementaryBillingYearsService" and "FlagSupplementaryBillingService"', async () => {
-          await CheckSupplementaryBillingFlagService.go(payload)
+          await ProcessSupplementaryBillingFlagService.go(payload)
 
           expect(determineSupplementaryBillingYearsServiceStub.called).to.be.false()
           expect(flagSupplementaryBillingServiceStub.called).to.be.false()

@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates flagging a licence for supplementary billing
- * @module CheckSupplementaryBillingFlagService
+ * @module ProcessSupplementaryBillingFlagService
  */
 
 const ChargeVersionModel = require('../../models/charge-version.model.js')

@@ -12,8 +12,8 @@ const { expect } = Code
 const Boom = require('@hapi/boom')
 
 // Things we need to stub
-const CheckSupplementaryBillingFlagService = require('../../app/services/licences/check-supplementary-billing-flag.service.js')
 const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
+const ProcessSupplementaryBillingFlagService = require('../../app/services/licences/process-supplementary-billing-flag.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
@@ -446,7 +446,7 @@ describe('Licences controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(CheckSupplementaryBillingFlagService, 'go').resolves()
+        Sinon.stub(ProcessSupplementaryBillingFlagService, 'go').resolves()
       })
 
       it('returns a 204 response', async () => {
