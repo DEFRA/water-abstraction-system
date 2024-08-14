@@ -27,7 +27,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * @param {String} regionId - UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<[module:BillingAccountModel]>} An array of `BillingAccountModel` to be billed and their relevant
+ * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
  */
 async function go (regionId, billingPeriod) {
