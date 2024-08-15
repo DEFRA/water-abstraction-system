@@ -24,64 +24,88 @@ describe('View Licence History presenter', () => {
       expect(result).to.equal({
         entries: [
           {
+            createdAt: new Date('2024-07-26T12:19:24.209Z'),
             createdBy: 'admin-internal@wrls.gov.uk',
             dateCreated: '26 July 2024',
+            displayNote: true,
+            notes: ['This is a test to see if history works'],
             link: '/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/charge-information/93b8a9c9-f420-44ca-b899-33aff7fe34e0/view',
-            note: 'This is a test to see if history works',
             reason: 'New licence',
-            source: 'wrls',
-            type: 'Charge version',
-            version: 106
+            type: {
+              index: 1,
+              name: 'Charge version'
+            }
           },
           {
+            createdAt: new Date('2024-07-22T09:04:40.136Z'),
             createdBy: 'admin-internal@wrls.gov.uk',
             dateCreated: '22 July 2024',
+            displayNote: false,
+            notes: [],
             link: '/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/charge-information/11b74e78-f797-4d20-aff9-8ef862e59eb6/view',
-            note: null,
             reason: 'Shell licence ',
-            source: 'wrls',
-            type: 'Charge version',
-            version: 105
+            type: {
+              index: 1,
+              name: 'Charge version'
+            }
           },
           {
+            createdAt: new Date('2023-12-14T21:31:31.690Z'),
             createdBy: 'Migrated from NALD',
-            dateCreated: '15 December 2023',
+            dateCreated: '14 December 2023',
+            displayNote: false,
+            notes: [],
+            link: null,
+            reason: null,
+            type: {
+              index: 0,
+              name: 'Licence version'
+            }
+          },
+          {
+            createdAt: new Date('2023-12-14T21:31:31.690Z'),
+            createdBy: 'Migrated from NALD',
+            dateCreated: '14 December 2023',
+            displayNote: false,
+            notes: [],
+            link: null,
+            reason: null,
+            type: {
+              index: 0,
+              name: 'Licence version'
+            }
+          },
+          {
+            createdAt: new Date('2008-11-06T00:00:00.000Z'),
+            createdBy: 'NALD_OWNER',
+            dateCreated: '6 November 2008',
+            displayNote: true,
+            notes: [
+              'Returns requirements changed - Operational Instruction 056_08',
+              '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,'
+            ],
             link: '/system/return-requirements/7b3b53c5-bffd-4d3a-a2a7-e3a66119b338/view',
-            note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD, 720 CMD, 720 CMD',
-            reason: null,
-            source: null,
-            type: 'Return version',
-            version: 4
+            reason: 'Changes to Returns requirements April 2008',
+            type: {
+              index: 2,
+              name: 'Return version'
+            }
           },
           {
-            createdBy: 'Migrated from NALD',
-            dateCreated: '15 December 2023',
+            createdAt: new Date('2008-11-06T00:00:00.000Z'),
+            createdBy: 'NALD_OWNER',
+            dateCreated: '6 November 2008',
+            displayNote: true,
+            notes: [
+              'Returns requirements changed - Operational Instruction 056_08',
+              '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,'
+            ],
             link: '/system/return-requirements/8eecdc56-cce3-47b8-a704-137b05503de4/view',
-            note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD, 720 CMD, 720 CMD',
-            reason: null,
-            source: null,
-            type: 'Return version',
-            version: 3
-          },
-          {
-            createdBy: 'Migrated from NALD',
-            dateCreated: '14 December 2023',
-            link: null,
-            note: null,
-            reason: '',
-            source: null,
-            type: 'Licence version',
-            version: 102
-          },
-          {
-            createdBy: 'Migrated from NALD',
-            dateCreated: '14 December 2023',
-            link: null,
-            note: null,
-            reason: '',
-            source: null,
-            type: 'Licence version',
-            version: 101
+            reason: 'Changes to Returns requirements April 2008',
+            type: {
+              index: 2,
+              name: 'Return version'
+            }
           }
         ],
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
@@ -101,6 +125,7 @@ function _licenceHistory () {
         reason: 'New licence',
         createdAt: new Date('2024-07-26T12:19:24.209Z'),
         createdBy: 'admin-internal@wrls.gov.uk',
+        modLog: '',
         note: 'This is a test to see if history works',
         versionNumber: 106,
         source: 'wrls'
@@ -112,6 +137,7 @@ function _licenceHistory () {
         reason: 'Shell licence ',
         createdAt: new Date('2024-07-22T09:04:40.136Z'),
         createdBy: 'admin-internal@wrls.gov.uk',
+        modLog: '',
         note: null,
         versionNumber: 105,
         source: 'wrls'
@@ -123,6 +149,7 @@ function _licenceHistory () {
         reason: '',
         createdAt: new Date('2023-12-14T21:31:31.690Z'),
         createdBy: '',
+        modLog: '',
         note: '',
         versionNumber: 102
       },
@@ -133,6 +160,7 @@ function _licenceHistory () {
         reason: '',
         createdAt: new Date('2023-12-14T21:31:31.690Z'),
         createdBy: '',
+        modLog: '',
         note: '',
         versionNumber: 101
       },
@@ -143,7 +171,14 @@ function _licenceHistory () {
         reason: null,
         createdAt: new Date('2023-12-15T14:00:04.098Z'),
         createdBy: null,
-        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD, 720 CMD, 720 CMD',
+        modLog: {
+          code: 'XRET',
+          note: 'Returns requirements changed - Operational Instruction 056_08',
+          createdAt: '2008-11-06',
+          createdBy: 'NALD_OWNER',
+          description: 'Changes to Returns requirements April 2008'
+        },
+        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,',
         versionNumber: 4
       },
       {
@@ -153,7 +188,14 @@ function _licenceHistory () {
         reason: null,
         createdAt: new Date('2023-12-15T14:00:04.098Z'),
         createdBy: null,
-        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD, 720 CMD, 720 CMD',
+        modLog: {
+          code: 'XRET',
+          note: 'Returns requirements changed - Operational Instruction 056_08',
+          createdAt: '2008-11-06',
+          createdBy: 'NALD_OWNER',
+          description: 'Changes to Returns requirements April 2008'
+        },
+        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,',
         versionNumber: 3
       }
     ],
