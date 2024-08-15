@@ -17,14 +17,14 @@ const CreateLicenceSupplementaryYearService = require('../../../../app/services/
 
 describe('Create Licence Supplementary Years Service', () => {
   let licenceId
-  let years
   let twoPartTariff
+  let years
 
   describe('when provided a licenceId, years and twoPartTariff data', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
-      years = [2023]
       twoPartTariff = true
+      years = [2023]
     })
 
     describe('that does not already exist', () => {
