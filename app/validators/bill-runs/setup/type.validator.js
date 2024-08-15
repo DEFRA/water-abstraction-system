@@ -10,7 +10,7 @@ const Joi = require('joi')
 const VALID_VALUES = [
   'annual',
   'supplementary',
-  'tpt_supplementary',
+  'two_part_supplementary',
   'two_part_tariff'
 ]
 
