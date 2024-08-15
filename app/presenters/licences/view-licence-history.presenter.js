@@ -12,12 +12,48 @@ function go (history) {
   }
 }
 
+function _createdAt (entry) {
+  const { createdAt, modLog } = entry
+
+  if (modLog.createdAt) {
+    return new Date(modLog.createdAt)
+  }
+
+  return createdAt
+}
+
+function _createdBy (entry) {
+  const { createdBy, modLog } = entry
+
+  if (createdBy) {
+    return createdBy
+  }
+
+  if (modLog.createdBy) {
+    return modLog.createdBy
+  }
+
+  return 'Migrated from NALD'
+}
+
 function _entries (entries) {
-  const sortedEntries = _sortEntriesByCreatedAt(entries)
+  const formattedEntries = entries.map((entry) => {
+    const createdAt = _createdAt(entry)
+    const notes = _notes(entry)
 
-  const mappedEntries = _mapEntries(sortedEntries)
+    return {
+      createdAt,
+      createdBy: _createdBy(entry),
+      dateCreated: formatLongDate(createdAt),
+      displayNote: notes.length > 0,
+      notes,
+      link: _link(entry.entryType, entry.entryId, entry.licenceId),
+      reason: _reason(entry),
+      type: _type(entry.entryType)
+    }
+  })
 
-  return mappedEntries
+  return _sortEntries(formattedEntries)
 }
 
 function _link (entryType, entryId, licenceId) {
@@ -32,39 +68,61 @@ function _link (entryType, entryId, licenceId) {
   return null
 }
 
-function _mapEntries (entries) {
-  return entries.map((entry) => {
-    return {
-      type: _type(entry.entryType),
-      reason: entry.reason,
-      dateCreated: formatLongDate(entry.createdAt),
-      createdBy: entry.createdBy ? entry.createdBy : 'Migrated from NALD',
-      note: entry.note ? entry.note : null,
-      version: entry.versionNumber,
-      source: entry.source ? entry.source : null,
-      link: _link(entry.entryType, entry.entryId, entry.licenceId)
+function _notes (entry) {
+  const notes = [entry.modLog.note, entry.note]
+
+  // Filter out null or blank from the array
+  return notes.filter((note) => {
+    return note
+  })
+}
+
+function _reason (entry) {
+  const { modLog, reason } = entry
+
+  if (reason) {
+    return reason
+  }
+
+  if (modLog.description) {
+    return modLog.description
+  }
+
+  if (modLog.code) {
+    return modLog.code
+  }
+
+  return null
+}
+
+function _sortEntries (entries) {
+  return entries.sort((entryA, entryB) => {
+    if (entryA.createdAt > entryB.createdAt) {
+      return -1
+    } else if (entryA.createdAt < entryB.createdAt) {
+      return 1
     }
+
+    if (entryA.type.index > entryB.type.index) {
+      return -1
+    } else if (entryA.type.index < entryB.type.index) {
+      return 1
+    }
+
+    return 0
   })
 }
 
 function _type (entryType) {
   if (entryType === 'charge-version') {
-    return 'Charge version'
+    return { index: 1, name: 'Charge version' }
   }
 
   if (entryType === 'return-version') {
-    return 'Return version'
+    return { index: 2, name: 'Return version' }
   }
 
-  return 'Licence version'
-}
-
-function _sortEntriesByCreatedAt (entries) {
-  entries.sort((a, b) => {
-    return new Date(b.createdAt) - new Date(a.createdAt)
-  })
-
-  return entries
+  return { index: 0, name: 'Licence version' }
 }
 
 module.exports = {
