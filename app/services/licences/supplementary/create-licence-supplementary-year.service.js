@@ -11,7 +11,7 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  * Creates a licenceSupplementaryYears record based on the provided licence data
  *
  * @param {module:LicenceModel} licenceId - The UUID of the licence to be persisted
- * @param {Object[]} years - An array of the financial year ends to be persisted as individual records
+ * @param {Object[]} financialYearEnds - An array of the financial year ends to be persisted as individual records
  * @param {Boolean} twoPartTariff - If there are any two-part tariff indicators on the licence
  */
 async function go (licenceId, financialYearEnds, twoPartTariff) {
