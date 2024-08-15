@@ -34,7 +34,12 @@ describe('Create Licence Supplementary Years Service', () => {
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
         expect(result).to.have.length(1)
-        expect(result[0].licenceId).to.equal(licenceId)
+        expect(result[0]).to.equal({
+          licenceId,
+          billRunId: null,
+          financialYearEnd: years[0],
+          twoPartTariff
+        }, { skip: ['id'] })
       })
     })
 
