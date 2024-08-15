@@ -5,7 +5,7 @@
  * @module LicencesController
  */
 
-const ProcessSupplementaryBillingFlagService = require('../services/licences/process-supplementary-billing-flag.service.js')
+const ProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
@@ -92,8 +92,8 @@ async function viewReturns (request, h) {
   })
 }
 
-async function supplementaryFlag (request, h) {
-  ProcessSupplementaryBillingFlagService.go(request.payload)
+async function supplementary (request, h) {
+  ProcessBillingFlagService.go(request.payload)
 
   return h.response().code(204)
 }
@@ -101,7 +101,7 @@ async function supplementaryFlag (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  supplementaryFlag,
+  supplementary,
   viewBills,
   viewCommunications,
   viewContacts,

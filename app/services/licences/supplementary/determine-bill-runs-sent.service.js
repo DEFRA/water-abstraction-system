@@ -2,11 +2,10 @@
 
 /**
  * Persists the years flagged on a licence for supplementary billing
- * @module FlagSupplementaryBillingService
+ * @module DetermineBillRunsSentService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
 
 /**
  * Flags the years on a licence for supplementary billing if the relevant annual two-part tariff bill runs
@@ -17,11 +16,7 @@ const LicenceSupplementaryYearModel = require('../../models/licence-supplementar
  * @param {Object[]} years - An array of the years a change in the charge version or return affects
  */
 async function go (licence, years) {
-  const yearsForSupplementaryBilling = await _supplementaryBillingYears(licence.regionId, years)
-
-  if (yearsForSupplementaryBilling.length > 0) {
-    await _persistSupplementaryBillingYears(licence.id, yearsForSupplementaryBilling)
-  }
+  return await _supplementaryBillingYears(licence.regionId, years)
 }
 
 /**
@@ -30,27 +25,12 @@ async function go (licence, years) {
  * annual run.
  */
 async function _supplementaryBillingYears (regionId, years) {
-  const annualTwoPartTariffYears = await BillRunModel.query()
+  return await BillRunModel.query()
     .distinct('toFinancialYearEnding')
     .where('regionId', regionId)
     .where('batchType', 'two_part_tariff')
     .where('status', 'sent')
     .whereIn('toFinancialYearEnding', years)
-
-  return annualTwoPartTariffYears
-}
-
-async function _persistSupplementaryBillingYears (licenceId, yearsForSupplementaryBilling) {
-  for (const year of yearsForSupplementaryBilling) {
-    await LicenceSupplementaryYearModel.query()
-      .insert({
-        licenceId,
-        financialYearEnd: year.toFinancialYearEnding,
-        twoPartTariff: true
-      })
-      // add where clause
-      // add test for this where clause 
-  }
 }
 
 module.exports = {

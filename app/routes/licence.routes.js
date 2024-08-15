@@ -73,9 +73,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/licences/supplementary-flag',
+    path: '/licences/supplementary',
     options: {
-      handler: LicencesController.supplementaryFlag,
+      handler: LicencesController.supplementary,
       app: {
         plainOutput: true
       },
