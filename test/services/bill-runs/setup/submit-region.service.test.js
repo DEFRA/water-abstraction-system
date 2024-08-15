@@ -77,6 +77,25 @@ describe('Bill Runs Setup Submit Region service', () => {
           expect(result.setupComplete).to.be.false()
         })
       })
+
+      describe('and the bill run type was two-part tariff supplementary', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
+        })
+
+        it('returns page data needed to re-render the view including the error', async () => {
+          const result = await SubmitRegionService.go(session.id, payload)
+
+          expect(result).to.equal({
+            sessionId: session.id,
+            regions,
+            selectedRegion: payload.region,
+            error: {
+              text: 'Currently you can progress no further for a two-part tariff supplementary bill run'
+            }
+          })
+        })
+      })
     })
 
     describe('with an invalid payload', () => {
