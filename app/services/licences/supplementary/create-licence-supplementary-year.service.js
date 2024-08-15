@@ -11,36 +11,38 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  * Creates a licenceSupplementaryYears record based on the provided licence data
  *
  * @param {module:LicenceModel} licenceId - The UUID of the licence to be persisted
- * @param {Object[]} years - An array of the years to be persisted as individual records
+ * @param {Object[]} years - An array of the financial year ends to be persisted as individual records
  * @param {Boolean} twoPartTariff - If there are any two-part tariff indicators on the licence
  */
-async function go (licenceId, years, twoPartTariff) {
-  for (const year of years) {
-    const existingLicenceSupplementaryYears = await _fetchExistingLicenceSupplementaryYears(
-      licenceId, year, twoPartTariff
-    )
+async function go (licenceId, financialYearEnds, twoPartTariff) {
+  for (const financialYearEnd of financialYearEnds) {
+    const match = await _fetchExistingLicenceSupplementaryYears(licenceId, financialYearEnd, twoPartTariff)
 
     // Create a new record only if no existing record matches all the provided properties, and where 'billRunId' is null
-    if (existingLicenceSupplementaryYears.length === 0) {
-      await _persistSupplementaryBillingYearsData(licenceId, year, twoPartTariff)
+    if (match) {
+      continue
     }
+
+    await _persistSupplementaryBillingYearsData(licenceId, financialYearEnd, twoPartTariff)
   }
 }
 
-async function _fetchExistingLicenceSupplementaryYears (licenceId, year, twoPartTariff) {
+async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYearEnd, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .select('id')
     .where('licenceId', licenceId)
-    .where('financialYearEnd', year)
+    .where('financialYearEnd', financialYearEnd)
     .where('twoPartTariff', twoPartTariff)
     .where('billRunId', null)
+    .limit(1)
+    .first()
 }
 
-async function _persistSupplementaryBillingYearsData (licenceId, year, twoPartTariff) {
+async function _persistSupplementaryBillingYearsData (licenceId, financialYearEnd, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .insert({
       licenceId,
-      financialYearEnd: year,
+      financialYearEnd,
       twoPartTariff
     })
 }

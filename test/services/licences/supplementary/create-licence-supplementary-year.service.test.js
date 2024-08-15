@@ -18,18 +18,18 @@ const CreateLicenceSupplementaryYearService = require('../../../../app/services/
 describe('Create Licence Supplementary Years Service', () => {
   let licenceId
   let twoPartTariff
-  let years
+  let financialYearEnds
 
   describe('when provided a licenceId, years and twoPartTariff data', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       twoPartTariff = true
-      years = [2023]
+      financialYearEnds = [2023]
     })
 
     describe('that does not already exist', () => {
       it('persists the data', async () => {
-        await CreateLicenceSupplementaryYearService.go(licenceId, years, twoPartTariff)
+        await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
 
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -37,7 +37,7 @@ describe('Create Licence Supplementary Years Service', () => {
         expect(result[0]).to.equal({
           licenceId,
           billRunId: null,
-          financialYearEnd: years[0],
+          financialYearEnd: financialYearEnds[0],
           twoPartTariff
         }, { skip: ['id'] })
       })
@@ -50,7 +50,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
       describe('without the billRunId', () => {
         it('does not persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, years, twoPartTariff)
+          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -72,7 +72,7 @@ describe('Create Licence Supplementary Years Service', () => {
         })
 
         it('persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, years, twoPartTariff)
+          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
