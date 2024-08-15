@@ -6,8 +6,8 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
+const CreateLicenceSupplementaryYearService = require('../../licences/supplementary/create-licence-supplementary-year.service.js')
 const LicenceModel = require('../../../models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
 const RemoveReviewDataService = require('./remove-review-data.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
@@ -57,15 +57,11 @@ async function _allLicencesRemoved (billRunId) {
 }
 
 async function _flagForSupplementaryBilling (licenceId, billRunId) {
+  const twoPartTariff = true
   const { toFinancialYearEnding } = await BillRunModel.query()
     .findById(billRunId)
 
-  return LicenceSupplementaryYearModel.query()
-    .insert({
-      licenceId,
-      twoPartTariff: true,
-      financialYearEnd: toFinancialYearEnding
-    })
+  return CreateLicenceSupplementaryYearService.go(licenceId, [toFinancialYearEnding], twoPartTariff)
 }
 
 module.exports = {
