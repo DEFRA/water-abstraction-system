@@ -41,11 +41,11 @@ async function go (sessionId, payload) {
 
     // Temporary if statement to end the journey if the bill run is for two-part tariff supplementary
     if (session.type === 'two_part_supplementary') {
-      const formattedData = RegionPresenter.go(session, regions)
+      const temporaryFormattedData = RegionPresenter.go(session, regions)
 
       return {
         error: { text: 'Currently you can progress no further for a two-part tariff supplementary bill run' },
-        ...formattedData
+        ...temporaryFormattedData
       }
     }
 
