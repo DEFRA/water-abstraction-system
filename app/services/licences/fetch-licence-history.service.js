@@ -42,7 +42,8 @@ async function _fetchChargeVersions (licenceId) {
       ref('createdBy:email').castText().as('created_by'),
       'water.notes.text as note',
       'versionNumber as version_number',
-      'chargeVersions.source as source'
+      'chargeVersions.source as source',
+      db.raw("'' as mod_log")
     )
     .leftJoin('water.notes', 'notes.noteId', '=', 'chargeVersions.noteId')
     .leftJoin('public.changeReasons', 'changeReasons.id', '=', 'chargeVersions.changeReasonId')
@@ -63,7 +64,8 @@ async function _fetchLicenceVersions (licenceId) {
       'licenceVersions.createdAt as created_at',
       db.raw("'' as created_by"),
       db.raw("'' as note"),
-      'issue as version_number'
+      'issue as version_number',
+      db.raw("'' as mod_log")
     )
     .orderBy([
       { column: 'createdAt', order: 'desc' },
@@ -82,7 +84,8 @@ async function _fetchReturnVersions (licenceId) {
       'returnVersions.createdAt as created_at',
       'users.username as created_by',
       'notes as note',
-      'version as version_number'
+      'version as version_number',
+      'modLog as mod_log'
     )
     .leftJoin('public.users', 'users.id', '=', 'returnVersions.createdBy')
     .orderBy([
