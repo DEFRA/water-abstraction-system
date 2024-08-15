@@ -16,7 +16,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 // Thing under test
 const FetchLicenceHistoryService = require('../../../app/services/licences/fetch-licence-history.service.js')
 
-describe.only('Fetch Licence History service', () => {
+describe('Fetch Licence History service', () => {
   let licenceId
 
   describe('when the licence has contact details', () => {
