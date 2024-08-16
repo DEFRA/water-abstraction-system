@@ -99,18 +99,21 @@ function _sortEntries (entries) {
   return entries.sort((entryA, entryB) => {
     if (entryA.createdAt > entryB.createdAt) {
       return -1
-    } else if (entryA.createdAt < entryB.createdAt) {
-      return 1
-    } else {
-      // NOTE: If createdAt for entryA and entryB are equal, we sort by the entry type.
-      if (entryA.type.index > entryB.type.index) {
-        return -1
-      } else if (entryA.type.index < entryB.type.index) {
-        return 1
-      } else {
-        return 0
-      }
     }
+
+    if (entryA.createdAt < entryB.createdAt) {
+      return 1
+    }
+
+    if (entryA.type.index > entryB.type.index) {
+      return -1
+    }
+
+    if (entryA.type.index < entryB.type.index) {
+      return 1
+    }
+
+    return 0
   })
 }
 
