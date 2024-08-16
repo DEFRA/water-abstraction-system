@@ -38,7 +38,17 @@ async function seed () {
   const licence = await LicenceHelper.add()
 
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
+  const returnVersion = await ReturnVersionHelper.add({
+    licenceId: licence.id,
+    createdBy: user.id,
+    modLog: {
+      code: 'XRETM',
+      note: 'AMENDED FOR GOR',
+      createdAt: '2010-04-07',
+      createdBy: 'BATKINSO',
+      description: 'Changes to Returns requirements April 2008 (manual update)'
+    }
+  })
 
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
