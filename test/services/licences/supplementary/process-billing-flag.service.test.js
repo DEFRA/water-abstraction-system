@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
 
 // Things we need to stub
 const DetermineChargeVersionYearsService = require('../../../../app/services/licences/supplementary/determine-charge-version-years.service.js')
+const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
 
 // Thing under test
 const ProcessSupplementaryBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
@@ -63,7 +63,7 @@ describe('Process Billing Flag Service', () => {
             flagForBilling: true
           })
 
-          await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId: licence.regionId })
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
         it('flags the licence for supplementary billing', async () => {

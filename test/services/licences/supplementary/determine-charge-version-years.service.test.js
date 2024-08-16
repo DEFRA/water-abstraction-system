@@ -52,7 +52,7 @@ describe('Determine Charge Version Years Service', () => {
           await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id, adjustments: { s127: true } })
         })
 
-        it('flagForBilling and twoPartTariff as true', async () => {
+        it('returns flagForBilling and twoPartTariff as true', async () => {
           const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
 
           expect(result.flagForBilling).to.equal(true)

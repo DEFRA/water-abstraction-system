@@ -14,7 +14,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Thing under test
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
 
-describe.only('Determine Existing Bill Run Years Service', () => {
+describe('Determine Existing Bill Run Years Service', () => {
   let years
   let region
 
