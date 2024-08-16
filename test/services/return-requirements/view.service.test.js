@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we want to stub
@@ -21,10 +21,6 @@ describe('Return Requirements - View service', () => {
     Sinon.stub(FetchReturnVersionService, 'go').resolves(_returnVersion())
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ViewService.go(returnVersionId)
@@ -35,10 +31,12 @@ describe('Return Requirements - View service', () => {
           multipleUpload: 'No'
         },
         createdBy: 'carol.shaw@atari.com',
-        createdDate: '5 April 2022',
+        createdDate: '7 April 2010',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: null,
+        notes: [
+          'AMENDED FOR GOR'
+        ],
         pageTitle: 'Requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
@@ -78,6 +76,13 @@ function _returnVersion (returnVersionId) {
       id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
       $licenceHolder: () => { return 'Mr Ingles' }
+    },
+    modLog: {
+      code: 'XRETM',
+      createdAt: '2010-04-07',
+      createdBy: 'BATKINSO',
+      description: 'Changes to Returns requirements April 2008 (manual update)',
+      note: 'AMENDED FOR GOR'
     },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
