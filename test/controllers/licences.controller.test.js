@@ -439,7 +439,7 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('POST /licences/supplementary-flag', () => {
+  describe('POST /licences/supplementary', () => {
     beforeEach(() => {
       options = { method: 'POST', url: '/licences/supplementary' }
     })

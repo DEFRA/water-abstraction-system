@@ -16,7 +16,7 @@ const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const DetermineChargeVersionYearsService = require('../../../../app/services/licences/supplementary/determine-charge-version-years.service.js')
 
 describe('Determine Charge Version Years Service', () => {
-  describe('when given a valid charge version id', () => {
+  describe('when given a valid chargeVersionId', () => {
     let chargeVersion
     let licence
 
@@ -25,7 +25,7 @@ describe('Determine Charge Version Years Service', () => {
       chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
     })
 
-    it('always returns the licence, startDate and endDate data', async () => {
+    it('always returns the licence, startDate and endDate', async () => {
       const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
 
       expect(result.licence).to.equal({ id: licence.id, regionId: licence.regionId })

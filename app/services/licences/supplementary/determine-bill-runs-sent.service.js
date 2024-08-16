@@ -19,9 +19,9 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  * picked up on the annual bill run.
  *
  * @param {String} regionId - The UUID of the region to search for
- * @param {Object[]} years - An array of years that the licence can be flagged for
+ * @param {Object[]} years - The years that the licence can be flagged for
  *
- * @returns {Object[]} - An array of years that can be flagged for supplementary billing
+ * @returns {Object[]} - The years that can be flagged for supplementary billing
  */
 async function go (regionId, years) {
   return _supplementaryBillingYears(regionId, years)
