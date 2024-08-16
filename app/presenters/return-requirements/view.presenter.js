@@ -20,18 +20,18 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  */
 
 function go (returnVersion) {
-  const { createdAt, licence, reason, notes, multipleUpload, returnRequirements, startDate, status, user } =
+  const { createdAt, licence, reason, modLog, notes, multipleUpload, returnRequirements, startDate, status, user } =
     returnVersion
 
   return {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
-    createdBy: user ? user.username : 'Migrated from NALD',
-    createdDate: formatLongDate(createdAt),
+    createdBy: _createdBy(modLog, user),
+    createdDate: _createdDate(createdAt, modLog),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    notes,
+    notes: _notes(modLog, notes),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
     reason: returnRequirementReasons[reason] || '',
     requirements: _requirements(returnRequirements),
@@ -94,6 +94,34 @@ function _buildAgreementExceptions (returnRequirement) {
   }
 
   return agreementsExceptions
+}
+
+function _createdBy (modLog, user) {
+  if (user) {
+    return user.username
+  }
+
+  if (modLog.createdBy) {
+    return modLog.createdBy
+  }
+
+  return 'Migrated from NALD'
+}
+
+function _createdDate (createdAt, modLog) {
+  if (modLog.createdAt) {
+    return formatLongDate(new Date(modLog.createdAt))
+  }
+
+  return formatLongDate(createdAt)
+}
+
+function _notes (modLog, note) {
+  const notes = [modLog.note, note]
+
+  return notes.filter((note) => {
+    return note
+  })
 }
 
 function _mapRequirement (requirement) {
