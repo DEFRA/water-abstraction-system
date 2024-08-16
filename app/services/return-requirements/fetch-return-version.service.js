@@ -31,7 +31,8 @@ async function _fetch (returnVersionId) {
       'notes',
       'reason',
       'startDate',
-      'status'
+      'status',
+      'modLog'
     ])
     .withGraphFetched('user')
     .modifyGraph('user', (builder) => {
