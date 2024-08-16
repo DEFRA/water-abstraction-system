@@ -116,8 +116,8 @@ function _createdDate (createdAt, modLog) {
   return formatLongDate(createdAt)
 }
 
-function _notes (modLog, note) {
-  const notes = [modLog.note, note]
+function _notes (modLog, returnVersionNote) {
+  const notes = [modLog.note, returnVersionNote]
 
   return notes.filter((note) => {
     return note
