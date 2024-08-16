@@ -2,7 +2,7 @@
 
 /**
  * Works out which financial year ends are between the date ranges
- * @module DetermineSupplementaryBillingYearsService
+ * @module DetermineBillingYearsService
  */
 
 const APRIL = 3

@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const DetermineSupplementaryBillingYearsService = require('../../../app/services/licences/determine-supplementary-billing-years.service.js')
+const DetermineBillingYearsService = require('../../../../app/services/licences/supplementary/determine-billing-years.service.js')
 
-describe('Determine Supplementary Billing Years Service', () => {
-  let startDate
-  let endDate
+describe('Determine Billing Years Service', () => {
   let clock
+  let endDate
+  let startDate
   let testDate
 
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023, 2024])
       })
@@ -50,7 +50,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023, 2024])
       })
@@ -62,7 +62,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023, 2024, 2025])
       })
@@ -80,7 +80,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023, 2024])
       })
@@ -92,7 +92,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023])
       })
@@ -104,7 +104,7 @@ describe('Determine Supplementary Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineSupplementaryBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService.go(startDate, endDate)
 
         expect(result).to.equal([2023, 2024])
       })
