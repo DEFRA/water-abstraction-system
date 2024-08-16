@@ -46,6 +46,13 @@ describe('Return Requirements - Fetch Return Version service', () => {
           licenceRef: licence.licenceRef,
           licenceDocument: null
         },
+        modLog: {
+          code: 'XRETM',
+          createdAt: '2010-04-07',
+          createdBy: 'BATKINSO',
+          description: 'Changes to Returns requirements April 2008 (manual update)',
+          note: 'AMENDED FOR GOR'
+        },
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
