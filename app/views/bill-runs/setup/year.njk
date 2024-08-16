@@ -44,28 +44,7 @@
             classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
           }
         },
-        items: [
-          {
-            text: '2023 to 2024',
-            value: '2024',
-            checked: '2024' == selectedYear
-          },
-          {
-            text: '2022 to 2023',
-            value: '2023',
-            checked: '2023' == selectedYear
-          },
-          {
-            text: '2021 to 2022',
-            value: '2022',
-            checked: '2022' == selectedYear
-          },
-          {
-            text: '2020 to 2021',
-            value: '2021',
-            checked: '2021' == selectedYear
-          }
-        ]
+        items: financialYearsData
       }) }}
 
       {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
