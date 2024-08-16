@@ -26,10 +26,13 @@ describe('Return Requirements - View presenter', () => {
           multipleUpload: 'No'
         },
         createdBy: 'carol.shaw@atari.com',
-        createdDate: '5 April 2022',
+        createdDate: '7 April 2010',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: 'A special note',
+        notes: [
+          'AMENDED FOR GOR',
+          'A special note'
+        ],
         pageTitle: 'Requirements for returns for Mr Ingles',
         reason: 'New licence',
         requirements: [
@@ -74,9 +77,10 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "createdBy" property', () => {
-      describe('when there is no user linked to the return', () => {
+      describe('when there is no user and no modLog createdBy linked to the return', () => {
         beforeEach(() => {
           returnVersion.user = null
+          returnVersion.modLog.createdBy = null
         })
 
         it('returns "Migrated from NALD" ', () => {
@@ -86,7 +90,18 @@ describe('Return Requirements - View presenter', () => {
         })
       })
 
-      describe('when there is a user linked to the return', () => {
+      describe('when there is a no user and the modLog createdBy is populated', () => {
+        beforeEach(() => {
+          returnVersion.user = null
+        })
+        it('returns the modLog createdBy', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.createdBy).to.equal('BATKINSO')
+        })
+      })
+
+      describe('when there is a user and modLog createdBy linked to the return', () => {
         it("returns the user's username", () => {
           const result = ViewPresenter.go(returnVersion)
 
@@ -96,10 +111,24 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "createdDate" property', () => {
-      it('returns created date', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('when the modLog createdAt field is populated', () => {
+        it('returns the formatted modLog createdAt', () => {
+          const result = ViewPresenter.go(returnVersion)
 
-        expect(result.createdDate).to.equal('5 April 2022')
+          expect(result.createdDate).to.equal('7 April 2010')
+        })
+      })
+
+      describe('when the modLog createdAt field is not populated', () => {
+        beforeEach(() => {
+          returnVersion.modLog.createdAt = null
+        })
+
+        it('returns the return version created date', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.createdDate).to.equal('5 April 2022')
+        })
       })
     })
 
@@ -282,6 +311,13 @@ function _returnVersion () {
       id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
       $licenceHolder: () => { return 'Mr Ingles' }
+    },
+    modLog: {
+      code: 'XRETM',
+      createdAt: '2010-04-07',
+      createdBy: 'BATKINSO',
+      description: 'Changes to Returns requirements April 2008 (manual update)',
+      note: 'AMENDED FOR GOR'
     },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
