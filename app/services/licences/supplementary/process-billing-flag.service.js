@@ -8,31 +8,45 @@
 const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
 const DetermineBillRunsSentService = require('./determine-bill-runs-sent.service.js')
-const FetchChargeVersionService = require('./fetch-charge-version.service.js')
+const DetermineChargeVersionYearsService = require('./determine-charge-version-years.service.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
- * Orchestrates flagging a licence for supplementary billing based on the provided charge version.
+ * Orchestrates flagging a licence for supplementary billing
  *
- * If a `chargeVersionId` is present in the payload, the service fetches the charge version, along with its relevant
- * charge references and licence details.
+ * This service orchestrates the process of flagging a licence for supplementary billing.
+ * It retrieves details of the charge version, including the licence information, start and end dates, whether the
+ * charge version has two-part tariff indicators, and if it should be flagged for supplementary billing.
  *
- * If the charge version has any two-part tariff indicators on any of its charge references then it calls the
- * `DetermineSupplementaryBillingYearsService` where it will work out which financial year ends have been affected by
- * the change in the charge version.
+ * If the licence qualifies for flagging, the relevant dates are passed to the `DetermineBillingYearsService`, which
+ * calculates the years affected by the changes to the licence.
  *
- * If there are years that have been affected, these are then passed to our `FlagSupplementaryBillingService`, which
- * checks if a bill run has already been sent for that affected year, and if it has it will then persist the flag in the
- * `LicenceSupplementaryYear` table.
+ * If any SROC years are affected, they are passed to the `DetermineBillRunsSentService`. This service checks the
+ * affected years to see if they have had an annual two-part tariff bill run sent. We avoid flagging any years that
+ * haven't had an annual two-part tariff bill run, as those changes will be captured when the bill run is created.
  *
- * @param {Object} payload - The payload from the request to be validated
+ * Finally, we call the `CreateLicenceSupplementaryYearService`, which persists our final list of years along with the
+ * licence ID and whether two-part tariff is true.
+ *
+ * @param {Object} payload - The payload from the request
  */
 async function go (payload) {
   try {
-    if (!payload.chargeVersionID) {
+    const startTime = currentTimeInNanoseconds()
+
+    let result
+
+    if (payload.chargeVersionId) {
+      result = await DetermineChargeVersionYearsService.go(payload.chargeVersionId)
+    } else {
       return
     }
 
-    const { licence, startDate, endDate, twoPartTariff } = FetchChargeVersionService.go(payload.chargeVersionId)
+    const { licence, startDate, endDate, twoPartTariff, flagForBilling } = result
+
+    if (!flagForBilling) {
+      return
+    }
 
     const years = DetermineBillingYearsService.go(startDate, endDate)
 
@@ -40,11 +54,15 @@ async function go (payload) {
       return
     }
 
-    const yearsToPersist = await DetermineBillRunsSentService.go(licence, years)
+    const financialYearEnds = await DetermineBillRunsSentService.go(licence.regionId, years)
 
-    if (yearsToPersist.length > 0) {
-      await CreateLicenceSupplementaryYearService.go(licence.id, yearsToPersist, twoPartTariff)
+    if (financialYearEnds.length === 0) {
+      return
     }
+
+    await CreateLicenceSupplementaryYearService.go(licence.id, financialYearEnds, twoPartTariff)
+
+    calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId: licence.id })
   } catch (error) {
     global.GlobalNotifier.omfg('Supplementary Billing Flag failed', payload, error)
   }
