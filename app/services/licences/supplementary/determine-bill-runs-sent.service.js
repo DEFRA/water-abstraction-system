@@ -1,22 +1,30 @@
 'use strict'
 
 /**
- * Persists the years flagged on a licence for supplementary billing
+ * Determines from the years provided which ones have an annual two-part tariff bill run sent
  * @module DetermineBillRunsSentService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 
 /**
- * Flags the years on a licence for supplementary billing if the relevant annual two-part tariff bill runs
- * have already been sent. It verifies which years are eligible for supplementary billing based on the
- * bill run status and persists these years for the given licence.
+ * Determines from the years provided which ones have an annual two-part tariff bill run sent
  *
- * @param {module:LicenceModel} licence - The licence where the change has come from
- * @param {Object[]} years - An array of the years a change in the charge version or return affects
+ * This service is responsible for determining the years an annual two part tariff bill run has been sent for. This
+ * allows those years to be flagged on the licence for supplementary billing.
+ *
+ * The service has been passed an array of years that the change on the licence covers. It then verify whether an annual
+ * two-part tariff bill run has already been sent for those years. If it has then the year is returned. We do not want
+ * to flag any years on the licence that hasn't had a bill run already sent, as the change on the licence will get
+ * picked up on the annual bill run.
+ *
+ * @param {String} regionId - The UUID of the region to search for
+ * @param {Object[]} years - An array of years that the licence can be flagged for
+ *
+ * @returns {Object[]} - An array of years that can be flagged for supplementary billing
  */
-async function go (licence, years) {
-  return await _supplementaryBillingYears(licence.regionId, years)
+async function go (regionId, years) {
+  return _supplementaryBillingYears(regionId, years)
 }
 
 /**
@@ -25,12 +33,16 @@ async function go (licence, years) {
  * annual run.
  */
 async function _supplementaryBillingYears (regionId, years) {
-  return await BillRunModel.query()
+  const billRuns = await BillRunModel.query()
     .distinct('toFinancialYearEnding')
     .where('regionId', regionId)
     .where('batchType', 'two_part_tariff')
     .where('status', 'sent')
     .whereIn('toFinancialYearEnding', years)
+
+  return billRuns.map((billRun) => {
+    return billRun.toFinancialYearEnding
+  })
 }
 
 module.exports = {
