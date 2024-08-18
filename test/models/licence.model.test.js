@@ -27,6 +27,8 @@ const LicenceGaugingStationModel = require('../../app/models/licence-gauging-sta
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+const ModLogModel = require('../../app/models/mod-log.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
@@ -302,6 +304,44 @@ describe('Licence model', () => {
         expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
         expect(result.licenceVersions).to.include(testLicenceVersions[0])
         expect(result.licenceVersions).to.include(testLicenceVersions[1])
+      })
+    })
+
+    describe('when linking to mod logs', () => {
+      let testModLogs
+
+      beforeEach(async () => {
+        testRecord = await LicenceHelper.add()
+
+        testModLogs = []
+        for (let i = 0; i < 2; i++) {
+          const modLog = await ModLogHelper.add({
+            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+          })
+
+          testModLogs.push(modLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('modLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the mod logs', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('modLogs')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.modLogs).to.be.an.array()
+        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
+        expect(result.modLogs).to.include(testModLogs[0])
+        expect(result.modLogs).to.include(testModLogs[1])
       })
     })
 
