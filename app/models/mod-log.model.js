@@ -16,6 +16,14 @@ class ModLogModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      chargeVersion: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'charge-version.model',
+        join: {
+          from: 'modLogs.chargeVersionId',
+          to: 'chargeVersions.id'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
