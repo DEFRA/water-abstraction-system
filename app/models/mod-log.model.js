@@ -31,6 +31,14 @@ class ModLogModel extends BaseModel {
           from: 'modLogs.licenceId',
           to: 'licences.id'
         }
+      },
+      licenceVersion: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-version.model',
+        join: {
+          from: 'modLogs.licenceVersionId',
+          to: 'licenceVersions.id'
+        }
       }
     }
   }
