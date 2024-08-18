@@ -14,6 +14,8 @@ const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
+const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
 
 // Thing under test
@@ -24,11 +26,15 @@ describe('Mod Log model', () => {
   let testLicence
   let testLicenceVersion
   let testRecord
+  let testReturnVersion
 
   before(async () => {
     testLicence = await LicenceHelper.add()
-    testChargeVersion = await ChargeVersionHelper.add({ licenceRef: testLicence.licenceRef })
-    testLicenceVersion = await LicenceVersionHelper.add()
+    testChargeVersion = await ChargeVersionHelper.add({
+      licenceId: testLicence.id, licenceRef: testLicence.licenceRef
+    })
+    testLicenceVersion = await LicenceVersionHelper.add({ licenceId: testLicence.id })
+    testReturnVersion = await ReturnVersionHelper.add({ licenceId: testLicence.id })
 
     // NOTE: A mod log would be linked to a licence and _one_ of the version types. It would not be linked to all 3.
     // But for the purposes of testing we have have correctly set up the relationships between them it is perfectly
@@ -37,7 +43,8 @@ describe('Mod Log model', () => {
       chargeVersionId: testChargeVersion.id,
       licenceId: testLicence.id,
       licenceRef: testLicence.licenceRef,
-      licenceVersionId: testLicenceVersion.id
+      licenceVersionId: testLicenceVersion.id,
+      returnVersionId: testReturnVersion.id
     })
   })
 
@@ -101,7 +108,7 @@ describe('Mod Log model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the licence', async () => {
+      it('can eager load the licence version', async () => {
         const result = await ModLogModel.query()
           .findById(testRecord.id)
           .withGraphFetched('licenceVersion')
@@ -111,6 +118,27 @@ describe('Mod Log model', () => {
 
         expect(result.licenceVersion).to.be.an.instanceOf(LicenceVersionModel)
         expect(result.licenceVersion).to.equal(testLicenceVersion)
+      })
+    })
+
+    describe('when linking to return version', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ModLogModel.query()
+          .innerJoinRelated('returnVersion')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return version', async () => {
+        const result = await ModLogModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnVersion')
+
+        expect(result).to.be.instanceOf(ModLogModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnVersion).to.be.an.instanceOf(ReturnVersionModel)
+        expect(result.returnVersion).to.equal(testReturnVersion)
       })
     })
   })
