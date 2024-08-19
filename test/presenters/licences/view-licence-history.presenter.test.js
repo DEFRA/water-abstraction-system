@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
 
-describe('View Licence History presenter', () => {
+describe.only('View Licence History presenter', () => {
   let licenceHistory
 
   beforeEach(() => {
@@ -111,6 +111,132 @@ describe('View Licence History presenter', () => {
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117'
       })
+    })
+
+    describe('the "createdAt" property', () => {
+      describe('when the entries "modLog" is null', () => {
+        it('returns the entries return version "createdAt"', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].createdAt).to.equal(licenceHistory.entries[0].createdAt)
+        })
+      })
+
+      describe('when the entries "modLog" property contains a "createdAt" property', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].modLog = {
+            code: 'XRET',
+            note: 'modLog test note!',
+            createdAt: '2002-07-06',
+            createdBy: 'TEST!',
+            description: 'This is a test!'
+          }
+        })
+
+        it('returns the entries "modLog" property "createdAt" property', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[5].dateCreated).to.equal('6 July 2002')
+        })
+      })
+    })
+
+    describe('the "createdBy" property', () => {
+      describe('when the entries "createdBy" is null and the entries "modLog.createdBy" property is null', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].createdBy = null
+        })
+
+        it('returns the "Migrated from NALD"', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].createdBy).to.equal('Migrated from NALD')
+        })
+      })
+
+      describe('when the entries "createdBy" is null but the entries "modLog.createdBy" property is populated', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].createdBy = null
+          licenceHistory.entries[0].modLog = {
+            createdBy: 'TEST!'
+          }
+        })
+
+        it('returns the "modLog.createdBy"', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].createdBy).to.equal('TEST!')
+        })
+      })
+
+      describe('when the entries "createdBy" and the entries "modLog.createdBy" properties are populated', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].modLog = {
+            createdBy: 'TEST!'
+          }
+        })
+
+        it('returns the entries "createdBy"', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].createdBy).to.equal('admin-internal@wrls.gov.uk')
+        })
+      })
+    })
+
+    describe('the "link" property', () => {
+      describe('when the "entryType" is "charge-version"', () => {
+        it('returns the charge version link', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].link).to.equal('/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/charge-information/93b8a9c9-f420-44ca-b899-33aff7fe34e0/view')
+        })
+      })
+
+      describe('when the "entryType" is "return-version"', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].entryType = 'return-version'
+        })
+
+        it('returns the return version link', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+
+          expect(result.entries[0].link).to.equal('/system/return-requirements/93b8a9c9-f420-44ca-b899-33aff7fe34e0/view')
+        })
+      })
+    })
+
+    describe('the "notes" property', () => {
+      describe('when the entry has both "note" and "modLog.note" properties populated', () => {
+        beforeEach(() => {
+          licenceHistory.entries[0].modLog = {
+            code: 'XRET',
+            note: 'This is a modLog test note!',
+            createdAt: '2002-07-06',
+            createdBy: 'TEST!',
+            description: 'This is a test!'
+          }
+        })
+
+        it('returns an array of notes', () => {
+          const result = ViewLicenceHistoryPresenter.go(licenceHistory)
+          console.log('🚀🚀🚀 ~ result:', result)
+
+          expect(result.entries[0].notes).to.equal(
+            ['This is a test to see if history works',
+              'This is a modLog test note!'
+            ]
+          )
+        })
+      })
+    })
+
+    describe('the "reason" property', () => {
+
+    })
+
+    describe('the "type" property', () => {
+
     })
   })
 })
