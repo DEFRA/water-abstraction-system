@@ -52,19 +52,20 @@ class ReturnVersionModel extends BaseModel {
   }
 
   /**
-   * Modifiers allow us to reuse logic in queries, eg. select the licence and everything to get the licence holder:
+   * Modifiers allow us to reuse logic in queries, eg. select the return version, user that created it, and/or all mod
+   * log records:
    *
-   * return LicenceModel.query()
+   * return ReturnVersionModel.query()
    *   .findById(licenceId)
-   *   .modify('licenceHolder')
+   *   .modify('history')
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
    */
   static get modifiers () {
     return {
       /**
-       * history modifier fetches all the records related to determining history properties, for example, created date
-       * and created by, from the record and its NALD mod logs (where they exist)
+       * history modifier fetches all the related records needed to determine history properties, for example, created
+       * at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
        */
       history (query) {
         query
@@ -106,12 +107,13 @@ class ReturnVersionModel extends BaseModel {
    * If a user record exists for this version then it was created in WRLS and it is the 'source'. It extracts the user
    * name, for example, `carol.shaw@wrls.gov.uk`.
    *
-   * If a user record doesn't exist, it falls back to attempting to extract the user ID from the first mod log
-   * record, for example, `JSMITH`. If one exists it is the 'source'.
+   * If a user record doesn't exist, it falls back to attempting to extract the user ID from the first mod log record,
+   * for example, `JSMITH`. If one exists it is the 'source'.
    *
    * If neither a user nor any mod logs exist it will return `null`.
    *
-   * @returns the user name of the user that created the 'source' record, else `null` if it cannot be determined
+   * @returns {string} the user name of the user that created the 'source' record, else `null` if it cannot be
+   * determined
    */
   $createdBy () {
     if (this.user) {
@@ -136,13 +138,13 @@ class ReturnVersionModel extends BaseModel {
    * Unfortunately, NALD doesn't enforce it's creation. But as the NALD version records don't capture the who and when,
    * they are the best 'source' we have to determine this information for imported records.
    *
-   * If there are mod logs for this record, it extracts the date from it, for example, `2019-06-02`, and returns it.
-   * Else, it falls back to using the return version's `createdAt` time stamp.
+   * If there are mod logs for this record, it extracts the date from the first entry, for example, `2019-06-02`, and
+   * returns it. Else, it falls back to using the return version's `createdAt` time stamp.
    *
    * > The NALD date takes priority, because all records will have a created at date. But in the case of imported
    * > records this will be when it was imported to WRLS, which can be some time after it was created in NALD.
    *
-   * @returns the date the 'source' record was created
+   * @returns {Date} the date the 'source' record was created
    */
   $createdAt () {
     const firstModLog = this._firstModLog()
@@ -166,12 +168,12 @@ class ReturnVersionModel extends BaseModel {
    * In WRLS (when we takeover from NALD) only a single note is captured against the return version.
    *
    * Till we takeover, the import job for NALD return versions extracts then concatenates the return requirement notes
-   * and saves them the return version's `notes` field.
+   * and saves them to the return version's `notes` field.
    *
    * In short, for imported records, the mod log notes take precedence then whatever note was generated during import.
    * Records created directly in WRLS will just have the single note and no mod log records.
    *
-   * @returns an array of all the notes in ascending date order taken from the record's history
+   * @returns {string[]} an array of all the notes in ascending date order taken from the record's history
    */
   $notes () {
     const notes = []
@@ -210,7 +212,7 @@ class ReturnVersionModel extends BaseModel {
    *
    * If neither 'source' records have a reason then it returns `null`
    *
-   * @returns the reason the 'source' record was created, else `null` if it cannot be determined
+   * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
    */
   $reason () {
     if (this.reason) {
