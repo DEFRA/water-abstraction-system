@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+const ModLogModel = require('../../app/models/mod-log.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -64,6 +66,42 @@ describe('Return Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to mod logs', () => {
+      let testModLogs
+
+      beforeEach(async () => {
+        testRecord = await ReturnVersionHelper.add()
+
+        testModLogs = []
+        for (let i = 0; i < 2; i++) {
+          const modLog = await ModLogHelper.add({ returnVersionId: testRecord.id })
+
+          testModLogs.push(modLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReturnVersionModel.query()
+          .innerJoinRelated('modLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the mod logs', async () => {
+        const result = await ReturnVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('modLogs')
+
+        expect(result).to.be.instanceOf(ReturnVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.modLogs).to.be.an.array()
+        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
+        expect(result.modLogs).to.include(testModLogs[0])
+        expect(result.modLogs).to.include(testModLogs[1])
       })
     })
 

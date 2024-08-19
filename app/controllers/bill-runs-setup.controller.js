@@ -153,7 +153,7 @@ async function type (request, h) {
 
   return h.view('bill-runs/setup/type.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: 'Select a bill run type',
+    pageTitle: 'Select bill run type',
     ...pageData
   })
 }

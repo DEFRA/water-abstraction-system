@@ -24,6 +24,14 @@ class ReturnVersionModel extends BaseModel {
           to: 'licences.id'
         }
       },
+      modLogs: {
+        relation: Model.HasManyRelation,
+        modelClass: 'mod-log.model',
+        join: {
+          from: 'returnVersions.id',
+          to: 'modLogs.returnVersionId'
+        }
+      },
       returnRequirements: {
         relation: Model.HasManyRelation,
         modelClass: 'return-requirement.model',
