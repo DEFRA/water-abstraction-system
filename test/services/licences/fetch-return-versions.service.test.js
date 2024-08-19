@@ -15,22 +15,38 @@ const FetchReturnVersionsService =
   require('../../../app/services/licences/fetch-return-versions.service.js')
 
 describe('Fetch Return Versions service', () => {
-  let returnVersion
+  const startDate = new Date('2022-04-01')
+
+  let currentReturnVersion
+  let supersededReturnVersion
 
   describe('when the licence has return versions data', () => {
     beforeEach(async () => {
-      returnVersion = await ReturnVersionHelper.add()
+      // NOTE: We add 2, both with the same start date to ensure the order that they are returned is as expected
+      supersededReturnVersion = await ReturnVersionHelper.add({
+        startDate, status: 'superseded', version: 100
+      })
+      currentReturnVersion = await ReturnVersionHelper.add({
+        licenceId: supersededReturnVersion.licenceId, startDate, status: 'current', version: 101
+      })
     })
 
     it('returns the matching return versions data', async () => {
-      const result = await FetchReturnVersionsService.go(returnVersion.licenceId)
+      const result = await FetchReturnVersionsService.go(supersededReturnVersion.licenceId)
 
       expect(result).to.equal([
         {
-          id: returnVersion.id,
+          id: currentReturnVersion.id,
           startDate: new Date('2022-04-01'),
           endDate: null,
           status: 'current',
+          reason: 'new-licence'
+        },
+        {
+          id: supersededReturnVersion.id,
+          startDate: new Date('2022-04-01'),
+          endDate: null,
+          status: 'superseded',
           reason: 'new-licence'
         }
       ])
