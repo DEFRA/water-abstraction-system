@@ -36,8 +36,7 @@ FROM (
     lv.created_at,
     '' AS created_by,
     '' AS note,
-    lv.issue AS version_number,
-    lv.mod_log
+    lv.issue AS version_number
   FROM
     public.licences l
   INNER JOIN public.licence_versions lv ON lv.licence_id = l.id
@@ -52,8 +51,7 @@ FROM (
     cv.created_at,
     cv.created_by->>'email' AS created_by,
     cvn."text" AS note,
-    cv.version_number,
-    cv.mod_log
+    cv.version_number
   FROM
     public.licences l
   INNER JOIN public.charge_versions cv ON cv.licence_id = l.id
@@ -70,8 +68,7 @@ FROM (
     rv.created_at,
     u.username AS created_by,
     rv.notes AS note,
-    rv.VERSION AS version_number,
-    rv.mod_log
+    rv.VERSION AS version_number
   FROM
     public.licences l
   INNER JOIN public.return_versions rv ON rv.licence_id = l.id

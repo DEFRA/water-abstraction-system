@@ -13,24 +13,16 @@ function go (history) {
 }
 
 function _createdAt (entry) {
-  const { created_at: createdAt, mod_log: modLog } = entry
-
-  if (modLog.createdAt) {
-    return new Date(modLog.createdAt)
-  }
+  const { created_at: createdAt} = entry
 
   return createdAt
 }
 
 function _createdBy (entry) {
-  const { created_by: createdBy, mod_log: modLog } = entry
+  const { created_by: createdBy } = entry
 
   if (createdBy) {
     return createdBy
-  }
-
-  if (modLog.createdBy) {
-    return modLog.createdBy
   }
 
   return 'Migrated from NALD'
@@ -57,7 +49,7 @@ function _entries (entries) {
 }
 
 function _notes (entry) {
-  const notes = [entry.mod_log.note, entry.note]
+  const notes = [entry.note]
 
   // Filter out null or blank from the array
   return notes.filter((note) => {
@@ -66,18 +58,10 @@ function _notes (entry) {
 }
 
 function _reason (entry) {
-  const { mod_log: modLog, reason } = entry
+  const { reason } = entry
 
   if (reason) {
     return reason
-  }
-
-  if (modLog.description) {
-    return modLog.description
-  }
-
-  if (modLog.code) {
-    return modLog.code
   }
 
   return null
