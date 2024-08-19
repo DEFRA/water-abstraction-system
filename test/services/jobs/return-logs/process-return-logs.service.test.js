@@ -11,7 +11,6 @@ const { expect } = Code
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
@@ -20,13 +19,10 @@ const ReturnVersionHelper = require('../../../support/helpers/return-version.hel
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
 
-describe.only('Process return logs service', () => {
+describe('Process return logs service', () => {
   const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
-  const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
-  const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
   const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
-  const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
 
   describe('Is summer is true and a licence reference is provided', () => {
     let licence
