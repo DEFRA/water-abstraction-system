@@ -72,6 +72,14 @@ class LicenceModel extends BaseModel {
           to: 'licenceVersions.licenceId'
         }
       },
+      modLogs: {
+        relation: Model.HasManyRelation,
+        modelClass: 'mod-log.model',
+        join: {
+          from: 'licences.id',
+          to: 'modLogs.licenceId'
+        }
+      },
       permitLicence: {
         relation: Model.HasOneRelation,
         modelClass: 'permit-licence.model',
