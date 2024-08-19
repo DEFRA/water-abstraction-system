@@ -278,7 +278,7 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select a bill run type')
+          expect(response.payload).to.contain('Select bill run type')
         })
       })
     })

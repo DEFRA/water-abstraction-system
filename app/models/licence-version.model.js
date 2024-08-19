@@ -32,6 +32,14 @@ class LicenceVersionModel extends BaseModel {
           to: 'licenceVersionPurposes.licenceVersionId'
         }
       },
+      modLogs: {
+        relation: Model.HasManyRelation,
+        modelClass: 'mod-log.model',
+        join: {
+          from: 'licenceVersions.id',
+          to: 'modLogs.licenceVersionId'
+        }
+      },
       purposes: {
         relation: Model.ManyToManyRelation,
         modelClass: 'purpose.model',

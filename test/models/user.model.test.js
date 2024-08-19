@@ -8,6 +8,8 @@ const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
+const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -29,6 +31,8 @@ const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
 describe('User model', () => {
+  let testChargeVersionNoteOne
+  let testChargeVersionNoteTwo
   let testGroup
   let testRecord
   let testRole
@@ -42,6 +46,8 @@ describe('User model', () => {
     testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
     testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
 
+    testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
+    testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
     testUserRole = await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
   })
 
@@ -55,6 +61,30 @@ describe('User model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to charge version notes', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('chargeVersionNotes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge version notes', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersionNotes')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersionNotes).to.be.an.array()
+        expect(result.chargeVersionNotes).to.have.length(2)
+        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNotes[0]).to.equal(testChargeVersionNoteOne)
+        expect(result.chargeVersionNotes[1]).to.equal(testChargeVersionNoteTwo)
+      })
+    })
+
     describe('when linking through user groups to groups', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
