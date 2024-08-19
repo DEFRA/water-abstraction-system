@@ -17,6 +17,14 @@ class UserModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      chargeVersionNotes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'charge-version-note.model',
+        join: {
+          from: 'users.id',
+          to: 'chargeVersionNotes.userId'
+        }
+      },
       groups: {
         relation: Model.ManyToManyRelation,
         modelClass: 'group.model',

@@ -17,8 +17,12 @@ const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
+const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
+const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+const ModLogModel = require('../../app/models/mod-log.model.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
 const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
 
@@ -176,6 +180,37 @@ describe('Charge Version model', () => {
       })
     })
 
+    describe('when linking to charge version note', () => {
+      let testNote
+
+      beforeEach(async () => {
+        testNote = await ChargeVersionNoteHelper.add()
+
+        const { id: noteId } = testNote
+
+        testRecord = await ChargeVersionHelper.add({ noteId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('chargeVersionNote')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the note', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersionNote')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersionNote).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNote).to.equal(testNote)
+      })
+    })
+
     describe('when linking to licence', () => {
       let testLicence
 
@@ -204,6 +239,44 @@ describe('Charge Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to mod logs', () => {
+      let testModLogs
+
+      beforeEach(async () => {
+        testRecord = await ChargeVersionHelper.add()
+
+        testModLogs = []
+        for (let i = 0; i < 2; i++) {
+          const modLog = await ModLogHelper.add({
+            chargeVersionId: testRecord.id, licenceRef: testRecord.licenceRef
+          })
+
+          testModLogs.push(modLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('modLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the mod logs', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('modLogs')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.modLogs).to.be.an.array()
+        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
+        expect(result.modLogs).to.include(testModLogs[0])
+        expect(result.modLogs).to.include(testModLogs[1])
       })
     })
 
