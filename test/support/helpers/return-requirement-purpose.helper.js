@@ -53,6 +53,7 @@ function defaults (data = {}) {
     externalId,
     purposeId: purpose.id,
     primaryPurposeId: primaryPurpose.id,
+    alias: 'Purpose alias',
     secondaryPurposeId: secondaryPurpose.id,
     returnRequirementId: generateUUID()
   }

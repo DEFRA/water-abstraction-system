@@ -5,11 +5,14 @@
  * @module FetchLicenceWithoutReturnsService
  */
 
-const FetchReturnRequirementPointsService = require('./fetch-return-requirement-points.service.js')
-const FetchReturnRequirementPurposesService = require('./fetch-return-requirement-purposes.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
+const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
+
+const endOfSummerCycle = new Date(new Date().getFullYear() + 1, 9, 31)
+const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, 2, 31)
 
 /**
  * Fetch all return requirements that need return logs created.
@@ -18,7 +21,7 @@ const { db } = require('../../../../db/db.js')
  */
 async function go (isSummer, licenceReference) {
   const requirementsForReturns = await _fetchReturnRequirements(isSummer, licenceReference)
-  const data = await _generateReturnLogPayload(requirementsForReturns)
+  const data = await _generateReturnLogPayload(isSummer, requirementsForReturns)
 
   return data
 }
@@ -33,16 +36,14 @@ async function _createMetaData (isSummer,
   isUpload,
   legacyId,
   naldRegionId,
-  siteDescritption,
+  points,
+  purposes,
+  siteDescription,
   twoPartTariff,
-  reason,
-  returnRequirementId
+  reason
 ) {
-  const points = await FetchReturnRequirementPointsService.go(returnRequirementId)
-  const purposes = await FetchReturnRequirementPurposesService.go(returnRequirementId)
-
   return {
-    description: siteDescritption,
+    description: siteDescription,
     isCurrent: reason !== 'succession-or-transfer-of-licence',
     isFinal: _isFinal(endDate, isSummer),
     isSummer,
@@ -67,22 +68,66 @@ function _createReturnLogId (regionCode, licenceReference, legacyId, startDate, 
   return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
 }
 
+async function _fetchReturnRequirements (isSummer, licenceReference) {
+  const cycleStartDate = _getCycleStartDate(isSummer)
+
+  const externalIds = await ReturnLogModel.query()
+    .select(['licenceRef',
+      db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")
+    ])
+    .from('returns.returns as ret')
+    .where('startDate', '>=', cycleStartDate)
+
+  const externalIdsArray = externalIds.map((item) => {
+    return item.externalid
+  })
+
+  const results = await ReturnRequirementModel.query()
+    .whereNotIn('returnRequirements.externalId', externalIdsArray)
+    .whereExists(_whereExistsClause(licenceReference, cycleStartDate))
+    .where('returnRequirements.summer', isSummer)
+    .withGraphFetched('returnVersion')
+    .modifyGraph('returnVersion', (builder) => {
+      builder.select(['endDate',
+        'id',
+        'startDate',
+        'reason'])
+    })
+    .withGraphFetched('returnVersion.licence')
+    .modifyGraph('returnVersion.licence', (builder) => {
+      builder.select(['expiredDate',
+        'id',
+        'lapsedDate',
+        'licenceRef',
+        'revokedDate',
+        db.raw('regions->>\'historicalAreaCode\' as areacode')])
+    })
+    .withGraphFetched('returnVersion.licence.region')
+    .modifyGraph('returnVersion.licence.region', (builder) => {
+      builder.select(['id', 'naldRegionId'])
+    })
+    .withGraphFetched('returnRequirementPoints')
+    .withGraphFetched('returnRequirementPurposes')
+
+  return results
+}
+
 function _formatDate (date) {
   return date.toISOString().split('T')[0]
 }
 
-async function _generateReturnLogPayload (requirementsForReturns, isSummer) {
+async function _generateReturnLogPayload (isSummer, requirementsForReturns) {
   const returnLogs = requirementsForReturns.map(async (requirements) => {
     const startDate = _getCycleStartDate(isSummer)
     const endDate = _getCycleEndDate(isSummer,
-      requirements.expiredDate,
-      requirements.lapsedDate,
-      requirements.revokedDate,
-      requirements.endDate
+      requirements.returnVersion.licence.expiredDate,
+      requirements.returnVersion.licence.lapsedDate,
+      requirements.returnVersion.licence.revokedDate,
+      requirements.returnVersion.endDate
     )
     const id = _createReturnLogId(
-      requirements.naldRegionId,
-      requirements.licenceRef,
+      requirements.returnVersion.licence.region.naldRegionId,
+      requirements.returnVersion.licence.licenceRef,
       requirements.legacyId,
       startDate,
       endDate
@@ -94,14 +139,15 @@ async function _generateReturnLogPayload (requirementsForReturns, isSummer) {
       requirements.abstractionPeriodStartMonth,
       requirements.abstractionPeriodEndDay,
       requirements.abstractionPeriodEndMonth,
-      requirements.areacode,
-      requirements.isUpload,
+      requirements.returnVersion.licence.areacode,
+      requirements.upload,
       requirements.legacyId,
-      requirements.naldRegionId,
-      requirements.siteDescritption,
+      requirements.returnVersion.licence.region.naldRegionId,
+      requirements.returnRequirementPoints,
+      requirements.returnRequirementPurposes,
+      requirements.siteDescription,
       requirements.twoPartTariff,
-      requirements.reason,
-      requirements.returnRequirementId
+      requirements.returnVersion.reason
     )
 
     return {
@@ -109,7 +155,7 @@ async function _generateReturnLogPayload (requirementsForReturns, isSummer) {
       dueDate: _getCycleDueDate(isSummer),
       endDate,
       id,
-      licenceRef: requirements.licenceRef,
+      licenceRef: requirements.returnVersion.licence.licenceRef,
       metadata,
       returnsFrequency: requirements.reportingFrequency,
       startDate,
@@ -134,9 +180,6 @@ function _getCycleEndDate (isSummer, licenceEndDate, licenceLapsedDate, licenceR
   const dates = [licenceEndDate, licenceLapsedDate, licenceRevokedDate, returnVersionEndDate]
     .filter((date) => { return date !== null })
     .map((date) => { return new Date(date) })
-
-  const endOfSummerCycle = new Date(new Date().getFullYear() + 1, 9, 31)
-  const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, 2, 31)
 
   if (dates.length === 0) {
     return isSummer
@@ -168,9 +211,8 @@ function _getCycleStartDate (isSummer) {
     : _formatDate(new Date(new Date().getFullYear(), 3, 1))
 }
 
-function _isFinal (endDate, isSummer) {
-  const endOfSummerCycle = new Date(new Date().getFullYear() + 1, 9, 31)
-  const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, 2, 31)
+function _isFinal (endDateString, isSummer) {
+  const endDate = new Date(endDateString)
 
   if ((isSummer && endDate < endOfSummerCycle) ||
     (!isSummer && endDate < endOfWinterAndAllYearCycle)
@@ -181,68 +223,41 @@ function _isFinal (endDate, isSummer) {
   return false
 }
 
-async function _fetchReturnRequirements (isSummer, licenceReference) {
-  const cycleStartDate = _getCycleStartDate(isSummer)
+function _whereExistsClause (licenceReference, cycleStartDate) {
+  const query = ReturnVersionModel.query().select(1)
 
-  const externalIds = await ReturnLogModel.query()
-    .select(['licenceRef',
-      db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")
-    ])
-    .from('returns.returns as ret')
-    .where('startDate', '>=', cycleStartDate)
-
-  const externalIdsArray = externalIds.map((item) => {
-    return item.externalid
-  })
-
-  return db.select([
-    'r.nald_region_id',
-    'l.expired_date',
-    'l.lapsed_date',
-    'l.licence_ref',
-    'l.revoked_date',
-    db.raw('l.regions->>\'historicalAreaCode\' as areacode'),
-    'rr.return_requirement_id',
-    'rr.is_summer',
-    'rr.is_upload',
-    'rr.abstraction_period_start_day',
-    'rr.abstraction_period_start_month',
-    'rr.abstraction_period_end_day',
-    'rr.abstraction_period_end_month',
-    'rr.legacyId',
-    'rr.reporting_frequency',
-    'rr.site_description',
-    'rr.twoPartTariff',
-    'rv.end_date',
-    'rv.start_date',
-    'rv.reason'
-  ])
-    .from('water.licences AS l')
-    .innerJoin('water.regions AS r', 'r.region_id', 'l.region_id')
-    .innerJoin('water.return_versions AS rv', 'rv.licence_id', 'l.licence_id')
-    .innerJoin('water.return_requirements AS rr', 'rv.return_version_id', 'rr.return_version_id')
-    .whereNull('l.lapsed_date')
-    .whereNull('l.revoked_date')
-    .where('l.start_date', '<=', cycleStartDate)
-    .where('rv.status', 'current')
-    .where('rv.start_date', '<=', cycleStartDate)
+  query.select(1)
+    .innerJoinRelated('licence')
+    .where('returnVersions.startDate', '<=', cycleStartDate)
+    .where('returnVersions.status', 'current')
     .where((builder) => {
       builder
-        .whereNull('l.expired_date')
-        .orWhere('l.expired_date', '>=', cycleStartDate)
+        .whereNull('returnVersions.endDate')
+        .orWhere('returnVersions.endDate', '>=', cycleStartDate)
     })
     .where((builder) => {
       builder
-        .whereNull('rv.end_date')
-        .orWhere('rv.end_date', '>=', cycleStartDate)
+        .whereNull('licence.expiredDate')
+        .orWhere('licence.expiredDate', '>=', cycleStartDate)
     })
-    .whereNotIn('rr.external_id', externalIdsArray)
-    .where('rr.is_summer', isSummer)
-    .modify(function (queryBuilder) {
-      if (licenceReference) {
-        queryBuilder.where('l.licenceRef', licenceReference)
-      }
+    .where((builder) => {
+      builder
+        .whereNull('licence.lapsedDate')
+        .orWhere('licence.lapsedDate', '>=', cycleStartDate)
     })
+    .where((builder) => {
+      builder
+        .whereNull('licence.revokedDate')
+        .orWhere('licence.revokedDate', '>=', cycleStartDate)
+    })
+
+  query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
+
+  if (licenceReference) {
+    query.where('licence.licenceRef', licenceReference)
+  }
+
+  return query
 }
 
 module.exports = {

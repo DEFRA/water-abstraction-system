@@ -1,29 +1,20 @@
 'use strict'
 
 /**
- * Creates the return logs for the next cycle
- * @module CreateReturnLogsService
+ * Saves the return logs
+ * @module SubmitReturnLogsService
  */
 
-const FetchReturnLogsService = require('./fetch-return-logs.service.js')
-const SubmitReturnLogsService = require('./submit-return-logs.service.js')
+const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Creates the return logs for the next cycle
+ * Saves the return logs
+ *
+ * @param {Array} returnLogs - Array of return logs to be created
  */
-async function go (isSummer, licenceReference) {
-  try {
-    const returnLogs = await FetchReturnLogsService.go(isSummer, licenceReference)
-
-    console.log(`There are ${returnLogs.length} number of return logs to be created.`)
-    console.log(returnLogs[0])
-
-    if (returnLogs.length > 0) {
-      await SubmitReturnLogsService.go(returnLogs)
-    }
-  } catch (error) {
-    global.GlobalNotifier.omfg('Create return logs job failed', null, error)
-  }
+async function go (returnLogs) {
+  await ReturnLogModel.query()
+    .insert(returnLogs)
 }
 
 module.exports = {
