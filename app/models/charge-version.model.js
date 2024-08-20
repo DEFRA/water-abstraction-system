@@ -163,14 +163,6 @@ class ChargeVersionModel extends BaseModel {
     return firstModLog?.naldDate ?? this.createdAt
   }
 
-  _firstModLog () {
-    if (this.modLogs.length > 0) {
-      return this.modLogs[0]
-    }
-
-    return null
-  }
-
   /**
    * Determine which user created the 'source' record using history
    *
@@ -273,6 +265,14 @@ class ChargeVersionModel extends BaseModel {
     const firstModLog = this._firstModLog()
 
     return firstModLog?.reasonDescription ?? null
+  }
+
+  _firstModLog () {
+    if (this.modLogs.length > 0) {
+      return this.modLogs[0]
+    }
+
+    return null
   }
 }
 
