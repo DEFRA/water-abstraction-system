@@ -144,6 +144,42 @@ describe('Licence Version model', () => {
     })
   })
 
+  describe('$createdAt', () => {
+    describe('when the licence version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns the licence version "created at" time stamp', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(testRecord.createdAt)
+      })
+    })
+
+    describe('when the licence version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), licenceVersionId
+        })
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), licenceVersionId
+        })
+
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD date', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(new Date('2012-06-01'))
+      })
+    })
+  })
+
   describe('$createdBy', () => {
     describe('when the licence version has no mod log history', () => {
       beforeEach(async () => {
