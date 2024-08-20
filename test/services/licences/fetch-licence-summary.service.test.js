@@ -166,7 +166,7 @@ describe('Fetch Licence Summary service', () => {
         licenceDocument: {
           id: licenceHolderSeed.licenceDocumentId,
           licenceDocumentRoles: [{
-            id: licenceHolderSeed.id,
+            id: licenceHolderSeed.licenceDocumentRoleId,
             contact: null,
             company: {
               id: licenceHolderSeed.companyId,
