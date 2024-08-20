@@ -83,7 +83,7 @@ async function _fetch (regionId, billingPeriod) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
-    .orderBy('chargeVersions.licenceRef')
+    .orderBy('chargeVersions.licenceRef', 'asc')
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {
       builder.select([
