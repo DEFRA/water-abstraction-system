@@ -44,7 +44,8 @@ module.exports = {
     'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
     'jsdoc/check-indentation': 'warn',
     'jsdoc/lines-before-block': 'warn',
-    'jsdoc/check-types': 'warn'
+    'jsdoc/check-types': 'warn',
+    'jsdoc/require-hyphen-before-param-description': 'warn'
   }
 }
 
