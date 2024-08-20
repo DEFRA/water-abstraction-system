@@ -2,6 +2,7 @@
 
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
+  ignorePatterns: ['docs/*'],
   parserOptions: {
     sourceType: 'script'
   },
