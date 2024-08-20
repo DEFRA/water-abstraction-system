@@ -9,12 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 
 // Thing under test
 const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
 describe('Return Requirements - Fetch Return Version service', () => {
   let licence
+  let modLog
   let returnVersion
   let user
 
@@ -24,6 +26,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
 
       licence = seedData.licence
       returnVersion = seedData.returnVersion
+      modLog = await ModLogHelper.add({ returnVersionId: returnVersion.id, note: 'This is a test note' })
       user = seedData.user
     })
 
@@ -46,13 +49,15 @@ describe('Return Requirements - Fetch Return Version service', () => {
           licenceRef: licence.licenceRef,
           licenceDocument: null
         },
-        modLog: {
-          code: 'XRETM',
-          createdAt: '2010-04-07',
-          createdBy: 'BATKINSO',
-          description: 'Changes to Returns requirements April 2008 (manual update)',
-          note: 'AMENDED FOR GOR'
-        },
+        modLogs: [
+          {
+            id: modLog.id,
+            naldDate: new Date('2012-06-01T00:00:00.000Z'),
+            note: 'This is a test note',
+            reasonDescription: null,
+            userId: 'TTESTER'
+          }
+        ],
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
