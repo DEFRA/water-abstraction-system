@@ -25,16 +25,13 @@ describe('Return Requirements - View presenter', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: 'carol.shaw@atari.com',
+        createdBy: 'BATKINSO',
         createdDate: '7 April 2010',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: [
-          'AMENDED FOR GOR',
-          'A special note'
-        ],
+        notes: ['AMENDED FOR GOR'],
         pageTitle: 'Requirements for returns for Mr Ingles',
-        reason: 'New licence',
+        reason: ['Changes to Returns requirements April 2008 (manual update)'],
         requirements: [
           {
             abstractionPeriod: 'From 1 April to 31 October',
@@ -77,58 +74,18 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "createdBy" property', () => {
-      describe('when there is no user and no modLog createdBy linked to the return', () => {
-        beforeEach(() => {
-          returnVersion.user = null
-          returnVersion.modLog.createdBy = null
-        })
+      it('returns who the return version was created by', () => {
+        const result = ViewPresenter.go(returnVersion)
 
-        it('returns "Migrated from NALD" ', () => {
-          const result = ViewPresenter.go(returnVersion)
-
-          expect(result.createdBy).to.equal('Migrated from NALD')
-        })
-      })
-
-      describe('when there is a no user and the modLog createdBy is populated', () => {
-        beforeEach(() => {
-          returnVersion.user = null
-        })
-        it('returns the modLog createdBy', () => {
-          const result = ViewPresenter.go(returnVersion)
-
-          expect(result.createdBy).to.equal('BATKINSO')
-        })
-      })
-
-      describe('when there is a user and modLog createdBy linked to the return', () => {
-        it("returns the user's username", () => {
-          const result = ViewPresenter.go(returnVersion)
-
-          expect(result.createdBy).to.equal('carol.shaw@atari.com')
-        })
+        expect(result.createdBy).to.equal('BATKINSO')
       })
     })
 
     describe('the "createdDate" property', () => {
-      describe('when the modLog createdAt field is populated', () => {
-        it('returns the formatted modLog createdAt', () => {
-          const result = ViewPresenter.go(returnVersion)
+      it('returns when the return version was created', () => {
+        const result = ViewPresenter.go(returnVersion)
 
-          expect(result.createdDate).to.equal('7 April 2010')
-        })
-      })
-
-      describe('when the modLog createdAt field is not populated', () => {
-        beforeEach(() => {
-          returnVersion.modLog.createdAt = null
-        })
-
-        it('returns the return version created date', () => {
-          const result = ViewPresenter.go(returnVersion)
-
-          expect(result.createdDate).to.equal('5 April 2022')
-        })
+        expect(result.createdDate).to.equal('7 April 2010')
       })
     })
 
@@ -141,24 +98,10 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "reason" property', () => {
-      describe('when there is a reason', () => {
-        it('returns the formatted reason', () => {
-          const result = ViewPresenter.go(returnVersion)
+      it('returns the reason for the return version', () => {
+        const result = ViewPresenter.go(returnVersion)
 
-          expect(result.reason).to.equal('New licence')
-        })
-      })
-
-      describe('when there is no reason', () => {
-        beforeEach(() => {
-          returnVersion.reason = null
-        })
-
-        it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersion)
-
-          expect(result.reason).to.equal('')
-        })
+        expect(result.reason).to.equal(['Changes to Returns requirements April 2008 (manual update)'])
       })
     })
 
@@ -312,13 +255,17 @@ function _returnVersion () {
       licenceRef: '01/123',
       $licenceHolder: () => { return 'Mr Ingles' }
     },
-    modLog: {
+    modLog: [{
       code: 'XRETM',
       createdAt: '2010-04-07',
       createdBy: 'BATKINSO',
       description: 'Changes to Returns requirements April 2008 (manual update)',
       note: 'AMENDED FOR GOR'
-    },
+    }],
+    $createdBy: () => { return 'BATKINSO' },
+    $createdAt: () => { return '2010-04-07' },
+    $notes: () => { return ['AMENDED FOR GOR'] },
+    $reason: () => { return ['Changes to Returns requirements April 2008 (manual update)'] },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
