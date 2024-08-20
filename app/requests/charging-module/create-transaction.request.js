@@ -14,9 +14,9 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  * more details
  *
  * @param {string} billRunId - UUID of the Charging Module API bill run the new bills will be assigned to
- * @param {Object} transactionData - The transaction details to be sent in the body of the request
+ * @param {object} transactionData - The transaction details to be sent in the body of the request
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send (billRunId, transactionData) {
   const path = `v3/wrls/bill-runs/${billRunId}/transactions`

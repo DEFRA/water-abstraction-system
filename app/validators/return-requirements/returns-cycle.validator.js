@@ -13,9 +13,9 @@ const Joi = require('joi')
  * When setting up a requirement users must specify a returns cycle for the return requirement. Users must select one
  * period for the returns cycle. If this requirement is not met the validation will return an error.
  *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  *
- * @returns {Object} The result from calling Joi's schema.validate(). The result from calling Joi's schema.validate().
+ * @returns {object} The result from calling Joi's schema.validate(). The result from calling Joi's schema.validate().
  * If any errors are found the `error:` property will also exist detailing what the issue is.
  */
 function go (payload) {

@@ -17,7 +17,7 @@ const ContactModel = require('../../../app/models/contact.model.js')
  * - `contactType` - person
  * - `email` - amara.gupta@example.com
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:ContactModel>} The instance of the newly created record
  */
@@ -35,7 +35,7 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
   const defaults = {

@@ -12,8 +12,8 @@ const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 /**
  * Adds a company to the provided licence that is set up to be the licence holder
  *
- * @param {String} licenceRef - The licence reference that the company will be the licence holder for
- * @param {String} [name] - The name of the company that will be the licence holder
+ * @param {string} licenceRef - The licence reference that the company will be the licence holder for
+ * @param {string} [name] - The name of the company that will be the licence holder
  *
  * @returns {Promise<module:LicenceDocumentRoleHelper>} the licence document role which will link through to all the
  * entities that make up the licence holder

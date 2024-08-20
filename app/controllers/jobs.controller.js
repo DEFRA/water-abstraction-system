@@ -14,6 +14,8 @@ const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited
  * Triggers export of all relevant tables to CSV and then uploads them to S3
  *
  * > Has to be called something other than 'export' because export is a reserved word
+ * @param _request
+ * @param h
  */
 async function exportDb (_request, h) {
   ExportService.go()

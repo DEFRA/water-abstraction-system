@@ -7,6 +7,8 @@ const LegacyImportLicenceService = require('../services/import/legacy-licence.se
 
 /**
  * Controller for /import
+ * @param request
+ * @param h
  * @module ImportController
  */
 async function licence (request, h) {

@@ -23,10 +23,10 @@
  * This service is used by the `RouterPlugin` to check which routes need filtering before it then registers them with
  * the Hapi server instance.
  *
- * @param {Object[]} routes An array of Hapi routes expected to be provided by the `RouterPlugin`
- * @param {string} environment The current environment ('dev', 'tst', 'tra', 'pre' or 'prd')
+ * @param {object[]} routes - An array of Hapi routes expected to be provided by the `RouterPlugin`
+ * @param {string} environment - The current environment ('dev', 'tst', 'tra', 'pre' or 'prd')
  *
- * @returns {Object[]} an array of Hapi routes, filtered depending on the current environment and whether any paths
+ * @returns {object[]} an array of Hapi routes, filtered depending on the current environment and whether any paths
  * have been registered as needing filtering
  */
 function go (routes, environment) {

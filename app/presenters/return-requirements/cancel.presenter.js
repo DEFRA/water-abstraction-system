@@ -3,7 +3,7 @@
 /**
  * Formats data for the `/return-requirements/{sessionId}/cancel` page
  * @module CancelRequirementsPresenter
-*/
+ */
 
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementFrequencies, returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
@@ -13,7 +13,7 @@ const { returnRequirementFrequencies, returnRequirementReasons } = require('../.
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session) {
   const { id: sessionId, journey, licence, reason, requirements } = session

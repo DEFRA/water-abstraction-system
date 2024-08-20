@@ -19,10 +19,10 @@ const SessionModel = require('../../models/session.model.js')
  *
  * If valid it converts the session data to return requirements records then deletes the session record.
  *
- * @param {String} sessionId - The UUID for return requirement setup session record
- * @param {Number} userId - The id of the logged in user
+ * @param {string} sessionId - The UUID for return requirement setup session record
+ * @param {number} userId - The id of the logged in user
  *
- * @returns {String} The licence ID
+ * @returns {string} The licence ID
  */
 async function go (sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)

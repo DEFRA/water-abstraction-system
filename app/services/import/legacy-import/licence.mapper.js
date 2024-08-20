@@ -35,8 +35,8 @@ function _mapLicence (licence, licenceVersions) {
 /**
  * Creates a JSON object of the region data
  *
- * @param {Object} licenceData
- * @return {RegionsType}
+ * @param {object} licenceData
+ * @returns {RegionsType}
  */
 const _regions = (licenceData) => {
   const historicalAreaCode = licenceData.AREP_AREA_CODE
@@ -58,7 +58,7 @@ const _regions = (licenceData) => {
  *
  * @param {LegacyLicenceType} licence
  * @param {LegacyLicenceVersionsArray} licenceVersions
- * @return {String} YYYY-MM-DD
+ * @returns {string} YYYY-MM-DD
  */
 const _startDate = (licence, licenceVersions) => {
   if (licence.ORIG_EFF_DATE !== 'null') {

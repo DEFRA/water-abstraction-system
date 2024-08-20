@@ -12,7 +12,7 @@ const ChargeVersionModel = require('../../models/charge-version.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch charge versions for
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's set up tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
 async function go (licenceId) {
   return _fetch(licenceId)

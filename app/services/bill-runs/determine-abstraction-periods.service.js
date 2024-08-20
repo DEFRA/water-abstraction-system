@@ -41,13 +41,13 @@
  * Finally, we filter out any of these abstraction periods which don't overlap with the reference period, and return the
  * results.
  *
- * @param {Object} referencePeriod either the billing period or charge period
- * @param {Number} startDay the abstraction start day value
- * @param {Number} startMonth the abstraction start month value
- * @param {Number} endDay the abstraction end day value
- * @param {Number} endMonth the abstraction end month value
+ * @param {object} referencePeriod - either the billing period or charge period
+ * @param {number} startDay - the abstraction start day value
+ * @param {number} startMonth - the abstraction start month value
+ * @param {number} endDay - the abstraction end day value
+ * @param {number} endMonth - the abstraction end month value
  *
- * @returns {Object[]} An array of abstraction periods each containing a start and end date
+ * @returns {object[]} An array of abstraction periods each containing a start and end date
  */
 function go (referencePeriod, startDay, startMonth, endDay, endMonth) {
   const abstractionPeriodsWithYears = _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth)

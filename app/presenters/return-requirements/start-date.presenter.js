@@ -3,7 +3,7 @@
 /**
  * Formats data for the `/return-requirements/{sessionId}/start-date` page
  * @module StartDatePresenter
-*/
+ */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
@@ -13,7 +13,7 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (session) {
   const {

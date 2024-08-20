@@ -8,7 +8,8 @@
 /**
  * Formats data for the `/licences/{id}/contact-details` view licence contact details page
  *
- * @returns {Object} The data formatted for the view template
+ * @param contacts
+ * @returns {object} The data formatted for the view template
  */
 function go (contacts) {
   return {

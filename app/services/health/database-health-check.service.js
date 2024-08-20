@@ -17,7 +17,7 @@ const { db } = require('../../../db/db.js')
  * - get some basic stats, for example number of records, for each table without needing to connect to the db
  *
  * @returns an array of stats for each table found in the db
-*/
+ */
 async function go () {
   const stats = db.select().table('pg_stat_user_tables')
 

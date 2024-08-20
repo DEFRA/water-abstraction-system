@@ -33,6 +33,7 @@ async function go (licenceId) {
 /**
  * Fetch the specified licence, its current version, and other linked records we need to generate return requirements
  * from
+ * @param licenceId
  */
 async function _fetch (licenceId) {
   return LicenceModel.query()

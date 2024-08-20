@@ -31,7 +31,8 @@ async function changeAddress (request, h) {
 
 /**
  * Takes an error from a validator and returns a suitable Boom error
-*/
+ * @param error
+ */
 function _formattedValidationError (error) {
   return Boom.badRequest(error.details[0].message)
 }

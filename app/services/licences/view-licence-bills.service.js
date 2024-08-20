@@ -15,7 +15,9 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<Object>} an object representing the `pageData` needed by the licence bills template.
+ * @param auth
+ * @param page
+ * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
 async function go (licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)

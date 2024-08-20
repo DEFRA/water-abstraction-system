@@ -44,7 +44,7 @@ class SessionModel extends BaseModel {
    * We think this makes working with the `SessionModel` the same as working with the normal, structured model
    * instances.
    *
-   * @param {Object} _queryContext - Objection.js query context which we do not use
+   * @param {object} _queryContext - Objection.js query context which we do not use
    */
   $afterFind (_queryContext) {
     for (const [key, value] of Object.entries(this.data)) {
@@ -73,7 +73,7 @@ class SessionModel extends BaseModel {
    * Ignoring `id` and the timestamps, this method extracts all the other properties on the instance into an object
    * then calls `patch({ data: currentData })`, saving calling modules the trouble!
    *
-   * @returns {Promise<Number>} - the number of affected rows. In our case this will always be 1!
+   * @returns {Promise<number>} - the number of affected rows. In our case this will always be 1!
    */
   async $update () {
     const { id, createdAt, data, updatedAt, ...currentData } = this

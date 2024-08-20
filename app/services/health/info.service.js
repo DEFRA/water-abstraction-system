@@ -26,7 +26,7 @@ const servicesConfig = require('../../../config/services.config.js')
  *
  * Each data set is returned in the format needed to populate the gov.uk table elements ie. an array containing one
  * array per row, where each row array contains multiple `{ text: '...' }` elements, one for each cell in the row.
-*/
+ */
 async function go () {
   const addressFacadeData = await _getAddressFacadeData()
   const chargingModuleData = await _getChargingModuleData()

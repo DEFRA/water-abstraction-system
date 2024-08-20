@@ -15,7 +15,7 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  *
  * @param {string} page - the page number of bill runs to be viewed
  *
- * @returns {Promise<Object>} an object representing the `pageData` needed by the index bill run template. It contains
+ * @returns {Promise<object>} an object representing the `pageData` needed by the index bill run template. It contains
  * summary details for each bill run for the page selected, the template's pagination control, the title and the
  * status of any busy bill runs
  */

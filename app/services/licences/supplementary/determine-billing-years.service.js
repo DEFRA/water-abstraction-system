@@ -19,7 +19,7 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
  * @param {Date} endDate - The end date up to which to calculate financial years. If not provided,
  * the current date will be used.
  *
- * @returns {Object[]} - The financial year end that are impacted by the changes between the start and end dates and are
+ * @returns {object[]} - The financial year end that are impacted by the changes between the start and end dates and are
  * relevant for SROC.
  */
 function go (startDate, endDate) {
@@ -45,6 +45,7 @@ function go (startDate, endDate) {
  * impacted by the change. We only care about the financial year ends. So if the startDate for a new chargeVersion is
  * `2022-05-31`, the financial year end is considered to be `2023` since the financial years run April to March. Same
  * goes for if a charge versions endDate is `2023-03-05`, the financial year end is `2023`.
+ * @param date
  */
 function _adjustedFinancialYearEnd (date) {
   let year = date.getFullYear()

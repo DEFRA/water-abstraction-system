@@ -195,9 +195,9 @@ const LOAD_HELPERS = {
  * `LicenceDocumentHeaderHelper`. You _must_ provide all elements for the query. Transformed to SQL this would be
  * `SELECT entity_id FROM crm.entity WHERE entity_type = 'regime'`.
  *
- * @param {Object} payload - the body from the request containing the entities to be created
+ * @param {object} payload - the body from the request containing the entities to be created
  *
- * @returns {Promise<Object>} for each entity type passed in an array of ID's for the records created, for example
+ * @returns {Promise<object>} for each entity type passed in an array of ID's for the records created, for example
  *
  * ```javascript
  * {
@@ -272,6 +272,7 @@ async function go (payload) {
  * `instance.regimeEntityId` we'll confirm it is an object with a `schema:` property. We then replace the value of
  * `instance.regimeEntityId` with the result of a query based on the details provided. In this case `SELECT entity_id
  * FROM crm.entity WHERE entity_type = 'regime'`.
+ * @param instance
  */
 async function _applyLookups (instance) {
   const keys = Object.keys(instance)
@@ -300,6 +301,8 @@ async function _applyLookups (instance) {
  * So, this is a 'fudge' to avoid having to go back and re-create loads of views just to include the flag. The constant
  * `LOAD_HELPERS` identifies those entities that have a `is_test` field. When we load one that does we trigger this
  * function to update the flag on the source table. Then when `/data/tear-down` runs it will know to clear it.
+ * @param legacy
+ * @param id
  */
 async function _applyTestFlag (legacy, id) {
   const { schema, table, id: tableId } = legacy

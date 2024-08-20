@@ -18,8 +18,8 @@ const StartBillRunProcessService = require('../start-bill-run-process.service.js
  * Once the bill runs have been triggered it finishes by deleting the setup session. Control is handed back to the
  * controller whilst the engines create and being building the bill runs.
  *
- * @param {Object} user - Instance of `UserModel` that represents the user making the request
- * @param {Object} existsResults - Results of `ExistsService` returned in the controller and passed on to this service
+ * @param {object} user - Instance of `UserModel` that represents the user making the request
+ * @param {object} existsResults - Results of `ExistsService` returned in the controller and passed on to this service
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */

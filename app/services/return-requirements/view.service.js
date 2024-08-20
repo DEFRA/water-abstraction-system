@@ -13,7 +13,7 @@ const ViewPresenter = require('../../presenters/return-requirements/view.present
  *
  * @param {string} returnVersionId - The UUID for return requirement version
  *
- * @returns {Promise<Object>} page data needed by the view template
+ * @returns {Promise<object>} page data needed by the view template
  */
 async function go (returnVersionId) {
   const requirementsForReturns = await FetchReturnVersionService.go(returnVersionId)

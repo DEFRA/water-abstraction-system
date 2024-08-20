@@ -17,7 +17,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
- * @returns {Promise<Object>} The view data for the region page
+ * @returns {Promise<object>} The view data for the region page
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)

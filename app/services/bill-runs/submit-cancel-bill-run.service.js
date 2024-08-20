@@ -105,6 +105,7 @@ function _cannotBeDeleted (status) {
  *
  * But we need to ensure no one exploits the `POST /bill-runs/{id}/cancel` endpoint to try and delete a 'sent' bill
  * run. So, we always have to fetch the bill run to check its status is not one that prevents us deleting it.
+ * @param id
  */
 async function _fetchBillRun (id) {
   return BillRunModel.query()
@@ -128,6 +129,7 @@ async function _fetchBillRun (id) {
  * Transactions have to be deleted before bill licences. Bill licences have to be cleared before bills. Bills, batch
  * charge version years, and bill run volumes have to be cleared before we can delete the bill run. But we can do
  * those in parallel.
+ * @param billRunId
  */
 async function _removeBillingRecords (billRunId) {
   try {
@@ -167,6 +169,7 @@ async function _removeBillRunChargeVersionYears (billRunId) {
 /**
  * We've opted to do this particular query using knex raw rather than via the Objection models due to the need for
  * multiple joins.
+ * @param billRunId
  */
 async function _removeBillRunTransactions (billRunId) {
   return db.raw(`
@@ -199,6 +202,7 @@ async function _removeChargeElements (billRunId) {
  * As the `review_charge_elements` table has a join with the `review_charge_references` table we need to delete the
  * `review_charge_elements` table first. This function does that so we can process in parallel the deletion of the
  * elements and references whilst also deleting the records from the `review_charge_elements_returns` table.
+ * @param billRunId
  */
 async function _removeChargeElementsAndReferences (billRunId) {
   await _removeChargeElements(billRunId)
@@ -240,6 +244,7 @@ async function _removeReturns (billRunId) {
 /**
  * We always call this function as part of cancelling a bill run. However, there will only be records if the bill run
  * is an SROC tw-part tariff bill run in 'review'.
+ * @param billRunId
  */
 async function _removeReviewResults (billRunId) {
   try {

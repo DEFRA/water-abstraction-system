@@ -142,8 +142,10 @@ class LicenceModel extends BaseModel {
    */
   static get modifiers () {
     return {
+
       /**
        * currentVersion modifier fetches only the current licence version record for this licence
+       * @param query
        */
       currentVersion (query) {
         query
@@ -160,8 +162,10 @@ class LicenceModel extends BaseModel {
               .limit(1)
           })
       },
+
       /**
        * licenceHolder modifier fetches all the joined records needed to identify the licence holder
+       * @param query
        */
       licenceHolder (query) {
         query
@@ -205,9 +209,11 @@ class LicenceModel extends BaseModel {
             ])
           })
       },
+
       /**
        * registeredToAndLicenceName modifier fetches the linked `licenceDocumentHeader` which holds the licence name and
        * adds to it the registered user's email address if one is set.
+       * @param query
        */
       registeredToAndLicenceName (query) {
         query

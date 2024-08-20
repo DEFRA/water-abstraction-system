@@ -13,7 +13,7 @@ const RemoveBillPresenter = require('../../presenters/bills/remove-bill.presente
  *
  * @param {string} billId - The UUID for the bill to remove
  *
- * @returns {Promise<Object>} a formatted representation of the bill, its billing account and the bill run it is linked
+ * @returns {Promise<object>} a formatted representation of the bill, its billing account and the bill run it is linked
  * to for the remove bill page
  */
 async function go (billId) {

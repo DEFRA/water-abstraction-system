@@ -29,7 +29,7 @@ const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/u
  * It simply looks for the value 'crm_v2' and when seen, returns it as is without any formatting. For everything else,
  * it passes control to the out-of-the-box solution.
  *
- * @param {Object} opt Object containing options used by
+ * @param {object} opt - Object containing options used by
  *  {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers|knexsnakecasemappers()}
  *
  * @returns object containing Knex postProcessResponse() and wrapIdentifier() hooks

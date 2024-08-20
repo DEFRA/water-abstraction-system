@@ -71,10 +71,12 @@ class LicenceVersionPurposeModel extends BaseModel {
    */
   static get modifiers () {
     return {
+
       /**
        * allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
        * the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
        * determine what frequency returns should be collected and reported by the licensee.
+       * @param query
        */
       allPurposes (query) {
         query
@@ -115,7 +117,7 @@ class LicenceVersionPurposeModel extends BaseModel {
    * This information is used when we have to generate return requirements from the current abstraction data and
    * determine what collection and reporting frequency to use.
    *
-   * @returns {Boolean} true if the overall purpose is electricity generation (P-ELC-240 or P-ELC-200) else false
+   * @returns {boolean} true if the overall purpose is electricity generation (P-ELC-240 or P-ELC-200) else false
    */
   $electricityGeneration () {
     if (this.primaryPurpose.legacyId !== 'P') {

@@ -31,8 +31,9 @@
  *
  * So, we also do not log any requests to `/assets/*`.
  *
- * @param {Object} _options The options passed to the HapiPino plugin
- * @param {request} request Hapi request object created internally for each incoming request
+ * @param {object} _options - The options passed to the HapiPino plugin
+ * @param options
+ * @param {request} request - Hapi request object created internally for each incoming request
  *
  * @returns {boolean} true if the request should be ignored, else false
  */

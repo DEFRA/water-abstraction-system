@@ -18,10 +18,10 @@ const TEST_REGION_INDEX = 8
  * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
  * select a specific entry, or have it it return one at random.
  *
- * @param {Number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {Object} The selected reference entry or one picked at random
+ * @returns {object} The selected reference entry or one picked at random
  */
 function select (index = -1) {
   if (index > -1) {

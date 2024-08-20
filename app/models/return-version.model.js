@@ -63,9 +63,11 @@ class ReturnVersionModel extends BaseModel {
    */
   static get modifiers () {
     return {
+
       /**
        * history modifier fetches all the related records needed to determine history properties, for example, created
        * at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
+       * @param query
        */
       history (query) {
         query

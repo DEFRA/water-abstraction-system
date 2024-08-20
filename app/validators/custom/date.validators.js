@@ -7,6 +7,7 @@
 /**
  * Validates a string is in the format yyyy-mm-dd
  *
+ * @param value
  */
 const isValidISODate = (value) => {
   const regex = /^\d{4}-\d{2}-\d{2}$/

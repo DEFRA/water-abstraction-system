@@ -17,7 +17,7 @@ const {
  *
  * @param {module:BillRunModel[]} billRuns - The bill runs containing the data to be summarised for the view
  *
- * @returns {Object[]} Each bill run summary formatted for use in the `index.njk` template for `/bill-runs`
+ * @returns {object[]} Each bill run summary formatted for use in the `index.njk` template for `/bill-runs`
  */
 function go (billRuns) {
   return billRuns.map((billRun) => {

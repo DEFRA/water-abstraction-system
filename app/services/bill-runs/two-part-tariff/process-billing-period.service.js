@@ -22,10 +22,10 @@ const BillingConfig = require('../../../../config/billing.config.js')
  * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
  *
  * @param {module:BillRunModel} billRun - The two-part tariff bill run we need to process
- * @param {Object} billingPeriod - An object representing the financial year the bills will be for
+ * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
- * @returns {Promise<Boolean>} true if the bill run is not empty (there are transactions to bill) else false
+ * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go (billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
@@ -88,6 +88,10 @@ async function go (billRun, billingPeriod, billingAccounts) {
  * The complication is we group transactions by licence (via the bill licence) not charge version. So, as we iterate
  * the charge versions we have to determine if its for a licence that we have already generated a bill licence for, or
  * we have to create a new one.
+ * @param billId
+ * @param billingAccount
+ * @param billRunExternalId
+ * @param billingPeriod
  */
 async function _createBillLicencesAndTransactions (billId, billingAccount, billRunExternalId, billingPeriod) {
   const allBillLicences = []
@@ -117,6 +121,11 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
 
 /**
  * Handles generating the transaction data for a given charge version and then sending it to the Charging Module API.
+ * @param billLicenceId
+ * @param billingPeriod
+ * @param chargeVersion
+ * @param billRunExternalId
+ * @param accountNumber
  */
 async function _createTransactions (billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
   const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
@@ -141,6 +150,7 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
  * A billing account can be linked to multiple licences but not all of them may be billable. We add a flag to each
  * one that denotes if transactions were generated so we can easily filter the billable ones out. But we also need
  * to remove that flag because it doesn't exist in the DB and will cause issues if we try and persist the object.
+ * @param allBillLicences
  */
 function _extractBillableLicences (allBillLicences) {
   const billableBillLicences = []
@@ -173,11 +183,11 @@ function _extractBillableLicences (allBillLicences) {
  * Because we're processing the charge versions for a billing account the same licence might appear more than once. This
  * means we need to find the existing bill licence record or if one doesn't exist create it.
  *
- * @param {Object[]} billLicences - The existing bill licences created for the bill being generated
- * @param {Object} licence - the licence we're looking for an existing bill licence record
- * @param {String} billId - the ID of the bill we're creating
+ * @param {object[]} billLicences - The existing bill licences created for the bill being generated
+ * @param {object} licence - the licence we're looking for an existing bill licence record
+ * @param {string} billId - the ID of the bill we're creating
  *
- * @return {Object} returns either an existing bill licence or a new one for the licence and bill being generated
+ * @returns {object} returns either an existing bill licence or a new one for the licence and bill being generated
  */
 function _findOrCreateBillLicence (billLicences, licence, billId) {
   const { id: licenceId, licenceRef } = licence
@@ -209,6 +219,9 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
  * This information needs to be passed to the Charging Module API as it affects the calculation.
  *
  * This function iterates the charge references generating a transaction for each one.
+ * @param billLicenceId
+ * @param chargePeriod
+ * @param chargeVersion
  */
 function _generateTransactionData (billLicenceId, chargePeriod, chargeVersion) {
   try {
@@ -244,6 +257,9 @@ function _generateTransactionData (billLicenceId, chargePeriod, chargeVersion) {
  * our bill.
  *
  * Once everything has been generated we persist the results to the DB.
+ * @param billingAccount
+ * @param billRun
+ * @param billingPeriod
  */
 async function _processBillingAccount (billingAccount, billRun, billingPeriod) {
   const { id: billingAccountId, accountNumber } = billingAccount

@@ -30,14 +30,14 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * and that reissuing bill is itself reissued, then `originalBillId` will still point directly to the original
  * source bill.
  *
- * @param {module:BillModel} sourceBill The bill to be reissued. Note that we expect it to include the bill
+ * @param {module:BillModel} sourceBill - The bill to be reissued. Note that we expect it to include the bill
  * licences and transactions
- * @param {module:BillRunModel} reissueBillRun The bill run that the new bills should belong to
+ * @param {module:BillRunModel} reissueBillRun - The bill run that the new bills should belong to
  *
- * @returns {Promise<Object>} dataToReturn Data that has been generated while reissuing the bill
- * @returns {Object[]} dataToReturn.bills Array of bills
- * @returns {Object[]} dataToReturn.billLicences Array of bill licences
- * @returns {Object[]} dataToReturn.transactions Array of transactions
+ * @returns {Promise<object>} dataToReturn Data that has been generated while reissuing the bill
+ * @returns {object[]} dataToReturn.bills Array of bills
+ * @returns {object[]} dataToReturn.billLicences Array of bill licences
+ * @returns {object[]} dataToReturn.transactions Array of transactions
  */
 
 async function go (sourceBill, reissueBillRun) {
@@ -138,6 +138,7 @@ function _generateBillLicence (billId, licenceId, licenceRef) {
  *
  * This service sends "view status" requests to the CM (every second to avoid bombarding it) until the status is not
  * `pending`, at which point it returns.
+ * @param billRunExternalId
  */
 async function _pauseUntilNotPending (billRunExternalId) {
   let status
@@ -169,6 +170,9 @@ async function _pauseUntilNotPending (billRunExternalId) {
 
 /**
  * Generates a new transaction using sourceTransaction as a base and amending properties as appropriate
+ * @param chargingModuleReissueTransaction
+ * @param sourceTransaction
+ * @param billLicenceId
  */
 function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
   return {
@@ -188,6 +192,8 @@ function _generateTransaction (chargingModuleReissueTransaction, sourceTransacti
  * The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
  * and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
  * amount should be positive or negative
+ * @param chargeValue
+ * @param credit
  */
 function _determineSignOfNetAmount (chargeValue, credit) {
   return credit ? -chargeValue : chargeValue
@@ -195,6 +201,7 @@ function _determineSignOfNetAmount (chargeValue, credit) {
 
 /**
  * Maps the provided CM invoice fields to their bill equivalents
+ * @param chargingModuleInvoice
  */
 function _mapChargingModuleInvoice (chargingModuleInvoice) {
   const chargingModuleRebilledTypes = new Map()
@@ -215,6 +222,7 @@ function _mapChargingModuleInvoice (chargingModuleInvoice) {
 
 /**
  * Updates the source bill's rebilling state and original bill ID
+ * @param sourceBill
  */
 async function _markSourceBillAsRebilled (sourceBill) {
   await sourceBill.$query().patch({
@@ -241,6 +249,10 @@ function _retrieveChargingModuleLicence (chargingModuleInvoice, licenceRef) {
 /**
  * If a bill exists for this combination of source bill and CM reissue invoice then return it; otherwise,
  * generate it, store it and then return it.
+ * @param dataToReturn
+ * @param sourceBill
+ * @param reissueBillRun
+ * @param chargingModuleReissueInvoice
  */
 function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, chargingModuleReissueInvoice) {
   // Because we have nested iteration of source bill and Charging Module reissue invoice, we need to ensure we have
@@ -279,6 +291,10 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
 /**
  * If a bill licence exists for this billing account id then return it; otherwise, generate it, store it and then return
  * it.
+ * @param dataToReturn
+ * @param sourceBill
+ * @param billingId
+ * @param sourceBillLicence
  */
 function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, sourceBillLicence) {
   const existingBillLicence = dataToReturn.billLicences.find((billLicence) => {

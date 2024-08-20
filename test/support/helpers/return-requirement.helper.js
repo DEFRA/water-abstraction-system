@@ -23,7 +23,7 @@ const ReturnRequirementModel = require('../../../app/models/return-requirement.m
  * - `returnVersionId` - [random UUID]
  * - `siteDescription` - BOREHOLE AT AVALON
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
@@ -41,7 +41,7 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
   const legacyId = data.legacyId ? data.legacyId : randomInteger(100, 99999)

@@ -10,7 +10,8 @@ const StaticLookupsLib = require('../lib/static-lookups.lib.js')
 
 /**
  * Checks that the payload of a `create bill run` request is valid
-*/
+ * @param data
+ */
 function go (data) {
   const schema = Joi.object({
     type: Joi.string().valid(...StaticLookupsLib.billRunTypes).required(),

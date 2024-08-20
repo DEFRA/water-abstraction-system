@@ -10,7 +10,7 @@ const LicenceVersionPurposeConditionValidator = require('../../validators/import
 /**
  * Add a new licence version purpose condition
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:LicenceVersionPurposeConditionModel>} The instance of the newly created record
  */

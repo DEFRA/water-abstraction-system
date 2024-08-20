@@ -11,7 +11,7 @@ const redisConfig = require('../../../config/redis.config.js')
 
 /**
  * Connect to Redis and return a client
-*/
+ */
 async function go () {
   return new Redis({
     host: redisConfig.host,
