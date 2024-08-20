@@ -70,6 +70,20 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/licences/supplementary',
+    options: {
+      handler: LicencesController.supplementary,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 
