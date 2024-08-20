@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -35,8 +35,13 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
 describe('Charge Version model', () => {
   let chargeVersionId
+  let testChangeReason
   let testRecord
   let testUser
+
+  before(() => {
+    testChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -120,11 +125,7 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to change reason', () => {
-      let testChangeReason
-
       beforeEach(async () => {
-        testChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
-
         const { id: changeReasonId } = testChangeReason
 
         testRecord = await ChargeVersionHelper.add({ changeReasonId })
@@ -541,6 +542,88 @@ describe('Charge Version model', () => {
 
             expect(result).to.equal(['Transfer per app 12-DEF'])
           })
+        })
+      })
+    })
+  })
+
+  describe('$reason', () => {
+    describe('when the charge version was created in WRLS', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ changeReasonId: testChangeReason.id, source: 'wrls' })
+
+        testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+      })
+
+      it('returns the charge version reason', () => {
+        const result = testRecord.$reason()
+
+        expect(result).to.equal(testChangeReason.description)
+      })
+    })
+
+    describe('when the charge version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ source: 'nald' })
+
+        chargeVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns null', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        describe('but the mod log history has no reason description recorded in the first entry', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns null', () => {
+            const result = testRecord.$reason()
+
+            expect(result).to.be.null()
+          })
+        })
+      })
+
+      describe('and the mod log history has a reason description recorded in the first entry', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'Formal Variation', chargeVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+          })
+
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns the NALD reason description', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.equal('Formal Variation')
         })
       })
     })

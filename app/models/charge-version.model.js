@@ -241,6 +241,39 @@ class ChargeVersionModel extends BaseModel {
 
     return notes
   }
+
+  /**
+   * Determine the reason the 'source' record was created using history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * Unfortunately, NALD doesn't enforce it's creation. But as the NALD version records don't capture the who and when,
+   * they are the best 'source' we have to determine this information for imported records.
+   *
+   * If the record has a reason, either it was created in WRLS or we have mapped the NALD 'source' reason to a WRLS one.
+   * The version record is the 'source'.
+   *
+   * If a reason doesn't exist, it falls back to attempting to extract the reason description from the first mod log
+   * record, for example, `Record Loaded During Migration`. If one exists it is the 'source'.
+   *
+   * If neither 'source' records have a reason then it returns `null`
+   *
+   * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
+   */
+  $reason () {
+    if (this.changeReason) {
+      return this.changeReason.description
+    }
+
+    const firstModLog = this._firstModLog()
+
+    return firstModLog?.reasonDescription ?? null
+  }
 }
 
 module.exports = ChargeVersionModel
