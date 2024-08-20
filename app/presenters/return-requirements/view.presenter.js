@@ -8,7 +8,7 @@
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { generatePointDetail } = require('../../lib/general.lib.js')
-const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
@@ -20,20 +20,20 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  */
 
 function go (returnVersion) {
-  const { createdAt, licence, reason, modLog, notes, multipleUpload, returnRequirements, startDate, status, user } =
+  const { licence, multipleUpload, returnRequirements, startDate, status } =
     returnVersion
 
   return {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
-    createdBy: _createdBy(modLog, user),
-    createdDate: _createdDate(createdAt, modLog),
+    createdBy: returnVersion.$createdBy() ? returnVersion.$createdBy() : 'Migrated from NALD',
+    createdDate: formatLongDate(new Date(returnVersion.$createdAt())),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    notes: _notes(modLog, notes),
+    notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
-    reason: returnRequirementReasons[reason] || '',
+    reason: returnVersion.$reason() ? returnVersion.$reason() : '',
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
     status
@@ -94,34 +94,6 @@ function _buildAgreementExceptions (returnRequirement) {
   }
 
   return agreementsExceptions
-}
-
-function _createdBy (modLog, user) {
-  if (user) {
-    return user.username
-  }
-
-  if (modLog.createdBy) {
-    return modLog.createdBy
-  }
-
-  return 'Migrated from NALD'
-}
-
-function _createdDate (createdAt, modLog) {
-  if (modLog.createdAt) {
-    return formatLongDate(new Date(modLog.createdAt))
-  }
-
-  return formatLongDate(createdAt)
-}
-
-function _notes (modLog, returnVersionNote) {
-  const notes = [modLog.note, returnVersionNote]
-
-  return notes.filter((note) => {
-    return note
-  })
 }
 
 function _mapRequirement (requirement) {

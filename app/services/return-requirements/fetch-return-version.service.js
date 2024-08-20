@@ -31,16 +31,9 @@ async function _fetch (returnVersionId) {
       'notes',
       'reason',
       'startDate',
-      'status',
-      'modLog'
+      'status'
     ])
-    .withGraphFetched('user')
-    .modifyGraph('user', (builder) => {
-      builder.select([
-        'id',
-        'username'
-      ])
-    })
+    .modify('history')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
