@@ -89,7 +89,7 @@ async function _sendRequest (path, method, body) {
  * - the authorization header with the AWS Cognito token on our requests
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
- *   response to a JSON object for us
+ * response to a JSON object for us
  * @param accessToken
  * @param body
  */

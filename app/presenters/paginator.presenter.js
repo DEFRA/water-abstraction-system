@@ -21,6 +21,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * The pagination component is the thing seen at the bottom of pages which have to display dynamic results, for example,
  * search results or all bill runs. For example,
  *
+ * @example
  *  `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
  *
  * The first step is to take the number of records and divide them by our page size config (defaults to 25) to determine

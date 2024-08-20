@@ -63,6 +63,7 @@ class LicenceVersionPurposeModel extends BaseModel {
    * Modifiers allow us to reuse logic in queries, eg. select the licence version purpose and all related purposes to
    * determine if the purpose is electricity generation.
    *
+   * @example
    * return LicenceVersionPurposeModel.query()
    *   .findById(licenceVersionPurposeId)
    *   .modify('allPurposes')

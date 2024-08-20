@@ -30,13 +30,14 @@
  * - A licence review is currently not 'in progress'
  * - The user clicks the 'Mark progress' button. This sends a POST request
  * - The server updates the licence review to 'in progress' and redirects to the licence review page (as per the
- *   {@link https://www.geeksforgeeks.org/post-redirect-get-prg-design-pattern/ | PRG pattern})
+ * {@link https://www.geeksforgeeks.org/post-redirect-get-prg-design-pattern/ | PRG pattern})
  * - The redirect causes a GET request which results in the server getting the updated record
  * - The licence review is displayed to the user
  *
  * In this situation we want to display a banner to the user confirming a change was just made. The problem is there is
  * nothing to tell the GET request that this is so. We could do the following
  *
+ * @example
  * - Don't redirect but respond directly from the POST
  *   - This breaks PRG which you'll see if you hit refresh. The browser will resend your POST request which might have
  *     unintended consequences

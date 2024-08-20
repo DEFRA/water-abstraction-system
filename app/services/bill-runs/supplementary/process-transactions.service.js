@@ -23,7 +23,7 @@ const ReverseTransactionsService = require('./reverse-transactions.service.js')
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Promise<object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
- *  out by a previous matching credit)
+ * out by a previous matching credit)
  */
 async function go (calculatedTransactions, billingAccountId, billLicence, billingPeriod) {
   const { id: billLicenceId, licenceId } = billLicence

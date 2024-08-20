@@ -15,7 +15,7 @@ const { randomInteger } = require('../general.js')
  * - `reference` - [randomly generated - 4.4.5]
  * - `subsistenceCharge` - 12000
  * - `description` - Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year,
- *    where a Tier 1 model applies.
+ * where a Tier 1 model applies.
  * - `shortDescription` - Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model
  * - `tidal` - false
  * - `lossFactor` - low
@@ -44,6 +44,8 @@ function add (data = {}) {
  * for use in tests to avoid having to duplicate values.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - returns the defaults with the override data spread on top
  */
 function defaults (data = {}) {
   const defaults = {

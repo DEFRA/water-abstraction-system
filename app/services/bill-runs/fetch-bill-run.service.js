@@ -79,11 +79,11 @@ async function _fetchBillRun (id) {
  * So, immediately we are required to use Knex. But then we have 2 sub-queries to perform
  *
  * - **get a list of linked licences as a single result** - Because a bill can be linked to 1 or more licences we can
- *  not use a JOIN. So, instead we use a function built into PostgreSQL that allows you to aggregate multiple results
- *  into a single value. (We can easily split them out again using JavaScripts `split()` method)
+ * not use a JOIN. So, instead we use a function built into PostgreSQL that allows you to aggregate multiple results
+ * into a single value. (We can easily split them out again using JavaScripts `split()` method)
  * - **flag the bill as a water company** - Again we have to avoid joining to the `licences` table via
- *  `bill_licences` as we'll get duplicate results. So, again we use a PostgreSQL function that will return
- *  true or false based on the query provided to it.
+ * bill_licences` as we'll get duplicate results. So, again we use a PostgreSQL function that will return
+ * true or false based on the query provided to it.
  *
  * We could have made things simpler by performing separate queries and then transforming all the results into what we
  * need this service to return. But we opted to go for performance this time, avoiding multiple requests to the DB and

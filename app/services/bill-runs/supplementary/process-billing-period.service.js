@@ -90,6 +90,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
  * more charge versions and the key's value is an object containing the associated licence, bill and bill
  * licence, along with any required transactions, eg:
  *
+ * @json
  * {
  *   'bill-licence-id-1': {
  *     billLicence: '...',     // instance of the bill licence

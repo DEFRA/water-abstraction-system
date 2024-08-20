@@ -147,7 +147,7 @@ function _service (serviceName) {
  * - the authorization header with shared legacy JWT Auth token
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
- *   response to a JSON object for us
+ * response to a JSON object for us
  * @param service
  * @param userId
  * @param apiRequest

@@ -56,10 +56,12 @@ function _generateBillLicence (billId, licenceId, licenceRef) {
  * required bill licences and returns an object where each key is a concatenated bill id and licence id, and each value
  * is the bill licence for that combination of bill and licence, ie:
  *
+ * @json
  * {
  *   'key-1': { billLicenceId: 'bill-licence-1', ... },
  *   'key-2': { billLicenceId: 'bill-licence-2', ... }
  * }
+ *
  * @param chargeVersions
  * @param bills
  */
@@ -94,10 +96,12 @@ function _billLicenceKey (billId, licenceId) {
  * charge version processing loop. This function generates the required bill licences and returns an object where
  * each key is the billing account id, and each value is the bill, ie:
  *
+ * @json
  * {
  *   'uuid-1': { id: 'uuid-1', ... },
  *   'uuid-2': { id: 'uuid-2', ... }
  * }
+ *
  * @param billingAccounts
  * @param billRunId
  * @param billingPeriod

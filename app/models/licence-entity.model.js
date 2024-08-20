@@ -23,10 +23,10 @@ const BaseModel = require('./base.model.js')
  * 'things'. So, you'll find 4 types if you look at the raw data.
  *
  * - regime (only one record has this type and comes from the original team being pressured to create a tactical CRM for
- *   all regimes, not just water abstraction)
+ * all regimes, not just water abstraction)
  * - company (this has been replaced by `crm_v2.companies`)
  * - individual (this has been replaced by `crm_v2.companies`, except for registered users which is the only reason we
- *   need to add this model)
+ * need to add this model)
  * - delete_me (no idea! But only one record has this type so it can be ignored)
  */
 class LicenceEntityModel extends BaseModel {

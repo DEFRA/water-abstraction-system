@@ -11,6 +11,9 @@ const StaticLookupsLib = require('../lib/static-lookups.lib.js')
 /**
  * Checks that the payload of a `create bill run` request is valid
  * @param data
+ *
+ * @returns {Joi.ValidationResult<any>} - The result of the validation, which contains the `value`, `error`,
+ * and `warning` properties.
  */
 function go (data) {
   const schema = Joi.object({

@@ -12,7 +12,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
 
 /**
  * Orchestrates validating the data for the amend adjustment factor page and patching the db value
-
+ *
  * @param {string} billRunId - The UUID for the bill run
  * @param {string} licenceId - The UUID of the licence that is being reviewed
  * @param {string} reviewChargeReferenceId - The UUID of the review charge reference being updated

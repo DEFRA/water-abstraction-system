@@ -58,6 +58,7 @@ class LicenceVersionModel extends BaseModel {
   /**
    * Modifiers allow us to reuse logic in queries, eg. select the licence version and all mod log records:
    *
+   * @example
    * return LicenceVersionModel.query()
    *   .findById(licenceVersionId)
    *   .modify('history')

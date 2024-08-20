@@ -32,6 +32,8 @@ async function changeAddress (request, h) {
 /**
  * Takes an error from a validator and returns a suitable Boom error
  * @param error
+ *
+ * @returns {Boom.Boom} - A Boom error object representing a 400 Bad Request.
  */
 function _formattedValidationError (error) {
   return Boom.badRequest(error.details[0].message)

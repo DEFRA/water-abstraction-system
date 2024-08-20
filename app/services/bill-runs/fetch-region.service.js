@@ -14,7 +14,7 @@ const RegionModel = require('../../models/region.model.js')
  * supplementary bill run. Its primary aim is to meet the acceptance criteria defined in WATER-3787.
  *
  * @param {string} naldRegionId - The NALD region ID (a number between 1 to 9, 9 being the test region) for the region
- *  to find
+ * to find
  *
  * @returns {object} Instance of `RegionModel` with the matching NALD Region ID
  */

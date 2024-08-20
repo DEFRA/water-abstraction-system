@@ -32,14 +32,14 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * The complexity comes from the legacy database and how it has been designed
  *
  * - the source for addresses, companies and contacts is NALD and WRLS. But rather than transform them at ingress to a
- *   single format the tables manage both. For example, NALD contacts use `initials` whereas WRLS contacts use
- *   `middle_initials`. A contact can also be a 'department' under WRLS, which means the format changes again
+ * single format the tables manage both. For example, NALD contacts use `initials` whereas WRLS contacts use
+ * `middle_initials`. A contact can also be a 'department' under WRLS, which means the format changes again
  * - where possible, duplication of records has tried to be avoided. For example, you cannot have 2 addresses with the
- *   same UPRN, or 2 companies with the same company number. The problem is the source data _does_ change. We have seen
- *   the OS Places result for Horizon House change from Environment Agency, to Natural England, Defra and back to the
- *   Environment Agency over the years. This means when a user changes the address, for example, they may actually be
- *   selecting one that already exists based on UPRN, in which case we are not inserting a new record but using an
- *   existing one
+ * same UPRN, or 2 companies with the same company number. The problem is the source data _does_ change. We have seen
+ * the OS Places result for Horizon House change from Environment Agency, to Natural England, Defra and back to the
+ * Environment Agency over the years. This means when a user changes the address, for example, they may actually be
+ * selecting one that already exists based on UPRN, in which case we are not inserting a new record but using an
+ * existing one
  *
  * Add to that all SOP wants is a name and address which means we have to do a lot of work to format the data we receive
  * into something the CHA will accept.

@@ -134,6 +134,7 @@ class LicenceModel extends BaseModel {
   /**
    * Modifiers allow us to reuse logic in queries, eg. select the licence and everything to get the licence holder:
    *
+   * @example
    * return LicenceModel.query()
    *   .findById(licenceId)
    *   .modify('licenceHolder')

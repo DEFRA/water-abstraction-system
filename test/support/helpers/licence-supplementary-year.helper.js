@@ -33,7 +33,9 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {object} [data] - Any data you want to use instead of the defaults used here in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - returns the defaults with the override data spread on top
  */
 function defaults (data = {}) {
   const defaults = {

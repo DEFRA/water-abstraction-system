@@ -55,6 +55,7 @@ class ReturnVersionModel extends BaseModel {
    * Modifiers allow us to reuse logic in queries, eg. select the return version, user that created it, and/or all mod
    * log records:
    *
+   * @example
    * return ReturnVersionModel.query()
    *   .findById(returnVersionId)
    *   .modify('history')

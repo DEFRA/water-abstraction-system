@@ -42,7 +42,7 @@ class BaseNotifierLib {
    *
    * @param {string} message - Message to add to the log (INFO)
    * @param {object} [data={}] - An object containing any values to be logged, for example, a bill run ID to be included
-   *  with the log message. Defaults to an empty object
+   * with the log message. Defaults to an empty object
    */
   omg (message, data = {}) {
     this._logger.info(this._formatLogPacket(data), message)

@@ -30,7 +30,7 @@ const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-
  * - 3 licence version purposes; one for an electricity purpose, one for a two-part purpose, one standard
  * - 2 licence financial agreements: one that is current but not 2PT, the other is 2PT but has ended
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
- *   points and the rest 1
+ * points and the rest 1
  *
  * @param {string | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
  *

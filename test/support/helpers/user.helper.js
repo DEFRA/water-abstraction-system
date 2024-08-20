@@ -44,6 +44,8 @@ function add (data = {}) {
  * for use in tests to avoid having to duplicate values.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - returns the defaults with the override data spread on top
  */
 function defaults (data = {}) {
   const defaults = {
@@ -72,7 +74,7 @@ function generateUserId () {
  * when using the service.
  *
  * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
- * select a specific entry, or have it it return one at random.
+ * select a specific entry, or have it return one at random.
  *
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
