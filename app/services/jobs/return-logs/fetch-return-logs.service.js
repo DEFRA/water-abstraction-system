@@ -11,8 +11,22 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
 
-const endOfSummerCycle = new Date(new Date().getFullYear() + 1, 9, 31)
-const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, 2, 31)
+const allYearDueDateDay = 28
+const allYearDueDateMonth = 3
+const allYearEndDay = 31
+const allYearEndMonth = 2
+const allYearStartDay = 1
+const allYearStartMonth = 3
+
+const summerDueDateDay = 28
+const summerDueDateMonth = 10
+const summerEndDay = 31
+const summerEndMonth = 9
+const summerStartDay = 1
+const summerStartMonth = 10
+
+const endOfSummerCycle = new Date(new Date().getFullYear() + 1, summerEndMonth, summerEndDay)
+const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, allYearEndMonth, allYearEndDay)
 
 /**
  * Fetch all return requirements that need return logs created.
@@ -26,51 +40,38 @@ async function go (isSummer, licenceReference) {
   return data
 }
 
-async function _createMetaData (isSummer,
-  endDate,
-  abstractionPeriodStartDay,
-  abstractionPeriodStartMonth,
-  abstractionPeriodEndDay,
-  abstractionPeriodEndMonth,
-  areacode,
-  isUpload,
-  legacyId,
-  naldRegionId,
-  points,
-  purposes,
-  siteDescription,
-  twoPartTariff,
-  reason
-) {
+async function _createMetaData (isSummer, endDate, requirements) {
   return {
-    description: siteDescription,
-    isCurrent: reason !== 'succession-or-transfer-of-licence',
+    description: requirements.siteDescription,
+    isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
     isFinal: _isFinal(endDate, isSummer),
     isSummer,
-    isTwoPartTariff: twoPartTariff,
-    isUpload,
+    isTwoPartTariff: requirements.twoPartTariff,
+    isUpload: requirements.upload,
     nald: {
-      regionCode: naldRegionId,
-      areaCode: areacode,
-      formatId: legacyId,
-      periodStartDay: abstractionPeriodStartDay,
-      periodStartMonth: abstractionPeriodStartMonth,
-      periodEndDay: abstractionPeriodEndDay,
-      periodEndMonth: abstractionPeriodEndMonth
+      regionCode: requirements.returnVersion.licence.region.naldRegionId,
+      areaCode: requirements.returnVersion.licence.areacode,
+      formatId: requirements.legacyId,
+      periodStartDay: requirements.abstractionPeriodStartDay,
+      periodStartMonth: requirements.abstractionPeriodStartMonth,
+      periodEndDay: requirements.abstractionPeriodEndDay,
+      periodEndMonth: requirements.abstractionPeriodEndMonth
     },
-    points,
-    purposes,
+    points: requirements.returnRequirementPoints,
+    purposes: requirements.returnRequirementPurposes,
     version: 1
   }
 }
 
-function _createReturnLogId (regionCode, licenceReference, legacyId, startDate, endDate) {
+function _createReturnLogId (requirements, startDate, endDate) {
+  const regionCode = requirements.returnVersion.licence.region.naldRegionId
+  const licenceReference = requirements.returnVersion.licence.licenceRef
+  const legacyId = requirements.legacyId
+
   return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
 }
 
-async function _fetchReturnRequirements (isSummer, licenceReference) {
-  const cycleStartDate = _getCycleStartDate(isSummer)
-
+async function _fetchExternalIds (cycleStartDate) {
   const externalIds = await ReturnLogModel.query()
     .select(['licenceRef',
       db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")
@@ -82,8 +83,15 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
     return item.externalid
   })
 
+  return externalIdsArray
+}
+
+async function _fetchReturnRequirements (isSummer, licenceReference) {
+  const cycleStartDate = _getCycleStartDate(isSummer)
+  const externalIds = await _fetchExternalIds(cycleStartDate)
+
   const results = await ReturnRequirementModel.query()
-    .whereNotIn('returnRequirements.externalId', externalIdsArray)
+    .whereNotIn('returnRequirements.externalId', externalIds)
     .whereExists(_whereExistsClause(licenceReference, cycleStartDate))
     .where('returnRequirements.summer', isSummer)
     .withGraphFetched('returnVersion')
@@ -119,36 +127,9 @@ function _formatDate (date) {
 async function _generateReturnLogPayload (isSummer, requirementsForReturns) {
   const returnLogs = requirementsForReturns.map(async (requirements) => {
     const startDate = _getCycleStartDate(isSummer)
-    const endDate = _getCycleEndDate(isSummer,
-      requirements.returnVersion.licence.expiredDate,
-      requirements.returnVersion.licence.lapsedDate,
-      requirements.returnVersion.licence.revokedDate,
-      requirements.returnVersion.endDate
-    )
-    const id = _createReturnLogId(
-      requirements.returnVersion.licence.region.naldRegionId,
-      requirements.returnVersion.licence.licenceRef,
-      requirements.legacyId,
-      startDate,
-      endDate
-    )
-    const metadata = await _createMetaData(
-      isSummer,
-      endDate,
-      requirements.abstractionPeriodStartDay,
-      requirements.abstractionPeriodStartMonth,
-      requirements.abstractionPeriodEndDay,
-      requirements.abstractionPeriodEndMonth,
-      requirements.returnVersion.licence.areacode,
-      requirements.upload,
-      requirements.legacyId,
-      requirements.returnVersion.licence.region.naldRegionId,
-      requirements.returnRequirementPoints,
-      requirements.returnRequirementPurposes,
-      requirements.siteDescription,
-      requirements.twoPartTariff,
-      requirements.returnVersion.reason
-    )
+    const endDate = _getCycleEndDate(isSummer, requirements.returnVersion)
+    const id = _createReturnLogId(requirements, startDate, endDate)
+    const metadata = await _createMetaData(isSummer, endDate, requirements)
 
     return {
       createdAt: new Date(),
@@ -172,12 +153,15 @@ async function _generateReturnLogPayload (isSummer, requirementsForReturns) {
 
 function _getCycleDueDate (isSummer) {
   return isSummer
-    ? _formatDate(new Date(new Date().getFullYear() + 1, 10, 28))
-    : _formatDate(new Date(new Date().getFullYear() + 1, 3, 28))
+    ? _formatDate(new Date(new Date().getFullYear() + 1, summerDueDateMonth, summerDueDateDay))
+    : _formatDate(new Date(new Date().getFullYear() + 1, allYearDueDateMonth, allYearDueDateDay))
 }
 
-function _getCycleEndDate (isSummer, licenceEndDate, licenceLapsedDate, licenceRevokedDate, returnVersionEndDate) {
-  const dates = [licenceEndDate, licenceLapsedDate, licenceRevokedDate, returnVersionEndDate]
+function _getCycleEndDate (isSummer, returnVersion) {
+  const dates = [returnVersion.licence.expiredDate,
+    returnVersion.licence.lapsedDate,
+    returnVersion.licence.revokedDate,
+    returnVersion.endDate]
     .filter((date) => { return date !== null })
     .map((date) => { return new Date(date) })
 
@@ -207,8 +191,8 @@ function _getCycleEndDate (isSummer, licenceEndDate, licenceLapsedDate, licenceR
 
 function _getCycleStartDate (isSummer) {
   return isSummer
-    ? _formatDate(new Date(new Date().getFullYear(), 10, 1))
-    : _formatDate(new Date(new Date().getFullYear(), 3, 1))
+    ? _formatDate(new Date(new Date().getFullYear(), summerStartMonth, summerStartDay))
+    : _formatDate(new Date(new Date().getFullYear(), allYearStartMonth, allYearStartDay))
 }
 
 function _isFinal (endDateString, isSummer) {

@@ -11,6 +11,8 @@ const ProcessSessionStorageCleanupService = require('../services/jobs/session-cl
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 
+const redirectStatusCode = 204
+
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3
  *
@@ -19,32 +21,32 @@ const ProcessReturnLogsService = require('../services/jobs/return-logs/process-r
 async function exportDb (_request, h) {
   ExportService.go()
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 async function licenceUpdates (_request, h) {
   ProcessLicenceUpdates.go()
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 async function sessionCleanup (_request, h) {
   ProcessSessionStorageCleanupService.go()
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 async function timeLimited (_request, h) {
   ProcessTimeLimitedLicencesService.go()
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 async function returnLogs (_request, h) {
   if (h.request.payload === null) {
     ProcessReturnLogsService.go(false, undefined)
 
-    return h.response().code(204)
+    return h.response().code(redirectStatusCode)
   }
 
   const isSummer = !!h.request.payload.isSummer
@@ -52,7 +54,7 @@ async function returnLogs (_request, h) {
 
   ProcessReturnLogsService.go(isSummer, licenceReference)
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 module.exports = {
