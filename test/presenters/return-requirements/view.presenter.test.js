@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/return-requirements/view.presenter.js')
 
@@ -14,7 +17,9 @@ describe('Return Requirements - View presenter', () => {
   let returnVersion
 
   beforeEach(() => {
-    returnVersion = _returnVersion()
+    const returnVersionData = _returnVersion()
+
+    returnVersion = ReturnVersionModel.fromJson(returnVersionData)
   })
 
   describe('when provided with a return version', () => {
@@ -25,13 +30,13 @@ describe('Return Requirements - View presenter', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: 'BATKINSO',
-        createdDate: '7 April 2010',
+        createdBy: 'carol.shaw@atari.com',
+        createdDate: '5 April 2022',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: ['AMENDED FOR GOR'],
+        notes: 'A special note',
         pageTitle: 'Requirements for returns for Mr Ingles',
-        reason: ['Changes to Returns requirements April 2008 (manual update)'],
+        reason: 'New licence',
         requirements: [
           {
             abstractionPeriod: 'From 1 April to 31 October',
@@ -74,18 +79,32 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "createdBy" property', () => {
-      it('returns who the return version was created by', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('when there is no user linked to the return', () => {
+        beforeEach(() => {
+          returnVersion.user = null
+        })
 
-        expect(result.createdBy).to.equal('BATKINSO')
+        it('returns "Migrated from NALD" ', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.createdBy).to.equal('Migrated from NALD')
+        })
+      })
+
+      describe('when there is a user linked to the return', () => {
+        it("returns the user's username", () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.createdBy).to.equal('carol.shaw@atari.com')
+        })
       })
     })
 
     describe('the "createdDate" property', () => {
-      it('returns when the return version was created', () => {
+      it('returns created date', () => {
         const result = ViewPresenter.go(returnVersion)
 
-        expect(result.createdDate).to.equal('7 April 2010')
+        expect(result.createdDate).to.equal('5 April 2022')
       })
     })
 
@@ -98,10 +117,24 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the "reason" property', () => {
-      it('returns the reason for the return version', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('when there is a reason', () => {
+        it('returns the formatted reason', () => {
+          const result = ViewPresenter.go(returnVersion)
 
-        expect(result.reason).to.equal(['Changes to Returns requirements April 2008 (manual update)'])
+          expect(result.reason).to.equal('New licence')
+        })
+      })
+
+      describe('when there is no reason', () => {
+        beforeEach(() => {
+          returnVersion.reason = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.reason).to.equal('')
+        })
       })
     })
 
@@ -249,23 +282,13 @@ function _returnVersion () {
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     status: 'current',
+    modLogs: [],
     user: { id: 1, username: 'carol.shaw@atari.com' },
     licence: {
       id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
       $licenceHolder: () => { return 'Mr Ingles' }
     },
-    modLog: [{
-      code: 'XRETM',
-      createdAt: '2010-04-07',
-      createdBy: 'BATKINSO',
-      description: 'Changes to Returns requirements April 2008 (manual update)',
-      note: 'AMENDED FOR GOR'
-    }],
-    $createdBy: () => { return 'BATKINSO' },
-    $createdAt: () => { return '2010-04-07' },
-    $notes: () => { return ['AMENDED FOR GOR'] },
-    $reason: () => { return ['Changes to Returns requirements April 2008 (manual update)'] },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
