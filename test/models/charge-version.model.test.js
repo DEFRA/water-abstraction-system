@@ -26,6 +26,8 @@ const ModLogModel = require('../../app/models/mod-log.model.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
 const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
 
+const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
+
 // Thing under test
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
@@ -117,7 +119,7 @@ describe('Charge Version model', () => {
       let testChangeReason
 
       beforeEach(async () => {
-        testChangeReason = await ChangeReasonHelper.add()
+        testChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
 
         const { id: changeReasonId } = testChangeReason
 
@@ -140,7 +142,7 @@ describe('Charge Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.changeReason).to.be.an.instanceOf(ChangeReasonModel)
-        expect(result.changeReason).to.equal(testChangeReason)
+        expect(result.changeReason).to.equal(testChangeReason, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
