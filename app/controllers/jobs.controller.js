@@ -41,6 +41,12 @@ async function timeLimited (_request, h) {
 }
 
 async function returnLogs (_request, h) {
+  if (h.request.payload === null) {
+    ProcessReturnLogsService.go(false, undefined)
+
+    return h.response().code(204)
+  }
+
   const isSummer = !!h.request.payload.isSummer
   const { licenceReference } = h.request.payload
 

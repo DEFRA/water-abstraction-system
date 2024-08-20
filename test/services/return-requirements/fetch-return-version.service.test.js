@@ -59,7 +59,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
             legacyId: returnRequirementsOne.legacyId,
             returnRequirementPoints: [
               {
-                description: null,
+                description: 'Point description',
                 id: returnRequirementsOne.returnRequirementPoints[0].id,
                 ngr1: returnRequirementsOne.returnRequirementPoints[0].ngr1,
                 ngr2: null,
@@ -95,7 +95,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
             legacyId: returnRequirementsTwo.legacyId,
             returnRequirementPoints: [
               {
-                description: null,
+                description: 'Point description',
                 id: returnRequirementsTwo.returnRequirementPoints[0].id,
                 ngr1: returnRequirementsTwo.returnRequirementPoints[0].ngr1,
                 ngr2: null,

@@ -13,7 +13,7 @@ const ExportService = require('../../app/services/jobs/export/export.service.js'
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
-const CreateReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
+const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -126,7 +126,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(CreateReturnLogsService, 'go').resolves()
+          Sinon.stub(ProcessReturnLogsService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {
