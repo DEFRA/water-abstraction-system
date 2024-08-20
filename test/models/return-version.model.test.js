@@ -177,6 +177,48 @@ describe('Return Version model', () => {
     })
   })
 
+  describe('$createdAt', () => {
+    beforeEach(async () => {
+      const { id } = await ReturnVersionHelper.add()
+
+      returnVersionId = id
+    })
+
+    describe('when a return version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+      })
+
+      it('returns the return version "created at" time stamp', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(testRecord.createdAt)
+      })
+    })
+
+    describe('when a return version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), returnVersionId
+        })
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), returnVersionId
+        })
+
+        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD date', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(new Date('2012-06-01'))
+      })
+    })
+  })
+
   describe('$createdBy', () => {
     describe('when the return version was created in WRLS', () => {
       let testUser
@@ -251,48 +293,6 @@ describe('Return Version model', () => {
 
           expect(result).to.equal('FIRST')
         })
-      })
-    })
-  })
-
-  describe('$createdAt', () => {
-    beforeEach(async () => {
-      const { id } = await ReturnVersionHelper.add()
-
-      returnVersionId = id
-    })
-
-    describe('when a return version has no mod log history', () => {
-      beforeEach(async () => {
-        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
-      })
-
-      it('returns the return version "created at" time stamp', () => {
-        const result = testRecord.$createdAt()
-
-        expect(result).to.equal(testRecord.createdAt)
-      })
-    })
-
-    describe('when a return version has mod log history', () => {
-      beforeEach(async () => {
-        const regionCode = randomInteger(1, 9)
-        const firstNaldId = randomInteger(100, 99998)
-
-        await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), returnVersionId
-        })
-        await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), returnVersionId
-        })
-
-        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
-      })
-
-      it('returns the first mod log NALD date', () => {
-        const result = testRecord.$createdAt()
-
-        expect(result).to.equal(new Date('2012-06-01'))
       })
     })
   })
