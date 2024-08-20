@@ -54,6 +54,36 @@ class LicenceVersionModel extends BaseModel {
       }
     }
   }
+
+  /**
+   * Modifiers allow us to reuse logic in queries, eg. select the licence version and all mod log records:
+   *
+   * return LicenceVersionModel.query()
+   *   .findById(licenceVersionId)
+   *   .modify('history')
+   *
+   * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   */
+  static get modifiers () {
+    return {
+      // history modifier fetches all the related records needed to determine history properties, for example, created
+      // at, created by, and notes from the record and its NALD mod logs (where they exist)
+      history (query) {
+        query
+          .withGraphFetched('modLogs')
+          .modifyGraph('modLogs', (builder) => {
+            builder.select([
+              'id',
+              'naldDate',
+              'note',
+              'reasonDescription',
+              'userId'
+            ])
+              .orderBy('externalId', 'asc')
+          })
+      }
+    }
+  }
 }
 
 module.exports = LicenceVersionModel
