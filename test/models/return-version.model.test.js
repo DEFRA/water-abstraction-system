@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { randomInteger } = require('../support/general.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
@@ -22,6 +23,7 @@ const UserHelper = require('../support/helpers/user.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
 describe('Return Version model', () => {
+  let returnVersionId
   let testRecord
 
   describe('Basic query', () => {
@@ -171,6 +173,354 @@ describe('Return Version model', () => {
 
         expect(result.user).to.be.an.instanceOf(UserModel)
         expect(result.user).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
+      })
+    })
+  })
+
+  describe('$createdBy', () => {
+    describe('when the return version was created in WRLS', () => {
+      let testUser
+
+      beforeEach(async () => {
+        testUser = UserHelper.select()
+
+        const { id } = await ReturnVersionHelper.add({ createdBy: testUser.id })
+
+        returnVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns the WRLS user name', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal(testUser.username)
+        })
+      })
+
+      describe('and has mod log history', () => {
+        beforeEach(async () => {
+          await ModLogHelper.add({ returnVersionId })
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('still returns the WRLS user name', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal(testUser.username)
+        })
+      })
+    })
+
+    describe('when the return version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ReturnVersionHelper.add()
+
+        returnVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns the null', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, returnVersionId, userId: 'FIRST' })
+          await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, returnVersionId, userId: 'SECOND' })
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns the first mod log NALD user ID', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal('FIRST')
+        })
+      })
+    })
+  })
+
+  describe('$createdAt', () => {
+    beforeEach(async () => {
+      const { id } = await ReturnVersionHelper.add()
+
+      returnVersionId = id
+    })
+
+    describe('when a return version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+      })
+
+      it('returns the return version "created at" time stamp', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(testRecord.createdAt)
+      })
+    })
+
+    describe('when a return version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), returnVersionId
+        })
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), returnVersionId
+        })
+
+        testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD date', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(new Date('2012-06-01'))
+      })
+    })
+  })
+
+  describe('$notes', () => {
+    describe('when a return version has no mod log history', () => {
+      describe('and no notes recorded', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ notes: null })
+
+          returnVersionId = id
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('but notes recorded', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ notes: 'Top site bore hole' })
+
+          returnVersionId = id
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns an array containing just the single note', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.equal(['Top site bore hole'])
+        })
+      })
+    })
+
+    describe('when a return version has mod log history', () => {
+      describe('and no notes recorded against the return version', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ notes: null })
+
+          returnVersionId = id
+        })
+
+        describe('and none of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, returnVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: null, returnVersionId
+            })
+
+            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+          })
+
+          it('returns an empty array', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.be.an.array()
+            expect(result).to.be.empty()
+          })
+        })
+
+        describe('and some of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, returnVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', returnVersionId
+            })
+
+            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+          })
+
+          it('returns an array containing just the notes from the mod logs with them', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.equal(['Transfer per app 12-DEF'])
+          })
+        })
+      })
+
+      describe('and notes recorded against the return version', () => {
+        describe('and notes in all the mod log history', () => {
+          beforeEach(async () => {
+            const { id } = await ReturnVersionHelper.add({ notes: 'Top site bore hole' })
+
+            returnVersionId = id
+
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: 'New Licence per app 9-ABC', returnVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', returnVersionId
+            })
+
+            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+          })
+
+          it('returns all the notes in one array, mod log first and return version last', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.equal(['New Licence per app 9-ABC', 'Transfer per app 12-DEF', 'Top site bore hole'])
+          })
+        })
+      })
+    })
+  })
+
+  describe('$reason', () => {
+    describe('when a return version has no mod log history', () => {
+      describe('and no reason recorded', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ reason: null })
+
+          returnVersionId = id
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns null', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('but a reason recorded', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ reason: 'new-licence' })
+
+          returnVersionId = id
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns the return version reason', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.equal('new-licence')
+        })
+      })
+    })
+
+    describe('when a return version has mod log history', () => {
+      describe('and no reason recorded against the return version', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ reason: null })
+
+          returnVersionId = id
+        })
+
+        describe('but the mod log history has no reason description recorded in the first entry', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, returnVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'New licence', returnVersionId
+            })
+
+            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+          })
+
+          it('returns null', () => {
+            const result = testRecord.$reason()
+
+            expect(result).to.be.null()
+          })
+        })
+
+        describe('and the mod log history has a reason description recorded in the first entry', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'New licence', returnVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', returnVersionId
+            })
+
+            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+          })
+
+          it('returns the NALD reason description', () => {
+            const result = testRecord.$reason()
+
+            expect(result).to.equal('New licence')
+          })
+        })
+      })
+
+      describe('but a reason recorded against the return version', () => {
+        beforeEach(async () => {
+          const { id } = await ReturnVersionHelper.add({ reason: 'major-change' })
+
+          returnVersionId = id
+
+          await ModLogHelper.add({ reasonDescription: 'New licence', returnVersionId })
+
+          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+        })
+
+        it('returns the return version reason', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.equal('major-change')
+        })
       })
     })
   })
