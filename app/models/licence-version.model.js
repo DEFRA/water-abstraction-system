@@ -169,6 +169,27 @@ class LicenceVersionModel extends BaseModel {
     return notes
   }
 
+  /**
+   * Determine the reason the 'source' record was created using history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * In NALD a licence version can have multiple mod logs, each with their own reason. There is currently no reason
+   * captured against the WRLS licence version.
+   *
+   * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
+   */
+  $reason () {
+    const firstModLog = this._firstModLog()
+
+    return firstModLog?.reasonDescription ?? null
+  }
+
   _firstModLog () {
     if (this.modLogs.length > 0) {
       return this.modLogs[0]

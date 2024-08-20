@@ -273,4 +273,64 @@ describe('Licence Version model', () => {
       })
     })
   })
+
+  describe('$reason', () => {
+    describe('when the licence version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns the null', () => {
+        const result = testRecord.$reason()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the licence version has mod log history', () => {
+      describe('but the mod log history has no reason description recorded in the first entry', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, licenceVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'New licence', licenceVersionId
+          })
+
+          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        })
+
+        it('returns null', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('and the mod log history has a reason description recorded in the first entry', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'New licence', licenceVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', licenceVersionId
+          })
+
+          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        })
+
+        it('returns the NALD reason description', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.equal('New licence')
+        })
+      })
+    })
+  })
 })
