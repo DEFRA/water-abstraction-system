@@ -30,7 +30,7 @@ describe('Return Requirements - View service', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: 'carol.shaw@atari.com',
+        createdBy: 'BATKINSO',
         createdDate: '7 April 2010',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
@@ -38,7 +38,7 @@ describe('Return Requirements - View service', () => {
           'AMENDED FOR GOR'
         ],
         pageTitle: 'Requirements for returns for Mr Ingles',
-        reason: 'New licence',
+        reason: ['Changes to Returns requirements April 2008 (manual update)'],
         requirements: [
           {
             abstractionPeriod: 'From 1 April to 31 October',
@@ -84,6 +84,10 @@ function _returnVersion (returnVersionId) {
       description: 'Changes to Returns requirements April 2008 (manual update)',
       note: 'AMENDED FOR GOR'
     },
+    $createdBy: () => { return 'BATKINSO' },
+    $createdAt: () => { return '2010-04-07' },
+    $notes: () => { return ['AMENDED FOR GOR'] },
+    $reason: () => { return ['Changes to Returns requirements April 2008 (manual update)'] },
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
