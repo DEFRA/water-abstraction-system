@@ -14,6 +14,14 @@ class ChargeVersionModel extends BaseModel {
     return 'chargeVersions'
   }
 
+  // Defining which fields contain json allows us to insert an object without needing to stringify it first
+  static get jsonAttributes () {
+    return [
+      'approvedBy',
+      'createdBy'
+    ]
+  }
+
   static get relationMappings () {
     return {
       billingAccount: {
