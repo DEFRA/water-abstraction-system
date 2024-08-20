@@ -2,11 +2,13 @@
 
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
+  ignorePatterns: ['docs/*'],
   parserOptions: {
     sourceType: 'script'
   },
   plugins: [
-    '@stylistic/js'
+    '@stylistic/js',
+    'jsdoc'
   ],
   rules: {
     '@stylistic/js/arrow-parens': ['error', 'always'],
@@ -33,7 +35,15 @@ module.exports = {
     ],
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
-    strict: ['error', 'global']
+    strict: ['error', 'global'],
+    'jsdoc/require-description': 'warn',
+    'jsdoc/require-param': 'warn',
+    'jsdoc/require-returns': 'warn',
+    'jsdoc/check-tag-names': 'warn',
+    'jsdoc/check-alignment': 'warn',
+    'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
+    'jsdoc/check-indentation': 'warn',
+    'jsdoc/lines-before-block': 'warn'
   }
 }
 
