@@ -92,6 +92,33 @@ class ReturnVersionModel extends BaseModel {
   }
 
   /**
+   * Determine the created at date of the 'source' record using history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * Unfortunately, NALD doesn't enforce it's creation. But as the NALD version records don't capture the who and when,
+   * they are the best 'source' we have to determine this information for imported records.
+   *
+   * If there are mod logs for this record, it extracts the date from the first entry, for example, `2019-06-02`, and
+   * returns it. Else, it falls back to using the return version's `createdAt` time stamp.
+   *
+   * > The NALD date takes priority, because all records will have a created at date. But in the case of imported
+   * > records this will be when it was imported to WRLS, which can be some time after it was created in NALD.
+   *
+   * @returns {Date} the date the 'source' record was created
+   */
+  $createdAt () {
+    const firstModLog = this._firstModLog()
+
+    return firstModLog?.naldDate ?? this.createdAt
+  }
+
+  /**
    * Determine which user created the 'source' record using history
    *
    * > We recommend adding the `history` modifier to your query to support this determination
@@ -123,33 +150,6 @@ class ReturnVersionModel extends BaseModel {
     const firstModLog = this._firstModLog()
 
     return firstModLog?.userId ?? null
-  }
-
-  /**
-   * Determine the created at date of the 'source' record using history
-   *
-   * > We recommend adding the `history` modifier to your query to support this determination
-   *
-   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
-   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
-   *
-   * It was intended to record a history of changes to the licence.
-   *
-   * Unfortunately, NALD doesn't enforce it's creation. But as the NALD version records don't capture the who and when,
-   * they are the best 'source' we have to determine this information for imported records.
-   *
-   * If there are mod logs for this record, it extracts the date from the first entry, for example, `2019-06-02`, and
-   * returns it. Else, it falls back to using the return version's `createdAt` time stamp.
-   *
-   * > The NALD date takes priority, because all records will have a created at date. But in the case of imported
-   * > records this will be when it was imported to WRLS, which can be some time after it was created in NALD.
-   *
-   * @returns {Date} the date the 'source' record was created
-   */
-  $createdAt () {
-    const firstModLog = this._firstModLog()
-
-    return firstModLog?.naldDate ?? this.createdAt
   }
 
   /**
