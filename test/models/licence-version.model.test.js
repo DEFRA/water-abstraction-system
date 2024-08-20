@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { randomInteger } = require('../support/general.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
@@ -21,10 +22,13 @@ const PurposeModel = require('../../app/models/purpose.model.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
 describe('Licence Version model', () => {
+  let licenceVersionId
   let testRecord
 
   beforeEach(async () => {
     testRecord = await LicenceVersionHelper.add()
+
+    licenceVersionId = testRecord.id
   })
 
   describe('Basic query', () => {
@@ -136,6 +140,38 @@ describe('Licence Version model', () => {
 
         expect(result.purposes[0]).to.be.an.instanceOf(PurposeModel)
         expect(result.purposes).to.equal([purpose], { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+  })
+
+  describe('$createdBy', () => {
+    describe('when the licence version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns the null', () => {
+        const result = testRecord.$createdBy()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the licence version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, licenceVersionId, userId: 'FIRST' })
+        await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, licenceVersionId, userId: 'SECOND' })
+
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD user ID', () => {
+        const result = testRecord.$createdBy()
+
+        expect(result).to.equal('FIRST')
       })
     })
   })

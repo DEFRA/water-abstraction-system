@@ -84,6 +84,44 @@ class LicenceVersionModel extends BaseModel {
       }
     }
   }
+
+  /**
+   * Determine which user created the 'source' record using history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * Unfortunately, NALD doesn't enforce it's creation. But as the NALD version records don't capture the who and when,
+   * they are the best 'source' we have to determine this information for imported records.
+   *
+   * Licence versions are not managed in WRLS, so we do not capture a `created_by` value. The only source for this is
+   * the mod logs.
+   *
+   * If mod logs exist it extracts the user ID from the first mod log record, for example, `JSMITH`. If one exists it is
+   * the 'source'.
+   *
+   * If no mod logs exist it will return `null`.
+   *
+   * @returns {string} the user name of the user that created the 'source' record, else `null` if it cannot be
+   * determined
+   */
+  $createdBy () {
+    const firstModLog = this._firstModLog()
+
+    return firstModLog?.userId ?? null
+  }
+
+  _firstModLog () {
+    if (this.modLogs.length > 0) {
+      return this.modLogs[0]
+    }
+
+    return null
+  }
 }
 
 module.exports = LicenceVersionModel
