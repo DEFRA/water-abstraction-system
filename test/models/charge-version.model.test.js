@@ -19,6 +19,7 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+const { randomInteger } = require('../support/general.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
@@ -32,6 +33,7 @@ const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
 describe('Charge Version model', () => {
+  let chargeVersionId
   let testRecord
 
   describe('Basic query', () => {
@@ -315,6 +317,48 @@ describe('Charge Version model', () => {
         expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
         expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
         expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
+      })
+    })
+  })
+
+  describe('$createdAt', () => {
+    beforeEach(async () => {
+      const { id } = await ChargeVersionHelper.add()
+
+      chargeVersionId = id
+    })
+
+    describe('when the charge version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+      })
+
+      it('returns the return version "created at" time stamp', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(testRecord.createdAt)
+      })
+    })
+
+    describe('when the return version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), chargeVersionId
+        })
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), chargeVersionId
+        })
+
+        testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD date', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(new Date('2012-06-01'))
       })
     })
   })
