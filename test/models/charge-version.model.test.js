@@ -443,4 +443,106 @@ describe('Charge Version model', () => {
       })
     })
   })
+
+  describe('$notes', () => {
+    describe('when the charge version was created in WRLS', () => {
+      describe('but no note was added', () => {
+        beforeEach(async () => {
+          const { id } = await ChargeVersionHelper.add({ source: 'wrls' })
+
+          testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and a note was added', () => {
+        beforeEach(async () => {
+          const { id: noteId } = await ChargeVersionNoteHelper.add({ note: 'Top site bore hole' })
+          const { id } = await ChargeVersionHelper.add({ noteId, source: 'nald' })
+
+          testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+        })
+
+        it('returns an array containing just the single note', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.equal(['Top site bore hole'])
+        })
+      })
+    })
+
+    describe('when the charge version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ source: 'nald' })
+
+        chargeVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        describe('but none of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: null, chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns an empty array', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.be.an.array()
+            expect(result).to.be.empty()
+          })
+        })
+
+        describe('and some of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns an array containing just the notes from the mod logs with them', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.equal(['Transfer per app 12-DEF'])
+          })
+        })
+      })
+    })
+  })
 })

@@ -204,6 +204,43 @@ class ChargeVersionModel extends BaseModel {
 
     return firstModLog?.userId ?? null
   }
+
+  /**
+   * Determine the notes for the record using its history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * In NALD a charge version can have multiple mod logs, each with their own note.
+   *
+   * In WRLS only a single note can be captured in `charge_version_notes` and linked to the charge version (we believe
+   * the intent was to allow multiples but the final research/design determined only 1 was needed: the code was never
+   * refactored).
+   *
+   * In short, if the record was created in WRLS we return an array containing the single note. For imported records,
+   * the mod log notes are extracted and return as an array. If a record has neither an empty array is returned.
+   *
+   * @returns {string[]} an array of all the notes in ascending date order taken from the record's history
+   */
+  $notes () {
+    if (this.chargeVersionNote) {
+      return [this.chargeVersionNote.note]
+    }
+
+    const notes = []
+
+    for (const modLog of this.modLogs) {
+      if (modLog.note) {
+        notes.push(modLog.note)
+      }
+    }
+
+    return notes
+  }
 }
 
 module.exports = ChargeVersionModel
