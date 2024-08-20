@@ -26,6 +26,8 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 
+const REGION_SOUTHERN_INDEX = 5
+
 describe('Fetch Licence Summary service', () => {
   let gaugingStation
   let licence
@@ -45,7 +47,7 @@ describe('Fetch Licence Summary service', () => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
 
-    region = RegionHelper.select()
+    region = RegionHelper.select(REGION_SOUTHERN_INDEX)
 
     licence = await LicenceHelper.add({
       expiredDate: null,
