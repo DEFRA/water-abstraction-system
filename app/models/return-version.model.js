@@ -56,7 +56,7 @@ class ReturnVersionModel extends BaseModel {
    * log records:
    *
    * return ReturnVersionModel.query()
-   *   .findById(licenceId)
+   *   .findById(returnVersionId)
    *   .modify('history')
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
