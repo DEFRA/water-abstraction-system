@@ -30,7 +30,12 @@ async function _exists (changeReason) {
 }
 
 async function _insert (changeReason) {
-  return ChangeReasonModel.query().insert(changeReason)
+  // NOTE: The table does not auto populate the created and updated at fields, but does define them as not nullable!
+  return ChangeReasonModel.query().insert({
+    ...changeReason,
+    createdAt: timestampForPostgres(),
+    updatedAt: timestampForPostgres()
+  })
 }
 
 async function _update (changeReason) {
