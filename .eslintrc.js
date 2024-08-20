@@ -43,7 +43,8 @@ module.exports = {
     'jsdoc/check-alignment': 'warn',
     'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
     'jsdoc/check-indentation': 'warn',
-    'jsdoc/lines-before-block': 'warn'
+    'jsdoc/lines-before-block': 'warn',
+    'jsdoc/check-types': 'warn'
   }
 }
 
