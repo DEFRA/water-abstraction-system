@@ -211,4 +211,66 @@ describe('Licence Version model', () => {
       })
     })
   })
+
+  describe('$notes', () => {
+    describe('when the licence version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+      })
+
+      it('returns an empty array', () => {
+        const result = testRecord.$notes()
+
+        expect(result).to.be.an.array()
+        expect(result).to.be.empty()
+      })
+    })
+
+    describe('when the licence version has mod log history', () => {
+      describe('but none of the mod log history has notes', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, note: null, licenceVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, note: null, licenceVersionId
+          })
+
+          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and some of the mod log history has notes', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, note: null, licenceVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', licenceVersionId
+          })
+
+          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        })
+
+        it('returns an array containing just the notes from the mod logs with them', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.equal(['Transfer per app 12-DEF'])
+        })
+      })
+    })
+  })
 })

@@ -142,6 +142,33 @@ class LicenceVersionModel extends BaseModel {
     return firstModLog?.userId ?? null
   }
 
+  /**
+   * Determine the notes for the record using its history
+   *
+   * > We recommend adding the `history` modifier to your query to support this determination
+   *
+   * NALD has a concept called 'mod log'. When someone creates a new licence, charge, or return version, they can
+   * provide a reason and a note, which is saved as the 'mod log'. Who created the 'mod log' and when is also captured.
+   *
+   * It was intended to record a history of changes to the licence.
+   *
+   * In NALD a licence version can have multiple mod logs, each with their own note. There is currently no note captured
+   * against the WRLS licence version.
+   *
+   * @returns {string[]} an array of all the notes in ascending date order taken from the record's history
+   */
+  $notes () {
+    const notes = []
+
+    for (const modLog of this.modLogs) {
+      if (modLog.note) {
+        notes.push(modLog.note)
+      }
+    }
+
+    return notes
+  }
+
   _firstModLog () {
     if (this.modLogs.length > 0) {
       return this.modLogs[0]
