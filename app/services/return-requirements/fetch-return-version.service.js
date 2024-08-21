@@ -33,13 +33,7 @@ async function _fetch (returnVersionId) {
       'startDate',
       'status'
     ])
-    .withGraphFetched('user')
-    .modifyGraph('user', (builder) => {
-      builder.select([
-        'id',
-        'username'
-      ])
-    })
+    .modify('history')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
