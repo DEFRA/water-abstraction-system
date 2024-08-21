@@ -1,6 +1,7 @@
 'use strict'
 
 const { formatLongDate } = require('../base.presenter.js')
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 function go (history) {
   const { entries, licence } = history
@@ -12,25 +13,11 @@ function go (history) {
   }
 }
 
-function _createdAt (entry) {
-  const { createdAt, modLog } = entry
-
-  if (modLog.createdAt) {
-    return new Date(modLog.createdAt)
-  }
-
-  return createdAt
-}
-
 function _createdBy (entry) {
-  const { createdBy, modLog } = entry
+  const createdBy = entry.$createdBy()
 
   if (createdBy) {
     return createdBy
-  }
-
-  if (modLog.createdBy) {
-    return modLog.createdBy
   }
 
   return 'Migrated from NALD'
@@ -38,8 +25,8 @@ function _createdBy (entry) {
 
 function _entries (entries) {
   const formattedEntries = entries.map((entry) => {
-    const createdAt = _createdAt(entry)
-    const notes = _notes(entry)
+    const createdAt = entry.$createdAt()
+    const notes = entry.$notes()
 
     return {
       createdAt,
@@ -68,31 +55,23 @@ function _link (entryType, entryId, licenceId) {
   return null
 }
 
-function _notes (entry) {
-  const notes = [entry.modLog.note, entry.note]
-
-  // Filter out null or blank from the array
-  return notes.filter((note) => {
-    return note
-  })
-}
-
+/**
+ * The history helper $reason() will return either the reason saved against the return version record, the reason
+ * captured in the first mod log entry, or null.
+ *
+ * If its the reason saved against the return version we have to map it to its display version first.
+ *
+ * @private
+ */
 function _reason (entry) {
-  const { modLog, reason } = entry
+  const reason = entry.$reason()
+  const mappedReason = returnRequirementReasons[reason]
 
-  if (reason) {
-    return reason
+  if (mappedReason) {
+    return mappedReason
   }
 
-  if (modLog.description) {
-    return modLog.description
-  }
-
-  if (modLog.code) {
-    return modLog.code
-  }
-
-  return null
+  return reason ?? ''
 }
 
 function _sortEntries (entries) {
