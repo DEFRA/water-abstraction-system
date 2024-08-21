@@ -57,6 +57,7 @@ function defaults (data = {}) {
 }
 
 /**
+ * @private
  * In real life, when a licence is imported from NALD into WRLS a number of records get created. A lot of it is
  * duplication, but not everything from NALD is put into tables.
  *
