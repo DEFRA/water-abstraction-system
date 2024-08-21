@@ -154,6 +154,8 @@ function _matchLines (chargeElement, returnSubmissionLines) {
 
 /**
  * Checks a return record for potential issues based on specific criteria and flags it accordingly
+ *
+ * @private
  */
 function _checkReturnForIssues (matchedReturn) {
   if (matchedReturn.nilReturn) {

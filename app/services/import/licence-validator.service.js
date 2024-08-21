@@ -37,7 +37,7 @@ module.exports = {
  */
 
 /**
- * A valid licence 'regions' json colum
+ * A valid licence 'regions' json column
  * @typedef {object} RegionsType
  *
  * @property {string} regionalChargeArea

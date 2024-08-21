@@ -78,6 +78,8 @@ function _billingPeriods (billRunType, financialYear) {
  * TODO: Whilst we still have `POST /bill-runs` to support bill runs created using the legacy setup bill run journey we
  * can receive requests where financialYearEnding has not been set. This exists to handle that scenario and can be
  * deleted when we are confident we can delete that end point.
+ *
+ * @private
  */
 function _financialYear (financialYearEnding) {
   if (financialYearEnding) {

@@ -70,6 +70,8 @@ function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLic
 /**
  * Generates a compensation transaction by taking a standard transaction and overwriting it with the supplied billing id
  * and the correct charge type and description for a compensation charge.
+ *
+ * @private
  */
 function _compensationTransaction (standardTransaction) {
   return {
@@ -91,6 +93,8 @@ function _description (chargeReference) {
 
 /**
  * Returns a json representation of all charge elements in a charge reference
+ *
+ * @private
  */
 function _generateElements (chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
@@ -102,6 +106,8 @@ function _generateElements (chargeReference) {
 
 /**
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
+ *
+ * @private
  */
 function _standardTransaction (
   billLicenceId,

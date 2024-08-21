@@ -48,6 +48,8 @@ async function go (billRun, billingPeriod, chargeVersions) {
 /**
  * Iterates over the populated billing data and builds an object of data to be persisted. This process includes sending
  * "create transaction" requests to the Charging Module as this data is needed to fully create our transaction records
+ *
+ * @private
  */
 async function _buildDataToPersist (billingData, billingPeriod, billRunExternalId) {
   const dataToPersist = {
@@ -87,6 +89,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
  * more charge versions and the key's value is an object containing the associated licence, bill and bill
  * licence, along with any required transactions, eg:
  *
+ * ```javascript
  * {
  *   'bill-licence-id-1': {
  *     billLicence: '...',     // instance of the bill licence
@@ -98,6 +101,9 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
  *     // Same object structure as above
  *   }
  * }
+ * ```
+ *
+ * @private
  */
 function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, billingPeriod) {
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
@@ -129,6 +135,8 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
 
 /**
  * Persists the transaction, bill and bill licence records in the db
+ *
+ * @private
  */
 async function _persistData (dataToPersist) {
   // If we don't have any transactions to persist then we also won't have any bills or bill licences, so we

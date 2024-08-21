@@ -175,6 +175,8 @@ async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId
  *
  * We can get the same result with a single query by using `onConflict()`. If we get a match we just overwrite the
  * existing record with our new data.
+ *
+ * @private
  */
 async function _persistBillingAccountAddress (trx, billingAccountAddress) {
   return billingAccountAddress.$query(trx)
@@ -211,6 +213,8 @@ async function _persistBillingAccountAddress (trx, billingAccountAddress) {
  * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
  * > record in our DB is locked to OS Places, it should reflect whatever OS Places currently returns, not what it
  * > returned when first added.
+ *
+ * @private
  */
 async function _persistAddress (trx, address) {
   if (address.id) {
@@ -260,6 +264,8 @@ async function _persistAddress (trx, address) {
  * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
  * > record in our DB is locked to Companies House, it should reflect whatever Companies House currently returns, not
  * > what it returned when first added.
+ *
+ * @private
  */
 async function _persistCompany (trx, company) {
   if (company.id || !company.name) {
@@ -284,6 +290,8 @@ async function _persistCompany (trx, company) {
  *
  * If the contact type is not set then the user has opted not to apply an FAO in the journey. So, we just return the
  * empty `ContactModel` instance.
+ *
+ * @private
  */
 async function _persistContact (trx, contact) {
   if (!contact.contactType) {
@@ -311,6 +319,8 @@ async function _persistContact (trx, contact) {
  *
  * Finally, where we do have populated instances we destructure them. This transforms the model instances into POJO's
  * again just making things cleaner.
+ *
+ * @private
  */
 function _response (persistedData) {
   const { address, company, contact, billingAccountAddress } = persistedData

@@ -67,6 +67,8 @@ async function post (path, body = {}) {
 
 /**
  * Sends a request to the Charging Module using the provided BaseRequest method
+ *
+ * @private
  */
 async function _sendRequest (path, method, body) {
   const authentication = await global.HapiServerMethods.getChargingModuleToken()
@@ -87,6 +89,8 @@ async function _sendRequest (path, method, body) {
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
+ *
+ * @private
  */
 function _requestOptions (accessToken, body) {
   return {
@@ -104,6 +108,8 @@ function _requestOptions (accessToken, body) {
 
 /**
  * Parses the charging module response returned from BaseRequest
+ *
+ * @private
  */
 function _parseResult (result) {
   const { body, headers, statusCode } = result.response

@@ -47,6 +47,8 @@ async function go (calculatedTransactions, billingAccountId, billLicence, billin
  * NOTE: This function will mutate the provided array of reversed transactions if one of the transactions in it will
  * cancel the calculated transaction; in this case, we remove the reversed transaction from the array as it can only
  * cancel one calculated transaction.
+ *
+ * @private
  */
 function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactions) {
   const result = reversedTransactions.findIndex((reversedTransaction) => {
@@ -67,6 +69,8 @@ function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactio
  * to the same bill licence which would send the same data to the Charging Module (and therefore return the same values)
  * but with opposing credit flags -- in other words, a credit and a debit which cancel each other out. All remaining
  * transactions (both calculated transactions and reverse transactions) are returned.
+ *
+ * @private
  */
 function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   const cleansedTransactionLines = []

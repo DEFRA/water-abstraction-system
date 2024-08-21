@@ -45,6 +45,8 @@ function go (startDate, endDate) {
  * impacted by the change. We only care about the financial year ends. So if the startDate for a new chargeVersion is
  * `2022-05-31`, the financial year end is considered to be `2023` since the financial years run April to March. Same
  * goes for if a charge versions endDate is `2023-03-05`, the financial year end is `2023`.
+ *
+ * @private
  */
 function _adjustedFinancialYearEnd (date) {
   let year = date.getFullYear()
