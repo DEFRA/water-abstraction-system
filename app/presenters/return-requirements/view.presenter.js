@@ -8,7 +8,7 @@
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { generatePointDetail } = require('../../lib/general.lib.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
@@ -27,13 +27,13 @@ function go (returnVersion) {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
-    createdBy: returnVersion.$createdBy() ? returnVersion.$createdBy() : 'Migrated from NALD',
-    createdDate: formatLongDate(new Date(returnVersion.$createdAt())),
+    createdBy: _createdBy(returnVersion),
+    createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
-    reason: returnVersion.$reason() ? returnVersion.$reason() : '',
+    reason: _reason(returnVersion),
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
     status
@@ -96,6 +96,16 @@ function _buildAgreementExceptions (returnRequirement) {
   return agreementsExceptions
 }
 
+function _createdBy (returnVersion) {
+  const createdBy = returnVersion.$createdBy()
+
+  if (createdBy) {
+    return createdBy
+  }
+
+  return 'Migrated from NALD'
+}
+
 function _mapRequirement (requirement) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement),
@@ -125,6 +135,25 @@ function _points (returnRequirementPoints) {
   return returnRequirementPoints.map((returnRequirementPoint) => {
     return generatePointDetail(returnRequirementPoint)
   })
+}
+
+/**
+ * The history helper $reason() will return either the reason saved against the return version record, the reason
+ * captured in the first mod log entry, or null.
+ *
+ * If its the reason saved against the return version we have to map it to its display version first.
+ *
+ * @private
+ */
+function _reason (returnVersion) {
+  const reason = returnVersion.$reason()
+  const mappedReason = returnRequirementReasons[reason]
+
+  if (mappedReason) {
+    return mappedReason
+  }
+
+  return reason ?? ''
 }
 
 function _requirements (requirements) {
