@@ -6,7 +6,7 @@
  */
 
 const LicenceContactPresenter = require('../../presenters/licences/licence-contact.presenter.js')
-const LicenceModel = require('../../models/licence.model.js')
+const FetchLicenceContactService = require('./fetch-licence-contact.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence contact details link page
@@ -16,8 +16,7 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<Object>} The view data for the licence contacts page
  */
 async function go (licenceId) {
-  const licence = await _fetchLicenceDetails(licenceId)
-
+  const licence = await FetchLicenceContactService.go(licenceId)
   const formattedData = await LicenceContactPresenter.go(licence)
 
   return {
@@ -25,22 +24,6 @@ async function go (licenceId) {
     pageTitle: 'Licence contact details',
     ...formattedData
   }
-}
-
-async function _fetchLicenceDetails (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef'
-    ])
-    .withGraphFetched('licenceDocumentHeader')
-    .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'id',
-        'metadata'
-      ])
-    })
 }
 
 module.exports = {

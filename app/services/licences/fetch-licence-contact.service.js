@@ -5,7 +5,7 @@
  * @module FetchLicenceContactService
  */
 
-const LicenceDocumentHeaderModel = require('../../models/licence-document-header.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 /**
  * Fetch the matching licence and return data needed for the licence contact details link page
@@ -14,22 +14,25 @@ const LicenceDocumentHeaderModel = require('../../models/licence-document-header
  *
  * @param {string} id The UUID for the licence to fetch
  */
-async function go (id) {
-  const licenceData = await _fetchLicenceDetails(id)
 
-  return licenceData
+async function go (licenceId) {
+  return _fetchLicenceDetails(licenceId)
 }
 
-async function _fetchLicenceDetails (id) {
-  const result = await LicenceDocumentHeaderModel.query()
-    .findById(id)
+async function _fetchLicenceDetails (licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
     .select([
-      'licenceRef',
-      'metadata',
-      'licenceName'
+      'id',
+      'licenceRef'
     ])
-
-  return result
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'id',
+        'metadata'
+      ])
+    })
 }
 
 module.exports = {
