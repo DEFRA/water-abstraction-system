@@ -49,7 +49,8 @@ module.exports = {
   },
   settings: {
     jsdoc: {
-      mode: 'jsdoc'
+      mode: 'jsdoc',
+      ignorePrivate: true
     }
   }
 }
