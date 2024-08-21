@@ -11,10 +11,10 @@ const { db } = require('../../../../db/db.js')
  * Retrieves headers, a knex query for the table rows and the table name from the table in the db, and returns them as
  * an object
  *
- * @param {String} tableName The name of the table to retrieve
- * @param {string} schemaName The schema that the table belongs to
+ * @param {string} tableName - The name of the table to retrieve
+ * @param {string} schemaName - The schema that the table belongs to
  *
- * @returns {Promise<Object>} The headers, query and table name from the table
+ * @returns {Promise<object>} The headers, query and table name from the table
  */
 async function go (tableName, schemaName) {
   const data = {

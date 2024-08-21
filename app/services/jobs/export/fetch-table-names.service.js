@@ -10,9 +10,9 @@ const { db } = require('../../../../db/db.js')
 /**
  * Retrieves the table names for a specific schema
  *
- * @param schemaName The name of the schema from which to fetch the table names
+ * @param schemaName - The name of the schema from which to fetch the table names
  *
- * @returns {Promise<String[]>} Table names for the specified schema
+ * @returns {Promise<string[]>} Table names for the specified schema
  */
 async function go (schemaName) {
   const tableData = await _fetchTableNames(schemaName)

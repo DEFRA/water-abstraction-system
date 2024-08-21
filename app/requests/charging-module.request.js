@@ -17,7 +17,7 @@ const servicesConfig = require('../../config/services.config.js')
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function deleteRequest (path) {
   const result = await _sendRequest(path, BaseRequest.delete)
@@ -30,7 +30,7 @@ async function deleteRequest (path) {
  *
  * @param {string} path - The route to send the request to (do not include the starting /)
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function get (path) {
   const result = await _sendRequest(path, BaseRequest.get)
@@ -43,7 +43,7 @@ async function get (path) {
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function patch (path) {
   const result = await _sendRequest(path, BaseRequest.patch)
@@ -55,9 +55,9 @@ async function patch (path) {
  * Sends a POST request to the Charging Module for the provided path
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
- * @param {Object} [body] - The body of the request
+ * @param {object} [body] - The body of the request
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function post (path, body = {}) {
   const result = await _sendRequest(path, BaseRequest.post, body)

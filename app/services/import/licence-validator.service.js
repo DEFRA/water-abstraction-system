@@ -24,7 +24,7 @@ module.exports = {
 
 /**
  * A valid licence that is in the correct shape / format to save in the database
- * @typedef {Object} ImportLicenceType
+ * @typedef {object} ImportLicenceType
  *
  * @property {string | null} expiredDate
  * @property {string | null} lapsedDate
@@ -38,7 +38,7 @@ module.exports = {
 
 /**
  * A valid licence 'regions' json colum
- * @typedef {Object} RegionsType
+ * @typedef {object} RegionsType
  *
  * @property {string} regionalChargeArea
  * @property {string} localEnvironmentAgencyPlanCode

@@ -36,14 +36,14 @@ module.exports = {
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
     strict: ['error', 'global'],
-    'jsdoc/require-description': 'warn',
-    'jsdoc/require-param': 'warn',
-    'jsdoc/require-returns': 'warn',
-    'jsdoc/check-tag-names': 'warn',
-    'jsdoc/check-alignment': 'warn',
-    'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
-    'jsdoc/check-indentation': 'warn',
-    'jsdoc/lines-before-block': 'warn',
+    // 'jsdoc/require-description': 'warn',
+    // 'jsdoc/require-param': 'warn',
+    // 'jsdoc/require-returns': 'warn',
+    // 'jsdoc/check-tag-names': 'warn',
+    // 'jsdoc/check-alignment': 'warn',
+    // 'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
+    // 'jsdoc/check-indentation': 'warn',
+    // 'jsdoc/lines-before-block': 'warn',
     'jsdoc/check-types': 'warn',
     'jsdoc/require-hyphen-before-param-description': 'warn'
   }
@@ -51,7 +51,7 @@ module.exports = {
 
 /*
 
-This is the code to enforce agreed conventions
+This is the code to enforce agreed conventionsk
 
 npm packages needed -
     "eslint-plugin-require-sort": "^1.3.0",

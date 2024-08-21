@@ -14,9 +14,9 @@ const Joi = require('joi')
  * Users must select one frequency for the returns cycle. If this requirement is not met the validation will return an
  * error.
  *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  *
- * @returns {Object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
+ * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
 

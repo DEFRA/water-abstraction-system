@@ -167,7 +167,7 @@ function _getMatchingReturns (returnLogs, licenceReturnLogs) {
 /**
  * Returns a list of issues that would put a licence into a status of 'review'
  *
- * @returns {Object[]} An array of issues that would put a licence into a status of 'review'
+ * @returns {object[]} An array of issues that would put a licence into a status of 'review'
  */
 function _getReviewStatuses () {
   // the keys for the issues that will put the licence into review status

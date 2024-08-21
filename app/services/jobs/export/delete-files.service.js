@@ -10,7 +10,7 @@ const fsPromises = require('fs').promises
 /**
  * Deletes a folder and its content or an individual file
  *
- * @param {String} path The folder or file path that we want to delete
+ * @param {string} path - The folder or file path that we want to delete
  */
 async function go (path) {
   try {

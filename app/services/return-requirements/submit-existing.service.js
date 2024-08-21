@@ -21,9 +21,9 @@ const SessionModel = require('../../models/session.model.js')
  * the session.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {Object} payload - The submitted form data
+ * @param {object} payload - The submitted form data
  *
- * @returns {Promise<Object>} If no errors an empty object else the page data for the existing page including the
+ * @returns {Promise<object>} If no errors an empty object else the page data for the existing page including the
  * validation error details
  */
 async function go (sessionId, payload) {

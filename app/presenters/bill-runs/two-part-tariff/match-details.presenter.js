@@ -13,9 +13,9 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  *
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewChargeElement} reviewChargeElement - the data from the review charge element
- * @param {String} licenceId - the UUID of the licence the charge element is linked to
+ * @param {string} licenceId - the UUID of the licence the charge element is linked to
  *
- * @returns {Object} the prepared bill run and charge element data to be passed to the match details page
+ * @returns {object} the prepared bill run and charge element data to be passed to the match details page
  */
 function go (billRun, reviewChargeElement, licenceId) {
   return {

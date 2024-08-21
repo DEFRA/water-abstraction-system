@@ -12,7 +12,7 @@ const { db } = require('../../../db/db.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's contact details tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's contact details tab
  */
 async function go (licenceId) {
   return _fetch(licenceId)

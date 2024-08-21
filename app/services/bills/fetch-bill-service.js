@@ -13,9 +13,9 @@ const { db } = require('../../../db/db.js')
  *
  * Was built to provide the data needed for the '/bills/{id}' page
  *
- * @param {string} id The UUID for the bill to fetch
+ * @param {string} id - The UUID for the bill to fetch
  *
- * @returns {Promise<Object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
+ * @returns {Promise<object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
  * for each licence linked to the bill
  */
 async function go (id) {

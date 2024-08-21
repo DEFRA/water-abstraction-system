@@ -20,7 +20,7 @@ const MatchAndAllocateService = require('./match-and-allocate.service.js')
  * the bill run if an error occurs during the process.
  *
  * @param {module:BillRunModel} billRun - The two-part tariff bill run being processed
- * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For 2PT
+ * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For 2PT
  * this will only ever contain a single period
  */
 async function go (billRun, billingPeriods) {

@@ -12,7 +12,7 @@ const WorkflowModel = require('../../models/workflow.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch workflow data for
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's set up tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
 async function go (licenceId) {
   return _fetch(licenceId)

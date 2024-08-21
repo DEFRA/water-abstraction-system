@@ -35,7 +35,7 @@ const LAST_PRESROC_YEAR = 2022
  * @param {boolean} [summer] - Applies only to PRESROC two-part tariff. Whether the bill run is summer or winter
  * all-year
  *
- * @returns {Promise<Object[]>} The matching bill run(s) if any. For annual and two-part tariff only one bill run
+ * @returns {Promise<object[]>} The matching bill run(s) if any. For annual and two-part tariff only one bill run
  * instance will be returned. For supplementary 2 bill runs may be returned depending on whether there is both an SROC
  * and PRESROC in progress.
  */

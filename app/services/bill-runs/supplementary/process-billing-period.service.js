@@ -20,11 +20,11 @@ const TransactionModel = require('../../../models/transaction.model.js')
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
  *
- * @param {module:BillRunModel} billRun The newly created bill run we need to process
- * @param {Object} billingPeriod An object representing the financial year the transactions are for
- * @param {module:ChargeVersionModel[]} chargeVersions The charge versions to create transactions for
+ * @param {module:BillRunModel} billRun - The newly created bill run we need to process
+ * @param {object} billingPeriod - An object representing the financial year the transactions are for
+ * @param {module:ChargeVersionModel[]} chargeVersions - The charge versions to create transactions for
  *
- * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
+ * @returns {boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go (billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {

@@ -14,7 +14,7 @@
  * But there will be times when trying to diagnose an issue that we will want log output. So using an env var we can
  * override the default and tell hapi-pino to log everything as normal.
  *
- * @returns {Object} an empty object or one containing Hapi-pino config to tell it not to log events
+ * @returns {object} an empty object or one containing Hapi-pino config to tell it not to log events
  */
 function go (logInTest) {
   if (process.env.NODE_ENV !== 'test' || logInTest) {

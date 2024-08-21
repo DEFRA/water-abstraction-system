@@ -12,11 +12,11 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
 /**
  * Orchestrates fetching and presenting the data needed for the review bill run page
  *
- * @param {String} id The UUID for the bill run to review
+ * @param {string} id - The UUID for the bill run to review
  * @param {string} page - the page number of licences to be viewed
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} An object representing the `pageData` needed by the review bill run template. It contains
+ * @returns {Promise<object>} An object representing the `pageData` needed by the review bill run template. It contains
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, page, yar) {

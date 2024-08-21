@@ -23,7 +23,7 @@ const ReviewReturnModel = require('../../../models/review-return.model.js')
  * We need to persist all this information ready for use in the review screens that our users use to asses if the
  * matching and allocating looks correct or if any issues need resolving first.
  *
- * @param {String} billRunId - the ID of the two-part tariff bill run being generated
+ * @param {string} billRunId - the ID of the two-part tariff bill run being generated
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */

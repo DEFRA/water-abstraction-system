@@ -115,7 +115,7 @@ class LicenceVersionPurposeModel extends BaseModel {
    * This information is used when we have to generate return requirements from the current abstraction data and
    * determine what collection and reporting frequency to use.
    *
-   * @returns {Boolean} true if the overall purpose is electricity generation (P-ELC-240 or P-ELC-200) else false
+   * @returns {boolean} true if the overall purpose is electricity generation (P-ELC-240 or P-ELC-200) else false
    */
   $electricityGeneration () {
     if (this.primaryPurpose.legacyId !== 'P') {

@@ -74,7 +74,7 @@ async function go () {
 /**
  * Calculates the current date minus the number of days passed to it
  *
- * @param {Number} days The number of days to be deducted from the currect date
+ * @param {number} days - The number of days to be deducted from the currect date
  *
  * @returns {Date} The current date minus the number days passed to the function
  */

@@ -52,11 +52,11 @@
  * ]
  * ```
  *
- * @param {Object[]} dateRanges - The series of date ranges to be consolidated.
+ * @param {object[]} dateRanges - The series of date ranges to be consolidated.
  * @param {Date} dateRanges[].startDate - The start date for the range
  * @param {Date} dateRanges[].endDate - The end date of the range
  *
- * @returns {Object[]} An array of the consolidated date ranges
+ * @returns {object[]} An array of the consolidated date ranges
  */
 function go (dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
