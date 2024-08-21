@@ -131,10 +131,29 @@ describe('Return Requirements - View presenter', () => {
         returnVersion.reason = null
       })
 
-      it('returns an empty string', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('and no mod log entries', () => {
+        it('returns an empty string', () => {
+          const result = ViewPresenter.go(returnVersion)
 
-        expect(result.reason).to.equal('')
+          expect(result.reason).to.equal('')
+        })
+      })
+
+      describe('but there is a mod log entry with a reason', () => {
+        beforeEach(() => {
+          returnVersion.modLogs = [{
+            naldDate: new Date('2019-03-01'),
+            note: null,
+            reasonDescription: 'Record loaded during migration',
+            userId: 'TTESTER'
+          }]
+        })
+
+        it('returns reason from the mod log', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.reason).to.equal('Record loaded during migration')
+        })
       })
     })
   })
