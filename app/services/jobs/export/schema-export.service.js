@@ -48,6 +48,8 @@ async function go (schemaName) {
  * @param {string} schemaName - The name of the database schema
  *
  * @returns {string} The folder path where the schema will be temporarily stored
+ *
+ * @private
  */
 function _folderToUpload (schemaName) {
   const temporaryFilePath = os.tmpdir()

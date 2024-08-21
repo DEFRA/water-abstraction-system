@@ -138,6 +138,8 @@ async function _fetchNew (regionId, billingPeriod) {
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {module:QueryBuilder} the builder instance passed in with the additional `where` clauses added
+ *
+ * @private
  */
 function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
   return query
@@ -178,6 +180,8 @@ function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
  * Bill runs are formed of 'bills' which are a 1-to-1 with billing accounts. But whether a billing account should
  * be included is _all_ based on the charge versions they are linked to. So, all the work of filtering what will be
  * considered is done here by combining a `select(1)` with our `_whereClauseForChargeVersions()` function.
+ *
+ * @private
  */
 function _whereExistsClause (regionId, billingPeriod) {
   let query = ChargeVersionModel.query().select(1)

@@ -88,6 +88,8 @@ async function go (billRun, billingPeriod, billingAccounts) {
  * The complication is we group transactions by licence (via the bill licence) not charge version. So, as we iterate
  * the charge versions we have to determine if its for a licence that we have already generated a bill licence for, or
  * we have to create a new one.
+ *
+ * @private
  */
 async function _createBillLicencesAndTransactions (billId, billingAccount, billRunExternalId, billingPeriod) {
   const allBillLicences = []
@@ -117,6 +119,8 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
 
 /**
  * Handles generating the transaction data for a given charge version and then sending it to the Charging Module API.
+ *
+ * @private
  */
 async function _createTransactions (billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
   const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
@@ -141,6 +145,8 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
  * A billing account can be linked to multiple licences but not all of them may be billable. We add a flag to each
  * one that denotes if transactions were generated so we can easily filter the billable ones out. But we also need
  * to remove that flag because it doesn't exist in the DB and will cause issues if we try and persist the object.
+ *
+ * @private
  */
 function _extractBillableLicences (allBillLicences) {
   const billableBillLicences = []
@@ -178,6 +184,8 @@ function _extractBillableLicences (allBillLicences) {
  * @param {string} billId - the ID of the bill we're creating
  *
  * @return {object} returns either an existing bill licence or a new one for the licence and bill being generated
+ *
+ * @private
  */
 function _findOrCreateBillLicence (billLicences, licence, billId) {
   const { id: licenceId, licenceRef } = licence
@@ -209,6 +217,8 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
  * This information needs to be passed to the Charging Module API as it affects the calculation.
  *
  * This function iterates the charge references generating a transaction for each one.
+ *
+ * @private
  */
 function _generateTransactionData (billLicenceId, chargePeriod, chargeVersion) {
   try {
@@ -244,6 +254,8 @@ function _generateTransactionData (billLicenceId, chargePeriod, chargeVersion) {
  * our bill.
  *
  * Once everything has been generated we persist the results to the DB.
+ *
+ * @private
  */
 async function _processBillingAccount (billingAccount, billRun, billingPeriod) {
   const { id: billingAccountId, accountNumber } = billingAccount

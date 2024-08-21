@@ -27,6 +27,8 @@ function go (transactions, billLicenceId) {
  * Receives an array of debit transactions and returns transactions that will reverse them. These transactions are
  * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is for the
  * bill licence we are creating, and a new transaction ID is generated.
+ *
+ * @private
  */
 function _reverseTransactions (transactions, billLicenceId) {
   return transactions.map((transaction) => {

@@ -78,6 +78,8 @@ async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
  * Pause between requests so that we are not bombarding the Charging Module
  *
  * The default is 1 second but we make this configurable mainly to allow us to override the pause in unit tests
+ *
+ * @private
  */
 function _pause () {
   return setTimeout(billingConfig.waitForStatusPauseInMs)

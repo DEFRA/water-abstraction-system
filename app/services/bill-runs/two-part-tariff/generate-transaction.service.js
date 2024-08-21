@@ -68,6 +68,8 @@ function _description (chargeReference) {
 
 /**
  * Returns a json representation of all charge elements in a charge reference
+ *
+ * @private
  */
 function _generateElements (chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
@@ -81,6 +83,8 @@ function _generateElements (chargeReference) {
 
 /**
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
+ *
+ * @private
  */
 function _standardTransaction (
   billLicenceId,

@@ -36,6 +36,8 @@ function go (payload, maxNumberOfDecimals, validationType) {
  * two items (if a decimal is present). The first item represents the part before the decimal, while the second item
  * represents the part after. By assessing if the length of the second string is less than 3 or 16, we can validate if
  * there the correct number of decimals.
+ *
+ * @private
  */
 function _customValidation (quantity, helpers, maxNumberOfDecimals, validationType) {
   const quantityParts = quantity.toString().split('.')

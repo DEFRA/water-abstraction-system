@@ -30,6 +30,8 @@ async function go (billingAccountId, licenceId, financialYearEnding) {
  *
  * If a credit matches to a debit then its something that was dealt with in a previous supplementary bill run. We need
  * to know only about debits that have not been credited.
+ *
+ * @private
  */
 function _cleanse (transactions) {
   const credits = transactions.filter((transaction) => {

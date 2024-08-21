@@ -88,6 +88,8 @@ async function _fetchBillRun (id) {
  * We could have made things simpler by performing separate queries and then transforming all the results into what we
  * need this service to return. But we opted to go for performance this time, avoiding multiple requests to the DB and
  * getting the query to provide the data we need without having to transform the result.
+ *
+ * @private
  */
 async function _fetchBillSummaries (id) {
   const results = await db
