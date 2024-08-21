@@ -46,6 +46,11 @@ module.exports = {
     'jsdoc/lines-before-block': 'warn',
     'jsdoc/check-types': 'warn',
     'jsdoc/require-hyphen-before-param-description': 'warn'
+  },
+  settings: {
+    jsdoc: {
+      mode: 'jsdoc'
+    }
   }
 }
 
