@@ -24,11 +24,11 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
  * Finally, we also need to validate that the user selected one of the options; licence version start date or a custom
  * date.
  *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  * @param {string} licenceStartDate - the date the original version of the licence starts from
  * @param {string} licenceEndDate - the date the licence has or will end if one is set
  *
- * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (payload, licenceStartDate, licenceEndDate) {

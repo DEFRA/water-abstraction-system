@@ -15,7 +15,7 @@ const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.
  * - `note` - 'This is a test note'
  * - `userId` - [randomly generated - 100001]
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:NoteModel>} The instance of the newly created record
  */
@@ -33,7 +33,7 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
   const defaults = {

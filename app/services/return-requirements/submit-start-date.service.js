@@ -21,10 +21,10 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
  * controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} If no errors 2 flags that determine whether the user is returned to the check page or the
+ * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
 async function go (sessionId, payload, yar) {

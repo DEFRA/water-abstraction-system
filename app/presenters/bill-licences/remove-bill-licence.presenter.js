@@ -19,7 +19,7 @@ const {
  *
  * @param {module:BillLicenceModel} billLicence - an instance of `BillLicenceModel` with associated billing data
  *
- * @returns {Object} - the prepared bill licence summary data to be passed to the confirm remove a bill licence page
+ * @returns {object} - the prepared bill licence summary data to be passed to the confirm remove a bill licence page
  */
 function go (billLicence) {
   const { id: billLicenceId, bill, licenceRef, transactions } = billLicence

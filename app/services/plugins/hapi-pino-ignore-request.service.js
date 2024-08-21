@@ -50,8 +50,8 @@
  *
  *
  *
- * @param {Object} _options The options passed to the HapiPino plugin
- * @param {request} request Hapi request object created internally for each incoming request
+ * @param {Object} _options - The options passed to the HapiPino plugin
+ * @param {request} request  - Hapi request object created internally for each incoming request
  *
  * @returns {boolean} true if the request should be ignored, else false
  */

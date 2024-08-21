@@ -31,7 +31,7 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
  *
  * If it doesn't, we 'bump' the financial end year to back to the year of the last annual bill run.
  *
- * @returns {Promise<Number>} The financial end year to use for selected bill run type and region
+ * @returns {Promise<number>} The financial end year to use for selected bill run type and region
  */
 async function go (regionId, billRunType, year = null) {
   const currentFinancialYear = determineCurrentFinancialYear()

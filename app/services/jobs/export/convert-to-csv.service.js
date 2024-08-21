@@ -8,9 +8,9 @@
 /**
  * Converts data to a CSV formatted string
  *
- * @param {String[]} data - An array representing either the headers or rows from a db table
+ * @param {string[]} data - An array representing either the headers or rows from a db table
  *
- * @returns {String} A CSV formatted string
+ * @returns {string} A CSV formatted string
  */
 function go (data) {
   if (!data) {

@@ -30,14 +30,14 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * and that reissuing bill is itself reissued, then `originalBillId` will still point directly to the original
  * source bill.
  *
- * @param {module:BillModel} sourceBill The bill to be reissued. Note that we expect it to include the bill
+ * @param {module:BillModel} sourceBill - The bill to be reissued. Note that we expect it to include the bill
  * licences and transactions
- * @param {module:BillRunModel} reissueBillRun The bill run that the new bills should belong to
+ * @param {module:BillRunModel} reissueBillRun - The bill run that the new bills should belong to
  *
- * @returns {Promise<Object>} dataToReturn Data that has been generated while reissuing the bill
- * @returns {Object[]} dataToReturn.bills Array of bills
- * @returns {Object[]} dataToReturn.billLicences Array of bill licences
- * @returns {Object[]} dataToReturn.transactions Array of transactions
+ * @returns {Promise<object>} dataToReturn Data that has been generated while reissuing the bill
+ * @returns {object[]} dataToReturn.bills Array of bills
+ * @returns {object[]} dataToReturn.billLicences Array of bill licences
+ * @returns {object[]} dataToReturn.transactions Array of transactions
  */
 
 async function go (sourceBill, reissueBillRun) {

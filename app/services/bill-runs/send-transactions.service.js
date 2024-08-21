@@ -16,12 +16,12 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
  * Each sent transaction is updated with a status of `charge_created` and the external id returned by the
  * Charging Module.
  *
- * @param {Object[]} transactions - The transactions to be sent to the Charging Module
+ * @param {object[]} transactions - The transactions to be sent to the Charging Module
  * @param {string} billRunExternalId - The Charging Module bill run id that the transactions are to be created on
  * @param {string} accountNumber - The billing account number for the transactions
  * @param {module:LicenceModel} licence - The licence that each transaction is linked to
  *
- * @returns {Promise<Object[]>} Array of transactions which have been sent to the Charging Module and updated with its
+ * @returns {Promise<object[]>} Array of transactions which have been sent to the Charging Module and updated with its
  * response
  */
 async function go (transactions, billRunExternalId, accountNumber, licence) {

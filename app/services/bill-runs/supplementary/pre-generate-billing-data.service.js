@@ -13,12 +13,12 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * a keyed object of bills and a keyed object of bill licences. The bills are keyed by the bill ID, and the bill
  * licences are keyed by the concatenated bill id and licence id.
  * *
- * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the billing
+ * @param {module:ChargeVersionModel[]} chargeVersions - Array of charge versions which provide the billing
  * accounts and licences to use
- * @param {String} billRunId The bill run id to be added to the billing invoices
- * @param {Object} billingPeriod The billing period of the billing invoices
+ * @param {string} billRunId - The bill run id to be added to the billing invoices
+ * @param {object} billingPeriod - The billing period of the billing invoices
  *
- * @returns {Promise<Object>} An object containing arrays of bills and billLicences objects
+ * @returns {Promise<object>} An object containing arrays of bills and billLicences objects
  */
 async function go (chargeVersions, billRunId, billingPeriod) {
   const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)

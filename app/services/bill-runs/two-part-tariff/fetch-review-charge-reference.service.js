@@ -13,10 +13,10 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
 /**
  * Fetches the charge reference details for an individual licence
  *
- * @param {String} billRunId - UUID of the bill run
- * @param {String} reviewChargeReferenceId - The UUID of the review charge reference being viewed
+ * @param {string} billRunId - UUID of the bill run
+ * @param {string} reviewChargeReferenceId - The UUID of the review charge reference being viewed
  *
- * @returns {Promise<Object>} An object containing the bill run and review charge reference instances
+ * @returns {Promise<object>} An object containing the bill run and review charge reference instances
  */
 async function go (billRunId, reviewChargeReferenceId) {
   const billRun = await _fetchBillRun(billRunId)

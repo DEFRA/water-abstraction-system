@@ -31,10 +31,10 @@ const agreementDescriptions = {
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
  * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
  * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
- * @param {Object} auth - The auth object taken from `request.auth` containing user details
- * @param {Object} commonData - Licence data already formatted for the view's shared elements
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} commonData - Licence data already formatted for the view's shared elements
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns

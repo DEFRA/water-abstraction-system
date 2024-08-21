@@ -29,7 +29,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
  * Finally, we call the `CreateLicenceSupplementaryYearService`, which persists our final list of years along with the
  * licence ID and whether two-part tariff is true.
  *
- * @param {Object} payload - The payload from the request
+ * @param {object} payload - The payload from the request
  */
 async function go (payload) {
   try {

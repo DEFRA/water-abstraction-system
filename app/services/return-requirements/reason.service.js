@@ -16,7 +16,7 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} id - The UUID for return requirement setup session record
  *
- * @returns {Promise<Object>} page data needed by the view template
+ * @returns {Promise<object>} page data needed by the view template
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
