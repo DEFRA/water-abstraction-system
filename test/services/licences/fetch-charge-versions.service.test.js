@@ -19,6 +19,7 @@ const FetchChargeVersionsService =
 describe('Fetch Charge Versions service', () => {
   const licenceId = generateUUID()
 
+  let changeReason
   let currentChargeVersionWithEndDateId
   let currentChargeVersionWithoutEndDateId
   let supersededChargeVersionWithEndDateId
@@ -26,7 +27,7 @@ describe('Fetch Charge Versions service', () => {
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
-      const changeReason = await ChangeReasonHelper.add()
+      changeReason = ChangeReasonHelper.select()
 
       // Create multiple charge versions to ensure we get them in the right order
       let chargeVersion = await ChargeVersionHelper.add({
@@ -82,7 +83,7 @@ describe('Fetch Charge Versions service', () => {
       expect(result).to.equal([
         {
           changeReason: {
-            description: 'Strategic review of charges (SRoC)'
+            description: changeReason.description
           },
           endDate: null,
           id: currentChargeVersionWithoutEndDateId,
@@ -92,7 +93,7 @@ describe('Fetch Charge Versions service', () => {
         },
         {
           changeReason: {
-            description: 'Strategic review of charges (SRoC)'
+            description: changeReason.description
           },
           endDate: null,
           id: supersededChargeVersionWithoutEndDateId,
@@ -102,7 +103,7 @@ describe('Fetch Charge Versions service', () => {
         },
         {
           changeReason: {
-            description: 'Strategic review of charges (SRoC)'
+            description: changeReason.description
           },
           endDate: new Date('2021-03-31'),
           id: currentChargeVersionWithEndDateId,
@@ -112,7 +113,7 @@ describe('Fetch Charge Versions service', () => {
         },
         {
           changeReason: {
-            description: 'Strategic review of charges (SRoC)'
+            description: changeReason.description
           },
           endDate: new Date('2030-03-31'),
           id: supersededChargeVersionWithEndDateId,
