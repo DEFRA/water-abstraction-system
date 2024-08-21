@@ -26,7 +26,8 @@ describe('Return Requirements - Existing presenter', () => {
         returnVersions: [{
           id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
           startDate: '2023-01-01T00:00:00.000Z',
-          reason: null
+          reason: null,
+          modLogs: []
         }],
         startDate: '2022-04-01T00:00:00.000Z'
       },
@@ -50,12 +51,44 @@ describe('Return Requirements - Existing presenter', () => {
 
   describe('the "existingOptions" property', () => {
     describe('when the return versions do not contain a "reason"', () => {
-      it('returns the version ID as the option value and just the start date as the option text', () => {
-        const result = ExistingPresenter.go(session)
+      describe('and do not contain any mod logs', () => {
+        it('returns the version ID as the option value and just the start date as the option text', () => {
+          const result = ExistingPresenter.go(session)
 
-        expect(result.existingOptions).to.equal([
-          { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
-        ])
+          expect(result.existingOptions).to.equal([
+            { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+          ])
+        })
+      })
+
+      describe('but do contain mod logs', () => {
+        describe('but the first entry does not have a reason', () => {
+          beforeEach(() => {
+            session.licence.returnVersions[0].modLogs.push({ reasonDescription: null })
+          })
+
+          it('returns the version ID as the option value and just the start date as the option text', () => {
+            const result = ExistingPresenter.go(session)
+
+            expect(result.existingOptions).to.equal([
+              { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+            ])
+          })
+        })
+
+        describe('and the first entry does have a reason', () => {
+          beforeEach(() => {
+            session.licence.returnVersions[0].modLogs.push({ reasonDescription: 'Record Loaded During Migration' })
+          })
+
+          it('returns the version ID as the option value and the start date and reason as the option text', () => {
+            const result = ExistingPresenter.go(session)
+
+            expect(result.existingOptions).to.equal([
+              { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023 - Record Loaded During Migration' }
+            ])
+          })
+        })
       })
     })
 
