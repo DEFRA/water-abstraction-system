@@ -9,6 +9,8 @@ const { db } = require('../../../db/db.js')
 
 /**
  * Returns data required to populate the Import tasks of our `/health/info` page.
+ *
+ * @returns {object} - query response
 */
 async function go () {
   const PGBOSS_JOBS_ARRAY = [
