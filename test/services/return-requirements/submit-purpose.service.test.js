@@ -35,6 +35,12 @@ describe('Return Requirements - Submit Purpose service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
+          returnVersions: [{
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
