@@ -5,8 +5,13 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
+
+// Test helpers
+const ContactModel = require('../../../app/models/contact.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Things we want to stub
 const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
@@ -21,6 +26,10 @@ describe('Return Requirements - View service', () => {
     Sinon.stub(FetchReturnVersionService, 'go').resolves(_returnVersion())
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ViewService.go(returnVersionId)
@@ -30,15 +39,13 @@ describe('Return Requirements - View service', () => {
         additionalSubmissionOptions: {
           multipleUpload: 'No'
         },
-        createdBy: 'BATKINSO',
-        createdDate: '7 April 2010',
+        createdBy: 'carol.shaw@atari.com',
+        createdDate: '5 April 2022',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: [
-          'AMENDED FOR GOR'
-        ],
-        pageTitle: 'Requirements for returns for Mr Ingles',
-        reason: ['Changes to Returns requirements April 2008 (manual update)'],
+        notes: ['A special note'],
+        pageTitle: 'Requirements for returns for Mrs A J Easley',
+        reason: 'New licence',
         requirements: [
           {
             abstractionPeriod: 'From 1 April to 31 October',
@@ -62,32 +69,36 @@ describe('Return Requirements - View service', () => {
   })
 })
 
-function _returnVersion (returnVersionId) {
-  return {
+function _returnVersion () {
+  const contact = ContactModel.fromJson({
+    firstName: 'Annie',
+    middleInitials: 'J',
+    lastName: 'Easley',
+    salutation: 'Mrs'
+  })
+
+  const licence = LicenceModel.fromJson({
+    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+    licenceRef: '01/123',
+    licenceDocument: {
+      licenceDocumentRoles: [{
+        id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
+        contact
+      }]
+    }
+  })
+
+  const returnVersionData = {
     createdAt: new Date('2022-04-05'),
-    id: returnVersionId,
+    id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
-    notes: null,
+    notes: 'A special note',
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     status: 'current',
+    modLogs: [],
     user: { id: 1, username: 'carol.shaw@atari.com' },
-    licence: {
-      id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-      licenceRef: '01/123',
-      $licenceHolder: () => { return 'Mr Ingles' }
-    },
-    modLog: {
-      code: 'XRETM',
-      createdAt: '2010-04-07',
-      createdBy: 'BATKINSO',
-      description: 'Changes to Returns requirements April 2008 (manual update)',
-      note: 'AMENDED FOR GOR'
-    },
-    $createdBy: () => { return 'BATKINSO' },
-    $createdAt: () => { return '2010-04-07' },
-    $notes: () => { return ['AMENDED FOR GOR'] },
-    $reason: () => { return ['Changes to Returns requirements April 2008 (manual update)'] },
+    licence,
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
@@ -118,4 +129,6 @@ function _returnVersion (returnVersionId) {
       }]
     }]
   }
+
+  return ReturnVersionModel.fromJson(returnVersionData)
 }
