@@ -112,6 +112,8 @@ async function post (serviceName, path, userId = null, apiRequest = true, body =
 
 /**
  * Sends a request to a legacy service using the provided BaseRequest method
+ *
+ * @private
  */
 async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
@@ -142,6 +144,8 @@ function _service (serviceName) {
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
+ *
+ * @private
  */
 function _requestOptions (service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
@@ -176,6 +180,8 @@ function _requestOptions (service, userId, apiRequest, body) {
 
 /**
  * Parses the charging module response returned from BaseRequest
+ *
+ * @private
  */
 function _parseResult (result) {
   const { body, statusCode } = result.response

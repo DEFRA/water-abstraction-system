@@ -42,6 +42,8 @@ function _addMatchingReturnsToElement (matchingReturns, chargeElement) {
 
 /**
  * Filters and returns logs that match a given charge element based on legacy ID and abstraction periods
+ *
+ * @private
  */
 function _matchReturns (chargeElement, returnLogs) {
   const elementCode = chargeElement.purpose.legacyId

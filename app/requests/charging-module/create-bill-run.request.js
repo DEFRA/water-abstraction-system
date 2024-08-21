@@ -29,6 +29,8 @@ async function send (regionId, ruleset) {
 
 /**
  * Gets the single-letter charge region code for the provided regionId UUID
+ *
+ * @private
  */
 async function _getChargeRegionId (regionId) {
   const result = await RegionModel.query()

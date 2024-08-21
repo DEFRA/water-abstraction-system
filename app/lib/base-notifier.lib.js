@@ -135,6 +135,8 @@ class BaseNotifierLib {
    *
    * By doing it this way we can _still_ pass a `data` arg to `omfg()` and include those values in our log entry along
    * with the error.
+   *
+   * @private
    */
   _formatLogPacket (data, error) {
     const packet = {
@@ -160,6 +162,8 @@ class BaseNotifierLib {
    * But this means Airbrake's `message:` property becomes ignored. Errbit will set the issue title using the error's
    * `message` instead. In order to see our message when a 'proper' error is passed in we include our `message` as a
    * property of `session:`.
+   *
+   * @private
    */
   _formatNotifyPacket (data, error, message) {
     return {
@@ -179,6 +183,8 @@ class BaseNotifierLib {
    *
    * @param {object} [logger] - An instance of {@link https://github.com/pinojs/pino|pino}. If 'null' the method will
    * create a new instance.
+   *
+   * @private
    */
   _setLogger (logger) {
     if (logger) {
@@ -196,6 +202,8 @@ class BaseNotifierLib {
    *
    * @param {object} [notifier] - An instance of the {@link https://github.com/airbrake/airbrake-js|airbrake-js}
    * `Notifier`. If 'null' the class will create a new instance instead.
+   *
+   * @private
    */
   _setNotifier (notifier) {
     if (notifier) {

@@ -53,6 +53,8 @@ async function go (userId) {
  * The user object we get back from the query has the roles and groups attached to it. The service returns the user,
  * roles and groups separately so we remove the roles and groups from the user object so we aren't returning the same
  * data twice.
+ *
+ * @private
  */
 function _extractRolesAndGroupsFromUser (user) {
   const { roles, groups } = user
@@ -68,6 +70,8 @@ function _extractRolesAndGroupsFromUser (user) {
  * We want to extract the roles and remove them from the groups in order to keep the Group objects clean and avoid
  * duplication in the object returned by the service. This function returns a flat array of all the group Roles objects,
  * deleting them from the Group objects in the process
+ *
+ * @private
  */
 function _extractRolesFromGroups (groups) {
   return groups.flatMap((group) => {

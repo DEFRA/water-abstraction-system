@@ -79,6 +79,8 @@ function _sortDates (dateRanges) {
  * or not they overlap.
  *
  * Based on https://stackoverflow.com/a/67717721
+ *
+ * @private
  */
 function _consolidateDates (dateRanges) {
   // We use reduce to build up an array of consolidated date ranges as we iterate over our initial dateRanges array.

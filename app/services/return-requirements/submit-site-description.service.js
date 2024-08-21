@@ -63,6 +63,8 @@ async function _save (session, requirementIndex, payload) {
 /**
  * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
  * the user, payload will be an empty object.
+ *
+ * @private
  */
 function _submittedSessionData (session, requirementIndex, payload) {
   session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null

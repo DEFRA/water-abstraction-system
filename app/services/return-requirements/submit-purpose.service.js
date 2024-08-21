@@ -83,6 +83,8 @@ function _combinePurposeDetails (payload, licencePurposes) {
  * When a single purpose is checked by the user, it returns as a string. When multiple purposes are checked, the
  * 'purposes' is returned as an array. This function works to make those single selected string 'purposes' into an array
  * for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!payload.purposes) {
@@ -102,6 +104,8 @@ async function _save (session, requirementIndex, purposes) {
 
 /**
  * Combines the existing session data with the submitted payload formatted by the presenter
+ *
+ * @private
  */
 function _submittedSessionData (session, requirementIndex, purposes, licencePurposes) {
   session.requirements[requirementIndex].purposes = purposes

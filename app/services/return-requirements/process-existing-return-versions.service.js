@@ -71,6 +71,8 @@ async function go (licenceId, newVersionStartDate) {
  *
  * This function finds return version **3** and updates its end date to the start date of the new return version minus
  * 1 day. We don't care about the end date because the new return version doesn't need one.
+ *
+ * @private
  */
 async function _endLatestVersion (previousVersions, newVersionStartDate, endDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
@@ -108,6 +110,8 @@ async function _endLatestVersion (previousVersions, newVersionStartDate, endDate
  * This function finds return version **2** and updates its end date to the start date of the new return version minus
  * 1 day. We also return the end date from version **2** as this needs to be applied to the new return version. Hence,
  * we are _inserting between versions_.
+ *
+ * @private
  */
 async function _insertBetweenVersions (previousVersions, newVersionStartDate, endDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
@@ -166,6 +170,8 @@ function _previousVersions (licenceId) {
  *
  * This function finds return version **3** and updates its status to `superseded`. We don't care about the end date
  * because the new return version doesn't need one.
+ *
+ * @private
  */
 async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
@@ -207,6 +213,8 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
  * This function finds return version **2** and updates its status to `superseded`. We also return the end date from
  * version **2** as this needs to be applied to the new return version as its end date. Hence, we are _replacing a
  * previous version_.
+ *
+ * @private
  */
 async function _replacePreviousVersion (previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {

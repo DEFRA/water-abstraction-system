@@ -146,6 +146,8 @@ function _formattedAddress (address, contact) {
  * @param {number} maximumLength - The maximum length to the truncated string
  *
  * @returns {string} - The truncated string.
+ *
+ * @private
  */
 function _truncate (stringToTruncate, maximumLength) {
   // Don't truncate if the string is equal to or less than maximum length
