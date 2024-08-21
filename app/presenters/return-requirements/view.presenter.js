@@ -27,7 +27,7 @@ function go (returnVersion) {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
-    createdBy: returnVersion.$createdBy() ? returnVersion.$createdBy() : 'Migrated from NALD',
+    createdBy: _createdBy(returnVersion),
     createdDate: formatLongDate(new Date(returnVersion.$createdAt())),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
@@ -94,6 +94,16 @@ function _buildAgreementExceptions (returnRequirement) {
   }
 
   return agreementsExceptions
+}
+
+function _createdBy (returnVersion) {
+  const createdBy = returnVersion.$createdBy()
+
+  if (createdBy) {
+    return createdBy
+  }
+
+  return 'Migrated from NALD'
 }
 
 function _mapRequirement (requirement) {
