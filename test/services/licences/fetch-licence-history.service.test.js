@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -12,6 +12,7 @@ const ChargeVersionHelper = require('../../support/helpers/charge-version.helper
 const ChargeVersionNoteHelper = require('../../support/helpers/charge-version-note.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
@@ -19,33 +20,31 @@ const FetchLicenceHistoryService = require('../../../app/services/licences/fetch
 
 describe('Fetch Licence History service', () => {
   let chargeVersion
+  let chargeVersionModLog
+  let chargeVersionNote
   let licence
   let licenceId
   let licenceVersion
+  let licenceVersionModLog
   let returnVersion
+  let returnVersionModLog
 
   describe('when the licence has licence versions, charge versions and return versions', () => {
-    beforeEach(async () => {
+    before(async () => {
       licence = await LicenceHelper.add()
 
       licenceId = licence.id
 
       const { licenceRef } = licence
 
-      const chargeVersionNote = await ChargeVersionNoteHelper.add()
-
+      chargeVersionNote = await ChargeVersionNoteHelper.add()
       chargeVersion = await ChargeVersionHelper.add({ licenceId, licenceRef, noteId: chargeVersionNote.id })
       licenceVersion = await LicenceVersionHelper.add({ licenceId })
-      returnVersion = await ReturnVersionHelper.add({
-        licenceId,
-        modLog: {
-          code: 'XRET',
-          note: 'Returns requirements changed - Operational Instruction 056_08',
-          createdAt: '2008-11-06',
-          createdBy: 'NALD_OWNER',
-          description: 'Changes to Returns requirements April 2008'
-        }
-      })
+      returnVersion = await ReturnVersionHelper.add({ licenceId })
+
+      chargeVersionModLog = await ModLogHelper.add({ chargeVersionId: chargeVersion.id })
+      licenceVersionModLog = await ModLogHelper.add({ licenceVersionId: licenceVersion.id })
+      returnVersionModLog = await ModLogHelper.add({ returnVersionId: returnVersion.id })
     })
 
     it('returns the matching licence versions, charge versions and return versions', async () => {
@@ -54,44 +53,53 @@ describe('Fetch Licence History service', () => {
       expect(result).to.equal({
         entries: [
           {
+            entryType: 'charge-version',
+            entryId: chargeVersion.id,
             createdAt: chargeVersion.createdAt,
             createdBy: null,
-            entryId: chargeVersion.id,
-            entryType: 'charge-version',
-            licenceId,
-            modLog: '',
-            note: 'This is a test note',
-            reason: null,
-            source: 'wrls',
-            versionNumber: 1
+            changeReason: null,
+            chargeVersionNote: {
+              id: chargeVersionNote.id,
+              note: 'This is a test note'
+            },
+            modLogs: [
+              {
+                id: chargeVersionModLog.id,
+                naldDate: chargeVersionModLog.naldDate,
+                note: chargeVersionModLog.note,
+                reasonDescription: chargeVersionModLog.reasonDescription,
+                userId: chargeVersionModLog.userId
+              }
+            ]
           },
           {
             createdAt: licenceVersion.createdAt,
-            createdBy: '',
             entryId: licenceVersion.id,
             entryType: 'licence-version',
-            licenceId,
-            modLog: '',
-            note: '',
-            reason: '',
-            versionNumber: 1
+            modLogs: [
+              {
+                id: licenceVersionModLog.id,
+                naldDate: licenceVersionModLog.naldDate,
+                note: licenceVersionModLog.note,
+                reasonDescription: licenceVersionModLog.reasonDescription,
+                userId: licenceVersionModLog.userId
+              }
+            ]
           },
           {
             createdAt: returnVersion.createdAt,
-            createdBy: null,
             entryId: returnVersion.id,
             entryType: 'return-version',
-            licenceId,
-            modLog: {
-              code: 'XRET',
-              createdAt: '2008-11-06',
-              createdBy: 'NALD_OWNER',
-              description: 'Changes to Returns requirements April 2008',
-              note: 'Returns requirements changed - Operational Instruction 056_08'
-            },
-            note: null,
-            reason: 'new-licence',
-            versionNumber: 100
+            modLogs: [
+              {
+                id: returnVersionModLog.id,
+                naldDate: returnVersionModLog.naldDate,
+                note: returnVersionModLog.note,
+                reasonDescription: returnVersionModLog.reasonDescription,
+                userId: returnVersionModLog.userId
+              }
+            ],
+            user: null
           }
         ],
         licence: {
