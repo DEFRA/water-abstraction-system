@@ -19,9 +19,7 @@ describe('Return Requirements - View presenter', () => {
   let returnVersion
 
   beforeEach(() => {
-    const returnVersionData = _returnVersion()
-
-    returnVersion = ReturnVersionModel.fromJson(returnVersionData)
+    returnVersion = _returnVersion()
   })
 
   it('correctly presents the data', () => {
@@ -311,7 +309,7 @@ function _returnVersion () {
     }
   })
 
-  return {
+  const returnVersionData = {
     createdAt: new Date('2022-04-05'),
     id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
@@ -352,4 +350,6 @@ function _returnVersion () {
       }]
     }]
   }
+
+  return ReturnVersionModel.fromJson(returnVersionData)
 }
