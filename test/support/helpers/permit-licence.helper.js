@@ -57,7 +57,6 @@ function defaults (data = {}) {
 }
 
 /**
- * @private
  * In real life, when a licence is imported from NALD into WRLS a number of records get created. A lot of it is
  * duplication, but not everything from NALD is put into tables.
  *
@@ -73,6 +72,7 @@ function defaults (data = {}) {
  * This was the NALD dump the legacy acceptance test data loading solution used. It doesn't matter that the data
  * included doesn't match with the related licence and other records. The critical factor is the structure must align
  * with what the legacy apps expect.
+ * @param licenceRef
  */
 function _licenceDataValue (licenceRef) {
   return {

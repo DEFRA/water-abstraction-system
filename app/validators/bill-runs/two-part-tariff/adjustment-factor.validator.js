@@ -30,7 +30,6 @@ function go (payload, maxNumberOfDecimals, validationType) {
 }
 
 /**
- * @private
  * Due to limitations in Joi validation for decimals, achieving validation for numbers with fewer than 2 or 15 decimal
  * places requires a custom approach. First, convert the number into a string. Then split the string into an array using
  * the decimal point (`.`) as the delimiter. This results in either one item in the array (if no decimal is present) or
