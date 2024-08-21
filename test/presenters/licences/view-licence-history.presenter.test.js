@@ -7,6 +7,15 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ContactModel = require('../../../app/models/contact.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
+const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
+const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
+const ModLogModel = require('../../../app/models/mod-log.model.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+
 // Thing under test
 const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
 
@@ -14,7 +23,7 @@ describe.only('View Licence History presenter', () => {
   let licenceHistory
 
   beforeEach(() => {
-    licenceHistory = _licenceHistory()
+    licenceHistory = _licenceHistory2()
   })
 
   describe('when provided with populated licence history', () => {
@@ -240,6 +249,63 @@ describe.only('View Licence History presenter', () => {
     })
   })
 })
+
+function _licenceHistory2 () {
+  const contact = ContactModel.fromJson({
+    firstName: 'Annie',
+    middleInitials: 'J',
+    lastName: 'Easley',
+    salutation: 'Mrs'
+  })
+
+  const licence = LicenceModel.fromJson({
+    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+    licenceRef: '01/123',
+    licenceDocument: {
+      licenceDocumentRoles: [{
+        id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
+        contact
+      }]
+    }
+  })
+
+  const chargeVersion = ChargeVersionModel.fromJson({
+    createdAt: new Date('2022-07-05'),
+    id: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
+    reason: 'new-licence',
+    status: 'current',
+    startDate: new Date('2020-04-01'),
+    modLogs: [],
+    user: { id: 3, username: 'cristiano.ronaldo@atari.com' },
+    licence
+  })
+
+  const licenceVersion = LicenceVersionModel.fromJson({
+    createdAt: new Date('2022-06-05'),
+    id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+    reason: 'new-licence',
+    status: 'current',
+    startDate: new Date('2021-04-01'),
+    modLogs: [],
+    user: { id: 2, username: 'lionel.messi@atari.com' },
+    licence
+  })
+
+  const returnVersion = ReturnVersionModel.fromJson({
+    createdAt: new Date('2022-04-05'),
+    id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
+    multipleUpload: false,
+    notes: 'A special note',
+    reason: 'new-licence',
+    startDate: new Date('2022-04-01'),
+    status: 'current',
+    modLogs: [],
+    user: { id: 1, username: 'carol.shaw@atari.com' },
+    licence
+  })
+
+  return [...chargeVersion, ...licenceVersion, ...returnVersion]
+}
 
 function _licenceHistory () {
   return {
