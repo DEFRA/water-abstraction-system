@@ -16,7 +16,7 @@ const StartDatePresenter = require('../../presenters/return-requirements/start-d
  *
  * @param {string} sessionId - The UUID of the current session
  *
- * @returns {Promise<Object>} The view data for the start date page
+ * @returns {Promise<object>} The view data for the start date page
 */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)

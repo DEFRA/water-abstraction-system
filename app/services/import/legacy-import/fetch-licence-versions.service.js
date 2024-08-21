@@ -45,7 +45,7 @@ module.exports = {
 
 /**
  * A legacy licence version
- * @typedef {Object} LegacyLicenceVersionsType
+ * @typedef {object} LegacyLicenceVersionsType
  *
  * @property {string} EFF_ST_DATE - date in UK format | 'null'
  */

@@ -12,7 +12,7 @@ const servicesConfig = require('../../../config/services.config.js')
 /**
  * Connects with the Charging Module API's Cognito service to get a JWT for authentication
  *
- * @returns {Promise<Object>} An object containing the `accessToken:` to use in future Charging Module requests
+ * @returns {Promise<object>} An object containing the `accessToken:` to use in future Charging Module requests
  */
 async function send () {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)

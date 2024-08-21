@@ -16,12 +16,12 @@ const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bi
 /**
  * Manages the creation of a new bill run
  *
- * @param {String} regionId Id of the region the bill run is for
- * @param {String} batchType Type of bill run, for example, supplementary
- * @param {String} userEmail Email address of the user who initiated the bill run
- * @param {Number} financialYearEnding End year of the bill run. Only populated for two-part-tariff
+ * @param {string} regionId - Id of the region the bill run is for
+ * @param {string} batchType - Type of bill run, for example, supplementary
+ * @param {string} userEmail - Email address of the user who initiated the bill run
+ * @param {number} financialYearEnding - End year of the bill run. Only populated for two-part-tariff
  *
- * @returns {Promise<Object>} Object that will be the JSON response returned to the client
+ * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
 async function go (regionId, batchType, userEmail, financialYearEnding) {
   const billingPeriods = DetermineBillingPeriodsService.go(batchType, financialYearEnding)

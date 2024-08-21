@@ -14,9 +14,9 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * Was built to provide the data needed for the '/licences/{id}/communications' page
  *
- * @param {string} licenceId The UUID for the licence to fetch
+ * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's communications tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
 async function go (licenceRef, page) {
   const { results, total } = await _fetch(licenceRef, page)

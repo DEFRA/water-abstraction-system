@@ -22,10 +22,10 @@ const BillingConfig = require('../../../../config/billing.config.js')
  * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
  *
  * @param {module:BillRunModel} billRun - The two-part tariff bill run we need to process
- * @param {Object} billingPeriod - An object representing the financial year the bills will be for
+ * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
- * @returns {Promise<Boolean>} true if the bill run is not empty (there are transactions to bill) else false
+ * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go (billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
@@ -173,11 +173,11 @@ function _extractBillableLicences (allBillLicences) {
  * Because we're processing the charge versions for a billing account the same licence might appear more than once. This
  * means we need to find the existing bill licence record or if one doesn't exist create it.
  *
- * @param {Object[]} billLicences - The existing bill licences created for the bill being generated
- * @param {Object} licence - the licence we're looking for an existing bill licence record
- * @param {String} billId - the ID of the bill we're creating
+ * @param {object[]} billLicences - The existing bill licences created for the bill being generated
+ * @param {object} licence - the licence we're looking for an existing bill licence record
+ * @param {string} billId - the ID of the bill we're creating
  *
- * @return {Object} returns either an existing bill licence or a new one for the licence and bill being generated
+ * @return {object} returns either an existing bill licence or a new one for the licence and bill being generated
  */
 function _findOrCreateBillLicence (billLicences, licence, billId) {
   const { id: licenceId, licenceRef } = licence

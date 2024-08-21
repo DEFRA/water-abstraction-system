@@ -28,7 +28,7 @@ const { generateUUID, timestampForPostgres } = require('../../../app/lib/general
  * - `createdAt` - current Date and time as an ISO string
  * - `updatedAt` - current Date and time as an ISO string
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:EventModel>} The instance of the newly created record
  */
@@ -46,7 +46,7 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
   const timestamp = timestampForPostgres()

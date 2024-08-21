@@ -54,10 +54,10 @@
  * When this happens we return an Object with `null` start and end dates. Calling services then know there is no valid
  * charge period and to avoid trying to calculate any billable days.
  *
- * @param {module:ChargeVersionModel} chargeVersion The charge version being processed for billing
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {module:ChargeVersionModel} chargeVersion - The charge version being processed for billing
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object} The start and end date of the calculated charge period
+ * @returns {object} The start and end date of the calculated charge period
  */
 function go (chargeVersion, billingPeriod) {
   const latestStartDateTimestamp = Math.max(

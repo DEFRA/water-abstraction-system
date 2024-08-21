@@ -29,7 +29,7 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
  *
  * @param {string} licenceId - The UUID of the licence to fetch abstraction data from and generate return requirements
  *
- * @returns {Promise<Object[]>} an array of return requirements generated from the licence's abstraction and ready to
+ * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction and ready to
  * be persisted to the setup session
  */
 async function go (licenceId) {

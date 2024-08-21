@@ -13,7 +13,7 @@ const RemoveBillLicencePresenter = require('../../presenters/bill-licences/remov
  *
  * @param {string} billLicenceId - The UUID for the bill licence to remove
  *
- * @returns {Promise<Object>} a formatted representation of the bill licence, its bill, billing account and the bill run
+ * @returns {Promise<object>} a formatted representation of the bill licence, its bill, billing account and the bill run
  * it is linked to for the remove bill licence page
  */
 async function go (billLicenceId) {

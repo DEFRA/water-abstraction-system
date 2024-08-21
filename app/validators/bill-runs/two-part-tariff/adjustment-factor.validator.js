@@ -18,11 +18,11 @@ const Joi = require('joi')
  * The validation happening here is to ensure that the adjustments have been entered. Both have a
  * minimum value of 0 and they both get validated to either 2 or 15 decimal places.
  *
- * @param {Object} payload - The payload from the request to be validated
- * @param {Number} maxNumberOfDecimals - The maximum number of decimal places the factor can be validated to
- * @param {String} validationType - The type of factor being validated, this is to add to the validation messages
+ * @param {object} payload - The payload from the request to be validated
+ * @param {number} maxNumberOfDecimals - The maximum number of decimal places the factor can be validated to
+ * @param {string} validationType - The type of factor being validated, this is to add to the validation messages
  *
- * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (payload, maxNumberOfDecimals, validationType) {

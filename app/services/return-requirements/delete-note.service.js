@@ -14,7 +14,7 @@ const SessionModel = require('../../models/session.model.js')
  * Then it removes the notes data from the session.
  *
  * @param {string} sessionId - The id of the current session
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */

@@ -20,10 +20,10 @@ const GeneralLib = require('../../lib/general.lib.js')
  * controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} The page data for the no returns required page
+ * @returns {Promise<object>} The page data for the no returns required page
  */
 async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)

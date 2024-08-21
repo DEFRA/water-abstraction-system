@@ -19,10 +19,10 @@ const SessionModel = require('../../models/session.model.js')
  * controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} If no errors it returns an empty object else the page data for the note page including the
+ * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
 async function go (sessionId, payload, yar) {

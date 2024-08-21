@@ -24,8 +24,8 @@ const Workflow = require('../../../models/workflow.model.js')
  * - be linked to a charge version which has an end date after the start of the billing period
  * - be linked to a charge version which has a status of 'current'
  *
- * @param {String} regionId - UUID of the region being billed that the licences must be linked to
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {string} regionId - UUID of the region being billed that the licences must be linked to
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
@@ -135,7 +135,7 @@ async function _fetchNew (regionId, billingPeriod) {
  *
  * @param {module:QueryBuilder} query - an instance of the Objection QueryBuilder being generated
  * @param {string} regionId - UUID of the region being billed that the licences must be linked to
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {module:QueryBuilder} the builder instance passed in with the additional `where` clauses added
  */

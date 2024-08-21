@@ -32,9 +32,9 @@ const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
  *   points and the rest 1
  *
- * @param {String | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
+ * @param {string | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
  *
- * @returns {Promise<Object>} all the named IDs for then seeded records in an object
+ * @returns {Promise<object>} all the named IDs for then seeded records in an object
  */
 async function seed (optionalLicenceRef = undefined) {
   const records = {}

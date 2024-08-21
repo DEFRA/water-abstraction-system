@@ -13,13 +13,13 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
 /**
  * Orchestrates validating the data for the amend billable returns page and patching the db value
  *
- * @param {String} billRunId - The UUID for the bill run
- * @param {String} licenceId - The UUID of the licence that is being reviewed
- * @param {String} reviewChargeElementId - The UUID of the review charge element being updated
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} billRunId - The UUID for the bill run
+ * @param {string} licenceId - The UUID of the licence that is being reviewed
+ * @param {string} reviewChargeElementId - The UUID of the review charge element being updated
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} The updated value for the billable returns
+ * @returns {Promise<object>} The updated value for the billable returns
  */
 async function go (billRunId, licenceId, reviewChargeElementId, payload, yar) {
   const validationResult = _validate(payload)

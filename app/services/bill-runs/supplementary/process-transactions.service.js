@@ -17,12 +17,12 @@ const ReverseTransactionsService = require('./reverse-transactions.service.js')
  * sent to the Charging Module) and any matching pairs of transactions which would cancel each other out are removed.
  * Any remaining reversed credits and calculated debits are returned.
  *
- * @param {Object[]} calculatedTransactions - The calculated transactions to be processed
+ * @param {object[]} calculatedTransactions - The calculated transactions to be processed
  * @param {string} billingAccountId - The UUID that identifies the billing account we are processing transactions for
- * @param {Object} billLicence - A generated bill licence that identifies the licence we need to match against
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {object} billLicence - A generated bill licence that identifies the licence we need to match against
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<Object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
+ * @returns {Promise<object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
  *  out by a previous matching credit)
  */
 async function go (calculatedTransactions, billingAccountId, billLicence, billingPeriod) {

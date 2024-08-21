@@ -12,7 +12,7 @@
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {module:PurposeModel[]} licencePurposes - All the purposes for the licence
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session, requirementIndex, licencePurposes) {
   const { id: sessionId, licence, requirements } = session

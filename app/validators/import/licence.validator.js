@@ -11,7 +11,7 @@ const CustomDateValidator = require('../custom/date.validators.js')
 /**
  * Checks that the data for inserting/updating the water.licence table is valid
  *
- * @param {ImportLicenceType} data The data to be validated
+ * @param {ImportLicenceType} data - The data to be validated
  *
  * Throws an error if anything fails
  *
