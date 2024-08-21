@@ -51,7 +51,7 @@ module.exports = {
 
 /*
 
-This is the code to enforce agreed conventionsk
+This is the code to enforce agreed conventions
 
 npm packages needed -
     "eslint-plugin-require-sort": "^1.3.0",
