@@ -22,7 +22,7 @@ async function _getLicenceVersions (licenceId, regionCode) {
 
   const { rows } = await db.raw(query)
 
-  return select(rows)
+  return _select(rows)
 }
 
 /**
@@ -30,8 +30,10 @@ async function _getLicenceVersions (licenceId, regionCode) {
  *
  * @param {{}} rows - the licence version columns
  * @returns {LegacyLicenceVersionsArray}
+ *
+ * @private
  */
-function select (rows) {
+function _select (rows) {
   return rows.map((row) => {
     return {
       EFF_ST_DATE: row.EFF_ST_DATE

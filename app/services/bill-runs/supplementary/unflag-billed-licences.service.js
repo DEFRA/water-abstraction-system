@@ -48,6 +48,8 @@ async function go (billRun) {
 
 /**
  * PRESROC
+ *
+ * @private
  */
 async function _updateOldScheme (billRun) {
   const { createdAt, regionId } = billRun
@@ -65,6 +67,8 @@ async function _updateOldScheme (billRun) {
 
 /**
  * SROC
+ *
+ * @private
  */
 async function _updateCurrentScheme (billRun) {
   const { id: billRunId, createdAt } = billRun

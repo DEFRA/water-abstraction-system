@@ -45,6 +45,8 @@ function go (payload) {
  * two items (if a decimal is present). The first item represents the part before the decimal, while the second item
  * represents the part after. By assessing if the length of the second string is less than o equal to 6, we can validate
  * if there are the correct number of decimals.
+ *
+ * @private
  */
 function _customValidation (quantity, helpers) {
   const maxNumberOfDecimals = 6

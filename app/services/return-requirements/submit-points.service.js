@@ -62,6 +62,8 @@ async function go (sessionId, requirementIndex, payload, yar) {
  * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
  * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
  * for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!Array.isArray(payload.points)) {

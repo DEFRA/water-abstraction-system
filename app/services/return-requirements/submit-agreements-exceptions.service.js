@@ -62,6 +62,8 @@ async function go (sessionId, requirementIndex, payload, yar) {
  * When a single agreement and exception is checked by the user, it returns as a string. When multiple agreements and
  * exceptions are checked, the 'agreementsExceptions' is returned as an array. This function works to make those single
  * selected string 'agreementsExceptions' into an array for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!Array.isArray(payload.agreementsExceptions)) {

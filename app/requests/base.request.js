@@ -143,6 +143,8 @@ async function _importGot () {
  * @param {object} result - the result object we generate
  * @param {string} url - the requested url
  * @param {object} additionalOptions - any additional options that were passed to Got by the calling service
+ *
+ * @private
  */
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
@@ -175,6 +177,8 @@ function _logFailure (method, result, url, additionalOptions) {
  * Those that use this module can add to, extend or replace the options we pass to Got when a request is made.
  *
  * @param {object} additionalOptions - Object of custom options
+ *
+ * @private
  */
 function _requestOptions (additionalOptions) {
   return { ...defaultOptions(), ...additionalOptions }

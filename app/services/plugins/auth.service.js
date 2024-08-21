@@ -64,6 +64,8 @@ async function go (userId) {
  *
  * @returns {object} Each top level permissions is a key. The value is true or false as to whether the user has
  * permission to access that area of the service
+ *
+ * @private
  */
 function _permission (scope = []) {
   const billRuns = scope.includes('billing')
