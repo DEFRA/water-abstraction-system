@@ -270,7 +270,7 @@ describe('Return Version model', () => {
           testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
         })
 
-        it('returns the null', () => {
+        it('returns null', () => {
           const result = testRecord.$createdBy()
 
           expect(result).to.be.null()
