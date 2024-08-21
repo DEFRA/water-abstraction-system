@@ -59,6 +59,7 @@ describe('View Licence Set Up service', () => {
       reason: 'change-to-special-agreement',
       modLogs: []
     })
+
     Sinon.stub(FetchReturnVersionsService, 'go').returns([returnVersion])
 
     Sinon.stub(FetchWorkflowsService, 'go').returns([
