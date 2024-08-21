@@ -49,6 +49,8 @@ function add (data = {}) {
  * for use in tests to avoid having to duplicate values.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
   const defaults = {
