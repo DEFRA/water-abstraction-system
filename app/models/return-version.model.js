@@ -55,18 +55,20 @@ class ReturnVersionModel extends BaseModel {
    * Modifiers allow us to reuse logic in queries, eg. select the return version, user that created it, and/or all mod
    * log records:
    *
+   * ```javascript
    * return ReturnVersionModel.query()
    *   .findById(returnVersionId)
    *   .modify('history')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object} an object defining modifier functions for this model
    */
   static get modifiers () {
     return {
-      /**
-       * history modifier fetches all the related records needed to determine history properties, for example, created
-       * at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
-       */
+      // history modifier fetches all the related records needed to determine history properties, for example, created
+      // at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
       history (query) {
         query
           .withGraphFetched('modLogs')
