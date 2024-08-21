@@ -47,6 +47,8 @@ function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStat
 /**
  * Returns true/false values for each issue in the Issue filter based on the filters applied to determine which
  * checkboxes if any should be checked upon loading the page
+ *
+ * @private
  */
 function _prepareIssues (filterIssues) {
   return {

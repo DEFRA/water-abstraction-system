@@ -32,6 +32,8 @@ async function go (regionId, years, twoPartTariff) {
  * We need to verify which years annual two-part tariff bill runs have been sent. A year shouldn't be flagged for a
  * supplementary bill run if the annual bill run hasn't been sent yet, as any licence changes will be handled in the
  * annual run.
+ *
+ * @private
  */
 async function _supplementaryBillingYears (regionId, years, twoPartTariff) {
   const batchType = twoPartTariff ? 'two_part_tariff' : 'annual'

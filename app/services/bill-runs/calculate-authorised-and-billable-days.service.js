@@ -99,6 +99,8 @@ function go (chargePeriod, billingPeriod, chargeReference) {
  * overlaps the reference period
  *
  * @returns {number} the length of the period in days (inclusive)
+ *
+ * @private
  */
 function _calculateDays (abstractionOverlapPeriod) {
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
@@ -130,6 +132,8 @@ function _calculateDays (abstractionOverlapPeriod) {
  *
  * @returns {object} an object with a start and end date representing the part of the abstraction period that overlaps
  *  the reference period
+ *
+ * @private
  */
 function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
   const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)

@@ -97,6 +97,8 @@ function go (payload) {
  * @param {object} obj - The object you wish to loop through and clean
  *
  * @returns {object} The cleaned object
+ *
+ * @private
  */
 function _cleanObject (obj) {
   if (obj === null) {
@@ -141,6 +143,8 @@ function _cleanObject (obj) {
  *
  * @param {Array} array - The object you wish to loop through and clean
  * @returns {Array} The cleaned array
+ *
+ * @private
  */
 function _cleanArray (array) {
   const cleanedArray = []
@@ -173,6 +177,8 @@ function _cleanArray (array) {
  * @param value - Value we are making the decision for
  *
  * @returns `true` if the `Object`, `Array` or `String` is not 'empty'. Else `false`
+ *
+ * @private
  */
 function _keepValue (value) {
   if (value === null) {
@@ -201,6 +207,8 @@ function _keepValue (value) {
  * @param value - Value to be cleaned
  *
  * @returns The 'cleaned' value if a `String` else the original value
+ *
+ * @private
  */
 function _cleanValue (value) {
   if (typeof value === 'string') {

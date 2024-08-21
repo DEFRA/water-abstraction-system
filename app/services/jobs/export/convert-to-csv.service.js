@@ -22,6 +22,8 @@ function go (data) {
 
 /**
  * Transforms each row or header to CSV format and joins the values with commas
+ *
+ * @private
  */
 function _transformDataToCSV (data) {
   const transformedRow = data.map((value) => {
@@ -33,6 +35,8 @@ function _transformDataToCSV (data) {
 
 /**
  * Transform a value to CSV format
+ *
+ * @private
  */
 function _transformValueToCSV (value) {
   // Return empty string for undefined or null values

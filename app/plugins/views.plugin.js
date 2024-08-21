@@ -154,6 +154,8 @@ function prepare (config, next) {
  * is authenticated and what scopes (permissions) they have
  *
  * @returns {object[]} if the user is authenticated navigation links to display in the top-level GOV.UK header
+ *
+ * @private
  */
 function _navigationLinks (auth) {
   if (!auth.isAuthenticated) {

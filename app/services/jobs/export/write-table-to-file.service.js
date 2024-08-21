@@ -39,6 +39,8 @@ async function go (headers, rows, schemaFolderPath, tableName) {
  * Creates and returns a Transform stream that converts incoming objects to CSV rows
  *
  * @returns {Transform} A transform stream with objectMode set to true
+ *
+ * @private
  */
 function _transformDataStream () {
   return new Transform({
@@ -59,6 +61,8 @@ function _transformDataStream () {
  * @param {string} schemaFolderPath - The folder path of the schema
  *
  * @returns {Promise<string>} The full file path
+ *
+ * @private
  */
 async function _filenameWithPath (tableName, schemaFolderPath) {
   await fsPromises.mkdir(schemaFolderPath, { recursive: true })

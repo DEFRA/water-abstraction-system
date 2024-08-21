@@ -53,6 +53,8 @@ class RequestNotifierLib extends BaseNotifierLib {
    * ```
    * { $.req.id = "1617655289640:533c1e381364:1671:kn526tbx:10000" }
    * ```
+   *
+   * @private
    */
   _formatLogPacket (data, error) {
     const dataWithRequestId = {
@@ -76,6 +78,8 @@ class RequestNotifierLib extends BaseNotifierLib {
    * ```
    * { $.req.id = "1617655289640:533c1e381364:1671:kn526tbx:10000" }
    * ```
+   *
+   * @private
    */
   _formatNotifyPacket (data, error, message) {
     const dataWithRequestId = {

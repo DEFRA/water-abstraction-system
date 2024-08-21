@@ -80,6 +80,8 @@ async function _fetchBill (id) {
  * To get the query to return a single line for each licence we need to use DISTINCT. So, due to the complexity of the
  * query needed we've had to drop back down to Knex and generate the query ourselves rather than going through
  * Objection.js.
+ *
+ * @private
  */
 async function _fetchLicenceSummaries (id) {
   return db

@@ -46,6 +46,8 @@ function go (billRun, reviewChargeElement, licenceId) {
  * The user can only enter a volume on the billable returns that is less than the authorised volume. The authorised
  * volume is either the authorised volume on the charge element or the authorised volume on the charge reference.
  * Whichever is lower.
+ *
+ * @private
  */
 function _authorisedQuantity (reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
