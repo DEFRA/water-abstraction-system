@@ -28,7 +28,7 @@ function go (returnVersion) {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
     createdBy: _createdBy(returnVersion),
-    createdDate: formatLongDate(new Date(returnVersion.$createdAt())),
+    createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     notes: returnVersion.$notes(),
