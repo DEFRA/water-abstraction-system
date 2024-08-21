@@ -21,7 +21,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  *
  * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId - UUID of the licence to remove from the bill run
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<boolean>} true if all the licences have been removed from the bill run else false
  */

@@ -92,9 +92,9 @@ function go (payload) {
  * We store the result and then call `keepValue()` to determine if the property should be retained in the object. If
  * it should we add it to a new object we create and update as we loop through. Else we quietly drop it.
  *
- * @param {Object} obj The object you wish to loop through and clean
+ * @param {object} obj - The object you wish to loop through and clean
  *
- * @returns {Object} The cleaned object
+ * @returns {object} The cleaned object
  */
 function _cleanObject (obj) {
   if (obj === null) {
@@ -137,7 +137,7 @@ function _cleanObject (obj) {
  * We store the result and then call `keepValue()` to determine if the value should be retained in the array. If it
  * should we add it to a new array we create and update as we loop through. Else we quietly drop it.
  *
- * @param {Array} array The object you wish to loop through and clean
+ * @param {Array} array - The object you wish to loop through and clean
  * @returns {Array} The cleaned array
  */
 function _cleanArray (array) {
@@ -168,7 +168,7 @@ function _cleanArray (array) {
  *
  * This includes objects which end up as `{}`, empty arrays, and empty strings
  *
- * @param value Value we are making the decision for
+ * @param value - Value we are making the decision for
  *
  * @returns `true` if the `Object`, `Array` or `String` is not 'empty'. Else `false`
  */
@@ -196,7 +196,7 @@ function _keepValue (value) {
  *
  * Else we just return the value as is.
  *
- * @param value Value to be cleaned
+ * @param value - Value to be cleaned
  *
  * @returns The 'cleaned' value if a `String` else the original value
  */

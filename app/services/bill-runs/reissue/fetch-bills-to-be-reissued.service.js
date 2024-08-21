@@ -10,7 +10,7 @@ const BillModel = require('../../../models/bill.model.js')
 /**
  * Takes a region and fetches sroc bills in that region marked for reissuing, along with their transactions
  *
- * @param {String} regionId The uuid of the region
+ * @param {string} regionId - The uuid of the region
  *
  * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */

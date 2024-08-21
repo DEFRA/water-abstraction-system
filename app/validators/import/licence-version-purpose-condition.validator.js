@@ -9,10 +9,10 @@ const Joi = require('joi')
 /**
  * Checks that the data for inserting/updating the water.licence_version_purpose_conditions table is valid
  *
- * @param {Object} data The data to be validated
+ * @param {object} data - The data to be validated
  *
  *
- * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
 */
 function go (data) {

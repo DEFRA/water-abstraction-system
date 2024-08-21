@@ -20,9 +20,9 @@ const TransactionModel = require('../../../models/transaction.model.js')
  * licence and transaction data which we batch persist once all bills have been reissued. Finally, we return a boolean
  * to indicate whether or not any bills were reissued.
  *
- * @param {module:BillRunModel} reissueBillRun The bill run that the reissued bills will be created on
+ * @param {module:BillRunModel} reissueBillRun - The bill run that the reissued bills will be created on
  *
- * @returns {Boolean} `true` if any bills were reissued; `false` if not
+ * @returns {boolean} `true` if any bills were reissued; `false` if not
 */
 
 async function go (reissueBillRun) {

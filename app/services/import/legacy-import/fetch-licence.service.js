@@ -58,7 +58,7 @@ module.exports = {
 /**
  * A legacy licence
  *
- * @typedef {Object} LegacyLicenceType
+ * @typedef {object} LegacyLicenceType
  *
  * @property {string} AREP_AREA_CODE
  * @property {string} AREP_EIUC_CODE

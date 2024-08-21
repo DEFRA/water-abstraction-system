@@ -106,7 +106,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @param {number} selectedPageNumber - the page of results selected for viewing
  * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
  *
- * @returns {Object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
+ * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
 function go (numberOfRecords, selectedPageNumber, path) {

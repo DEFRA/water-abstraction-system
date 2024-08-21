@@ -19,7 +19,7 @@ const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
  * modifier on the `LicenceModel`.
  *
  * @param {module:LicenceModel} licence - The licence instance we are setting up the records for
- * @param {String} [licenceName] The custom licence name to use
+ * @param {string} [licenceName] - The custom licence name to use
  */
 async function seed (licence, licenceName = 'My custom licence name') {
   const { licenceRef } = licence

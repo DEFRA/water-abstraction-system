@@ -14,9 +14,9 @@ const BillLicenceModel = require('../../models/bill-licence.model.js')
  *
  * Was built to provide the data needed for the '/bill-licences/{id}' page
  *
- * @param {string} id The UUID for the bill licence to fetch
+ * @param {string} id - The UUID for the bill licence to fetch
  *
- * @returns {Promise<Object>} the matching instance of BillLicenceModel plus the linked bill and bill run. Also all
+ * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill and bill run. Also all
  * transactions linked to the bill licence and their linked charge reference details
  */
 async function go (id) {

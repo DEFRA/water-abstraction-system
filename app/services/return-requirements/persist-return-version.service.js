@@ -17,7 +17,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * `return_requirements`, `return_requirement_points` and `return_requirement_purposes` tables which are required to
  * create a new return version for a licence.
  *
- * @param {Object} returnVersionData - The return version data required to persist a new return version for a licence
+ * @param {object} returnVersionData - The return version data required to persist a new return version for a licence
  */
 async function go (returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData

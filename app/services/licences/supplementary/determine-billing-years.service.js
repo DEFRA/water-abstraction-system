@@ -19,7 +19,7 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
  * @param {Date} endDate - The end date up to which to calculate financial years. If not provided,
  * the current date will be used.
  *
- * @returns {Object[]} - The financial year end that are impacted by the changes between the start and end dates and are
+ * @returns {object[]} - The financial year end that are impacted by the changes between the start and end dates and are
  * relevant for SROC.
  */
 function go (startDate, endDate) {

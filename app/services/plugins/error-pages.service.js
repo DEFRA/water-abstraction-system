@@ -15,9 +15,9 @@
  * {@link https://hapi.dev/api/?v=21.3.2#response-toolkit | response toolkit} to continue with the response or not. If
  * not the `ErrorPagesPlugin` will use the `statusCode` returned to determine which error page to show.
  *
- * @param {Object} request An instance of a {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
+ * @param {object} request - An instance of a {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
  *
- * @returns {Object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
+ * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
 function go (request) {
@@ -80,7 +80,7 @@ function _logError (statusCode, request) {
  * Finally, this service is called for _all_ responses so we need to handle standard responses, for example, 200 on a
  * request for an asset.
  *
- * @param {Object} request The instance of {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
+ * @param {object} request - The instance of {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
  *
  * @returns {boolean} true if the response should be stopped and redirected to an error page else false
  */

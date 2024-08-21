@@ -16,7 +16,7 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  * @param {ReturnVersionModel[]} returnVersion - The return version and associated, licence, and return requirements
  * (requirement, points, purposes) returned by FetchRequirementsForReturns
  *
- * @returns {Object} requirements for returns data needed by the view template
+ * @returns {object} requirements for returns data needed by the view template
  */
 
 function go (returnVersion) {

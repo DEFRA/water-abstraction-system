@@ -20,9 +20,9 @@ const SetupValidator = require('../../../validators/return-requirements/setup.va
  * controller will redirect to the next page in the journey depending on which radio item was chosen.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {Object} payload - The submitted form data
+ * @param {object} payload - The submitted form data
  *
- * @returns {Promise<Object>} If no errors a the url for where the user should be redirected else the page data for the
+ * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
 async function go (sessionId, payload) {

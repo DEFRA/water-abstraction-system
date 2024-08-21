@@ -29,9 +29,9 @@ const SROC_FIRST_FIN_YEAR_END = 2023
  * Our 3 billing engines then use these periods to generate the bill run.
  *
  * @param {string} billRunType - The type of bill run, for example, 'annual' or 'supplementary'
- * @param {Number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
+ * @param {number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
  *
- * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
+ * @returns {object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
 function go (billRunType, financialYearEnding) {
   const financialYear = _financialYear(financialYearEnding)

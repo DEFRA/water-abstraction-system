@@ -195,9 +195,9 @@ const LOAD_HELPERS = {
  * `LicenceDocumentHeaderHelper`. You _must_ provide all elements for the query. Transformed to SQL this would be
  * `SELECT entity_id FROM crm.entity WHERE entity_type = 'regime'`.
  *
- * @param {Object} payload - the body from the request containing the entities to be created
+ * @param {object} payload - the body from the request containing the entities to be created
  *
- * @returns {Promise<Object>} for each entity type passed in an array of ID's for the records created, for example
+ * @returns {Promise<object>} for each entity type passed in an array of ID's for the records created, for example
  *
  * ```javascript
  * {

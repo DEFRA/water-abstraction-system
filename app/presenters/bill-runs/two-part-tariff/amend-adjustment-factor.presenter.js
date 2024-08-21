@@ -12,9 +12,9 @@ const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js
  *
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewChargeReference} reviewChargeReference - the data from the review charge reference
- * @param {String} licenceId - the UUID of the licence being reviewed
+ * @param {string} licenceId - the UUID of the licence being reviewed
  *
- * @returns {Object} the prepared bill run and charge reference data to be passed to the amend adjustment factor page
+ * @returns {object} the prepared bill run and charge reference data to be passed to the amend adjustment factor page
  */
 function go (billRun, reviewChargeReference, licenceId) {
   return {

@@ -13,9 +13,9 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewChargeElement} reviewChargeElement - the data from the review charge element
- * @param {String} licenceId - the UUID of the licence being reviewed
+ * @param {string} licenceId - the UUID of the licence being reviewed
  *
- * @returns {Object} the prepared bill run and charge element data to be passed to the edit billable returns page
+ * @returns {object} the prepared bill run and charge element data to be passed to the edit billable returns page
  */
 function go (billRun, reviewChargeElement, licenceId) {
   return {

@@ -20,7 +20,7 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
  * required bills and transactions for it in both this service and the Charging Module.
  *
  * @param {module:BillRunModel} billRun
- * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
+ * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  */
 async function go (billRun, billingPeriods) {
   const { id: billRunId } = billRun

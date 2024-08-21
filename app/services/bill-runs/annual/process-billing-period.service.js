@@ -22,10 +22,10 @@ const BillingConfig = require('../../../../config/billing.config.js')
  * Process the billing accounts for a given billing period and creates their annual bills
  *
  * @param {module:BillRunModel} billRun - The newly created bill run we need to process
- * @param {Object} billingPeriod - An object representing the financial year the bills will be for
+ * @param {object} billingPeriod - An object representing the financial year the bills will be for
  * @param {module:BillingAccountModel[]} billingAccounts - The billing accounts to create bills for
  *
- * @returns {Promise<Boolean>} true if the bill run is not empty (there are transactions to bill) else false
+ * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go (billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
@@ -173,7 +173,7 @@ function _extractBillableLicences (allBillLicences) {
  * @param {*} licence - the licence we're looking for an against bill licence record
  * @param {*} billId - the ID of the bill we're creating
  *
- * @return {Object} returns either an existing bill licence we previously created or a new one for the licence and bill
+ * @return {object} returns either an existing bill licence we previously created or a new one for the licence and bill
  * being generated
  */
 function _findOrCreateBillLicence (billLicences, licence, billId) {

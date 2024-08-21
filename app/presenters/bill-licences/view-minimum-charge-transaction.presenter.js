@@ -10,10 +10,10 @@ const { formatMoney } = require('../base.presenter.js')
 /**
  * Formats data for minimum charge transaction for the bill-licence page
  *
- * @param {module:TransactionModel} transaction an instance of `TransactionModel` that represents a minimum charge
+ * @param {module:TransactionModel} transaction - an instance of `TransactionModel` that represents a minimum charge
  * transaction
  *
- * @returns {Object} a formatted representation of the transaction specifically for the bill-licence page
+ * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
 function go (transaction) {
   const {
