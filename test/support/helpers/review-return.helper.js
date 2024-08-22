@@ -51,6 +51,8 @@ function add (data = {}) {
  * for use in tests to avoid having to duplicate values.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here in the database
+ *
+ * @returns {object} - Returns data from the query
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
