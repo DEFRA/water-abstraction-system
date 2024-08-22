@@ -36,9 +36,16 @@ module.exports = {
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
     strict: ['error', 'global'],
+    'jsdoc/require-jsdoc': ['warn', {
+      publicOnly: true
+    }],
     'jsdoc/require-description': 'warn',
-    'jsdoc/require-param': 'warn',
-    'jsdoc/require-returns': 'warn',
+    'jsdoc/require-param': ['warn', {
+      exemptedBy: ['private']
+    }],
+    'jsdoc/require-returns': ['warn', {
+      publicOnly: true
+    }],
     'jsdoc/check-tag-names': 'warn',
     'jsdoc/check-alignment': 'warn',
     'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
