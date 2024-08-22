@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
 const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
@@ -20,7 +19,7 @@ const ReturnVersionModel = require('../../../app/models/return-version.model.js'
 // Thing under test
 const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
 
-describe.only('View Licence History presenter', () => {
+describe('View Licence History presenter', () => {
   let licenceHistory
 
   beforeEach(() => {
