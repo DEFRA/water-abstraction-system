@@ -73,7 +73,7 @@ module.exports = {
 
 /**
  * A legacy licence version
- * @typedef {Object} ImportLegacyLicenceVersionsType
+ * @typedef {object} ImportLegacyLicenceVersionsType
  *
  * @property {string} EFF_END_DATE - date in UK format - can be 'null'
  * @property {string} EFF_ST_DATE - date in UK format
@@ -86,7 +86,7 @@ module.exports = {
  */
 
 /**
- * @typedef {Object} ImportLegacyLicenceVersionsPurposesType
+ * @typedef {object} ImportLegacyLicenceVersionsPurposesType
  *
  * @property {string} PERIOD_END_DAY - The end day of the period.
  * @property {string} PERIOD_END_MONTH - The end month of the period.

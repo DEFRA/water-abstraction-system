@@ -25,7 +25,16 @@ function importLicence () {
   }
 }
 
-function create (data) {
+/**
+ * Creates a test import licence object
+ *
+ * This is the object we expect to see when we persist the data
+ *
+ * This object should pass the validation
+ *
+ * @returns {object} - an import licence object
+ */
+function create () {
   return {
     ...importLicence()
   }

@@ -5,6 +5,11 @@ const ImportLegacyProcessLicenceService = require('../services/import/legacy/pro
 
 /**
  * Controller for /import
+ * @param request - the hapi request object
+ * @param h - the hapi response object
+ *
+ * @returns {object}
+ *
  * @module ImportController
  */
 async function licence (request, h) {

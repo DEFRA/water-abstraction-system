@@ -21,7 +21,12 @@ function purpose () {
   }
 }
 
-function create (data) {
+/**
+ * Creates a test legacy import licence versions purpose object
+ *
+ * @returns {object} - a legacy import licence versions purpose object
+ */
+function create () {
   return {
     ...purpose()
   }

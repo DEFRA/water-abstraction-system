@@ -18,7 +18,12 @@ function legacyLicenceFixture () {
   }
 }
 
-function create (data) {
+/**
+ * Creates a test legacy import licence object
+ *
+ * @returns {object} - a legacy import licence object
+ */
+function create () {
   return {
     ...legacyLicenceFixture()
   }

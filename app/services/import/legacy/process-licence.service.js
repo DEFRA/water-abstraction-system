@@ -18,7 +18,8 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  * Imports a licence from the legacy import tables. Maps and validates the data and then saves to the database.
  *
  * @param {string} licenceRef - The licence reference of the licence
- * @returns {Promise<Object>} an object representing the saved licence in the database
+ *
+ * @returns {Promise<object>} an object representing the saved licence in the database
  */
 async function go (licenceRef) {
   try {

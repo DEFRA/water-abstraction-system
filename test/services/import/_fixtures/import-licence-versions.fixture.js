@@ -33,7 +33,16 @@ function _createtLicenceVersion () {
   }
 }
 
-function create (data) {
+/**
+ * Creates a test import licence versions object with purposes
+ *
+ * This is the object we expect to see when we persist the data for the licence versions and purposes
+ *
+ * This object should pass the validation
+ *
+ * @returns {object} - an import licence object with purposes
+ */
+function create () {
   const defaults = [
     {
       ..._createtLicenceVersion(),

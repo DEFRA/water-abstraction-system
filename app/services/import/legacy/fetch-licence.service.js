@@ -48,7 +48,7 @@ module.exports = {
 /**
  * An Import legacy licence
  *
- * @typedef {Object} ImportLegacyLicenceType
+ * @typedef {object} ImportLegacyLicenceType
  *
  * @property {string} AREP_AREA_CODE - historicalAreaCode
  * @property {string} AREP_EIUC_CODE - regionPrefix / regionalChargeArea

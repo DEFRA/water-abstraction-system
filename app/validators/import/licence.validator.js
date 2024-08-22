@@ -28,6 +28,13 @@ const Joi = require('joi')
  * @throws {Error} - throw an error if any of the validations fail
  */
 
+/**
+ * Validate an import licence to persist in the database
+ *
+ * @param data
+ *
+ * @throws {error} - the first error from the validation failure
+ */
 function go (data) {
   const result = _schema.validate(data)
 
