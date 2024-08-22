@@ -36,6 +36,16 @@ describe.only('View Licence History presenter', () => {
         licenceRef: '01/123',
         entries: [
           {
+            createdAt: new Date('2023-04-03T00:00:00.000Z'),
+            createdBy: 'cristiano.ronaldo@atari.com',
+            dateCreated: '3 April 2023',
+            displayNote: true,
+            notes: ['Charge version test note'],
+            link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
+            reason: 'Major change',
+            type: { index: 1, name: 'Charge version' }
+          },
+          {
             createdAt: new Date('2022-06-05T00:00:00.000Z'),
             createdBy: 'Migrated from NALD',
             dateCreated: '5 June 2022',
@@ -46,24 +56,14 @@ describe.only('View Licence History presenter', () => {
             type: { index: 0, name: 'Licence version' }
           },
           {
-            createdAt: new Date('2022-04-05T00:00:00.000Z'),
+            createdAt: new Date('2021-04-05T00:00:00.000Z'),
             createdBy: 'Migrated from NALD',
-            dateCreated: '5 April 2022',
+            dateCreated: '5 April 2021',
             displayNote: true,
             notes: ['Test note'],
             link: '/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view',
             reason: 'New licence',
             type: { index: 2, name: 'Return version' }
-          },
-          {
-            createdAt: new Date('2002-07-06T00:00:00.000Z'),
-            createdBy: 'cristiano.ronaldo@atari.com',
-            dateCreated: '6 July 2002',
-            displayNote: true,
-            notes: ['Charge version test note'],
-            link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
-            reason: 'Major change',
-            type: { index: 1, name: 'Charge version' }
           }
         ]
       })
@@ -86,7 +86,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the entries "modLog" property "createdAt" property', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].dateCreated).to.equal('6 July 2002')
+          expect(result.entries[0].dateCreated).to.equal('3 April 2023')
         })
       })
     })
@@ -101,7 +101,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the "Migrated from NALD"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].createdBy).to.equal('Migrated from NALD')
+          expect(result.entries[0].createdBy).to.equal('Migrated from NALD')
         })
       })
 
@@ -113,7 +113,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the "modLog.createdBy"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].createdBy).to.equal('TEST_NALD_OWNER')
+          expect(result.entries[0].createdBy).to.equal('TEST_NALD_OWNER')
         })
       })
 
@@ -121,7 +121,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the entries "createdBy"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].createdBy).to.equal('cristiano.ronaldo@atari.com')
+          expect(result.entries[0].createdBy).to.equal('cristiano.ronaldo@atari.com')
         })
       })
     })
@@ -131,19 +131,19 @@ describe.only('View Licence History presenter', () => {
         it('returns the charge version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].link).to.equal('/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view')
+          expect(result.entries[0].link).to.equal('/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view')
         })
       })
 
       describe('when the "entryType" is "return-version"', () => {
         beforeEach(() => {
-          licenceHistory.entries[0].entryType = 'return-version'
+          licenceHistory.entries[2].entryType = 'return-version'
         })
 
         it('returns the return version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].link).to.equal('/system/return-requirements/dfe3d0d7-5e53-4e51-9748-169d01816642/view')
+          expect(result.entries[2].link).to.equal('/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view')
         })
       })
     })
@@ -154,7 +154,7 @@ describe.only('View Licence History presenter', () => {
           it('returns only the charge version note', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[2].notes).to.equal(['Charge version test note'])
+            expect(result.entries[0].notes).to.equal(['Charge version test note'])
           })
         })
 
@@ -166,7 +166,7 @@ describe.only('View Licence History presenter', () => {
           it('returns an array of the "modLog.note"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[2].notes).to.equal(['modLog test note!'])
+            expect(result.entries[0].notes).to.equal(['modLog test note!'])
           })
         })
       })
@@ -182,7 +182,7 @@ describe.only('View Licence History presenter', () => {
           it('returns an array of the "modLog.note"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[0].notes).to.equal(['Licence version test note!'])
+            expect(result.entries[1].notes).to.equal(['Licence version test note!'])
           })
         })
       })
@@ -198,7 +198,7 @@ describe.only('View Licence History presenter', () => {
           it('returns an array of both the "notes" and "modLog.notes"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[1].notes).to.equal(['Return version test note!', 'Test note'])
+            expect(result.entries[2].notes).to.equal(['Return version test note!', 'Test note'])
           })
         })
 
@@ -206,7 +206,7 @@ describe.only('View Licence History presenter', () => {
           it('returns an array of both the "notes" and "modLog.notes"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[1].notes).to.equal(['Test note'])
+            expect(result.entries[2].notes).to.equal(['Test note'])
           })
         })
       })
@@ -223,7 +223,7 @@ describe.only('View Licence History presenter', () => {
         it('returns an array of both the "notes" and "modLog.notes"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[1].notes).to.equal(['Return version test note!'])
+          expect(result.entries[2].notes).to.equal(['Return version test note!'])
         })
       })
     })
@@ -234,7 +234,7 @@ describe.only('View Licence History presenter', () => {
           it('returns the linked change reason description', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[2].reason).to.equal('Major change')
+            expect(result.entries[0].reason).to.equal('Major change')
           })
         })
 
@@ -246,7 +246,7 @@ describe.only('View Licence History presenter', () => {
           it('returns the "modLog.reasonDescription"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[2].reason).to.equal('This is a test!')
+            expect(result.entries[0].reason).to.equal('This is a test!')
           })
         })
       })
@@ -262,7 +262,7 @@ describe.only('View Licence History presenter', () => {
           it('returns the "modLog.reasonDescription"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[0].reason).to.equal('This is a test!')
+            expect(result.entries[1].reason).to.equal('This is a test!')
           })
         })
       })
@@ -278,7 +278,7 @@ describe.only('View Licence History presenter', () => {
           it('returns the entry "reason"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[1].reason).to.equal('New licence')
+            expect(result.entries[2].reason).to.equal('New licence')
           })
         })
 
@@ -294,7 +294,7 @@ describe.only('View Licence History presenter', () => {
           it('returns the "modLog.reasonDescription"', () => {
             const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-            expect(result.entries[1].reason).to.equal('This is a test!')
+            expect(result.entries[2].reason).to.equal('This is a test!')
           })
         })
       })
@@ -305,7 +305,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the index 1 and name "Charge version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[2].type).to.equal({ index: 1, name: 'Charge version' })
+          expect(result.entries[0].type).to.equal({ index: 1, name: 'Charge version' })
         })
       })
 
@@ -313,7 +313,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the index 2 and name "Return version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[1].type).to.equal({ index: 2, name: 'Return version' })
+          expect(result.entries[2].type).to.equal({ index: 2, name: 'Return version' })
         })
       })
 
@@ -321,7 +321,7 @@ describe.only('View Licence History presenter', () => {
         it('returns the index 0 and name "Licence version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licenceHistory)
 
-          expect(result.entries[0].type).to.equal({ index: 0, name: 'Licence version' })
+          expect(result.entries[1].type).to.equal({ index: 0, name: 'Licence version' })
         })
       })
     })
@@ -359,14 +359,14 @@ function _licenceHistory2 () {
 
   const modLog = ModLogModel.fromJson({
     id: 'c79c86b3-4b5a-464b-b321-585cd280c396',
-    naldDate: new Date('2002-07-06'),
+    naldDate: new Date('2023-04-03'),
     note: 'modLog test note!',
     reasonDescription: 'This is a test!',
     userId: 'TEST_NALD_OWNER'
   })
 
   const chargeVersion = ChargeVersionModel.fromJson({
-    createdAt: new Date('2022-07-05'),
+    createdAt: new Date('2023-07-05'),
     createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
     entryType: 'charge-version',
     entryId: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
@@ -385,18 +385,18 @@ function _licenceHistory2 () {
     entryType: 'licence-version',
     reason: 'new-licence',
     status: 'current',
-    startDate: new Date('2021-04-01'),
+    startDate: new Date('2022-04-01'),
     modLogs: []
   })
 
   const returnVersion = ReturnVersionModel.fromJson({
-    createdAt: new Date('2022-04-05'),
+    createdAt: new Date('2021-04-05'),
     entryType: 'return-version',
     entryId: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
     notes: 'Test note',
     reason: 'new-licence',
-    startDate: new Date('2022-04-01'),
+    startDate: new Date('2021-04-01'),
     status: 'current',
     modLogs: []
   })
