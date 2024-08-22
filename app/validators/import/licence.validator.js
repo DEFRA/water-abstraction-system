@@ -7,57 +7,35 @@
 const Joi = require('joi')
 
 /**
- * Checks that the data for inserting/updating the public.licence table is valid
+ * Checks that imported licence data that has been transformed is valid for persisting to WRLS
  *
- * @param {{
- *   expiredDate: string | null,
- *   lapsedDate: string | null,
- *   licenceRef: string,
- *   naldRegionId: number,
- *   regions: {
- *     regionalChargeArea: string,
- *     localEnvironmentAgencyPlanCode: string,
- *     historicalAreaCode: string,
- *     standardUnitChargeCode: string
- *   },
- *   revokedDate: string | null,
- *   startDate: string,
- *   waterUndertaker: boolean
- * }} data - The mapped licence data
- * @returns {void}
- * @throws {Error} - throw an error if any of the validations fail
+ * @param {object} licence - The transformed licence data
+ *
+ * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
+function go (licence) {
+  const schema = Joi.object({
+    expiredDate: Joi.date().iso().allow(null),
+    lapsedDate: Joi.date().iso().allow(null),
+    licenceRef: Joi.string().required(),
+    regionId: Joi.number().required(),
+    regions: Joi.object({
+      regionalChargeArea: Joi.string().required(),
+      localEnvironmentAgencyPlanCode: Joi.string().required(),
+      historicalAreaCode: Joi.string().required(),
+      standardUnitChargeCode: Joi.string().required()
+    }),
+    revokedDate: Joi.date().iso().allow(null),
+    startDate: Joi.date().iso().required(),
+    waterUndertaker: Joi.boolean().required()
+  })
 
-/**
- * Validate an import licence to persist in the database
- *
- * @param data
- *
- * @throws {error} - the first error from the validation failure
- */
-function go (data) {
-  const result = _schema.validate(data)
+  const result = schema.validate(licence)
 
-  if (Object.hasOwn(result, 'error')) {
-    throw new Error(result.error.details[0].message)
+  if (result.error) {
+    throw result.error
   }
 }
-
-const _schema = Joi.object({
-  expiredDate: Joi.date().iso().allow(null),
-  lapsedDate: Joi.date().iso().allow(null),
-  licenceRef: Joi.string().required(),
-  regionId: Joi.number().required(),
-  regions: Joi.object({
-    regionalChargeArea: Joi.string().required(),
-    localEnvironmentAgencyPlanCode: Joi.string().required(),
-    historicalAreaCode: Joi.string().required(),
-    standardUnitChargeCode: Joi.string().required()
-  }),
-  revokedDate: Joi.date().iso().allow(null),
-  startDate: Joi.date().iso().required(),
-  waterUndertaker: Joi.boolean().required()
-})
 
 module.exports = {
   go
