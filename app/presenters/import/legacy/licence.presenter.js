@@ -1,80 +1,53 @@
 'use strict'
 
 /**
- * Maps the import data to the desired format
+ * Maps the legacy NALD licence data to the WRLS format
  * @module LicencePresenter
  */
 
-const { formatStandardDateToISO } = require('../../../lib/dates.lib.js')
 const { naldRegions } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Maps the import data to the desired format
+ * Maps the legacy NALD licence data to the WRLS format
  *
- * @param {ImportLegacyLicenceType} licence - the legacy licence
- * @param {ImportLegacyLicenceVersionsType[]} licenceVersions - the legacy licence versions and purposes
- * @returns {object}
+ * @param {ImportLegacyLicenceType} licence - the legacy NALD licence
+ *
+ * @returns {object} the NALD licence data transformed into the WRLS format ready for validation and persisting
  */
-function go (licence, licenceVersions = []) {
-  return _mapLicence(licence, licenceVersions)
-}
-
-function _mapLicence (licence, licenceVersions) {
+function go (licence) {
   return {
-    expiredDate: formatStandardDateToISO(licence.EXPIRY_DATE),
-    lapsedDate: formatStandardDateToISO(licence.LAPSED_DATE),
-    licenceRef: licence.LIC_NO,
-    regionId: parseInt(licence.FGAC_REGION_CODE, 10),
+    expiredDate: licence.expiry_date,
+    lapsedDate: licence.lapsed_date,
+    licenceRef: licence.licence_ref,
+    regionId: licence.region_code,
     regions: _regions(licence),
-    revokedDate: formatStandardDateToISO(licence.REV_DATE),
-    startDate: _startDate(licence, licenceVersions),
-    waterUndertaker: licence.AREP_EIUC_CODE.endsWith('SWC')
+    revokedDate: licence.revoked_date,
+    startDate: _startDate(licence),
+    waterUndertaker: licence.environmental_improvement_unit_charge_code.endsWith('SWC')
   }
 }
 
 /**
- * Creates a JSON object of the region data
- * This is stored as a JSON object in the licence.regions column.
- * @param licenceData
+ * Creates a JSON object of the region data. This is stored as a JSON object in the licence.regions column.
  *
- * @returns {object} - the json structure to persist in the licence.regions column
+ * @private
  */
-const _regions = (licenceData) => {
-  const historicalAreaCode = licenceData.AREP_AREA_CODE
-  const regionPrefix = licenceData.AREP_EIUC_CODE.substr(0, 2)
+const _regions = (licence) => {
+  const historicalAreaCode = licence.historical_area_code
+  const regionPrefix = licence.environmental_improvement_unit_charge_code.substr(0, 2)
   const regionalChargeArea = naldRegions[regionPrefix]
-  const standardUnitChargeCode = licenceData.AREP_SUC_CODE
-  const localEnvironmentAgencyPlanCode = licenceData.AREP_LEAP_CODE
+  const standardUnitChargeCode = licence.standard_unit_charge_code
+  const localEnvironmentAgencyPlanCode = licence.local_environment_agency_plan_code
 
   return { historicalAreaCode, regionalChargeArea, standardUnitChargeCode, localEnvironmentAgencyPlanCode }
 }
 
-/**
- * Maps the licence and licence versions to a start date.
- * If the licence ORIG_EFF_DATE is not null, this is used.
- * Otherwise the start date of the earliest non-draft licence
- * version is used.
- *
- * It is assumed one of these will always exist
- *
- * @param {object} licence - the legacy licence data
- * @param {object[]} licenceVersions - the legacy licence versions
- * @returns {string} YYYY-MM-DD
- */
-const _startDate = (licence, licenceVersions) => {
-  if (licence.ORIG_EFF_DATE !== 'null') {
-    return formatStandardDateToISO(licence.ORIG_EFF_DATE)
+function _startDate (licence) {
+  if (licence.original_effective_date) {
+    return licence.original_effective_date
   }
 
-  return licenceVersions
-    .filter((version) => { return version.STATUS !== 'DRAFT' })
-    .map((version) => {
-      return formatStandardDateToISO(version.EFF_ST_DATE)
-    })
-    .sort((a, b) => {
-      return new Date(a) - new Date(b)
-    })
-    .shift()
+  return licence.earliest_version_start_date
 }
 
 module.exports = {
