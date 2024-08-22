@@ -1,8 +1,21 @@
 'use strict'
 
+/**
+ * Formats data for the `/licences/{id}/history` view licence history page
+ * @module ViewLicenceHistoryPresenter
+ */
+
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
+/**
+ * Formats data for the `/licences/{id}/history` view licence history page
+ *
+ * @param {module:LicenceModel|ChargeVersionModel|LicenceVersionModel|ReturnVersionModel} history - The licence and
+ * related charge, licence and return versions
+ *
+ * @returns The data formatted and sorted for the view template
+ */
 function go (history) {
   const { entries, licence } = history
 
