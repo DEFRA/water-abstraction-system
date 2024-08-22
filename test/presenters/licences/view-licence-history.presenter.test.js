@@ -329,13 +329,6 @@ describe.only('View Licence History presenter', () => {
 })
 
 function _licenceHistory2 () {
-  const contact = ContactModel.fromJson({
-    firstName: 'Annie',
-    middleInitials: 'J',
-    lastName: 'Easley',
-    salutation: 'Mrs'
-  })
-
   const changeReason = ChangeReasonModel.fromJson({
     id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
     description: 'Major change'
@@ -351,8 +344,7 @@ function _licenceHistory2 () {
     licenceRef: '01/123',
     licenceDocument: {
       licenceDocumentRoles: [{
-        id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
-        contact
+        id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
       }]
     }
   })
