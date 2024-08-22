@@ -37,6 +37,8 @@ async function add (data = {}) {
  * for use in tests to avoid having to duplicate values.
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
@@ -70,6 +72,7 @@ function defaults (data = {}) {
  * This was the NALD dump the legacy acceptance test data loading solution used. It doesn't matter that the data
  * included doesn't match with the related licence and other records. The critical factor is the structure must align
  * with what the legacy apps expect.
+ * @param licenceRef
  */
 function _licenceDataValue (licenceRef) {
   return {

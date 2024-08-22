@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -32,14 +35,6 @@ describe('Licences - Set Up presenter', () => {
     licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
   }
 
-  const returnVersion = {
-    id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
-    startDate: new Date('2020-01-01'),
-    endDate: null,
-    status: 'current',
-    reason: 'change-to-special-agreement'
-  }
-
   const workflow = {
     id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
     createdAt: new Date('2020-01-01'),
@@ -57,6 +52,7 @@ describe('Licences - Set Up presenter', () => {
   let auth
   let chargeVersions
   let commonData
+  let returnVersion
   let returnVersions
   let workflows
 
@@ -80,6 +76,18 @@ describe('Licences - Set Up presenter', () => {
         date: new Date()
       }
     }
+
+    returnVersion = ReturnVersionModel.fromJson({
+      id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+      startDate: new Date('2020-01-01'),
+      endDate: null,
+      status: 'current',
+      reason: 'change-to-special-agreement',
+      modLogs: [{
+        id: '956a876a-2a51-4e86-bb39-3101395a741b',
+        reasonDescription: 'Special Agreement - Change'
+      }]
+    })
 
     agreements = []
     chargeVersions = []
@@ -546,7 +554,7 @@ describe('Licences - Set Up presenter', () => {
 
     describe('that includes return versions', () => {
       beforeEach(() => {
-        returnVersions = [{ ...returnVersion }]
+        returnVersions = [returnVersion]
       })
 
       it('correctly presents the returns versions data', () => {
@@ -570,7 +578,9 @@ describe('Licences - Set Up presenter', () => {
 
       describe('and the data is missing', () => {
         beforeEach(() => {
-          returnVersions = [{ ...returnVersion, endDate: null, reason: null }]
+          returnVersion.endDate = null
+          returnVersion.reason = null
+          returnVersions = [returnVersion]
         })
 
         it('correctly presents the returns versions data with the missing data defaults', () => {
@@ -585,7 +595,7 @@ describe('Licences - Set Up presenter', () => {
                 }
               ],
               endDate: '',
-              reason: '',
+              reason: 'Special Agreement - Change',
               startDate: '1 January 2020',
               status: 'current'
             }
