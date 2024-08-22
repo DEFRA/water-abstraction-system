@@ -12,7 +12,7 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (licence, auth) {
   const {

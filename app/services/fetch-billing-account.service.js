@@ -10,7 +10,7 @@ const BillingAccount = require('../models/billing-account.model.js')
 /**
  * Fetch the matching Billing account plus the current billing account address record linked to it
  *
- * @param {string} id The UUID for the billing account to fetch
+ * @param {string} id - The UUID for the billing account to fetch
  *
  * @returns the matching instance of BillModel including linked company and just the current account address record
  */

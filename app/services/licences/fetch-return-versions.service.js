@@ -12,7 +12,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {string} licenceId - The licence id for the licence to fetch return requirements
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's set up tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
 async function go (licenceId) {
   return _fetch(licenceId)
@@ -32,6 +32,15 @@ async function _fetch (licenceId) {
       { column: 'startDate', order: 'desc' },
       { column: 'version', order: 'desc' }
     ])
+    .withGraphFetched('modLogs')
+    .modifyGraph('modLogs', (builder) => {
+      builder
+        .select([
+          'id',
+          'reasonDescription'
+        ])
+        .orderBy('externalId', 'asc')
+    })
 }
 
 module.exports = {

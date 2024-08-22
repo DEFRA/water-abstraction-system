@@ -19,7 +19,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * issues.
  *
  * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
 async function go (licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)

@@ -15,10 +15,10 @@ const ViewLicenceService = require('./view-licence.service.js')
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
  * @param {string} licenceId - The UUID of the licence
- * @param {Object} auth - The auth object taken from `request.auth` containing user details
- * @param {Object} page - The current page for the pagination service
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} page - The current page for the pagination service
  *
- * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
+ * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go (licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)

@@ -21,8 +21,8 @@ const SessionModel = require('../../models/session.model.js')
  * At the end when the journey is complete the data from the session will be used to create the return requirement and
  * the session record itself deleted.
  *
- * @param {String} licenceId - the ID of the licence the return requirement will be created for
- * @param {String} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
+ * @param {string} licenceId - the ID of the licence the return requirement will be created for
+ * @param {string} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
@@ -101,6 +101,15 @@ async function _fetchLicence (licenceId) {
             .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
         )
         .orderBy('startDate', 'desc')
+    })
+    .withGraphFetched('returnVersions.modLogs')
+    .modifyGraph('returnVersions.modLogs', (builder) => {
+      builder
+        .select([
+          'id',
+          'reasonDescription'
+        ])
+        .orderBy('externalId', 'asc')
     })
     // See licence.model.js `static get modifiers` if you are unsure about what this is doing
     .modify('licenceHolder')

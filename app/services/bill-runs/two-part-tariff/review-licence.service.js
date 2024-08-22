@@ -13,9 +13,9 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-t
  *
  * @param {module:BillRunModel} billRunId - The UUID for the bill run
  * @param {module:LicenceModel} licenceId - The UUID of the licence that is being reviewed
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} the 'pageData' needed for the review licence page. It contains the licence, bill run,
+ * @returns {Promise<object>} the 'pageData' needed for the review licence page. It contains the licence, bill run,
  * matched and unmatched returns and the licence charge data
  */
 async function go (billRunId, licenceId, yar) {

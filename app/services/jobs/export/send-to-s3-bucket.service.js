@@ -17,7 +17,7 @@ const S3Config = require('../../../../config/s3.config.js')
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives
  *
- * @param {String} filePath A string containing the path of the file to send to the S3 bucket
+ * @param {string} filePath - A string containing the path of the file to send to the S3 bucket
  */
 async function go (filePath) {
   const bucketName = S3Config.s3.bucket
@@ -37,6 +37,8 @@ async function go (filePath) {
  *
  * If the environment has a proxy then we set that here. The default timeout is 6 minutes but we believe that is far too
  * long to wait. So, we set 'connectionTimeout' to be 10 seconds.
+ *
+ * @private
  */
 function _customConfig () {
   return {

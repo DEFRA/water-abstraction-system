@@ -4,58 +4,32 @@
  * @module ChangeReasonHelper
  */
 
-const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
+const { data: changeReasons } = require('../../../db/seeds/data/change-reasons.js')
+const { selectRandomEntry } = require('../general.js')
 
 /**
- * Add a new change reason
+ * Select an entry from the reference data entries seeded at the start of testing
  *
- * If no `data` is provided, default values will be used. These are
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
  *
- * - `description` - Strategic review of charges (SRoC)
- * - `type` - new_chargeable_charge_version
- * - `enabledForNewChargeVersions` - true,
- * - `createdAt` - 2022-02-23
+ * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
+ * select a specific entry, or have it it return one at random.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * random from the reference data
  *
- * @returns {Promise<module:ChangeReasonModel>} The instance of the newly created record
+ * @returns {object} The selected reference entry or one picked at random
  */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return ChangeReasonModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
-
-/**
- * Returns the defaults used
- *
- * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
- * for use in tests to avoid having to duplicate values.
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- */
-function defaults (data = {}) {
-  const defaults = {
-    description: 'Strategic review of charges (SRoC)',
-    type: 'new_chargeable_charge_version',
-    enabledForNewChargeVersions: true,
-    // INFO: The change_reasons table does not have a default for the date_created column. But it is set as 'not
-    // nullable'! So, we need to ensure we set it when creating a new record. Also, we can't use Date.now() because
-    // Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold
-    // the seconds since the epoch. Pass it an ISO string though ('2022-02-23 09:19:39.953') and PostgreSQL can do the
-    // conversion https://stackoverflow.com/a/61912776/6117745
-    createdAt: new Date('2022-02-23 09:19:39.953').toISOString()
+function select (index = -1) {
+  if (index > -1) {
+    return changeReasons[index]
   }
 
-  return {
-    ...defaults,
-    ...data
-  }
+  return selectRandomEntry(changeReasons)
 }
 
 module.exports = {
-  add,
-  defaults
+  data: changeReasons,
+  select
 }

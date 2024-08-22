@@ -76,6 +76,8 @@ function isISODateFormat (dateString) {
  *
  * @param {dateString} dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
+ *
+ * @private
  */
 function _isValidLeapYearDate (dateString) {
   const [year, month, day] = dateString.split('-')

@@ -23,14 +23,14 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * So, we have to grab those values as well. Finally, because the standard annual bill run will have handled the
  * compensation charge we don't have to generate an additional transaction alongside our two-part tariff one.
  *
- * @param {String} billLicenceId - The UUID of the bill licence the transaction will be linked to
+ * @param {string} billLicenceId - The UUID of the bill licence the transaction will be linked to
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the transaction generated will be
  * generated from
- * @param {Object} chargePeriod - A start and end date representing the charge period for the transaction
- * @param {Boolean} newLicence - Whether the charge reference is linked to a new licence
- * @param {Boolean} waterUndertaker - Whether the charge reference is linked to a water undertaker licence
+ * @param {object} chargePeriod - A start and end date representing the charge period for the transaction
+ * @param {boolean} newLicence - Whether the charge reference is linked to a new licence
+ * @param {boolean} waterUndertaker - Whether the charge reference is linked to a water undertaker licence
  *
- * @returns {Object} the two-part tariff transaction
+ * @returns {object} the two-part tariff transaction
  */
 function go (billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)
@@ -68,6 +68,8 @@ function _description (chargeReference) {
 
 /**
  * Returns a json representation of all charge elements in a charge reference
+ *
+ * @private
  */
 function _generateElements (chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
@@ -81,6 +83,8 @@ function _generateElements (chargeReference) {
 
 /**
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
+ *
+ * @private
  */
 function _standardTransaction (
   billLicenceId,

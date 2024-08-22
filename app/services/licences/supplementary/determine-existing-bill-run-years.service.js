@@ -18,11 +18,11 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  * want to flag any years on the licence that hasn't had a bill run already created, as the change on the licence will
  * get picked up when the annual/ two-part tariff bill run is created for that year.
  *
- * @param {String} regionId - The UUID of the region to search for
- * @param {Object[]} years - The years that the licence can be flagged for
- * @param {Boolean} twoPartTariff - If there are two-part tariff indicators on the licence
+ * @param {string} regionId - The UUID of the region to search for
+ * @param {object[]} years - The years that the licence can be flagged for
+ * @param {boolean} twoPartTariff - If there are two-part tariff indicators on the licence
  *
- * @returns {Object[]} - The years that can be flagged for supplementary billing
+ * @returns {object[]} - The years that can be flagged for supplementary billing
  */
 async function go (regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
@@ -32,6 +32,8 @@ async function go (regionId, years, twoPartTariff) {
  * We need to verify which years annual two-part tariff bill runs have been sent. A year shouldn't be flagged for a
  * supplementary bill run if the annual bill run hasn't been sent yet, as any licence changes will be handled in the
  * annual run.
+ *
+ * @private
  */
 async function _supplementaryBillingYears (regionId, years, twoPartTariff) {
   const batchType = twoPartTariff ? 'two_part_tariff' : 'annual'

@@ -14,9 +14,9 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * billing. This is worked out based on the charge versions scheme and if any related charge reference has a two-part
  * tariff indicator. If they do, then flagForBilling is set to true.
  *
- * @param {String} chargeVersionId - The UUID for the charge version to fetch
+ * @param {string} chargeVersionId - The UUID for the charge version to fetch
  *
- * @returns {Object} - An object containing the related licence, charge version start and end date and if the licence
+ * @returns {object} - An object containing the related licence, charge version start and end date and if the licence
  * should be flagged for two-part tariff supplementary billing
  */
 async function go (chargeVersionId) {

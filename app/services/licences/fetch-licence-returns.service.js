@@ -14,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's returns tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
 async function go (licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)

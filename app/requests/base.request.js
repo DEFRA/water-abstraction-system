@@ -21,7 +21,7 @@ const requestConfig = require('../../config/request.config.js')
  * Sinon to stub `requestConfig`; the const appeared to have its values fixed when the file was required, whereas a
  * function generates its values each time it's called.
  *
- * @returns {Object} default options to pass to Got when making a request
+ * @returns {object} default options to pass to Got when making a request
  */
 function defaultOptions () {
   return {
@@ -74,9 +74,9 @@ function defaultOptions () {
  * > Note: This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word.
  *
  * @param {string} url - The full URL that you wish to connect to
- * @param {Object} additionalOptions - Append to or replace the options passed to Got when making the request
+ * @param {object} additionalOptions - Append to or replace the options passed to Got when making the request
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function deleteRequest (url, additionalOptions = {}) {
   return _sendRequest('delete', url, additionalOptions)
@@ -99,9 +99,9 @@ async function deleteRequest (url, additionalOptions = {}) {
  * be a Got error instance.
  *
  * @param {string} url - The full URL that you wish to connect to
- * @param {Object} additionalOptions - Append to or replace the options passed to Got when making the request
+ * @param {object} additionalOptions - Append to or replace the options passed to Got when making the request
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
   return _sendRequest('get', url, additionalOptions)
@@ -140,9 +140,11 @@ async function _importGot () {
  * we need to diagnose the problem.
  *
  * @param {string} method - the type of request made, for example, 'GET', 'POST, or 'PATCH'
- * @param {Object} result - the result object we generate
+ * @param {object} result - the result object we generate
  * @param {string} url - the requested url
- * @param {Object} additionalOptions - any additional options that were passed to Got by the calling service
+ * @param {object} additionalOptions - any additional options that were passed to Got by the calling service
+ *
+ * @private
  */
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
@@ -174,7 +176,9 @@ function _logFailure (method, result, url, additionalOptions) {
  *
  * Those that use this module can add to, extend or replace the options we pass to Got when a request is made.
  *
- * @param {Object} additionalOptions - Object of custom options
+ * @param {object} additionalOptions - Object of custom options
+ *
+ * @private
  */
 function _requestOptions (additionalOptions) {
   return { ...defaultOptions(), ...additionalOptions }

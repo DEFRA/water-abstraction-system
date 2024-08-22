@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
@@ -18,6 +19,7 @@ describe('Fetch Return Versions service', () => {
   const startDate = new Date('2022-04-01')
 
   let currentReturnVersion
+  let currentReturnVersionModLog
   let supersededReturnVersion
 
   describe('when the licence has return versions data', () => {
@@ -28,6 +30,10 @@ describe('Fetch Return Versions service', () => {
       })
       currentReturnVersion = await ReturnVersionHelper.add({
         licenceId: supersededReturnVersion.licenceId, startDate, status: 'current', version: 101
+      })
+
+      currentReturnVersionModLog = await ModLogHelper.add({
+        reasonDescription: 'Record Loaded During Migration', returnVersionId: currentReturnVersion.id
       })
     })
 
@@ -40,14 +46,19 @@ describe('Fetch Return Versions service', () => {
           startDate: new Date('2022-04-01'),
           endDate: null,
           status: 'current',
-          reason: 'new-licence'
+          reason: 'new-licence',
+          modLogs: [{
+            id: currentReturnVersionModLog.id,
+            reasonDescription: 'Record Loaded During Migration'
+          }]
         },
         {
           id: supersededReturnVersion.id,
           startDate: new Date('2022-04-01'),
           endDate: null,
           status: 'superseded',
-          reason: 'new-licence'
+          reason: 'new-licence',
+          modLogs: []
         }
       ])
     })

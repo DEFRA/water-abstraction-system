@@ -29,7 +29,7 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
  *
  * @param {string} licenceId - The UUID of the licence to fetch abstraction data from and generate return requirements
  *
- * @returns {Promise<Object[]>} an array of return requirements generated from the licence's abstraction and ready to
+ * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction and ready to
  * be persisted to the setup session
  */
 async function go (licenceId) {
@@ -46,6 +46,8 @@ async function go (licenceId) {
  * Because a user can select multiple agreements or exceptions we return it as an array. If none apply you have to
  * explicitly select it as well. Hence, we return that as an option so that the view can pre-select it should a user
  * return to the page to make changes.
+ *
+ * @private
  */
 function _agreementExceptions (licence) {
   const { twoPartTariffAgreement } = licence
@@ -64,6 +66,8 @@ function _agreementExceptions (licence) {
  * 'winter-and-all-year'.
  *
  * Fortunately, to confirm this we don't have to look at the day, we can just check the months involved!
+ *
+ * @private
  */
 function _returnsCycle (startMonth, endMonth) {
   const summerMonths = [4, 5, 6, 7, 8, 9, 10]
@@ -117,6 +121,7 @@ function _returnsCycle (startMonth, endMonth) {
  * |100 - 2500|Monthly   |Monthly  |
  * |Above 2500|Weekly    |Weekly   |
  *
+ * @private
  */
 function _frequencyCollected (licence, licenceVersionPurpose) {
   const { twoPartTariffAgreement, waterUndertaker } = licence
@@ -146,6 +151,8 @@ function _frequencyCollected (licence, licenceVersionPurpose) {
  * various factors
  *
  * See the tables in _frequencyCollected() for details
+ *
+ * @private
  */
 function _frequencyReported (licence, licenceVersionPurpose) {
   const { waterUndertaker } = licence
@@ -173,6 +180,8 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  * first part is the region code, but the second part is NALD's ID for the licence purpose. `_fetch()` will have
  * extracted the legacy purposes from permit licence's JSONB dump. We just need to grab the one that matches the ID we
  * get from `externalId`. With that we can get to the points info and generate `points:` and `siteDescription:`.
+ *
+ * @private
  */
 function _matchingPermitPurpose (permitLicence, licenceVersionPurpose) {
   const { externalId } = licenceVersionPurpose
@@ -190,6 +199,8 @@ function _matchingPermitPurpose (permitLicence, licenceVersionPurpose) {
  *
  * Remember, we are transforming the data into what is needed for the session, not what is needed for the UI! Hence, we
  * only need the ID.
+ *
+ * @private
  */
 function _points (matchingPermitPurpose) {
   return matchingPermitPurpose.purposePoints.map((purposePoint) => {
@@ -204,6 +215,8 @@ function _points (matchingPermitPurpose) {
  *
  * The problem is a purpose can have multiple points. So, we grab all the local name values for each point in the
  * matched permit purpose, strip out any nulls or undefined and then select the first one to form the site description.
+ *
+ * @private
  */
 function _siteDescription (matchingPermitPurpose) {
   const localNames = matchingPermitPurpose.purposePoints.map((purposePoint) => {
@@ -222,6 +235,8 @@ function _siteDescription (matchingPermitPurpose) {
  *
  * What we return matches what you would see in the session if you chose the manual journey. This is what allows a
  * user to make changes from the `/check` page to the requirements we generate.
+ *
+ * @private
  */
 function _transformForSetup (licence) {
   const { licenceVersionPurposes } = licence.$currentVersion()
