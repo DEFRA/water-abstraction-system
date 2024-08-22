@@ -5,12 +5,20 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
+
+// Test helpers
+const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
+const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
+const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
+const ModLogModel = require('../../../app/models/mod-log.model.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Things we need to stub
 const FetchLicenceHistoryService = require('../../../app/services/licences/fetch-licence-history.service.js')
-const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
 
 // Thing under test
 const ViewLicenceHistoryService = require('../../../app/services/licences/view-licence-history.service.js')
@@ -20,203 +28,125 @@ describe('View Licence History service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchLicenceHistoryService, 'go').returns(_testFetchLicenceHistory())
-    Sinon.stub(ViewLicenceHistoryPresenter, 'go').returns(_testFormattedLicenceHistory())
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
       const result = await ViewLicenceHistoryService.go(licenceId)
 
-      expect(result).to.equal(_testFormattedLicenceHistory())
+      expect(result).to.equal({
+        licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        licenceRef: '01/123',
+        entries: [
+          {
+            createdAt: new Date('2023-04-03T00:00:00.000Z'),
+            createdBy: 'cristiano.ronaldo@atari.com',
+            dateCreated: '3 April 2023',
+            displayNote: true,
+            notes: ['Charge version test note'],
+            link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
+            reason: 'Major change',
+            type: { index: 1, name: 'Charge version' }
+          },
+          {
+            createdAt: new Date('2022-06-05T00:00:00.000Z'),
+            createdBy: 'Migrated from NALD',
+            dateCreated: '5 June 2022',
+            displayNote: false,
+            notes: [],
+            link: null,
+            reason: '',
+            type: { index: 0, name: 'Licence version' }
+          },
+          {
+            createdAt: new Date('2021-04-05T00:00:00.000Z'),
+            createdBy: 'Migrated from NALD',
+            dateCreated: '5 April 2021',
+            displayNote: true,
+            notes: ['Test note'],
+            link: '/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view',
+            reason: 'New licence',
+            type: { index: 2, name: 'Return version' }
+          }
+        ]
+      })
     })
   })
 })
 
 function _testFetchLicenceHistory () {
-  return {
-    entries: [
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'charge-version',
-        entryId: '93b8a9c9-f420-44ca-b899-33aff7fe34e0',
-        reason: 'New licence',
-        createdAt: new Date('2024-07-26T12:19:24.209Z'),
-        createdBy: 'admin-internal@wrls.gov.uk',
-        modLog: '',
-        note: 'This is a test to see if history works',
-        versionNumber: 106,
-        source: 'wrls'
-      },
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'charge-version',
-        entryId: '11b74e78-f797-4d20-aff9-8ef862e59eb6',
-        reason: 'Shell licence ',
-        createdAt: new Date('2024-07-22T09:04:40.136Z'),
-        createdBy: 'admin-internal@wrls.gov.uk',
-        modLog: '',
-        note: null,
-        versionNumber: 105,
-        source: 'wrls'
-      },
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'licence-version',
-        entryId: 'dcc707f6-197e-4779-814a-7572b68a9b7a',
-        reason: '',
-        createdAt: new Date('2023-12-14T21:31:31.690Z'),
-        createdBy: '',
-        modLog: '',
-        note: '',
-        versionNumber: 102
-      },
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'licence-version',
-        entryId: '64eb001f-af5c-4157-88dd-5f0c5ddcef40',
-        reason: '',
-        createdAt: new Date('2023-12-14T21:31:31.690Z'),
-        createdBy: '',
-        modLog: '',
-        note: '',
-        versionNumber: 101
-      },
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'return-version',
-        entryId: '7b3b53c5-bffd-4d3a-a2a7-e3a66119b338',
-        reason: null,
-        createdAt: new Date('2023-12-15T14:00:04.098Z'),
-        createdBy: null,
-        modLog: {
-          code: 'XRET',
-          note: 'Returns requirements changed - Operational Instruction 056_08',
-          createdAt: '2008-11-06',
-          createdBy: 'NALD_OWNER',
-          description: 'Changes to Returns requirements April 2008'
-        },
-        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,',
-        versionNumber: 4
-      },
-      {
-        licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        entryType: 'return-version',
-        entryId: '8eecdc56-cce3-47b8-a704-137b05503de4',
-        reason: null,
-        createdAt: new Date('2023-12-15T14:00:04.098Z'),
-        createdBy: null,
-        modLog: {
-          code: 'XRET',
-          note: 'Returns requirements changed - Operational Instruction 056_08',
-          createdAt: '2008-11-06',
-          createdBy: 'NALD_OWNER',
-          description: 'Changes to Returns requirements April 2008'
-        },
-        note: '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,',
-        versionNumber: 3
-      }
-    ],
-    licence: {
-      id: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-      licenceRef: '01/117',
-      createdAt: new Date('2023-12-14T21:31:31.686Z')
-    }
-  }
-}
+  const changeReason = ChangeReasonModel.fromJson({
+    id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
+    description: 'Major change'
+  })
 
-function _testFormattedLicenceHistory () {
-  return {
+  const chargeVersionNote = ChargeVersionNoteModel.fromJson({
+    id: '27ac6412-5f73-4e35-8885-236bfea92a1c',
+    note: 'Charge version test note'
+  })
+
+  const testLicence = LicenceModel.fromJson({
+    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+    licenceRef: '01/123',
+    licenceDocument: {
+      licenceDocumentRoles: [{
+        id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
+      }]
+    }
+  })
+
+  const modLog = ModLogModel.fromJson({
+    id: 'c79c86b3-4b5a-464b-b321-585cd280c396',
+    naldDate: new Date('2023-04-03'),
+    note: 'modLog test note!',
+    reasonDescription: 'This is a test!',
+    userId: 'TEST_NALD_OWNER'
+  })
+
+  const chargeVersion = ChargeVersionModel.fromJson({
+    createdAt: new Date('2023-07-05'),
+    createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
+    entryType: 'charge-version',
+    entryId: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
+    reason: 'new-licence',
+    status: 'current',
+    startDate: new Date('2020-04-01'),
+    modLogs: [modLog],
+    chargeVersionNote,
+    changeReason,
+    noteId: '27ac6412-5f73-4e35-8885-236bfea92a1c'
+  })
+
+  const licenceVersion = LicenceVersionModel.fromJson({
+    createdAt: new Date('2022-06-05'),
+    entryId: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+    entryType: 'licence-version',
+    reason: 'new-licence',
+    status: 'current',
+    startDate: new Date('2022-04-01'),
+    modLogs: []
+  })
+
+  const returnVersion = ReturnVersionModel.fromJson({
+    createdAt: new Date('2021-04-05'),
+    entryType: 'return-version',
+    entryId: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
+    multipleUpload: false,
+    notes: 'Test note',
+    reason: 'new-licence',
+    startDate: new Date('2021-04-01'),
+    status: 'current',
+    modLogs: []
+  })
+
+  const history = {
     entries: [
-      {
-        createdAt: new Date('2024-07-26T12:19:24.209Z'),
-        createdBy: 'admin-internal@wrls.gov.uk',
-        dateCreated: '26 July 2024',
-        displayNote: true,
-        notes: ['This is a test to see if history works'],
-        link: '/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/charge-information/93b8a9c9-f420-44ca-b899-33aff7fe34e0/view',
-        reason: 'New licence',
-        type: {
-          index: 1,
-          name: 'Charge version'
-        }
-      },
-      {
-        createdAt: new Date('2024-07-22T09:04:40.136Z'),
-        createdBy: 'admin-internal@wrls.gov.uk',
-        dateCreated: '22 July 2024',
-        displayNote: false,
-        notes: [],
-        link: '/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/charge-information/11b74e78-f797-4d20-aff9-8ef862e59eb6/view',
-        reason: 'Shell licence ',
-        type: {
-          index: 1,
-          name: 'Charge version'
-        }
-      },
-      {
-        createdAt: new Date('2023-12-14T21:31:31.690Z'),
-        createdBy: 'Migrated from NALD',
-        dateCreated: '14 December 2023',
-        displayNote: false,
-        notes: [],
-        link: null,
-        reason: null,
-        type: {
-          index: 0,
-          name: 'Licence version'
-        }
-      },
-      {
-        createdAt: new Date('2023-12-14T21:31:31.690Z'),
-        createdBy: 'Migrated from NALD',
-        dateCreated: '14 December 2023',
-        displayNote: false,
-        notes: [],
-        link: null,
-        reason: null,
-        type: {
-          index: 0,
-          name: 'Licence version'
-        }
-      },
-      {
-        createdAt: new Date('2008-11-06T00:00:00.000Z'),
-        createdBy: 'NALD_OWNER',
-        dateCreated: '6 November 2008',
-        displayNote: true,
-        notes: [
-          'Returns requirements changed - Operational Instruction 056_08',
-          '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,'
-        ],
-        link: '/system/return-requirements/7b3b53c5-bffd-4d3a-a2a7-e3a66119b338/view',
-        reason: 'Changes to Returns requirements April 2008',
-        type: {
-          index: 2,
-          name: 'Return version'
-        }
-      },
-      {
-        createdAt: new Date('2008-11-06T00:00:00.000Z'),
-        createdBy: 'NALD_OWNER',
-        dateCreated: '6 November 2008',
-        displayNote: true,
-        notes: [
-          'Returns requirements changed - Operational Instruction 056_08',
-          '869616000 CMA ****2376000 CMD, 869616000 CMA ****2376000 CMD, *2,376,000 CMD, 720 CMD, *2,376,000 CMD,'
-        ],
-        link: '/system/return-requirements/8eecdc56-cce3-47b8-a704-137b05503de4/view',
-        reason: 'Changes to Returns requirements April 2008',
-        type: {
-          index: 2,
-          name: 'Return version'
-        }
-      }
+      chargeVersion,
+      licenceVersion,
+      returnVersion
     ],
-    licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-    licenceRef: '01/117'
+    licence: testLicence
   }
+
+  return history
 }
