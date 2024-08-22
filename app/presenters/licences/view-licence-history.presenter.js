@@ -9,7 +9,7 @@ function go (history) {
   return {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    entries: _entries(entries)
+    entries: _entries(entries, licence.id)
   }
 }
 
@@ -23,7 +23,7 @@ function _createdBy (entry) {
   return 'Migrated from NALD'
 }
 
-function _entries (entries) {
+function _entries (entries, licenceId) {
   const formattedEntries = entries.map((entry) => {
     const createdAt = entry.$createdAt()
     const notes = entry.$notes()
@@ -34,7 +34,7 @@ function _entries (entries) {
       dateCreated: formatLongDate(createdAt),
       displayNote: notes.length > 0,
       notes,
-      link: _link(entry.entryType, entry.entryId, entry.licenceId),
+      link: _link(entry.entryType, entry.entryId, licenceId),
       reason: _reason(entry),
       type: _type(entry.entryType)
     }
