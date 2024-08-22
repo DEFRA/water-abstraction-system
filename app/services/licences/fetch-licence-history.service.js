@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Fetches data needed for the view '/licences/{id}/history` page
+ * @module FetchLicenceHistoryService
+ */
+
 const { db } = require('../../../db/db.js')
 
 const ChargeVersionModel = require('../../models/charge-version.model.js')
@@ -7,6 +12,14 @@ const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
+/**
+ * Fetches data needed for the view '/licences/{id}/history` page
+ *
+ * @param {string} licenceId - The UUID for the licence to fetch
+ *
+ * @returns {Promise<module:LicenceModel|ChargeVersionModel|LicenceVersionModel|ReturnVersionModel>} the licence and
+ * related charge, licence and return versions
+ */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
   const chargeVersions = await _fetchChargeVersions(licenceId)
