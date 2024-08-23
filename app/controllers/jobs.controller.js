@@ -52,8 +52,8 @@ async function returnLogs (request, h) {
     return h.response().code(notFoundStatusCode)
   }
 
-  const isSummer = cycle === 'summer' ? true : false
-  let licenceReference = undefined
+  const isSummer = cycle === 'summer'
+  let licenceReference
 
   if (h.request.payload !== null && h.request.payload.licenceReference) {
     licenceReference = h.request.payload.licenceReference
