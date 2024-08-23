@@ -90,6 +90,8 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
   const cycleStartDate = _getCycleStartDate(isSummer)
   const externalIds = await _fetchExternalIds(cycleStartDate)
 
+  const response = _whereExistsClause(licenceReference, cycleStartDate)
+
   const results = await ReturnRequirementModel.query()
     .whereNotIn('returnRequirements.externalId', externalIds)
     .whereExists(_whereExistsClause(licenceReference, cycleStartDate))

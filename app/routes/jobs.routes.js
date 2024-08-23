@@ -61,7 +61,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/return-logs',
+    path: '/jobs/return-logs/{cycle}',
     options: {
       handler: JobsController.returnLogs,
       app: {

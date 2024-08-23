@@ -12,6 +12,7 @@ const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 
 const redirectStatusCode = 204
+const notFoundStatusCode = 404
 
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3
@@ -42,15 +43,19 @@ async function timeLimited (_request, h) {
   return h.response().code(redirectStatusCode)
 }
 
-async function returnLogs (_request, h) {
-  if (h.request.payload === null) {
-    ProcessReturnLogsService.go(false, undefined)
+async function returnLogs (request, h) {
+  const { cycle } = request.params
 
-    return h.response().code(redirectStatusCode)
+  if (!['summer', 'allYear'].includes(cycle)) {
+    return h.response().code(notFoundStatusCode)
   }
 
-  const isSummer = !!h.request.payload.isSummer
-  const { licenceReference } = h.request.payload
+  const isSummer = cycle === 'summer' ? true : false
+  let licenceReference = undefined
+
+  if (h.request.payload !== null && h.request.payload.licenceReference) {
+    licenceReference = h.request.payload.licenceReference
+  }
 
   ProcessReturnLogsService.go(isSummer, licenceReference)
 
