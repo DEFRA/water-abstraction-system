@@ -17,7 +17,7 @@ const ReviewChargeReferenceModel = require('../../../../app/models/review-charge
 // Thing under test
 const SubmitAmendedAuthorisedVolumeService = require('../../../../app/services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 
-describe.only('Submit Amended Authorised Volume Service', () => {
+describe('Submit Amended Authorised Volume Service', () => {
   const billRunId = 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e'
   const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
 
