@@ -102,6 +102,15 @@ async function _fetchLicence (licenceId) {
         )
         .orderBy('startDate', 'desc')
     })
+    .withGraphFetched('returnVersions.modLogs')
+    .modifyGraph('returnVersions.modLogs', (builder) => {
+      builder
+        .select([
+          'id',
+          'reasonDescription'
+        ])
+        .orderBy('externalId', 'asc')
+    })
     // See licence.model.js `static get modifiers` if you are unsure about what this is doing
     .modify('licenceHolder')
 

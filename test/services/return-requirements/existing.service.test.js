@@ -29,7 +29,8 @@ describe('Return Requirements - Existing service', () => {
           returnVersions: [{
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
             startDate: '2023-01-01T00:00:00.000Z',
-            reason: null
+            reason: null,
+            modLogs: []
           }],
           startDate: '2022-04-01T00:00:00.000Z'
         },

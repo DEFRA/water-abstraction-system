@@ -7,6 +7,8 @@
 /**
  * Validates a string is in the format yyyy-mm-dd
  *
+ * @returns {string} - returns the string value if the date is a valid ISO date YYYY-MM-DD
+ * @throws {Error} - throws an error if the date is not in the correct format or is not a valid date
  */
 const isValidISODate = (value) => {
   const regex = /^\d{4}-\d{2}-\d{2}$/

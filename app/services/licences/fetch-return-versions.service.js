@@ -32,6 +32,15 @@ async function _fetch (licenceId) {
       { column: 'startDate', order: 'desc' },
       { column: 'version', order: 'desc' }
     ])
+    .withGraphFetched('modLogs')
+    .modifyGraph('modLogs', (builder) => {
+      builder
+        .select([
+          'id',
+          'reasonDescription'
+        ])
+        .orderBy('externalId', 'asc')
+    })
 }
 
 module.exports = {
