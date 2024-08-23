@@ -121,6 +121,7 @@ async function _viewNames (schema) {
 }
 
 /**
+ * Close the connection to the database
  *
  */
 async function closeConnection () {
