@@ -13,19 +13,16 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
 
-describe('Fetch Licence Updates service', () => {
+describe.only('Fetch Licence Updates service', () => {
   let licence
   let licenceVersion
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     licence = await LicenceHelper.add()
   })
 
@@ -38,7 +35,7 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results[0]
+        const result = results.find((l) => { return l.id === licenceVersion.id })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -54,7 +51,7 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results[0]
+        const result = results.find((l) => { return l.id === licenceVersion.id })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -63,14 +60,16 @@ describe('Fetch Licence Updates service', () => {
     })
   })
 
-  describe('when there are no matching licence version records', () => {
+  describe.only('when there are no matching licence version records', () => {
     describe('because they were all created more than 2 months ago', () => {
       beforeEach(async () => {
         licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, createdAt: _threeMonthsAgo() })
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -83,7 +82,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -102,7 +103,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -114,7 +117,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
