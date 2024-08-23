@@ -18,7 +18,7 @@ const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 // Thing under test
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
 
-describe.only('Fetch Licence Updates service', () => {
+describe('Fetch Licence Updates service', () => {
   let licence
   let licenceVersion
 
@@ -60,7 +60,7 @@ describe.only('Fetch Licence Updates service', () => {
     })
   })
 
-  describe.only('when there are no matching licence version records', () => {
+  describe('when there are no matching licence version records', () => {
     describe('because they were all created more than 2 months ago', () => {
       beforeEach(async () => {
         licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, createdAt: _threeMonthsAgo() })
