@@ -36,11 +36,11 @@ const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 async function clean () {
   const schemas = ['public', ...LEGACY_SCHEMAS]
 
-  for (const schema of schemas) {
-    const tables = await _tableNames(schema)
-
-    await db.raw(`TRUNCATE TABLE ${tables.join(',')} RESTART IDENTITY;`)
-  }
+  // for (const schema of schemas) {
+  //   const tables = await _tableNames(schema)
+  //
+  //   await db.raw(`TRUNCATE TABLE ${tables.join(',')} RESTART IDENTITY;`)
+  // }
 
   // TODO: when all calls to DatabaseSupport.clean() (this function) have been removed from the tests we can drop this
   await _seed()
