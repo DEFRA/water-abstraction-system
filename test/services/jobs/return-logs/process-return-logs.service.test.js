@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
@@ -29,6 +30,7 @@ describe('Process return logs service', () => {
     let region
     let returnVersion
     let returnRequirement
+    let notifierStub
 
     before(async () => {
       region = RegionHelper.select()
@@ -37,6 +39,12 @@ describe('Process return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+
+      // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+      // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+      // test we recreate the condition by setting it directly with our own stub
+      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
     })
 
     it('can successfully save an return log in the database', async () => {
