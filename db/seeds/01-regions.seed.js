@@ -8,6 +8,16 @@ const RegionModel = require('../../app/models/region.model.js')
 
 const ServerConfig = require('../../config/server.config.js')
 
+/**
+ * Seed the regions reference data
+ *
+ * Water.regions does not have a composite key constraint for chargeRegionId and naldRegionId.
+ *
+ * We do not want multiple occurrences of the column pair chargeRegionId and naldRegionId.
+ *
+ * We manually check if the combination exits already and update / insert accordingly.
+ *
+ */
 async function seed () {
   for (const region of regions) {
     const exists = await _exists(region)
