@@ -5,13 +5,11 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchLicenceVersionsService = require('./fetch-licence-versions.service.js')
-const ValidateLicenceService = require('../validate-licence.service.js')
-const LicencePresenter = require('../../../presenters/import/legacy/licence.presenter.js')
-const LicenceVersionsPresenter = require('../../../presenters/import/legacy/licence-versions.presenter.js')
 const PersistLicenceService = require('../persist-licence.service.js')
 const PersistLicenceVersionsService = require('../persist-licence-versions.service.js')
+const TransformLicenceService = require('./transform-licence.service.js')
+const TransformLicenceVersionsService = require('./transform-licence-versions.service.js')
+const TransformLicenceVersionPurposesService = require('./transform-licence-version-purposes.service.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
@@ -25,19 +23,17 @@ async function go (licenceRef) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licenceData = await FetchLicenceService.go(licenceRef)
+    const { naldLicenceId, regionCode, transformedLicence } = await TransformLicenceService.go(licenceRef)
+    const transformedLicenceVersions = await TransformLicenceVersionsService.go(regionCode, naldLicenceId)
+    const transformedLicenceVersionPurposes = await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId)
 
-    const licenceVersionsData = await FetchLicenceVersionsService.go(licenceData)
+    // TODO: We want to bring the persisting of the 'licence' into a single service so that we can do it within a
+    // single DB transaction. This removes the risk (slight as it is admittedly) of only part of a licence being saved.
+    //
+    // But before we get there, we can remove some of the work the current services are doing!
+    const savedLicence = await PersistLicenceService.go(transformedLicence)
 
-    const mappedLicenceData = LicencePresenter.go(licenceData, licenceVersionsData)
-
-    const mappedLicenceVersionsData = LicenceVersionsPresenter.go(licenceVersionsData)
-
-    ValidateLicenceService.go(mappedLicenceData, mappedLicenceVersionsData)
-
-    const savedLicence = await PersistLicenceService.go(mappedLicenceData)
-
-    await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
+    await PersistLicenceVersionsService.go(transformedLicenceVersions, savedLicence.id)
     calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
   } catch (error) {
     global.GlobalNotifier.omfg('Licence import failed', { licenceRef }, error)
