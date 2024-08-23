@@ -118,10 +118,30 @@ describe('Jobs controller', () => {
     })
   })
 
-  describe('/jobs/return-logs', () => {
+  describe('/jobs/return-logs/summer', () => {
     describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/return-logs' }
+        options = { method: 'POST', url: '/jobs/return-logs/summer' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessReturnLogsService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/return-logs/allYear', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/return-logs/allYear' }
       })
 
       describe('when the request succeeds', () => {
