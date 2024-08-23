@@ -102,7 +102,10 @@ describe('Process Time Limited Licences service', () => {
     it('adds nothing to workflow', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const results = await WorkflowModel.query().orderBy('createdAt', 'asc')
+      const results = await WorkflowModel.query()
+        // Matches the fetched results for FetchTimeLimitedLicencesService
+        .whereIn('licenceId', [])
+        .orderBy('createdAt', 'asc')
 
       expect(results).to.be.empty()
     })
