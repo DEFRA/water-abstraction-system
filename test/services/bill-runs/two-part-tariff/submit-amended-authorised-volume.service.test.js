@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const AmendAuthorisedVolumePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-authorised-volume.presenter.js')
-const DatabaseSupport = require('../../../support/database.js')
 const FetchAuthorisedVolumeService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-authorised-volume.service.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../../../app/models/review-charge-reference.model.js')
@@ -18,7 +17,7 @@ const ReviewChargeReferenceModel = require('../../../../app/models/review-charge
 // Thing under test
 const SubmitAmendedAuthorisedVolumeService = require('../../../../app/services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 
-describe('Submit Amended Authorised Volume Service', () => {
+describe.only('Submit Amended Authorised Volume Service', () => {
   const billRunId = 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e'
   const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
 
@@ -27,8 +26,6 @@ describe('Submit Amended Authorised Volume Service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     yarStub = { flash: Sinon.stub() }
 
     reviewChargeReference = await ReviewChargeReferenceHelper.add()
