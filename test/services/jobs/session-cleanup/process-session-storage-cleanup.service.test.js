@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
@@ -20,10 +19,9 @@ describe('Process Session Storage Cleanup service', () => {
   const todayMinusOneDay = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString()
 
   let notifierStub
+  let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -37,13 +35,13 @@ describe('Process Session Storage Cleanup service', () => {
 
   describe('when there is session data created more than 1 day ago', () => {
     beforeEach(async () => {
-      await SessionHelper.add({ createdAt: todayMinusOneDay })
+      session = await SessionHelper.add({ createdAt: todayMinusOneDay })
     })
 
     it('removes the session data created more than 1 day ago', async () => {
       await ProcessSessionStorageCleanupService.go()
 
-      const results = await SessionModel.query()
+      const results = await SessionModel.query().whereIn('id', [session.id])
 
       expect(results).to.have.length(0)
     })
@@ -62,13 +60,13 @@ describe('Process Session Storage Cleanup service', () => {
 
   describe('when there is session data created less than 1 day ago (today)', () => {
     beforeEach(async () => {
-      await SessionHelper.add()
+      session = await SessionHelper.add()
     })
 
     it('does not remove the session data created less than 1 day ago', async () => {
       await ProcessSessionStorageCleanupService.go()
 
-      const results = await SessionModel.query()
+      const results = await SessionModel.query().whereIn('id', [session.id])
 
       expect(results).to.have.length(1)
     })
