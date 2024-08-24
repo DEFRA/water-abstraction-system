@@ -78,6 +78,7 @@ function _query () {
           ELSE to_date(nalp."TIMELTD_ST_DATE", 'DD/MM/YYYY')
         END
       )  AS time_limited_start_date,
+      (concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO")) AS version_external_id,
       p.id AS purpose_id,
       pp.id AS primary_purpose_id,
       sp.id AS secondary_purpose_id

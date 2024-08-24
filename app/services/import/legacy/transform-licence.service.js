@@ -10,7 +10,7 @@ const LicencePresenter = require('../../../presenters/import/legacy/licence.pres
 const LicenceValidator = require('../../../validators/import/licence.validator.js')
 
 /**
- * Transforms NALD licence data into a validated object that matches the WRLS licence structure
+ * Transforms NALD licence data into a validated object that matches the WRLS structure
  *
  * @param {string} licenceRef - The reference of the licence to be imported from NALD
  *
@@ -22,6 +22,9 @@ async function go (licenceRef) {
   const transformedLicence = LicencePresenter.go(naldLicence)
 
   LicenceValidator.go(transformedLicence)
+
+  // Add an empty array property ready for when transforming and attaching licence versions
+  transformedLicence.licenceVersions = []
 
   return {
     naldLicenceId: naldLicence.id,
