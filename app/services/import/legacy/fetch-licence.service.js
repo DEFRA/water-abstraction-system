@@ -93,7 +93,9 @@ module.exports = {
  * @property {number} region_code
  * @property {string} id
  * @property {Date} lapsed_date
+ * @property {string} licence_ref
  * @property {Date} original_effective_date
  * @property {Date} revoked_date
  * @property {Date} earliest_version_start_date
+ * @property {string} region_id
  */
