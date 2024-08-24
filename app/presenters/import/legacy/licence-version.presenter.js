@@ -23,6 +23,8 @@ function go (licenceVersion) {
     externalId: licenceVersion.external_id,
     increment: licenceVersion.increment_number,
     issue: licenceVersion.issue_no,
+    // Add an empty array property ready for when transforming and attaching licence version purposes
+    licenceVersionPurposes: [],
     startDate: licenceVersion.effective_start_date,
     status: statuses[licenceVersion.status]
   }

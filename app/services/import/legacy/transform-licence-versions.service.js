@@ -26,9 +26,6 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
 
     LicenceVersionValidator.go(transformedLicenceVersion)
 
-    // Add an empty array property ready for when transforming and attaching licence version purposes
-    transformedLicenceVersion.licenceVersionPurposes = []
-
     transformedLicence.licenceVersions.push(transformedLicenceVersion)
   })
 }

@@ -31,6 +31,7 @@ function go (licence) {
     expiredDate: Joi.date().iso().allow(null),
     lapsedDate: Joi.date().iso().allow(null),
     licenceRef: Joi.string().required(),
+    licenceVersions: Joi.array().required(),
     regionId: Joi.string().guid().required(),
     regions: Joi.object({
       regionalChargeArea: Joi.string().required(),

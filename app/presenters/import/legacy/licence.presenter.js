@@ -19,6 +19,8 @@ function go (licence) {
     expiredDate: licence.expiry_date,
     lapsedDate: licence.lapsed_date,
     licenceRef: licence.licence_ref,
+    // Add an empty array property ready for when transforming and attaching licence versions
+    licenceVersions: [],
     regionId: licence.region_id,
     regions: _regions(licence),
     revokedDate: licence.revoked_date,

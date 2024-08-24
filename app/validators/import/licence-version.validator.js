@@ -21,6 +21,7 @@ function go (licenceVersion) {
     externalId: Joi.string().required(),
     increment: Joi.number().required(),
     issue: Joi.number().required(),
+    licenceVersionPurposes: Joi.array().required(),
     startDate: Joi.date().iso().required(),
     status: Joi.string().required().valid(...statuses)
   })

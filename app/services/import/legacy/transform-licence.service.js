@@ -23,9 +23,6 @@ async function go (licenceRef) {
 
   LicenceValidator.go(transformedLicence)
 
-  // Add an empty array property ready for when transforming and attaching licence versions
-  transformedLicence.licenceVersions = []
-
   return {
     naldLicenceId: naldLicence.id,
     regionCode: naldLicence.region_code,
