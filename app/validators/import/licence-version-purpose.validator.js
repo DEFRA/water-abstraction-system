@@ -20,9 +20,9 @@ const calender = {
  */
 function go (licenceVersionPurpose) {
   const schema = Joi.object({
-    primaryPurposeId: Joi.string().required(),
-    secondaryPurposeId: Joi.string().required(),
-    purposeId: Joi.string().required(),
+    primaryPurposeId: Joi.string().guid().required(),
+    secondaryPurposeId: Joi.string().guid().required(),
+    purposeId: Joi.string().guid().required(),
     abstractionPeriodStartDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
     abstractionPeriodStartMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
     abstractionPeriodEndDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),

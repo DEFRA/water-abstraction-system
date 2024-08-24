@@ -76,12 +76,21 @@ function _query () {
           WHEN 'null' THEN NULL
           ELSE to_date(nalp."TIMELTD_ST_DATE", 'DD/MM/YYYY')
         END
-      )  AS time_limited_start_date
+      )  AS time_limited_start_date,
+      p.id AS purpose_id,
+      pp.id AS primary_purpose_id,
+      sp.id AS secondary_purpose_id
     FROM
       "import"."NALD_ABS_LIC_PURPOSES" nalp
     INNER JOIN
       "import"."NALD_ABS_LIC_VERSIONS" nalv ON
       concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO") = concat_ws(':', nalp."FGAC_REGION_CODE", nalp."AABV_AABL_ID", nalp."AABV_ISSUE_NO", nalp."AABV_INCR_NO")
+    LEFT JOIN
+      public.purposes p ON p.legacy_id = nalp."APUR_APUS_CODE"
+    LEFT JOIN
+      public.primary_purposes pp ON pp.legacy_id = nalp."APUR_APPR_CODE"
+    LEFT JOIN
+      public.secondary_purposes sp ON sp.legacy_id = nalp."APUR_APSE_CODE"
     WHERE
       nalp."FGAC_REGION_CODE" = ?
       AND nalp."AABV_AABL_ID" = ?
