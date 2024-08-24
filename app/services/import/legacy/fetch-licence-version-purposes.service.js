@@ -110,6 +110,6 @@ module.exports = {
  * @property {string} primary_purpose_code
  * @property {string} secondary_purpose_code
  * @property {string} purpose_code
- * @property {date} time_limited_end_date
- * @property {date} time_limited_start_date
+ * @property {Date} time_limited_end_date
+ * @property {Date} time_limited_start_date
  */

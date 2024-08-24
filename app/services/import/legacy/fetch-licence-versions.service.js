@@ -60,8 +60,8 @@ module.exports = {
  * Representation of a licence version fetched from the NALD data
  * @typedef {object} ImportLegacyLicenceVersionType
  *
- * @property {date} effective_end_date
- * @property {date} effective_start_date
+ * @property {Date} effective_end_date
+ * @property {Date} effective_start_date
  * @property {string} id
  * @property {number} increment_number
  * @property {number} issue_no

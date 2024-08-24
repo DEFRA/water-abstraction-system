@@ -14,11 +14,11 @@ const calender = {
 /**
  * Checks that imported licence version purpose data that has been transformed is valid for persisting to WRLS
  *
- * @param {object[]} licenceVersionPurposes - The transformed licence version purpose
+ * @param {object} licenceVersionPurpose - The transformed licence version purpose data
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (data) {
+function go (licenceVersionPurpose) {
   const schema = Joi.object({
     primaryPurposeId: Joi.string().required(),
     secondaryPurposeId: Joi.string().required(),
@@ -37,7 +37,7 @@ function go (data) {
     dailyQuantity: Joi.number().allow(null)
   })
 
-  const result = schema.validate(data)
+  const result = schema.validate(licenceVersionPurpose)
 
   if (result.error) {
     throw result.error

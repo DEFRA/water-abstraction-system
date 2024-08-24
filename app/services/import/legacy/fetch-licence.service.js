@@ -89,11 +89,11 @@ module.exports = {
  * @property {string} environmental_improvement_unit_charge_code
  * @property {string} local_environment_agency_plan_code
  * @property {string} standard_unit_charge_code
- * @property {date} expiry_date
+ * @property {Date} expiry_date
  * @property {number} region_code
  * @property {string} id
- * @property {date} lapsed_date
- * @property {date} original_effective_date
- * @property {date} revoked_date
- * @property {date} earliest_version_start_date
+ * @property {Date} lapsed_date
+ * @property {Date} original_effective_date
+ * @property {Date} revoked_date
+ * @property {Date} earliest_version_start_date
  */
