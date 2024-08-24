@@ -33,13 +33,12 @@ async function go (licenceRef) {
     // Ensure the built licence has all the valid child records we require
     LicenceStructureValidator.go(transformedLicence)
 
-    // TODO: We want to bring the persisting of the 'licence' into a single service so that we can do it within a
-    // single DB transaction. This removes the risk (slight as it is admittedly) of only part of a licence being saved.
-    // const savedLicence = await PersistLicenceService.go(transformedLicence)
+    // Either insert or update the licence in WRLS
+    const licenceId = await PersistLicenceService.go(transformedLicence)
 
-    calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
+    calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
-    global.GlobalNotifier.omfg('Licence import failed', { licenceRef }, error)
+    global.GlobalNotifier.omfg('Legacy licence import errored', { licenceRef }, error)
   }
 }
 
