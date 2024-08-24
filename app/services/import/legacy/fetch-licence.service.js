@@ -65,9 +65,12 @@ function _query () {
           nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
           AND nalv."AABL_ID" = nal."ID"
           AND nalv."STATUS" <> 'DRAFT'
-      ) AS earliest_version_start_date
+      ) AS earliest_version_start_date,
+      r.id AS region_id
     FROM
       "import"."NALD_ABS_LICENCES" nal
+    LEFT JOIN
+      public.regions r ON r.nald_region_id = (nal."FGAC_REGION_CODE")::INTEGER
     WHERE
       nal."LIC_NO" = ?;
   `

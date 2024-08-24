@@ -18,7 +18,7 @@ function go (licence) {
     expiredDate: Joi.date().iso().allow(null),
     lapsedDate: Joi.date().iso().allow(null),
     licenceRef: Joi.string().required(),
-    regionId: Joi.number().required(),
+    regionId: Joi.string().guid().required(),
     regions: Joi.object({
       regionalChargeArea: Joi.string().required(),
       localEnvironmentAgencyPlanCode: Joi.string().required(),
