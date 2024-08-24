@@ -39,6 +39,7 @@ function _query () {
         END
       )  AS effective_start_date,
       (nalv."AABL_ID") AS id,
+      (concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO")) AS external_id,
       (nalv."INCR_NO")::INTEGER AS increment_number,
       (nalv."ISSUE_NO")::INTEGER AS issue_no,
       (nalv."FGAC_REGION_CODE") AS region_code,

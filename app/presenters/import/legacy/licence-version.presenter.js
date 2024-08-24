@@ -20,18 +20,12 @@ const statuses = {
 function go (licenceVersion) {
   return {
     endDate: licenceVersion.effective_end_date,
-    externalId: _externalId(licenceVersion),
+    externalId: licenceVersion.external_id,
     increment: licenceVersion.increment_number,
     issue: licenceVersion.issue_no,
     startDate: licenceVersion.effective_start_date,
     status: statuses[licenceVersion.status]
   }
-}
-
-function _externalId (licenceVersion) {
-  const { region_code: regionCode, id, issue_no: issueNo, increment_number: incrementNo } = licenceVersion
-
-  return `${regionCode}:${id}:${issueNo}:${incrementNo}`
 }
 
 module.exports = {

@@ -21,7 +21,7 @@ function go (licenceVersionPurpose) {
     abstractionPeriodStartMonth: licenceVersionPurpose.abstraction_period_start_month,
     annualQuantity: licenceVersionPurpose.annual_quantity,
     dailyQuantity: licenceVersionPurpose.daily_quantity,
-    externalId: _externalId(licenceVersionPurpose),
+    externalId: licenceVersionPurpose.external_id,
     hourlyQuantity: licenceVersionPurpose.hourly_quantity,
     instantQuantity: licenceVersionPurpose.instant_quantity,
     notes: licenceVersionPurpose.notes,
@@ -31,12 +31,6 @@ function go (licenceVersionPurpose) {
     timeLimitedEndDate: licenceVersionPurpose.time_limited_end_date,
     timeLimitedStartDate: licenceVersionPurpose.time_limited_start_date
   }
-}
-
-function _externalId (licenceVersionPurpose) {
-  const { region_code: regionCode, id } = licenceVersionPurpose
-
-  return `${regionCode}:${id}`
 }
 
 module.exports = {

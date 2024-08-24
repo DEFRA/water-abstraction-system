@@ -44,6 +44,7 @@ function _query () {
       ) AS daily_quantity,
       nalp."FGAC_REGION_CODE" AS region_code,
       nalp."ID" AS id,
+      (concat_ws(':', nalp."FGAC_REGION_CODE", nalp."ID")) AS external_id,
       (
         CASE nalp."HOURLY_QTY"
           WHEN 'null' THEN NULL
