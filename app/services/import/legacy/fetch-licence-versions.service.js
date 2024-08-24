@@ -38,11 +38,9 @@ function _query () {
           ELSE to_date(nalv."EFF_ST_DATE", 'DD/MM/YYYY')
         END
       )  AS effective_start_date,
-      (nalv."AABL_ID") AS id,
       (concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO")) AS external_id,
       (nalv."INCR_NO")::INTEGER AS increment_number,
       (nalv."ISSUE_NO")::INTEGER AS issue_no,
-      (nalv."FGAC_REGION_CODE") AS region_code,
       nalv."STATUS" AS status
     FROM
       "import"."NALD_ABS_LIC_VERSIONS" nalv
@@ -63,9 +61,8 @@ module.exports = {
  *
  * @property {Date} effective_end_date
  * @property {Date} effective_start_date
- * @property {string} id
+ * @property {string} external_id
  * @property {number} increment_number
  * @property {number} issue_no
- * @property {string} region_code
  * @property {string} status
  */

@@ -5,7 +5,7 @@
  * @module LicenceVersionPresenter
  */
 
-const statuses = {
+const NALD_STATUSES = {
   CURR: 'current',
   SUPER: 'superseded'
 }
@@ -26,7 +26,7 @@ function go (licenceVersion) {
     // Add an empty array property ready for when transforming and attaching licence version purposes
     licenceVersionPurposes: [],
     startDate: licenceVersion.effective_start_date,
-    status: statuses[licenceVersion.status]
+    status: NALD_STATUSES[licenceVersion.status]
   }
 }
 
