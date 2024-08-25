@@ -16,6 +16,19 @@ const Joi = require('joi')
  * Only if the data against a licence and its child records is valid, and the overall structure of the licence is valid
  * should we be attempting to import it.
  *
+ * A valid licence structure is the following. Some properties must contain at least one child object to be valid. Those
+ * that are optional we leave empty.
+ *
+ * ```javascript
+ * {
+ *   licenceVersions: [{
+ *     licenceVersionPurposes: [{
+ *       licenceVersionPurposeConditions: []
+ *     }]
+ *   }]
+ * }
+ * ```
+ *
  * @param {object} licence - The transformed licence with child records, for example, licence versions
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
