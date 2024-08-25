@@ -6,7 +6,7 @@
 
 const Joi = require('joi')
 
-const statuses = ['current', 'superseded']
+const WRLS_STATUSES = ['current', 'superseded']
 
 /**
  * Checks that imported licence version data that has been transformed is valid for persisting to WRLS
@@ -17,16 +17,16 @@ const statuses = ['current', 'superseded']
  */
 function go (licenceVersion) {
   const schema = Joi.object({
-    endDate: Joi.date().iso().required().allow(null),
+    endDate: Joi.date().required().allow(null),
     externalId: Joi.string().required(),
     increment: Joi.number().required(),
     issue: Joi.number().required(),
     licenceVersionPurposes: Joi.array().required(),
-    startDate: Joi.date().iso().required(),
-    status: Joi.string().required().valid(...statuses)
+    startDate: Joi.date().required(),
+    status: Joi.string().required().valid(...WRLS_STATUSES)
   })
 
-  const result = schema.validate(licenceVersion)
+  const result = schema.validate(licenceVersion, { convert: false })
 
   if (result.error) {
     throw result.error
