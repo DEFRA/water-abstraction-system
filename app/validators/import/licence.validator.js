@@ -15,8 +15,8 @@ const Joi = require('joi')
  */
 function go (licence) {
   const schema = Joi.object({
-    expiredDate: Joi.date().iso().allow(null),
-    lapsedDate: Joi.date().iso().allow(null),
+    expiredDate: Joi.date().allow(null),
+    lapsedDate: Joi.date().allow(null),
     licenceRef: Joi.string().required(),
     licenceVersions: Joi.array().required(),
     regionId: Joi.string().guid().required(),
@@ -26,12 +26,12 @@ function go (licence) {
       historicalAreaCode: Joi.string().required(),
       standardUnitChargeCode: Joi.string().required()
     }),
-    revokedDate: Joi.date().iso().allow(null),
-    startDate: Joi.date().iso().required(),
+    revokedDate: Joi.date().allow(null),
+    startDate: Joi.date().required(),
     waterUndertaker: Joi.boolean().required()
   })
 
-  const result = schema.validate(licence)
+  const result = schema.validate(licence, { convert: false })
 
   if (result.error) {
     throw result.error
