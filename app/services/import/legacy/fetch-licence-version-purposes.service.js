@@ -42,8 +42,6 @@ function _query () {
           ELSE (nalp."DAILY_QTY")::NUMERIC
         END
       ) AS daily_quantity,
-      nalp."FGAC_REGION_CODE" AS region_code,
-      nalp."ID" AS id,
       (concat_ws(':', nalp."FGAC_REGION_CODE", nalp."ID")) AS external_id,
       (
         CASE nalp."HOURLY_QTY"
@@ -63,9 +61,9 @@ function _query () {
           ELSE nalp."NOTES"
         END
       ) AS notes,
-      nalp."APUR_APPR_CODE" AS primary_purpose_code,
-      nalp."APUR_APSE_CODE" AS secondary_purpose_code,
-      nalp."APUR_APUS_CODE" AS purpose_code,
+      pp.id AS primary_purpose_id,
+      p.id AS purpose_id,
+      sp.id AS secondary_purpose_id,
       (
         CASE nalp."TIMELTD_END_DATE"
           WHEN 'null' THEN NULL
@@ -78,10 +76,7 @@ function _query () {
           ELSE to_date(nalp."TIMELTD_ST_DATE", 'DD/MM/YYYY')
         END
       )  AS time_limited_start_date,
-      (concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO")) AS version_external_id,
-      p.id AS purpose_id,
-      pp.id AS primary_purpose_id,
-      sp.id AS secondary_purpose_id
+      (concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO")) AS version_external_id
     FROM
       "import"."NALD_ABS_LIC_PURPOSES" nalp
     INNER JOIN
@@ -113,14 +108,13 @@ module.exports = {
  * @property {number} abstraction_period_start_month
  * @property {number} annual_quantity
  * @property {number} daily_quantity
- * @property {string} region_code
- * @property {string} id
  * @property {number} hourly_quantity
  * @property {number} instant_quantity
  * @property {string} notes
- * @property {string} primary_purpose_code
- * @property {string} secondary_purpose_code
- * @property {string} purpose_code
+ * @property {string} primary_purpose_id
+ * @property {string} purpose_id
+ * @property {string} secondary_purpose_id
  * @property {Date} time_limited_end_date
  * @property {Date} time_limited_start_date
+ * @property {string} version_external_id
  */
