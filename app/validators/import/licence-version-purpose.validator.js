@@ -6,7 +6,7 @@
 
 const Joi = require('joi')
 
-const calender = {
+const CALENDAR = {
   totalDaysInMonth: 31,
   totalMonthsInYear: 12
 }
@@ -20,24 +20,24 @@ const calender = {
  */
 function go (licenceVersionPurpose) {
   const schema = Joi.object({
-    primaryPurposeId: Joi.string().guid().required(),
-    secondaryPurposeId: Joi.string().guid().required(),
-    purposeId: Joi.string().guid().required(),
-    abstractionPeriodStartDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
-    abstractionPeriodStartMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
-    abstractionPeriodEndDay: Joi.number().integer().min(1).max(calender.totalDaysInMonth).required(),
-    abstractionPeriodEndMonth: Joi.number().integer().min(1).max(calender.totalMonthsInYear).required(),
-    timeLimitedStartDate: Joi.date().iso().allow(null),
-    timeLimitedEndDate: Joi.date().iso().allow(null),
-    notes: Joi.string().allow(null),
+    abstractionPeriodEndDay: Joi.number().integer().min(1).max(CALENDAR.totalDaysInMonth).required(),
+    abstractionPeriodEndMonth: Joi.number().integer().min(1).max(CALENDAR.totalMonthsInYear).required(),
+    abstractionPeriodStartDay: Joi.number().integer().min(1).max(CALENDAR.totalDaysInMonth).required(),
+    abstractionPeriodStartMonth: Joi.number().integer().min(1).max(CALENDAR.totalMonthsInYear).required(),
     annualQuantity: Joi.number().allow(null),
+    dailyQuantity: Joi.number().allow(null),
     externalId: Joi.string().required(),
-    instantQuantity: Joi.number().allow(null),
     hourlyQuantity: Joi.number().allow(null),
-    dailyQuantity: Joi.number().allow(null)
+    instantQuantity: Joi.number().allow(null),
+    notes: Joi.string().allow(null),
+    primaryPurposeId: Joi.string().guid().required(),
+    purposeId: Joi.string().guid().required(),
+    secondaryPurposeId: Joi.string().guid().required(),
+    timeLimitedEndDate: Joi.date().allow(null),
+    timeLimitedStartDate: Joi.date().allow(null)
   })
 
-  const result = schema.validate(licenceVersionPurpose)
+  const result = schema.validate(licenceVersionPurpose, { convert: false })
 
   if (result.error) {
     throw result.error
