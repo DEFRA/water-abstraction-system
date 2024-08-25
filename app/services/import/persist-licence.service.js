@@ -53,10 +53,9 @@ async function _persistLicenceVersion (trx, updatedAt, licenceVersion, licenceId
     .insert({ ...propertiesToPersist, licenceId, updatedAt })
     .onConflict('externalId')
     .merge([
-      'licenceId',
-      'status',
-      'startDate',
       'endDate',
+      'startDate',
+      'status',
       'updatedAt'
     ])
     .returning('id')
