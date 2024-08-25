@@ -35,12 +35,12 @@ describe('Import controller', () => {
     Sinon.restore()
   })
 
-  describe('/import/licence', () => {
-    describe('POST /import/licence', () => {
+  describe('/import/licence/legacy', () => {
+    describe('POST', () => {
       beforeEach(async () => {
         options = {
           method: 'POST',
-          url: '/import/licence',
+          url: '/import/licence/legacy',
           payload: {
             licenceRef: 'mock-licence-ref'
           }
