@@ -62,15 +62,50 @@ describe('Import Licence Version Purpose validator', () => {
       })
     })
 
-    describe('when it is more than the maximum (31)', () => {
-      beforeEach(() => {
-        transformedLicenceVersionPurpose.abstractionPeriodEndDay = 32
+    describe('when "abstractionPeriodEndMonth"', () => {
+      describe('is February (2)', () => {
+        describe('and "abstractionPeriodEndDay" is more than the number of days in the month (29)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodEndMonth = 2
+            transformedLicenceVersionPurpose.abstractionPeriodEndDay = 29
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodEndDay" must be less than or equal to 28')
+          })
+        })
       })
 
-      it('throws an error', async () => {
-        expect(() => {
-          LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
-        }).to.throw('"abstractionPeriodEndDay" must be less than or equal to 31')
+      describe('is April (4)', () => {
+        describe('and "abstractionPeriodEndDay" is more than the number of days in the month (30)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodEndMonth = 4
+            transformedLicenceVersionPurpose.abstractionPeriodEndDay = 31
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodEndDay" must be less than or equal to 30')
+          })
+        })
+      })
+
+      describe('is March (3)', () => {
+        describe('and "abstractionPeriodEndDay" is more than the number of days in the month (31)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodEndMonth = 3
+            transformedLicenceVersionPurpose.abstractionPeriodEndDay = 32
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodEndDay" must be less than or equal to 31')
+          })
+        })
       })
     })
   })
@@ -162,15 +197,50 @@ describe('Import Licence Version Purpose validator', () => {
       })
     })
 
-    describe('when it is more than the maximum (31)', () => {
-      beforeEach(() => {
-        transformedLicenceVersionPurpose.abstractionPeriodStartDay = 32
+    describe('when "abstractionPeriodStartMonth"', () => {
+      describe('is February (2)', () => {
+        describe('and "abstractionPeriodStartDay" is more than the number of days in the month (29)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodStartMonth = 2
+            transformedLicenceVersionPurpose.abstractionPeriodStartDay = 29
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodStartDay" must be less than or equal to 28')
+          })
+        })
       })
 
-      it('throws an error', async () => {
-        expect(() => {
-          LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
-        }).to.throw('"abstractionPeriodStartDay" must be less than or equal to 31')
+      describe('is April (4)', () => {
+        describe('and "abstractionPeriodStartDay" is more than the number of days in the month (30)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodStartMonth = 4
+            transformedLicenceVersionPurpose.abstractionPeriodStartDay = 31
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodStartDay" must be less than or equal to 30')
+          })
+        })
+      })
+
+      describe('is March (3)', () => {
+        describe('and "abstractionPeriodStartDay" is more than the number of days in the month (31)', () => {
+          beforeEach(() => {
+            transformedLicenceVersionPurpose.abstractionPeriodStartMonth = 3
+            transformedLicenceVersionPurpose.abstractionPeriodStartDay = 32
+          })
+
+          it('throws an error', async () => {
+            expect(() => {
+              LicenceVersionPurposeValidator.go(transformedLicenceVersionPurpose)
+            }).to.throw('"abstractionPeriodStartDay" must be less than or equal to 31')
+          })
+        })
       })
     })
   })
