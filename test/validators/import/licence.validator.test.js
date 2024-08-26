@@ -104,6 +104,18 @@ describe('Import Licence validator', () => {
         }).to.throw('"licenceRef" must be a string')
       })
     })
+
+    describe('when it contains whitespace', () => {
+      beforeEach(() => {
+        transformedLicence.licenceRef = `${transformedLicence.licenceRef} `
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          LicenceValidator.go(transformedLicence)
+        }).to.throw('"licenceRef" must not have leading or trailing whitespace')
+      })
+    })
   })
 
   describe('the "licenceVersions" property', () => {
