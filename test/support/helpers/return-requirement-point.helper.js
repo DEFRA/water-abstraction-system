@@ -45,6 +45,7 @@ function defaults (data = {}) {
   const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
 
   const defaults = {
+    description: 'Point description',
     externalId: `9:${randomInteger(100, 99999)}:${naldPointId}`,
     naldPointId,
     ngr1,

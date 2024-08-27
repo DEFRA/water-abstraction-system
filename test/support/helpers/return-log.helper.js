@@ -61,7 +61,26 @@ function defaults (data = {}) {
     dueDate: new Date('2023-04-28'),
     endDate: new Date('2023-03-31'),
     licenceRef,
-    metadata: {},
+    metadata: {
+      description: 'BOREHOLE AT AVALON',
+      isCurrent: true,
+      isFinal: false,
+      isSummer: false,
+      isTwoPartTariff: false,
+      isUpload: false,
+      nald: {
+        regionCode: 9,
+        areaCode: 'ARCA',
+        formatId: returnReference,
+        periodStartDay: 1,
+        periodStartMonth: 4,
+        periodEndDay: 28,
+        periodEndMonth: 4
+      },
+      points: [],
+      purposes: [],
+      version: 1
+    },
     receivedDate,
     returnReference,
     returnsFrequency: 'month',
