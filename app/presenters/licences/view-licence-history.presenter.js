@@ -17,7 +17,7 @@ const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
  * @returns The data formatted and sorted for the view template
  */
 function go (history) {
-  const { entries, licence } = history
+  const { licence, entries } = history
 
   return {
     licenceId: licence.id,
@@ -37,23 +37,13 @@ function _createdBy (entry) {
 }
 
 function _entries (entries, licenceId) {
-  const formattedEntries = entries.map((entry) => {
-    const createdAt = entry.$createdAt()
-    const notes = entry.$notes()
+  const chargeVersions = _mapEntries(entries.chargeVersions, 'charge-version', licenceId)
+  const licenceVersions = _mapEntries(entries.licenceVersions, 'licence-version', licenceId)
+  const returnVersions = _mapEntries(entries.returnVersions, 'return-version', licenceId)
 
-    return {
-      createdAt,
-      createdBy: _createdBy(entry),
-      dateCreated: formatLongDate(createdAt),
-      displayNote: notes.length > 0,
-      notes,
-      link: _link(entry.entryType, entry.entryId, licenceId),
-      reason: _reason(entry),
-      type: _type(entry.entryType)
-    }
-  })
+  const joinedEntries = [...chargeVersions, ...licenceVersions, ...returnVersions]
 
-  return _sortEntries(formattedEntries)
+  return _sortEntries(joinedEntries)
 }
 
 function _link (entryType, entryId, licenceId) {
@@ -66,6 +56,24 @@ function _link (entryType, entryId, licenceId) {
   }
 
   return null
+}
+
+function _mapEntries (entries, entryType, licenceId) {
+  return entries.map((entry) => {
+    const createdAt = entry.$createdAt()
+    const notes = entry.$notes()
+
+    return {
+      createdAt,
+      createdBy: _createdBy(entry),
+      dateCreated: formatLongDate(createdAt),
+      displayNote: notes.length > 0,
+      notes,
+      link: _link(entryType, entry.id, licenceId),
+      reason: _reason(entry),
+      type: _type(entryType)
+    }
+  })
 }
 
 /**
