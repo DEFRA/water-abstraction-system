@@ -25,7 +25,7 @@ describe('Process return logs service', () => {
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
   const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
 
-  describe('Is summer is true and a licence reference is provided', () => {
+  describe('cycle is summer is true and a licence reference is provided', () => {
     let licence
     let region
     let returnVersion
@@ -49,7 +49,7 @@ describe('Process return logs service', () => {
     })
 
     it('can successfully save an return log in the database', async () => {
-      await ProcessReturnLogsService.go(false, licence.licenceRef)
+      await ProcessReturnLogsService.go('all-year', licence.licenceRef)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
 
@@ -65,9 +65,9 @@ describe('Process return logs service', () => {
     })
   })
 
-  describe('Is summer is false and a licence reference is provided but there is no matching return requirements', () => {
+  describe('All year cycle and a licence reference is provided but there is no matching return requirements', () => {
     it('will not save anything in the data base', async () => {
-      await ProcessReturnLogsService.go(false, 'testReference')
+      await ProcessReturnLogsService.go('all-year', 'testReference')
 
       const result = await ReturnLogModel.query().where('licenceRef', 'testReference')
 

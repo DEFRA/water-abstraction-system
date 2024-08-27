@@ -48,18 +48,17 @@ async function timeLimited (_request, h) {
 async function returnLogs (request, h) {
   const { cycle } = request.params
 
-  if (!['summer', 'allYear'].includes(cycle)) {
+  if (!['summer', 'all-year'].includes(cycle)) {
     return h.response().code(notFoundStatusCode)
   }
 
-  const isSummer = cycle === 'summer'
   let licenceReference
 
   if (h.request.payload !== null && h.request.payload.licenceReference) {
     licenceReference = h.request.payload.licenceReference
   }
 
-  ProcessReturnLogsService.go(isSummer, licenceReference)
+  ProcessReturnLogsService.go(cycle, licenceReference)
 
   return h.response().code(redirectStatusCode)
 }
