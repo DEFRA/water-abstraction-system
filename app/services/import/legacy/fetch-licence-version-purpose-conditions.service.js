@@ -35,19 +35,19 @@ function _query () {
         WHEN 'null' THEN NULL
         ELSE NALC."PARAM1"
         END
-       ) AS PARAM1,
+      ) AS PARAM1,
       (
         CASE NALC."PARAM2"
         WHEN 'null' THEN NULL
         ELSE NALC."PARAM2"
         END
-       ) AS PARAM2,
+      ) AS PARAM2,
       (
         CASE NALC."TEXT"
         WHEN 'null' THEN NULL
         ELSE NALC."TEXT"
         END
-       ) AS NOTES,
+      ) AS NOTES,
       (CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID"))            AS PURPOSE_EXTERNAL_ID,
       (CONCAT_WS(':', NALC."ID", NALC."FGAC_REGION_CODE", NALC."AABP_ID")) AS EXTERNAL_ID
     FROM "import"."NALD_LIC_CONDITIONS" NALC
