@@ -23,7 +23,7 @@ describe('View Licence History presenter', () => {
   let licenceHistory
 
   beforeEach(() => {
-    licenceHistory = _licenceHistory2()
+    licenceHistory = _licenceHistory()
   })
 
   describe('when provided with populated licence history', () => {
@@ -327,7 +327,7 @@ describe('View Licence History presenter', () => {
   })
 })
 
-function _licenceHistory2 () {
+function _licenceHistory () {
   const changeReason = ChangeReasonModel.fromJson({
     id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
     description: 'Major change'
@@ -356,11 +356,10 @@ function _licenceHistory2 () {
     userId: 'TEST_NALD_OWNER'
   })
 
-  const chargeVersion = ChargeVersionModel.fromJson({
+  const chargeVersions = ChargeVersionModel.fromJson({
     createdAt: new Date('2023-07-05'),
     createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
-    entryType: 'charge-version',
-    entryId: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
+    id: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2020-04-01'),
@@ -370,20 +369,18 @@ function _licenceHistory2 () {
     noteId: '27ac6412-5f73-4e35-8885-236bfea92a1c'
   })
 
-  const licenceVersion = LicenceVersionModel.fromJson({
+  const licenceVersions = LicenceVersionModel.fromJson({
     createdAt: new Date('2022-06-05'),
-    entryId: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
-    entryType: 'licence-version',
+    id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2022-04-01'),
     modLogs: []
   })
 
-  const returnVersion = ReturnVersionModel.fromJson({
+  const returnVersions = ReturnVersionModel.fromJson({
     createdAt: new Date('2021-04-05'),
-    entryType: 'return-version',
-    entryId: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
+    id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
     notes: 'Test note',
     reason: 'new-licence',
@@ -393,11 +390,11 @@ function _licenceHistory2 () {
   })
 
   const history = {
-    entries: [
-      chargeVersion,
-      licenceVersion,
-      returnVersion
-    ],
+    entries: {
+      chargeVersions,
+      licenceVersions,
+      returnVersions
+    },
     licence: testLicence
   }
 
