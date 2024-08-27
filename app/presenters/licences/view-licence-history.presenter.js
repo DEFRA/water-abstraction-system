@@ -59,6 +59,13 @@ function _link (entryType, entryId, licenceId) {
 }
 
 function _mapEntries (entries, entryType, licenceId) {
+  // NOTE: When there is only a single entry for the charge, licence, or return versions, it is returned as an object.
+  // When there are multiple `entries`, it's returned as an array. This checks if `entries` is not an array, and if not,
+  // converts it into an array.
+  if (!Array.isArray(entries)) {
+    entries = [entries]
+  }
+
   return entries.map((entry) => {
     const createdAt = entry.$createdAt()
     const notes = entry.$notes()
