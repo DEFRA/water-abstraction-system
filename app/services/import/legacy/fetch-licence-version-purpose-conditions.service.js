@@ -28,38 +28,38 @@ async function go (regionCode, licenceId) {
 function _query () {
   return `
     SELECT
-      NALC."ACIN_CODE"                                                     AS CODE,
-      NALC."ACIN_SUBCODE"                                                  AS SUBCODE,
+      NALC."ACIN_CODE" AS CODE,
+      NALC."ACIN_SUBCODE" AS SUBCODE,
       (
-       CASE NALC."PARAM1"
-         WHEN 'null' THEN NULL
-         ELSE NALC."PARAM1"
-         END
-       )                                                                  AS PARAM1,
+        CASE NALC."PARAM1"
+        WHEN 'null' THEN NULL
+        ELSE NALC."PARAM1"
+        END
+       ) AS PARAM1,
       (
-       CASE NALC."PARAM2"
-         WHEN 'null' THEN NULL
-         ELSE NALC."PARAM2"
-         END
-       )                                                                  AS PARAM2,
-      (CASE NALC."TEXT"
+        CASE NALC."PARAM2"
+        WHEN 'null' THEN NULL
+        ELSE NALC."PARAM2"
+        END
+       ) AS PARAM2,
+      (
+        CASE NALC."TEXT"
         WHEN 'null' THEN NULL
         ELSE NALC."TEXT"
-       END
-       )                                                                  AS NOTES,
+        END
+       ) AS NOTES,
       (CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID"))            AS PURPOSE_EXTERNAL_ID,
       (CONCAT_WS(':', NALC."ID", NALC."FGAC_REGION_CODE", NALC."AABP_ID")) AS EXTERNAL_ID
     FROM "import"."NALD_LIC_CONDITIONS" NALC
-           INNER JOIN "import"."NALD_ABS_LIC_PURPOSES" NALP ON
-      CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."ID") = CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID")
-           INNER JOIN
-         "import"."NALD_ABS_LIC_VERSIONS" NALV ON
-           CONCAT_WS(':', NALV."FGAC_REGION_CODE", NALV."AABL_ID", NALV."ISSUE_NO", NALV."INCR_NO") =
-           CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."AABV_AABL_ID", NALP."AABV_ISSUE_NO", NALP."AABV_INCR_NO")
+      INNER JOIN "import"."NALD_ABS_LIC_PURPOSES" NALP ON
+        CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."ID") = CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID")
+      INNER JOIN "import"."NALD_ABS_LIC_VERSIONS" NALV ON
+        CONCAT_WS(':', NALV."FGAC_REGION_CODE", NALV."AABL_ID", NALV."ISSUE_NO", NALV."INCR_NO") =
+        CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."AABV_AABL_ID", NALP."AABV_ISSUE_NO", NALP."AABV_INCR_NO")
     WHERE NALP."FGAC_REGION_CODE" = ?
       AND NALP."AABV_AABL_ID" = ?
       AND NALV."STATUS" <> 'DRAFT';
-	`
+`
 }
 
 module.exports = {
