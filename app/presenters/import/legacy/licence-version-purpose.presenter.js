@@ -29,7 +29,9 @@ function go (licenceVersionPurpose) {
     purposeId: licenceVersionPurpose.purpose_id,
     secondaryPurposeId: licenceVersionPurpose.secondary_purpose_id,
     timeLimitedEndDate: licenceVersionPurpose.time_limited_end_date,
-    timeLimitedStartDate: licenceVersionPurpose.time_limited_start_date
+    timeLimitedStartDate: licenceVersionPurpose.time_limited_start_date,
+    // Add an empty array property ready for when transforming and attaching licence version purpose conditions
+    licenceVersionPurposeConditions: []
   }
 }
 
