@@ -5,83 +5,63 @@
  * @module FetchLicenceHistoryService
  */
 
-const { db } = require('../../../db/db.js')
-
-const ChargeVersionModel = require('../../models/charge-version.model.js')
 const LicenceModel = require('../../models/licence.model.js')
-const LicenceVersionModel = require('../../models/licence-version.model.js')
-const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<module:LicenceModel|ChargeVersionModel|LicenceVersionModel|ReturnVersionModel>} the licence and
+ * @returns {Promise<module:LicenceModel>} the licence and
  * related charge, licence and return versions
  */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
-  const chargeVersions = await _fetchChargeVersions(licenceId)
-  const licenceVersions = await _fetchLicenceVersions(licenceId)
-  const returnVersions = await _fetchReturnVersions(licenceId)
+
+  const chargeVersions = licence.chargeVersions
+  const licenceVersions = licence.licenceVersions
+  const returnVersions = licence.returnVersions
 
   return {
-    entries: [...chargeVersions, ...licenceVersions, ...returnVersions],
-    licence
+    entries: {
+      chargeVersions,
+      licenceVersions,
+      returnVersions
+    },
+    licence: {
+      id: licence.id,
+      licenceRef: licence.licenceRef
+    }
   }
 }
 
 async function _fetchLicence (licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef',
-      'createdAt'
-    ])
-}
-
-async function _fetchChargeVersions (licenceId) {
-  return ChargeVersionModel.query()
-    .select(
-      db.raw("'charge-version' as entry_type"),
-      'chargeVersions.id as entry_id',
-      'chargeVersions.createdAt as created_at'
-    )
-    .modify('history')
-    .orderBy([
-      { column: 'versionNumber', order: 'desc' }
-    ])
-    .where('chargeVersions.licenceId', licenceId)
-}
-
-async function _fetchLicenceVersions (licenceId) {
-  return LicenceVersionModel.query()
-    .select(
-      db.raw("'licence-version' as entry_type"),
-      'licenceVersions.id as entry_id',
-      'licenceVersions.createdAt as created_at'
-    )
-    .modify('history')
-    .orderBy([
-      { column: 'issue', order: 'desc' }
-    ])
-    .where('licenceVersions.licenceId', licenceId)
-}
-
-async function _fetchReturnVersions (licenceId) {
-  return ReturnVersionModel.query()
-    .select(
-      db.raw("'return-version' as entry_type"),
-      'returnVersions.id as entry_id',
-      'returnVersions.createdAt as created_at'
-    )
-    .modify('history')
-    .orderBy([
-      { column: 'version', order: 'desc' }
-    ])
-    .where('returnVersions.licenceId', licenceId)
+    .withGraphFetched('chargeVersions')
+    .modifyGraph('chargeVersions', (builder) => {
+      builder.select(
+        'chargeVersions.id',
+        'chargeVersions.createdAt'
+      )
+        .modify('history')
+    })
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (builder) => {
+      builder.select(
+        'licenceVersions.id',
+        'licenceVersions.createdAt'
+      )
+        .modify('history')
+    })
+    .withGraphFetched('returnVersions')
+    .modifyGraph('returnVersions', (builder) => {
+      builder.select(
+        'returnVersions.id',
+        'returnVersions.createdAt'
+      )
+        .modify('history')
+    })
 }
 
 module.exports = {
