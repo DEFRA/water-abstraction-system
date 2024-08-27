@@ -27,27 +27,28 @@ async function go (regionCode, licenceId) {
 
 function _query () {
   return `
-    SELECT NALC."ACIN_CODE"                                                     AS CODE,
-           NALC."ACIN_SUBCODE"                                                  AS SUBCODE,
-           (
-             CASE NALC."PARAM1"
-               WHEN 'null' THEN NULL
-               ELSE NALC."PARAM1"
-               END
-             )                                                                  AS PARAM1,
-           (
-             CASE NALC."PARAM2"
-               WHEN 'null' THEN NULL
-               ELSE NALC."PARAM2"
-               END
-             )                                                                  AS PARAM2,
-           (CASE NALC."TEXT"
-              WHEN 'null' THEN NULL
-              ELSE NALC."TEXT"
-             END
-             )                                                                  AS NOTES,
-           (CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID"))            AS PURPOSE_EXTERNAL_ID,
-           (CONCAT_WS(':', NALC."ID", NALC."FGAC_REGION_CODE", NALC."AABP_ID")) AS EXTERNAL_ID
+    SELECT
+      NALC."ACIN_CODE"                                                     AS CODE,
+      NALC."ACIN_SUBCODE"                                                  AS SUBCODE,
+      (
+       CASE NALC."PARAM1"
+         WHEN 'null' THEN NULL
+         ELSE NALC."PARAM1"
+         END
+       )                                                                  AS PARAM1,
+      (
+       CASE NALC."PARAM2"
+         WHEN 'null' THEN NULL
+         ELSE NALC."PARAM2"
+         END
+       )                                                                  AS PARAM2,
+      (CASE NALC."TEXT"
+        WHEN 'null' THEN NULL
+        ELSE NALC."TEXT"
+       END
+       )                                                                  AS NOTES,
+      (CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID"))            AS PURPOSE_EXTERNAL_ID,
+      (CONCAT_WS(':', NALC."ID", NALC."FGAC_REGION_CODE", NALC."AABP_ID")) AS EXTERNAL_ID
     FROM "import"."NALD_LIC_CONDITIONS" NALC
            INNER JOIN "import"."NALD_ABS_LIC_PURPOSES" NALP ON
       CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."ID") = CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID")
