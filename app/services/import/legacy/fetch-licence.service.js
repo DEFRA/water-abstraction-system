@@ -1,44 +1,79 @@
 'use strict'
 
 /**
- * Service for /import/licence
+ * Fetches the licence data from the import.NALD_ABS_LICENCES table for the licence ref
  * @module FetchLicenceService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the licence data for the licence ref from the import.NALD_ABS_LICENCES table
+ * Fetches the licence data from the import.NALD_ABS_LICENCES table for the licence ref
  *
- * @param {string} licenceRef - the licence ref
+ * @param {string} licenceRef - the licence ref to fetch
  *
  * @returns {Promise<ImportLegacyLicenceType>}
  */
 async function go (licenceRef) {
-  return _getLicenceByRef(licenceRef)
-}
-
-async function _getLicenceByRef (licenceRef) {
-  const query = `
-      SELECT
-          licence."AREP_AREA_CODE",
-          licence."AREP_EIUC_CODE",
-          licence."AREP_LEAP_CODE",
-          licence."AREP_SUC_CODE",
-          licence."EXPIRY_DATE",
-          licence."FGAC_REGION_CODE",
-          licence."ID",
-          licence."LAPSED_DATE",
-          licence."LIC_NO",
-          licence."ORIG_EFF_DATE",
-          licence."REV_DATE"
-      FROM import."NALD_ABS_LICENCES" licence
-      WHERE licence."LIC_NO" = ?;
-  `
+  const query = _query()
 
   const { rows: [row] } = await db.raw(query, [licenceRef])
 
   return row
+}
+
+function _query () {
+  return `
+    SELECT
+      nal."AREP_AREA_CODE" AS historical_area_code,
+      nal."AREP_EIUC_CODE" AS environmental_improvement_unit_charge_code,
+      nal."AREP_LEAP_CODE" AS local_environment_agency_plan_code,
+      nal."AREP_SUC_CODE" AS standard_unit_charge_code,
+      (
+        CASE nal."EXPIRY_DATE"
+          WHEN 'null' THEN NULL
+          ELSE to_date(nal."EXPIRY_DATE", 'DD/MM/YYYY')
+        END
+      ) AS expiry_date,
+      nal."FGAC_REGION_CODE" AS region_code,
+      nal."ID" AS id,
+      (
+        CASE nal."LAPSED_DATE"
+          WHEN 'null' THEN NULL
+          ELSE to_date(nal."LAPSED_DATE", 'DD/MM/YYYY')
+        END
+      ) AS lapsed_date,
+      nal."LIC_NO" AS licence_ref,
+      (
+        CASE nal."ORIG_EFF_DATE"
+          WHEN 'null' THEN NULL
+          ELSE to_date(nal."ORIG_EFF_DATE", 'DD/MM/YYYY')
+        END
+      ) AS original_effective_date,
+      (
+        CASE nal."REV_DATE"
+          WHEN 'null' THEN NULL
+          ELSE to_date(nal."REV_DATE", 'DD/MM/YYYY')
+        END
+      ) AS revoked_date,
+      (
+        SELECT
+          MIN(to_date(nalv."EFF_ST_DATE", 'DD/MM/YYYY'))
+        FROM
+          "import"."NALD_ABS_LIC_VERSIONS" nalv
+        WHERE
+          nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
+          AND nalv."AABL_ID" = nal."ID"
+          AND nalv."STATUS" <> 'DRAFT'
+      ) AS earliest_version_start_date,
+      r.id AS region_id
+    FROM
+      "import"."NALD_ABS_LICENCES" nal
+    LEFT JOIN
+      public.regions r ON r.nald_region_id = (nal."FGAC_REGION_CODE")::INTEGER
+    WHERE
+      nal."LIC_NO" = ?;
+  `
 }
 
 module.exports = {
@@ -46,20 +81,21 @@ module.exports = {
 }
 
 /**
- * An Import legacy licence
+ * Representation of a licence fetched from the NALD data
  *
  * @typedef {object} ImportLegacyLicenceType
  *
- * @property {string} AREP_AREA_CODE - historicalAreaCode
- * @property {string} AREP_EIUC_CODE - regionPrefix / regionalChargeArea
- * @property {string} AREP_LEAP_CODE - localEnvironmentAgencyPlanCode
- * @property {string} AREP_SUC_CODE - standardUnitChargeCode
- * @property {string} AREP_AREA_CODE - regions - historicalAreaCode
- * @property {string} AREP_EIUC_CODE - regions - regionPrefix / regionalChargeArea
- * @property {string} AREP_LEAP_CODE - regions - localEnvironmentAgencyPlanCode
- * @property {string} AREP_SUC_CODE - regions - standardUnitChargeCode
- * @property {string} EXPIRY_DATE
- * @property {string} ID
- * @property {string} LAPSED_DATE
- * @property {string} LIC_NO - Licence Ref
+ * @property {string} historical_area_code
+ * @property {string} environmental_improvement_unit_charge_code
+ * @property {string} local_environment_agency_plan_code
+ * @property {string} standard_unit_charge_code
+ * @property {Date} expiry_date
+ * @property {number} region_code
+ * @property {string} id
+ * @property {Date} lapsed_date
+ * @property {string} licence_ref
+ * @property {Date} original_effective_date
+ * @property {Date} revoked_date
+ * @property {Date} earliest_version_start_date
+ * @property {string} region_id
  */

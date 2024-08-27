@@ -12,7 +12,7 @@ const ImportLegacyProcessLicenceService = require('../services/import/legacy/pro
  *
  * @module ImportController
  */
-async function licence (request, h) {
+async function licenceLegacy (request, h) {
   const { licenceRef } = request.payload
 
   if (FeatureFlags.enableSystemImportLegacyLicence) {
@@ -23,5 +23,5 @@ async function licence (request, h) {
 }
 
 module.exports = {
-  licence
+  licenceLegacy
 }

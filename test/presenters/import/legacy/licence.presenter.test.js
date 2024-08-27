@@ -8,187 +8,115 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FixtureLegacyLicence = require('../../../services/import/_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersion = require('../../../services/import/_fixtures/legacy-licence-version.fixture.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const LicencePresenter =
-  require('../../../../app/presenters/import/legacy/licence.presenter.js')
+const LicencePresenter = require('../../../../app/presenters/import/legacy/licence.presenter.js')
 
-describe('Import legacy licence presenter', () => {
-  let licence
+describe('Import Legacy Licence presenter', () => {
+  let legacyLicence
 
   beforeEach(() => {
-    licence = { ...FixtureLegacyLicence.create() }
+    legacyLicence = _legacyLicence()
   })
 
-  it('returns the matching agreements data', () => {
-    const results = LicencePresenter.go(licence)
+  it('correctly transforms the data', () => {
+    const result = LicencePresenter.go(legacyLicence)
 
-    expect(results).to.equal({
-      licenceRef: licence.LIC_NO,
-      startDate: '2005-06-03',
-      waterUndertaker: false,
-      regions: {
-        historicalAreaCode: 'RIDIN',
-        regionalChargeArea: 'Yorkshire',
-        standardUnitChargeCode: 'YORKI',
-        localEnvironmentAgencyPlanCode: 'AIREL'
-      },
-      regionId: 3,
-      expiredDate: '2015-03-31',
+    expect(result).to.equal({
+      expiredDate: null,
       lapsedDate: null,
-      revokedDate: null
-
+      licenceRef: legacyLicence.licence_ref,
+      licenceVersions: [],
+      regionId: '82d8c1b7-0eed-43a7-a5f9-4e397c08e17e',
+      regions: {
+        historicalAreaCode: 'KAEA',
+        regionalChargeArea: 'Southern',
+        standardUnitChargeCode: 'SUCSO',
+        localEnvironmentAgencyPlanCode: 'LEME'
+      },
+      revokedDate: null,
+      startDate: new Date('1992-08-19'),
+      waterUndertaker: false
     })
   })
 
-  describe('licence', () => {
-    describe('the "expiredDate" property', () => {
-      describe('when the licence has an expiry date', () => {
-        it('returns the licence expired date in the ISO format', () => {
-          const result = LicencePresenter.go(licence)
+  describe('the "regions" property', () => {
+    beforeEach(() => {
+      legacyLicence.environmental_improvement_unit_charge_code = 'YOOTH'
+    })
 
-          expect(result.expiredDate).to.equal('2015-03-31')
-        })
+    it('returns a JSON object where the "regionalChargeArea" is based on the first 2 chars of the EIUC code', () => {
+      const result = LicencePresenter.go(legacyLicence)
+
+      expect(result.regions).to.equal({
+        historicalAreaCode: 'KAEA',
+        regionalChargeArea: 'Yorkshire',
+        standardUnitChargeCode: 'SUCSO',
+        localEnvironmentAgencyPlanCode: 'LEME'
       })
+    })
+  })
 
-      describe('when the licence does not have an expiry date', () => {
-        beforeEach(() => {
-          licence.EXPIRY_DATE = 'null'
-        })
-        it('returns null', () => {
-          const result = LicencePresenter.go(licence)
+  describe('the "startDate" property', () => {
+    describe('when "original_effective_date" is populated in the licence data', () => {
+      it('returns "original_effective_date" as the "startDate"', () => {
+        const result = LicencePresenter.go(legacyLicence)
 
-          expect(result.expiredDate).to.be.null()
-        })
+        expect(result.startDate).to.equal(legacyLicence.original_effective_date)
       })
     })
 
-    describe('the "lapsedDate" property', () => {
-      describe('when the licence has an lapsed date', () => {
-        beforeEach(() => {
-          licence.LAPSED_DATE = '01/09/2006'
-        })
-
-        it('returns the licence expired date in the ISO format', () => {
-          const result = LicencePresenter.go(licence)
-
-          expect(result.lapsedDate).to.equal('2006-09-01')
-        })
+    describe('when "original_effective_date" is not populated in the licence data', () => {
+      beforeEach(() => {
+        legacyLicence.original_effective_date = null
       })
 
-      describe('when the licence does not have an lapsed date', () => {
-        it('returns null', () => {
-          const result = LicencePresenter.go(licence)
+      it('returns "earliest_version_start_date" as the "startDate"', () => {
+        const result = LicencePresenter.go(legacyLicence)
 
-          expect(result.lapsedDate).to.be.null()
-        })
+        expect(result.startDate).to.equal(legacyLicence.earliest_version_start_date)
+      })
+    })
+  })
+
+  describe('the "waterUndertaker" property', () => {
+    describe('when the "environmental_improvement_unit_charge_code" does not end with SWC', () => {
+      it('returns false', () => {
+        const result = LicencePresenter.go(legacyLicence)
+
+        expect(result.waterUndertaker).to.be.false()
       })
     })
 
-    describe('the "licenceRef" property', () => {
-      it('returns licence ref from the licence LIC_NO', () => {
-        const result = LicencePresenter.go(licence)
-
-        expect(result.licenceRef).to.equal(licence.LIC_NO)
-      })
-    })
-
-    describe('the "regionId" property', () => {
-      it('returns the FGAC_REGION_CODE as an integer assigned to regionId', () => {
-        const result = LicencePresenter.go(licence)
-
-        expect(result.regionId).to.equal(3)
-      })
-    })
-
-    describe('the "regions" property', () => {
-      it('returns region', () => {
-        const result = LicencePresenter.go(licence)
-
-        expect(result.regions).to.equal({
-          historicalAreaCode: 'RIDIN',
-          regionalChargeArea: 'Yorkshire',
-          standardUnitChargeCode: 'YORKI',
-          localEnvironmentAgencyPlanCode: 'AIREL'
-        })
-      })
-    })
-
-    describe('the "revokedDate" property', () => {
-      describe('when the licence has an revoked date', () => {
-        beforeEach(() => {
-          licence.REV_DATE = '01/09/2006'
-        })
-
-        it('returns the licence revoked date in the ISO format', () => {
-          const result = LicencePresenter.go(licence)
-
-          expect(result.revokedDate).to.equal('2006-09-01')
-        })
+    describe('when the "environmental_improvement_unit_charge_code" ends with SWC', () => {
+      beforeEach(() => {
+        legacyLicence.environmental_improvement_unit_charge_code = 'SOSWC'
       })
 
-      describe('when the licence does not have an revoked date', () => {
-        it('returns null', () => {
-          const result = LicencePresenter.go(licence)
+      it('returns true', () => {
+        const result = LicencePresenter.go(legacyLicence)
 
-          expect(result.revokedDate).to.be.null()
-        })
-      })
-    })
-
-    describe('the "startDate" property', () => {
-      describe('when the licence has ORIG_EFF_DATE', () => {
-        it('returns ORIG_EFF_DATE as the start date in the correct format', () => {
-          const result = LicencePresenter.go(licence)
-
-          expect(result.startDate).to.equal('2005-06-03')
-        })
-      })
-      describe('when the licence ORIG_EFF_DATE is null', () => {
-        let licenceVersions
-
-        beforeEach(() => {
-          licence.ORIG_EFF_DATE = 'null'
-
-          licenceVersions = [
-            { ...FixtureLegacyLicenceVersion.create(), EFF_ST_DATE: '07/07/2001' },
-            // This licence version should be used by the sort as it is the earliest
-            { ...FixtureLegacyLicenceVersion.create(), EFF_ST_DATE: '01/01/2001' }
-          ]
-        })
-
-        describe('then start date of the earliest non-draft licence version is used', () => {
-          it('returns the start date in the ISO format', () => {
-            const result = LicencePresenter.go(licence, licenceVersions)
-
-            expect(result.startDate).to.equal('2001-01-01')
-          })
-        })
-      })
-    })
-
-    describe('the "waterUndertaker" property', () => {
-      describe('when the licence AREP_EIUC_CODE ends with "SWC" ', () => {
-        beforeEach(() => {
-          licence.AREP_EIUC_CODE = 'ANSWC'
-        })
-
-        it('returns waterUndertaker as true', () => {
-          const result = LicencePresenter.go(licence)
-
-          expect(result.waterUndertaker).to.be.true()
-        })
-      })
-
-      describe('when the licence AREP_EIUC_CODE does not end with "SWC" ', () => {
-        it('returns waterUndertaker as false', () => {
-          const result = LicencePresenter.go(licence)
-
-          expect(result.waterUndertaker).to.be.false()
-        })
+        expect(result.waterUndertaker).to.be.true()
       })
     })
   })
 })
+
+function _legacyLicence () {
+  return {
+    historical_area_code: 'KAEA',
+    environmental_improvement_unit_charge_code: 'SOOTH',
+    local_environment_agency_plan_code: 'LEME',
+    standard_unit_charge_code: 'SUCSO',
+    expiry_date: null,
+    region_code: '6',
+    id: '2113',
+    lapsed_date: null,
+    licence_ref: generateLicenceRef(),
+    original_effective_date: new Date('1992-08-19'),
+    revoked_date: null,
+    earliest_version_start_date: new Date('1999-01-01'),
+    region_id: '82d8c1b7-0eed-43a7-a5f9-4e397c08e17e'
+  }
+}

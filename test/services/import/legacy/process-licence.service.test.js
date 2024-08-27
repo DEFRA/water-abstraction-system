@@ -5,173 +5,112 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FetchLicenceService = require('../../../../app/services/import/legacy/fetch-licence.service.js')
-const FetchLicenceVersionsService = require('../../../../app/services/import/legacy/fetch-licence-versions.service.js')
-const FixtureLegacyLicence = require('../_fixtures/legacy-licence.fixture.js')
-const FixtureLegacyLicenceVersion = require('../_fixtures/legacy-licence-version.fixture.js')
-const FixtureLegacyLicenceVersionPurpose = require('../_fixtures/legacy-licence-version-purpose.fixture.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
+// Things to stub
+const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
+const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
+const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
+const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
 
 // Thing under test
-const ImportLegacyProcessLicenceService =
-  require('../../../../app/services/import/legacy/process-licence.service.js')
+const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
 
-describe('Import legacy process licence service', () => {
-  const region = RegionHelper.select()
+describe('Import Legacy Process Licence service', () => {
+  const naldLicenceId = '2113'
+  const regionCode = '6'
 
-  let legacyLicence
+  let licenceId
   let licenceRef
-  let licenceVersionPurpose
-  let licenceVersions
-  let version
+  let notifierStub
+  let persistLicenceServiceStub
+  let transformedLicence
 
-  before(() => {
-    legacyLicence = FixtureLegacyLicence.create()
-    licenceRef = legacyLicence.LIC_NO
+  beforeEach(() => {
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
 
-    licenceVersionPurpose = FixtureLegacyLicenceVersionPurpose.create()
-    version = FixtureLegacyLicenceVersion.create()
+    transformedLicence = _transformedLicence(licenceRef)
 
-    licenceVersions = [{ ...version, purposes: [{ ...licenceVersionPurpose }] }]
+    Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+    Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
+    Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
 
-    Sinon.stub(FetchLicenceService, 'go').resolves({
-      ...legacyLicence,
-      FGAC_REGION_CODE: region.naldRegionId
-    })
-
-    Sinon.stub(FetchLicenceVersionsService, 'go').resolves(licenceVersions)
-
-    global.GlobalNotifier = { omfg: Sinon.stub() }
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
-  describe('the "licence" data is imported and saved to the database', () => {
-    it('returns the matching licence data', async () => {
-      await ImportLegacyProcessLicenceService.go(licenceRef)
+  afterEach(() => {
+    Sinon.restore()
+    delete global.GlobalNotifier
+  })
 
-      const licence = await LicenceModel.query().select('*').where('licenceRef', licenceRef).first()
-
-      expect(licence).to.equal({
-        createdAt: new Date(licence.createdAt),
-        expiredDate: new Date('2015-03-31'),
-        id: licence.id,
-        includeInPresrocBilling: 'no',
-        includeInSrocBilling: false,
-        lapsedDate: null,
-        licenceRef,
-        regionId: region.id,
-        regions: {
-          historicalAreaCode: 'RIDIN',
-          localEnvironmentAgencyPlanCode: 'AIREL',
-          regionalChargeArea: 'Yorkshire',
-          standardUnitChargeCode: 'YORKI'
-        },
-        revokedDate: null,
-        startDate: new Date('2005-06-03'),
-        suspendFromBilling: false,
-        updatedAt: new Date(licence.updatedAt),
-        waterUndertaker: false
-      })
+  describe('when there is a valid NALD licence to import', () => {
+    beforeEach(() => {
+      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
     })
 
-    it('returns defaulted columns', async () => {
-      await ImportLegacyProcessLicenceService.go(licenceRef)
+    it('saves the imported licence', async () => {
+      await ProcessLicenceService.go(licenceRef)
 
-      const licence = await LicenceModel.query().select('*').where('licenceRef', licenceRef).first()
+      expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
+    })
 
-      expect(licence.includeInPresrocBilling).to.equal('no')
-      expect(licence.includeInSrocBilling).to.be.false()
-      expect(licence.suspendFromBilling).to.be.false()
+    it('logs the time taken in milliseconds and seconds', async () => {
+      await ProcessLicenceService.go(licenceRef)
+
+      const logDataArg = notifierStub.omg.firstCall.args[1]
+
+      expect(
+        notifierStub.omg.calledWith('Legacy licence import complete')
+      ).to.be.true()
+      expect(logDataArg.timeTakenMs).to.exist()
+      expect(logDataArg.timeTakenSs).to.exist()
+      expect(logDataArg.licenceId).to.equal(licenceId)
+      expect(logDataArg.licenceRef).to.equal(licenceRef)
     })
   })
 
-  describe('the "licence versions" ', () => {
-    it('returns the matching licence versions data', async () => {
-      await ImportLegacyProcessLicenceService.go(licenceRef)
-
-      const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()
-        .withGraphFetched('licenceVersions')
-
-      const [licenceVersion] = licence.licenceVersions
-
-      expect(licence.licenceVersions).to.be.array()
-
-      expect(licenceVersion).to.equal(
-        {
-          createdAt: licenceVersion.createdAt,
-          endDate: new Date('2007-06-04'),
-          externalId: '3:10000003:100:0',
-          id: licenceVersion.id,
-          increment: 0,
-          issue: 100,
-          licenceId: licence.id,
-          startDate: new Date('2005-06-05'),
-          status: 'superseded',
-          updatedAt: licenceVersion.updatedAt
-        })
+  describe('when the service errors', () => {
+    beforeEach(() => {
+      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').rejects()
     })
 
-    describe('the "licence version purposes"', () => {
-      let primaryPurpose
-      let purpose
-      let secondaryPurpose
+    it('handles the error', async () => {
+      await ProcessLicenceService.go(licenceRef)
 
-      beforeEach(() => {
-        primaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
-          return primaryPurpose.legacyId === licenceVersionPurpose.APUR_APPR_CODE
-        })
+      const args = notifierStub.omfg.firstCall.args
 
-        purpose = PurposeHelper.data.find((purpose) => {
-          return purpose.legacyId === licenceVersionPurpose.APUR_APUS_CODE
-        })
-
-        secondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
-          return secondaryPurpose.legacyId === licenceVersionPurpose.APUR_APSE_CODE
-        })
-      })
-
-      it('returns the matching licence versions purposes data', async () => {
-        await ImportLegacyProcessLicenceService.go(licenceRef)
-
-        const licence = await LicenceModel.query().select(['id']).where('licenceRef', licenceRef).first()
-          .withGraphFetched('licenceVersions').withGraphFetched('licenceVersions.licenceVersionPurposes')
-
-        const [licenceVersion] = licence.licenceVersions
-        const { licenceVersionPurposes } = licenceVersion
-        const [licenceVersionPurpose] = licenceVersionPurposes
-
-        expect(licence.licenceVersions[0].licenceVersionPurposes).to.be.array()
-
-        expect(licenceVersionPurpose).to.equal(
-          {
-            id: licenceVersionPurpose.id,
-            licenceVersionId: licenceVersion.id,
-            primaryPurposeId: primaryPurpose.id,
-            secondaryPurposeId: secondaryPurpose.id,
-            purposeId: purpose.id,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            timeLimitedStartDate: null,
-            timeLimitedEndDate: null,
-            notes: null,
-            instantQuantity: null,
-            dailyQuantity: 1500.2,
-            hourlyQuantity: 140.929,
-            annualQuantity: 545520,
-            externalId: '3:10000004',
-            createdAt: new Date(licenceVersionPurpose.createdAt),
-            updatedAt: new Date(licenceVersionPurpose.updatedAt)
-          })
-      })
+      expect(args[0]).to.equal('Legacy licence import errored')
+      expect(args[1]).to.equal({ licenceRef })
+      expect(args[2]).to.be.an.error()
     })
   })
 })
+
+// NOTE: This is an incomplete transformed licence. But this minimum valid structure saves us having to also stub
+// the LicenceStructureValidator
+function _transformedLicence (licenceRef) {
+  return {
+    licenceRef,
+    licenceVersions: [{
+      externalId: '6:2113:100:0',
+      licenceVersionPurposes: [
+        {
+          externalId: '6:10000004'
+        },
+        {
+          externalId: '6:10000005'
+        }
+      ]
+    }]
+  }
+}

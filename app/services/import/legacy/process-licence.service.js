@@ -5,13 +5,11 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchLicenceVersionsService = require('./fetch-licence-versions.service.js')
-const ValidateLicenceService = require('../validate-licence.service.js')
-const LicencePresenter = require('../../../presenters/import/legacy/licence.presenter.js')
-const LicenceVersionsPresenter = require('../../../presenters/import/legacy/licence-versions.presenter.js')
+const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
-const PersistLicenceVersionsService = require('../persist-licence-versions.service.js')
+const TransformLicenceService = require('./transform-licence.service.js')
+const TransformLicenceVersionsService = require('./transform-licence-versions.service.js')
+const TransformLicenceVersionPurposesService = require('./transform-licence-version-purposes.service.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
@@ -25,22 +23,22 @@ async function go (licenceRef) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licenceData = await FetchLicenceService.go(licenceRef)
+    // Transform the parent legacy licence record first
+    const { naldLicenceId, regionCode, transformedLicence } = await TransformLicenceService.go(licenceRef)
 
-    const licenceVersionsData = await FetchLicenceVersionsService.go(licenceData)
+    // Pass the transformed licence through each transformation step, building the licence as we go
+    await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
+    await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
 
-    const mappedLicenceData = LicencePresenter.go(licenceData, licenceVersionsData)
+    // Ensure the built licence has all the valid child records we require
+    LicenceStructureValidator.go(transformedLicence)
 
-    const mappedLicenceVersionsData = LicenceVersionsPresenter.go(licenceVersionsData)
+    // Either insert or update the licence in WRLS
+    const licenceId = await PersistLicenceService.go(transformedLicence)
 
-    ValidateLicenceService.go(mappedLicenceData, mappedLicenceVersionsData)
-
-    const savedLicence = await PersistLicenceService.go(mappedLicenceData)
-
-    await PersistLicenceVersionsService.go(mappedLicenceVersionsData, savedLicence.id)
-    calculateAndLogTimeTaken(startTime, 'Process licence', { licenceRef })
+    calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
-    global.GlobalNotifier.omfg('Licence import failed', { licenceRef }, error)
+    global.GlobalNotifier.omfg('Legacy licence import errored', { licenceRef }, error)
   }
 }
 

@@ -1,31 +1,38 @@
 'use strict'
 
 /**
- * Persists the licence
+ * Creates or updates an imported licence and its child entities that have been transformed and validated
  * @module PersistLicenceService
  */
 
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 const LicenceModel = require('../../models/licence.model.js')
-const RegionModel = require('../../models/region.model.js')
+const LicenceVersionModel = require('../../models/licence-version.model.js')
+const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 /**
- * Saves the licence versions, purposes and conditions
+ * Creates or updates an imported licence and its child entities that have been transformed and validated
  *
- * @param {object} licenceData - the mapped and validated licence to persist
- * @returns {Promise<module:LicenceModel>}
+ * @param {object} transformedLicence - An object representing a valid WRLS licence
+ *
+ * @returns {Promise<object>}
  */
-async function go (licenceData) {
-  const region = await RegionModel.query()
-    .select(['id'])
-    .where('naldRegionId', licenceData.regionId)
-    .limit(1)
-    .first()
+async function go (transformedLicence) {
+  return LicenceModel.transaction(async (trx) => {
+    const updatedAt = timestampForPostgres()
+    const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
 
-  return LicenceModel.query()
-    .insert({
-      ...licenceData,
-      regionId: region.id
-    })
+    await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, id)
+
+    return id
+  })
+}
+
+async function _persistLicence (trx, updatedAt, licence) {
+  const { licenceVersions, ...propertiesToPersist } = licence
+
+  return LicenceModel.query(trx)
+    .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('licenceRef')
     .merge([
       'expiredDate',
@@ -36,6 +43,62 @@ async function go (licenceData) {
       'updatedAt',
       'waterUndertaker'
     ])
+    .returning('id')
+}
+
+async function _persistLicenceVersion (trx, updatedAt, licenceVersion, licenceId) {
+  const { licenceVersionPurposes, ...propertiesToPersist } = licenceVersion
+
+  return LicenceVersionModel.query(trx)
+    .insert({ ...propertiesToPersist, licenceId, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'endDate',
+      'startDate',
+      'status',
+      'updatedAt'
+    ])
+    .returning('id')
+}
+
+async function _persistLicenceVersions (trx, updatedAt, licenceVersions, licenceId) {
+  for (const licenceVersion of licenceVersions) {
+    const { id } = await _persistLicenceVersion(trx, updatedAt, licenceVersion, licenceId)
+
+    await _persistLicenceVersionPurposes(trx, updatedAt, licenceVersion.licenceVersionPurposes, id)
+  }
+}
+
+async function _persistLicenceVersionPurpose (trx, updatedAt, licenceVersionPurpose, licenceVersionId) {
+  const { ...propertiesToPersist } = licenceVersionPurpose
+
+  return LicenceVersionPurposeModel.query(trx)
+    .insert({ ...propertiesToPersist, licenceVersionId, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'abstractionPeriodEndDay',
+      'abstractionPeriodEndMonth',
+      'abstractionPeriodStartDay',
+      'abstractionPeriodStartMonth',
+      'annualQuantity',
+      'dailyQuantity',
+      'hourlyQuantity',
+      'instantQuantity',
+      'notes',
+      'primaryPurposeId',
+      'purposeId',
+      'secondaryPurposeId',
+      'timeLimitedEndDate',
+      'timeLimitedStartDate',
+      'updatedAt'
+    ])
+    .returning('id')
+}
+
+async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPurposes, licenceVersionId) {
+  for (const licenceVersionPurpose of licenceVersionPurposes) {
+    await _persistLicenceVersionPurpose(trx, updatedAt, licenceVersionPurpose, licenceVersionId)
+  }
 }
 
 module.exports = {
