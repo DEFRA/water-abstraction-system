@@ -79,7 +79,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is true, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is true, one return requirement and a licenceRef provided', () => {
     let licence
     let region
     let returnVersion
@@ -131,7 +131,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is false, two return requirements and a licenceRef provided', () => {
+  describe('when isSummer is false, two return requirements and a licenceRef provided', () => {
     let licence
     let region
     let returnVersion
@@ -219,7 +219,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is true, two return requirements and a licenceRef provided', () => {
+  describe('when isSummer is true, two return requirements and a licenceRef provided', () => {
     let licence
     let region
     let returnVersion
@@ -334,7 +334,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 1, 31).toISOString().split('T')[0]
 
     let licence
@@ -388,7 +388,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 3, 31).toISOString().split('T')[0]
 
     let licence
@@ -442,7 +442,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
     const lapsedDate = new Date(new Date().getFullYear() + 1, 8, 31).toISOString().split('T')[0]
 
     let licence
@@ -496,7 +496,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
     const revokedDate = new Date(new Date().getFullYear() + 1, 10, 31).toISOString().split('T')[0]
 
     let licence
@@ -550,7 +550,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
+  describe('when isSummer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return three return log payloads', async () => {
       const result = await FetchReturnLogsService.go(false)
 
@@ -558,7 +558,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('When isSummer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
+  describe('when isSummer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return three return log payloads', async () => {
       const result = await FetchReturnLogsService.go(true)
 
