@@ -19,7 +19,7 @@ const SendToS3BucketService = require('./send-to-s3-bucket.service.js')
  * into a compressed tarball file and uploading this to the S3 bucket. Finally deleting the schema folder and the
  * schema.tgz file
  *
- * @param {String} schemaName The name of the database schema to export
+ * @param {string} schemaName - The name of the database schema to export
  */
 async function go (schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
@@ -45,9 +45,11 @@ async function go (schemaName) {
 /**
  * Generates the folder path where the schema will be temporarily stored for upload
  *
- * @param {String} schemaName The name of the database schema
+ * @param {string} schemaName - The name of the database schema
  *
- * @returns {String} The folder path where the schema will be temporarily stored
+ * @returns {string} The folder path where the schema will be temporarily stored
+ *
+ * @private
  */
 function _folderToUpload (schemaName) {
   const temporaryFilePath = os.tmpdir()

@@ -20,16 +20,16 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  *
  * Finally, we return a 'permission' object. This is used to determine which nav bar menu items a user sees.
  *
- * @param {Number} userId The user id to be authenticated
+ * @param {number} userId - The user id to be authenticated
  *
- * @returns {Object} response
- * @returns {Boolean} response.isValid Indicates whether the user was found
- * @returns {Object} response.credentials User credentials found in the IDM
+ * @returns {object} response
+ * @returns {boolean} response.isValid Indicates whether the user was found
+ * @returns {object} response.credentials User credentials found in the IDM
  * @returns {UserModel} response.credentials.user Object representing the user
  * @returns {RoleModel[]} response.credentials.roles Objects representing the roles the user has
  * @returns {GroupModel[]} response.credentials.groups Objects representing the groups the user is assigned to
- * @returns {String[]} response.credentials.scope The names of the roles the user has, for route authorisation purposes
- * @returns {Object} response.credentials.permission Object with each top level permission as a key and true or false
+ * @returns {string[]} response.credentials.scope The names of the roles the user has, for route authorisation purposes
+ * @returns {object} response.credentials.permission Object with each top level permission as a key and true or false
  * whether the user has authorisation to access the area
  */
 async function go (userId) {
@@ -60,10 +60,12 @@ async function go (userId) {
  *
  * They are used by the nav bar to determine which menu items should be visible.
  *
- * @param {String[]} scope All the scopes (roles) a user has access to
+ * @param {string[]} scope - All the scopes (roles) a user has access to
  *
- * @returns {Object} Each top level permissions is a key. The value is true or false as to whether the user has
+ * @returns {object} Each top level permissions is a key. The value is true or false as to whether the user has
  * permission to access that area of the service
+ *
+ * @private
  */
 function _permission (scope = []) {
   const billRuns = scope.includes('billing')

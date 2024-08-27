@@ -43,7 +43,7 @@ const billingConfig = require('../../../config/billing.config.js')
  * @param {string[]} statusesToWaitFor - Array of statuses to wait for, for example, `['billed', 'billing_not_required]`
  * @param {number} [maximumAttempts] - Number of times to check the status before giving up. Defaults to 120
  *
- * @returns {Promise<Object>} returns the results of the wait
+ * @returns {Promise<object>} returns the results of the wait
  */
 async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
@@ -78,6 +78,8 @@ async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
  * Pause between requests so that we are not bombarding the Charging Module
  *
  * The default is 1 second but we make this configurable mainly to allow us to override the pause in unit tests
+ *
+ * @private
  */
 function _pause () {
   return setTimeout(billingConfig.waitForStatusPauseInMs)

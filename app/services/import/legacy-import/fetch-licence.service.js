@@ -26,7 +26,7 @@ async function _getLicenceByRef (licenceRef) {
 
   const { rows: [row] } = await db.raw(query)
 
-  return select(row)
+  return _select(row)
 }
 
 /**
@@ -34,8 +34,10 @@ async function _getLicenceByRef (licenceRef) {
  *
  * @param {any} licence
  * @returns {LegacyLicenceType}
+ *
+ * @private
  */
-function select (licence) {
+function _select (licence) {
   return {
     AREP_AREA_CODE: licence.AREP_AREA_CODE,
     AREP_EIUC_CODE: licence.AREP_EIUC_CODE,
@@ -58,7 +60,7 @@ module.exports = {
 /**
  * A legacy licence
  *
- * @typedef {Object} LegacyLicenceType
+ * @typedef {object} LegacyLicenceType
  *
  * @property {string} AREP_AREA_CODE
  * @property {string} AREP_EIUC_CODE

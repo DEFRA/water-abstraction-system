@@ -10,6 +10,7 @@
 
 const { db, dbConfig } = require('../../db/db.js')
 
+const ChangeReasonsSeeder = require('../../db/seeds/12-change-reasons.seed.js')
 const FinancialAgreementsSeeder = require('../../db/seeds/11-financial-agreements.seed.js')
 const GroupRolesSeeder = require('../../db/seeds/08-group-roles.seed.js')
 const GroupsSeeder = require('../../db/seeds/06-groups.seed.js')
@@ -95,6 +96,7 @@ async function _seed () {
   await UsersSeeder.seed()
   await UserGroupsSeeder.seed()
   await FinancialAgreementsSeeder.seed()
+  await ChangeReasonsSeeder.seed()
 }
 
 async function _tableNames (schema) {
@@ -118,6 +120,10 @@ async function _viewNames (schema) {
   })
 }
 
+/**
+ * Close the connection to the database
+ *
+ */
 async function closeConnection () {
   await db.destroy()
 }

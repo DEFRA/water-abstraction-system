@@ -12,7 +12,7 @@ const exec = util.promisify(require('child_process').exec)
 /**
  * Returns information about the `system` repo in the format required by the info service
  *
- * @returns {Promise<Object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
+ * @returns {Promise<object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
 async function go () {
   return {

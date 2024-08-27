@@ -26,7 +26,7 @@ const UserHelper = require('../helpers/user.helper.js')
  *
  * Because of this it can be useful to test presenters and services that need to transform the data.
  *
- * @returns {Promise<Object>} a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a
+ * @returns {Promise<object>} a 'complete' `ReturnVersionModel` instance with two return requirements, each containing a
  * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
  * it is linked to
  */

@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * @param {module:TransactionModel[]} transactions - Array of transactions to be reversed
  * @param {string} billLicenceId - The bill licence UUID these transactions are to be added to
  *
- * @returns {Object[]} Array of reversed transactions with `billLicenceId` set to the id of the supplied `billLicence`
+ * @returns {object[]} Array of reversed transactions with `billLicenceId` set to the id of the supplied `billLicence`
  */
 function go (transactions, billLicenceId) {
   return _reverseTransactions(transactions, billLicenceId)
@@ -27,6 +27,8 @@ function go (transactions, billLicenceId) {
  * Receives an array of debit transactions and returns transactions that will reverse them. These transactions are
  * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is for the
  * bill licence we are creating, and a new transaction ID is generated.
+ *
+ * @private
  */
 function _reverseTransactions (transactions, billLicenceId) {
   return transactions.map((transaction) => {

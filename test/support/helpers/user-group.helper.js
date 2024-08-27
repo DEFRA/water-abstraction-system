@@ -20,7 +20,7 @@ const DEFAULT_INDEX = 4
  * - `userId` - [randomly generated - 100001]
  * - `groupId` - [random UUID]
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:UserGroupModel>} The instance of the newly created record
  */
@@ -38,7 +38,9 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
   const defaults = {
@@ -63,10 +65,10 @@ function defaults (data = {}) {
  * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
  * select a specific entry, or have it it return one at random.
  *
- * @param {Number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {Object} The selected reference entry or one picked at random
+ * @returns {object} The selected reference entry or one picked at random
  */
 function select (index = -1) {
   if (index > -1) {

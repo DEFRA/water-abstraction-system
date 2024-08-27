@@ -13,9 +13,9 @@ const { db } = require('../../../db/db.js')
  *
  * Was built to provide the data needed for the '/bills/{id}' page
  *
- * @param {string} id The UUID for the bill to fetch
+ * @param {string} id - The UUID for the bill to fetch
  *
- * @returns {Promise<Object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
+ * @returns {Promise<object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
  * for each licence linked to the bill
  */
 async function go (id) {
@@ -80,6 +80,8 @@ async function _fetchBill (id) {
  * To get the query to return a single line for each licence we need to use DISTINCT. So, due to the complexity of the
  * query needed we've had to drop back down to Knex and generate the query ourselves rather than going through
  * Objection.js.
+ *
+ * @private
  */
 async function _fetchLicenceSummaries (id) {
   return db

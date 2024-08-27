@@ -14,10 +14,10 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @param {string} billingAccountId - The UUID that identifies the billing account we need to fetch transactions for
  * @param {string} licenceId - The UUID that identifies the licence we need to fetch transactions for
- * @param {Number} financialYearEnding - The year the financial billing period ends that we need to fetch transactions
+ * @param {number} financialYearEnding - The year the financial billing period ends that we need to fetch transactions
  * for
  *
- * @returns {Promise<Object[]>} The resulting matched transactions
+ * @returns {Promise<object[]>} The resulting matched transactions
  */
 async function go (billingAccountId, licenceId, financialYearEnding) {
   const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding)
@@ -30,6 +30,8 @@ async function go (billingAccountId, licenceId, financialYearEnding) {
  *
  * If a credit matches to a debit then its something that was dealt with in a previous supplementary bill run. We need
  * to know only about debits that have not been credited.
+ *
+ * @private
  */
 function _cleanse (transactions) {
   const credits = transactions.filter((transaction) => {

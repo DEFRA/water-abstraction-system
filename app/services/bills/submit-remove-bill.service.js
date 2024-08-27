@@ -12,7 +12,7 @@ const LegacyDeleteBillRequest = require('../../requests/legacy/delete-bill.reque
  * Orchestrates the removing of a bill from a bill run
  *
  * @param {string} billId - UUID of the bill to be removed
- * @param {Object} user - Instance of `UserModel` that represents the user making the request
+ * @param {object} user - Instance of `UserModel` that represents the user making the request
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */

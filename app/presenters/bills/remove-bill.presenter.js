@@ -19,7 +19,7 @@ const {
  *
  * @param {module:BillModel} bill - an instance of `BillModel` with associated billing data
  *
- * @returns {Object} - the prepared bill summary data to be passed to the confirm remove a bill page
+ * @returns {object} - the prepared bill summary data to be passed to the confirm remove a bill page
  */
 function go (bill) {
   const { id: billId, billingAccount, billLicences, billRun } = bill

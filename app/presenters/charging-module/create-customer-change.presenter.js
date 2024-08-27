@@ -44,15 +44,15 @@
  *
  * Anything set to null the Charging Module API will set to `null` in the record it sends to SSCL.
  *
- * @param {module:BillingAccountModel} billingAccount the billing account having its address changed
+ * @param {module:BillingAccountModel} billingAccount - the billing account having its address changed
  * (required)
- * @param {module:AddressModel} address the address it is being changed to (required)
- * @param {module:CompanyModel} company the agent company selected or created during the process (if the user made no
+ * @param {module:AddressModel} address - the address it is being changed to (required)
+ * @param {module:CompanyModel} company - the agent company selected or created during the process (if the user made no
  * change to the agent company this should be an unset instance)
- * @param {module:ContactModel} contact the contact created during the process (if the user did not create an FAO this
+ * @param {module:ContactModel} contact - the contact created during the process (if the user did not create an FAO this
  * should be an unset instance)
  *
- * @returns {Object} the request data needed in the format required by the Charging Module
+ * @returns {object} the request data needed in the format required by the Charging Module
  */
 function go (billingAccount, address, company, contact) {
   const { accountNumber: customerReference } = billingAccount
@@ -142,10 +142,12 @@ function _formattedAddress (address, contact) {
 /**
  * Truncates a string adding an ellipsis at the end to indicate that the string has been shortened
  *
- * @param {string} stringToTruncate The string to be truncated
- * @param {number} maximumLength The maximum length to the truncated string
+ * @param {string} stringToTruncate - The string to be truncated
+ * @param {number} maximumLength - The maximum length to the truncated string
  *
  * @returns {string} - The truncated string.
+ *
+ * @private
  */
 function _truncate (stringToTruncate, maximumLength) {
   // Don't truncate if the string is equal to or less than maximum length

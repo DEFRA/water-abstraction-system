@@ -18,7 +18,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @param {string} sessionData - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  *
- * @returns {Promise<Object>} The new return version and requirement data for a licence
+ * @returns {Promise<object>} The new return version and requirement data for a licence
  */
 async function go (sessionData, userId) {
   const returnVersionsExist = sessionData.licence.returnVersions.length > 0

@@ -31,10 +31,10 @@ const agreementDescriptions = {
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
  * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
  * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
- * @param {Object} auth - The auth object taken from `request.auth` containing user details
- * @param {Object} commonData - Licence data already formatted for the view's shared elements
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} commonData - Licence data already formatted for the view's shared elements
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
@@ -172,6 +172,25 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreement.code
 }
 
+/**
+ * The history helper $reason() will return either the reason saved against the return version record, the reason
+ * captured in the first mod log entry, or null.
+ *
+ * If its the reason saved against the return version we have to map it to its display version first.
+ *
+ * @private
+ */
+function _reason (returnVersion) {
+  const reason = returnVersion.$reason()
+  const mappedReason = returnRequirementReasons[reason]
+
+  if (mappedReason) {
+    return mappedReason
+  }
+
+  return reason ?? ''
+}
+
 function _returnVersions (returnVersions = [{}]) {
   return returnVersions.map((returnVersion) => {
     return {
@@ -180,7 +199,7 @@ function _returnVersions (returnVersions = [{}]) {
         link: `/system/return-requirements/${returnVersion.id}/view`
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
-      reason: returnVersion.reason ? returnRequirementReasons[returnVersion.reason] : '',
+      reason: _reason(returnVersion),
       startDate: formatLongDate(returnVersion.startDate),
       status: returnVersion.status
     }

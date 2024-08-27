@@ -1,6 +1,6 @@
 {
   "name": "water-abstraction-system",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "System for managing water abstraction licences, including alerts, returns and billing",
   "homepage": "https://github.com/DEFRA/water-abstraction-team",
   "main": "index.js",
@@ -67,6 +67,7 @@
     "@hapi/lab": "^25.1.3",
     "@stylistic/eslint-plugin-js": "^1.8.1",
     "eslint": "^8.57.0",
+    "eslint-plugin-jsdoc": "^50.2.2",
     "jsdoc": "~4.0.3",
     "mock-fs": "^5.2.0",
     "nock": "^13.3.2",

@@ -17,7 +17,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  * @param {string} regionId - The UUID of the region the bill run is to be created for
  * @param {string} ruleset - The ruleset that the bill run is to be created for, either `sroc` or `presroc`
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send (regionId, ruleset) {
   const region = await _getChargeRegionId(regionId)
@@ -29,6 +29,8 @@ async function send (regionId, ruleset) {
 
 /**
  * Gets the single-letter charge region code for the provided regionId UUID
+ *
+ * @private
  */
 async function _getChargeRegionId (regionId) {
   const result = await RegionModel.query()

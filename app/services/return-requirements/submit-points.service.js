@@ -22,10 +22,10 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the points page including the validation error details
  */
 async function go (sessionId, requirementIndex, payload, yar) {
@@ -62,6 +62,8 @@ async function go (sessionId, requirementIndex, payload, yar) {
  * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
  * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
  * for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!Array.isArray(payload.points)) {
