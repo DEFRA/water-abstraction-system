@@ -27,27 +27,28 @@ async function go (regionCode, licenceId) {
 
 function _query () {
   return `
-    SELECT nalc."ACIN_CODE"                                                     as code,
-           nalc."ACIN_SUBCODE"                                                  as subcode,
-           (
-             CASE nalc."PARAM1"
-               WHEN 'null' THEN NULL
-               ELSE nalc."PARAM1"
-               END
-             )                                                                  AS param1,
-           (
-             CASE nalc."PARAM2"
-               WHEN 'null' THEN NULL
-               ELSE nalc."PARAM2"
-               END
-             )                                                                  AS param2,
-           (CASE nalc."TEXT"
-              WHEN 'null' THEN NULL
-              ELSE nalc."TEXT"
-             END
-             )                                                                  AS notes,
-           (concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID"))            AS purpose_external_id,
-           (concat_ws(':', nalc."ID", nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS external_id
+    SELECT
+      nalc."ACIN_CODE" AS code,
+       nalc."ACIN_SUBCODE" AS subcode,
+       (
+         CASE nalc."PARAM1"
+           WHEN 'null' THEN NULL
+           ELSE nalc."PARAM1"
+           END
+         ) AS param1,
+       (
+         CASE nalc."PARAM2"
+           WHEN 'null' THEN NULL
+           ELSE nalc."PARAM2"
+           END
+         ) AS param2,
+       (CASE nalc."TEXT"
+          WHEN 'null' THEN NULL
+          ELSE nalc."TEXT"
+         END
+         ) AS notes,
+       (concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS purpose_external_id,
+       (concat_ws(':', nalc."ID", nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS external_id
     FROM "import"."NALD_LIC_CONDITIONS" nalc
            INNER JOIN "import"."NALD_ABS_LIC_PURPOSES" nalp ON
       concat_ws(':', nalp."FGAC_REGION_CODE", nalp."ID") = concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID")
@@ -58,7 +59,7 @@ function _query () {
     where nalp."FGAC_REGION_CODE" = ?
       and nalp."AABV_AABL_ID" = ?
       AND nalv."STATUS" <> 'DRAFT';
-  `
+    `
 }
 
 module.exports = {
