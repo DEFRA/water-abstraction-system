@@ -51,59 +51,60 @@ describe('Fetch Licence History service', () => {
       const result = await FetchLicenceHistoryService.go(licenceId)
 
       expect(result).to.equal({
-        entries: [
-          {
-            entryType: 'charge-version',
-            entryId: chargeVersion.id,
-            createdAt: chargeVersion.createdAt,
-            createdBy: null,
-            changeReason: null,
-            chargeVersionNote: {
-              id: chargeVersionNote.id,
-              note: 'This is a test note'
-            },
-            modLogs: [
-              {
-                id: chargeVersionModLog.id,
-                naldDate: chargeVersionModLog.naldDate,
-                note: chargeVersionModLog.note,
-                reasonDescription: chargeVersionModLog.reasonDescription,
-                userId: chargeVersionModLog.userId
-              }
-            ]
-          },
-          {
-            createdAt: licenceVersion.createdAt,
-            entryId: licenceVersion.id,
-            entryType: 'licence-version',
-            modLogs: [
-              {
-                id: licenceVersionModLog.id,
-                naldDate: licenceVersionModLog.naldDate,
-                note: licenceVersionModLog.note,
-                reasonDescription: licenceVersionModLog.reasonDescription,
-                userId: licenceVersionModLog.userId
-              }
-            ]
-          },
-          {
-            createdAt: returnVersion.createdAt,
-            entryId: returnVersion.id,
-            entryType: 'return-version',
-            modLogs: [
-              {
-                id: returnVersionModLog.id,
-                naldDate: returnVersionModLog.naldDate,
-                note: returnVersionModLog.note,
-                reasonDescription: returnVersionModLog.reasonDescription,
-                userId: returnVersionModLog.userId
-              }
-            ],
-            user: null
-          }
-        ],
+        entries: {
+          chargeVersions: [
+            {
+              id: chargeVersion.id,
+              createdAt: chargeVersion.createdAt,
+              createdBy: null,
+              changeReason: null,
+              chargeVersionNote: {
+                id: chargeVersionNote.id,
+                note: 'This is a test note'
+              },
+              modLogs: [
+                {
+                  id: chargeVersionModLog.id,
+                  naldDate: chargeVersionModLog.naldDate,
+                  note: chargeVersionModLog.note,
+                  reasonDescription: chargeVersionModLog.reasonDescription,
+                  userId: chargeVersionModLog.userId
+                }]
+            }
+          ],
+          licenceVersions: [
+            {
+              createdAt: licenceVersion.createdAt,
+              id: licenceVersion.id,
+              modLogs: [
+                {
+                  id: licenceVersionModLog.id,
+                  naldDate: licenceVersionModLog.naldDate,
+                  note: licenceVersionModLog.note,
+                  reasonDescription: licenceVersionModLog.reasonDescription,
+                  userId: licenceVersionModLog.userId
+                }
+              ]
+            }
+          ],
+          returnVersions: [
+            {
+              createdAt: returnVersion.createdAt,
+              id: returnVersion.id,
+              modLogs: [
+                {
+                  id: returnVersionModLog.id,
+                  naldDate: returnVersionModLog.naldDate,
+                  note: returnVersionModLog.note,
+                  reasonDescription: returnVersionModLog.reasonDescription,
+                  userId: returnVersionModLog.userId
+                }
+              ],
+              user: null
+            }
+          ]
+        },
         licence: {
-          createdAt: licence.createdAt,
           id: licenceId,
           licenceRef: licence.licenceRef
         }
