@@ -198,13 +198,7 @@ function _getCycleStartDate (isSummer) {
 function _isFinal (endDateString, isSummer) {
   const endDate = new Date(endDateString)
 
-  if ((isSummer && endDate < endOfSummerCycle) ||
-    (!isSummer && endDate < endOfWinterAndAllYearCycle)
-  ) {
-    return true
-  }
-
-  return false
+  return ((isSummer && endDate < endOfSummerCycle) || (!isSummer && endDate < endOfWinterAndAllYearCycle))
 }
 
 function _whereExistsClause (licenceReference, cycleStartDate) {
