@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
@@ -23,9 +23,10 @@ const ExistsService = require('../../../../app/services/bill-runs/setup/exists.s
 describe('Bill Runs Setup Exists service', () => {
   let currentFinancialEndYear
   let setupSession
+  let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    region = RegionHelper.select()
 
     const { endDate } = determineCurrentFinancialYear()
 
@@ -42,7 +43,7 @@ describe('Bill Runs Setup Exists service', () => {
         setupSession = await SessionHelper.add({
           data: {
             type: 'two_part_tariff',
-            region: '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+            region: region.id,
             year: '2022',
             season: 'summer'
           }
@@ -75,7 +76,7 @@ describe('Bill Runs Setup Exists service', () => {
             batchType: 'two_part_tariff',
             billRunNumber: 12345,
             createdAt: new Date('2022-05-01'),
-            region: { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'stormlands' },
+            region,
             scheme: 'alcs',
             status: 'sent',
             summer: true,
@@ -104,7 +105,7 @@ describe('Bill Runs Setup Exists service', () => {
         setupSession = await SessionHelper.add({
           data: {
             type: 'annual',
-            region: '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+            region,
             year: '2022',
             season: 'summer'
           }
@@ -137,7 +138,7 @@ describe('Bill Runs Setup Exists service', () => {
             batchType: 'annual',
             billRunNumber: 12345,
             createdAt: new Date('2023-05-01'),
-            region: { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'stormlands' },
+            region,
             scheme: 'sroc',
             status: 'sent',
             summer: false,
@@ -166,7 +167,7 @@ describe('Bill Runs Setup Exists service', () => {
         setupSession = await SessionHelper.add({
           data: {
             type: 'supplementary',
-            region: '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+            region: region.id,
             year: '2022',
             season: 'summer'
           }
@@ -199,7 +200,7 @@ describe('Bill Runs Setup Exists service', () => {
             batchType: 'supplementary',
             billRunNumber: 12345,
             createdAt: new Date('2023-05-01'),
-            region: { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'stormlands' },
+            region,
             scheme: 'sroc',
             status: 'ready',
             summer: false,
@@ -229,7 +230,7 @@ describe('Bill Runs Setup Exists service', () => {
               batchType: 'supplementary',
               billRunNumber: 12345,
               createdAt: new Date('2023-05-01'),
-              region: { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'stormlands' },
+              region,
               scheme: 'sroc',
               status: 'ready',
               summer: false,
@@ -240,7 +241,7 @@ describe('Bill Runs Setup Exists service', () => {
               batchType: 'supplementary',
               billRunNumber: 12345,
               createdAt: new Date('2023-05-01'),
-              region: { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'stormlands' },
+              region,
               scheme: 'presroc',
               status: 'ready',
               summer: false,
