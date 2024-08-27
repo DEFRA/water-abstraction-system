@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
@@ -25,11 +25,12 @@ describe('Bill Runs Setup Create service', () => {
 
   let existsResults
   let legacyCreateBillRunRequestStub
+  let region
   let session
   let startBillRunProcessServiceStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    region = RegionHelper.data[0]
 
     legacyCreateBillRunRequestStub = Sinon.stub(LegacyCreateBillRunRequest, 'send')
     startBillRunProcessServiceStub = Sinon.stub(StartBillRunProcessService, 'go')
@@ -42,7 +43,7 @@ describe('Bill Runs Setup Create service', () => {
   describe('when called and the bill runs have been triggered', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
-        data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'annual' }
+        data: { region: region.id, type: 'annual' }
       })
       // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
       // create service queries for the session. The hook elevates properties from `data` onto the session instance
@@ -64,7 +65,7 @@ describe('Bill Runs Setup Create service', () => {
   describe('when the user wishes to create an annual bill run', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
-        data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'annual' }
+        data: { region: region.id, type: 'annual' }
       })
       session.$afterFind()
 
@@ -76,7 +77,7 @@ describe('Bill Runs Setup Create service', () => {
 
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
       expect(startBillRunProcessServiceStub.calledWith(
-        '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+        region.id,
         'annual',
         'carol.shaw@atari.com',
         2024)
@@ -87,7 +88,7 @@ describe('Bill Runs Setup Create service', () => {
   describe('when the user wishes to create a supplementary bill run', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
-        data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'supplementary' }
+        data: { region: region.id, type: 'supplementary' }
       })
       session.$afterFind()
     })
@@ -102,7 +103,7 @@ describe('Bill Runs Setup Create service', () => {
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
         expect(startBillRunProcessServiceStub.calledWith(
-          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          region.id,
           'supplementary',
           'carol.shaw@atari.com',
           2024)
@@ -120,7 +121,7 @@ describe('Bill Runs Setup Create service', () => {
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
         expect(startBillRunProcessServiceStub.calledWith(
-          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          region.id,
           'supplementary',
           'carol.shaw@atari.com',
           2024)
@@ -147,7 +148,7 @@ describe('Bill Runs Setup Create service', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
           data: {
-            region: '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+            region: region.id,
             type: 'two_part_tariff',
             year: 2022,
             season: 'summer'
@@ -170,7 +171,7 @@ describe('Bill Runs Setup Create service', () => {
       beforeEach(async () => {
         session = await SessionHelper.add({
           data: {
-            region: '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+            region: region.id,
             type: 'two_part_tariff',
             year: 2023
           }
@@ -185,7 +186,7 @@ describe('Bill Runs Setup Create service', () => {
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
         expect(startBillRunProcessServiceStub.calledWith(
-          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          region.id,
           'two_part_tariff',
           'carol.shaw@atari.com',
           2023)

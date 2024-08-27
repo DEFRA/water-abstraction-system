@@ -9,16 +9,11 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
 
 describe('Fetch Billing Accounts service', () => {
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when the service is called with an array of charge version', () => {
     let expectedResult
     let billingAccounts
