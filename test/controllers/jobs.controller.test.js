@@ -13,6 +13,7 @@ const ExportService = require('../../app/services/jobs/export/export.service.js'
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
+const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -112,6 +113,62 @@ describe('Jobs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/return-logs/{cycle}', () => {
+    describe('when the requested cycle is summer', () => {
+      describe('POST', () => {
+        beforeEach(() => {
+          options = { method: 'POST', url: '/jobs/return-logs/summer' }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
+          })
+
+          it('returns a 204 response', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(204)
+          })
+        })
+      })
+    })
+
+    describe('when the requested cycle is all-year', () => {
+      describe('POST', () => {
+        beforeEach(() => {
+          options = { method: 'POST', url: '/jobs/return-logs/all-year' }
+        })
+
+        describe('when the request succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
+          })
+
+          it('returns a 204 response', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(204)
+          })
+        })
+      })
+    })
+
+    describe('when the requested cycel is unknown', () => {
+      describe('POST', () => {
+        beforeEach(() => {
+          options = { method: 'POST', url: '/jobs/return-logs/winter' }
+        })
+
+        it('returns a 404 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(404)
         })
       })
     })
