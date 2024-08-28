@@ -5,8 +5,9 @@
  * @module DetermineReturnLogYearsService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
 const { ref } = require('objection')
+
+const ReturnLogModel = require('../../../models/return-log.model.js')
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -17,7 +18,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  * billing. This is worked out based on the returns start date being after the SROC start date and if it has two part
  * tariff set to true. If they do, then flagForBilling is set to true.
  *
- * @param {string} returnLogId - The UUID for the charge version to fetch
+ * @param {string} returnLogId - The UUID for the return log to fetch
  *
  * @returns {object} - An object containing the related licence, return start and end date and if the licence
  * should be flagged for two-part tariff supplementary billing
