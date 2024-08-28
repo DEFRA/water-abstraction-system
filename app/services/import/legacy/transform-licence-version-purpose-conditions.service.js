@@ -7,7 +7,7 @@
 
 const FetchLicenceVersionPurposeConditionsService = require('./fetch-licence-version-purpose-conditions.service.js')
 const LicenceVersionPurposeConditionsPresenter = require('../../../presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
-// const LicenceVersionPurposeValidator = require('../../../validators/import/licence-version-purpose.validator.js')
+const LicenceVersionPurposeConditionValidator = require('../../../validators/import/licence-version-purpose-condition.validator.js')
 
 /**
  * Transforms all NALD licence version purpose data into an object that matches the WRLS structure
@@ -28,9 +28,12 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
       const matchingLicenceVersionPurposeConditions =
         _conditionsForLicenceVersionPurpose(licenceVersionPurpose, naldLicenceVersionPurposesConditions)
 
-      //  validate here -
-      licenceVersionPurpose.licenceVersionPurposeConditions
-        .push(LicenceVersionPurposeConditionsPresenter.go(matchingLicenceVersionPurposeConditions))
+      const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
+        .go(matchingLicenceVersionPurposeConditions)
+
+      LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
+
+      licenceVersionPurpose.licenceVersionPurposeConditions = transformedLicenceVersionPurposeConditions
     }
   }
 }

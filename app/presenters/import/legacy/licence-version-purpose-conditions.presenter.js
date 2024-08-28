@@ -17,7 +17,6 @@
 function go (licenceVersionPurposeConditions) {
   return licenceVersionPurposeConditions.map((condition) => {
     return {
-      code: condition.code,
       param1: condition.param1,
       param2: condition.param2,
       notes: condition.notes,

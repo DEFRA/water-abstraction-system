@@ -23,11 +23,11 @@ describe('Import Legacy Licence Version Purpose presenter', () => {
 
     expect(results).to.equal([
       {
-        code: 'GW',
-        param1: null,
-        param2: null,
+        externalId: '172640:6:10000004',
+        licenceVersionPurposeConditionTypeId: 'b10cc9d1-d46f-465d-a74a-26b2e567c699',
         notes: 'At each abstraction borehole',
-        externalId: '172640:6:10000004'
+        param1: null,
+        param2: null
       }
     ])
   })
@@ -37,10 +37,11 @@ function _legacyLicenceVersionPurposeConditions () {
   return [
     {
       code: 'GW',
-      param1: null,
-      param2: null,
+      external_id: '172640:6:10000004',
+      licence_version_purpose_condition_type_id: 'b10cc9d1-d46f-465d-a74a-26b2e567c699',
       notes: 'At each abstraction borehole',
-      external_id: '172640:6:10000004'
+      param1: null,
+      param2: null
     }
   ]
 }

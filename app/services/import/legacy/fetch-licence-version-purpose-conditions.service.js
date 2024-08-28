@@ -81,5 +81,6 @@ module.exports = {
  * @property {string} purpose_external_id - A concatenated string representing the purpose external ID,
  * combining "FGAC_REGION_CODE" and "AABP_ID". This is used to match with a licence version purpose
  * @property {string} external_id - A concatenated string representing the external ID, combining "ID",
+ * @property {string} licence_version_purpose_condition_type_id - the condition type id from the reference data
  * "FGAC_REGION_CODE", and "AABP_ID".
  */
