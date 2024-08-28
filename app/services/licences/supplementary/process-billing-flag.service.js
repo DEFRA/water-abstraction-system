@@ -9,6 +9,7 @@ const CreateLicenceSupplementaryYearService = require('./create-licence-suppleme
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineChargeVersionYearsService = require('./determine-charge-version-years.service.js')
+const DetermineReturnLogYearsService = require('./determine-return-log-years.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
@@ -39,6 +40,8 @@ async function go (payload) {
 
     if (payload.chargeVersionId) {
       result = await DetermineChargeVersionYearsService.go(payload.chargeVersionId)
+    } else if (payload.returnId) {
+      result = await DetermineReturnLogYearsService.go(payload.returnId)
     } else {
       return
     }
