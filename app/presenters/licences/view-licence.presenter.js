@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for common licence data `/licences/{id}` page's
+ * Formats data for common licence data `/licences/{id}` pages
  * @module ViewLicencePresenter
  */
 
@@ -11,6 +11,7 @@ const { formatLongDate } = require('../base.presenter.js')
  * Formats data for common licence data `/licences/{id}` page's
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
  */
