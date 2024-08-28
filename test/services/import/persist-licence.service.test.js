@@ -16,11 +16,13 @@ const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.help
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 
 // Thing under test
 const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
 
-describe('Persist licence service', () => {
+describe.only('Persist licence service', () => {
+  let licenceVersionPurposeConditionType
   let primaryPurpose
   let purpose
   let region
@@ -28,6 +30,7 @@ describe('Persist licence service', () => {
   let transformedLicence
 
   beforeEach(async () => {
+    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
     primaryPurpose = PrimaryPurposeHelper.select()
     purpose = PurposeHelper.select()
     region = RegionHelper.select()
@@ -219,7 +222,8 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
             purposeId,
             secondaryPurposeId,
             timeLimitedEndDate: null,
-            timeLimitedStartDate: null
+            timeLimitedStartDate: null,
+            licenceVersionPurposeConditions: []
           }
         ]
       }
