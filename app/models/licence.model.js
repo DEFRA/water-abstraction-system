@@ -134,17 +134,19 @@ class LicenceModel extends BaseModel {
   /**
    * Modifiers allow us to reuse logic in queries, eg. select the licence and everything to get the licence holder:
    *
+   * ```javascript
    * return LicenceModel.query()
    *   .findById(licenceId)
    *   .modify('licenceHolder')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
    */
   static get modifiers () {
     return {
-      /**
-       * currentVersion modifier fetches only the current licence version record for this licence
-       */
+      // currentVersion modifier fetches only the current licence version record for this licence
       currentVersion (query) {
         query
           .withGraphFetched('licenceVersions')
@@ -160,9 +162,7 @@ class LicenceModel extends BaseModel {
               .limit(1)
           })
       },
-      /**
-       * licenceHolder modifier fetches all the joined records needed to identify the licence holder
-       */
+      // licenceHolder modifier fetches all the joined records needed to identify the licence holder
       licenceHolder (query) {
         query
           .withGraphFetched('licenceDocument')
