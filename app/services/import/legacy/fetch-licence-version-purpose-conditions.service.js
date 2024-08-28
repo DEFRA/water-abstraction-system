@@ -30,6 +30,7 @@ function _query () {
     SELECT
       NALC."ACIN_CODE" AS CODE,
       NALC."ACIN_SUBCODE" AS SUBCODE,
+      LVPCT.id as licence_version_purpose_condition_type_id,
       (
         CASE NALC."PARAM1"
         WHEN 'null' THEN NULL
@@ -56,6 +57,9 @@ function _query () {
       INNER JOIN "import"."NALD_ABS_LIC_VERSIONS" NALV ON
         CONCAT_WS(':', NALV."FGAC_REGION_CODE", NALV."AABL_ID", NALV."ISSUE_NO", NALV."INCR_NO") =
         CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."AABV_AABL_ID", NALP."AABV_ISSUE_NO", NALP."AABV_INCR_NO")
+      LEFT JOIN public.licence_version_purpose_condition_types LVPCT
+        ON NALC."ACIN_CODE" = LVPCT.code
+        AND NALC."ACIN_SUBCODE" = LVPCT.subcode
     WHERE NALP."FGAC_REGION_CODE" = ?
       AND NALP."AABV_AABL_ID" = ?
       AND NALV."STATUS" <> 'DRAFT';

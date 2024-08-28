@@ -21,7 +21,8 @@ function go (licenceVersionPurposeConditions) {
       param1: condition.param1,
       param2: condition.param2,
       notes: condition.notes,
-      externalId: condition.external_id
+      externalId: condition.external_id,
+      licenceVersionPurposeConditionTypeId: condition.licence_version_purpose_condition_type_id
     }
   })
 }
