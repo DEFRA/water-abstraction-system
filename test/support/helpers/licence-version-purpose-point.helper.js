@@ -1,31 +1,32 @@
 'use strict'
 
 /**
- * @module ReturnRequirementPointHelper
+ * @module LicenceVersionPurposePointHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
-const ReturnRequirementPointModel = require('../../../app/models/return-requirement-point.model.js')
+const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
+const { generateNaldPointId, generateNationalGridReference } = require('./return-requirement-point.helper.js')
 
 /**
- * Add a new return requirement point
+ * Add a new licence version purpose point
  *
  * If no `data` is provided, default values will be used. These are
  *
  * - `externalId` - [randomly generated - 9:99999:100414]
+ * - `licenceVersionPurposeId` - [random UUID]
  * - `naldPointId` - [randomly generated - 100414]
  * - `ngr1` - [randomly generated - TL 5143 7153]
- * - `returnRequirementId` - [random UUID]
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:ReturnRequirementPointModel>} The instance of the newly created record
+ * @returns {Promise<module:LicenceVersionPurposePointModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return ReturnRequirementPointModel.query()
+  return LicenceVersionPurposePointModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -47,9 +48,9 @@ function defaults (data = {}) {
   const defaults = {
     description: 'Point description',
     externalId: `9:${randomInteger(100, 99999)}:${naldPointId}`,
+    licenceVersionPurposeId: generateUUID(),
     naldPointId,
-    ngr1,
-    returnRequirementId: generateUUID()
+    ngr1
   }
 
   return {
@@ -58,21 +59,7 @@ function defaults (data = {}) {
   }
 }
 
-function generateNationalGridReference () {
-  // NOTE: These are taken from https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid and are the 100KM
-  // square references that cover the majority of the UK (sorry far North!)
-  const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
-
-  return `${codes[randomInteger(0, 16)]} ${randomInteger(100, 999)} ${randomInteger(100, 999)}`
-}
-
-function generateNaldPointId () {
-  return randomInteger(1, 9999)
-}
-
 module.exports = {
   add,
-  defaults,
-  generateNationalGridReference,
-  generateNaldPointId
+  defaults
 }
