@@ -152,6 +152,12 @@ async function submitYear (request, h) {
     })
   }
 
+  // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
+  // is not currently possible
+  if (pageData.goBackToBillRuns) {
+    return h.redirect('/system/bill-runs')
+  }
+
   if (pageData.setupComplete) {
     return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }

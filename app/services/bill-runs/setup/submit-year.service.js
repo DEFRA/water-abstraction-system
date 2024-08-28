@@ -37,10 +37,16 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
+    // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
+    // is not currently possible
+    if (session.type === 'two_part_supplementary') {
+      return { goBackToBillRuns: true }
+    }
+
     return { setupComplete: ['2024', '2023'].includes(session.year) }
   }
 
-  const formattedData = YearPresenter.go(session)
+  const formattedData = await YearPresenter.go(session)
 
   return {
     error: validationResult,
