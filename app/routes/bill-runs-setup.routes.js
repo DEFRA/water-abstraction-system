@@ -17,6 +17,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/no-licences',
+    options: {
+      handler: BillRunsSetupController.noLicences,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/setup/{sessionId}/region',
     options: {
       handler: BillRunsSetupController.region,
