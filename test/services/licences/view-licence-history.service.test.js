@@ -103,10 +103,9 @@ function _testFetchLicenceHistory () {
     userId: 'TEST_NALD_OWNER'
   })
 
-  const chargeVersion = ChargeVersionModel.fromJson({
+  const chargeVersions = ChargeVersionModel.fromJson({
     createdAt: new Date('2023-07-05'),
     createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
-    entryType: 'charge-version',
     id: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
     reason: 'new-licence',
     status: 'current',
@@ -117,19 +116,17 @@ function _testFetchLicenceHistory () {
     noteId: '27ac6412-5f73-4e35-8885-236bfea92a1c'
   })
 
-  const licenceVersion = LicenceVersionModel.fromJson({
+  const licenceVersions = LicenceVersionModel.fromJson({
     createdAt: new Date('2022-06-05'),
     id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
-    entryType: 'licence-version',
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2022-04-01'),
     modLogs: []
   })
 
-  const returnVersion = ReturnVersionModel.fromJson({
+  const returnVersions = ReturnVersionModel.fromJson({
     createdAt: new Date('2021-04-05'),
-    entryType: 'return-version',
     id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
     notes: 'Test note',
@@ -141,9 +138,9 @@ function _testFetchLicenceHistory () {
 
   const history = {
     entries: {
-      chargeVersion,
-      licenceVersion,
-      returnVersion
+      chargeVersions,
+      licenceVersions,
+      returnVersions
     },
     licence: testLicence
   }
