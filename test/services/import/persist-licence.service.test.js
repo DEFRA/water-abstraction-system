@@ -21,7 +21,7 @@ const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/
 // Thing under test
 const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
 
-describe.only('Persist licence service', () => {
+describe('Persist licence service', () => {
   let licenceVersionPurposeConditionType
   let primaryPurpose
   let purpose
@@ -36,7 +36,8 @@ describe.only('Persist licence service', () => {
     region = RegionHelper.select()
     secondaryPurpose = SecondaryPurposeHelper.select()
 
-    transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id)
+    transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
+      licenceVersionPurposeConditionType.id)
   })
 
   describe('when given a valid transformed licence', () => {
@@ -60,6 +61,13 @@ describe.only('Persist licence service', () => {
         expect(newLicenceVersionPurpose.externalId).to.equal(
           transformedLicence.licenceVersions[0].licenceVersionPurposes[0].externalId
         )
+
+        // Licence version purpose conditions
+        const newLicenceVersionPurposeCondition = newLicence.licenceVersions[0]
+          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+
+        expect(newLicenceVersionPurposeCondition.externalId).to.equal(
+          transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0].externalId)
       })
     })
 
@@ -152,6 +160,8 @@ describe.only('Persist licence service', () => {
         expect(updatedLicVerPur.secondaryPurposeId).to.equal(transformedLicVerPur.secondaryPurposeId)
         expect(updatedLicVerPur.timeLimitedEndDate).to.equal(transformedLicVerPur.timeLimitedEndDate)
         expect(updatedLicVerPur.timeLimitedStartDate).to.equal(transformedLicVerPur.timeLimitedStartDate)
+
+      //   Add test for update conditions
       })
     })
   })
@@ -179,11 +189,13 @@ async function _fetchPersistedLicence (licenceRef) {
     .where('licenceRef', licenceRef)
     .withGraphFetched('licenceVersions')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')
     .limit(1)
     .first()
 }
 
-function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPurposeId) {
+function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPurposeId,
+  licenceVersionPurposeConditionTypeId) {
   return {
     expiredDate: null,
     lapsedDate: null,
@@ -223,7 +235,16 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
             secondaryPurposeId,
             timeLimitedEndDate: null,
             timeLimitedStartDate: null,
-            licenceVersionPurposeConditions: []
+            licenceVersionPurposeConditions: [
+              {
+                externalId: '172640:6:10000004',
+                licenceVersionPurposeConditionTypeId,
+                notes: 'At each abstraction borehole',
+                param1: null,
+                param2: null,
+                source: 'nald'
+              }
+            ]
           }
         ]
       }

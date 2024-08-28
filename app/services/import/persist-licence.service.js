@@ -100,8 +100,6 @@ async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPur
   for (const licenceVersionPurpose of licenceVersionPurposes) {
     const licenceVersionPurposeConditions = licenceVersionPurpose.licenceVersionPurposeConditions
 
-    delete licenceVersionPurpose.licenceVersionPurposeConditions
-
     const { id } = await _persistLicenceVersionPurpose(
       trx, updatedAt, licenceVersionPurpose, licenceVersionId)
 
