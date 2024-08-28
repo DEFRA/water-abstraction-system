@@ -12,8 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<module:LicenceModel>} the licence and
- * related charge, licence and return versions
+ * @returns {Promise<module:LicenceModel>} the licence and related charge, licence and return versions
  */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
