@@ -8,6 +8,10 @@
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
+const chargeVersion = 'charge-version'
+const licenceVersion = 'licence-version'
+const returnVersion = 'return-version'
+
 /**
  * Formats data for the `/licences/{id}/history` view licence history page
  *
@@ -36,9 +40,9 @@ function _createdBy (entry) {
 }
 
 function _entries (entries, licenceId) {
-  const chargeVersions = _mapEntries(entries.chargeVersions, 'charge-version', licenceId)
-  const licenceVersions = _mapEntries(entries.licenceVersions, 'licence-version', licenceId)
-  const returnVersions = _mapEntries(entries.returnVersions, 'return-version', licenceId)
+  const chargeVersions = _mapEntries(entries.chargeVersions, chargeVersion, licenceId)
+  const licenceVersions = _mapEntries(entries.licenceVersions, licenceVersion, licenceId)
+  const returnVersions = _mapEntries(entries.returnVersions, returnVersion, licenceId)
 
   const joinedEntries = [...chargeVersions, ...licenceVersions, ...returnVersions]
 
@@ -46,11 +50,11 @@ function _entries (entries, licenceId) {
 }
 
 function _link (entryType, entryId, licenceId) {
-  if (entryType === 'charge-version') {
+  if (entryType === chargeVersion) {
     return `/licences/${licenceId}/charge-information/${entryId}/view`
   }
 
-  if (entryType === 'return-version') {
+  if (entryType === returnVersion) {
     return `/system/return-requirements/${entryId}/view`
   }
 
@@ -124,11 +128,11 @@ function _sortEntries (entries) {
 }
 
 function _type (entryType) {
-  if (entryType === 'charge-version') {
+  if (entryType === chargeVersion) {
     return { index: 1, name: 'Charge version' }
   }
 
-  if (entryType === 'return-version') {
+  if (entryType === returnVersion) {
     return { index: 2, name: 'Return version' }
   }
 
