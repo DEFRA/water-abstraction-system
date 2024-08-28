@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -16,13 +16,18 @@ const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 
 describe('Licence Document Header model', () => {
+  let testLicence
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceDocumentHeaderHelper.add()
-    })
+  before(async () => {
+    testLicence = await LicenceHelper.add()
 
+    testRecord = await LicenceDocumentHeaderHelper.add({
+      licenceRef: testLicence.licenceRef
+    })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceDocumentHeaderModel.query().findById(testRecord.id)
 
@@ -33,16 +38,6 @@ describe('Licence Document Header model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { licenceRef } = testLicence
-
-        testRecord = await LicenceDocumentHeaderHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceDocumentHeaderModel.query()
           .innerJoinRelated('licence')

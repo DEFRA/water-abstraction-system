@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -16,13 +16,24 @@ const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.
 const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
 
 describe('Licence Entity Role model', () => {
+  let testCompanyEntity
+  let testLicenceEntity
   let testRecord
+  let testRegimeEntity
+
+  before(async () => {
+    testCompanyEntity = await LicenceEntityHelper.add({ type: 'company' })
+    testLicenceEntity = await LicenceEntityHelper.add()
+    testRegimeEntity = await LicenceEntityHelper.add({ type: 'regime' })
+
+    testRecord = await LicenceEntityRoleHelper.add({
+      companyEntityId: testCompanyEntity.id,
+      licenceEntityId: testLicenceEntity.id,
+      regimeEntityId: testRegimeEntity.id
+    })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceEntityRoleHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await LicenceEntityRoleModel.query().findById(testRecord.id)
 
@@ -33,16 +44,6 @@ describe('Licence Entity Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to company entity', () => {
-      let testCompanyEntity
-
-      beforeEach(async () => {
-        testCompanyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-        const { id: companyEntityId } = testCompanyEntity
-
-        testRecord = await LicenceEntityRoleHelper.add({ companyEntityId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceEntityRoleModel.query()
           .innerJoinRelated('companyEntity')
@@ -64,16 +65,6 @@ describe('Licence Entity Role model', () => {
     })
 
     describe('when linking to licence entity', () => {
-      let testLicenceEntity
-
-      beforeEach(async () => {
-        testLicenceEntity = await LicenceEntityHelper.add()
-
-        const { id: licenceEntityId } = testLicenceEntity
-
-        testRecord = await LicenceEntityRoleHelper.add({ licenceEntityId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceEntityRoleModel.query()
           .innerJoinRelated('licenceEntity')
@@ -95,16 +86,6 @@ describe('Licence Entity Role model', () => {
     })
 
     describe('when linking to regime entity', () => {
-      let testRegimeEntity
-
-      beforeEach(async () => {
-        testRegimeEntity = await LicenceEntityHelper.add({ type: 'regime' })
-
-        const { id: regimeEntityId } = testRegimeEntity
-
-        testRecord = await LicenceEntityRoleHelper.add({ regimeEntityId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceEntityRoleModel.query()
           .innerJoinRelated('regimeEntity')
