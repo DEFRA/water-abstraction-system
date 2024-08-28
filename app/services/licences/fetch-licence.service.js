@@ -47,12 +47,6 @@ async function _fetchLicence (id) {
       'revokedDate',
       'lapsedDate'
     ])
-    .withGraphFetched('licenceDocumentHeader')
-    .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'licenceDocumentHeaders.id'
-      ])
-    })
     .modify('registeredToAndLicenceName')
     .withGraphFetched('workflows')
     .modifyGraph('workflows', (builder) => {
