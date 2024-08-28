@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = YearPresenter.go(session)
+  const formattedData = await YearPresenter.go(session)
 
   return {
     ...formattedData
