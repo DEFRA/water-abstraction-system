@@ -73,7 +73,6 @@ describe('Fetch Licence History service', () => {
               }
             ]
           }
-
         ],
         licenceVersions: [
           {
@@ -94,6 +93,9 @@ describe('Fetch Licence History service', () => {
           {
             createdAt: returnVersion.createdAt,
             id: returnVersion.id,
+            notes: null,
+            createdBy: null,
+            reason: 'new-licence',
             modLogs: [
               {
                 id: returnVersionModLog.id,
