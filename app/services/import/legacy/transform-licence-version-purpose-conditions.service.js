@@ -28,12 +28,14 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
       const matchingLicenceVersionPurposeConditions =
         _conditionsForLicenceVersionPurpose(licenceVersionPurpose, naldLicenceVersionPurposesConditions)
 
-      const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
-        .go(matchingLicenceVersionPurposeConditions)
+      if (matchingLicenceVersionPurposeConditions.length > 0) {
+        const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
+          .go(matchingLicenceVersionPurposeConditions)
 
-      LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
+        LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
 
-      licenceVersionPurpose.licenceVersionPurposeConditions = transformedLicenceVersionPurposeConditions
+        licenceVersionPurpose.licenceVersionPurposeConditions = transformedLicenceVersionPurposeConditions
+      }
     }
   }
 }
