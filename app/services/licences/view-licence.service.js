@@ -13,14 +13,16 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
+ *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go (licenceId, auth) {
-  const licenceData = await FetchLicenceService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
 
-  const pageData = ViewLicencePresenter.go(licenceData, auth)
+  const pageData = ViewLicencePresenter.go(licence, auth)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
