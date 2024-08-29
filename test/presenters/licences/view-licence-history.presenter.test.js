@@ -36,9 +36,9 @@ describe('View Licence History presenter', () => {
         pageTitle: 'History for 01/123',
         entries: [
           {
-            createdAt: new Date('2023-04-03T00:00:00.000Z'),
+            createdAt: new Date('2023-07-05T00:00:00.000Z'),
             createdBy: 'cristiano.ronaldo@atari.com',
-            dateCreated: '3 April 2023',
+            dateCreated: '5 July 2023',
             displayNote: true,
             notes: ['Charge version test note'],
             link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
@@ -69,65 +69,49 @@ describe('View Licence History presenter', () => {
       })
     })
 
-    describe('the "createdAt" property', () => {
-      describe('when the entries "modLogs" is empty', () => {
-        beforeEach(() => {
-          licence.chargeVersions[0].modLogs = []
-        })
-
-        it('returns the entries return version "createdAt"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
-
-          expect(result.entries[0].createdAt).to.equal(licence.chargeVersions[0].createdAt)
-        })
-      })
-
-      describe('when the entries "modLogs" property contains a "createdAt" property', () => {
-        it('returns the entries "modLog" property "createdAt" property', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
-
-          expect(result.entries[0].dateCreated).to.equal('3 April 2023')
-        })
-      })
-    })
-
     describe('the "createdBy" property', () => {
-      describe('when the entries "createdBy" is null and the entries "modLog.userId" property is null', () => {
-        beforeEach(() => {
-          licence.chargeVersions[0].createdBy = null
-          licence.chargeVersions[0].modLogs[0].userId = null
-        })
-
-        it('returns the "Migrated from NALD"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
-
-          expect(result.entries[0].createdBy).to.equal('Migrated from NALD')
-        })
-      })
-
-      describe('when the entries "createdBy" is null but the entries "modLog.userId" property is populated', () => {
-        beforeEach(() => {
-          licence.chargeVersions[0].createdBy = null
-        })
-
-        it('returns the "modLog.createdBy"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
-
-          expect(result.entries[0].createdBy).to.equal('TEST_NALD_OWNER')
-        })
-      })
-
-      describe('when the entries "createdBy" and the entries "modLog.userId" properties are populated', () => {
-        it('returns the entries "createdBy"', () => {
+      describe('when the entry has a "createdBy"', () => {
+        it("returns the entry's `createdBy`", () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
           expect(result.entries[0].createdBy).to.equal('cristiano.ronaldo@atari.com')
         })
       })
+
+      describe('when the entry does not have a "createdBy"', () => {
+        it('returns "Migrated from NALD"', () => {
+          const result = ViewLicenceHistoryPresenter.go(licence)
+
+          expect(result.entries[1].createdBy).to.equal('Migrated from NALD')
+        })
+      })
+    })
+
+    describe('the "displayNote" property', () => {
+      describe('when the entry has a note', () => {
+        it('return true', () => {
+          const result = ViewLicenceHistoryPresenter.go(licence)
+
+          expect(result.entries[0].displayNote).to.be.true()
+        })
+      })
+
+      describe('when the entry does not have a note', () => {
+        beforeEach(() => {
+          licence.chargeVersions[0].noteId = null
+          licence.chargeVersions[0].chargeVersionNote = null
+        })
+
+        it('returns false', () => {
+          const result = ViewLicenceHistoryPresenter.go(licence)
+
+          expect(result.entries[0].displayNote).to.be.false()
+        })
+      })
     })
 
     describe('the "link" property', () => {
-      describe('when the "entryType" is "charge-version"', () => {
+      describe('when the entry is a "charge-version"', () => {
         it('returns the charge version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
@@ -135,11 +119,15 @@ describe('View Licence History presenter', () => {
         })
       })
 
-      describe('when the "entryType" is "return-version"', () => {
-        beforeEach(() => {
-          licence.returnVersions[0].entryType = 'return-version'
-        })
+      describe('when the entry is a "licence-version"', () => {
+        it('returns null', () => {
+          const result = ViewLicenceHistoryPresenter.go(licence)
 
+          expect(result.entries[1].link).to.be.null()
+        })
+      })
+
+      describe('when the entry is a "return-version"', () => {
         it('returns the return version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
@@ -148,160 +136,35 @@ describe('View Licence History presenter', () => {
       })
     })
 
-    describe('the "notes" property', () => {
-      describe('when the entry is a charge version', () => {
-        describe('and the entry has a charge version note linked and "modLog.note" properties populated', () => {
-          it('returns only the charge version note', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[0].notes).to.equal(['Charge version test note'])
-          })
-        })
-
-        describe('when only the "modLog.note" property is populated', () => {
-          beforeEach(() => {
-            licence.chargeVersions[0].chargeVersionNote = null
-          })
-
-          it('returns an array of the "modLog.note"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[0].notes).to.equal(['modLog test note!'])
-          })
-        })
-      })
-
-      describe('when the entry is a licence version', () => {
-        describe('and has the "modLog.notes" populated', () => {
-          beforeEach(() => {
-            licence.licenceVersions[0].modLogs = [ModLogModel.fromJson({
-              note: 'Licence version test note!'
-            })]
-          })
-
-          it('returns an array of the "modLog.note"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[1].notes).to.equal(['Licence version test note!'])
-          })
-        })
-      })
-
-      describe('when the entry is a return version', () => {
-        describe('and the entry has both the "notes" and "modLog.notes" property populated', () => {
-          beforeEach(() => {
-            licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
-              note: 'Return version test note!'
-            })]
-          })
-
-          it('returns an array of both the "notes" and "modLog.notes"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[2].notes).to.equal(['Return version test note!', 'Test note'])
-          })
-        })
-
-        describe('and the entry only has the "notes" property populated', () => {
-          it('returns an array of both the "notes" and "modLog.notes"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[2].notes).to.equal(['Test note'])
-          })
-        })
-      })
-
-      describe('and the entry only has the "modLog.notes" property populated', () => {
-        beforeEach(() => {
-          licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
-            note: 'Return version test note!'
-          })]
-
-          licence.returnVersions[0].notes = null
-        })
-
-        it('returns an array of both the "notes" and "modLog.notes"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
-
-          expect(result.entries[2].notes).to.equal(['Return version test note!'])
-        })
-      })
-    })
-
     describe('the "reason" property', () => {
-      describe('when the entry is a charge version', () => {
-        describe('and the entry has a change reason linked and the "modLog.reasonDescription" is populated', () => {
-          it('returns the linked change reason description', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[0].reason).to.equal('Major change')
-          })
-        })
-
-        describe('and only the "modLog.reasonDescription" is populated', () => {
-          beforeEach(() => {
-            licence.chargeVersions[0].changeReason = null
-          })
-
-          it('returns the "modLog.reasonDescription"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[0].reason).to.equal('This is a test!')
-          })
-        })
-      })
-
-      describe('when the entry is a licence version', () => {
-        describe('and the entry "modLog.reasonDescription" is populated', () => {
-          beforeEach(() => {
-            licence.licenceVersions[0].modLogs = [ModLogModel.fromJson({
-              reasonDescription: 'This is a test!'
-            })]
-          })
-
-          it('returns the "modLog.reasonDescription"', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
-
-            expect(result.entries[1].reason).to.equal('This is a test!')
-          })
-        })
-      })
-
       describe('when the entry is a return version', () => {
-        describe('and the entry has both the "reason" and "modLog.reasonDescription" populated', () => {
-          beforeEach(() => {
-            licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
-              reasonDescription: 'This is a test!'
-            })]
-          })
-
-          it('returns the entry "reason"', () => {
+        describe('and the reason maps to a WRLS reason', () => {
+          it('returns the WRLS reason', () => {
             const result = ViewLicenceHistoryPresenter.go(licence)
 
             expect(result.entries[2].reason).to.equal('New licence')
           })
         })
 
-        describe('and only the "modLog.reasonDescription" is populated', () => {
+        describe('and the reason does not map to a WRLS reason', () => {
           beforeEach(() => {
-            licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
-              reasonDescription: 'This is a test!'
-            })]
-
             licence.returnVersions[0].reason = null
+            licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
+              reasonDescription: 'This is a reason'
+            })]
           })
 
-          it('returns the "modLog.reasonDescription"', () => {
+          it("returns the entry's reason", () => {
             const result = ViewLicenceHistoryPresenter.go(licence)
 
-            expect(result.entries[2].reason).to.equal('This is a test!')
+            expect(result.entries[2].reason).to.equal('This is a reason')
           })
         })
       })
     })
 
     describe('the "type" property', () => {
-      describe('when the "entryType" is "charge-version"', () => {
+      describe('when the entry is "charge-version"', () => {
         it('returns the index 1 and name "Charge version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
@@ -309,7 +172,7 @@ describe('View Licence History presenter', () => {
         })
       })
 
-      describe('when the "entryType" is "return-version"', () => {
+      describe('when the entry is "return-version"', () => {
         it('returns the index 2 and name "Return version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
@@ -317,7 +180,7 @@ describe('View Licence History presenter', () => {
         })
       })
 
-      describe('when the "entryType" is "licence-version"', () => {
+      describe('when the entry is "licence-version"', () => {
         it('returns the index 0 and name "Licence version"', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
@@ -349,14 +212,6 @@ function _testLicence () {
     }
   })
 
-  const modLog = ModLogModel.fromJson({
-    id: 'c79c86b3-4b5a-464b-b321-585cd280c396',
-    naldDate: new Date('2023-04-03'),
-    note: 'modLog test note!',
-    reasonDescription: 'This is a test!',
-    userId: 'TEST_NALD_OWNER'
-  })
-
   const chargeVersions = ChargeVersionModel.fromJson({
     createdAt: new Date('2023-07-05'),
     createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
@@ -364,7 +219,7 @@ function _testLicence () {
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2020-04-01'),
-    modLogs: [modLog],
+    modLogs: [],
     chargeVersionNote,
     changeReason,
     noteId: '27ac6412-5f73-4e35-8885-236bfea92a1c'
