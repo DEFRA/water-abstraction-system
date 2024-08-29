@@ -31,11 +31,18 @@ async function _fetch (licenceId) {
       'startDate'
     ])
     .modify('currentVersion')
+    .modify('licenceHolder')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
         'id',
         'displayName'
+      ])
+    })
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'id'
       ])
     })
     .withGraphFetched('permitLicence')
@@ -93,8 +100,6 @@ async function _fetch (licenceId) {
         'label'
       ])
     })
-    .modify('licenceHolder')
-    .modify('registeredToAndLicenceName')
 }
 
 module.exports = {
