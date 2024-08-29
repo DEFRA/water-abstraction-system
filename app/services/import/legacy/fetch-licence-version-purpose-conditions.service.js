@@ -28,41 +28,45 @@ async function go (regionCode, licenceId) {
 function _query () {
   return `
     SELECT
-      NALC."ACIN_CODE" AS CODE,
-      NALC."ACIN_SUBCODE" AS SUBCODE,
-      LVPCT.id as licence_version_purpose_condition_type_id,
+      nalc."ACIN_CODE" AS code,
+      nalc."ACIN_SUBCODE" AS subcode,
+      lvpct.id as licence_version_purpose_condition_type_id,
       (
-        CASE NALC."PARAM1"
-        WHEN 'null' THEN NULL
-        ELSE NALC."PARAM1"
+        CASE nalc."PARAM1"
+          WHEN 'null' THEN NULL
+          ELSE nalc."PARAM1"
         END
-      ) AS PARAM1,
+      ) AS param_1,
       (
-        CASE NALC."PARAM2"
-        WHEN 'null' THEN NULL
-        ELSE NALC."PARAM2"
+        CASE nalc."PARAM2"
+          WHEN 'null' THEN NULL
+          ELSE nalc."PARAM2"
         END
-      ) AS PARAM2,
+      ) AS param_2,
       (
-        CASE NALC."TEXT"
-        WHEN 'null' THEN NULL
-        ELSE NALC."TEXT"
+        CASE nalc."TEXT"
+          WHEN 'null' THEN NULL
+          ELSE nalc."TEXT"
         END
-      ) AS NOTES,
-      (CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID"))            AS PURPOSE_EXTERNAL_ID,
-      (CONCAT_WS(':', NALC."ID", NALC."FGAC_REGION_CODE", NALC."AABP_ID")) AS EXTERNAL_ID
-    FROM "import"."NALD_LIC_CONDITIONS" NALC
-      INNER JOIN "import"."NALD_ABS_LIC_PURPOSES" NALP ON
-        CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."ID") = CONCAT_WS(':', NALC."FGAC_REGION_CODE", NALC."AABP_ID")
-      INNER JOIN "import"."NALD_ABS_LIC_VERSIONS" NALV ON
-        CONCAT_WS(':', NALV."FGAC_REGION_CODE", NALV."AABL_ID", NALV."ISSUE_NO", NALV."INCR_NO") =
-        CONCAT_WS(':', NALP."FGAC_REGION_CODE", NALP."AABV_AABL_ID", NALP."AABV_ISSUE_NO", NALP."AABV_INCR_NO")
-      LEFT JOIN public.licence_version_purpose_condition_types LVPCT
-        ON NALC."ACIN_CODE" = LVPCT.code
-        AND NALC."ACIN_SUBCODE" = LVPCT.subcode
-    WHERE NALP."FGAC_REGION_CODE" = ?
-      AND NALP."AABV_AABL_ID" = ?
-      AND NALV."STATUS" <> 'DRAFT';
+      ) AS notes,
+      (concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS purpose_external_id,
+      (concat_ws(':', nalc."ID", nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS external_id
+    FROM 
+      "import"."NALD_LIC_CONDITIONS" nalc
+    INNER JOIN
+      "import"."NALD_ABS_LIC_PURPOSES" nalp
+      ON concat_ws(':', nalp."FGAC_REGION_CODE", nalp."ID") = concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID")
+    INNER JOIN
+      "import"."NALD_ABS_LIC_VERSIONS" nalv
+      ON concat_ws(':', nalv."FGAC_REGION_CODE", nalv."AABL_ID", nalv."ISSUE_NO", nalv."INCR_NO") = concat_ws(':', nalp."FGAC_REGION_CODE", nalp."AABV_AABL_ID", nalp."AABV_ISSUE_NO", nalp."AABV_INCR_NO")
+    LEFT JOIN
+      public.licence_version_purpose_condition_types lvpct
+      ON nalc."ACIN_CODE" = LVPCT.code
+      AND nalc."ACIN_SUBCODE" = LVPCT.subcode
+    WHERE
+      nalp."FGAC_REGION_CODE" = ?
+      AND nalp."AABV_AABL_ID" = ?
+      AND nalv."STATUS" <> 'DRAFT';
 `
 }
 
