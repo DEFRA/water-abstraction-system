@@ -38,22 +38,22 @@ function _annualFinancialYearsData (selectedYear) {
   return [
     {
       text: '2023 to 2024',
-      value: '2024',
+      value: 2024,
       checked: selectedYear === '2024'
     },
     {
       text: '2022 to 2023',
-      value: '2023',
+      value: 2023,
       checked: selectedYear === '2023'
     },
     {
       text: '2021 to 2022',
-      value: '2022',
+      value: 2022,
       checked: selectedYear === '2022'
     },
     {
       text: '2020 to 2021',
-      value: '2021',
+      value: 2021,
       checked: selectedYear === '2021'
     }
   ]
@@ -68,7 +68,7 @@ async function _supplementaryFinancialYearsData (regionId, selectedYear) {
       supplementaryFinancialYearsData.push({
         text: `${tptSupplementaryYear.financialYearEnd - 1} to ${tptSupplementaryYear.financialYearEnd}`,
         value: tptSupplementaryYear.financialYearEnd,
-        checked: selectedYear === tptSupplementaryYear.financialYearEnd
+        checked: selectedYear === tptSupplementaryYear.financialYearEnd.toString()
       })
     })
   }
