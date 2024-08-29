@@ -71,7 +71,7 @@ module.exports = {
 }
 
 /**
- * @typedef {object} ImportLegacyLicenceVersionPurposeConditionsType
+ * @typedef {object} ImportLegacyLicenceVersionPurposeConditionType
  *
  * @property {string} code - The code associated with the condition, derived from "ACIN_CODE".
  * @property {string} subcode - The subcode associated with the condition, derived from "ACIN_SUBCODE".
