@@ -87,12 +87,13 @@ async function _fetchExternalIds (cycleStartDate) {
 }
 
 async function _fetchReturnRequirements (isSummer, licenceReference) {
+  const cycleEndDate = _getCycleEndDate(isSummer)
   const cycleStartDate = _getCycleStartDate(isSummer)
   const externalIds = await _fetchExternalIds(cycleStartDate)
 
   const results = await ReturnRequirementModel.query()
     .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(licenceReference, cycleStartDate))
+    .whereExists(_whereExistsClause(licenceReference, cycleStartDate, cycleEndDate))
     .where('returnRequirements.summer', isSummer)
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (builder) => {
@@ -117,6 +118,8 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
     .withGraphFetched('returnRequirementPoints')
     .withGraphFetched('returnRequirementPurposes')
 
+    console.log(results)
+
   return results
 }
 
@@ -126,8 +129,9 @@ function _formatDate (date) {
 
 async function _generateReturnLogPayload (isSummer, requirementsForReturns) {
   const returnLogs = requirementsForReturns.map(async (requirements) => {
-    const startDate = _getCycleStartDate(isSummer)
-    const endDate = _getCycleEndDate(isSummer, requirements.returnVersion)
+    const licenceStartDate = _getLicenceStartDate(isSummer, requirements.returnVersion)
+    const startDate = _getCycleStartDate(isSummer, requirements.returnVersion)
+    const endDate = _getLicenceEndDate(isSummer, requirements.returnVersion)
     const id = _createReturnLogId(requirements, startDate, endDate)
     const metadata = await _createMetaData(isSummer, endDate, requirements)
 
@@ -157,7 +161,7 @@ function _getCycleDueDate (isSummer) {
     : _formatDate(new Date(new Date().getFullYear() + 1, allYearDueDateMonth, allYearDueDateDay))
 }
 
-function _getCycleEndDate (isSummer, returnVersion) {
+function _getLicenceEndDate (isSummer, returnVersion) {
   const dates = [returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
     returnVersion.licence.revokedDate,
@@ -189,10 +193,21 @@ function _getCycleEndDate (isSummer, returnVersion) {
   return _formatDate(endOfWinterAndAllYearCycle)
 }
 
+function _getLicenceStartDate (isSummer, returnVersion) {
+  console.log(returnVersion)
+  return isSummer
+    ? _formatDate(new Date(new Date().getFullYear(), summerStartMonth, summerStartDay))
+    : _formatDate(new Date(new Date().getFullYear(), allYearStartMonth, allYearStartDay))
+}
+
 function _getCycleStartDate (isSummer) {
   return isSummer
     ? _formatDate(new Date(new Date().getFullYear(), summerStartMonth, summerStartDay))
     : _formatDate(new Date(new Date().getFullYear(), allYearStartMonth, allYearStartDay))
+}
+
+function _getCycleEndDate (isSummer) {
+  return isSummer ? _formatDate(endOfSummerCycle) : _formatDate(endOfWinterAndAllYearCycle)
 }
 
 function _isFinal (endDateString, isSummer) {
@@ -201,8 +216,9 @@ function _isFinal (endDateString, isSummer) {
   return ((isSummer && endDate < endOfSummerCycle) || (!isSummer && endDate < endOfWinterAndAllYearCycle))
 }
 
-function _whereExistsClause (licenceReference, cycleStartDate) {
+function _whereExistsClause (licenceReference, cycleStartDate, cycleEndDate) {
   const query = ReturnVersionModel.query().select(1)
+  console.log(cycleEndDate)
 
   query.select(1)
     .innerJoinRelated('licence')

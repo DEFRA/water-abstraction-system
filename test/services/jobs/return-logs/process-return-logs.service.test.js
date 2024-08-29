@@ -48,8 +48,8 @@ describe('Process return logs service', () => {
       global.GlobalNotifier = notifierStub
     })
 
-    it('can successfully save an return log in the database', async () => {
-      await ProcessReturnLogsService.go('all-year', licence.licenceRef)
+    it('can successfully save a return log in the database', async () => {
+      await ProcessReturnLogsService.go('summer', licence.licenceRef)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
 
