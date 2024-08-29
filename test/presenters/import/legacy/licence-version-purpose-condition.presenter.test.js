@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Thing under test
 const LicenceVersionPurposeConditionsPresenter =
-  require('../../../../app/presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
+  require('../../../../app/presenters/import/legacy/licence-version-purpose-condition.presenter.js')
 
 describe('Import Legacy Licence Version Purpose Conditions presenter', () => {
   let legacyLicenceVersionPurposeCondition

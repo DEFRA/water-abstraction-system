@@ -7,7 +7,7 @@
 
 const FetchLicenceVersionPurposeConditionsService = require('./fetch-licence-version-purpose-conditions.service.js')
 const LicenceVersionPurposeConditionValidator = require('../../../validators/import/licence-version-purpose-condition.validator.js')
-const LicenceVersionPurposeConditionPresenter = require('../../../presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
+const LicenceVersionPurposeConditionPresenter = require('../../../presenters/import/legacy/licence-version-purpose-condition.presenter.js')
 
 /**
  * Transforms all NALD licence version purpose conditions data into an object that matches the WRLS structure
