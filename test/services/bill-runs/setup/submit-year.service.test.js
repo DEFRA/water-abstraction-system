@@ -57,7 +57,7 @@ describe('Bill Runs Setup Submit Year service', () => {
         })
       })
 
-      describe('and the type is  two-part tariff supplementary', () => {
+      describe('and the type is two-part tariff supplementary', () => {
         beforeEach(async () => {
           payload = {
             year: '2023'
