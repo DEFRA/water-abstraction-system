@@ -115,7 +115,7 @@ async function _persistLicenceVersionPurposesConditions (
   }
 }
 
-async function _persistLicenceVersionPurposeConditions (
+async function _persistLicenceVersionPurposeCondition (
   trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
   const { ...propertiesToPersist } = licenceVersionPurposeConditions
 
