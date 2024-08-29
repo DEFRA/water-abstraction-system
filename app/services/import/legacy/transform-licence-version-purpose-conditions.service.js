@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Transforms all NALD licence version purpose conditions data into an object that matches the WRLS structure
+ * Transforms all NALD licence version purpose condition data into an object that matches the WRLS structure
  * @module ImportLegacyTransformLicenceVersionPurposeConditionsService
  */
 
 const FetchLicenceVersionPurposeConditionsService = require('./fetch-licence-version-purpose-conditions.service.js')
 const LicenceVersionPurposeConditionValidator = require('../../../validators/import/licence-version-purpose-condition.validator.js')
-const LicenceVersionPurposeConditionsPresenter = require('../../../presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
+const LicenceVersionPurposeConditionPresenter = require('../../../presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
 
 /**
  * Transforms all NALD licence version purpose conditions data into an object that matches the WRLS structure
@@ -20,37 +20,46 @@ const LicenceVersionPurposeConditionsPresenter = require('../../../presenters/im
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  */
 async function go (regionCode, naldLicenceId, transformedLicence) {
-  const naldLicenceVersionPurposesConditions = await
-  FetchLicenceVersionPurposeConditionsService.go(regionCode, naldLicenceId)
+  const naldLicenceVersionPurposeConditions = await FetchLicenceVersionPurposeConditionsService.go(
+    regionCode,
+    naldLicenceId
+  )
 
-  for (const naldLicenceVersionPurposesCondition of naldLicenceVersionPurposesConditions) {
-    const matchingLicenceVersion =
-      _matchingLicenceVersion(transformedLicence.licenceVersions, naldLicenceVersionPurposesCondition)
+  for (const naldLicenceVersionPurposeCondition of naldLicenceVersionPurposeConditions) {
+    const matchingLicenceVersionPurpose = _matchingLicenceVersionPurpose(
+      transformedLicence.licenceVersions, naldLicenceVersionPurposeCondition
+    )
 
-    const matchingLicenceVersionPurpose =
-      _matchingLicenceVersionPurpose(matchingLicenceVersion, naldLicenceVersionPurposesCondition)
+    const transformedLicenceVersionPurposeCondition = LicenceVersionPurposeConditionPresenter.go(
+      naldLicenceVersionPurposeCondition
+    )
 
-    const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
-      .go(naldLicenceVersionPurposesCondition)
+    LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeCondition)
 
-    LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
-
-    matchingLicenceVersionPurpose.licenceVersionPurposeConditions.push(transformedLicenceVersionPurposeConditions)
+    matchingLicenceVersionPurpose.licenceVersionPurposeConditions.push(transformedLicenceVersionPurposeCondition)
   }
 }
 
-function _matchingLicenceVersion (licenceVersions, naldLicenceVersionPurposesCondition) {
-  return licenceVersions.find((licenceVersion) => {
-    return licenceVersion.licenceVersionPurposes.some((purpose) => {
+function _matchingLicenceVersionPurpose (licenceVersions, naldLicenceVersionPurposesCondition) {
+  let matchedLicenceVersionPurpose
+
+  // Because the licence version purpose we need to match is against a licence version, we need to iterate through them
+  // till we find the one that contains our matching purpose.
+  for (const licenceVersion of licenceVersions) {
+    matchedLicenceVersionPurpose = licenceVersion.licenceVersionPurposes.find((purpose) => {
       return purpose.externalId === naldLicenceVersionPurposesCondition.purpose_external_id
     })
-  })
-}
 
-function _matchingLicenceVersionPurpose (licenceVersion, naldLicenceVersionPurposesCondition) {
-  return licenceVersion.licenceVersionPurposes.find((purpose) => {
-    return purpose.externalId === naldLicenceVersionPurposesCondition.purpose_external_id
-  })
+    // We have a match! Break the loop here
+    if (matchedLicenceVersionPurpose) {
+      break
+    }
+
+    // No match, so onto the next licence version
+    continue
+  }
+
+  return matchedLicenceVersionPurpose
 }
 
 module.exports = {
