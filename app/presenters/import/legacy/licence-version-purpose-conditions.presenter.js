@@ -6,7 +6,7 @@
  */
 
 /**
- * Maps the legacy NALD licence version purpose conditions data to the WRLS format
+ * Maps the legacy NALD licence version purpose condition data to the WRLS format
  *
  * @param {ImportLegacyLicenceVersionPurposeConditionsType} licenceVersionPurposeCondition - the legacy NALD
  * licence version purpose conditions
