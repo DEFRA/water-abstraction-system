@@ -30,7 +30,7 @@ const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/u
  * it passes control to the out-of-the-box solution.
  *
  * @param {object} opt - Object containing options used by
- *  {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers|knexsnakecasemappers()}
+ * {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers|knexsnakecasemappers()}
  *
  * @returns object containing Knex postProcessResponse() and wrapIdentifier() hooks
  */

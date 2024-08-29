@@ -18,146 +18,102 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 describe('View Licence service', () => {
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+  let auth
+  let licence
 
-  let fetchLicenceResult
+  beforeEach(() => {
+    auth = _auth()
+    licence = _licence()
+  })
 
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when a licence with a matching ID exists', () => {
-    describe('and it has no optional fields', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will return all the mandatory data and default values for use in the licence summary page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
-          ends: null,
-          includeInPresrocBilling: 'no',
-          licenceId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-          licenceName: 'Unregistered licence',
-          licenceRef: '01/130/R01',
-          notification: null,
-          pageTitle: 'Licence 01/130/R01',
-          registeredTo: null,
-          roles: null,
-          warning: null,
-          workflowWarning: true
-        })
-      })
+    beforeEach(() => {
+      Sinon.stub(FetchLicenceService, 'go').resolves(licence)
     })
 
-    describe('and it does not have an expired, lapsed, or revoke date', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
+    it('returns page data for the view', async () => {
+      const result = await ViewLicenceService.go(licence.id, auth)
 
-      it('will return the data and format it for use in the licence summary page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result.warning).to.equal(null)
-      })
-    })
-    describe('and it did "end" in the past', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-      })
-
-      describe('because it was revoked', () => {
-        beforeEach(() => {
-          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'revoked' }
-          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-        })
-
-        it('will include the revoked warning message for use in the view licence page', async () => {
-          const result = await ViewLicenceService.go(testId)
-
-          expect(result.warning).to.equal('This licence was revoked on 7 March 2023')
-        })
-      })
-
-      describe('because it was lapsed', () => {
-        beforeEach(() => {
-          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'lapsed' }
-          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-        })
-
-        it('will include the lapsed warning message for use in the view licence page', async () => {
-          const result = await ViewLicenceService.go(testId)
-
-          expect(result.warning).to.equal('This licence lapsed on 7 March 2023')
-        })
-      })
-
-      describe('because it was expired', () => {
-        beforeEach(() => {
-          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'expired' }
-          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-        })
-
-        it('will include the expired warning message for use in the view licence page', async () => {
-          const result = await ViewLicenceService.go(testId)
-
-          expect(result.warning).to.equal('This licence expired on 7 March 2023')
-        })
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+        licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+        licenceName: 'Between two ferns',
+        licenceRef: '01/123',
+        notification: null,
+        pageTitle: 'Licence 01/123',
+        primaryUser: {
+          id: 10036,
+          username: 'grace.hopper@example.co.uk'
+        },
+        roles: ['billing', 'view_charge_versions'],
+        warning: null,
+        workflowWarning: true
       })
     })
+  })
 
-    describe('and it did "ends" today', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        fetchLicenceResult.ends = { date: new Date(), priority: 1, reason: 'revoked' }
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will include a warning message for use in the view licence page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result.warning).to.startWith('This licence was revoked on')
-      })
-    })
-
-    describe('and it did "ends" in the future', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-
-        // Set the 'end' date to tomorrow
-        const today = new Date()
-        // 86400000 is one day in milliseconds
-        const tomorrow = new Date(today.getTime() + 86400000)
-
-        fetchLicenceResult.ends = { date: tomorrow, priority: 1, reason: 'revoked' }
-
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will include a warning message for use in the view licence page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result.warning).to.be.null()
-      })
+  describe('when a licence with a matching ID does not exist', () => {
+    it('throws an exception', async () => {
+      await expect(ViewLicenceService.go('a45341d0-82c7-4a00-975c-e978a6f776eb', auth))
+        .to
+        .reject()
     })
   })
 })
 
-function _testLicence () {
-  return LicenceModel.fromJson({
-    id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+function _auth () {
+  return {
+    credentials: {
+      roles: [
+        {
+          id: 'b62afe79-d599-4101-b374-729011711462',
+          role: 'billing',
+          description: 'Administer billing',
+          createdAt: new Date('2023-12-14'),
+          updatedAt: new Date('2024-08-19')
+        },
+        {
+          id: '02b09477-8c1e-4f9a-956c-ad18f9d4f222',
+          role: 'view_charge_versions',
+          description: 'View charge information',
+          createdAt: new Date('2023-12-14'),
+          updatedAt: new Date('2024-08-19')
+        }
+      ]
+    }
+  }
+}
+
+function _licence () {
+  const licence = LicenceModel.fromJson({
+    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    expiredDate: null,
+    lapsedDate: null,
     includeInPresrocBilling: 'no',
-    licenceRef: '01/130/R01',
-    ends: null,
-    licenceName: 'Unregistered licence',
-    registeredTo: null,
-    startDate: new Date('2013-03-07'),
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
-    workflows: [{ status: 'to_setup' }]
+    includeInSrocBilling: false,
+    licenceRef: '01/123',
+    revokedDate: null,
+    licenceDocumentHeader: {
+      id: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+      licenceName: 'Between two ferns',
+      licenceEntityRole: {
+        id: 'd7eecfc1-7afa-49f7-8bef-5dc477696a2d',
+        licenceEntity: {
+          id: 'ba7702cf-cd87-4419-a04c-8cea4e0cfdc2',
+          user: {
+            id: 10036,
+            username: 'grace.hopper@example.co.uk'
+          }
+        }
+      }
+    },
+    workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
+
+  return licence
 }

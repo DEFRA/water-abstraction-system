@@ -172,7 +172,7 @@ describe('Return Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'password', 'updatedAt'] })
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
       })
     })
   })
