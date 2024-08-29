@@ -16,15 +16,15 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data) {
-  const schema = Joi.array().items(
+  const schema =
     Joi.object({
       licenceVersionPurposeConditionTypeId: Joi.string().guid().required(),
       param1: Joi.string().allow(null).optional(),
       param2: Joi.string().allow(null).optional(),
       notes: Joi.string().allow(null).optional(),
       externalId: Joi.string().required()
-    })
-  )
+    }
+    )
 
   const result = schema.validate(data, { convert: false })
 

@@ -11,16 +11,16 @@ const { expect } = Code
 const LicenceVersionPurposeConditionsValidator = require('../../../app/validators/import/licence-version-purpose-condition.validator.js')
 
 describe('Import Licence Version Purpose Conditions validator', () => {
-  let transformedLicenceVersionPurposeConditions
+  let transformedLicenceVersionPurposeCondition
 
   beforeEach(async () => {
-    transformedLicenceVersionPurposeConditions = [_licenceVersionPurposeConditionsValidatorCondition()]
+    transformedLicenceVersionPurposeCondition = _licenceVersionPurposeConditionsValidatorCondition()
   })
 
   describe('when valid data is provided', () => {
     it('does not throw an error', () => {
       expect(() => {
-        LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
+        LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
       }).to.not.throw()
     })
   })
@@ -28,37 +28,37 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   describe('the "licenceVersionPurposeConditionTypeId" property', () => {
     describe('when it is not on the object', () => {
       beforeEach(() => {
-        delete transformedLicenceVersionPurposeConditions[0].licenceVersionPurposeConditionTypeId
+        delete transformedLicenceVersionPurposeCondition.licenceVersionPurposeConditionTypeId
       })
 
       it('throws an error', async () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].licenceVersionPurposeConditionTypeId" is required')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"licenceVersionPurposeConditionTypeId" is required')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].licenceVersionPurposeConditionTypeId = null
+        transformedLicenceVersionPurposeCondition.licenceVersionPurposeConditionTypeId = null
       })
 
       it('throws an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].licenceVersionPurposeConditionTypeId" must be a string')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"licenceVersionPurposeConditionTypeId" must be a string')
       })
     })
 
     describe('when it is not a guid', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].licenceVersionPurposeConditionTypeId = '123'
+        transformedLicenceVersionPurposeCondition.licenceVersionPurposeConditionTypeId = '123'
       })
 
       it('throws an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].licenceVersionPurposeConditionTypeId" must be a valid GUID')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"licenceVersionPurposeConditionTypeId" must be a valid GUID')
       })
     })
   })
@@ -66,24 +66,24 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   describe('the "param1" property', () => {
     describe('when it is a number', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].param1 = 1
+        transformedLicenceVersionPurposeCondition.param1 = 1
       })
 
       it('throws an error', async () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].param1" must be a string')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"param1" must be a string')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].param1 = null
+        transformedLicenceVersionPurposeCondition.param1 = null
       })
 
       it('does not throw an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
         }).to.not.throw()
       })
     })
@@ -92,24 +92,24 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   describe('the "param2" property', () => {
     describe('when it is a number', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].param2 = 1
+        transformedLicenceVersionPurposeCondition.param2 = 1
       })
 
       it('throws an error', async () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].param2" must be a string')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"param2" must be a string')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].param2 = null
+        transformedLicenceVersionPurposeCondition.param2 = null
       })
 
       it('does not throw an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
         }).to.not.throw()
       })
     })
@@ -118,24 +118,24 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   describe('the "notes" property', () => {
     describe('when it is a number', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].notes = 1
+        transformedLicenceVersionPurposeCondition.notes = 1
       })
 
       it('throws an error', async () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].notes" must be a string')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"notes" must be a string')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].notes = null
+        transformedLicenceVersionPurposeCondition.notes = null
       })
 
       it('does not throw an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
         }).to.not.throw()
       })
     })
@@ -144,25 +144,25 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   describe('the "externalId" property', () => {
     describe('when it is not on the object', () => {
       beforeEach(() => {
-        delete transformedLicenceVersionPurposeConditions[0].externalId
+        delete transformedLicenceVersionPurposeCondition.externalId
       })
 
       it('throws an error', async () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].externalId" is required')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"externalId" is required')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceVersionPurposeConditions[0].externalId = null
+        transformedLicenceVersionPurposeCondition.externalId = null
       })
 
       it('throws an error', () => {
         expect(() => {
-          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeConditions)
-        }).to.throw('"[0].externalId" must be a string')
+          LicenceVersionPurposeConditionsValidator.go(transformedLicenceVersionPurposeCondition)
+        }).to.throw('"externalId" must be a string')
       })
     })
   })

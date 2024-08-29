@@ -23,25 +23,34 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
   const naldLicenceVersionPurposesConditions = await
   FetchLicenceVersionPurposeConditionsService.go(regionCode, naldLicenceId)
 
-  for (const licenceVersion of transformedLicence.licenceVersions) {
-    for (const licenceVersionPurpose of licenceVersion.licenceVersionPurposes) {
-      const matchingLicenceVersionPurposeConditions =
-        _conditionsForLicenceVersionPurpose(licenceVersionPurpose, naldLicenceVersionPurposesConditions)
+  for (const naldLicenceVersionPurposesCondition of naldLicenceVersionPurposesConditions) {
+    const matchingLicenceVersion =
+      _matchingLicenceVersion(transformedLicence.licenceVersions, naldLicenceVersionPurposesCondition)
 
-      if (matchingLicenceVersionPurposeConditions.length > 0) {
-        const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
-          .go(matchingLicenceVersionPurposeConditions)
+    const matchingLicenceVersionPurpose =
+      _matchingLicenceVersionPurpose(matchingLicenceVersion, naldLicenceVersionPurposesCondition)
 
-        LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
+    const transformedLicenceVersionPurposeConditions = LicenceVersionPurposeConditionsPresenter
+      .go(naldLicenceVersionPurposesCondition)
 
-        licenceVersionPurpose.licenceVersionPurposeConditions = transformedLicenceVersionPurposeConditions
-      }
-    }
+    LicenceVersionPurposeConditionValidator.go(transformedLicenceVersionPurposeConditions)
+
+    matchingLicenceVersionPurpose.licenceVersionPurposeConditions.push(transformedLicenceVersionPurposeConditions)
   }
 }
 
-function _conditionsForLicenceVersionPurpose (licenceVersionPurpose, conditions) {
-  return conditions.filter((condition) => { return condition.purpose_external_id === licenceVersionPurpose.externalId })
+function _matchingLicenceVersion (licenceVersions, naldLicenceVersionPurposesCondition) {
+  return licenceVersions.find((licenceVersion) => {
+    return licenceVersion.licenceVersionPurposes.some((purpose) => {
+      return purpose.externalId === naldLicenceVersionPurposesCondition.purpose_external_id
+    })
+  })
+}
+
+function _matchingLicenceVersionPurpose (licenceVersion, naldLicenceVersionPurposesCondition) {
+  return licenceVersion.licenceVersionPurposes.find((purpose) => {
+    return purpose.externalId === naldLicenceVersionPurposesCondition.purpose_external_id
+  })
 }
 
 module.exports = {
