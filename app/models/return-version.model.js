@@ -71,6 +71,12 @@ class ReturnVersionModel extends BaseModel {
       // at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
       history (query) {
         query
+          .select([
+            'createdAt',
+            'createdBy',
+            'notes',
+            'reason'
+          ])
           .withGraphFetched('modLogs')
           .modifyGraph('modLogs', (builder) => {
             builder.select([
