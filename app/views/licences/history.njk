@@ -1,0 +1,105 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro dateAndTypeColumn(entry) %}
+  {% if entry.link %}
+    <a href="{{ entry.link }}" class="govuk-link">{{ entry.dateCreated }}</a>
+  {% else %}
+    <div>{{ entry.dateCreated }}</div>
+  {% endif %}
+  <p class="govuk-body-s govuk-!-margin-bottom-0">{{ entry.type.name }}</p>
+{% endmacro %}
+
+{% macro formatNote(notes) %}
+  {% for note in notes %}
+    <p class="govuk-!-margin-bottom-0"> {{ note }}</p>
+  {% endfor %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to licence ' + licenceRef,
+    href: "/system/licences/" + licenceId + "/summary"
+  }) }}
+{% endblock %}
+
+{% block content %}
+    {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">History</h1>
+  </div>
+
+  {% if entries.length == 0 %}
+    <p>No history for this licence.</p>
+  {% else %}
+    {% set tableRows = [] %}
+    {% for entry in entries %}
+      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+      {% set rowIndex = loop.index0 %}
+
+      {% if entry.displayNote %}
+        {% set classes = 'table__cell--include govuk-!-margin-bottom-0 govuk-!-padding-bottom-0' %}
+      {% else %}
+        {% set classes = '' %}
+      {% endif %}
+
+      {# Set data row #}
+      {% set dataRow = [
+        {
+          html: dateAndTypeColumn(entry),
+          attributes: { 'data-test': 'entry-date-type-' + rowIndex },
+          classes: classes
+        },
+        {
+          text: entry.reason,
+          attributes: { 'data-test': 'entry-reason-' + rowIndex },
+          classes: classes
+        },
+        {
+          text: entry.createdBy,
+          attributes: { 'data-test': 'entry-created-by-' + rowIndex },
+          classes: classes
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(dataRow), tableRows) %}
+
+      {# Set note row #}
+      {% if entry.displayNote %}
+        {% set noteCell %}
+          {{
+            govukDetails({
+              classes: 'govuk-!-margin-bottom-0',
+              summaryText: 'Note',
+              html: formatNote(entry.notes)
+            })
+          }}
+        {% endset %}
+
+        {% set noteRow = [
+          {
+            html: noteCell,
+            attributes: { 'data-test': 'entry-note-' + rowIndex },
+            colspan: 3
+          }
+        ] %}
+
+        {% set tableRows = (tableRows.push(noteRow), tableRows) %}
+      {% endif %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'bills-table' },
+      firstCellIsHeader: false,
+      head: [
+        { text: 'Date and type', classes: 'govuk-!-width-one-quarter' },
+        { text: 'Reason' },
+        { text: 'Created by', classes: 'govuk-!-width-one-third' }
+      ],
+      rows: tableRows
+    }) }}
+  {% endif %}
+{% endblock %}
