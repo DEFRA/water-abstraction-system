@@ -16,11 +16,12 @@ const ViewLicenceHistoryPresenter = require('../../presenters/licences/view-lice
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence history template.
  */
 async function go (licenceId) {
-  const history = await FetchLicenceHistoryService.go(licenceId)
+  const licence = await FetchLicenceHistoryService.go(licenceId)
 
-  const pageData = ViewLicenceHistoryPresenter.go(history)
+  const pageData = ViewLicenceHistoryPresenter.go(licence)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
