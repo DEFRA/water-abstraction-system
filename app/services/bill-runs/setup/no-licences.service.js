@@ -5,8 +5,8 @@
  * @module NoLicencesService
  */
 
-const SessionModel = require('../../../models/session.model.js')
 const RegionModel = require('../../../models/region.model.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
