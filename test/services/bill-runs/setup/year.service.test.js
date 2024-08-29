@@ -25,6 +25,7 @@ describe('Bill Runs Setup Year service', () => {
       const result = await YearService.go(session.id)
 
       expect(result).to.equal({
+        financialYearsData: [],
         sessionId: session.id,
         selectedYear: 2024
       })
