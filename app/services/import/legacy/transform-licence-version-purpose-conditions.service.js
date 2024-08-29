@@ -38,8 +38,8 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
   }
 }
 
-function _conditionsForLicenceVersionPurpose (licenceVersionPurpose, condition) {
-  return condition.filter((condition) => { return condition.purpose_external_id === licenceVersionPurpose.externalId })
+function _conditionsForLicenceVersionPurpose (licenceVersionPurpose, conditions) {
+  return conditions.filter((condition) => { return condition.purpose_external_id === licenceVersionPurpose.externalId })
 }
 
 module.exports = {
