@@ -103,14 +103,14 @@ async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPur
     const { id } = await _persistLicenceVersionPurpose(
       trx, updatedAt, licenceVersionPurpose, licenceVersionId)
 
-    await _persistLicenceVersionPurposesConditions(trx, updatedAt, licenceVersionPurposeConditions, id)
+    await _persistLicenceVersionPurposeConditions(trx, updatedAt, licenceVersionPurposeConditions, id)
   }
 }
 
 async function _persistLicenceVersionPurposeConditions (
   trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
   for (const licenceVersionPurposeCondition of licenceVersionPurposeConditions) {
-    await _persistLicenceVersionPurposeConditions(
+    await _persistLicenceVersionPurposeCondition(
       trx, updatedAt, licenceVersionPurposeCondition, licenceVersionPurposeId)
   }
 }
