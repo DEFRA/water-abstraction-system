@@ -35,8 +35,10 @@ describe('View Licence History service', () => {
       const result = await ViewLicenceHistoryService.go(licenceId)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
+        pageTitle: 'History for 01/123',
         entries: [
           {
             createdAt: new Date('2023-04-03T00:00:00.000Z'),
@@ -55,7 +57,7 @@ describe('View Licence History service', () => {
             displayNote: false,
             notes: [],
             link: null,
-            reason: '',
+            reason: null,
             type: { index: 0, name: 'Licence version' }
           },
           {
@@ -136,14 +138,17 @@ function _testFetchLicenceHistory () {
     modLogs: []
   })
 
-  const history = {
-    entries: {
-      chargeVersions,
-      licenceVersions,
+  return {
+    id: testLicence.id,
+    licenceRef: testLicence.licenceRef,
+    licenceVersions: [
+      licenceVersions
+    ],
+    chargeVersions: [
+      chargeVersions
+    ],
+    returnVersions: [
       returnVersions
-    },
-    licence: testLicence
+    ]
   }
-
-  return history
 }
