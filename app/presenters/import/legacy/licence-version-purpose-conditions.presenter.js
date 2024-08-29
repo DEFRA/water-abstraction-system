@@ -2,7 +2,7 @@
 
 /**
  * Maps the legacy NALD licence version purpose condition data to the WRLS format
- * @module LicenceVersionPurposeConditionsPresenter
+ * @module LicenceVersionPurposeConditionPresenter
  */
 
 /**
