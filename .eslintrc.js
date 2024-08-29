@@ -3,6 +3,14 @@
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
   ignorePatterns: ['docs/*'],
+  overrides: [
+    {
+      files: ['*.controller.js'],
+      rules: {
+        'jsdoc/require-jsdoc': 'off'
+      }
+    }
+  ],
   parserOptions: {
     sourceType: 'script'
   },
