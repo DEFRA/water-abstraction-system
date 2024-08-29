@@ -14,7 +14,7 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   let transformedLicenceVersionPurposeConditions
 
   beforeEach(async () => {
-    transformedLicenceVersionPurposeConditions = [_LicenceVersionPurposeConditionsValidatorCondition()]
+    transformedLicenceVersionPurposeConditions = [_licenceVersionPurposeConditionsValidatorCondition()]
   })
 
   describe('when valid data is provided', () => {
@@ -168,7 +168,7 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   })
 })
 
-function _LicenceVersionPurposeConditionsValidatorCondition () {
+function _licenceVersionPurposeConditionsValidatorCondition () {
   return {
     externalId: '6:100004',
     licenceVersionPurposeConditionTypeId: 'b10cc9d1-d46f-465d-a74a-26b2e567c699'

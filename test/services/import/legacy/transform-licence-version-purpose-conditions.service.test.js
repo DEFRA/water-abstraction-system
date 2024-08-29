@@ -63,7 +63,7 @@ describe('Import Legacy Transform Licence Version Purpose conditions service', (
     })
   })
 
-  describe('when a matching valid legacy licence version purpose condition for multiple licence purposes is found', () => {
+  describe('when a matching valid legacy licence version purpose condition for multiple licence "purposes" is found', () => {
     const externalId = '1:1'
 
     beforeEach(() => {
@@ -101,7 +101,7 @@ describe('Import Legacy Transform Licence Version Purpose conditions service', (
     })
   })
 
-  describe('when a matching valid legacy licence version purpose condition for multiple licence versions is found', () => {
+  describe('when a matching valid legacy licence version purpose condition for multiple licence "versions" is found', () => {
     const externalId = '1:1'
 
     beforeEach(() => {
@@ -159,21 +159,7 @@ function _legacyLicenceVersionPurposeCondition () {
 
 function _legacyLicenceVersionPurpose () {
   return {
-    abstractionPeriodEndDay: 31,
-    abstractionPeriodEndMonth: 3,
-    abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 4,
-    annualQuantity: 545520,
-    dailyQuantity: 1500.2,
     externalId: '6:10000004',
-    hourlyQuantity: 140.929,
-    instantQuantity: null,
-    notes: null,
-    primaryPurposeId: 'd6259e5e-9bb4-4743-b565-e61ec05afc0a',
-    purposeId: 'f48f5c29-8231-4552-bb98-3f04234ca6cb',
-    secondaryPurposeId: 'f85ab791-e943-4492-a3bb-c0b3ad3f0712',
-    timeLimitedEndDate: null,
-    timeLimitedStartDate: null,
     licenceVersionPurposeConditions: []
   }
 }

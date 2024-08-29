@@ -11,7 +11,7 @@ const { expect } = Code
 const LicenceVersionPurposeConditionsPresenter =
   require('../../../../app/presenters/import/legacy/licence-version-purpose-conditions.presenter.js')
 
-describe('Import Legacy Licence Version Purpose presenter', () => {
+describe('Import Legacy Licence Version Purpose Conditions presenter', () => {
   let legacyLicenceVersionPurposeConditions
 
   beforeEach(() => {
@@ -36,7 +36,6 @@ describe('Import Legacy Licence Version Purpose presenter', () => {
 function _legacyLicenceVersionPurposeConditions () {
   return [
     {
-      code: 'GW',
       external_id: '172640:6:10000004',
       licence_version_purpose_condition_type_id: 'b10cc9d1-d46f-465d-a74a-26b2e567c699',
       notes: 'At each abstraction borehole',

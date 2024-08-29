@@ -11,13 +11,13 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
+const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const { randomInteger } = require('../../support/general.js')
 
 // Thing under test
@@ -261,7 +261,7 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
             timeLimitedStartDate: null,
             licenceVersionPurposeConditions: [
               {
-                externalId: `9:${randomInteger(10000, 99999)}:1:0`,
+                externalId: `${randomInteger(1, 99999)}:${randomInteger(1, 9)}:${randomInteger(1, 99999999)}`,
                 licenceVersionPurposeConditionTypeId,
                 notes: 'At each abstraction borehole',
                 param1: null,
