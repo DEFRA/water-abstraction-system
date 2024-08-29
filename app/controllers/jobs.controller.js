@@ -18,6 +18,8 @@ const notFoundStatusCode = 404
  * Triggers export of all relevant tables to CSV and then uploads them to S3
  *
  * > Has to be called something other than 'export' because export is a reserved word
+ * @param _request - the hapi request object
+ * @param h - the hapi response object
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
