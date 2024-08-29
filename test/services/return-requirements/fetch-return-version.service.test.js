@@ -37,6 +37,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
 
       expect(result).to.equal({
         createdAt: returnVersion.createdAt,
+        createdBy: user.id,
         id: returnVersion.id,
         multipleUpload: false,
         notes: null,
