@@ -51,7 +51,7 @@ function _query () {
       ) AS notes,
       (concat_ws(':', nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS purpose_external_id,
       (concat_ws(':', nalc."ID", nalc."FGAC_REGION_CODE", nalc."AABP_ID")) AS external_id
-    FROM 
+    FROM
       "import"."NALD_LIC_CONDITIONS" nalc
     INNER JOIN
       "import"."NALD_ABS_LIC_PURPOSES" nalp
