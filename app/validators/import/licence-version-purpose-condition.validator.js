@@ -23,8 +23,7 @@ function go (data) {
       param2: Joi.string().allow(null).optional(),
       notes: Joi.string().allow(null).optional(),
       externalId: Joi.string().required()
-    }
-    )
+    })
 
   const result = schema.validate(data, { convert: false })
 
