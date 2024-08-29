@@ -12,11 +12,13 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
+const { randomInteger } = require('../../support/general.js')
 
 // Thing under test
 const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
@@ -75,6 +77,7 @@ describe('Persist licence service', () => {
       let existingLicence
       let existingLicenceVersion
       let existingLicenceVersionPurpose
+      let existingLicenceVersionPurposeCondition
 
       beforeEach(async () => {
         existingLicence = await LicenceHelper.add({
@@ -115,6 +118,14 @@ describe('Persist licence service', () => {
           secondaryPurposeId: SecondaryPurposeHelper.select().id,
           timeLimitedEndDate: new Date('1992-08-19'),
           timeLimitedStartDate: new Date('2052-06-23')
+        })
+
+        existingLicenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+          licenceVersionPurposeId: existingLicenceVersionPurpose.id,
+          licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id,
+          externalId: transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
+            .licenceVersionPurposeConditions[0].externalId,
+          source: 'nald'
         })
       })
 
@@ -161,7 +172,20 @@ describe('Persist licence service', () => {
         expect(updatedLicVerPur.timeLimitedEndDate).to.equal(transformedLicVerPur.timeLimitedEndDate)
         expect(updatedLicVerPur.timeLimitedStartDate).to.equal(transformedLicVerPur.timeLimitedStartDate)
 
-      //   Add test for update conditions
+        // Licence version purpose conditions comparison
+        const updatedLicVerPurCon = updatedLicence.licenceVersions[0]
+          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+        const transformedLicVerPurCon = transformedLicence.licenceVersions[0]
+          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+
+        expect(updatedLicVerPurCon.id).to.equal(existingLicenceVersionPurposeCondition.id)
+        expect(updatedLicVerPurCon.externalId).to.equal(transformedLicVerPurCon.externalId)
+        expect(updatedLicVerPurCon.licenceVersionPurposeConditionTypeId)
+          .to.equal(transformedLicVerPurCon.licenceVersionPurposeConditionTypeId)
+        expect(updatedLicVerPurCon.notes).to.equal(transformedLicVerPurCon.notes)
+        expect(updatedLicVerPurCon.param1).to.equal(transformedLicVerPurCon.param1)
+        expect(updatedLicVerPurCon.param2).to.equal(transformedLicVerPurCon.param2)
+        expect(updatedLicVerPurCon.source).to.equal(transformedLicVerPurCon.source)
       })
     })
   })
@@ -237,7 +261,7 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
             timeLimitedStartDate: null,
             licenceVersionPurposeConditions: [
               {
-                externalId: '172640:6:10000004',
+                externalId: `9:${randomInteger(10000, 99999)}:1:0`,
                 licenceVersionPurposeConditionTypeId,
                 notes: 'At each abstraction borehole',
                 param1: null,
