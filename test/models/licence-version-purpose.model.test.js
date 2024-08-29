@@ -13,6 +13,8 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
+const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
@@ -115,6 +117,44 @@ describe('Licence Version Purpose model', () => {
         expect(result.licenceVersionPurposeConditions[0]).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[0])
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[1])
+      })
+    })
+
+    describe('when linking to licence version purpose points', () => {
+      let testLicenceVersionPurposePoints
+
+      beforeEach(async () => {
+        testRecord = await LicenceVersionPurposeHelper.add()
+
+        testLicenceVersionPurposePoints = []
+        for (let i = 0; i < 2; i++) {
+          const licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+            licenceVersionPurposeId: testRecord.id
+          })
+
+          testLicenceVersionPurposePoints.push(licenceVersionPurposePoint)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query()
+          .innerJoinRelated('licenceVersionPurposePoints')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose points', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposePoints')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposePoints).to.be.an.array()
+        expect(result.licenceVersionPurposePoints[0]).to.be.an.instanceOf(LicenceVersionPurposePointModel)
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[0])
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[1])
       })
     })
 
