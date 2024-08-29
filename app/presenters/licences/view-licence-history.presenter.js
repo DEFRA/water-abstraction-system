@@ -8,25 +8,48 @@
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
-const chargeVersion = 'charge-version'
-const licenceVersion = 'licence-version'
-const returnVersion = 'return-version'
-
 /**
  * Formats data for the `/licences/{id}/history` view licence history page
  *
- * @param {module:LicenceModel} history - The licence and related charge, licence and return versions
+ * @param {module:LicenceModel} licence - The licence and related charge, licence and return versions
  *
  * @returns The data formatted and sorted for the view template
  */
-function go (history) {
-  const { licence, entries } = history
+function go (licence) {
+  const { id: licenceId, licenceRef } = licence
+
+  const chargeVersionEntries = _chargeVersionEntries(licence)
+  const licenceVersionEntries = _licenceVersionEntries(licence)
+  const returnVersionEntries = _returnVersionEntries(licence)
+
+  const sortedEntries = _sortEntries(chargeVersionEntries, licenceVersionEntries, returnVersionEntries)
 
   return {
-    licenceId: licence.id,
-    licenceRef: licence.licenceRef,
-    entries: _entries(entries, licence.id)
+    entries: sortedEntries,
+    licenceId,
+    licenceRef,
+    pageTitle: `History for ${licenceRef}`
   }
+}
+
+function _chargeVersionEntries (licence) {
+  const { chargeVersions, id } = licence
+
+  return chargeVersions.map((chargeVersion) => {
+    const createdAt = chargeVersion.$createdAt()
+    const notes = chargeVersion.$notes()
+
+    return {
+      createdAt,
+      createdBy: _createdBy(chargeVersion),
+      dateCreated: formatLongDate(createdAt),
+      displayNote: notes.length > 0,
+      notes,
+      link: `/licences/${id}/charge-information/${chargeVersion.id}/view`,
+      reason: chargeVersion.$reason(),
+      type: { index: 1, name: 'Charge version' }
+    }
+  })
 }
 
 function _createdBy (entry) {
@@ -39,74 +62,52 @@ function _createdBy (entry) {
   return 'Migrated from NALD'
 }
 
-function _entries (entries, licenceId) {
-  const chargeVersions = _mapEntries(entries.chargeVersions, chargeVersion, licenceId)
-  const licenceVersions = _mapEntries(entries.licenceVersions, licenceVersion, licenceId)
-  const returnVersions = _mapEntries(entries.returnVersions, returnVersion, licenceId)
+function _licenceVersionEntries (licence) {
+  const { licenceVersions } = licence
 
-  const joinedEntries = [...chargeVersions, ...licenceVersions, ...returnVersions]
-
-  return _sortEntries(joinedEntries)
-}
-
-function _link (entryType, entryId, licenceId) {
-  if (entryType === chargeVersion) {
-    return `/licences/${licenceId}/charge-information/${entryId}/view`
-  }
-
-  if (entryType === returnVersion) {
-    return `/system/return-requirements/${entryId}/view`
-  }
-
-  return null
-}
-
-function _mapEntries (entries, entryType, licenceId) {
-  // NOTE: When there is only a single entry for the charge, licence, or return versions, it is returned as an object.
-  // When there are multiple `entries`, it's returned as an array. This checks if `entries` is not an array, and if not,
-  // converts it into an array.
-  if (!Array.isArray(entries)) {
-    entries = [entries]
-  }
-
-  return entries.map((entry) => {
-    const createdAt = entry.$createdAt()
-    const notes = entry.$notes()
+  return licenceVersions.map((licenceVersion) => {
+    const createdAt = licenceVersion.$createdAt()
+    const notes = licenceVersion.$notes()
 
     return {
       createdAt,
-      createdBy: _createdBy(entry),
+      createdBy: _createdBy(licenceVersion),
       dateCreated: formatLongDate(createdAt),
       displayNote: notes.length > 0,
       notes,
-      link: _link(entryType, entry.id, licenceId),
-      reason: _reason(entry),
-      type: _type(entryType)
+      link: null,
+      reason: licenceVersion.$reason(),
+      type: { index: 0, name: 'Licence version' }
     }
   })
 }
 
-/**
- * The history helper $reason() will return either the reason saved against the return version record, the reason
- * captured in the first mod log entry, or null.
- *
- * If its the reason saved against the return version we have to map it to its display version first.
- *
- * @private
- */
-function _reason (entry) {
-  const reason = entry.$reason()
-  const mappedReason = returnRequirementReasons[reason]
+function _returnVersionEntries (licence) {
+  const { returnVersions } = licence
 
-  if (mappedReason) {
-    return mappedReason
-  }
+  return returnVersions.map((returnVersion) => {
+    const createdAt = returnVersion.$createdAt()
+    const notes = returnVersion.$notes()
+    const reason = returnVersion.$reason()
+    const mappedReason = returnRequirementReasons[reason]
 
-  return reason ?? ''
+    return {
+      createdAt,
+      createdBy: _createdBy(returnVersion),
+      dateCreated: formatLongDate(createdAt),
+      displayNote: notes.length > 0,
+      notes,
+      link: `/system/return-requirements/${returnVersion.id}/view`,
+      reason: mappedReason ?? reason,
+      type: { index: 2, name: 'Return version' }
+    }
+  })
 }
 
-function _sortEntries (entries) {
-  return entries.sort((entryA, entryB) => {
+function _sortEntries (chargeVersionEntries, licenceVersionEntries, returnVersionEntries) {
+  const joinedEntries = [...chargeVersionEntries, ...licenceVersionEntries, ...returnVersionEntries]
+
+  return joinedEntries.sort((entryA, entryB) => {
     if (entryA.createdAt > entryB.createdAt) {
       return -1
     }
@@ -125,18 +126,6 @@ function _sortEntries (entries) {
 
     return 0
   })
-}
-
-function _type (entryType) {
-  if (entryType === chargeVersion) {
-    return { index: 1, name: 'Charge version' }
-  }
-
-  if (entryType === returnVersion) {
-    return { index: 2, name: 'Return version' }
-  }
-
-  return { index: 0, name: 'Licence version' }
 }
 
 module.exports = {
