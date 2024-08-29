@@ -15,49 +15,34 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the licence and related charge, licence and return versions
  */
 async function go (licenceId) {
-  const licence = await _fetchLicence(licenceId)
-
-  const chargeVersions = licence.chargeVersions
-  const licenceVersions = licence.licenceVersions
-  const returnVersions = licence.returnVersions
-
-  return {
-    entries: {
-      chargeVersions,
-      licenceVersions,
-      returnVersions
-    },
-    licence: {
-      id: licence.id,
-      licenceRef: licence.licenceRef
-    }
-  }
+  return _fetch(licenceId)
 }
 
-async function _fetchLicence (licenceId) {
+async function _fetch (licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
+    .select(['id', 'licenceRef'])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
       builder.select(
-        'chargeVersions.id',
-        'chargeVersions.createdAt'
+        'id',
+        'createdAt'
       )
         .modify('history')
     })
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
       builder.select(
-        'licenceVersions.id',
-        'licenceVersions.createdAt'
+        'id',
+        'createdAt'
       )
         .modify('history')
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
       builder.select(
-        'returnVersions.id',
-        'returnVersions.createdAt'
+        'id',
+        'createdAt'
       )
         .modify('history')
     })
