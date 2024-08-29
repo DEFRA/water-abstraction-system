@@ -107,7 +107,7 @@ async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPur
   }
 }
 
-async function _persistLicenceVersionPurposesConditions (
+async function _persistLicenceVersionPurposeConditions (
   trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
   for (const licenceVersionPurposeCondition of licenceVersionPurposeConditions) {
     await _persistLicenceVersionPurposeConditions(
