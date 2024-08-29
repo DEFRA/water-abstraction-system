@@ -353,7 +353,7 @@ describe('Bill Runs Setup controller', () => {
             financialYearsData: [
               {
                 text: '2023 to 2024',
-                value: '2024',
+                value: 2024,
                 checked: false
               }
             ],
