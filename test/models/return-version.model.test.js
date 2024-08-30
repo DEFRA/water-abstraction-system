@@ -279,10 +279,6 @@ describe('Return Version model', () => {
 
       describe('and has mod log history', () => {
         beforeEach(async () => {
-          // The externalId combines the region code and first nald id.
-          // The region code should be between 1 and 9.
-          // Due to unique constraint on the external id we need to increase the region code so tests do not create the
-          // same external id
           const regionCode = randomRegionCode()
           const firstNaldId = randomInteger(100, 99998)
 
