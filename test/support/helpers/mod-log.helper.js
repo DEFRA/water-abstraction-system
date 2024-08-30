@@ -63,10 +63,6 @@ function defaults (data = {}) {
   }
 }
 
-/**
- *
- * @param regionCode
- */
 function generateRegionNaldPatternExternalId (regionCode = null) {
   const regionCodeToUse = regionCode ?? randomInteger(1, 9)
 
