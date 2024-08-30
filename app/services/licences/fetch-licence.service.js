@@ -37,10 +37,12 @@ async function _fetch (licenceId) {
     .modify('primaryUser')
     .withGraphFetched('workflows')
     .modifyGraph('workflows', (builder) => {
-      builder.select([
-        'id',
-        'status'
-      ])
+      builder
+        .select([
+          'id',
+          'status'
+        ])
+        .whereNull('deletedAt')
     })
 }
 
