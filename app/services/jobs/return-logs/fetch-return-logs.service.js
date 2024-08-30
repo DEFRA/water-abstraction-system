@@ -149,15 +149,23 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
     .withGraphFetched('returnRequirementPoints')
     .modifyGraph('returnRequirementPoints', (builder) => {
       builder.select(['description',
-        'description',
         'ngr1',
         'ngr2',
         'ngr3',
         'ngr4'])
     })
     .withGraphFetched('returnRequirementPurposes.primaryPurpose')
+    .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {
+      builder.select(['legacyId', 'description'])
+    })
     .withGraphFetched('returnRequirementPurposes.secondaryPurpose')
+    .modifyGraph('returnRequirementPurposes.secondaryPurpose', (builder) => {
+      builder.select(['legacyId', 'description'])
+    })
     .withGraphFetched('returnRequirementPurposes.purpose')
+    .modifyGraph('returnRequirementPurposes.purpose', (builder) => {
+      builder.select(['legacyId', 'description'])
+    })
 
   return results
 }
