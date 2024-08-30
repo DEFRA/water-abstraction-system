@@ -52,15 +52,47 @@ async function _createMetaData (isSummer, endDate, requirements) {
       regionCode: requirements.returnVersion.licence.region.naldRegionId,
       areaCode: requirements.returnVersion.licence.areacode,
       formatId: requirements.legacyId,
-      periodStartDay: requirements.abstractionPeriodStartDay,
-      periodStartMonth: requirements.abstractionPeriodStartMonth,
-      periodEndDay: requirements.abstractionPeriodEndDay,
-      periodEndMonth: requirements.abstractionPeriodEndMonth
+      periodStartDay: requirements.abstractionPeriodStartDay.toString(),
+      periodStartMonth: requirements.abstractionPeriodStartMonth.toString(),
+      periodEndDay: requirements.abstractionPeriodEndDay.toString(),
+      periodEndMonth: requirements.abstractionPeriodEndMonth.toString()
     },
-    points: requirements.returnRequirementPoints,
-    purposes: requirements.returnRequirementPurposes,
+    points: _createPointsMetaData(requirements.returnRequirementPoints),
+    purposes: _createPurposesMetaData(requirements.returnRequirementPurposes),
     version: 1
   }
+}
+
+function _createPointsMetaData (returnRequirementPoints) {
+  return returnRequirementPoints.map((returnRequirementPoint) => {
+    return {
+      name: returnRequirementPoint.description,
+      ngr1: returnRequirementPoint.ngr1,
+      ngr2: returnRequirementPoint.ngr2,
+      ngr3: returnRequirementPoint.ngr3,
+      ngr4: returnRequirementPoint.ngr4
+    }
+  })
+}
+
+function _createPurposesMetaData (returnRequirementPurposes) {
+  return returnRequirementPurposes.map((returnRequirementPurpose) => {
+    return {
+      alias: returnRequirementPurpose.alias,
+      primary: {
+        code: returnRequirementPurpose.primaryPurpose.legacyId,
+        description: returnRequirementPurpose.primaryPurpose.description
+      },
+      secondary: {
+        code: returnRequirementPurpose.secondaryPurpose.legacyId,
+        description: returnRequirementPurpose.secondaryPurpose.description
+      },
+      tertiary: {
+        code: returnRequirementPurpose.purpose.legacyId,
+        description: returnRequirementPurpose.purpose.description
+      }
+    }
+  })
 }
 
 function _createReturnLogId (requirements, startDate, endDate) {
@@ -115,7 +147,17 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
       builder.select(['id', 'naldRegionId'])
     })
     .withGraphFetched('returnRequirementPoints')
-    .withGraphFetched('returnRequirementPurposes')
+    .modifyGraph('returnRequirementPoints', (builder) => {
+      builder.select(['description',
+        'description',
+        'ngr1',
+        'ngr2',
+        'ngr3',
+        'ngr4'])
+    })
+    .withGraphFetched('returnRequirementPurposes.primaryPurpose')
+    .withGraphFetched('returnRequirementPurposes.secondaryPurpose')
+    .withGraphFetched('returnRequirementPurposes.purpose')
 
   return results
 }
