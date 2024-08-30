@@ -19,7 +19,7 @@ const ReturnVersionHelper = require('../../../support/helpers/return-version.hel
 // Thing under test
 const FetchReturnLogsService = require('../../../../app/services/jobs/return-logs/fetch-return-logs.service.js')
 
-describe('Fetch return logs service', () => {
+describe.only('Fetch return logs service', () => {
   const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
   const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
@@ -545,6 +545,60 @@ describe('Fetch return logs service', () => {
       })
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(summerStartDate)
+      expect(result[0].status).to.equal('due')
+      expect(result[0].source).to.equal('WRLS')
+    })
+  })
+
+  describe.only('when isSummer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
+    const startDate = new Date(new Date().getFullYear(), 11, 1).toISOString().split('T')[0]
+console.log(startDate)
+    let licence
+    let region
+    let returnVersion
+    let returnRequirement
+    let returnRequirementPoint
+    let returnRequirementPurpose
+
+    before(async () => {
+      region = RegionHelper.select()
+      licence = await LicenceHelper.add({ regionId: region.id })
+      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, startDate })
+      returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
+      returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+    })
+
+    it('should return one return log payload', async () => {
+      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+
+      expect(result.length).to.equal(1)
+      expect(result[0].dueDate).to.equal(summerDueDate)
+      expect(result[0].endDate).to.equal(summerEndDate)
+      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${summerEndDate}`)
+      expect(result[0].licenceRef).to.equal(licence.licenceRef)
+      expect(result[0].metadata).to.equal({
+        description: 'BOREHOLE AT AVALON',
+        isCurrent: true,
+        isFinal: false,
+        isSummer: true,
+        isTwoPartTariff: false,
+        isUpload: false,
+        nald: {
+          regionCode: region.naldRegionId,
+          areaCode: licence.regions.historicalAreaCode,
+          formatId: returnRequirement.legacyId,
+          periodStartDay: returnRequirement.abstractionPeriodStartDay,
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+          periodEndDay: returnRequirement.abstractionPeriodEndDay,
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+        },
+        points: [returnRequirementPoint],
+        purposes: [returnRequirementPurpose],
+        version: 1
+      })
+      expect(result[0].returnsFrequency).to.equal('day')
+      expect(result[0].startDate).to.equal(startDate)
       expect(result[0].status).to.equal('due')
       expect(result[0].source).to.equal('WRLS')
     })

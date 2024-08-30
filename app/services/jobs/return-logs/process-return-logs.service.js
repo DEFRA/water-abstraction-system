@@ -38,7 +38,8 @@ async function go (cycle, licenceReference = null) {
     const isSummer = cycle === 'summer'
     const returnLogs = await FetchReturnLogsService.go(isSummer, licenceReference)
 
-    await _createReturnLogs(returnLogs)
+
+    // await _createReturnLogs(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle, licenceReference })
   } catch (error) {
