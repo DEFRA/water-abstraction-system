@@ -76,14 +76,18 @@ describe('User model', () => {
           .findById(testRecord.id)
           .withGraphFetched('chargeVersionNotes')
 
+        const foundChargeVersionNoteOne = result.chargeVersionNotes
+          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteOne.id })
+        const foundChargeVersionNoteTwo = result.chargeVersionNotes
+          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteTwo.id })
+
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.chargeVersionNotes).to.be.an.array()
-        expect(result.chargeVersionNotes).to.have.length(2)
-        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(result.chargeVersionNotes[0]).to.equal(testChargeVersionNoteOne)
-        expect(result.chargeVersionNotes[1]).to.equal(testChargeVersionNoteTwo)
+        expect(foundChargeVersionNoteOne).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(foundChargeVersionNoteOne).to.equal(testChargeVersionNoteOne)
+        expect(foundChargeVersionNoteTwo).to.equal(testChargeVersionNoteTwo)
       })
     })
 
