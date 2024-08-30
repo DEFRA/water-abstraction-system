@@ -153,45 +153,6 @@ function generateAbstractionPointDetail (pointDetail) {
 }
 
 /**
- * Generate a string that represents an abstraction point based on the assumption the points have already been merged
- *
- * When abstracting water the point at which this is done can be described in several ways depending on the number of
- * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
- * a string that defines the details of the abstraction point.
- *
- * This follows the same out put as generateAbstractionPointDetail but the points have already been merged
- *
- * @param {object} pointDetail - Object containing all the details for the point
- *
- * @returns {string} a description of the abstraction point
- */
-function generatePointDetail (pointDetail) {
-  let abstractionPoint = null
-
-  if (pointDetail.ngr4) {
-    const point1 = pointDetail.ngr1
-    const point2 = pointDetail.ngr2
-    const point3 = pointDetail.ngr3
-    const point4 = pointDetail.ngr4
-
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.ngr2) {
-    const point1 = pointDetail.ngr1
-    const point2 = pointDetail.ngr2
-
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else {
-    const point1 = pointDetail.ngr1
-
-    abstractionPoint = `At National Grid Reference ${point1}`
-  }
-
-  abstractionPoint += pointDetail.description !== undefined ? ` (${pointDetail.description})` : ''
-
-  return abstractionPoint
-}
-
-/**
  * Generate a Universally Unique Identifier (UUID)
  *
  * The service uses these as the IDs for most records in the DB. Most tables will automatically generate them when
@@ -334,7 +295,6 @@ module.exports = {
   determineCurrentFinancialYear,
   flashNotification,
   generateAbstractionPointDetail,
-  generatePointDetail,
   generateUUID,
   periodsOverlap,
   timestampForPostgres,
