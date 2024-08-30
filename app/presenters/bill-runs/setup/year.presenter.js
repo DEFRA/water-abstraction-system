@@ -58,13 +58,6 @@ async function _supplementaryFinancialYearsData (regionId, selectedYear) {
       })
     })
   }
-      supplementaryFinancialYearsData.push({
-        text: `${tptSupplementaryYear.financialYearEnd - 1} to ${tptSupplementaryYear.financialYearEnd}`,
-        value: tptSupplementaryYear.financialYearEnd.toString(),
-        checked: selectedYear === tptSupplementaryYear.financialYearEnd.toString()
-      })
-    })
-  }
 
   return supplementaryFinancialYearsData
 }
