@@ -74,11 +74,27 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generate Charge reference - e.g "4.6.42"
+ *
+ * A charge reference is built in three parts
+ *
+ * firstPart why - 4 (does it have a know range ? )
+ * secondPart why - (1, 6)
+ * thirdPart why - (1, 42)
+ *
+ * We see issues with this small range when tables have unique constraints when building the charge reference.
+ *
+ * The know range is commented above. But for the ease of testing this range has been extended.
+ *
+ * @returns {string} - randomly generated charge reference. Example - "4.6.42"
+ */
 function generateChargeReference () {
+  const firstPart = randomInteger(1, 999999)
   const secondPart = randomInteger(1, 6)
   const thirdPart = randomInteger(1, 42)
 
-  return `4.${secondPart}.${thirdPart}`
+  return `${firstPart}.${secondPart}.${thirdPart}`
 }
 
 module.exports = {

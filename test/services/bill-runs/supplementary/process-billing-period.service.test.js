@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
@@ -21,6 +21,7 @@ const ChargeVersionHelper = require('../../../support/helpers/charge-version.hel
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
@@ -178,9 +179,9 @@ describe('Supplementary Process billing period service', () => {
           chargeVersions = chargeVersionData.chargeVersions
 
           const sentTransactions = [{
-            id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
-            billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
-            chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
+            id: generateUUID(),
+            billLicenceId: generateUUID(),
+            chargeReferenceId: generateUUID(),
             startDate: new Date('2022-04-01'),
             endDate: new Date('2022-10-31'),
             source: 'non-tidal',
@@ -210,7 +211,7 @@ describe('Supplementary Process billing period service', () => {
             waterCompanyCharge: true,
             winterOnly: false,
             waterUndertaker: false,
-            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
+            externalId: generateUUID(),
             purposes: [{}]
           }]
 
