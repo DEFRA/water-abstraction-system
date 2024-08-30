@@ -16,25 +16,20 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data) {
-  const schema = Joi.object({
-    licenceVersionPurposeId: Joi.string().guid().optional(),
-    licenceVersionPurposeConditionTypeId: Joi.string().guid().required(),
-    param1: Joi.string().optional(),
-    param2: Joi.string().optional(),
-    notes: Joi.string().optional(),
-    externalId: Joi.string().required(),
-    source: Joi.string().required(),
-    dateCreated: Joi.date().optional(),
-    dateUpdated: Joi.date().optional()
-  })
+  const schema =
+    Joi.object({
+      licenceVersionPurposeConditionTypeId: Joi.string().guid().required(),
+      param1: Joi.string().allow(null).optional(),
+      param2: Joi.string().allow(null).optional(),
+      notes: Joi.string().allow(null).optional(),
+      externalId: Joi.string().required()
+    })
 
-  const result = schema.validate(data)
+  const result = schema.validate(data, { convert: false })
 
-  if (Object.hasOwn(result, 'error')) {
-    throw new Error(result.error.details[0].message)
+  if (result.error) {
+    throw result.error
   }
-
-  return result
 }
 
 module.exports = {

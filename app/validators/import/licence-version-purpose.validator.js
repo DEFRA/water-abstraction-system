@@ -31,7 +31,8 @@ function go (licenceVersionPurpose) {
     purposeId: Joi.string().guid().required(),
     secondaryPurposeId: Joi.string().guid().required(),
     timeLimitedEndDate: Joi.date().allow(null),
-    timeLimitedStartDate: Joi.date().allow(null)
+    timeLimitedStartDate: Joi.date().allow(null),
+    licenceVersionPurposeConditions: Joi.array()
   })
 
   const result = schema.validate(licenceVersionPurpose, { convert: false })

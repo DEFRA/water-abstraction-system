@@ -7,7 +7,6 @@
 
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
-const { generatePointDetail } = require('../../lib/general.lib.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -18,7 +17,6 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  *
  * @returns {object} requirements for returns data needed by the view template
  */
-
 function go (returnVersion) {
   const { licence, multipleUpload, returnRequirements, startDate, status } =
     returnVersion
@@ -133,7 +131,7 @@ function _purposes (returnRequirementPurposes) {
 
 function _points (returnRequirementPoints) {
   return returnRequirementPoints.map((returnRequirementPoint) => {
-    return generatePointDetail(returnRequirementPoint)
+    return returnRequirementPoint.$describe()
   })
 }
 
