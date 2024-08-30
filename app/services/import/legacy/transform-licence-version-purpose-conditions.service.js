@@ -54,9 +54,6 @@ function _matchingLicenceVersionPurpose (licenceVersions, naldLicenceVersionPurp
     if (matchedLicenceVersionPurpose) {
       break
     }
-
-    // No match, so onto the next licence version
-    continue
   }
 
   return matchedLicenceVersionPurpose
