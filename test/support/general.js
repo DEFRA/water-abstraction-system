@@ -113,6 +113,6 @@ function randomRegionCode () {
 module.exports = {
   postRequestOptions,
   randomInteger,
-  selectRandomEntry,
-  randomRegionCode
+  randomRegionCode,
+  selectRandomEntry
 }
