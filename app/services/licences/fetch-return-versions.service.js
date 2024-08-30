@@ -28,6 +28,7 @@ async function _fetch (licenceId) {
       'reason'
     ])
     .where('licenceId', licenceId)
+    .whereNot('status', 'draft')
     .orderBy([
       { column: 'startDate', order: 'desc' },
       { column: 'version', order: 'desc' }
