@@ -37,6 +37,14 @@ class UserModel extends BaseModel {
           to: 'groups.id'
         }
       },
+      licenceEntity: {
+        relation: Model.HasOneRelation,
+        modelClass: 'licence-entity.model',
+        join: {
+          from: 'users.licenceEntityId',
+          to: 'licenceEntities.id'
+        }
+      },
       returnVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'return-version.model',

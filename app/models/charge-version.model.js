@@ -94,11 +94,15 @@ class ChargeVersionModel extends BaseModel {
   /**
    * Modifiers allow us to reuse logic in queries, eg. select the charge version, note, and/or all mod log records:
    *
+   * ```javascript
    * return ChargeVersionModel.query()
    *   .findById(chargeVersionId)
    *   .modify('history')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
    */
   static get modifiers () {
     return {
@@ -106,7 +110,10 @@ class ChargeVersionModel extends BaseModel {
       // at, and created by from the record, plus its note, change reason, and NALD mod logs (where they exist)
       history (query) {
         query
-          .select(['createdBy'])
+          .select([
+            'createdAt',
+            'createdBy'
+          ])
           .withGraphFetched('modLogs')
           .modifyGraph('modLogs', (builder) => {
             builder.select([

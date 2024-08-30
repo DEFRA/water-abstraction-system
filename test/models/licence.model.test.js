@@ -14,6 +14,7 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -22,6 +23,8 @@ const LicenceDocumentModel = require('../../app/models/licence-document.model.js
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
+const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceGaugingStationHelper = require('../support/helpers/licence-gauging-station.helper.js')
 const LicenceGaugingStationModel = require('../../app/models/licence-gauging-station.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
@@ -35,9 +38,10 @@ const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
+const UserModel = require('../../app/models/user.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -859,9 +863,11 @@ describe('Licence model', () => {
       beforeEach(async () => {
         const licence = await LicenceHelper.add()
 
-        await RegisteredToAndLicenceNameSeeder.seed(licence)
+        await LicenceDocumentHeaderHelper.add({
+          licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+        })
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+        testRecord = await LicenceModel.query().findById(licence.id).modify('licenceName')
       })
 
       it('returns the licence name', async () => {
@@ -872,32 +878,44 @@ describe('Licence model', () => {
     })
   })
 
-  describe('$registeredTo', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceHelper.add()
-    })
-
+  describe('$primaryUser', () => {
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
-        const result = testRecord.$registeredTo()
+        const result = testRecord.$primaryUser()
 
         expect(result).to.be.null()
       })
     })
 
     describe('when the instance has been set with the additional properties needed', () => {
+      let primaryUser
+
       beforeEach(async () => {
         const licence = await LicenceHelper.add()
 
-        await RegisteredToAndLicenceNameSeeder.seed(licence)
+        const companyEntityId = generateUUID()
+        const username = `${generateUUID()}@wrls.gov.uk`
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+        const licenceEntity = await LicenceEntityHelper.add({ name: username })
+
+        primaryUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: licenceEntity.id, username })
+
+        await LicenceEntityRoleHelper.add({
+          companyEntityId, licenceEntityId: licenceEntity.id, role: 'primary_user'
+        })
+
+        await LicenceDocumentHeaderHelper.add({
+          companyEntityId, licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+        })
+
+        testRecord = await LicenceModel.query().findById(licence.id).modify('primaryUser')
       })
 
-      it('returns who the licence is registered to', async () => {
-        const result = testRecord.$registeredTo()
+      it('returns the primary user', async () => {
+        const result = testRecord.$primaryUser()
 
-        expect(result).to.equal('grace.hopper@example.com')
+        expect(result).to.be.an.instanceOf(UserModel)
+        expect(result).to.equal({ id: primaryUser.id, username: primaryUser.username })
       })
     })
   })

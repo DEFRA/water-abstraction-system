@@ -176,10 +176,7 @@ describe('Fetch Licence Summary service', () => {
           }]
         },
         licenceDocumentHeader: {
-          id: licenceDocumentHeader.id,
-          licenceName: 'Licence Holder Ltd',
-          registeredTo: 'grace.hopper@example.com',
-          role: 'primary_user'
+          id: licenceDocumentHeader.id
         }
       })
     })
