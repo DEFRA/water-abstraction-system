@@ -49,6 +49,15 @@ async function _supplementaryFinancialYearsData (regionId, selectedYear) {
 
   if (tptSupplementaryYears.length > 0) {
     tptSupplementaryYears.forEach((tptSupplementaryYear) => {
+      const { financialYearEnd } = tptSupplementaryYear
+
+      supplementaryFinancialYearsData.push({
+        text: `${financialYearEnd - 1} to ${financialYearEnd}`,
+        value: financialYearEnd.toString(),
+        checked: selectedYear === financialYearEnd.toString()
+      })
+    })
+  }
       supplementaryFinancialYearsData.push({
         text: `${tptSupplementaryYear.financialYearEnd - 1} to ${tptSupplementaryYear.financialYearEnd}`,
         value: tptSupplementaryYear.financialYearEnd.toString(),
