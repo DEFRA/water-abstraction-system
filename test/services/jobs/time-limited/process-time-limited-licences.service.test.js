@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const WorkflowModel = require('../../../../app/models/workflow.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
@@ -23,8 +23,6 @@ describe('Process Time Limited Licences service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -40,14 +38,14 @@ describe('Process Time Limited Licences service', () => {
     beforeEach(() => {
       fetchResults = [
         {
-          id: 'ece3a745-d7b8-451e-8434-9977fbaa3bc1',
-          licenceVersionId: 'a3f0bdeb-edcb-427d-9f79-c345d19d8aa1',
-          chargeVersionId: 'dbb98ce9-2cfd-4d74-94ac-c4e6e8f42442'
+          id: generateUUID(),
+          licenceVersionId: generateUUID(),
+          chargeVersionId: generateUUID()
         },
         {
-          id: 'cbd2195f-17c4-407d-b7ed-c3cd729c3dca',
-          licenceVersionId: 'fa25c580-710e-48f0-8932-b2d18e391994',
-          chargeVersionId: 'cc192da9-d0f4-489d-bf44-0de2544bc801'
+          id: generateUUID(),
+          licenceVersionId: generateUUID(),
+          chargeVersionId: generateUUID()
         }
       ]
 
@@ -57,24 +55,26 @@ describe('Process Time Limited Licences service', () => {
     it('adds the licences to the workflow table', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const results = await WorkflowModel.query().orderBy('createdAt', 'asc')
+      const results = await WorkflowModel.query()
+        .whereIn('licenceId', [fetchResults[0].id, fetchResults[1].id])
+        .orderBy('createdAt', 'asc')
 
       expect(results).to.have.length(2)
 
-      expect(results[0].licenceId).to.equal('ece3a745-d7b8-451e-8434-9977fbaa3bc1')
-      expect(results[0].licenceVersionId).to.equal('a3f0bdeb-edcb-427d-9f79-c345d19d8aa1')
+      expect(results[0].licenceId).to.equal(fetchResults[0].id)
+      expect(results[0].licenceVersionId).to.equal(fetchResults[0].licenceVersionId)
       expect(results[0].status).to.equal('to_setup')
       expect(results[0].data).to.equal({
         chargeVersion: null,
-        timeLimitedChargeVersionId: 'dbb98ce9-2cfd-4d74-94ac-c4e6e8f42442'
+        timeLimitedChargeVersionId: fetchResults[0].chargeVersionId
       })
 
-      expect(results[1].licenceId).to.equal('cbd2195f-17c4-407d-b7ed-c3cd729c3dca')
-      expect(results[1].licenceVersionId).to.equal('fa25c580-710e-48f0-8932-b2d18e391994')
+      expect(results[1].licenceId).to.equal(fetchResults[1].id)
+      expect(results[1].licenceVersionId).to.equal(fetchResults[1].licenceVersionId)
       expect(results[1].status).to.equal('to_setup')
       expect(results[1].data).to.equal({
         chargeVersion: null,
-        timeLimitedChargeVersionId: 'cc192da9-d0f4-489d-bf44-0de2544bc801'
+        timeLimitedChargeVersionId: fetchResults[1].chargeVersionId
       })
     })
 
@@ -102,7 +102,10 @@ describe('Process Time Limited Licences service', () => {
     it('adds nothing to workflow', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const results = await WorkflowModel.query().orderBy('createdAt', 'asc')
+      const results = await WorkflowModel.query()
+        // Matches the fetched results for FetchTimeLimitedLicencesService
+        .whereIn('licenceId', [])
+        .orderBy('createdAt', 'asc')
 
       expect(results).to.be.empty()
     })

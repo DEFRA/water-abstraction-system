@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
 
@@ -28,8 +27,6 @@ describe('Submit Amended Billable Returns Service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     yarStub = { flash: Sinon.stub() }
 
     reviewChargeElement = await ReviewChargeElementHelper.add()

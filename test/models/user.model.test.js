@@ -12,6 +12,8 @@ const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
+const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
+const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
@@ -105,6 +107,43 @@ describe('User model', () => {
         expect(result.groups).to.have.length(1)
         expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
         expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to licence entity', () => {
+      let testAddedRecord
+      let testLicenceEntity
+
+      before(async () => {
+        testLicenceEntity = await LicenceEntityHelper.add()
+
+        const { id: licenceEntityId } = testLicenceEntity
+
+        // NOTE: The entity ID is held against the user, not the other way round!! Because of this we can't seed a user
+        // with `licence_entity_id` set because the licence entity record is only created when an external user is
+        // linked to a licence using the external UI.
+        //
+        // So, for this test we have to fall back to generating a user against which we assign the licence entity ID.
+        testAddedRecord = await UserHelper.add({ licenceEntityId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('licenceEntity')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence entity', async () => {
+        const result = await UserModel.query()
+          .findById(testAddedRecord.id)
+          .withGraphFetched('licenceEntity')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testAddedRecord.id)
+
+        expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
+        expect(result.licenceEntity).to.equal(testLicenceEntity)
       })
     })
 

@@ -120,6 +120,18 @@ const data = [
     application: 'water_vml',
     resetGuidCreatedAt: null,
     enabled: true
+  },
+  {
+    id: 100010,
+    username: 'basic.access@wrls.gov.uk',
+    password: 'P@55word',
+    resetGuid: null,
+    resetRequired: 0,
+    lastLogin: null,
+    badLogins: 0,
+    application: 'water_admin',
+    resetGuidCreatedAt: null,
+    enabled: true
   }
 ]
 

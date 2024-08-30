@@ -62,9 +62,14 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generates a random user ID
+ *
+ * @returns {number} a random integer between 100011 and 199999
+ */
 function generateUserId () {
-  // The last ID in the pre-seeded users is 100009
-  return randomInteger(100010, 199999)
+  // The last ID in the pre-seeded users is 100010
+  return randomInteger(100011, 199999)
 }
 
 /**

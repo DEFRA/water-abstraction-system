@@ -5,8 +5,8 @@ const ImportController = require('../controllers/import.controller.js')
 const routes = [
   {
     method: 'POST',
-    path: '/import/licence',
-    handler: ImportController.licence,
+    path: '/import/licence/legacy',
+    handler: ImportController.licenceLegacy,
     options: {
       app: {
         plainOutput: true

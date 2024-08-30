@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
-const LegacyImportLicenceService = require('../../app/services/import/legacy-licence.service.js')
+const LegacyImportLicenceService = require('../../app/services/import/legacy/process-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -35,12 +35,12 @@ describe('Import controller', () => {
     Sinon.restore()
   })
 
-  describe('/import/licence', () => {
-    describe('POST /import/licence', () => {
+  describe('/import/licence/legacy', () => {
+    describe('POST', () => {
       beforeEach(async () => {
         options = {
           method: 'POST',
-          url: '/import/licence',
+          url: '/import/licence/legacy',
           payload: {
             licenceRef: 'mock-licence-ref'
           }
@@ -63,25 +63,11 @@ describe('Import controller', () => {
             expect(response.statusCode).to.equal(204)
           })
         })
-
-        describe('when a request does include the licence ref', () => {
-          beforeEach(() => {
-            options.payload = {}
-
-            Sinon.stub(LegacyImportLicenceService, 'go').rejects()
-          })
-
-          it('redirects to select return start date page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(500)
-          })
-        })
       })
 
       describe('when the feature flag "enableSystemLicenceView" is false', () => {
         beforeEach(() => {
-          Sinon.stub(LegacyImportLicenceService, 'go')
+          Sinon.stub(LegacyImportLicenceService, 'go').resolves()
 
           Sinon.stub(FeatureFlagsConfig, 'enableSystemImportLegacyLicence').value(false)
         })

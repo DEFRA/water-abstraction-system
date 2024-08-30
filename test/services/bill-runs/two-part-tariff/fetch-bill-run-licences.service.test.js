@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
-const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
@@ -27,10 +26,6 @@ describe('Fetch Bill Run Licences service', () => {
   let testLicenceReady
   let testLicenceReview
   let testLicenceNoIssues
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   afterEach(() => {
     Sinon.restore()

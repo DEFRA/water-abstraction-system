@@ -31,7 +31,7 @@ function formatStandardDateToISO (date) {
   if (isValidDate(isoDateString)) {
     return isoDateString
   } else {
-    return null
+    throw new Error(`${isoDateString} is not a valid date`)
   }
 }
 

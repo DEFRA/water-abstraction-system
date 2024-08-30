@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { ref } = require('objection')
@@ -24,10 +23,6 @@ describe('Charging Module Create Transaction presenter', () => {
   let transaction
   let licence
   let region
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {

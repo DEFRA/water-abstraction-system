@@ -42,7 +42,7 @@ class BaseNotifierLib {
    *
    * @param {string} message - Message to add to the log (INFO)
    * @param {object} [data={}] - An object containing any values to be logged, for example, a bill run ID to be included
-   *  with the log message. Defaults to an empty object
+   * with the log message. Defaults to an empty object
    */
   omg (message, data = {}) {
     this._logger.info(this._formatLogPacket(data), message)
@@ -78,7 +78,7 @@ class BaseNotifierLib {
    * @param {object} [data={}] - An object containing any values to be logged and sent in the notification to Errbit,
    * for example, a bill run ID. Defaults to an empty object
    * @param {Error} [error=null] - An instance of the error to be logged and sent to Errbit. If no error is provided one
-   *  will be created using `message` as the error message
+   * will be created using `message` as the error message
    */
   omfg (message, data = {}, error = null) {
     // This deals with anyone calling omfg() with `omfg('It broke', null, error)` which would cause things to break

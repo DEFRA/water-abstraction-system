@@ -18,7 +18,8 @@ describe('Bill Runs Setup - Fetch Regions service', () => {
     it('returns the ID and display name for each region ordered by display name', async () => {
       const results = await FetchRegionsService.go()
 
-      // This is necessary because other region helpers are adding regions into the database as part of their tests.
+      // TODO: This is necessary because other region helpers are adding regions into the database as part
+      //  of their tests. (Remove when cleans have been removed)
       const expectedRegions = RegionHelper.data.map((region) => {
         return {
           id: region.id,
