@@ -95,8 +95,24 @@ function selectRandomEntry (data) {
   return data[randomIndex]
 }
 
+/**
+ * Generates a random region code
+ *
+ * Region codes should be between 1 and 9 based on the fixed region reference data.
+ *
+ * We see issues with this small range when tables have unique constraints when building external id's.
+ *
+ * This function is here to encapsulate this issue and remove any need to explain the issue else where in the tests.
+ *
+ * @returns a random number
+ */
+function randomRegionCode () {
+  return randomInteger(1, 999999)
+}
+
 module.exports = {
   postRequestOptions,
   randomInteger,
-  selectRandomEntry
+  selectRandomEntry,
+  randomRegionCode
 }

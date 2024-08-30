@@ -5,7 +5,7 @@
  */
 
 const ModLogModel = require('../../../app/models/mod-log.model.js')
-const { randomInteger } = require('../general.js')
+const { randomInteger, randomRegionCode } = require('../general.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 
 /**
@@ -44,7 +44,7 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
-  const regionCode = randomInteger(1, 9)
+  const regionCode = randomRegionCode()
 
   const defaults = {
     externalId: generateRegionNaldPatternExternalId(regionCode),
@@ -63,6 +63,10 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ *
+ * @param regionCode
+ */
 function generateRegionNaldPatternExternalId (regionCode = null) {
   const regionCodeToUse = regionCode ?? randomInteger(1, 9)
 
