@@ -10,6 +10,7 @@ const InitiateSessionService = require('../services/return-requirements/initiate
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
+const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
@@ -72,6 +73,16 @@ async function viewContacts (request, h) {
   })
 }
 
+async function viewHistory (request, h) {
+  const { params: { id }, auth } = request
+
+  const data = await ViewLicenceHistoryService.go(id, auth)
+
+  return h.view('licences/history.njk', {
+    ...data
+  })
+}
+
 async function viewSummary (request, h) {
   const { params: { id }, auth } = request
 
@@ -105,6 +116,7 @@ module.exports = {
   viewBills,
   viewCommunications,
   viewContacts,
+  viewHistory,
   viewReturns,
   viewSetUp,
   viewSummary

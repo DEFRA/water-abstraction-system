@@ -9,6 +9,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
+const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -97,8 +98,38 @@ async function _persistLicenceVersionPurpose (trx, updatedAt, licenceVersionPurp
 
 async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPurposes, licenceVersionId) {
   for (const licenceVersionPurpose of licenceVersionPurposes) {
-    await _persistLicenceVersionPurpose(trx, updatedAt, licenceVersionPurpose, licenceVersionId)
+    const licenceVersionPurposeConditions = licenceVersionPurpose.licenceVersionPurposeConditions
+
+    const { id } = await _persistLicenceVersionPurpose(
+      trx, updatedAt, licenceVersionPurpose, licenceVersionId)
+
+    await _persistLicenceVersionPurposeConditions(trx, updatedAt, licenceVersionPurposeConditions, id)
   }
+}
+
+async function _persistLicenceVersionPurposeConditions (
+  trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
+  for (const licenceVersionPurposeCondition of licenceVersionPurposeConditions) {
+    await _persistLicenceVersionPurposeCondition(
+      trx, updatedAt, licenceVersionPurposeCondition, licenceVersionPurposeId)
+  }
+}
+
+async function _persistLicenceVersionPurposeCondition (
+  trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
+  const { ...propertiesToPersist } = licenceVersionPurposeConditions
+
+  return LicenceVersionPurposeConditionModel.query(trx)
+    .insert({ ...propertiesToPersist, licenceVersionPurposeId, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'licenceVersionPurposeConditionTypeId',
+      'param1',
+      'param2',
+      'notes',
+      'updatedAt'
+    ])
+    .returning('id')
 }
 
 module.exports = {

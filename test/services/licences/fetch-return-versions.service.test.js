@@ -24,12 +24,17 @@ describe('Fetch Return Versions service', () => {
 
   describe('when the licence has return versions data', () => {
     beforeEach(async () => {
-      // NOTE: We add 2, both with the same start date to ensure the order that they are returned is as expected
+      // NOTE: We add these 2, both with the same start date to ensure the order that they are returned as expected
       supersededReturnVersion = await ReturnVersionHelper.add({
         startDate, status: 'superseded', version: 100
       })
       currentReturnVersion = await ReturnVersionHelper.add({
         licenceId: supersededReturnVersion.licenceId, startDate, status: 'current', version: 101
+      })
+
+      // We add this 3rd one with a status of draft to ensure it is not included
+      await ReturnVersionHelper.add({
+        licenceId: supersededReturnVersion.licenceId, startDate: new Date('2022-05-01'), status: 'draft', version: 102
       })
 
       currentReturnVersionModLog = await ModLogHelper.add({

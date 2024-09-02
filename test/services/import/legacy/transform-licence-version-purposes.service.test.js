@@ -58,6 +58,7 @@ describe('Import Legacy Transform Licence Version Purposes service', () => {
         externalId: '6:10000004',
         hourlyQuantity: 140.929,
         instantQuantity: null,
+        licenceVersionPurposeConditions: [],
         notes: null,
         primaryPurposeId: '8d9d407c-3da7-4977-84a0-97738c9b44cc',
         purposeId: '025bfdc9-d7f4-46b5-a7e0-451dec1a34a6',
