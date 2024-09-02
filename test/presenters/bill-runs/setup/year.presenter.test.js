@@ -15,7 +15,7 @@ describe('Bill Runs Setup Year presenter', () => {
   let session
 
   describe('when provided with a bill run setup session record for two-part tariff supplementary', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       licenceSupplementaryYears = [{ financialYearEnd: 2024 }, { financialYearEnd: 2022 }]
       session = {
         id: '98ad3a1f-8e4f-490a-be05-0aece6755466',
@@ -85,7 +85,7 @@ describe('Bill Runs Setup Year presenter', () => {
     })
 
     describe('where the user has not previously selected a financial year', () => {
-      it('correctly presents the data', async () => {
+      it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
@@ -101,7 +101,7 @@ describe('Bill Runs Setup Year presenter', () => {
         session.year = '2022'
       })
 
-      it('correctly presents the data', async () => {
+      it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
         expect(result).to.equal({
