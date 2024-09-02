@@ -18,15 +18,19 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (licence, auth) {
   const {
     id,
+    includeInPresrocBilling,
     licenceDocumentHeader,
     licenceRef,
     workflows
   } = licence
 
   const primaryUser = licence.$primaryUser()
+  const ends = licence.$ends()
 
   return {
     documentId: licenceDocumentHeader.id,
+    ends,
+    includeInPresrocBilling,
     licenceId: id,
     licenceName: _licenceName(licence),
     licenceRef,
@@ -34,7 +38,7 @@ function go (licence, auth) {
     pageTitle: `Licence ${licenceRef}`,
     primaryUser,
     roles: _roles(auth),
-    warning: _warning(licence),
+    warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
 }
@@ -73,9 +77,8 @@ function _roles (auth) {
   })
 }
 
-function _warning (licence) {
+function _warning (ends) {
   const today = new Date()
-  const ends = licence.$ends()
 
   if (!ends || ends.date > today) {
     return null
