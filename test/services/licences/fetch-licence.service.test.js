@@ -22,7 +22,12 @@ describe('Fetch Licence service', () => {
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
+
+      // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
+      // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
+      // as changed incorrectly
       workflow = await WorkflowHelper.add({ licenceId: licence.id })
+      await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
     })
 
     it('returns the matching licence', async () => {

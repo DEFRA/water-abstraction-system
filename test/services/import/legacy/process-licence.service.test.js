@@ -17,6 +17,7 @@ const PersistLicenceService = require('../../../../app/services/import/persist-l
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
 const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
+const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
 
 // Thing under test
 const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
@@ -40,6 +41,7 @@ describe('Import Legacy Process Licence service', () => {
     Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
+    Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -105,10 +107,12 @@ function _transformedLicence (licenceRef) {
       externalId: '6:2113:100:0',
       licenceVersionPurposes: [
         {
-          externalId: '6:10000004'
+          externalId: '6:10000004',
+          licenceVersionPurposeConditions: []
         },
         {
-          externalId: '6:10000005'
+          externalId: '6:10000005',
+          licenceVersionPurposeConditions: []
         }
       ]
     }]
