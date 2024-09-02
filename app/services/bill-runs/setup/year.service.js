@@ -5,6 +5,7 @@
  * @module YearService
  */
 
+const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
 const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -20,7 +21,12 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = await YearPresenter.go(session)
+
+  const regionId = session.region
+  const twoPartTariff = session.type.startsWith('two_part')
+  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+
+  const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
 
   return {
     ...formattedData
