@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the generating return logs
- * @module FetchLicenceWithoutReturnsService
+ * @module FetchReturnLogsService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
@@ -11,25 +11,28 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
 
-const allYearDueDateDay = 28
-const allYearDueDateMonth = 3
-const allYearEndDay = 31
-const allYearEndMonth = 2
-const allYearStartDay = 1
-const allYearStartMonth = 3
+const ALL_YEAR_DUE_DATE_DAY = 28
+const ALL_YEAR_DUE_DATE_MONTH = 3
+const ALL_YEAR_END_DAY = 31
+const ALL_YEAR_END_MONTH = 2
+const ALL_YEAR_START_DAY = 1
+const ALL_YEAR_START_MONTH = 3
 
-const summerDueDateDay = 28
-const summerDueDateMonth = 10
-const summerEndDay = 31
-const summerEndMonth = 9
-const summerStartDay = 1
-const summerStartMonth = 10
+const SUMMER_DUE_DATE_DAY = 28
+const SUMMER_DUE_DATE_MONTH = 10
+const SUMMER_END_DAY = 31
+const SUMMER_END_MONTH = 9
+const SUMMER_START_DAY = 1
+const SUMMER_START_MONTH = 10
 
-const endOfSummerCycle = new Date(new Date().getFullYear() + 1, summerEndMonth, summerEndDay)
-const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, allYearEndMonth, allYearEndDay)
+const endOfSummerCycle = new Date(new Date().getFullYear() + 1, SUMMER_END_MONTH, SUMMER_END_DAY)
+const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, ALL_YEAR_END_MONTH, ALL_YEAR_END_DAY)
 
 /**
  * Fetch all return requirements that need return logs created.
+ *
+ * @param isSummer - are we running summer cycel or all year - boolean
+ * @param licenceReference - if provided only do the return log for that licence reference - string
  *
  * @returns {Promise<Array>} the list of return requirement ids
  */
@@ -203,8 +206,8 @@ async function _generateReturnLogPayload (isSummer, requirementsForReturns) {
 
 function _getCycleDueDate (isSummer) {
   return isSummer
-    ? _formatDate(new Date(new Date().getFullYear() + 1, summerDueDateMonth, summerDueDateDay))
-    : _formatDate(new Date(new Date().getFullYear() + 1, allYearDueDateMonth, allYearDueDateDay))
+    ? _formatDate(new Date(new Date().getFullYear() + 1, SUMMER_DUE_DATE_MONTH, SUMMER_DUE_DATE_DAY))
+    : _formatDate(new Date(new Date().getFullYear() + 1, ALL_YEAR_DUE_DATE_MONTH, ALL_YEAR_DUE_DATE_DAY))
 }
 
 function _getCycleEndDate (isSummer, returnVersion) {
@@ -241,8 +244,8 @@ function _getCycleEndDate (isSummer, returnVersion) {
 
 function _getCycleStartDate (isSummer) {
   return isSummer
-    ? _formatDate(new Date(new Date().getFullYear(), summerStartMonth, summerStartDay))
-    : _formatDate(new Date(new Date().getFullYear(), allYearStartMonth, allYearStartDay))
+    ? _formatDate(new Date(new Date().getFullYear(), SUMMER_START_MONTH, SUMMER_START_DAY))
+    : _formatDate(new Date(new Date().getFullYear(), ALL_YEAR_START_MONTH, ALL_YEAR_START_DAY))
 }
 
 function _isFinal (endDateString, isSummer) {
