@@ -29,6 +29,8 @@ function go (licence, auth) {
 
   return {
     documentId: licenceDocumentHeader.id,
+    ends,
+    includeInPresrocBilling,
     licenceId: id,
     licenceName: _licenceName(licence),
     licenceRef,
@@ -37,9 +39,7 @@ function go (licence, auth) {
     primaryUser,
     roles: _roles(auth),
     warning: _warning(ends),
-    workflowWarning: _workflowWarning(workflows),
-    includeInPresrocBilling,
-    ends
+    workflowWarning: _workflowWarning(workflows)
   }
 }
 
