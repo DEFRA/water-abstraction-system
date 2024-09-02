@@ -18,17 +18,22 @@ const FetchLicenceSupplementaryYearsService = require('../../../../app/services/
 const YearService = require('../../../../app/services/bill-runs/setup/year.service.js')
 
 describe('Bill Runs Setup Year service', () => {
+  const regionId = 'cff057a0-f3a7-4ae6-bc2b-01183e40fd05'
+
   let session
+  let yearsStub
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { type: 'two_part_supplementary', year: 2024 } })
+    session = await SessionHelper.add({ data: { region: regionId, type: 'two_part_supplementary', year: 2024 } })
 
-    Sinon.stub(FetchLicenceSupplementaryYearsService, 'go').resolves([{ financialYearEnd: 2024 }])
+    yearsStub = Sinon.stub(FetchLicenceSupplementaryYearsService, 'go').resolves([{ financialYearEnd: 2024 }])
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await YearService.go(session.id)
+
+      expect(yearsStub.calledWith(regionId, true)).to.be.true()
 
       expect(result).to.equal({
         financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: true }],
