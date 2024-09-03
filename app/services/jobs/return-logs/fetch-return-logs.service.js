@@ -33,6 +33,7 @@ const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, ALL_YE
  *
  * @param {boolean} isSummer - are we running summer cycel or all year
  * @param {string} licenceReference - if provided only do the return log for that licence reference
+ *
  * @returns {Promise<Array>} the list of return requirement ids
  */
 async function go (isSummer, licenceReference) {
