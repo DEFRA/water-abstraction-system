@@ -19,13 +19,15 @@ const ReturnVersionHelper = require('../../../support/helpers/return-version.hel
 // Thing under test
 const FetchReturnLogsService = require('../../../../app/services/jobs/return-logs/fetch-return-logs.service.js')
 
-describe.only('Fetch return logs service', () => {
+describe('Fetch return logs service', () => {
   const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
   const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
   const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
   const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
   const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
+  const summerReturns = []
+  const allYearReturns = []
 
   describe('When isSummer is false, one return requirement and a licenceRef provided', () => {
     let licence
@@ -42,6 +44,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      allYearReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -94,6 +97,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      summerReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -154,6 +158,8 @@ describe.only('Fetch return logs service', () => {
       returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
         returnRequirementId: returnRequirement2.id
       })
+      allYearReturns.push(returnRequirement.legacyId.toString())
+      allYearReturns.push(returnRequirement2.legacyId.toString())
     })
 
     it('should return two return log payloads', async () => {
@@ -269,6 +275,8 @@ describe.only('Fetch return logs service', () => {
         returnReference: returnRequirement.legacyId,
         startDate: summerStartDate
       })
+      summerReturns.push(returnRequirement.legacyId.toString())
+      summerReturns.push(returnRequirement2.legacyId.toString())
     })
 
     it('should return two return log payloads', async () => {
@@ -351,6 +359,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      allYearReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -405,6 +414,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      allYearReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -459,6 +469,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      summerReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -513,6 +524,7 @@ describe.only('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      summerReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -550,9 +562,9 @@ describe.only('Fetch return logs service', () => {
     })
   })
 
-  describe.only('when isSummer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
+  describe('when isSummer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
     const startDate = new Date(new Date().getFullYear(), 11, 1).toISOString().split('T')[0]
-console.log(startDate)
+
     let licence
     let region
     let returnVersion
@@ -567,6 +579,7 @@ console.log(startDate)
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      summerReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
@@ -605,18 +618,26 @@ console.log(startDate)
   })
 
   describe('when isSummer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
-    it('should return three return log payloads', async () => {
-      const result = await FetchReturnLogsService.go(false)
+    it('should return five return log payloads', async () => {
+      const results = await FetchReturnLogsService.go(false)
 
-      expect(result.length).to.equal(5)
+      const returnRequirementExternalId = results.map((returnLog) => {
+        return returnLog.returnReference
+      })
+
+      expect(allYearReturns.every((result) => { return returnRequirementExternalId.includes(result) })).to.equal(true)
     })
   })
 
   describe('when isSummer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
-    it('should return three return log payloads', async () => {
-      const result = await FetchReturnLogsService.go(true)
+    it('should return five return log payloads', async () => {
+      const results = await FetchReturnLogsService.go(true)
 
-      expect(result.length).to.equal(5)
+      const returnRequirementExternalId = results.map((returnLog) => {
+        return returnLog.returnReference
+      })
+
+      expect(summerReturns.every((result) => { return returnRequirementExternalId.includes(result) })).to.equal(true)
     })
   })
 })
