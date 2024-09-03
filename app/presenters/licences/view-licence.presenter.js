@@ -54,18 +54,33 @@ function _licenceName (licence) {
 }
 
 function _notification (licence) {
-  const { includeInPresrocBilling, includeInSrocBilling } = licence
-  const baseMessage = 'This licence has been marked for the next supplementary bill run'
+  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
+  const baseMessage = 'This licence has been marked for the next '
+
+  if (licenceSupplementaryYears.length > 0) {
+    if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+      return baseMessage + 'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+    }
+    if (includeInPresrocBilling === 'yes') {
+      return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
+    }
+
+    if (includeInSrocBilling === true) {
+      return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
+    }
+
+    return baseMessage + 'two-part tariff supplementary bill run.'
+  }
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return baseMessage + 's for the current and old charge schemes.'
+    return baseMessage + 'supplementary bill runs for the current and old charge schemes.'
   }
   if (includeInPresrocBilling === 'yes') {
-    return baseMessage + ' for the old charge scheme.'
+    return baseMessage + 'supplementary bill run for the old charge scheme.'
   }
 
   if (includeInSrocBilling === true) {
-    return baseMessage + '.'
+    return baseMessage + 'supplementary bill run.'
   }
 
   return null
