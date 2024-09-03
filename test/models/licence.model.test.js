@@ -277,7 +277,7 @@ describe('Licence model', () => {
       })
     })
 
-    describe.only('when linking to licence supplementary years', () => {
+    describe('when linking to licence supplementary years', () => {
       let testLicenceSupplementaryYears
 
       beforeEach(async () => {
