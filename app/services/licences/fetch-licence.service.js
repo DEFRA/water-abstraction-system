@@ -35,6 +35,17 @@ async function _fetch (licenceId) {
     ])
     .modify('licenceName')
     .modify('primaryUser')
+    .withGraphFetched('licenceSupplementaryYears')
+    .modifyGraph('licenceSupplementaryYears', (builder) => {
+      builder
+        .select([
+          'id',
+          'licenceId',
+          'billRunId',
+          'financialYearEnd',
+          'twoPartTariff'
+        ])
+    })
     .withGraphFetched('workflows')
     .modifyGraph('workflows', (builder) => {
       builder
