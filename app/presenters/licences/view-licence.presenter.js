@@ -58,18 +58,7 @@ function _notification (licence) {
   const baseMessage = 'This licence has been marked for the next '
 
   if (licenceSupplementaryYears.length > 0) {
-    if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-      return baseMessage + 'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
-    }
-    if (includeInPresrocBilling === 'yes') {
-      return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
-    }
-
-    if (includeInSrocBilling === true) {
-      return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
-    }
-
-    return baseMessage + 'two-part tariff supplementary bill run.'
+    return _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling)
   }
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
@@ -90,6 +79,21 @@ function _roles (auth) {
   return auth.credentials.roles.map((role) => {
     return role.role
   })
+}
+
+function _tptNotification (baseMessage, includeInPresrocBilling, includeInSrocBilling) {
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
+  }
+
+  return baseMessage + 'two-part tariff supplementary bill run.'
 }
 
 function _warning (ends) {
