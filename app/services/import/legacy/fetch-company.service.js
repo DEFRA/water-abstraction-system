@@ -58,19 +58,19 @@ function _query () {
         -- If FORENAME or INITIALS are NULL, use NAME directly
         WHEN np."FORENAME" = 'null' AND np."INITIALS" = 'null' THEN np."NAME"
         ELSE CONCAT_WS(' ',
-                       CASE
-                         WHEN np."SALUTATION" = 'null' THEN NULL
-                         ELSE np."SALUTATION"
-                         END,
-                       CASE
-                         WHEN np."FORENAME" = 'null' THEN np."INITIALS"
-                         ELSE np."FORENAME"
-                         END,
-                       CASE
-                         WHEN np."NAME" = 'null' THEN NULL
-                         ELSE np."NAME"
-                         END
-             )
+          CASE
+            WHEN np."SALUTATION" = 'null' THEN NULL
+            ELSE np."SALUTATION"
+          END,
+          CASE
+            WHEN np."FORENAME" = 'null' THEN np."INITIALS"
+            ELSE np."FORENAME"
+          END,
+          CASE
+            WHEN np."NAME" = 'null' THEN NULL
+            ELSE np."NAME"
+          END
+          )
         END
       )) AS name,
     nlr."ACON_APAR_ID" as party_id,
