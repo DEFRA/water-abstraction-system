@@ -64,6 +64,14 @@ class LicenceModel extends BaseModel {
           to: 'licenceGaugingStations.licenceId'
         }
       },
+      licenceSupplementaryYears: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-supplementary-year.model',
+        join: {
+          from: 'licences.id',
+          to: 'licenceSupplementaryYears.licenceId'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
