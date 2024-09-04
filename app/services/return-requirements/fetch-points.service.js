@@ -1,62 +1,53 @@
 'use strict'
 
 /**
- * Fetches the points data for a licence
+ * Fetches all LicenceVersionPurposePoints for the matching licenceId
  * @module FetchPointsService
  */
-
-const { ref } = require('objection')
 
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetches the points data for a licence
+ * Fetches all LicenceVersionPurposePoints for the matching licenceId
  *
- * @param {string} licenceId - The UUID for the licence to fetch
+ * @param {string} licenceId - The UUID for the licence to fetch points for
  *
- * @returns {Promise<object>} The points data for the matching licenceId
+ * @returns {Promise<module:LicenceVersionPurposePoints[]>} All LicenceVersionPurposePoints for the matching licenceId
  */
 async function go (licenceId) {
-  const data = await _fetchPoints(licenceId)
-
-  return data
+  return _fetch(licenceId)
 }
 
-async function _fetchPoints (licenceId) {
-  const result = await LicenceModel.query()
+// NOTE: We could have gone direct to the LicenceVersionPurposePoints table and then worked back to the selected
+// licence. But we have the added complexity of only wanting the points for the current licence version, something we
+// already have logic for on the licence model.
+//
+// It made sense to go from licence to the points via our 'currentVersion' modifier. It just means we need to bring
+// the points back into a single array afterwards.
+async function _fetch (licenceId) {
+  const licence = await LicenceModel.query()
     .findById(licenceId)
-    .withGraphFetched('permitLicence')
-    .modifyGraph('permitLicence', (builder) => {
+    .select(['id'])
+    .modify('currentVersion')
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints', (builder) => {
       builder.select([
-        ref('licenceDataValue:data.current_version.purposes').as('purposes')
+        'id',
+        'description',
+        'ngr1',
+        'ngr2',
+        'ngr3',
+        'ngr4'
       ])
     })
 
-  return _abstractPointsData(result.permitLicence)
-}
+  const points = []
 
-function _abstractPointsData (result) {
-  const pointsData = []
+  for (const licenceVersionPurpose of licence.$currentVersion().licenceVersionPurposes) {
+    points.push(...licenceVersionPurpose.licenceVersionPurposePoints)
+  }
 
-  // First extract from the current_version's purposes the various points
-  result.purposes.forEach((purpose) => {
-    purpose.purposePoints.forEach((point) => {
-      const pointDetail = point.point_detail
-
-      pointsData.push(pointDetail)
-    })
-  })
-
-  // Then sort the extracted points to give us a consistent display order and return
-  return pointsData.sort((first, second) => {
-    // NOTE: This ensures we don't call localeCompare with null or undefined values
-    const firstLocalName = first.LOCAL_NAME ? first.LOCAL_NAME : ''
-    const secondLocalName = second.LOCAL_NAME ? second.LOCAL_NAME : ''
-
-    // NOTE: localeCompare() handles dealing with values in different cases automatically! So we don't have to lowercase
-    // everything before then comparing.
-    return firstLocalName.localeCompare(secondLocalName)
-  })
+  return points
 }
 
 module.exports = {
