@@ -19,10 +19,10 @@ const PartiesPresenter = require('../../../presenters/import/legacy/companies.pr
 async function go (regionCode, licenceId) {
   const companies = await FetchCompanyService.go(regionCode, licenceId)
 
-  const data = PartiesPresenter.go(companies)
+  const transformedCompanies = PartiesPresenter.go(companies)
 
   return {
-    transformedCompanies: data,
+    transformedCompanies,
     companies // to be used by the company address et al. services when built
   }
 }

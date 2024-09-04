@@ -40,7 +40,7 @@ async function go (licenceRef) {
     LicenceStructureValidator.go(transformedLicence)
 
     // Either insert or update the licence in WRLS
-    const licenceId = await PersistLicenceService.go(transformedLicence)
+    const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
