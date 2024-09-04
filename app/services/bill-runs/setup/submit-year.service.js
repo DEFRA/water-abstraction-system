@@ -48,8 +48,8 @@ async function go (sessionId, payload) {
   }
 
   const regionId = session.region
-  const twoPartTariff = session.type.startsWith('two_part')
-  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+  const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
+  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
 
   const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
 
