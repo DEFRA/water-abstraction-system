@@ -9,6 +9,7 @@ const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.j
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposePointHelper = require('../helpers/licence-version-purpose-point.helper.js')
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
 const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
@@ -30,7 +31,7 @@ const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-
  * - 3 licence version purposes; one for an electricity purpose, one for a two-part purpose, one standard
  * - 2 licence financial agreements: one that is current but not 2PT, the other is 2PT but has ended
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
- *   points and the rest 1
+ * points and the rest 1
  *
  * @param {string | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
  *
@@ -57,7 +58,7 @@ async function seed (optionalLicenceRef = undefined) {
   records.licenceFinancialAgreements = await _licenceFinancialAgreement(licenceRef, records.financialAgreements)
   records.licenceVersions = await _licenceVersions(licenceId)
   records.licenceVersionPurposes = await _licenceVersionPurposes(records.licenceVersions.currentId, records.allPurposes)
-  records.permitLicence = await _permitLicence(licenceRef)
+  records.licenceVersionPurposePoints = await _licenceVersionPurposePoints(records.licenceVersionPurposes)
 
   return records
 }
@@ -136,59 +137,30 @@ async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   return { electricity, standard, twoPartTariff }
 }
 
-async function _permitLicence (licenceRef) {
-  const licenceDataValue = {
-    ID: '10021954',
-    data: {
-      current_version: {
-        purposes: [
-          {
-            ID: '10065380',
-            purposePoints: [
-              {
-                point_detail: {
-                  ID: '10030400',
-                  LOCAL_NAME: 'INTAKE POINT'
-                }
-              },
-              {
-                point_detail: {
-                  ID: '10030401',
-                  LOCAL_NAME: 'OUT TAKE POINT'
-                }
-              }
-            ]
-          },
-          {
-            ID: '10065381',
-            purposePoints: [
-              {
-                point_detail: {
-                  ID: '10030500',
-                  LOCAL_NAME: 'SOUTH BOREHOLE'
-                }
-              }
-            ]
-          },
-          {
-            ID: '10065382',
-            purposePoints: [
-              {
-                point_detail: {
-                  ID: '10030600',
-                  LOCAL_NAME: 'MAIN INTAKE'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
+async function _licenceVersionPurposePoints (licenceVersionPurposes) {
+  const {
+    electricity: electricityPurpose,
+    standard: standardPurpose,
+    twoPartTariff: twoPartTariffPurpose
+  } = licenceVersionPurposes
 
-  const { id: permitLicenceId } = await PermitLicenceHelper.add({ licenceRef, licenceDataValue })
+  const electricity1 = await LicenceVersionPurposePointHelper.add({
+    description: 'INTAKE POINT', licenceVersionPurposeId: electricityPurpose.id
+  })
 
-  return permitLicenceId
+  const electricity2 = await LicenceVersionPurposePointHelper.add({
+    description: 'OUT TAKE POINT', licenceVersionPurposeId: electricityPurpose.id
+  })
+
+  const standard = await LicenceVersionPurposePointHelper.add({
+    description: 'SOUTH BOREHOLE', licenceVersionPurposeId: standardPurpose.id
+  })
+
+  const twoPartTariff = await LicenceVersionPurposePointHelper.add({
+    description: 'MAIN INTAKE', licenceVersionPurposeId: twoPartTariffPurpose.id
+  })
+
+  return { electricity1, electricity2, standard, twoPartTariff }
 }
 
 async function _purposes () {

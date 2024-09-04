@@ -5,8 +5,6 @@
  * @module FetchAbstractionDataService
  */
 
-const { ref } = require('objection')
-
 const LicenceModel = require('../../../models/licence.model.js')
 
 /**
@@ -55,28 +53,27 @@ async function _fetch (licenceId) {
     ])
     // Grab only the current version for the licence. The licence version purposes are linked off it
     .modify('currentVersion')
-    // For reasons unknown (!!) the previous team never normalised the points against a licence, just the purposes. So,
-    // we have to dip into the JSONB blob of _all_ the NALD data for a licence to retrieve the points for a purpose
-    .withGraphFetched('permitLicence')
-    .modifyGraph('permitLicence', (builder) => {
-      builder.select([
-        ref('licenceDataValue:data.current_version.purposes').as('purposes')
-      ])
-    })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
       builder.select([
-        'id',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'dailyQuantity',
-        'externalId'
+        'licenceVersionPurposes.id',
+        'licenceVersionPurposes.abstractionPeriodEndDay',
+        'licenceVersionPurposes.abstractionPeriodEndMonth',
+        'licenceVersionPurposes.abstractionPeriodStartDay',
+        'licenceVersionPurposes.abstractionPeriodStartMonth',
+        'licenceVersionPurposes.dailyQuantity',
+        'licenceVersionPurposes.externalId'
       ])
         // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary
         // and secondary against a licence version purpose
         .modify('allPurposes')
+        .withGraphFetched('licenceVersionPurposePoints')
+        .modifyGraph('licenceVersionPurposePoints', (builder) => {
+          builder.select([
+            'licenceVersionPurposePoints.id',
+            'licenceVersionPurposePoints.description'
+          ])
+        })
     })
 }
 

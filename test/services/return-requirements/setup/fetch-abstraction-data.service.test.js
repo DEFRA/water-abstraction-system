@@ -29,19 +29,6 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
         id: seedIds.licenceId,
         waterUndertaker: false,
         twoPartTariffAgreement: false,
-        permitLicence: {
-          purposes: [
-            {
-              ID: '10065380',
-              purposePoints: [
-                { point_detail: { ID: '10030400', LOCAL_NAME: 'INTAKE POINT' } },
-                { point_detail: { ID: '10030401', LOCAL_NAME: 'OUT TAKE POINT' } }
-              ]
-            },
-            { ID: '10065381', purposePoints: [{ point_detail: { ID: '10030500', LOCAL_NAME: 'SOUTH BOREHOLE' } }] },
-            { ID: '10065382', purposePoints: [{ point_detail: { ID: '10030600', LOCAL_NAME: 'MAIN INTAKE' } }] }
-          ]
-        },
         licenceVersions: [
           {
             id: seedIds.licenceVersions.currentId,
@@ -58,7 +45,11 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 externalId: seedIds.licenceVersionPurposes.electricity.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryElectricityId, legacyId: 'P' },
                 purpose: { description: 'Heat Pump', id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
-                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' }
+                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' },
+                licenceVersionPurposePoints: [
+                  { description: 'INTAKE POINT', id: seedIds.licenceVersionPurposePoints.electricity1.id },
+                  { description: 'OUT TAKE POINT', id: seedIds.licenceVersionPurposePoints.electricity2.id }
+                ]
               },
               {
                 id: seedIds.licenceVersionPurposes.standard.id,
@@ -70,7 +61,10 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 externalId: seedIds.licenceVersionPurposes.standard.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
                 purpose: { description: 'Vegetable Washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
-                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
+                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
+                licenceVersionPurposePoints: [
+                  { description: 'SOUTH BOREHOLE', id: seedIds.licenceVersionPurposePoints.standard.id }
+                ]
               },
               {
                 id: seedIds.licenceVersionPurposes.twoPartTariff.id,
@@ -82,7 +76,10 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 externalId: seedIds.licenceVersionPurposes.twoPartTariff.externalId,
                 primaryPurpose: { id: seedIds.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
                 purpose: { description: 'Spray Irrigation - Direct', id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
-                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' }
+                secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
+                licenceVersionPurposePoints: [
+                  { description: 'MAIN INTAKE', id: seedIds.licenceVersionPurposePoints.twoPartTariff.id }
+                ]
               }
             ]
           }
