@@ -12,9 +12,11 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * Was built to provide the data needed for the '/licences/{id}/licence-contact' page
  *
- * @param {string} id The UUID for the licence to fetch
+ * @param {string} licenceId - The UUID for the licence to fetch
+ *
+ * @returns {Promise<module:LicenceModel>} the matching `licenceModel` populated with the data needed for the view
+ * licence contact details page
  */
-
 async function go (licenceId) {
   return _fetchLicenceDetails(licenceId)
 }
