@@ -20,7 +20,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @param {string} returnVersionId - The UUID of the selected return version to copy requirements from
  *
- * @returns {Promise<Object[]>} an array of return requirements generated from the existing return version and ready to
+ * @returns {Promise<object[]>} an array of return requirements generated from the existing return version and ready to
  * be persisted to the setup session
  */
 async function go (returnVersionId) {

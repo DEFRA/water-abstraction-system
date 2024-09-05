@@ -17,7 +17,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being removed
  *
- * @returns {Promise<Object>} The view data for the remove requirements page
+ * @returns {Promise<object>} The view data for the remove requirements page
 */
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)

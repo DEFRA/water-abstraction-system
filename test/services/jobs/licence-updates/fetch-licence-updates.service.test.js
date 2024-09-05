@@ -13,7 +13,6 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
@@ -24,8 +23,6 @@ describe('Fetch Licence Updates service', () => {
   let licenceVersion
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     licence = await LicenceHelper.add()
   })
 
@@ -38,7 +35,7 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results[0]
+        const result = results.find((l) => { return l.id === licenceVersion.id })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -54,7 +51,7 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results[0]
+        const result = results.find((l) => { return l.id === licenceVersion.id })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -70,7 +67,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -83,7 +82,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -97,11 +98,14 @@ describe('Fetch Licence Updates service', () => {
           licenceId: licence.id, licenceRef: licence.licenceRef, scheme: 'alcs'
         })
         const billRun = await BillRunHelper.add({ scheme: 'alcs' })
+
         await BillRunChargeVersionYearHelper.add({ billRunId: billRun.id, chargeVersionId: chargeVersion.id })
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -113,7 +117,9 @@ describe('Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService.go()
+
+        const results = data.filter((l) => { return l.licenceId === licence.id })
 
         expect(results).to.be.empty()
       })
@@ -123,6 +129,7 @@ describe('Fetch Licence Updates service', () => {
 
 function _threeMonthsAgo () {
   const today = new Date()
+
   today.setMonth(today.getMonth() - 3)
 
   return today.toISOString()

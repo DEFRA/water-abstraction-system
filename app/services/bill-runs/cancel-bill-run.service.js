@@ -13,7 +13,7 @@ const CancelBillRunPresenter = require('../../presenters/bill-runs/cancel-bill-r
  *
  * @param {string} id - The UUID of the bill run to cancel
  *
- * @returns {Promise<Object}> an object representing the `pageData` needed by the cancel bill run template. It contains
+ * @returns {Promise<object>} an object representing the `pageData` needed by the cancel bill run template. It contains
  * details of the bill run.
  */
 async function go (id) {

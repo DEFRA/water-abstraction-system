@@ -16,7 +16,7 @@ const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 
 // Thing under test
@@ -37,9 +37,7 @@ describe('Fetch Bill Licence Summary service', () => {
   let transactionId
 
   beforeEach(async () => {
-    const region = RegionsSeeder.data.find((region) => {
-      return region.displayName === 'Test Region'
-    })
+    const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
     regionId = region.id
     licenceRef = LicenceHelper.generateLicenceRef()

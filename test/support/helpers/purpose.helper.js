@@ -4,61 +4,32 @@
  * @module PurposeHelper
  */
 
-const PurposeModel = require('../../../app/models/purpose.model.js')
-const { randomInteger } = require('../general.js')
+const { selectRandomEntry } = require('../general.js')
+const { data: purposes } = require('../../../db/seeds/data/purposes.js')
 
 /**
- * Add a new purpose
+ * Select an entry from the reference data entries seeded at the start of testing
  *
- * If no `data` is provided, default values will be used. These are
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
  *
- * - `legacyId` - [randomly generated - 420]
- * - `description` - Spray Irrigation - Storage
- * - `lossFactor` - high
- * - `twoPartTariff` - true
+ * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
+ * select a specific entry, or have it it return one at random.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * random from the reference data
  *
- * @returns {Promise<module:PurposeModel>} The instance of the newly created record
+ * @returns {object} The selected reference entry or one picked at random
  */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return PurposeModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
-
-/**
- * Returns the defaults used
- *
- * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
- * for use in tests to avoid having to duplicate values.
- *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- */
-function defaults (data = {}) {
-  const defaults = {
-    legacyId: generatePurposeCode(),
-    description: 'Spray Irrigation - Storage',
-    lossFactor: 'high',
-    twoPartTariff: true
+function select (index = -1) {
+  if (index > -1) {
+    return purposes[index]
   }
 
-  return {
-    ...defaults,
-    ...data
-  }
-}
-
-function generatePurposeCode () {
-  const numbering = randomInteger(1, 999)
-
-  return `${numbering}0`
+  return selectRandomEntry(purposes)
 }
 
 module.exports = {
-  add,
-  defaults,
-  generatePurposeCode
+  data: purposes,
+  select
 }

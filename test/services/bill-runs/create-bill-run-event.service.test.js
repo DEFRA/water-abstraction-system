@@ -40,7 +40,7 @@ describe('Create Bill Run Event service', () => {
     let billRun
 
     beforeEach(async () => {
-      const region = await RegionHelper.add()
+      const region = RegionHelper.select()
       const testBillRun = await BillRunHelper.add({ regionId: region.id })
 
       billRun = await BillRunModel.query()

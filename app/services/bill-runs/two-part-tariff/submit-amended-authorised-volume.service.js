@@ -13,13 +13,13 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
 /**
  * Orchestrates validating the data for the amend authorised volume page and patching the db value
  *
- * @param {String} billRunId - The UUID for the bill run
- * @param {String} licenceId - The UUID of the licence that is being reviewed
- * @param {String} reviewChargeReferenceId - The UUID of the review charge reference being updated
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} billRunId - The UUID for the bill run
+ * @param {string} licenceId - The UUID of the licence that is being reviewed
+ * @param {string} reviewChargeReferenceId - The UUID of the review charge reference being updated
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} The updated value for the authorised volume
+ * @returns {Promise<object>} The updated value for the authorised volume
  */
 async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) {
   const validationResult = _validate(payload)

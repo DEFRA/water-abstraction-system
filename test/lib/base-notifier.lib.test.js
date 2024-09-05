@@ -37,6 +37,7 @@ describe('BaseNotifierLib class', () => {
     describe('when just a message is logged', () => {
       it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new BaseNotifierLib()
+
         testNotifier.omg(message)
 
         expect(pinoFake.info.calledOnceWith({}, message)).to.be.true()
@@ -46,6 +47,7 @@ describe('BaseNotifierLib class', () => {
     describe('when a message and some data is to be logged', () => {
       it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new BaseNotifierLib()
+
         testNotifier.omg(message, { id })
 
         expect(pinoFake.info.calledOnceWith({ id }, message)).to.be.true()
@@ -54,6 +56,7 @@ describe('BaseNotifierLib class', () => {
 
     it('does not send a notification to "Errbit"', () => {
       const testNotifier = new BaseNotifierLib()
+
       testNotifier.omg(message)
 
       expect(airbrakeFake.notify.notCalled).to.be.true()
@@ -61,6 +64,7 @@ describe('BaseNotifierLib class', () => {
 
     it('does not log an "error" message', () => {
       const testNotifier = new BaseNotifierLib()
+
       testNotifier.omg(message)
 
       expect(pinoFake.error.notCalled).to.be.true()
@@ -79,6 +83,7 @@ describe('BaseNotifierLib class', () => {
       describe('and just a message is logged', () => {
         it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message)
 
           const logPacketArgs = pinoFake.error.args[0]
@@ -90,6 +95,7 @@ describe('BaseNotifierLib class', () => {
 
         it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message)
 
           const { error, session } = airbrakeFake.notify.args[0][0]
@@ -103,6 +109,7 @@ describe('BaseNotifierLib class', () => {
       describe('and a message and some data is to be logged', () => {
         it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, { id })
 
           const logPacketArgs = pinoFake.error.args[0]
@@ -115,6 +122,7 @@ describe('BaseNotifierLib class', () => {
 
         it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, { id })
 
           const { error, session } = airbrakeFake.notify.args[0][0]
@@ -128,6 +136,7 @@ describe('BaseNotifierLib class', () => {
       describe('and a message, some data and an error is to be logged', () => {
         it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, { id }, testError)
 
           const logPacketArgs = pinoFake.error.args[0]
@@ -140,6 +149,7 @@ describe('BaseNotifierLib class', () => {
 
         it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, { id }, testError)
 
           const { error, session } = airbrakeFake.notify.args[0][0]
@@ -153,6 +163,7 @@ describe('BaseNotifierLib class', () => {
       describe('and a message, no data but an error is to be logged', () => {
         it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, null, testError)
 
           const logPacketArgs = pinoFake.error.args[0]
@@ -164,6 +175,7 @@ describe('BaseNotifierLib class', () => {
 
         it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
+
           testNotifier.omfg(message, null, testError)
 
           const { error, session } = airbrakeFake.notify.args[0][0]
@@ -190,6 +202,7 @@ describe('BaseNotifierLib class', () => {
 
       it('logs 2 "error" messages, the second containing details of the Airbrake failure', async () => {
         const testNotifier = new BaseNotifierLib()
+
         testNotifier.omfg(message)
 
         // We use Sinon callsFake() here in order to test our expectations. This is because Airbrake notify() actually
@@ -200,11 +213,13 @@ describe('BaseNotifierLib class', () => {
         // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
         pinoFake.error.callsFake(async () => {
           const firstCallArgs = pinoFake.error.firstCall.args
+
           expect(firstCallArgs[0].err).to.be.an.error()
           expect(firstCallArgs[0].err.message).to.equal(message)
           expect(firstCallArgs[1]).to.equal(message)
 
           const secondCallArgs = pinoFake.error.secondCall.args
+
           expect(secondCallArgs[0]).to.be.an.error()
           expect(secondCallArgs[0].message).to.equal(airbrakeFailure.message)
           expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake failed')
@@ -225,15 +240,18 @@ describe('BaseNotifierLib class', () => {
 
       it('logs 2 "error" messages, the second containing details of the Airbrake errors', async () => {
         const testNotifier = new BaseNotifierLib()
+
         testNotifier.omfg(message)
 
         pinoFake.error.callsFake(async () => {
           const firstCallArgs = pinoFake.error.firstCall.args
+
           expect(firstCallArgs[0].err).to.be.an.error()
           expect(firstCallArgs[0].err.message).to.equal(message)
           expect(firstCallArgs[1]).to.equal(message)
 
           const secondCallArgs = pinoFake.error.secondCall.args
+
           expect(secondCallArgs[0]).to.be.an.error()
           expect(secondCallArgs[0].message).to.equal(airbrakeError.message)
           expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake errored')
@@ -249,6 +267,7 @@ describe('BaseNotifierLib class', () => {
 
     it('tells the underlying Airbrake notifier to flush its queue of notifications', () => {
       const testNotifier = new BaseNotifierLib()
+
       testNotifier.flush()
 
       expect(airbrakeFake.flush.called).to.be.true()

@@ -17,9 +17,9 @@ const Joi = require('joi')
  * Users also have the option to add an alias (purpose description) to the purpose. This is not required but if added
  * we check to ensure it is no more than 100 characters.
  *
- * @param {Object[]} purposes - The selected purposes and aliases (if entered) from the payload
+ * @param {object[]} purposes - The selected purposes and aliases (if entered) from the payload
  *
- * @returns {Object} The result from calling Joi's schema.validate(). If any errors are found the
+ * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
 function go (purposes, purposeIds) {

@@ -44,17 +44,17 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * have multiple charge elements. But we must return a single **Authorised** and **Billable** days calculation. This
  * problem is what this service tackles.
  *
- * @param {{startDate: Date, endDate: Date}} chargePeriod Charge period is determined as the overlap between a charge
+ * @param {{startDate: Date, endDate: Date}} chargePeriod - Charge period is determined as the overlap between a charge
  *  version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
  *  version and billing period are compared the charge period's start date is the latest of the two, and the end date is
  *  the earliest of their end dates
- * @param {{startDate: Date, endDate: Date}} billingPeriod The period a bill run is being calculated for. Currently,
+ * @param {{startDate: Date, endDate: Date}} billingPeriod - The period a bill run is being calculated for. Currently,
  *  this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
- * @param {module:ChargeReferenceModel} chargeReference A charge version can have multiple charge references, though
+ * @param {module:ChargeReferenceModel} chargeReference - A charge version can have multiple charge references, though
  *  each will have a different reference, for example, 4.1.10. Each reference can have multiple charge elements and it's
  *  these that hold the abstraction period data
  *
- * @returns {Object} An object containing an `authorisedDays` and `billableDays` property
+ * @returns {object} An object containing an `authorisedDays` and `billableDays` property
  */
 function go (chargePeriod, billingPeriod, chargeReference) {
   const { chargeElements } = chargeReference
@@ -95,10 +95,12 @@ function go (chargePeriod, billingPeriod, chargeReference) {
  * Finally, we add 1 to the result to make it inclusive of the last day. This is because our dates are set at
  * midnight which means `endDate.getTime()` is the time at `endDate 00:00:00`.
  *
- * @param {Object} abstractionOverlapPeriod a start and end date representing the part of the abstraction period that
+ * @param {object} abstractionOverlapPeriod - a start and end date representing the part of the abstraction period that
  * overlaps the reference period
  *
  * @returns {number} the length of the period in days (inclusive)
+ *
+ * @private
  */
 function _calculateDays (abstractionOverlapPeriod) {
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
@@ -124,12 +126,14 @@ function _calculateDays (abstractionOverlapPeriod) {
  * - 01-JUL-2022 to 31-DEC-2022 - overlap is also 01-JUL-2022 to 31-DEC-2022 because it falls inside the billing period
  * - 01-NOV-2022 to 31-MAY-2023 - overlap is 01-NOV-2022 to 31-MAR-2023
  *
- * @param {Object} referencePeriod either the billing period or charge period
- * @param {Object} abstractionPeriod an object containing `startDate` and `endDate` date representing the abstraction
+ * @param {object} referencePeriod - either the billing period or charge period
+ * @param {object} abstractionPeriod - an object containing `startDate` and `endDate` date representing the abstraction
  *  period relative to the reference
  *
- * @returns {Object} an object with a start and end date representing the part of the abstraction period that overlaps
+ * @returns {object} an object with a start and end date representing the part of the abstraction period that overlaps
  *  the reference period
+ *
+ * @private
  */
 function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
   const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)

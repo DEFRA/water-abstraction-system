@@ -81,7 +81,7 @@ class ContactModel extends BaseModel {
    * single `customerName` value. What we have implemented here replicates what the legacy code was doing to derive
    * what that name should be.
    *
-   * @returns {String} The name for the contact derived from its various parts
+   * @returns {string} The name for the contact derived from its various parts
    */
   $name () {
     if (this.contactType === 'department') {

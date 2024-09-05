@@ -57,8 +57,8 @@ const ViewsPlugin = {
  *
  * Tl;DR; It the object we pass to Vision `compile:` must be a function that returns a function :-)
  *
- * @param {string} template The content of the template
- * @param {Object} options Vision's `config.compileOptions` property which we assign the Nunjucks Environment instance
+ * @param {string} template - The content of the template
+ * @param {object} options - Vision's `config.compileOptions` property which we assign the Nunjucks Environment instance
  * to in `prepare()` below
  */
 function compile (template, options) {
@@ -84,9 +84,9 @@ function compile (template, options) {
  *
  * > Credit to https://www.solarwinter.net/hapi-vision-and-who-am-i/ for highlighting we could do this
  *
- * @param {Object} request Instance of a Hapi {@link https://hapi.dev/api/?v=21.3.2#request Request}
+ * @param {object} request - Instance of a Hapi {@link https://hapi.dev/api/?v=21.3.2#request Request}
  *
- * @returns {Object} the global context for all templates
+ * @returns {object} the global context for all templates
  */
 function context (request) {
   return {
@@ -118,9 +118,9 @@ function context (request) {
  * Nunjucks, require or can be configured. If `prepare:` is in the plugin options Vision will call it as part of
  * its initialisation so you can configure your chosen view engine.
  *
- * @param {*} config The engine configuration object allowing updates to be made. This is useful for engines like
+ * @param {*} config - The engine configuration object allowing updates to be made. This is useful for engines like
  * Nunjucks that rely on additional state for rendering
- * @param {*} next Has the signature `function(err)`
+ * @param {*} next - Has the signature `function(err)`
  *
  * @returns the result of calling `next()`
  */
@@ -150,10 +150,12 @@ function prepare (config, next) {
  * Some users are also eligible to see a 'Contact information' link, which allows them to set their contact details
  * which will be used when generating, for example, renewal notifications.
  *
- * @param {Object} auth The `auth` property added to each Hapi request by the `AuthPlugin`. It tells us whether a user
+ * @param {object} auth - The `auth` property added to each Hapi request by the `AuthPlugin`. It tells us whether a user
  * is authenticated and what scopes (permissions) they have
  *
- * @returns {Object[]} if the user is authenticated navigation links to display in the top-level GOV.UK header
+ * @returns {object[]} if the user is authenticated navigation links to display in the top-level GOV.UK header
+ *
+ * @private
  */
 function _navigationLinks (auth) {
   if (!auth.isAuthenticated) {

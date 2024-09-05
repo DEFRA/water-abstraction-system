@@ -18,9 +18,9 @@ const UserModel = require('../../models/user.model.js')
  * later added to a group which also includes that role). It also returns an array of groups that the user is a member
  * of, along with `userFound` to explicitly indicate whether or not the user id exists.
  *
- * @param {Number} userId The user id to get roles and groups for
+ * @param {number} userId - The user id to get roles and groups for
  *
- * @returns {Promise<Object>} result The resulting roles and groups
+ * @returns {Promise<object>} result The resulting roles and groups
  * @returns {UserModel} result.user Returns the UserModel representing the user, or `null` if the user is not found
  * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
  * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of
@@ -53,9 +53,12 @@ async function go (userId) {
  * The user object we get back from the query has the roles and groups attached to it. The service returns the user,
  * roles and groups separately so we remove the roles and groups from the user object so we aren't returning the same
  * data twice.
+ *
+ * @private
  */
 function _extractRolesAndGroupsFromUser (user) {
   const { roles, groups } = user
+
   delete user.roles
   delete user.groups
 
@@ -67,10 +70,13 @@ function _extractRolesAndGroupsFromUser (user) {
  * We want to extract the roles and remove them from the groups in order to keep the Group objects clean and avoid
  * duplication in the object returned by the service. This function returns a flat array of all the group Roles objects,
  * deleting them from the Group objects in the process
+ *
+ * @private
  */
 function _extractRolesFromGroups (groups) {
   return groups.flatMap((group) => {
     const { roles } = group
+
     delete group.roles
 
     return roles

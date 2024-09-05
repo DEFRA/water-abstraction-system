@@ -11,6 +11,7 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -21,8 +22,9 @@ const InitiateSessionService = require('../../../app/services/return-requirement
 describe('Return Requirements - Initiate Session service', () => {
   let journey
   let licence
-  let returnVersionId
   let licenceRef
+  let modLog
+  let returnVersionId
 
   beforeEach(async () => {
     // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
@@ -77,6 +79,7 @@ describe('Return Requirements - Initiate Session service', () => {
 
           returnVersionId = returnVersion.id
 
+          modLog = await ModLogHelper.add({ reasonDescription: 'Record Loaded During Migration', returnVersionId })
           await ReturnRequirementHelper.add({ returnVersionId })
         })
 
@@ -88,7 +91,8 @@ describe('Return Requirements - Initiate Session service', () => {
           expect(returnVersions).to.equal([{
             id: returnVersionId,
             reason: 'new-licence',
-            startDate: new Date('2022-05-01')
+            startDate: new Date('2022-05-01'),
+            modLogs: [{ id: modLog.id, reasonDescription: modLog.reasonDescription }]
           }])
         })
       })

@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -24,8 +23,6 @@ describe('Return Requirements - Purpose service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     Sinon.stub(FetchPurposesService, 'go').resolves([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
@@ -40,6 +37,12 @@ describe('Return Requirements - Purpose service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
+          returnVersions: [{
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',

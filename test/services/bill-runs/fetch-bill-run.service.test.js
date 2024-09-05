@@ -36,7 +36,7 @@ describe('Fetch Bill Run service', () => {
     await DatabaseSupport.clean()
 
     // Create the initial bill run linked and associated region
-    linkedRegion = await RegionHelper.add()
+    linkedRegion = RegionHelper.select()
     testBillRun = await BillRunHelper.add({ regionId: linkedRegion.id })
 
     // Create 3 licences including 1 that is a water undertaker (company). We'll link the first 2 to the first bill to

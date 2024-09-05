@@ -10,7 +10,7 @@ const { formatBillRunType, formatLongDate, formatMoney } = require('../base.pres
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (bills) {
   return {

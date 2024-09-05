@@ -58,7 +58,18 @@
           {
             text: 'Two-part tariff',
             value: 'two_part_tariff',
-            checked: 'two_part_tariff' == selectedType
+            checked: 'two_part_tariff' == selectedType,
+            hint: {
+              text: 'Second part charges only'
+            }
+          },
+          {
+            text: 'Two-part tariff supplementary',
+            value: 'two_part_supplementary',
+            checked: 'two_part_supplementary' == selectedType,
+            hint: {
+              text: 'Second part charges for the current charge scheme only'
+            }
           }
         ]
       }) }}

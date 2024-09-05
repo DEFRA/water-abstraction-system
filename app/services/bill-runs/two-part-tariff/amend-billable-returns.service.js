@@ -11,11 +11,11 @@ const FetchMatchDetailsService = require('./fetch-match-details.service.js')
 /**
  * Orchestrates fetching and presenting the data needed for the amend billable returns page
  *
- * @param {String} billRunId - The UUID for the bill run
- * @param {String} licenceId - The UUID of the licence that is being reviewed
- * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
+ * @param {string} billRunId - The UUID for the bill run
+ * @param {string} licenceId - The UUID of the licence that is being reviewed
+ * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
  *
- * @returns {Promise<Object>} the 'pageData' needed to view the edit billable return volumes page
+ * @returns {Promise<object>} the 'pageData' needed to view the edit billable return volumes page
  */
 async function go (billRunId, licenceId, reviewChargeElementId) {
   const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)

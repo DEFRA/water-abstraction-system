@@ -20,7 +20,7 @@ const { db } = require('../../../../db/db.js')
  * - not be linked to a licence in the workflow
  * - have a related `purpose` that is due to expire in less than 50 days
  *
- * @returns {Promise<Object[]>} The licence IDs with time-limited elements and their current licence version ID (needed
+ * @returns {Promise<object[]>} The licence IDs with time-limited elements and their current licence version ID (needed
  * else we break the workflow). Also the ID of the charge version that has the time limited charge element
  */
 async function go () {
@@ -57,6 +57,7 @@ async function go () {
 
 function _offSetCurrentDateByDays (days) {
   const date = new Date()
+
   date.setDate(date.getDate() + days)
 
   return date

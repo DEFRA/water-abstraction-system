@@ -27,6 +27,14 @@ describe('Hapi Pino Ignore Request service', () => {
     })
   })
 
+  describe('when the request is for "/import/licence"', () => {
+    it('returns true', () => {
+      const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/status' })
+
+      expect(result).to.be.true()
+    })
+  })
+
   describe('when the request is for an asset', () => {
     describe('and LOG_ASSET_REQUESTS is false', () => {
       it('returns true', () => {

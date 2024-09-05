@@ -11,8 +11,8 @@ const { expect } = Code
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 
@@ -71,7 +71,7 @@ describe('Charge Element model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = PurposesSeeder.data[0]
+        testPurpose = PurposeHelper.select()
 
         const { id: purposeId } = testPurpose
 
@@ -94,7 +94,7 @@ describe('Charge Element model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

@@ -48,6 +48,7 @@ function _licenceEnded (licence) {
   }
 
   const today = new Date()
+
   today.setHours(0, 0, 0, 0)
 
   return ends.date <= today

@@ -13,11 +13,12 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
+const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
-const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
+const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
 
 // For running our service
@@ -43,411 +44,360 @@ describe('Licences controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /licences/{id}/no-returns-required', () => {
-    const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
-
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
+  describe('/licences/{id}/bills', () => {
+    describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
       })
 
-      it('redirects to select return start date page', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
-      })
-    })
-
-    describe('when a request is invalid', () => {
-      describe('because the licence ID is unrecognised', () => {
+      describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
+          Sinon.stub(ViewLicenceBillsService, 'go').resolves(_viewLicenceBills())
         })
 
-        it('returns a 404 and page not found', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(404)
-          expect(response.payload).to.contain('Page not found')
-        })
-      })
-
-      describe('because the initialise session service errors', () => {
-        beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').rejects()
-        })
-
-        it('returns a 200 and there is a problem with the service page', async () => {
+        it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          expect(response.payload).to.contain('Bills')
         })
       })
     })
   })
 
-  describe('GET /licences/{id}/returns-required', () => {
-    const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
-
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/returns-required',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
+  describe('/licences/{id}/communications', () => {
+    describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/communications',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
       })
 
-      it('redirects to select return start date page', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
-      })
-    })
-
-    describe('when a request is invalid', () => {
-      describe('because the licence ID is unrecognised', () => {
+      describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
+          Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves(_viewLicenceCommunications())
         })
 
-        it('returns a 404 and page not found', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(404)
-          expect(response.payload).to.contain('Page not found')
-        })
-      })
-
-      describe('because the initialise session service errors', () => {
-        beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').rejects()
-        })
-
-        it('returns a 200 and there is a problem with the service page', async () => {
+        it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          expect(response.payload).to.contain('Communications')
         })
       })
     })
   })
 
-  describe('GET /licences/{id}/bills', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
+  describe('/licences/{id}/contact-details', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/contact-details',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
         }
-      }
-    })
-
-    describe('when a request is valid and has bills', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceBillsService, 'go').resolves(_viewLicenceBills())
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid and has contacts', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+        })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Bills')
-        //  Check the table titles
-        expect(response.payload).to.contain('Bill number')
-        expect(response.payload).to.contain('Date created')
-        expect(response.payload).to.contain('Billing account')
-        expect(response.payload).to.contain('Bill run type')
-        expect(response.payload).to.contain('Bill total')
-      })
-    })
-    describe('when a request is valid and has no bills', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills', bills: [] })
-      })
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Bills')
-        //  Check the table titles
-        expect(response.payload).to.contain('Bills')
-        expect(response.payload).to.contain('No bills sent for this licence.')
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Contact details')
+        })
       })
     })
   })
 
-  describe('GET /licences/{id}/communications', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/communications',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: [] }
+  describe('/licences/{id}/no-returns-required', () => {
+    describe('GET', () => {
+      const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
+
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
         }
-      }
-    })
-
-    describe('when a request is valid and has communications', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves(_viewLicenceCommunications())
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Communications')
-        expect(response.payload).to.contain('Type')
-        expect(response.payload).to.contain('Sent')
-        expect(response.payload).to.contain('Sender')
-        expect(response.payload).to.contain('Method')
-      })
-    })
+        it('redirects to select return start date page', async () => {
+          const response = await server.inject(options)
 
-    describe('when a request is valid and does not have communications', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves({
-          activeTab: 'communications',
-          communications: []
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
         })
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is invalid', () => {
+        describe('because the licence ID is unrecognised', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
+          })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Communications')
-        expect(response.payload).to.contain('No communications for this licence.')
+          it('returns a 404 and page not found', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(404)
+            expect(response.payload).to.contain('Page not found')
+          })
+        })
+
+        describe('because the initialise session service errors', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').rejects()
+          })
+
+          it('returns a 200 and there is a problem with the service page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
+        })
       })
     })
   })
 
-  describe('GET /licences/{id}/contact-details', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/contact-details',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: [] }
+  describe('/licences/{id}/returns-required', () => {
+    describe('GET', () => {
+      const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
+
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/returns-required',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
         }
-      }
-    })
-
-    describe('when a request is valid and has contacts', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Contact details')
-        // Table row titles
-        expect(response.payload).to.contain('Name')
-        expect(response.payload).to.contain('Communication type')
-        expect(response.payload).to.contain('Send to')
-      })
-    })
+        it('redirects to select return start date page', async () => {
+          const response = await server.inject(options)
 
-    describe('when a request is valid and has no contact details', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves({
-          activeTab: 'contact-details',
-          licenceContacts: [],
-          customerContacts: []
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
         })
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is invalid', () => {
+        describe('because the licence ID is unrecognised', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
+          })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Contact details')
-        expect(response.payload).to.contain('No licence contacts found.')
-        expect(response.payload).to.contain('No customer contacts found.')
-      })
-    })
-  })
+          it('returns a 404 and page not found', async () => {
+            const response = await server.inject(options)
 
-  describe('GET /licences/{id}/set-up', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/set-up',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['view_charge_versions'] }
-        }
-      }
-    })
+            expect(response.statusCode).to.equal(404)
+            expect(response.payload).to.contain('Page not found')
+          })
+        })
 
-    describe('when a request is valid and has charge versions and charge edit buttons', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceSetUpService, 'go').resolves(_viewLicenceSetUp())
-      })
+        describe('because the initialise session service errors', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').rejects()
+          })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+          it('returns a 200 and there is a problem with the service page', async () => {
+            const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Licence set up')
-        // Returns for requirements
-        expect(response.payload).to.contain('Requirements for returns')
-        // Returns for requirements present
-        expect(response.payload).to.contain('Set up new requirements')
-        expect(response.payload).to.contain('Mark licence as')
-        expect(response.payload).to.contain('no returns needed')
-        // Charge information
-        expect(response.payload).to.contain('Charge information')
-        // Charge information table headers
-        expect(response.payload).to.contain('Start date')
-        expect(response.payload).to.contain('End date')
-        expect(response.payload).to.contain('Reason')
-        expect(response.payload).to.contain('Status')
-        expect(response.payload).to.contain('Action')
-        // Charge information buttons present
-        expect(response.payload).to.contain('Set up a new charge')
-        expect(response.payload).to.contain('Make licence non-chargeable')
-
-        // Agreements
-        expect(response.payload).to.contain('Charging agreements')
-        // Agreements table headers
-        expect(response.payload).to.contain('Agreement')
-        expect(response.payload).to.contain('Date signed')
-        // Charge information buttons present
-        expect(response.payload).to.contain('Set up a new agreement')
-      })
-    })
-
-    describe('when a request is valid and does not have any data', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
-          activeTab: 'set-up',
-          agreements: [],
-          chargeInformation: [],
-          returnVersions: []
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
         })
       })
-
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Licence set up')
-        expect(response.payload).to.contain('Requirements for returns')
-        expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
-        expect(response.payload).to.contain('Charge information')
-        expect(response.payload).to.contain('No charge information for this licence.')
-        expect(response.payload).to.contain('Charging agreements')
-        expect(response.payload).to.contain('No agreements for this licence.')
-      })
     })
   })
 
-  describe('GET /licences/{id}/summary', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: [] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
+  describe('/licences/{id}/returns', () => {
+    describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+        })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Summary')
-        expect(response.payload).to.contain('Effective from')
-        expect(response.payload).to.contain('End date')
-      })
-    })
-  })
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
 
-  describe('GET /licences/{id}/returns', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
-          activeTab: 'returns',
-          returns: [
-            { id: 'returns-id' }
-          ],
-          noReturnsMessage: null
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Returns')
         })
       })
+    })
+  })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+  describe('/licences/{id}/set-up', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/set-up',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['view_charge_versions'] }
+          }
+        }
+      })
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        //  Check the table titles
-        expect(response.payload).to.contain('Return reference and dates')
-        expect(response.payload).to.contain('Purpose and description')
-        expect(response.payload).to.contain('Due date')
-        expect(response.payload).to.contain('Status')
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceSetUpService, 'go').resolves(_viewLicenceSetUp())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence set up')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/summary', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Summary')
+        })
+      })
+    })
+  })
+
+  describe('/licences/supplementary', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/licences/supplementary' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(LicenceSupplementaryProcessBillingFlagService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
       })
     })
   })
 })
 
 function _viewLicenceBills () {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     activeTab: 'bills',
     bills: [{ id: 'bills-id' }]
   }
 }
 
-function _viewLicenceSetUp () {
+function _viewLicenceCommunications () {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
+    activeTab: 'communications',
+    communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
+  }
+}
+
+function _viewLicenceContactDetails () {
+  const commonLicenceData = _viewLicence()
+
+  return {
+    ...commonLicenceData,
+    activeTab: 'contact-details',
+    licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
+    customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
+  }
+}
+
+function _viewLicenceReturns () {
+  const commonLicenceData = _viewLicence()
+
+  return {
+    ...commonLicenceData,
+    activeTab: 'returns',
+    returns: [
+      { id: 'returns-id' }
+    ],
+    noReturnsMessage: null
+  }
+}
+
+function _viewLicenceSetUp () {
+  const commonLicenceData = _viewLicence()
+
+  return {
+    ...commonLicenceData,
     activeTab: 'set-up',
     agreements: [{}],
     chargeInformation: [{ }],
@@ -469,28 +419,33 @@ function _viewLicenceSetUp () {
   }
 }
 
-function _viewLicenceCommunications () {
-  return {
-    activeTab: 'communications',
-    communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
-  }
-}
-
-function _viewLicenceContactDetails () {
-  return {
-    activeTab: 'contact-details',
-    licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
-    customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
-  }
-}
-
 function _viewLicenceSummary () {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     id: '7861814c-ca19-43f2-be11-3c612f0d744b',
-    licenceRef: '01/130/R01',
     region: 'Southern',
     startDate: '1 November 2022',
     endDate: '1 November 2032',
     activeTab: 'summary'
+  }
+}
+
+function _viewLicence () {
+  return {
+    documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+    licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    licenceName: 'Between two ferns',
+    licenceRef: '01/123',
+    notification: null,
+    pageTitle: 'Licence 01/123',
+    primaryUser: {
+      id: 10036,
+      username: 'grace.hopper@example.co.uk'
+    },
+    roles: ['billing', 'view_charge_versions'],
+    warning: null,
+    workflowWarning: true
   }
 }

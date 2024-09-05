@@ -19,21 +19,24 @@ const RemoveBillRunLicenceService = require('../../../../app/services/bill-runs/
 describe('Remove Bill Run Licence service', () => {
   let billRunId
   let licenceId
+  let region
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const { id: regionId } = await RegionHelper.add({ displayName: 'Test Region' })
+    region = RegionHelper.select()
     const billRun = await BillRunHelper.add({
       billRunNumber: 12345,
       createdAt: new Date('2024-05-03'),
-      regionId,
+      regionId: region.id,
       status: 'review',
       toFinancialYearEnding: 2023
     })
+
     billRunId = billRun.id
 
     const licence = await LicenceHelper.add({ licenceRef: '01/123/ABC' })
+
     licenceId = licence.id
   })
 
@@ -48,7 +51,7 @@ describe('Remove Bill Run Licence service', () => {
         billRunStatus: 'review',
         dateCreated: '3 May 2024',
         financialYear: '2022 to 2023',
-        region: 'Test Region'
+        region: region.displayName
       })
     })
   })

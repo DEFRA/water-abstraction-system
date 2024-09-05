@@ -14,7 +14,7 @@ const ChargeReferenceHelper = require('../support/helpers/charge-reference.helpe
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const PurposeSeeder = require('../support/seeders/purposes.seeder.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
@@ -26,7 +26,7 @@ describe('Purpose model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = PurposeSeeder.data[0]
+      testRecord = PurposeHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -42,7 +42,7 @@ describe('Purpose model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        testRecord = PurposeSeeder.data[0]
+        testRecord = PurposeHelper.select()
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
@@ -78,7 +78,7 @@ describe('Purpose model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        testRecord = PurposeSeeder.data[0]
+        testRecord = PurposeHelper.select()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
@@ -114,7 +114,7 @@ describe('Purpose model', () => {
       let testLicenceVersionPurposes
 
       beforeEach(async () => {
-        testRecord = PurposeSeeder.data[0]
+        testRecord = PurposeHelper.select()
 
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
@@ -150,7 +150,7 @@ describe('Purpose model', () => {
       let testReturnRequirementPurposes
 
       beforeEach(async () => {
-        testRecord = PurposeSeeder.data[0]
+        testRecord = PurposeHelper.select()
 
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {

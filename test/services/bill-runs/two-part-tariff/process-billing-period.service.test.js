@@ -13,7 +13,7 @@ const BillModel = require('../../../../app/models/bill.model.js')
 const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateChargeRegionId } = require('../../../support/helpers/region.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
@@ -24,7 +24,7 @@ const GenerateTransactionService = require('../../../../app/services/bill-runs/t
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
 
-describe('Two-part Tariff Process Billing Period service', () => {
+describe('Two-part Tariff - Process Billing Period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -307,6 +307,8 @@ async function _fetchPersistedBill (billRunId) {
 }
 
 function _licence () {
+  const region = RegionHelper.select()
+
   return {
     id: generateUUID(),
     licenceRef: generateLicenceRef(),
@@ -318,8 +320,8 @@ function _licence () {
     lapsedDate: null,
     revokedDate: null,
     region: {
-      id: generateUUID(),
-      chargeRegionId: generateChargeRegionId()
+      id: region.id,
+      chargeRegionId: region.chargeRegionId
     }
   }
 }

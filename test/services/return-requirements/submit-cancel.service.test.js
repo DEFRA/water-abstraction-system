@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../app/services/return-requirements/submit-cancel.service.js')
@@ -18,10 +18,8 @@ describe('Return Requirements - Submit Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     session = await SessionHelper.add({
-      id: '61e07498-f309-4829-96a9-72084a54996d',
+      id: generateUUID(),
       data: {
         checkPageVisited: false,
         licence: {
@@ -30,6 +28,12 @@ describe('Return Requirements - Submit Cancel service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
+          returnVersions: [{
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',

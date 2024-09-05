@@ -9,7 +9,19 @@
  */
 
 const { db, dbConfig } = require('../../db/db.js')
-const ReferenceDataSeeder = require('../../db/seeds/reference-data.js')
+
+const ChangeReasonsSeeder = require('../../db/seeds/12-change-reasons.seed.js')
+const FinancialAgreementsSeeder = require('../../db/seeds/11-financial-agreements.seed.js')
+const GroupRolesSeeder = require('../../db/seeds/08-group-roles.seed.js')
+const GroupsSeeder = require('../../db/seeds/06-groups.seed.js')
+const LicenceVersionPurposeConditionTypeSeeder = require('../../db/seeds/05-licence-version-purpose-condition-types.seed.js')
+const PurposesSeeder = require('../../db/seeds/02-purposes.seed.js')
+const PrimaryPurposesSeeder = require('../../db/seeds/03-primary-purposes.seed.js')
+const RegionsSeeder = require('../../db/seeds/01-regions.seed.js')
+const RolesSeeder = require('../../db/seeds/07-roles.seed.js')
+const SecondaryPurposesSeeder = require('../../db/seeds/04-secondary-purposes.seed.js')
+const UserGroupsSeeder = require('../../db/seeds/10-user-groups.seed.js')
+const UsersSeeder = require('../../db/seeds/09-users.seed.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -29,8 +41,9 @@ async function clean () {
 
     await db.raw(`TRUNCATE TABLE ${tables.join(',')} RESTART IDENTITY;`)
   }
-  // TODO: when all calls this function are removed from the tests remove this call
-  await ReferenceDataSeeder.seed()
+
+  // TODO: when all calls to DatabaseSupport.clean() (this function) have been removed from the tests we can drop this
+  await _seed()
 }
 
 /**
@@ -70,6 +83,22 @@ function _migrationTables () {
   return [dbConfig.migrations.tableName, `${dbConfig.migrations.tableName}_lock`]
 }
 
+async function _seed () {
+  // NOTE: Order matches the order they are seeded via Knex seeding. Do not alphabetize!
+  await RegionsSeeder.seed()
+  await PurposesSeeder.seed()
+  await PrimaryPurposesSeeder.seed()
+  await SecondaryPurposesSeeder.seed()
+  await LicenceVersionPurposeConditionTypeSeeder.seed()
+  await GroupsSeeder.seed()
+  await RolesSeeder.seed()
+  await GroupRolesSeeder.seed()
+  await UsersSeeder.seed()
+  await UserGroupsSeeder.seed()
+  await FinancialAgreementsSeeder.seed()
+  await ChangeReasonsSeeder.seed()
+}
+
 async function _tableNames (schema) {
   const result = await db('pg_tables')
     .select('tablename')
@@ -91,6 +120,10 @@ async function _viewNames (schema) {
   })
 }
 
+/**
+ * Close the connection to the database
+ *
+ */
 async function closeConnection () {
   await db.destroy()
 }

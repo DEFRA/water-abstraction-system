@@ -19,7 +19,7 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @param {string} billRunId - UUID of the bill run to refresh
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send (billRunId) {
   const path = `billing/batches/${billRunId}/refresh`

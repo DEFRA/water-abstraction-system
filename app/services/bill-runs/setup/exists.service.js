@@ -24,7 +24,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
- * @returns {Promise<Object>} It always returns the session and the results of looking for matching bill runs plus a
+ * @returns {Promise<object>} It always returns the session and the results of looking for matching bill runs plus a
  * `pageData:` property.
  *
  * If no matches are found `pageData` will be `null`.

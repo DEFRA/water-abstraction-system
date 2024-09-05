@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -15,11 +15,13 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 // Thing under test
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 
+const CHANGE_REASON_SUCCESSION_REMAINDER_INDEX = 9
+
 describe('Change Reason model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await ChangeReasonHelper.add()
+  before(async () => {
+    testRecord = ChangeReasonHelper.select(CHANGE_REASON_SUCCESSION_REMAINDER_INDEX)
   })
 
   describe('Basic query', () => {

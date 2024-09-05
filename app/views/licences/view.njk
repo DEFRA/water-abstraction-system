@@ -19,7 +19,7 @@
     }) }}
   {% endif %}
 
-  {% if (workflowWarning === true) and ((roles and 'billing' in roles) or (roles and 'view_charge_versions' in roles))%}
+  {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles))%}
     {{ govukWarningText({
       text: "This licence has changed and needs the set up reviewed before it can be billed.",
       iconFallbackText: "Warning"
@@ -37,8 +37,8 @@
   <span class="govuk-caption-l">{{ licenceName }}</span>
   <h1 class="govuk-heading-l">Licence number {{ licenceRef }}</h1>
 
-  {% if registeredTo %}
-    <p>Registered to <a href="/user/{{ primaryUser.userId }}/status">{{ registeredTo }}</a></p>
+  {% if primaryUser %}
+    <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>
   {% endif %}
 
   <div class="govuk-tabs">
@@ -66,14 +66,14 @@
           Communications
         </a>
       </li>
-      {% if roles and 'billing' in roles %}
+      {% if 'billing' in roles %}
         <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_bills">
           <a class="govuk-tabs__tab" href="bills">
             Bills
           </a>
         </li>
       {% endif %}
-      {% if roles and 'view_charge_versions' in roles %}
+      {% if 'view_charge_versions' in roles %}
         <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}" data-test="#tab_licence_set_up">
           <a class="govuk-tabs__tab" href="set-up">
             Licence set up

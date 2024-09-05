@@ -27,7 +27,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  *
  * @param {string} billRunId - The UUID of the two-part tariff bill run to fetches billing accounts for
  *
- * @returns {Promise<[module:BillingAccountModel]>} An array of `BillingAccountModel` to be billed and their relevant
+ * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records, plus the two-part tariff review details needed to generate the
  * bill run
  */

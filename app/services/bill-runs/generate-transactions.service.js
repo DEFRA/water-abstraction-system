@@ -24,14 +24,14 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  * They will then be returned in an array for further processing before being persisted to the DB as
  * `billing_transactions`.
  *
- * @param {String} billLicenceId The UUID of the bill licence the transaction will be linked to
- * @param {Object} chargeReference The charge reference the transaction generated from
- * @param {Object} billingPeriod A start and end date representing the billing period for the bill run
- * @param {Object} chargePeriod A start and end date representing the charge period for the charge version
- * @param {Boolean} newLicence Whether the charge version is linked to a new licence
- * @param {Boolean} waterUndertaker Whether the charge version is linked to a water undertaker licence
+ * @param {string} billLicenceId - The UUID of the bill licence the transaction will be linked to
+ * @param {object} chargeReference - The charge reference the transaction generated from
+ * @param {object} billingPeriod - A start and end date representing the billing period for the bill run
+ * @param {object} chargePeriod - A start and end date representing the charge period for the charge version
+ * @param {boolean} newLicence - Whether the charge version is linked to a new licence
+ * @param {boolean} waterUndertaker - Whether the charge version is linked to a water undertaker licence
  *
- * @returns {Object[]} an array of 0, 1 or 2 transaction objects
+ * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
 function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
@@ -60,6 +60,7 @@ function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLic
 
   if (!waterUndertaker) {
     const compensationTransaction = _compensationTransaction(standardTransaction)
+
     transactions.push(compensationTransaction)
   }
 
@@ -69,6 +70,8 @@ function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLic
 /**
  * Generates a compensation transaction by taking a standard transaction and overwriting it with the supplied billing id
  * and the correct charge type and description for a compensation charge.
+ *
+ * @private
  */
 function _compensationTransaction (standardTransaction) {
   return {
@@ -90,6 +93,8 @@ function _description (chargeReference) {
 
 /**
  * Returns a json representation of all charge elements in a charge reference
+ *
+ * @private
  */
 function _generateElements (chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
@@ -101,6 +106,8 @@ function _generateElements (chargeReference) {
 
 /**
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
+ *
+ * @private
  */
 function _standardTransaction (
   billLicenceId,

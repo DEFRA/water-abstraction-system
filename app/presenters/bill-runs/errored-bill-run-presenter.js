@@ -19,7 +19,7 @@ const {
  *
  * @param {module:BillRunModel} billRun - an instance of `BillRunModel`
  *
- * @returns {Object} - the prepared bill run data to be passed to the errored bill run page
+ * @returns {object} - the prepared bill run data to be passed to the errored bill run page
  */
 function go (billRun) {
   const {

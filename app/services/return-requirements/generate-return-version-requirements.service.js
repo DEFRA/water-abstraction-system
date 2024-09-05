@@ -16,10 +16,10 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  * Creates the data needed to populate the `return_requirements`, `return_requirement_points` and
  * `return_requirement_purposes` tables.
  *
- * @param {String} licenceId - The UUID of the licence the requirements are for
- * @param {Object[]} requirements - The return requirements data from the session
+ * @param {string} licenceId - The UUID of the licence the requirements are for
+ * @param {object[]} requirements - The return requirements data from the session
  *
- * @returns {Promise<Object>} The new return version requirements data for a licence
+ * @returns {Promise<object>} The new return version requirements data for a licence
  */
 async function go (licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)

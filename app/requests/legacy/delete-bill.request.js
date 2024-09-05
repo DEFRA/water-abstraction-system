@@ -23,7 +23,7 @@ const LegacyRequest = require('../legacy.request.js')
  * @param {string} billId - UUID of the bill to be removed
  * @param {module:UserModel} user - Instance representing the user that originated the request
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send (billRunId, billId, user) {
   const { id: userId } = user

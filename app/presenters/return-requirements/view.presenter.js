@@ -7,7 +7,6 @@
 
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
-const { generatePointDetail } = require('../../lib/general.lib.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -16,24 +15,23 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  * @param {ReturnVersionModel[]} returnVersion - The return version and associated, licence, and return requirements
  * (requirement, points, purposes) returned by FetchRequirementsForReturns
  *
- * @returns {Object} requirements for returns data needed by the view template
+ * @returns {object} requirements for returns data needed by the view template
  */
-
 function go (returnVersion) {
-  const { createdAt, licence, reason, notes, multipleUpload, returnRequirements, startDate, status, user } =
+  const { licence, multipleUpload, returnRequirements, startDate, status } =
     returnVersion
 
   return {
     additionalSubmissionOptions: {
       multipleUpload: multipleUpload === true ? 'Yes' : 'No'
     },
-    createdBy: user ? user.username : 'Migrated from NALD',
-    createdDate: formatLongDate(createdAt),
+    createdBy: _createdBy(returnVersion),
+    createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    notes,
+    notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
-    reason: returnRequirementReasons[reason] || '',
+    reason: _reason(returnVersion),
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),
     status
@@ -96,6 +94,16 @@ function _buildAgreementExceptions (returnRequirement) {
   return agreementsExceptions
 }
 
+function _createdBy (returnVersion) {
+  const createdBy = returnVersion.$createdBy()
+
+  if (createdBy) {
+    return createdBy
+  }
+
+  return 'Migrated from NALD'
+}
+
 function _mapRequirement (requirement) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement),
@@ -123,8 +131,27 @@ function _purposes (returnRequirementPurposes) {
 
 function _points (returnRequirementPoints) {
   return returnRequirementPoints.map((returnRequirementPoint) => {
-    return generatePointDetail(returnRequirementPoint)
+    return returnRequirementPoint.$describe()
   })
+}
+
+/**
+ * The history helper $reason() will return either the reason saved against the return version record, the reason
+ * captured in the first mod log entry, or null.
+ *
+ * If its the reason saved against the return version we have to map it to its display version first.
+ *
+ * @private
+ */
+function _reason (returnVersion) {
+  const reason = returnVersion.$reason()
+  const mappedReason = returnRequirementReasons[reason]
+
+  if (mappedReason) {
+    return mappedReason
+  }
+
+  return reason ?? ''
 }
 
 function _requirements (requirements) {

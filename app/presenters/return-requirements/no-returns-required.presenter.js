@@ -10,7 +10,7 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session) {
   const { id: sessionId, licence, reason } = session

@@ -87,6 +87,7 @@ describe('Annual Process billing period service', () => {
           // that was revoked at the start of May. The engine should calculate 0 billable days and therefore not attempt
           // to create a bill licence for this record.
           const unbillableChargeVersion = _testChargeVersion(billingAccount.id)
+
           unbillableChargeVersion.licence.id = 'c3726e99-935e-4a36-ab2f-eef8bda9293a'
           unbillableChargeVersion.licence.revokedDate = new Date(billingPeriod.startDate.getFullYear(), 4, 1)
           unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartDay = 1

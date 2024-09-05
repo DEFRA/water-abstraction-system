@@ -13,9 +13,9 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/customer/CreateCustomerChange | API docs} for more
  * details
  *
- * @param {Object} customerChangeData - The customer change details to be sent in the body of the request
+ * @param {object} customerChangeData - The customer change details to be sent in the body of the request
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send (customerChangeData) {
   const path = 'v3/wrls/customer-changes'

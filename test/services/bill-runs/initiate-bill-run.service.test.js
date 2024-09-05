@@ -32,7 +32,8 @@ describe('Initiate Bill Run service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const region = await RegionHelper.add()
+    const region = RegionHelper.select()
+
     regionId = region.id
 
     // The InitiateBillRun service does not await the call to the ProcessBillRunService. It is intended to

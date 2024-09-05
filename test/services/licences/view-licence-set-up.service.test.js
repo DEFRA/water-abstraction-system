@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
@@ -48,15 +51,16 @@ describe('View Licence Set Up service', () => {
       }
     ])
 
-    Sinon.stub(FetchReturnVersionsService, 'go').returns([
-      {
-        id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
-        startDate: new Date('2025-01-01'),
-        endDate: new Date('2025-02-01'),
-        status: 'current',
-        reason: 'change-to-special-agreement'
-      }
-    ])
+    const returnVersion = ReturnVersionModel.fromJson({
+      id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+      startDate: new Date('2025-01-01'),
+      endDate: new Date('2025-02-01'),
+      status: 'current',
+      reason: 'change-to-special-agreement',
+      modLogs: []
+    })
+
+    Sinon.stub(FetchReturnVersionsService, 'go').returns([returnVersion])
 
     Sinon.stub(FetchWorkflowsService, 'go').returns([
       {

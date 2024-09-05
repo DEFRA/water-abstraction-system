@@ -85,6 +85,7 @@ describe('Persist Allocated Licence to Results service', () => {
         // Check the charge reference persisted correctly
         // NOTE: As the aggregate is null on the charge reference the service returns 1
         const { reviewChargeReferences } = reviewChargeVersions[0]
+
         expect(reviewChargeReferences).to.have.length(1)
         expect(reviewChargeReferences[0].reviewChargeVersionId).to.equal(result[0].reviewChargeVersions[0].id)
         expect(reviewChargeReferences[0].chargeReferenceId).to.equal(testChargeVersions[0].chargeReferences[0].id)

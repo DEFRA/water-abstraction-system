@@ -19,7 +19,7 @@ const { db } = require('../../../../db/db.js')
  * Also, if a workflow record already exists for the licence version, for example, it is already under review, it will
  * also be excluded from the results.
  *
- * @returns {Promise<Object[]>} The ID for each licence version created in the last 2 months without a workflow record,
+ * @returns {Promise<object[]>} The ID for each licence version created in the last 2 months without a workflow record,
  * plus associated licence ID and whether a charge version exists for the licence
  */
 async function go () {
@@ -62,6 +62,7 @@ async function go () {
 
 function _twoMonthsAgo () {
   const today = new Date()
+
   today.setMonth(today.getMonth() - 2)
 
   return today

@@ -8,32 +8,32 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const DeDuplicateLicenceService = require('../../../../app/services/data/deduplicate/de-duplicate-licence.service.js')
 
 describe('De-duplicate Licence service', () => {
-  const licenceRef = '01/120'
-
   let invalidLicence
+  let licenceRef
   let validLicences
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    licenceRef = generateLicenceRef()
 
     validLicences = []
 
     // Create our valid licence
     let licence = await LicenceHelper.add({ licenceRef })
+
     validLicences.push(licence.id)
 
     // Create other valid licences that will match our search. We need to ensure these do not get deleted by the service
-    licence = await LicenceHelper.add({ licenceRef: 'WA/01/120' })
+    licence = await LicenceHelper.add({ licenceRef: generateLicenceRef() })
     validLicences.push(licence.id)
-    licence = await LicenceHelper.add({ licenceRef: '02/01/120/R01' })
+    licence = await LicenceHelper.add({ licenceRef: generateLicenceRef() })
     validLicences.push(licence.id)
   })
 
@@ -41,7 +41,7 @@ describe('De-duplicate Licence service', () => {
     describe('with a space', () => {
       describe('at the start of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: ' 01/120' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: ` ${licenceRef}` })
         })
 
         it('removes just that invalid licence', async () => {
@@ -59,7 +59,7 @@ describe('De-duplicate Licence service', () => {
 
       describe('at the end of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: '01/120 ' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: `${licenceRef} ` })
         })
 
         it('removes just that invalid licence', async () => {
@@ -77,7 +77,7 @@ describe('De-duplicate Licence service', () => {
 
       describe('at the start and end of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: ' 01/120 ' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: ` ${licenceRef} ` })
         })
 
         it('removes just that invalid licence', async () => {
@@ -97,7 +97,7 @@ describe('De-duplicate Licence service', () => {
     describe('with a newline', () => {
       describe('at the start of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: '\n01/120' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: `\n${licenceRef}` })
         })
 
         it('removes just that invalid licence', async () => {
@@ -115,7 +115,7 @@ describe('De-duplicate Licence service', () => {
 
       describe('at the end of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: '01/120\n' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: `${licenceRef}\n` })
         })
 
         it('removes just that invalid licence', async () => {
@@ -133,7 +133,7 @@ describe('De-duplicate Licence service', () => {
 
       describe('at the start and end of the reference', () => {
         beforeEach(async () => {
-          invalidLicence = await LicenceHelper.add({ licenceRef: '\n01/120\n' })
+          invalidLicence = await LicenceHelper.add({ licenceRef: `\n${licenceRef}\n` })
         })
 
         it('removes just that invalid licence', async () => {

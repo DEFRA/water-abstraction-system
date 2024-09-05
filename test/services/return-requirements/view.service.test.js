@@ -8,6 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ContactModel = require('../../../app/models/contact.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+
 // Things we want to stub
 const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
@@ -38,8 +43,8 @@ describe('Return Requirements - View service', () => {
         createdDate: '5 April 2022',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
-        notes: null,
-        pageTitle: 'Requirements for returns for Mr Ingles',
+        notes: ['A special note'],
+        pageTitle: 'Requirements for returns for Mrs A J Easley',
         reason: 'New licence',
         requirements: [
           {
@@ -64,21 +69,36 @@ describe('Return Requirements - View service', () => {
   })
 })
 
-function _returnVersion (returnVersionId) {
-  return {
+function _returnVersion () {
+  const contact = ContactModel.fromJson({
+    firstName: 'Annie',
+    middleInitials: 'J',
+    lastName: 'Easley',
+    salutation: 'Mrs'
+  })
+
+  const licence = LicenceModel.fromJson({
+    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+    licenceRef: '01/123',
+    licenceDocument: {
+      licenceDocumentRoles: [{
+        id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
+        contact
+      }]
+    }
+  })
+
+  const returnVersionData = {
     createdAt: new Date('2022-04-05'),
-    id: returnVersionId,
+    id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
     multipleUpload: false,
-    notes: null,
+    notes: 'A special note',
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     status: 'current',
+    modLogs: [],
     user: { id: 1, username: 'carol.shaw@atari.com' },
-    licence: {
-      id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-      licenceRef: '01/123',
-      $licenceHolder: () => { return 'Mr Ingles' }
-    },
+    licence,
     returnRequirements: [{
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
@@ -109,4 +129,6 @@ function _returnVersion (returnVersionId) {
       }]
     }]
   }
+
+  return ReturnVersionModel.fromJson(returnVersionData)
 }

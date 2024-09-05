@@ -33,7 +33,7 @@ const HandleErroredBillRunService = require('../handle-errored-bill-run.service.
  * as **Ready**.
  *
  * @param {module:BillRunModel} billRun - The annual bill run being processed
- * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
+ * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
  * annual this will only ever contain a single period
  */
 async function go (billRun, billingPeriods) {

@@ -24,9 +24,9 @@ const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licen
  * Else when there is just 1 licence we show all the transactions details instead (saving the user an extra click!). For
  * this we need to fetch the bill licence and use `ViewBillLicencePresenter` to generate the data.
  *
- * @param {string} id The UUID for the bill to view
+ * @param {string} id - The UUID for the bill to view
  *
- * @returns {Promise<Object>} a formatted representation of the bill, its bill run and billing account plus summaries
+ * @returns {Promise<object>} a formatted representation of the bill, its bill run and billing account plus summaries
  * for all the licences linked to the bill for use in the bill view page
  */
 async function go (id) {

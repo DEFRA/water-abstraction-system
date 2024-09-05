@@ -10,19 +10,19 @@ const { formatLongDate } = require('../../base.presenter.js')
 /**
  * Prepares and processes bill run, licence and filter data for presentation
  *
- * @param {module:BillRunModel} billRun The data from the bill run
- * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
+ * @param {module:BillRunModel} billRun - The data from the bill run
+ * @param {{Object[]}} filterIssues - An array of issues to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
  * issue this will be a string, not an array
- * @param {String} filterLicenceHolderNumber The licence holder or licence number to filter the results by. This will
+ * @param {string} filterLicenceHolderNumber - The licence holder or licence number to filter the results by. This will
  * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
- * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
+ * @param {string} filterLicenceStatus - The status of the licence to filter the results by. This also only contains
+ * data when there is a POST request.
+ * @param {string} filterProgress - The progress of the licence to filter the results by. This also only contains data
  * when there is a POST request.
- * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
- * when there is a POST request.
- * @param {module:LicenceModel} licences The licences data associated with the bill run
+ * @param {module:LicenceModel} licences - The licences data associated with the bill run
  *
- * @returns {Object} The prepared bill run,licence and filter data to be passed to the review page
+ * @returns {object} The prepared bill run,licence and filter data to be passed to the review page
  */
 function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, licences) {
   const preparedLicences = _prepareLicences(licences)
@@ -47,6 +47,8 @@ function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStat
 /**
  * Returns true/false values for each issue in the Issue filter based on the filters applied to determine which
  * checkboxes if any should be checked upon loading the page
+ *
+ * @private
  */
 function _prepareIssues (filterIssues) {
   return {

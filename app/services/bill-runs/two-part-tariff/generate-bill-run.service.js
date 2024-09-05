@@ -64,6 +64,8 @@ async function go (billRunId) {
  *
  * This means we've already determined the billing period and recorded it against the bill run. So, we retrieve it from
  * the bill run rather than pass it into the service.
+ *
+ * @private
  */
 function _billingPeriod (billRun) {
   const { toFinancialYearEnding } = billRun
@@ -123,6 +125,8 @@ async function _finaliseBillRun (billRun, billRunPopulated) {
  * The go() has to deal with updating the status of the bill run and then passing a response back to the request to
  * avoid the user seeing a timeout in their browser. So, this is where we actually generate the bills and record the
  * time taken.
+ *
+ * @private
  */
 async function _generateBillRun (billRun) {
   const { id: billRunId } = billRun

@@ -10,7 +10,7 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (communications) {
   return {

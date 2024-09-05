@@ -27,7 +27,7 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  * - `status` - completed
  * - `updatedAt` - new Date()
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
@@ -45,7 +45,9 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
@@ -59,7 +61,26 @@ function defaults (data = {}) {
     dueDate: new Date('2023-04-28'),
     endDate: new Date('2023-03-31'),
     licenceRef,
-    metadata: {},
+    metadata: {
+      description: 'BOREHOLE AT AVALON',
+      isCurrent: true,
+      isFinal: false,
+      isSummer: false,
+      isTwoPartTariff: false,
+      isUpload: false,
+      nald: {
+        regionCode: 9,
+        areaCode: 'ARCA',
+        formatId: returnReference,
+        periodStartDay: 1,
+        periodStartMonth: 4,
+        periodEndDay: 28,
+        periodEndMonth: 4
+      },
+      points: [],
+      purposes: [],
+      version: 1
+    },
     receivedDate,
     returnReference,
     returnsFrequency: 'month',

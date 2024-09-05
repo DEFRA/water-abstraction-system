@@ -23,7 +23,7 @@ const ReviewReturnModel = require('../../../models/review-return.model.js')
  * We need to persist all this information ready for use in the review screens that our users use to asses if the
  * matching and allocating looks correct or if any issues need resolving first.
  *
- * @param {String} billRunId - the ID of the two-part tariff bill run being generated
+ * @param {string} billRunId - the ID of the two-part tariff bill run being generated
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */
@@ -52,6 +52,7 @@ async function go (billRunId, licence) {
 
 async function _persistChargeElement (chargeElement, reviewReturnIds, reviewChargeReferenceId) {
   const reviewChargeElementId = await _persistReviewChargeElement(chargeElement, reviewChargeReferenceId)
+
   for (const returnLog of chargeElement.returnLogs) {
     // When we persist the review result we need the Id's for both the charge element and return log's review result
     // records. Though it looks like we're iterating return logs here, these are copies assigned during matching and
@@ -130,6 +131,7 @@ async function _persistReturnLogs (returnLogs, reviewLicenceId) {
 
   for (const returnLog of returnLogs) {
     const reviewReturnId = await _persistReviewReturn(returnLog, reviewLicenceId)
+
     reviewReturnIds.push({ returnId: returnLog.id, reviewReturnId })
   }
 

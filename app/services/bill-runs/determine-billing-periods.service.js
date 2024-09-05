@@ -29,9 +29,9 @@ const SROC_FIRST_FIN_YEAR_END = 2023
  * Our 3 billing engines then use these periods to generate the bill run.
  *
  * @param {string} billRunType - The type of bill run, for example, 'annual' or 'supplementary'
- * @param {Number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
+ * @param {number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
  *
- * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
+ * @returns {object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
 function go (billRunType, financialYearEnding) {
   const financialYear = _financialYear(financialYearEnding)
@@ -63,6 +63,7 @@ function _billingPeriods (billRunType, financialYear) {
   // It means we'll never pick a PRESROC for our billing periods. But also we are future proofed should we still be
   // here in 2029!
   const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (years.endYear - NO_OF_YEARS_TO_LOOK_BACK))
+
   while (earliestSrocFinYearEnd <= years.endYear) {
     _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
 
@@ -77,6 +78,8 @@ function _billingPeriods (billRunType, financialYear) {
  * TODO: Whilst we still have `POST /bill-runs` to support bill runs created using the legacy setup bill run journey we
  * can receive requests where financialYearEnding has not been set. This exists to handle that scenario and can be
  * deleted when we are confident we can delete that end point.
+ *
+ * @private
  */
 function _financialYear (financialYearEnding) {
   if (financialYearEnding) {

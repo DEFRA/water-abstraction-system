@@ -57,6 +57,8 @@ async function go (billRunId) {
  *
  * But we need to ensure no one exploits the `POST /bill-runs/{id}/send` endpoint. So, we always have to fetch the bill
  * run to check its status is not one that prevents us deleting it.
+ *
+ * @private
  */
 async function _fetchBillRun (id) {
   return BillRunModel.query()

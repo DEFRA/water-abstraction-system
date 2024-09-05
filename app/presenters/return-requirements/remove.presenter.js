@@ -14,7 +14,7 @@ const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.j
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session

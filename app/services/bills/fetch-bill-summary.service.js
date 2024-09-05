@@ -18,7 +18,7 @@ const BillModel = require('../../models/bill.model.js')
  *
  * @param {string} billId - The UUID for the bill to fetch a summary of
  *
- * @returns {Promise<Object>} the matching instance of BillModel plus the linked billing account and bill
+ * @returns {Promise<object>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
 async function go (billId) {

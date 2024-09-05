@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const NoBillingPeriodsError = require('../../../app/errors/no-billing-periods.error.js')
+
 // Things we need to stub
 const AnnualProcessBillRunService = require('../../../app/services/bill-runs/annual/process-bill-run.service.js')
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
@@ -56,6 +59,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(annualBillRun)
 
         Sinon.stub(AnnualProcessBillRunService, 'go')
@@ -98,6 +102,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(supplementaryBillRun)
 
         Sinon.stub(SupplementaryProcessBillRunService, 'go')
@@ -140,6 +145,7 @@ describe('Start Bill Run Process service', () => {
           ...billRun,
           batchType
         }
+
         Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffBillRun)
 
         Sinon.stub(TwoPartTariffProcessBillRunService, 'go')
@@ -176,12 +182,26 @@ describe('Start Bill Run Process service', () => {
   })
 
   describe('when calling the service fails', () => {
-    beforeEach(() => {
-      Sinon.stub(DetermineBillingPeriodsService, 'go').throws()
+    describe('because of an unexpected error', () => {
+      beforeEach(() => {
+        Sinon.stub(DetermineBillingPeriodsService, 'go').throws()
+      })
+
+      it('throws an error', async () => {
+        await expect(StartBillRunProcessService.go(regionId, userEmail)).to.reject()
+      })
     })
 
-    it('throws an error', async () => {
-      await expect(StartBillRunProcessService.go(regionId, userEmail)).to.reject()
+    describe('because no billing periods could be determined', () => {
+      beforeEach(() => {
+        Sinon.stub(DetermineBillingPeriodsService, 'go').returns([])
+      })
+
+      it('throws a NoBillingPeriodsError', async () => {
+        const result = await expect(StartBillRunProcessService.go(regionId, userEmail)).to.reject()
+
+        expect(result).to.be.instanceOf(NoBillingPeriodsError)
+      })
     })
   })
 })

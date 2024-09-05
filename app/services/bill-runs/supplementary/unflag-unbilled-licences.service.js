@@ -32,9 +32,9 @@ const LicenceModel = require('../../../models/licence.model.js')
  * running are slim. But we feel it prudent to still check plus it keeps the services consistent.
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being processed
- * @param {String[]} allLicenceIds - All licence UUIDs being processed in the bill run
+ * @param {string[]} allLicenceIds - All licence UUIDs being processed in the bill run
  *
- * @returns {Promise<Number>} Resolves to the count of records updated
+ * @returns {Promise<number>} Resolves to the count of records updated
  */
 async function go (billRun, allLicenceIds) {
   const { id: billRunId, createdAt } = billRun

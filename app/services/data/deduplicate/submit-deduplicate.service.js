@@ -20,7 +20,7 @@ const DeDuplicateService = require('./de-duplicate-licence.service.js')
  * controller will redirect the user to the search page and have it search for the licence reference. If the tool has
  * done its job the page should no longer error.
  *
- * @returns {Promise<Object>} an object containing a parsed version of the licence reference submitted else an error
+ * @returns {Promise<object>} an object containing a parsed version of the licence reference submitted else an error
  * message if nothing was entered
  */
 async function go (payload) {
@@ -35,6 +35,7 @@ async function go (payload) {
   }
 
   const parsedLicenceRef = licenceRef.trim().toUpperCase()
+
   await DeDuplicateService.go(parsedLicenceRef)
 
   return {

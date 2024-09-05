@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service')
+const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
 
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {

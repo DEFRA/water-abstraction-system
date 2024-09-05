@@ -12,7 +12,7 @@ const PurposeModel = require('../../models/purpose.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} The distinct purposes for the matching licence's current version
+ * @returns {Promise<object>} The distinct purposes for the matching licence's current version
  */
 async function go (licenceId) {
   return _fetch(licenceId)

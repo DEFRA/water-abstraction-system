@@ -15,10 +15,10 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/RebillBillRunInvoice | CHA API docs} for
  * more details
  *
- * @param {String} billRunId - UUID of the Charging Module API bill run the new bills will be assigned to
- * @param {String} billId - UUID of the Charging Module the bill to be reissued
+ * @param {string} billRunId - UUID of the Charging Module API bill run the new bills will be assigned to
+ * @param {string} billId - UUID of the Charging Module the bill to be reissued
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
 */
 async function send (billRunId, billId) {
   const path = `v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`

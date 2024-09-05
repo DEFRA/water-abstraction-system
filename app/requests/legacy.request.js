@@ -69,7 +69,7 @@ const services = {
  * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
  * response). Defaults to true
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function deleteRequest (serviceName, path, userId = null, apiRequest = true) {
   return _sendRequest(BaseRequest.delete, serviceName, path, userId, apiRequest)
@@ -86,7 +86,7 @@ async function deleteRequest (serviceName, path, userId = null, apiRequest = tru
  * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
  * response). Defaults to true
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function get (serviceName, path, userId = null, apiRequest = true) {
   return _sendRequest(BaseRequest.get, serviceName, path, userId, apiRequest)
@@ -95,16 +95,16 @@ async function get (serviceName, path, userId = null, apiRequest = true) {
 /**
  * Sends a POST request to the legacy service for the provided path
  *
- * @param {string} serviceName name of the legacy service to call (background, crm, external, idm, import, internal,
+ * @param {string} serviceName - name of the legacy service to call (background, crm, external, idm, import, internal,
  * permits, reporting, returns or water)
  * @param {string} path - The path to send the request to (do not include the starting /)
  * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
  * header. Defaults to null
  * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
  * response). Defaults to true
- * @param {Object} [body] - Data to be sent in the request body to the service as JSON
+ * @param {object} [body] - Data to be sent in the request body to the service as JSON
  *
- * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {Promise<object>} An object representing the result of the request
  */
 async function post (serviceName, path, userId = null, apiRequest = true, body = {}) {
   return _sendRequest(BaseRequest.post, serviceName, path, userId, apiRequest, body)
@@ -112,6 +112,8 @@ async function post (serviceName, path, userId = null, apiRequest = true, body =
 
 /**
  * Sends a request to a legacy service using the provided BaseRequest method
+ *
+ * @private
  */
 async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
@@ -142,6 +144,8 @@ function _service (serviceName) {
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
+ *
+ * @private
  */
 function _requestOptions (service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
@@ -176,6 +180,8 @@ function _requestOptions (service, userId, apiRequest, body) {
 
 /**
  * Parses the charging module response returned from BaseRequest
+ *
+ * @private
  */
 function _parseResult (result) {
   const { body, statusCode } = result.response

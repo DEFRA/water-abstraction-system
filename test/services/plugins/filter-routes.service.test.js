@@ -33,6 +33,7 @@ describe('Filter routes service', () => {
   describe('when the environment is production', () => {
     it('returns the routes filtered', () => {
       const filteredRoutes = Hoek.clone(routes)
+
       filteredRoutes.pop()
 
       const result = FilterRoutesService.go(routes, 'prd')

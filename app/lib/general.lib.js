@@ -27,7 +27,7 @@ const { randomUUID } = require('crypto')
  *
  * @param {bigint} startTime - the time the process started in nanoseconds
  * @param {string} message - the message to log
- * @param {Object} [data] - additional data to include with the log output
+ * @param {object} [data] - additional data to include with the log output
  */
 function calculateAndLogTimeTaken (startTime, message, data = {}) {
   const endTime = currentTimeInNanoseconds()
@@ -74,7 +74,7 @@ function currentTimeInNanoseconds () {
  * We often need to work out what the start and end date for the current financial year is. But because the financial
  * year starts on 01-APR and finishes on 31-MAR what that year is will change dependent on the current date.
  *
- * @returns {Object} An object containing a `startDate` and `endDate`
+ * @returns {object} An object containing a `startDate` and `endDate`
  */
 function determineCurrentFinancialYear () {
   const currentDate = new Date()
@@ -103,7 +103,7 @@ function determineCurrentFinancialYear () {
  *
  * This function adds a key/value to 'notification' in yar.
  *
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} [title='Updated'] - title for the notification
  * @param {string} [text='Changes made'] - text for the notification
  *
@@ -122,9 +122,9 @@ function flashNotification (yar, title = 'Updated', text = 'Changes made') {
  * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
  * a string that defines the details of the abstraction point.
  *
- * @param {Object} pointDetail - Object containing all the details for the point
+ * @param {object} pointDetail - Object containing all the details for the point
  *
- * @returns {String} a description of the abstraction point
+ * @returns {string} a description of the abstraction point
  */
 function generateAbstractionPointDetail (pointDetail) {
   let abstractionPoint = null
@@ -153,45 +153,6 @@ function generateAbstractionPointDetail (pointDetail) {
 }
 
 /**
- * Generate a string that represents an abstraction point based on the assumption the points have already been merged
- *
- * When abstracting water the point at which this is done can be described in several ways depending on the number of
- * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
- * a string that defines the details of the abstraction point.
- *
- * This follows the same out put as generateAbstractionPointDetail but the points have already been merged
- *
- * @param {Object} pointDetail - Object containing all the details for the point
- *
- * @returns {String} a description of the abstraction point
- */
-function generatePointDetail (pointDetail) {
-  let abstractionPoint = null
-
-  if (pointDetail.ngr4) {
-    const point1 = pointDetail.ngr1
-    const point2 = pointDetail.ngr2
-    const point3 = pointDetail.ngr3
-    const point4 = pointDetail.ngr4
-
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.ngr2) {
-    const point1 = pointDetail.ngr1
-    const point2 = pointDetail.ngr2
-
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else {
-    const point1 = pointDetail.ngr1
-
-    abstractionPoint = `At National Grid Reference ${point1}`
-  }
-
-  abstractionPoint += pointDetail.description !== undefined ? ` (${pointDetail.description})` : ''
-
-  return abstractionPoint
-}
-
-/**
  * Generate a Universally Unique Identifier (UUID)
  *
  * The service uses these as the IDs for most records in the DB. Most tables will automatically generate them when
@@ -205,7 +166,7 @@ function generatePointDetail (pointDetail) {
  *
  * https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
  *
- * @returns {String} a randomly generated UUID
+ * @returns {string} a randomly generated UUID
  */
 function generateUUID () {
   return randomUUID({ disableEntropyCache: true })
@@ -234,8 +195,8 @@ function generateUUID () {
  * Else, having compared all the `checkPeriods` against each `referencePeriod` and finding no overlaps the function will
  * return false.
  *
- * @param {Object[]} referencePeriods Each period is an object containing a `startDate` and `endDate` property
- * @param {Object[]} checkPeriods Each period is an object containing a `startDate` and `endDate` property. These
+ * @param {object[]} referencePeriods - Each period is an object containing a `startDate` and `endDate` property
+ * @param {object[]} checkPeriods - Each period is an object containing a `startDate` and `endDate` property. These
  * periods will be checked against the `referencePeriods for any overlaps
  *
  * @returns {boolean} Returns true if there _any_ check period overlaps with a reference period, else false
@@ -300,8 +261,8 @@ function timestampForPostgres () {
  * - Additional charges - supportedSourceName
  * - Additional charges - waterCompanyCharge
  *
- * @param {Object} left - First transaction to match
- * @param {Object} right - Second transaction to match
+ * @param {object} left - First transaction to match
+ * @param {object} right - Second transaction to match
  *
  * @returns {boolean} true if a match else false
  */
@@ -334,7 +295,6 @@ module.exports = {
   determineCurrentFinancialYear,
   flashNotification,
   generateAbstractionPointDetail,
-  generatePointDetail,
   generateUUID,
   periodsOverlap,
   timestampForPostgres,

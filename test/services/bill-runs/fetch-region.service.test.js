@@ -8,15 +8,13 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const RegionsSeeder = require('../../support/seeders/regions.seeder.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
 
 describe('Fetch Region service', () => {
-  const region = RegionsSeeder.data.find((region) => {
-    return region.displayName === 'Test Region'
-  })
+  const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   describe('when there is a region with a matching NALD region id', () => {
     it('returns results', async () => {

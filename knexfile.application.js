@@ -21,7 +21,7 @@ const { legacyDbSnakeCaseMappers } = require('./app/lib/legacy-db-snake-case-map
  * to migrations.
  */
 
-const knexfile = require('./knexfile')
+const knexfile = require('./knexfile.js')
 
 for (const environment in knexfile) {
   Object.assign(knexfile[environment], legacyDbSnakeCaseMappers({ underscoreBeforeDigits: true }))

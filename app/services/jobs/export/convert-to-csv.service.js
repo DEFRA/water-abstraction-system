@@ -8,9 +8,9 @@
 /**
  * Converts data to a CSV formatted string
  *
- * @param {[]} data An array representing either the headers or rows from a db table
+ * @param {string[]} data - An array representing either the headers or rows from a db table
  *
- * @returns {String} A CSV formatted string
+ * @returns {string} A CSV formatted string
  */
 function go (data) {
   if (!data) {
@@ -23,9 +23,7 @@ function go (data) {
 /**
  * Transforms each row or header to CSV format and joins the values with commas
  *
- * @param {[*]} data The data to be transformed to CSV
- *
- * @returns {String[]} An array of transformed data
+ * @private
  */
 function _transformDataToCSV (data) {
   const transformedRow = data.map((value) => {
@@ -38,9 +36,7 @@ function _transformDataToCSV (data) {
 /**
  * Transform a value to CSV format
  *
- * @param {*} value The value to transform
- *
- * @returns {*} The value transformed to CSV format
+ * @private
  */
 function _transformValueToCSV (value) {
   // Return empty string for undefined or null values

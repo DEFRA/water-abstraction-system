@@ -11,9 +11,9 @@
  * Because the legacy code does not use our views of the legacy data, the response needs to be formatted to use the
  * legacy field names.
  *
- * @param {module:BillRunModel} billRun An instance of the newly created bill run
+ * @param {module:BillRunModel} billRun - An instance of the newly created bill run
  *
- * @returns {Object} the formatted response
+ * @returns {object} the formatted response
  */
 function go (billRun) {
   const {

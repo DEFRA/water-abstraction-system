@@ -13,9 +13,9 @@ const { db } = require('../../../db/db.js')
  *
  * Was built to provide the data needed for the '/bill-runs/{id}' page
  *
- * @param {string} id The UUID for the bill run to fetch
+ * @param {string} id - The UUID for the bill run to fetch
  *
- * @returns {Promise<Object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
+ * @returns {Promise<object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
  * licence, numbers, financial year and total net amount) for each bill linked to the bill run
  */
 async function go (id) {
@@ -88,6 +88,8 @@ async function _fetchBillRun (id) {
  * We could have made things simpler by performing separate queries and then transforming all the results into what we
  * need this service to return. But we opted to go for performance this time, avoiding multiple requests to the DB and
  * getting the query to provide the data we need without having to transform the result.
+ *
+ * @private
  */
 async function _fetchBillSummaries (id) {
   const results = await db

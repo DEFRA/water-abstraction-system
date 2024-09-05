@@ -20,10 +20,10 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  *
  * @param {module:BillRunModel} billRunId - The UUID for the bill run
  * @param {module:LicenceModel} licenceId - The UUID of the licence that is being reviewed
- * @param {Object} payload - The Hapi `request.payload` object passed on by the controller
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The Hapi `request.payload` object passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} resolves to the result of the update query. Not intended to be used
+ * @returns {Promise<object>} resolves to the result of the update query. Not intended to be used
  */
 async function go (billRunId, licenceId, payload, yar) {
   const parsedPayload = _parsePayload(payload)

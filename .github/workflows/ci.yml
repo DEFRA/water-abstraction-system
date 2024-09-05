@@ -39,6 +39,7 @@ jobs:
       POSTGRES_DB_TEST: wabs_system_test
       ENVIRONMENT: dev
       COOKIE_SECRET: 1a1028df-a2af-468a-929b-e3a274be1208
+      DEFAULT_USER_PASSWORD: P@55word
 
     # Service containers to run with `runner-job`
     services:
@@ -113,6 +114,11 @@ jobs:
       - name: Run lint check
         run: |
           npm run lint
+
+      # Next generate docs. This checks any JSDoc changes are valid
+      - name: Run docs check
+        run: |
+          npm run docs
 
       - name: Database migrations
         run: |

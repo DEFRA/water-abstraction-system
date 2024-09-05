@@ -4,13 +4,16 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
+const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
+const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
+const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
+const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
@@ -24,14 +27,33 @@ const UserRoleModel = require('../../app/models/user-role.model.js')
 // Thing under test
 const UserModel = require('../../app/models/user.model.js')
 
+const GROUP_WIRS_INDEX = 2
+const ROLE_RETURNS_INDEX = 0
+const USER_GROUP_WIRS_INDEX = 3
+const USER_WIRS_INDEX = 3
+
 describe('User model', () => {
+  let testChargeVersionNoteOne
+  let testChargeVersionNoteTwo
+  let testGroup
   let testRecord
+  let testRole
+  let testUserRole
+  let testUserGroup
+
+  before(async () => {
+    testRecord = UserHelper.select(USER_WIRS_INDEX)
+
+    testRole = RoleHelper.select(ROLE_RETURNS_INDEX)
+    testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
+    testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+
+    testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
+    testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
+    testUserRole = await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserModel.query().findById(testRecord.id)
 
@@ -41,15 +63,35 @@ describe('User model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking through user groups to groups', () => {
-      let testGroup
+    describe('when linking to charge version notes', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('chargeVersionNotes')
 
-      beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testGroup = await GroupHelper.add()
-        await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
+        expect(query).to.exist()
       })
 
+      it('can eager load the charge version notes', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersionNotes')
+
+        const foundChargeVersionNoteOne = result.chargeVersionNotes
+          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteOne.id })
+        const foundChargeVersionNoteTwo = result.chargeVersionNotes
+          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteTwo.id })
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersionNotes).to.be.an.array()
+        expect(foundChargeVersionNoteOne).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(foundChargeVersionNoteOne).to.equal(testChargeVersionNoteOne)
+        expect(foundChargeVersionNoteTwo).to.equal(testChargeVersionNoteTwo)
+      })
+    })
+
+    describe('when linking through user groups to groups', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('groups')
@@ -68,7 +110,44 @@ describe('User model', () => {
         expect(result.groups).to.be.an.array()
         expect(result.groups).to.have.length(1)
         expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup)
+        expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to licence entity', () => {
+      let testAddedRecord
+      let testLicenceEntity
+
+      before(async () => {
+        testLicenceEntity = await LicenceEntityHelper.add()
+
+        const { id: licenceEntityId } = testLicenceEntity
+
+        // NOTE: The entity ID is held against the user, not the other way round!! Because of this we can't seed a user
+        // with `licence_entity_id` set because the licence entity record is only created when an external user is
+        // linked to a licence using the external UI.
+        //
+        // So, for this test we have to fall back to generating a user against which we assign the licence entity ID.
+        testAddedRecord = await UserHelper.add({ licenceEntityId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query()
+          .innerJoinRelated('licenceEntity')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence entity', async () => {
+        const result = await UserModel.query()
+          .findById(testAddedRecord.id)
+          .withGraphFetched('licenceEntity')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testAddedRecord.id)
+
+        expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
+        expect(result.licenceEntity).to.equal(testLicenceEntity)
       })
     })
 
@@ -76,8 +155,6 @@ describe('User model', () => {
       let testReturnVersions
 
       beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
           const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.id })
@@ -109,14 +186,6 @@ describe('User model', () => {
     })
 
     describe('when linking through user roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testRole = await RoleHelper.add()
-        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('roles')
@@ -135,18 +204,11 @@ describe('User model', () => {
         expect(result.roles).to.be.an.array()
         expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole)
+        expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to user groups', () => {
-      let testUserGroup
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('userGroups')
@@ -165,18 +227,11 @@ describe('User model', () => {
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup)
+        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to user roles', () => {
-      let testUserRole
-
-      beforeEach(async () => {
-        testRecord = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserModel.query()
           .innerJoinRelated('userRoles')

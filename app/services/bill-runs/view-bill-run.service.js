@@ -14,9 +14,9 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page
  *
- * @param {string} id The UUID for the bill run to view
+ * @param {string} id - The UUID for the bill run to view
  *
- * @returns {Promise<Object>} an object representing the `pageData` needed by the view bill run template. It contains
+ * @returns {Promise<object>} an object representing the `pageData` needed by the view bill run template. It contains
  * details of the bill run and the bills linked to it plus the page title.
  */
 async function go (id) {

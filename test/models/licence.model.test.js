@@ -14,6 +14,7 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -22,20 +23,27 @@ const LicenceDocumentModel = require('../../app/models/licence-document.model.js
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
+const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceGaugingStationHelper = require('../support/helpers/licence-gauging-station.helper.js')
 const LicenceGaugingStationModel = require('../../app/models/licence-gauging-station.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
+const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
+const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+const ModLogModel = require('../../app/models/mod-log.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
+const UserModel = require('../../app/models/user.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -269,6 +277,42 @@ describe('Licence model', () => {
       })
     })
 
+    describe('when linking to licence supplementary years', () => {
+      let testLicenceSupplementaryYears
+
+      beforeEach(async () => {
+        testRecord = await LicenceHelper.add()
+
+        testLicenceSupplementaryYears = []
+        for (let i = 0; i < 2; i++) {
+          const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({ licenceId: testRecord.id })
+
+          testLicenceSupplementaryYears.push(licenceSupplementaryYear)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceSupplementaryYears')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence supplementary years', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceSupplementaryYears')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceSupplementaryYears).to.be.an.array()
+        expect(result.licenceSupplementaryYears[0]).to.be.an.instanceOf(LicenceSupplementaryYearModel)
+        expect(result.licenceSupplementaryYears).to.include(testLicenceSupplementaryYears[0])
+        expect(result.licenceSupplementaryYears).to.include(testLicenceSupplementaryYears[1])
+      })
+    })
+
     describe('when linking to licence versions', () => {
       let testLicenceVersions
 
@@ -305,11 +349,49 @@ describe('Licence model', () => {
       })
     })
 
+    describe('when linking to mod logs', () => {
+      let testModLogs
+
+      beforeEach(async () => {
+        testRecord = await LicenceHelper.add()
+
+        testModLogs = []
+        for (let i = 0; i < 2; i++) {
+          const modLog = await ModLogHelper.add({
+            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+          })
+
+          testModLogs.push(modLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('modLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the mod logs', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('modLogs')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.modLogs).to.be.an.array()
+        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
+        expect(result.modLogs).to.include(testModLogs[0])
+        expect(result.modLogs).to.include(testModLogs[1])
+      })
+    })
+
     describe('when linking to region', () => {
       let testRegion
 
       beforeEach(async () => {
-        testRegion = await RegionHelper.add()
+        testRegion = RegionHelper.select()
 
         const { id: regionId } = testRegion
 
@@ -332,7 +414,7 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
+        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -819,9 +901,11 @@ describe('Licence model', () => {
       beforeEach(async () => {
         const licence = await LicenceHelper.add()
 
-        await RegisteredToAndLicenceNameSeeder.seed(licence)
+        await LicenceDocumentHeaderHelper.add({
+          licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+        })
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+        testRecord = await LicenceModel.query().findById(licence.id).modify('licenceName')
       })
 
       it('returns the licence name', async () => {
@@ -832,32 +916,44 @@ describe('Licence model', () => {
     })
   })
 
-  describe('$registeredTo', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceHelper.add()
-    })
-
+  describe('$primaryUser', () => {
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
-        const result = testRecord.$registeredTo()
+        const result = testRecord.$primaryUser()
 
         expect(result).to.be.null()
       })
     })
 
     describe('when the instance has been set with the additional properties needed', () => {
+      let primaryUser
+
       beforeEach(async () => {
         const licence = await LicenceHelper.add()
 
-        await RegisteredToAndLicenceNameSeeder.seed(licence)
+        const companyEntityId = generateUUID()
+        const username = `${generateUUID()}@wrls.gov.uk`
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+        const licenceEntity = await LicenceEntityHelper.add({ name: username })
+
+        primaryUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: licenceEntity.id, username })
+
+        await LicenceEntityRoleHelper.add({
+          companyEntityId, licenceEntityId: licenceEntity.id, role: 'primary_user'
+        })
+
+        await LicenceDocumentHeaderHelper.add({
+          companyEntityId, licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+        })
+
+        testRecord = await LicenceModel.query().findById(licence.id).modify('primaryUser')
       })
 
-      it('returns who the licence is registered to', async () => {
-        const result = testRecord.$registeredTo()
+      it('returns the primary user', async () => {
+        const result = testRecord.$primaryUser()
 
-        expect(result).to.equal('grace.hopper@example.com')
+        expect(result).to.be.an.instanceOf(UserModel)
+        expect(result).to.equal({ id: primaryUser.id, username: primaryUser.username })
       })
     })
   })

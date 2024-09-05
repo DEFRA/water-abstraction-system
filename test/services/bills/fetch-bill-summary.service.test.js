@@ -8,14 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
+const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -26,46 +25,53 @@ describe('Fetch Bill Summary service', () => {
 
   let agentCompanyId
   let bill
-  let billingAccountId
-  let billingAccountAddressId
   let billRunId
+  let billingAccount
+  let billingAccountAddressId
+  let billingAccountId
   let companyId
   let contactId
-  let regionId
+  let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const company = await CompanyHelper.add()
+
     companyId = company.id
 
-    const billingAccount = await BillingAccountHelper.add({ accountNumber: 'T65757520A', companyId })
+    billingAccount = await BillingAccountHelper.add({ companyId })
+
     billingAccountId = billingAccount.id
 
     const agentCompany = await CompanyHelper.add({ name: 'Agent Company Ltd' })
+
     agentCompanyId = agentCompany.id
 
     const contact = await ContactHelper.add()
+
     contactId = contact.id
 
     const billingAccountAddress = await BillingAccountAddressHelper.add({
       billingAccountId, companyId: agentCompanyId, contactId, endDate: null
     })
+
     billingAccountAddressId = billingAccountAddress.id
 
-    const region = await RegionHelper.add({ displayName: 'Stormlands' })
-    regionId = region.id
+    region = RegionHelper.select()
 
     const billRun = await BillRunHelper.add({
-      billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId
+      billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId: region.id
     })
+
     billRunId = billRun.id
 
-    bill = await BillHelper.add({ accountNumber: 'T65757520A', billingAccountId, billRunId, netAmount: 1045 })
+    bill = await BillHelper
+      .add({ accountNumber: billingAccount.accountNumber, billingAccountId, billRunId, netAmount: 1045 })
+
     const billId = bill.id
 
     for (let i = 0; i < 2; i++) {
       const billLicence = await BillLicenceHelper.add({ billId, licenceRef: `01/0${i + 1}/26/9400` })
+
       billLicences.push(billLicence)
     }
   })
@@ -79,7 +85,7 @@ describe('Fetch Bill Summary service', () => {
         netAmount: 1045,
         billingAccount: {
           id: billingAccountId,
-          accountNumber: 'T65757520A',
+          accountNumber: billingAccount.accountNumber,
           company: {
             id: companyId,
             name: 'Example Trading Ltd',
@@ -120,8 +126,8 @@ describe('Fetch Bill Summary service', () => {
           status: 'ready',
           toFinancialYearEnding: 2023,
           region: {
-            id: regionId,
-            displayName: 'Stormlands'
+            id: region.id,
+            displayName: region.displayName
           }
         }
       })

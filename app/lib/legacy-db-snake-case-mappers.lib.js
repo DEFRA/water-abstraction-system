@@ -5,7 +5,7 @@
  * @module LegacyDbSnakeCaseMappersLib
  */
 
-const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/utils/identifierMapping')
+const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/utils/identifierMapping.js')
 
 /**
  * Return an object containing Knex postProcessResponse() and wrapIdentifier() hooks used in Db query and result parsing
@@ -29,8 +29,8 @@ const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/u
  * It simply looks for the value 'crm_v2' and when seen, returns it as is without any formatting. For everything else,
  * it passes control to the out-of-the-box solution.
  *
- * @param {Object} opt Object containing options used by
- *  {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers|knexsnakecasemappers()}
+ * @param {object} opt - Object containing options used by
+ * {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers|knexsnakecasemappers()}
  *
  * @returns object containing Knex postProcessResponse() and wrapIdentifier() hooks
  */

@@ -43,6 +43,14 @@ class LicenceEntityModel extends BaseModel {
           from: 'licenceEntities.id',
           to: 'licenceEntityRoles.licenceEntityId'
         }
+      },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'licenceEntities.id',
+          to: 'users.licenceEntityId'
+        }
       }
     }
   }

@@ -5,12 +5,12 @@ const { formatChargingModuleDate } = require('../base.presenter.js')
 /**
  * Formats a transaction as a Charging Module API transaction request
  *
- * @param {Object} transaction the transaction object
- * @param {Object} billingPeriod The billing period of the transaction
- * @param {string} accountNumber known as the customer reference in the Charging Module API
- * @param {module:LicenceModel} licence an instance of LicenceModel
+ * @param {object} transaction - the transaction object
+ * @param {object} billingPeriod - The billing period of the transaction
+ * @param {string} accountNumber - known as the customer reference in the Charging Module API
+ * @param {module:LicenceModel} licence - an instance of LicenceModel
  *
- * @returns {Object} an object to be used as the body in a Charging Module POST transaction request
+ * @returns {object} an object to be used as the body in a Charging Module POST transaction request
  */
 function go (transaction, accountNumber, licence) {
   const periodStart = formatChargingModuleDate(transaction.startDate)

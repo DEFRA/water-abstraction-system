@@ -48,6 +48,7 @@ describe('Calculate Authorised and Billable days service', () => {
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 12
         })
+
         chargeReference.chargeElements = [chargeElement]
       })
 
@@ -109,6 +110,7 @@ describe('Calculate Authorised and Billable days service', () => {
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 6
         })
+
         chargeReference.chargeElements = [chargeElement]
       })
 
@@ -170,6 +172,7 @@ describe('Calculate Authorised and Billable days service', () => {
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
+
         chargeReference.chargeElements = [chargeElement]
       })
 
@@ -256,6 +259,7 @@ describe('Calculate Authorised and Billable days service', () => {
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
+
         chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
       })
 
@@ -330,6 +334,7 @@ describe('Calculate Authorised and Billable days service', () => {
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 11
           })
+
           chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 
@@ -357,6 +362,7 @@ describe('Calculate Authorised and Billable days service', () => {
             abstractionPeriodEndDay: 1,
             abstractionPeriodEndMonth: 1
           })
+
           chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 
@@ -384,6 +390,7 @@ describe('Calculate Authorised and Billable days service', () => {
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3
           })
+
           chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 

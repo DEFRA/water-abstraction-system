@@ -4,11 +4,10 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const RoleModel = require('../../app/models/role.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
@@ -18,14 +17,21 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const UserRoleModel = require('../../app/models/user-role.model.js')
 
+const ROLE_RENEWAL_NOTIFICATIONS_INDEX = 5
+const USER_NPS_INDEX = 6
+
 describe('User Role model', () => {
   let testRecord
+  let testRole
+  let testUser
+
+  before(async () => {
+    testRole = RoleHelper.select(ROLE_RENEWAL_NOTIFICATIONS_INDEX)
+    testUser = UserHelper.select(USER_NPS_INDEX)
+    testRecord = await UserRoleHelper.add({ roleId: testRole.id, userId: testUser.id })
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await UserRoleHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserRoleModel.query().findById(testRecord.id)
 
@@ -36,13 +42,6 @@ describe('User Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to role', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRole = await RoleHelper.add()
-        testRecord = await UserRoleHelper.add({ roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserRoleModel.query()
           .innerJoinRelated('role')
@@ -59,18 +58,11 @@ describe('User Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.role).to.be.an.instanceOf(RoleModel)
-        expect(result.role).to.equal(testRole)
+        expect(result.role).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testRecord = await UserRoleHelper.add({ userId: testUser.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserRoleModel.query()
           .innerJoinRelated('user')
@@ -87,7 +79,7 @@ describe('User Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
       })
     })
   })

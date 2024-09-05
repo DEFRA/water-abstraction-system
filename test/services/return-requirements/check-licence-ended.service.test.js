@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -16,10 +15,6 @@ const CheckLicenceEndedService = require('../../../app/services/return-requireme
 
 describe('Return Requirements - CheckLicenceEndedService', () => {
   let licence
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('go', () => {
     beforeEach(async () => {

@@ -15,9 +15,9 @@
  * {@link https://hapi.dev/api/?v=21.3.2#response-toolkit | response toolkit} to continue with the response or not. If
  * not the `ErrorPagesPlugin` will use the `statusCode` returned to determine which error page to show.
  *
- * @param {Object} request An instance of a {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
+ * @param {object} request - An instance of a {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
  *
- * @returns {Object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
+ * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
 function go (request) {
@@ -44,6 +44,8 @@ function go (request) {
  * If the request object reflects a 2xx or 3xx response then the status code will be a property of the request. But if
  * it's because an error is thrown, `request` is actually a Boom error instance which means the status code is
  * somewhere else. So, we need this bit of logic to figure out what status code we're dealing with!
+ *
+ * @private
  */
 function _extractStatusCode (request) {
   const { response } = request
@@ -80,9 +82,11 @@ function _logError (statusCode, request) {
  * Finally, this service is called for _all_ responses so we need to handle standard responses, for example, 200 on a
  * request for an asset.
  *
- * @param {Object} request The instance of {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
+ * @param {object} request - The instance of {@link https://hapi.dev/api/?v=21.3.2#request | Hapi request}
  *
  * @returns {boolean} true if the response should be stopped and redirected to an error page else false
+ *
+ * @private
  */
 function _stopResponse (request) {
   // `isBoom` is only present when dealing with requests that have resulted in an error being thrown.
@@ -105,6 +109,8 @@ function _stopResponse (request) {
  * This will only be called when _stopResponse() has determined we need to redirect to an error page. In this case
  * we need to ensure the code we return is secure and will not get the response blocked by the WAF we have in our AWS
  * environments.
+ *
+ * @private
  */
 function _determineSafeStatusCode (statusCode) {
   // The status code will be a 2xx or 3xx so safe to return as is

@@ -167,7 +167,9 @@ function _getMatchingReturns (returnLogs, licenceReturnLogs) {
 /**
  * Returns a list of issues that would put a licence into a status of 'review'
  *
- * @returns {Object[]} An array of issues that would put a licence into a status of 'review'
+ * @returns {object[]} An array of issues that would put a licence into a status of 'review'
+ *
+ * @private
  */
 function _getReviewStatuses () {
   // the keys for the issues that will put the licence into review status
@@ -245,6 +247,8 @@ function _returnLogIssues (returnLog, licence) {
  * - If no matching returns have a status of 'due', `noReturnsReceived` and 'someReturnsNotReceived is `false`.
  * - If some of the matching returns, but not all, have a status of 'due', `someReturnsNotReceived` is `true`.
  * - If all matching returns have a status of 'due', `noReturnsReceived` is `true`.
+ *
+ * @private
  */
 function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
   const matchingReturnLogs = _getMatchingReturns(returnLogs, licenceReturnLogs)

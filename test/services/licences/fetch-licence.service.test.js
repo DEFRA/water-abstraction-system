@@ -8,76 +8,66 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const licenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
+const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
-describe('Fetch licence service', () => {
+describe('Fetch Licence service', () => {
   let licence
+  let licenceSupplementaryYearId
+  let workflow
 
-  describe('when there is no optional data in the model', () => {
+  describe('when there is a matching licence', () => {
     beforeEach(async () => {
-      licence = await LicenceHelper.add({
-        expiredDate: null,
-        include_in_presroc_billing: 'yes',
-        include_in_sroc_billing: true,
-        lapsedDate: null,
-        revokedDate: null
+      licence = await LicenceHelper.add()
+
+      const licenceSupplementaryYear = await licenceSupplementaryYearHelper.add({
+        licenceId: licence.id,
+        twoPartTariff: true
       })
 
-      // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
-      await LicenceHolderSeeder.seed(licence.licenceRef)
+      licenceSupplementaryYearId = licenceSupplementaryYear.id
+
+      // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
+      // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
+      // as changed incorrectly
+      workflow = await WorkflowHelper.add({ licenceId: licence.id })
+      await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
     })
 
-    it('returns results', async () => {
+    it('returns the matching licence', async () => {
       const result = await FetchLicenceService.go(licence.id)
 
-      expect(result.id).to.equal(licence.id)
-      expect(result.ends).to.equal(null)
-      expect(result.expiredDate).to.equal(null)
-      expect(result.lapsedDate).to.equal(null)
-      expect(result.licenceName).to.equal('Unregistered licence')
-      expect(result.licenceRef).to.equal(licence.licenceRef)
-      expect(result.revokedDate).to.equal(null)
-      expect(result.includeInPresrocBilling).to.equal('yes')
-      expect(result.includeInSrocBilling).to.be.true()
+      expect(result).to.be.an.instanceOf(LicenceModel)
+      expect(result).to.equal({
+        id: licence.id,
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
+        licenceRef: licence.licenceRef,
+        expiredDate: null,
+        revokedDate: null,
+        lapsedDate: null,
+        licenceDocumentHeader: null,
+        licenceSupplementaryYears: [{
+          id: licenceSupplementaryYearId
+        }],
+        workflows: [{
+          id: workflow.id,
+          status: workflow.status
+        }]
+      })
     })
   })
 
-  describe('when there is optional data in the model', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add({
-        expiredDate: '2020-01-01',
-        lapsedDate: null,
-        revokedDate: null
-      })
+  describe('when there is not a matching licence', () => {
+    it('returns undefined', async () => {
+      const result = await FetchLicenceService.go('4ba2066b-4623-4102-801a-c771e39af2f3')
 
-      const licenceName = 'Test Company Ltd'
-      const companyEntityId = 'c960a4a1-94f9-4c05-9db1-a70ce5d08738'
-      const licenceRef = licence.licenceRef
-
-      await LicenceDocumentHeaderHelper.add({ companyEntityId, licenceName, licenceRef })
-      const { id: licenceEntityId } = await LicenceEntityHelper.add()
-
-      await LicenceEntityRoleHelper.add({ companyEntityId, licenceEntityId })
-    })
-
-    it('returns results', async () => {
-      const result = await FetchLicenceService.go(licence.id)
-
-      expect(result.registeredTo).to.equal('grace.hopper@example.com')
-      expect(result.licenceName).to.equal('Test Company Ltd')
-      expect(result.ends).to.equal({
-        date: new Date('2020-01-01'),
-        priority: 3,
-        reason: 'expired'
-      }
-      )
+      expect(result).to.be.undefined()
     })
   })
 })

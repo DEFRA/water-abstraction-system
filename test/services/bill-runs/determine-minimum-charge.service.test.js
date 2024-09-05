@@ -4,37 +4,42 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 
 // Thing under test
 const DetermineMinimumChargeService = require('../../../app/services/bill-runs/determine-minimum-charge.service.js')
+
+const CHANGE_REASON_CHARGE_CANCELLED_INDEX = 7
+const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 
 describe('Determine Minimum Charge service', () => {
   const chargePeriod = {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')
   }
+
+  let minimumChargeChangeReason
+  let noMinimumChargeChangeReason
   let chargeVersion
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
+  before(() => {
+    minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
+    noMinimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_CHARGE_CANCELLED_INDEX)
   })
 
   describe('where the charge version start date is the same as the charge period', () => {
     describe('and the charge version change reason triggers a minimum charge', () => {
       beforeEach(async () => {
-        const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
         chargeVersion = await ChargeVersionHelper.add({
           startDate: new Date('2023-04-01'),
-          changeReasonId: changeReason.changeReasonId
+          changeReasonId: minimumChargeChangeReason.id
         })
-        chargeVersion.changeReason = changeReason
+        chargeVersion.changeReason = minimumChargeChangeReason
         chargeVersion.licence = { startDate: new Date('2022-01-01') }
       })
 
@@ -47,12 +52,11 @@ describe('Determine Minimum Charge service', () => {
 
     describe('and the charge version change reason does not trigger a minimum charge', () => {
       beforeEach(async () => {
-        const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: false })
         chargeVersion = await ChargeVersionHelper.add({
           startDate: new Date('2022-05-01'),
-          changeReasonId: changeReason.changeReasonId
+          changeReasonId: noMinimumChargeChangeReason.id
         })
-        chargeVersion.changeReason = changeReason
+        chargeVersion.changeReason = noMinimumChargeChangeReason
         chargeVersion.licence = { startDate: new Date('2022-01-01') }
       })
 
@@ -66,12 +70,11 @@ describe('Determine Minimum Charge service', () => {
 
   describe('where the charge version start date is not the same as the charge period', () => {
     beforeEach(async () => {
-      const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
       chargeVersion = await ChargeVersionHelper.add({
         startDate: new Date('2022-03-01'),
-        changeReasonId: changeReason.changeReasonId
+        changeReasonId: minimumChargeChangeReason.id
       })
-      chargeVersion.changeReason = changeReason
+      chargeVersion.changeReason = minimumChargeChangeReason
       chargeVersion.licence = { startDate: new Date('2022-01-01') }
     })
 

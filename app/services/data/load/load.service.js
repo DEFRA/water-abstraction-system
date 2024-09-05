@@ -27,10 +27,7 @@ const CompanyContactHelper = require('../../../../test/support/helpers/company-c
 const CompanyHelper = require('../../../../test/support/helpers/company.helper.js')
 const ContactHelper = require('../../../../test/support/helpers/contact.helper.js')
 const EventHelper = require('../../../../test/support/helpers/event.helper.js')
-const FinancialAgreementHelper = require('../../../../test/support/helpers/financial-agreement.helper.js')
 const GaugingStationHelper = require('../../../../test/support/helpers/gauging-station.helper.js')
-const GroupRoleHelper = require('../../../../test/support/helpers/group-role.helper.js')
-const GroupHelper = require('../../../../test/support/helpers/group.helper.js')
 const LicenceAgreementHelper = require('../../../../test/support/helpers/licence-agreement.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
 const LicenceDocumentRoleHelper = require('../../../../test/support/helpers/licence-document-role.helper.js')
@@ -39,14 +36,12 @@ const LicenceEntityRoleHelper = require('../../../../test/support/helpers/licenc
 const LicenceEntityHelper = require('../../../../test/support/helpers/licence-entity.helper.js')
 const LicenceGaugingStationHelper = require('../../../../test/support/helpers/licence-gauging-station.helper.js')
 const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../../../test/support/helpers/licence-version-purpose-condition-type.helper.js')
+const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../../test/support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionHelper = require('../../../../test/support/helpers/licence-version.helper.js')
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
-const PurposeHelper = require('../../../../test/support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../../test/support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
 const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../../test/support/helpers/return-requirement-purpose.helper.js')
@@ -60,7 +55,6 @@ const ReviewChargeReferenceHelper = require('../../../../test/support/helpers/re
 const ReviewChargeVersionHelper = require('../../../../test/support/helpers/review-charge-version.helper.js')
 const ReviewLicenceHelper = require('../../../../test/support/helpers/review-licence.helper.js')
 const ReviewReturnHelper = require('../../../../test/support/helpers/review-return.helper.js')
-const RoleHelper = require('../../../../test/support/helpers/role.helper.js')
 const ScheduledNotificationHelper = require('../../../../test/support/helpers/scheduled-notification.helper.js')
 const SessionHelper = require('../../../../test/support/helpers/session.helper.js')
 const TransactionHelper = require('../../../../test/support/helpers/transaction.helper.js')
@@ -91,10 +85,7 @@ const LOAD_HELPERS = {
   companies: { helper: CompanyHelper, test: true, legacy: { schema: 'crm_v2', table: 'companies', id: 'company_id' } },
   contacts: { helper: ContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'contacts', id: 'contact_id' } },
   events: { helper: EventHelper, test: false },
-  financialAgreements: { helper: FinancialAgreementHelper, test: true, legacy: { schema: 'water', table: 'financial_agreement_types', id: 'financial_agreement_type_id' } },
   gaugingStations: { helper: GaugingStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
-  groupRoles: { helper: GroupRoleHelper, test: false },
-  groups: { helper: GroupHelper, test: false },
   licenceAgreements: { helper: LicenceAgreementHelper, test: true, legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' } },
   licenceDocumentHeaders: { helper: LicenceDocumentHeaderHelper, test: false },
   licenceDocumentRoles: { helper: LicenceDocumentRoleHelper, test: true, legacy: { schema: 'crm_v2', table: 'document_roles', id: 'document_role_id' } },
@@ -103,14 +94,12 @@ const LOAD_HELPERS = {
   licenceEntities: { helper: LicenceEntityHelper, test: false },
   licenceGaugingStations: { helper: LicenceGaugingStationHelper, test: true, legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' } },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
-  licenceVersionPurposeConditionTypes: { helper: LicenceVersionPurposeConditionTypeHelper, test: false },
+  LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
   licenceVersionPurposes: { helper: LicenceVersionPurposeHelper, test: true, legacy: { schema: 'water', table: 'licence_version_purposes', id: 'licence_version_purpose_id' } },
   licenceVersions: { helper: LicenceVersionHelper, test: true, legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' } },
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   permitLicences: { helper: PermitLicenceHelper, test: false },
-  purposes: { helper: PurposeHelper, test: true, legacy: { schema: 'water', table: 'purposes_uses', id: 'purpose_use_id' } },
-  regions: { helper: RegionHelper, test: true, legacy: { schema: 'water', table: 'regions', id: 'region_id' } },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
   returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
   returnRequirementPurposes: { helper: ReturnRequirementPurposeHelper, test: false },
@@ -124,7 +113,6 @@ const LOAD_HELPERS = {
   reviewChargeVersions: { helper: ReviewChargeVersionHelper, test: false },
   reviewLicences: { helper: ReviewLicenceHelper, test: false },
   reviewReturns: { helper: ReviewReturnHelper, test: false },
-  roles: { helper: RoleHelper, test: false },
   scheduledNotifications: { helper: ScheduledNotificationHelper },
   sessions: { helper: SessionHelper, test: false },
   transactions: { helper: TransactionHelper, test: false },
@@ -207,9 +195,9 @@ const LOAD_HELPERS = {
  * `LicenceDocumentHeaderHelper`. You _must_ provide all elements for the query. Transformed to SQL this would be
  * `SELECT entity_id FROM crm.entity WHERE entity_type = 'regime'`.
  *
- * @param {Object} payload - the body from the request containing the entities to be created
+ * @param {object} payload - the body from the request containing the entities to be created
  *
- * @returns {Promise<Object>} for each entity type passed in an array of ID's for the records created, for example
+ * @returns {Promise<object>} for each entity type passed in an array of ID's for the records created, for example
  *
  * ```javascript
  * {
@@ -284,6 +272,8 @@ async function go (payload) {
  * `instance.regimeEntityId` we'll confirm it is an object with a `schema:` property. We then replace the value of
  * `instance.regimeEntityId` with the result of a query based on the details provided. In this case `SELECT entity_id
  * FROM crm.entity WHERE entity_type = 'regime'`.
+ *
+ * @private
  */
 async function _applyLookups (instance) {
   const keys = Object.keys(instance)
@@ -312,6 +302,8 @@ async function _applyLookups (instance) {
  * So, this is a 'fudge' to avoid having to go back and re-create loads of views just to include the flag. The constant
  * `LOAD_HELPERS` identifies those entities that have a `is_test` field. When we load one that does we trigger this
  * function to update the flag on the source table. Then when `/data/tear-down` runs it will know to clear it.
+ *
+ * @private
  */
 async function _applyTestFlag (legacy, id) {
   const { schema, table, id: tableId } = legacy

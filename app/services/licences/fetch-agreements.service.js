@@ -12,7 +12,7 @@ const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
  *
  * @param {string} licenceRef - The licence ref for the licence to fetch licence agreements for
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's set up tab
+ * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
 async function go (licenceRef) {
   return _fetch(licenceRef)

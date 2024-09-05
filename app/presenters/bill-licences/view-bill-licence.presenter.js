@@ -13,10 +13,10 @@ const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-t
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
  *
- * @param {module:BillLicenceModel} billLicence an instance of `BillLicence` with linked bill, bill run and
+ * @param {module:BillLicenceModel} billLicence - an instance of `BillLicence` with linked bill, bill run and
  * transactions
  *
- * @returns {Object} a formatted representation of the bill licence and its transactions specifically for the
+ * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
  * view bill-licence page
  */
 function go (billLicence) {

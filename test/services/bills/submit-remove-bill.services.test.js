@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 
 // Things we need to stub
 const LegacyDeleteBillRequest = require('../../../app/requests/legacy/delete-bill.request.js')
@@ -25,8 +24,6 @@ describe('Submit Remove Bill service', () => {
   let legacyDeleteBillRequestStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     bill = await BillHelper.add()
 
     legacyDeleteBillRequestStub = Sinon.stub(LegacyDeleteBillRequest, 'send').resolves()

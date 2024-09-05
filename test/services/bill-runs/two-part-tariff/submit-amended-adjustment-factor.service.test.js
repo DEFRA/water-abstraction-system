@@ -134,7 +134,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -156,7 +157,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data with an error for the aggregate factor input element', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result.error).to.equal({
             aggregateFactorElement: { text: 'Enter a aggregate factor' },
@@ -173,7 +175,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -195,7 +198,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data with an error for the charge factor input element', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result.error).to.equal({
             aggregateFactorElement: null,
@@ -210,7 +214,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -232,7 +237,8 @@ describe('Submit Amended Adjustment Factor Service', () => {
         })
 
         it('returns the page data with an error for the aggregate and charge factor input element', async () => {
-          const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
+          const result = await SubmitAmendedAdjustmentFactorService
+            .go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result.error).to.equal({
             aggregateFactorElement: { text: 'Enter a aggregate factor' },

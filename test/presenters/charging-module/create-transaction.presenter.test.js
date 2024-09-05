@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { ref } = require('objection')
@@ -25,13 +24,9 @@ describe('Charging Module Create Transaction presenter', () => {
   let licence
   let region
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
 
       // NOTE: In the context the presenter is used it is from a Licence instance returned by
       // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
@@ -40,6 +35,7 @@ describe('Charging Module Create Transaction presenter', () => {
         regionId: region.id,
         regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
       })
+
       licence = await LicenceModel.query()
         .findById(tempLicence.id)
         .select([

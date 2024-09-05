@@ -17,8 +17,8 @@ const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
@@ -183,7 +183,7 @@ describe('Charge Reference model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = PurposesSeeder.data[0]
+        testPurpose = PurposeHelper.select()
 
         const { id: purposeId } = testPurpose
 
@@ -206,7 +206,7 @@ describe('Charge Reference model', () => {
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

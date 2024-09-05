@@ -32,6 +32,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/history',
+    options: {
+      handler: LicencesController.viewHistory,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/set-up',
     options: {
       handler: LicencesController.viewSetUp,
@@ -73,6 +85,20 @@ const routes = [
         access: {
           scope: ['billing']
         }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licences/supplementary',
+    options: {
+      handler: LicencesController.supplementary,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
       }
     }
   }

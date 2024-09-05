@@ -15,7 +15,7 @@ const RemoveBillRunLicencePresenter = require('../../../presenters/bill-runs/two
  * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId - UUID of the licence to remove from the bill run
  *
- * @returns {Promise<Object}> an object representing the `pageData` needed by the remove licence template. It contains
+ * @returns {Promise<object>} an object representing the `pageData` needed by the remove licence template. It contains
  * details of the bill run & the licence reference.
  */
 async function go (billRunId, licenceId) {

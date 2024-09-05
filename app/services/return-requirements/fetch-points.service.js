@@ -14,7 +14,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} The points data for the matching licenceId
+ * @returns {Promise<object>} The points data for the matching licenceId
  */
 async function go (licenceId) {
   const data = await _fetchPoints(licenceId)
@@ -42,6 +42,7 @@ function _abstractPointsData (result) {
   result.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
       const pointDetail = point.point_detail
+
       pointsData.push(pointDetail)
     })
   })

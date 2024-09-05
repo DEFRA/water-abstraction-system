@@ -21,7 +21,7 @@ const LAST_PRESROC_YEAR = 2022
  * @param {module:SessionModel} session - The session instance for the setup bill run journey
  * @param {module:BillRunModel} billRun - The matching instance of `BillRunModel` to the setup options selected
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session, billRun) {
   const {

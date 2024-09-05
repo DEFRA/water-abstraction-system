@@ -4,18 +4,19 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-const SecondaryPurposesSeeder = require('./secondary-purpose.seeder.js')
-const PrimaryPurposesSeeder = require('./primary-purpose.seeder.js')
-const PurposesSeeder = require('./purposes.seeder.js')
-
 const FinancialAgreementHelper = require('../helpers/financial-agreement.helper.js')
 const LicenceFinancialAgreement = require('../helpers/licence-agreement.helper.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
 const PermitLicenceHelper = require('../helpers/permit-licence.helper.js')
+const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
-const { purpose } = require('../../../app/controllers/return-requirements.controller')
+const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const { generateLicenceVersionExternalId } = require('../helpers/licence-version.helper.js')
+const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-version-purpose.helper.js')
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -31,14 +32,20 @@ const { purpose } = require('../../../app/controllers/return-requirements.contro
  * - 1 permit licence containing 3 legacy purposes which match to the 3 licence version purposes, the first containing 2
  *   points and the rest 1
  *
- * @param {String} licenceRef - The licence reference to use for the seeded licence
+ * @param {string | undefined} optionalLicenceRef - The licence reference to use for the seeded licence
  *
- * @returns {Promise<Object>} all the named IDs for then seeded records in an object
+ * @returns {Promise<object>} all the named IDs for then seeded records in an object
  */
-async function seed (licenceRef) {
+async function seed (optionalLicenceRef = undefined) {
   const records = {}
 
-  const { id: regionId } = await RegionHelper.add({ naldRegionId: 1 })
+  let licenceRef = generateLicenceRef()
+
+  if (optionalLicenceRef) {
+    licenceRef = optionalLicenceRef
+  }
+
+  const { id: regionId } = RegionHelper.select()
   const { id: licenceId } = await LicenceHelper.add({ licenceRef, regionId })
 
   records.regionId = regionId
@@ -56,17 +63,10 @@ async function seed (licenceRef) {
 }
 
 async function _financialAgreements () {
-  const { id: section126Id } = await FinancialAgreementHelper.add({
-    code: 'S126',
-    description: 'Section 126'
-  })
+  const section126 = FinancialAgreementHelper.select(2)
+  const twoPartTariff = FinancialAgreementHelper.select(3)
 
-  const { id: twoPartTariffId } = await FinancialAgreementHelper.add({
-    code: 'S127',
-    description: 'Section 127 (Two Part Tariff)'
-  })
-
-  return { section126Id, twoPartTariffId }
+  return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
 
 async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
@@ -87,7 +87,7 @@ async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
 async function _licenceVersions (licenceId) {
   const { id: supersededId } = await LicenceVersionHelper.add({
     endDate: new Date('2022-04-31'),
-    externalId: '1:100234:100:0',
+    externalId: generateLicenceVersionExternalId(),
     issue: 100,
     licenceId,
     startDate: new Date('2021-10-11'),
@@ -95,7 +95,7 @@ async function _licenceVersions (licenceId) {
   })
 
   const { id: currentId } = await LicenceVersionHelper.add({
-    externalId: '1:100234:101:0',
+    externalId: generateLicenceVersionExternalId(),
     issue: 101,
     licenceId,
     startDate: new Date('2022-05-01'),
@@ -106,34 +106,34 @@ async function _licenceVersions (licenceId) {
 }
 
 async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
-  const { id: electricityId } = await LicenceVersionPurposeHelper.add({
+  const electricity = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 455,
-    externalId: '1:10065380',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryElectricityId,
     purposeId: allPurposes.purposes.heatPumpId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryElectricityId
   })
 
-  const { id: standardId } = await LicenceVersionPurposeHelper.add({
+  const standard = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 2675,
-    externalId: '1:10065381',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
     purposeId: allPurposes.purposes.vegetableWashingId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryAgricultureId
   })
 
-  const { id: twoPartTariffId } = await LicenceVersionPurposeHelper.add({
+  const twoPartTariff = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 300,
-    externalId: '1:10065382',
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId,
     primaryPurposeId: allPurposes.primaryPurposes.primaryAgricultureId,
     purposeId: allPurposes.purposes.sprayIrrigationDirectId,
     secondaryPurposeId: allPurposes.secondaryPurposes.secondaryAgricultureId
   })
 
-  return { electricityId, standardId, twoPartTariffId }
+  return { electricity, standard, twoPartTariff }
 }
 
 async function _permitLicence (licenceRef) {
@@ -192,19 +192,19 @@ async function _permitLicence (licenceRef) {
 }
 
 async function _purposes () {
-  const { id: heatPumpId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '200' })
+  const { id: heatPumpId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '200' })
 
-  const { id: sprayIrrigationDirectId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '400' })
+  const { id: sprayIrrigationDirectId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '400' })
 
-  const { id: vegetableWashingId } = PurposesSeeder.data.find((purpose) => { return purpose.legacyId === '460' })
+  const { id: vegetableWashingId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '460' })
 
-  const { id: primaryAgricultureId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'A' })
+  const { id: primaryAgricultureId } = PrimaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'A' })
 
-  const { id: primaryElectricityId } = PrimaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'P' })
+  const { id: primaryElectricityId } = PrimaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'P' })
 
-  const { id: secondaryAgricultureId } = SecondaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'AGR' })
+  const { id: secondaryAgricultureId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'AGR' })
 
-  const { id: secondaryElectricityId } = SecondaryPurposesSeeder.data.find((purpose) => { return purpose.legacyId === 'ELC' })
+  const { id: secondaryElectricityId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'ELC' })
 
   return {
     purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },

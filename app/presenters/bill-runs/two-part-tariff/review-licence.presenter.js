@@ -16,7 +16,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewLicenceModel} licence - the data from review licence
  *
- * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
+ * @returns {object} the prepared bill run and licence data to be passed to the review licence page
  */
 function go (billRun, licence) {
   return {

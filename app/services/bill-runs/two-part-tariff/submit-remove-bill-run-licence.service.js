@@ -6,6 +6,7 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
+const CreateLicenceSupplementaryYearService = require('../../licences/supplementary/create-licence-supplementary-year.service.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const RemoveReviewDataService = require('./remove-review-data.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
@@ -20,18 +21,20 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  *
  * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId - UUID of the licence to remove from the bill run
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<boolean>} true if all the licences have been removed from the bill run else false
  */
 async function go (billRunId, licenceId, yar) {
   await RemoveReviewDataService.go(billRunId, licenceId)
 
-  const licenceRef = await _flagForSupplementaryBilling(licenceId)
+  await _flagForSupplementaryBilling(licenceId, billRunId)
 
   const allLicencesRemoved = await _allLicencesRemoved(billRunId)
 
   if (!allLicencesRemoved) {
+    const { licenceRef } = await LicenceModel.query().findById(licenceId)
+
     // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
     // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of
     // "Review licences". As the banner isn't displayed on the "Bill runs" page the message would remain in the cookie.
@@ -53,13 +56,12 @@ async function _allLicencesRemoved (billRunId) {
   return false
 }
 
-async function _flagForSupplementaryBilling (licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .patch({ includeInSrocTptBilling: true })
-    .returning('licenceRef')
+async function _flagForSupplementaryBilling (licenceId, billRunId) {
+  const twoPartTariff = true
+  const { toFinancialYearEnding } = await BillRunModel.query()
+    .findById(billRunId)
 
-  return licence.licenceRef
+  return CreateLicenceSupplementaryYearService.go(licenceId, [toFinancialYearEnding], twoPartTariff)
 }
 
 module.exports = {

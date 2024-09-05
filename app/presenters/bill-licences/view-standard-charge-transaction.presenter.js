@@ -18,10 +18,10 @@ const {
  *
  * The format of the object the presenter returns will differ depending on the scheme the transaction is for.
  *
- * @param {module:TransactionModel} transaction an instance of `TransactionModel` that represents a compensation charge
- * transaction
+ * @param {module:TransactionModel} transaction - an instance of `TransactionModel` that represents a compensation
+ * charge transaction
  *
- * @returns {Object} a formatted representation of the transaction specifically for the bill-licence page
+ * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
 function go (transaction) {
   if (transaction.scheme === 'sroc') {

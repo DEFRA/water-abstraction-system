@@ -44,12 +44,12 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * Add to that all SOP wants is a name and address which means we have to do a lot of work to format the data we receive
  * into something the CHA will accept.
  *
- * @param {String} billingAccountId The UUID for the billing account being updated
- * @param {Object} address The validated address details
- * @param {Object} [agentCompany] The validated agent company details
- * @param {Object} [contact] The validated contact details
+ * @param {string} billingAccountId - The UUID for the billing account being updated
+ * @param {object} address - The validated address details
+ * @param {object} [agentCompany] - The validated agent company details
+ * @param {object} [contact] - The validated contact details
  *
- * @returns {Promise<Object>} contains a copy of the persisted address, agent company and contact if they were also
+ * @returns {Promise<object>} contains a copy of the persisted address, agent company and contact if they were also
  * changed
  */
 async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
@@ -113,13 +113,13 @@ async function _fetchBillingAccount (billingAccountId) {
  * The object we return has all 3 entities whether they were persisted or not. This gets passed back to the UI via the
  * controller and is what it needs to then be able to redirect the user to the correct page.
  *
- * @param {Date} timestamp the timestamp to be used for any date created or updated values when persisting
- * @param {module:BillingAccountModel} billingAccount the billing account having its address changed
- * @param {module:AddressModel} address the new address to be persisted (expected to be populated)
- * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
- * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
+ * @param {Date} timestamp - the timestamp to be used for any date created or updated values when persisting
+ * @param {module:BillingAccountModel} billingAccount - the billing account having its address changed
+ * @param {module:AddressModel} address - the new address to be persisted (expected to be populated)
+ * @param {module:CompanyModel} company - the new agent company to be persisted (not expected to be populated)
+ * @param {module:ContactModel} contact - the new contact to be persisted (not expected to be populated)
  *
- * @returns {Promise<Object>} a single object that contains the persisted billingAccountAddress, plus address, agent
+ * @returns {Promise<object>} a single object that contains the persisted billingAccountAddress, plus address, agent
  * company and contact
  */
 async function _persist (timestamp, billingAccount, address, company, contact) {
@@ -154,6 +154,7 @@ async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId
   // `endDate` to be today - 1 (yesterday). The following works it all out even if we're over a month or year boundary
   // and no moment() in sight! Thanks to https://stackoverflow.com/a/1296374 for how to do this
   const endDate = new Date()
+
   endDate.setDate(timestamp.getDate() - 1)
 
   await BillingAccountAddressModel.query(trx)
@@ -174,6 +175,8 @@ async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId
  *
  * We can get the same result with a single query by using `onConflict()`. If we get a match we just overwrite the
  * existing record with our new data.
+ *
+ * @private
  */
 async function _persistBillingAccountAddress (trx, billingAccountAddress) {
   return billingAccountAddress.$query(trx)
@@ -210,6 +213,8 @@ async function _persistBillingAccountAddress (trx, billingAccountAddress) {
  * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
  * > record in our DB is locked to OS Places, it should reflect whatever OS Places currently returns, not what it
  * > returned when first added.
+ *
+ * @private
  */
 async function _persistAddress (trx, address) {
   if (address.id) {
@@ -259,6 +264,8 @@ async function _persistAddress (trx, address) {
  * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
  * > record in our DB is locked to Companies House, it should reflect whatever Companies House currently returns, not
  * > what it returned when first added.
+ *
+ * @private
  */
 async function _persistCompany (trx, company) {
   if (company.id || !company.name) {
@@ -283,6 +290,8 @@ async function _persistCompany (trx, company) {
  *
  * If the contact type is not set then the user has opted not to apply an FAO in the journey. So, we just return the
  * empty `ContactModel` instance.
+ *
+ * @private
  */
 async function _persistContact (trx, contact) {
   if (!contact.contactType) {
@@ -310,6 +319,8 @@ async function _persistContact (trx, contact) {
  *
  * Finally, where we do have populated instances we destructure them. This transforms the model instances into POJO's
  * again just making things cleaner.
+ *
+ * @private
  */
 function _response (persistedData) {
   const { address, company, contact, billingAccountAddress } = persistedData

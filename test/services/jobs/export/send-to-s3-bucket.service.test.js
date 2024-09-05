@@ -37,6 +37,7 @@ describe('Send to S3 bucket service', () => {
 
       // Get the first call and test that it was called with PutObjectCommand
       const calledCommand = s3Stub.getCall(0).firstArg
+
       expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
     })
   })

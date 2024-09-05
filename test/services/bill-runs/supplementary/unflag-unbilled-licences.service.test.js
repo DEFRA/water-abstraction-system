@@ -95,6 +95,7 @@ describe('Unflag unbilled licences service', () => {
       describe('which were billed', () => {
         beforeEach(async () => {
           const { id: billId } = await BillHelper.add({ billRunId: billRun.id })
+
           await BillLicenceHelper.add({ billId, licenceId: licenceBilledInBillRun.id })
         })
 

@@ -25,9 +25,9 @@ const SessionModel = require('../../../models/session.model.js')
  * re-render the view with an error message.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {Object} payload - The submitted form data
+ * @param {object} payload - The submitted form data
  *
- * @returns {Promise<Object>} An object with a `setupComplete:` property if there are no errors else the page data for
+ * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the region page including the validation error details
  */
 async function go (sessionId, payload) {

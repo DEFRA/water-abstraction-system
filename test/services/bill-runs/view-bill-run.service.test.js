@@ -238,6 +238,7 @@ function _multipleGroupBillRun () {
 
 function _singleGroupBillRun () {
   const billSummaries = _billSummariesData()
+
   delete billSummaries[1]
 
   return {

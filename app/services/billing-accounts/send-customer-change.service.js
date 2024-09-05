@@ -22,12 +22,12 @@ const ExpandedError = require('../../errors/expanded.error.js')
  *
  * Should the request fail it will generate and throw an error.
  *
- * @param {module:BillingAccountModel} billingAccount The billing account we are changing the address details
+ * @param {module:BillingAccountModel} billingAccount - The billing account we are changing the address details
  * for
- * @param {module:AddressModel} address The new address
- * @param {module:CompanyModel} company The agent company for the billing account if one was selected or setup by the
+ * @param {module:AddressModel} address - The new address
+ * @param {module:CompanyModel} company - The agent company for the billing account if one was selected or setup by the
  * user during the change address journey
- * @param {module:ContactModel} contact The new contact for the billing account if an FAO was setup by the user during
+ * @param {module:ContactModel} contact - The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
 async function go (billingAccount, address, company, contact) {

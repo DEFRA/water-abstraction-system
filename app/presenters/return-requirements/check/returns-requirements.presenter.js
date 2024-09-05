@@ -20,11 +20,11 @@ const agreementsExceptionsText = {
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  *
- * @param {Object[]} requirements - The existing return requirements in the current session
- * @param {Object[]} points - The points related to the licence
+ * @param {object[]} requirements - The existing return requirements in the current session
+ * @param {object[]} points - The points related to the licence
  * @param {string} journey - Whether the setup journey is 'no-returns-required' or 'returns-required'
  *
- * @returns {Object} returns requirement data needed by the view template
+ * @returns {object} returns requirement data needed by the view template
  */
 
 function go (requirements, points, journey) {

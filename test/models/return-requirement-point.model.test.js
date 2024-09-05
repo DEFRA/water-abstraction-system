@@ -50,7 +50,7 @@ describe('Return Requirement Point model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the charge reference', async () => {
+      it('can eager load the return requirement', async () => {
         const result = await ReturnRequirementPointModel.query()
           .findById(testRecord.id)
           .withGraphFetched('returnRequirement')

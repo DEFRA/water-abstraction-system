@@ -17,9 +17,9 @@ const Joi = require('joi')
  * The validation happening here is to ensure that the volume has been entered, it has a maximum 6 decimal places and
  * is more than the totalBillableReturns.
  *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  *
- * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (payload) {
@@ -45,6 +45,8 @@ function go (payload) {
  * two items (if a decimal is present). The first item represents the part before the decimal, while the second item
  * represents the part after. By assessing if the length of the second string is less than o equal to 6, we can validate
  * if there are the correct number of decimals.
+ *
+ * @private
  */
 function _customValidation (quantity, helpers) {
   const maxNumberOfDecimals = 6

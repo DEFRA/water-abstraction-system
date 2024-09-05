@@ -13,10 +13,10 @@
  *
  * If either of those tests is false then the service will return false.
  *
- * @param {module:ChargeVersionModel} chargeVersion The charge version being checked for minimum charge
- * @param {Object} chargePeriod Object with a `startDate` and `endDate` property representing the chargeable period
+ * @param {module:ChargeVersionModel} chargeVersion - The charge version being checked for minimum charge
+ * @param {object} chargePeriod - Object with a `startDate` and `endDate` property representing the chargeable period
  *
- * @returns {Boolean} true if minimum charge applies else false
+ * @returns {boolean} true if minimum charge applies else false
  */
 function go (chargeVersion, chargePeriod) {
   const chargePeriodStartTimestamp = chargePeriod.startDate.getTime()

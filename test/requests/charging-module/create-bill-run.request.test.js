@@ -24,7 +24,7 @@ describe('Charging Module Create Bill Run request', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    testRegion = await RegionHelper.add()
+    testRegion = RegionHelper.select()
   })
 
   afterEach(() => {

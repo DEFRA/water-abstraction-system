@@ -12,12 +12,12 @@ const MatchDetailsPresenter = require('../../../presenters/bill-runs/two-part-ta
 /**
  * Orchestrates fetching and presenting the data needed for the view match details page for a charge element
  *
- * @param {String} billRunId - The UUID for the bill run
- * @param {String} licenceId - The UUID of the licence that is being reviewed
- * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} billRunId - The UUID for the bill run
+ * @param {string} licenceId - The UUID of the licence that is being reviewed
+ * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} the 'pageData' needed to view the match details of an individual charge
+ * @returns {Promise<object>} the 'pageData' needed to view the match details of an individual charge
  */
 async function go (billRunId, licenceId, reviewChargeElementId, yar) {
   const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)

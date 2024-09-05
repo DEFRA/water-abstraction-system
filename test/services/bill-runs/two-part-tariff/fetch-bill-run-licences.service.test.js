@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
-const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
@@ -28,10 +27,6 @@ describe('Fetch Bill Run Licences service', () => {
   let testLicenceReview
   let testLicenceNoIssues
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   afterEach(() => {
     Sinon.restore()
   })
@@ -41,7 +36,7 @@ describe('Fetch Bill Run Licences service', () => {
     let region
 
     beforeEach(async () => {
-      region = await RegionHelper.add()
+      region = RegionHelper.select()
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
 
       testLicenceReady = await ReviewLicenceHelper.add({

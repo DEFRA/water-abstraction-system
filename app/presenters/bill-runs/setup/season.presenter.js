@@ -10,7 +10,7 @@
  *
  * @param {module:SessionModel} session - The session instance to format
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session) {
   return {

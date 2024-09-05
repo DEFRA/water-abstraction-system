@@ -20,7 +20,7 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
  * required bills and transactions for it in both this service and the Charging Module.
  *
  * @param {module:BillRunModel} billRun
- * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
+ * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  */
 async function go (billRun, billingPeriods) {
   const { id: billRunId } = billRun
@@ -73,6 +73,8 @@ async function _fetchChargeVersions (billRun, billingPeriod) {
  * Finalises the bill run by unflagging all unbilled licences, requesting the Charging Module run its generate
  * process, and refreshes the bill run locally. However if there were no resulting bill licences then we simply
  * unflag the unbilled licences and mark the bill run with `empty` status
+ *
+ * @private
  */
 async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProcessing) {
   // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in

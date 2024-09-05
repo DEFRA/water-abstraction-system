@@ -18,7 +18,7 @@ const ReturnRequirementPointModel = require('../../../app/models/return-requirem
  * - `ngr1` - [randomly generated - TL 5143 7153]
  * - `returnRequirementId` - [random UUID]
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:ReturnRequirementPointModel>} The instance of the newly created record
  */
@@ -36,13 +36,16 @@ function add (data = {}) {
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
  *
- * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
   const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
   const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
 
   const defaults = {
+    description: 'Point description',
     externalId: `9:${randomInteger(100, 99999)}:${naldPointId}`,
     naldPointId,
     ngr1,

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for common licence data `/licences/{id}` page's
+ * Formats data for common licence data `/licences/{id}` pages
  * @module ViewLicencePresenter
  */
 
@@ -11,88 +11,112 @@ const { formatLongDate } = require('../base.presenter.js')
  * Formats data for common licence data `/licences/{id}` page's
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (licence, auth) {
   const {
-    ends,
     id,
     includeInPresrocBilling,
-    includeInSrocBilling,
     licenceDocumentHeader,
-    licenceName,
     licenceRef,
-    registeredTo,
     workflows
   } = licence
 
+  const primaryUser = licence.$primaryUser()
+  const ends = licence.$ends()
+
   return {
-    activeNavBar: 'search',
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
     licenceId: id,
-    licenceName,
+    licenceName: _licenceName(licence),
     licenceRef,
-    notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),
+    notification: _notification(licence),
     pageTitle: `Licence ${licenceRef}`,
-    registeredTo,
-    roles: _authRoles(auth),
-    warning: _generateWarningMessage(ends),
-    workflowWarning: _generateWorkflowWarningMessage(workflows)
+    primaryUser,
+    roles: _roles(auth),
+    warning: _warning(ends),
+    workflowWarning: _workflowWarning(workflows)
   }
 }
 
-function _determineNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
-  const baseMessage = 'This licence has been marked for the next supplementary bill run'
+function _licenceName (licence) {
+  const licenceName = licence.$licenceName()
+
+  if (licenceName) {
+    return licenceName
+  }
+
+  return 'Unregistered licence'
+}
+
+function _notification (licence) {
+  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
+  const baseMessage = 'This licence has been marked for the next '
+
+  if (licenceSupplementaryYears.length > 0) {
+    return _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling)
+  }
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return baseMessage + 's for the current and old charge schemes.'
+    return baseMessage + 'supplementary bill runs for the current and old charge schemes.'
   }
   if (includeInPresrocBilling === 'yes') {
-    return baseMessage + ' for the old charge scheme.'
+    return baseMessage + 'supplementary bill run for the old charge scheme.'
   }
 
   if (includeInSrocBilling === true) {
-    return baseMessage + '.'
+    return baseMessage + 'supplementary bill run.'
   }
 
   return null
 }
 
-function _authRoles (auth) {
-  const roles = auth?.credentials?.roles?.map((role) => {
-    return role?.role
+function _roles (auth) {
+  return auth.credentials.roles.map((role) => {
+    return role.role
   })
-
-  return roles || null
 }
 
-function _generateWarningMessage (ends) {
-  if (!ends) {
-    return null
+function _tptNotification (baseMessage, includeInPresrocBilling, includeInSrocBilling) {
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
   }
 
-  const { date, reason } = ends
+  if (includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
+  }
+
+  return baseMessage + 'two-part tariff supplementary bill run.'
+}
+
+function _warning (ends) {
   const today = new Date()
 
-  if (date > today) {
+  if (!ends || ends.date > today) {
     return null
   }
 
-  if (reason === 'revoked') {
-    return `This licence was revoked on ${formatLongDate(date)}`
+  const formattedDate = formatLongDate(ends.date)
+
+  if (ends.reason === 'revoked') {
+    return `This licence was revoked on ${formattedDate}`
   }
 
-  if (reason === 'lapsed') {
-    return `This licence lapsed on ${formatLongDate(date)}`
+  if (ends.reason === 'lapsed') {
+    return `This licence lapsed on ${formattedDate}`
   }
 
-  return `This licence expired on ${formatLongDate(date)}`
+  return `This licence expired on ${formattedDate}`
 }
 
-function _generateWorkflowWarningMessage (workflows) {
+function _workflowWarning (workflows) {
   return workflows.some((workflow) => {
     return workflow.status === 'to_setup'
   })

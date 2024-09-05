@@ -23,9 +23,9 @@ const SeasonValidator = require('../../../validators/bill-runs/setup/season.vali
  * re-render the view with an error message.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {Object} payload - The submitted form data
+ * @param {object} payload - The submitted form data
  *
- * @returns {Promise<Object>} An empty object if there are no errors else the page data for the type page including the
+ * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
 async function go (sessionId, payload) {

@@ -25,10 +25,10 @@ const Workflow = require('../../../models/workflow.model.js')
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
- * @param {String} regionId - UUID of the region being billed
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {string} regionId - UUID of the region being billed
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<Object>} Contains an array of two-part tariff charge versions with linked licences, charge
+ * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
 async function go (regionId, billingPeriod) {
@@ -83,7 +83,7 @@ async function _fetch (regionId, billingPeriod) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
-    .orderBy('chargeVersions.licenceRef')
+    .orderBy('chargeVersions.licenceRef', 'asc')
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {
       builder.select([

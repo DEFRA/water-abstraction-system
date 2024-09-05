@@ -40,7 +40,7 @@ const LAST_PRESROC_YEAR = 2022
  * @param {number} financialYearEnding - The end year of the financial period to look at
  * @param {boolean} supplementary - true if we're trying to create a supplementary bill run else false
  *
- * @returns {Promise<Object[]>} An array of `BillRunModel` which are live for the region and financial year specified
+ * @returns {Promise<object[]>} An array of `BillRunModel` which are live for the region and financial year specified
  */
 async function go (regionId, financialYearEnding, supplementary) {
   const liveBillRuns = await _fetchLiveBillRuns(regionId)

@@ -4,11 +4,10 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, before } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
 const GroupRoleModel = require('../../app/models/group-role.model.js')
@@ -22,14 +21,29 @@ const UserModel = require('../../app/models/user.model.js')
 // Thing under test
 const GroupModel = require('../../app/models/group.model.js')
 
+const GROUP_ROLE_WIRS_RTNS_INDEX = 5
+const GROUP_WIRS_INDEX = 2
+const ROLE_RTNS_INDEX = 0
+const USER_GROUP_WIRS_INDEX = 3
+const USER_WIRS_INDEX = 3
+
 describe('Group model', () => {
+  let testGroupRole
   let testRecord
+  let testRole
+  let testUser
+  let testUserGroup
+
+  before(async () => {
+    testRecord = GroupHelper.select(GROUP_WIRS_INDEX)
+
+    testGroupRole = GroupRoleHelper.select(GROUP_ROLE_WIRS_RTNS_INDEX)
+    testRole = RoleHelper.select(ROLE_RTNS_INDEX)
+    testUser = UserHelper.select(USER_WIRS_INDEX)
+    testUserGroup = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await GroupHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await GroupModel.query().findById(testRecord.id)
 
@@ -40,13 +54,6 @@ describe('Group model', () => {
 
   describe('Relationships', () => {
     describe('when linking to group roles', () => {
-      let testGroupRole
-
-      beforeEach(async () => {
-        testRecord = await GroupHelper.add()
-        testGroupRole = await GroupRoleHelper.add({ groupId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('groupRoles')
@@ -65,19 +72,11 @@ describe('Group model', () => {
         expect(result.groupRoles).to.be.an.array()
         expect(result.groupRoles).to.have.length(1)
         expect(result.groupRoles[0]).to.be.an.instanceOf(GroupRoleModel)
-        expect(result.groupRoles[0]).to.equal(testGroupRole)
+        expect(result.groupRoles[0]).to.equal(testGroupRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking through group roles to roles', () => {
-      let testRole
-
-      beforeEach(async () => {
-        testRecord = await GroupHelper.add()
-        testRole = await RoleHelper.add()
-        await GroupRoleHelper.add({ groupId: testRecord.id, roleId: testRole.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('roles')
@@ -96,18 +95,11 @@ describe('Group model', () => {
         expect(result.roles).to.be.an.array()
         expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole)
+        expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to user groups', () => {
-      let testUserGroup
-
-      beforeEach(async () => {
-        testRecord = await GroupHelper.add()
-        testUserGroup = await UserGroupHelper.add({ groupId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('userGroups')
@@ -126,19 +118,11 @@ describe('Group model', () => {
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup)
+        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking through user groups to users', () => {
-      let testUser
-
-      before(async () => {
-        testRecord = await GroupHelper.add()
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        await UserGroupHelper.add({ userId: testUser.id, groupId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await GroupModel.query()
           .innerJoinRelated('users')
@@ -157,7 +141,7 @@ describe('Group model', () => {
         expect(result.users).to.be.an.array()
         expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser)
+        expect(result.users[0]).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
       })
     })
   })

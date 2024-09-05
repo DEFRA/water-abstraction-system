@@ -29,6 +29,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     billRun = await BillRunHelper.add()
     bill = await BillHelper.add({ billRunId: billRun.id })
     const { id: billLicenceId } = await BillLicenceHelper.add({ billId: bill.id })
+
     await TransactionHelper.add({ billLicenceId })
   })
 
@@ -92,6 +93,7 @@ describe('Fetch Bills To Be Reissued service', () => {
         const { id: alcsBillLicenceId } = await BillLicenceHelper.add({
           billId: alcsBill.id
         })
+
         await TransactionHelper.add({ billLicenceId: alcsBillLicenceId })
       })
 

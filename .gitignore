@@ -45,5 +45,8 @@ lcov.info
 # Build assets
 app/public/build
 
+# JSDoc documentation output
+docs/
+
 # ignore husky config
 .husky/

@@ -12,7 +12,7 @@ const LegacyDeleteBillLicenceRequest = require('../../requests/legacy/delete-bil
  * Orchestrates the removing of a bill licence from a bill run
  *
  * @param {string} billLicenceId - UUID of the bill licence to be removed
- * @param {Object} user - Instance of `UserModel` that represents the user making the request
+ * @param {object} user - Instance of `UserModel` that represents the user making the request
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */

@@ -13,7 +13,7 @@ const SendBillRunPresenter = require('../../presenters/bill-runs/send-bill-run.p
  *
  * @param {string} id - The UUID of the bill run to send
  *
- * @returns {Promise<Object}> an object representing the `pageData` needed by the send bill run template. It contains
+ * @returns {Promise<object>} an object representing the `pageData` needed by the send bill run template. It contains
  * details of the bill run.
  */
 async function go (id) {

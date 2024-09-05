@@ -82,6 +82,7 @@ describe('Fetch Billing Account service', () => {
 
       beforeEach(async () => {
         const { id: billingAccountId } = testBillingAccount
+
         linkedAgentCompany = await CompanyHelper.add()
 
         await BillingAccountAddressHelper.add({ billingAccountId, companyId: linkedAgentCompany.id })
@@ -106,6 +107,7 @@ describe('Fetch Billing Account service', () => {
 
       beforeEach(async () => {
         const { id: billingAccountId } = testBillingAccount
+
         linkedContact = await ContactHelper.add()
 
         await BillingAccountAddressHelper.add({ billingAccountId, contactId: linkedContact.id })

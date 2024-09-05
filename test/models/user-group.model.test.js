@@ -4,11 +4,10 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const GroupModel = require('../../app/models/group.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const UserGroupHelper = require('../support/helpers/user-group.helper.js')
@@ -18,14 +17,23 @@ const UserHelper = require('../support/helpers/user.helper.js')
 // Thing under test
 const UserGroupModel = require('../../app/models/user-group.model.js')
 
+const GROUP_WIRS_INDEX = 2
+const USER_GROUP_WIRS_INDEX = 3
+const USER_WIRS_INDEX = 3
+
 describe('User Group model', () => {
+  let testGroup
   let testRecord
+  let testUser
+
+  before(async () => {
+    testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
+
+    testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
+    testUser = UserHelper.select(USER_WIRS_INDEX)
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await UserGroupHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserGroupModel.query().findById(testRecord.id)
 
@@ -36,13 +44,6 @@ describe('User Group model', () => {
 
   describe('Relationships', () => {
     describe('when linking to group', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testGroup = await GroupHelper.add()
-        testRecord = await UserGroupHelper.add({ groupId: testGroup.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('group')
@@ -59,18 +60,11 @@ describe('User Group model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup)
+        expect(result.group).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = await UserHelper.add({ username: `${generateUUID()}@test.com` })
-        testRecord = await UserGroupHelper.add({ userId: testUser.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('user')
@@ -87,7 +81,7 @@ describe('User Group model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
       })
     })
   })

@@ -22,10 +22,10 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the purpose page including the validation error details
  */
 async function go (sessionId, requirementIndex, payload, yar) {
@@ -83,6 +83,8 @@ function _combinePurposeDetails (payload, licencePurposes) {
  * When a single purpose is checked by the user, it returns as a string. When multiple purposes are checked, the
  * 'purposes' is returned as an array. This function works to make those single selected string 'purposes' into an array
  * for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!payload.purposes) {
@@ -102,6 +104,8 @@ async function _save (session, requirementIndex, purposes) {
 
 /**
  * Combines the existing session data with the submitted payload formatted by the presenter
+ *
+ * @private
  */
 function _submittedSessionData (session, requirementIndex, purposes, licencePurposes) {
   session.requirements[requirementIndex].purposes = purposes

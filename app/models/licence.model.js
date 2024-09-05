@@ -64,12 +64,28 @@ class LicenceModel extends BaseModel {
           to: 'licenceGaugingStations.licenceId'
         }
       },
+      licenceSupplementaryYears: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-supplementary-year.model',
+        join: {
+          from: 'licences.id',
+          to: 'licenceSupplementaryYears.licenceId'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
         join: {
           from: 'licences.id',
           to: 'licenceVersions.licenceId'
+        }
+      },
+      modLogs: {
+        relation: Model.HasManyRelation,
+        modelClass: 'mod-log.model',
+        join: {
+          from: 'licences.id',
+          to: 'modLogs.licenceId'
         }
       },
       permitLicence: {
@@ -126,17 +142,19 @@ class LicenceModel extends BaseModel {
   /**
    * Modifiers allow us to reuse logic in queries, eg. select the licence and everything to get the licence holder:
    *
+   * ```javascript
    * return LicenceModel.query()
    *   .findById(licenceId)
    *   .modify('licenceHolder')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
    */
   static get modifiers () {
     return {
-      /**
-       * currentVersion modifier fetches only the current licence version record for this licence
-       */
+      // currentVersion modifier fetches only the current licence version record for this licence
       currentVersion (query) {
         query
           .withGraphFetched('licenceVersions')
@@ -152,9 +170,7 @@ class LicenceModel extends BaseModel {
               .limit(1)
           })
       },
-      /**
-       * licenceHolder modifier fetches all the joined records needed to identify the licence holder
-       */
+      // licenceHolder modifier fetches all the joined records needed to identify the licence holder
       licenceHolder (query) {
         query
           .withGraphFetched('licenceDocument')
@@ -197,26 +213,67 @@ class LicenceModel extends BaseModel {
             ])
           })
       },
-      /**
-       * registeredToAndLicenceName modifier fetches the linked `licenceDocumentHeader` which holds the licence name and
-       * adds to it the registered user's email address if one is set.
-       */
-      registeredToAndLicenceName (query) {
+      // When an external user registers themselves as the 'primary user' for a licence (see $primaryUser()) they
+      // can choose to set a custom name for the licence. If set this is visible on the view licence page above the
+      // licence reference.
+      //
+      // The value itself is stored in `crm.document_header` not `water.licences` which is why we have to pull the
+      // related record.
+      licenceName (query) {
         query
           .withGraphFetched('licenceDocumentHeader')
           .modifyGraph('licenceDocumentHeader', (builder) => {
             builder.select([
-              'licenceDocumentHeaders.id',
-              'licenceDocumentHeaders.licenceName',
-              'licenceEntityRoles.role',
-              'licenceEntities.name AS registeredTo'
+              'id',
+              'licenceName'
             ])
-              .leftJoin('licenceEntityRoles', function () {
-                this
-                  .on('licenceEntityRoles.companyEntityId', '=', 'licenceDocumentHeaders.companyEntityId')
-                  .andOn('licenceEntityRoles.role', '=', Model.raw('?', ['primary_user']))
-              })
-              .leftJoin('licenceEntities', 'licenceEntities.id', 'licenceEntityRoles.licenceEntityId')
+          })
+      },
+      // An external user with an account can register a licence via the external UI. The legacy service will generate a
+      // letter with a code which gets sent to the licence's address. Once they receive it they can enter the code in
+      // the UI and they then become the 'primary user' for it.
+      //
+      // When they do this the legacy service creates
+      //
+      // - creates a `crm.entity` record with the user's email
+      // - updates the user's `idm.users` record with the entity ID (see `external_id)
+      // - creates a `crm.entity_role` record with a role of 'primary_user' linked to both the entity, and the company
+      // entity linked to the licence
+      // - the `crm.entity_role` is linked to the `crm.document_header` for the licence
+      //
+      // We know, this is mad! It explains why even the previous team were trying to move away from this and had created
+      // `crm_v2`. Unfortunately, this never got sorted so it remains the only means to get from a licence to the user
+      // record which holds the ID of the primary user.
+      primaryUser (query) {
+        query
+          .withGraphFetched('licenceDocumentHeader')
+          .modifyGraph('licenceDocumentHeader', (builder) => {
+            builder.select([
+              'id'
+            ])
+          })
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
+            builder
+              .select([
+                'id'
+              ])
+              .where('role', 'primary_user')
+          })
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
+            builder
+              .select([
+                'id'
+              ])
+          })
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity.user')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity.user', (builder) => {
+            builder
+              .select([
+                'id',
+                'username'
+              ])
           })
       }
     }
@@ -351,17 +408,18 @@ class LicenceModel extends BaseModel {
   /**
    * Determine the licence name for the licence
    *
-   * > We recommend adding the `registeredToAndLicenceName` modifier to your query to ensure the joined records are
-   * > available to determine this
+   * > We recommend adding the `licenceName` modifier to your query to ensure the joined records are available to
+   * > determine this
    *
-   * If set this is visible on the view licence page above the licence reference and on the legacy external view as a
-   * field in the summary tab.
+   * When an external user registers themselves as the 'primary user' for a licence (see {@link $primaryUser}) they can
+   * choose to set a custom name for the licence.
    *
-   * The licence name is a custom name the registered user of the licence can set. So, you will only see a licence name
-   * if the licence is registered to a user and they have chosen to set a name for it via the external UI.
+   * If set this is visible on the view licence page above the licence reference.
    *
-   * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine the
-   * licence name else the licence's custom name
+   * So, you will only see a licence name if the licence is registered to a user and they have chosen to set a name.
+   *
+   * @returns {(string|null)} the licence name set by the primary user for the licence if the licence has one and the
+   * additional properties needed to to determine it have been set, else `null`
    */
   $licenceName () {
     const licenceName = this?.licenceDocumentHeader?.licenceName
@@ -370,24 +428,24 @@ class LicenceModel extends BaseModel {
   }
 
   /**
-   * Determine who the licence is registered to
+   * Determine who the primary user for the licence is
    *
-   * > We recommend adding the `registeredToAndLicenceName` modifier to your query to ensure the joined records are
-   * > available to determine this
+   * > We recommend adding the `primaryUser` modifier to your query to ensure the joined records are available to
+   * > determine this
    *
-   * If set this is visible on the view licence page below the licence reference.
+   * An external user with an account can register a licence via the external UI. The legacy service will generate a
+   * letter with a code which gets sent to the licence's address. Once they receive it they can enter the code in the UI
+   * and they then become the 'primary user' for it.
    *
-   * When an external user has an account they can add a licence via the external UI. We'll generate a letter with a
-   * code which gets sent to the licence's address. Once they receive it they can enter the code in the UI and they
-   * then become the registered user for it.
+   * Within the UI this what determines whether you see the "Registered to" link in the view licence page's top section.
    *
-   * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine who
-   * the licence is registered to else the email of the user
+   * @returns {(module:UserModel|null)} the primary user if the licence has one and the additional properties needed to
+   * to determine it have been set, else `null`
    */
-  $registeredTo () {
-    const registeredUserName = this?.licenceDocumentHeader?.registeredTo
+  $primaryUser () {
+    const primaryUser = this?.licenceDocumentHeader?.licenceEntityRole?.licenceEntity?.user
 
-    return registeredUserName || null
+    return primaryUser || null
   }
 }
 

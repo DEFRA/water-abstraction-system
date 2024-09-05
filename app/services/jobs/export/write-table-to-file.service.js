@@ -15,9 +15,9 @@ const ConvertToCSVService = require('./convert-to-csv.service.js')
 
 /**
  * Converts data into CSV format and writes it to a file
- *  @param {Object} data The knex query to fetch the table
- *  @param {String} schemaFolderPath The folder path of the schema
- *  @param {String} tableName The name of the table
+ *  @param {object} data - The knex query to fetch the table
+ *  @param {string} schemaFolderPath - The folder path of the schema
+ *  @param {string} tableName - The name of the table
  */
 async function go (headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)
@@ -29,6 +29,7 @@ async function go (headers, rows, schemaFolderPath, tableName) {
   const transformDataStream = _transformDataStream()
 
   const convertedHeaders = ConvertToCSVService.go(headers)
+
   writeToFileStream.write(convertedHeaders)
 
   await promisifiedPipeline(inputStream, transformDataStream, writeToFileStream)
@@ -38,12 +39,15 @@ async function go (headers, rows, schemaFolderPath, tableName) {
  * Creates and returns a Transform stream that converts incoming objects to CSV rows
  *
  * @returns {Transform} A transform stream with objectMode set to true
+ *
+ * @private
  */
 function _transformDataStream () {
   return new Transform({
     objectMode: true,
     transform: function (row, _encoding, callback) {
       const datRow = ConvertToCSVService.go(Object.values(row))
+
       callback(null, datRow)
     }
   })
@@ -53,10 +57,12 @@ function _transformDataStream () {
  * Returns a file path by joining the schema folder path with the file name.
  * The schema path has already been created with the temporary directory
  *
- * @param {String} tableName The name of the table
- * @param {String} schemaFolderPath The folder path of the schema
+ * @param {string} tableName - The name of the table
+ * @param {string} schemaFolderPath - The folder path of the schema
  *
- * @returns {Promise<String>} The full file path
+ * @returns {Promise<string>} The full file path
+ *
+ * @private
  */
 async function _filenameWithPath (tableName, schemaFolderPath) {
   await fsPromises.mkdir(schemaFolderPath, { recursive: true })

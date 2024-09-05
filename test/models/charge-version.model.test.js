@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,16 +17,31 @@ const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
+const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
+const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+const { randomInteger } = require('../support/general.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+const ModLogModel = require('../../app/models/mod-log.model.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
 const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
+
+const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 
 // Thing under test
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
 describe('Charge Version model', () => {
+  let chargeVersionId
+  let testChangeReason
   let testRecord
+  let testUser
+
+  before(() => {
+    testChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -110,11 +125,7 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to change reason', () => {
-      let testChangeReason
-
       beforeEach(async () => {
-        testChangeReason = await ChangeReasonHelper.add()
-
         const { id: changeReasonId } = testChangeReason
 
         testRecord = await ChargeVersionHelper.add({ changeReasonId })
@@ -136,7 +147,7 @@ describe('Charge Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.changeReason).to.be.an.instanceOf(ChangeReasonModel)
-        expect(result.changeReason).to.equal(testChangeReason)
+        expect(result.changeReason).to.equal(testChangeReason, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -176,6 +187,37 @@ describe('Charge Version model', () => {
       })
     })
 
+    describe('when linking to charge version note', () => {
+      let testNote
+
+      beforeEach(async () => {
+        testNote = await ChargeVersionNoteHelper.add()
+
+        const { id: noteId } = testNote
+
+        testRecord = await ChargeVersionHelper.add({ noteId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('chargeVersionNote')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the note', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersionNote')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersionNote).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNote).to.equal(testNote)
+      })
+    })
+
     describe('when linking to licence', () => {
       let testLicence
 
@@ -204,6 +246,44 @@ describe('Charge Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to mod logs', () => {
+      let testModLogs
+
+      beforeEach(async () => {
+        testRecord = await ChargeVersionHelper.add()
+
+        testModLogs = []
+        for (let i = 0; i < 2; i++) {
+          const modLog = await ModLogHelper.add({
+            chargeVersionId: testRecord.id, licenceRef: testRecord.licenceRef
+          })
+
+          testModLogs.push(modLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('modLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the mod logs', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('modLogs')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.modLogs).to.be.an.array()
+        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
+        expect(result.modLogs).to.include(testModLogs[0])
+        expect(result.modLogs).to.include(testModLogs[1])
       })
     })
 
@@ -240,6 +320,311 @@ describe('Charge Version model', () => {
         expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
         expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
         expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
+      })
+    })
+  })
+
+  describe('$createdAt', () => {
+    beforeEach(async () => {
+      const { id } = await ChargeVersionHelper.add()
+
+      chargeVersionId = id
+    })
+
+    describe('when the charge version has no mod log history', () => {
+      beforeEach(async () => {
+        testRecord = await ChargeVersionModel.query().select(['licenceId']).findById(chargeVersionId).modify('history')
+      })
+
+      it('returns the charge version "created at" time stamp', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(testRecord.createdAt)
+      })
+    })
+
+    describe('when the charge version has mod log history', () => {
+      beforeEach(async () => {
+        const regionCode = randomInteger(1, 9)
+        const firstNaldId = randomInteger(100, 99998)
+
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), chargeVersionId
+        })
+        await ModLogHelper.add({
+          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), chargeVersionId
+        })
+
+        testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+      })
+
+      it('returns the first mod log NALD date', () => {
+        const result = testRecord.$createdAt()
+
+        expect(result).to.equal(new Date('2012-06-01'))
+      })
+    })
+  })
+
+  describe('$createdBy', () => {
+    describe('when the charge version was created in WRLS', () => {
+      beforeEach(async () => {
+        testUser = UserHelper.select()
+
+        const { id } = await ChargeVersionHelper.add({
+          source: 'wrls',
+          createdBy: { id: testUser.id, email: testUser.username }
+        })
+
+        chargeVersionId = id
+      })
+
+      describe('and it has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns the WRLS user name', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal(testUser.username)
+        })
+      })
+
+      describe('though it has mod log history', () => {
+        beforeEach(async () => {
+          await ModLogHelper.add({ chargeVersionId })
+
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('still returns the WRLS user name', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal(testUser.username)
+        })
+      })
+    })
+
+    describe('when the charge version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ source: 'nald' })
+
+        chargeVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns null', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, chargeVersionId, userId: 'FIRST' })
+          await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, chargeVersionId, userId: 'SECOND' })
+
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns the first mod log NALD user ID', () => {
+          const result = testRecord.$createdBy()
+
+          expect(result).to.equal('FIRST')
+        })
+      })
+    })
+  })
+
+  describe('$notes', () => {
+    describe('when the charge version was created in WRLS', () => {
+      describe('but no note was added', () => {
+        beforeEach(async () => {
+          const { id } = await ChargeVersionHelper.add({ source: 'wrls' })
+
+          testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and a note was added', () => {
+        beforeEach(async () => {
+          const { id: noteId } = await ChargeVersionNoteHelper.add({ note: 'Top site bore hole' })
+          const { id } = await ChargeVersionHelper.add({ noteId, source: 'nald' })
+
+          testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+        })
+
+        it('returns an array containing just the single note', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.equal(['Top site bore hole'])
+        })
+      })
+    })
+
+    describe('when the charge version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ source: 'nald' })
+
+        chargeVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns an empty array', () => {
+          const result = testRecord.$notes()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        describe('but none of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: null, chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns an empty array', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.be.an.array()
+            expect(result).to.be.empty()
+          })
+        })
+
+        describe('and some of the mod log history has notes', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns an array containing just the notes from the mod logs with them', () => {
+            const result = testRecord.$notes()
+
+            expect(result).to.equal(['Transfer per app 12-DEF'])
+          })
+        })
+      })
+    })
+  })
+
+  describe('$reason', () => {
+    describe('when the charge version was created in WRLS', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ changeReasonId: testChangeReason.id, source: 'wrls' })
+
+        testRecord = await ChargeVersionModel.query().findById(id).modify('history')
+      })
+
+      it('returns the charge version reason', () => {
+        const result = testRecord.$reason()
+
+        expect(result).to.equal(testChangeReason.description)
+      })
+    })
+
+    describe('when the charge version was created in NALD', () => {
+      beforeEach(async () => {
+        const { id } = await ChargeVersionHelper.add({ source: 'nald' })
+
+        chargeVersionId = id
+      })
+
+      describe('and has no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns null', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('and has mod log history', () => {
+        describe('but the mod log history has no reason description recorded in the first entry', () => {
+          beforeEach(async () => {
+            const regionCode = randomInteger(1, 9)
+            const firstNaldId = randomInteger(100, 99998)
+
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, chargeVersionId
+            })
+            await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+            })
+
+            testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+          })
+
+          it('returns null', () => {
+            const result = testRecord.$reason()
+
+            expect(result).to.be.null()
+          })
+        })
+      })
+
+      describe('and the mod log history has a reason description recorded in the first entry', () => {
+        beforeEach(async () => {
+          const regionCode = randomInteger(1, 9)
+          const firstNaldId = randomInteger(100, 99998)
+
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'Formal Variation', chargeVersionId
+          })
+          await ModLogHelper.add({
+            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+          })
+
+          testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
+        })
+
+        it('returns the NALD reason description', () => {
+          const result = testRecord.$reason()
+
+          expect(result).to.equal('Formal Variation')
+        })
       })
     })
   })

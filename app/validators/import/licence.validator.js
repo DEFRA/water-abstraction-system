@@ -6,37 +6,41 @@
 
 const Joi = require('joi')
 
-const CustomDateValidator = require('../custom/date.validators.js')
-
 /**
- * Checks that the data for inserting/updating the water.licence table is valid
+ * Checks that imported licence data that has been transformed is valid for persisting to WRLS
  *
- * @param {ImportLicenceType} data The data to be validated
+ * @param {object} licence - The transformed licence data
  *
- * Throws an error if anything fails
- *
+ * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (data) {
+function go (licence) {
   const schema = Joi.object({
-    expiredDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    lapsedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    licenceRef: Joi.string().required(),
-    naldRegionId: Joi.number().required(),
+    expiredDate: Joi.date().allow(null),
+    lapsedDate: Joi.date().allow(null),
+    // NOTE: With the combination of trim() and `convert: false` passed to validate() we ensure that the licence ref
+    // does not contain any leading or trailing whitespace. It is common for users to accidentally add whitespace in
+    // NALD.Because of this when the legacy import runs it sees the licence as distinct and so creates a new record.
+    // This then breaks the service because things like search, find the errant licence record and 'blow up' because the
+    // licence ref doesn't match validation held in a different part of the service.
+    // We don't want to make the same mistake with our version.
+    licenceRef: Joi.string().trim().required(),
+    licenceVersions: Joi.array().required(),
+    regionId: Joi.string().guid().required(),
     regions: Joi.object({
-      regionalChargeArea: Joi.string(),
-      localEnvironmentAgencyPlanCode: Joi.string(),
-      historicalAreaCode: Joi.string(),
-      standardUnitChargeCode: Joi.string()
+      regionalChargeArea: Joi.string().required(),
+      localEnvironmentAgencyPlanCode: Joi.string().required(),
+      historicalAreaCode: Joi.string().required(),
+      standardUnitChargeCode: Joi.string().required()
     }),
-    revokedDate: Joi.string().allow(null).custom(CustomDateValidator.isValidISODate),
-    startDate: Joi.string().required().custom(CustomDateValidator.isValidISODate),
+    revokedDate: Joi.date().allow(null),
+    startDate: Joi.date().required(),
     waterUndertaker: Joi.boolean().required()
   })
 
-  const result = schema.validate(data)
+  const result = schema.validate(licence, { convert: false })
 
-  if (Object.hasOwn(result, 'error')) {
-    throw new Error(result.error.details[0].message)
+  if (result.error) {
+    throw result.error
   }
 }
 

@@ -17,20 +17,20 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * Fetches specifically the bill run data, a list of the licences in the bill run with the licence holder and licence
  * ref.
  *
- * @param {String} id The UUID for the bill run
- * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
+ * @param {string} id - The UUID for the bill run
+ * @param {{Object[]}} filterIssues - An array of issues to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
  * issue this will be a string, not an array
- * @param {String} filterLicenceHolderNumber The licence holder or licence number to filter the results by. This will
+ * @param {string} filterLicenceHolderNumber - The licence holder or licence number to filter the results by. This will
  * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
- * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
- * when there is a POST request.
- * @param {String} filterProgress The progress of the licence to filter the results by. This also only contains data
+ * @param {string} filterLicenceStatus - The status of the licence to filter the results by. This also only contains
+ * data when there is a POST request.
+ * @param {string} filterProgress - The progress of the licence to filter the results by. This also only contains data
  * when there is a POST request.
  * @param {number} page - the page number of licences to be viewed
  *
- * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run that match
- * the selected 'page in the data. Also included is any data that has been used to filter the results
+ * @returns {Promise<object>} An object containing the billRun data and an array of licences for the bill run that match
+ * the selected page in the data. Also included is any data that has been used to filter the results
  */
 async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page) {
   const billRun = await _fetchBillRun(id)
@@ -46,7 +46,9 @@ async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceSta
   return { billRun, licences }
 }
 
-function _applyFilters (reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress) {
+function _applyFilters (
+  reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress
+) {
   if (filterIssues) {
     _filterIssues(filterIssues, reviewLicenceQuery)
   }
@@ -84,7 +86,9 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1) {
+async function _fetchBillRunLicences (
+  id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1
+) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)

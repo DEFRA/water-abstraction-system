@@ -72,11 +72,13 @@ describe('Submit Cancel Bill Run service', () => {
         const { id: reviewChargeVersionId } = await ReviewChargeVersionHelper.add({ reviewLicenceId })
         const { id: reviewChargeReferenceId } = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId })
         const { id: reviewChargeElementId } = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
+
         await ReviewChargeElementReturnHelper.add({ reviewChargeElementId, reviewReturnId })
         await BillRunChargeVersionYearHelper.add({ billRunId })
         await BillRunVolumeHelper.add({ billRunId })
         const { id: billId } = await BillHelper.add({ billRunId })
         const { id: billLicenceId } = await BillLicenceHelper.add({ billId })
+
         await TransactionHelper.add({ billLicenceId })
 
         chargingModuleDeleteBillRunRequestStub.resolves()

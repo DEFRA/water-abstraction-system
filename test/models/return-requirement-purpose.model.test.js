@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
-const SecondaryPurposesSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 
 // Thing under test
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
@@ -42,7 +42,7 @@ describe('Return Requirement Purpose model', () => {
       let testPrimaryPurpose
 
       beforeEach(async () => {
-        testPrimaryPurpose = PrimaryPurposesSeeder.data[0]
+        testPrimaryPurpose = PrimaryPurposeHelper.select()
 
         testRecord = await ReturnRequirementPurposeHelper.add({ primaryPurposeId: testPrimaryPurpose.id })
       })
@@ -63,7 +63,7 @@ describe('Return Requirement Purpose model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
-        expect(result.primaryPurpose.id).to.equal(testPrimaryPurpose.id)
+        expect(result.primaryPurpose).to.equal(testPrimaryPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -71,7 +71,7 @@ describe('Return Requirement Purpose model', () => {
       let testPurpose
 
       beforeEach(async () => {
-        testPurpose = PurposesSeeder.data[0]
+        testPurpose = PurposeHelper.select()
 
         const { id: purposeId } = testPurpose
 
@@ -94,7 +94,7 @@ describe('Return Requirement Purpose model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose)
+        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
@@ -134,7 +134,7 @@ describe('Return Requirement Purpose model', () => {
     let testSecondaryPurpose
 
     beforeEach(async () => {
-      testSecondaryPurpose = SecondaryPurposesSeeder.data[0]
+      testSecondaryPurpose = SecondaryPurposeHelper.select()
 
       const { id: secondaryPurposeId } = testSecondaryPurpose
 

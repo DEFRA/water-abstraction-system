@@ -16,8 +16,8 @@ const BillRunModel = require('../../models/bill-run.model.js')
  * Note that although this is async we would generally not call it asynchronously as the intent is you can call it and
  * continue with whatever error logging is required
  *
- * @param {String} billRunId UUID of the bill run to be marked with `error` status
- * @param {Number} [errorCode] Numeric error code as defined in BillRunModel. Defaults to `null`
+ * @param {string} billRunId - UUID of the bill run to be marked with `error` status
+ * @param {number} [errorCode] - Numeric error code as defined in BillRunModel. Defaults to `null`
  */
 async function go (billRunId, errorCode = null) {
   try {

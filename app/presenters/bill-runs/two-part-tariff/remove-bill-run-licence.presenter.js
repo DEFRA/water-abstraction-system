@@ -14,7 +14,7 @@ const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js
  * @param {string} licenceId - UUID of the licence to remove from the bill run
  * @param {string} licenceRef - the licence reference of the licence to remove from the bill run
  *
- * @returns {Object} - the prepared data to be passed to the remove licence template
+ * @returns {object} - the prepared data to be passed to the remove licence template
  */
 function go (billRun, licenceId, licenceRef) {
   const { billRunNumber, createdAt, region, status, toFinancialYearEnding } = billRun

@@ -13,10 +13,10 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
 /**
  * Fetches the match details for an individual charge element
  *
- * @param {String} billRunId - UUID of the bill run
- * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
+ * @param {string} billRunId - UUID of the bill run
+ * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
  *
- * @returns {Promise<Object>} An object containing the bill run and review charge element instances
+ * @returns {Promise<object>} An object containing the bill run and review charge element instances
  */
 async function go (billRunId, reviewChargeElementId) {
   const billRun = await _fetchBillRun(billRunId)

@@ -42,7 +42,7 @@ describe('Bill Run model', () => {
       let testRegion
 
       beforeEach(async () => {
-        testRegion = await RegionHelper.add()
+        testRegion = RegionHelper.select()
         testRecord = await BillRunHelper.add({ regionId: testRegion.id })
       })
 
@@ -62,7 +62,7 @@ describe('Bill Run model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
+        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 

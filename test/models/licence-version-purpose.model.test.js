@@ -13,26 +13,28 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
+const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PrimaryPurposesSeeder = require('../support/seeders/primary-purpose.seeder.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
-const PurposesSeeder = require('../support/seeders/purposes.seeder.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
-const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
 
 // Thing under test
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 
-describe('Licence Version Purposes model', () => {
+describe('Licence Version Purpose model', () => {
   let testRecord
   let secondaryPurposeId
   let primaryPurposeId
   let purposeId
 
   beforeEach(() => {
-    primaryPurposeId = PrimaryPurposesSeeder.data[0].id
-    secondaryPurposeId = SecondaryPurposeSeeder.data[0].id
-    purposeId = PurposesSeeder.data[0].id
+    primaryPurposeId = PrimaryPurposeHelper.select().id
+    secondaryPurposeId = SecondaryPurposeHelper.select().id
+    purposeId = PurposeHelper.select().id
   })
 
   describe('Basic query', () => {
@@ -115,6 +117,44 @@ describe('Licence Version Purposes model', () => {
         expect(result.licenceVersionPurposeConditions[0]).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[0])
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[1])
+      })
+    })
+
+    describe('when linking to licence version purpose points', () => {
+      let testLicenceVersionPurposePoints
+
+      beforeEach(async () => {
+        testRecord = await LicenceVersionPurposeHelper.add()
+
+        testLicenceVersionPurposePoints = []
+        for (let i = 0; i < 2; i++) {
+          const licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+            licenceVersionPurposeId: testRecord.id
+          })
+
+          testLicenceVersionPurposePoints.push(licenceVersionPurposePoint)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query()
+          .innerJoinRelated('licenceVersionPurposePoints')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose points', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposePoints')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposePoints).to.be.an.array()
+        expect(result.licenceVersionPurposePoints[0]).to.be.an.instanceOf(LicenceVersionPurposePointModel)
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[0])
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[1])
       })
     })
 
@@ -218,19 +258,19 @@ describe('Licence Version Purposes model', () => {
     let validSecondaryPurpose
 
     beforeEach(() => {
-      invalidPrimaryPurpose = PrimaryPurposesSeeder.data[0]
-      invalidSecondaryPurpose = SecondaryPurposeSeeder.data[0]
-      invalidPurpose = PurposesSeeder.data.find((purpose) => {
+      invalidPrimaryPurpose = PrimaryPurposeHelper.select(0)
+      invalidSecondaryPurpose = SecondaryPurposeHelper.select()
+      invalidPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
 
-      validPrimaryPurpose = PrimaryPurposesSeeder.data.find((primaryPurpose) => {
+      validPrimaryPurpose = PrimaryPurposeHelper.data.find((primaryPurpose) => {
         return primaryPurpose.legacyId === 'P'
       })
-      validSecondaryPurpose = SecondaryPurposeSeeder.data.find((secondaryPurpose) => {
+      validSecondaryPurpose = SecondaryPurposeHelper.data.find((secondaryPurpose) => {
         return secondaryPurpose.legacyId === 'ELC'
       })
-      validPurpose = PurposesSeeder.data.find((purpose) => {
+      validPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '200'
       })
     })

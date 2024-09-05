@@ -13,7 +13,7 @@ const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
  *
  * @param {module:LicenceModel} licence - The licence the summary data will be extracted from
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (licence) {
   const {

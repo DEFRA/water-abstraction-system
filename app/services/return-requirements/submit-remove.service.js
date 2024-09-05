@@ -15,7 +15,7 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID for the return requirement setup session record
  * @param {number} requirementIndex - The index of the requirement being removed
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */

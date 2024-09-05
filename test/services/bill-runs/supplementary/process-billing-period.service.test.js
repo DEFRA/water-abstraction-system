@@ -20,7 +20,6 @@ const ChargeReferenceHelper = require('../../../support/helpers/charge-reference
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
@@ -30,6 +29,9 @@ const SendTransactionsService = require('../../../../app/services/bill-runs/send
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
+
+const CHANGE_NEW_AGREEMENT_INDEX = 2
+const REGION_SOUTH_WEST_INDEX = 4
 
 describe('Supplementary Process billing period service', () => {
   const billingPeriod = {
@@ -43,17 +45,17 @@ describe('Supplementary Process billing period service', () => {
   let changeReason
   let chargeVersions
   let licence
+  let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    region = RegionHelper.select(REGION_SOUTH_WEST_INDEX)
 
-    const { id: regionId } = await RegionHelper.add()
-    licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId })
-    changeReason = await ChangeReasonHelper.add()
+    licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId: region.id })
+    changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
     billingAccount = await BillingAccountHelper.add()
     chargeCategory = await ChargeCategoryHelper.add()
 
-    billRun = await BillRunHelper.add({ regionId })
+    billRun = await BillRunHelper.add({ regionId: region.id })
   })
 
   afterEach(() => {
@@ -74,6 +76,81 @@ describe('Supplementary Process billing period service', () => {
     })
 
     describe('and there are charge versions to process', () => {
+      describe('but none of them are billable', () => {
+        describe('because the billable days calculated as 0', () => {
+          beforeEach(async () => {
+            const { id: chargeVersionId } = await ChargeVersionHelper.add(
+              {
+                changeReasonId: changeReason.id,
+                billingAccountId: billingAccount.id,
+                startDate: new Date(2022, 7, 1, 9),
+                licenceId: licence.id
+              }
+            )
+            const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
+              { chargeCategoryId: chargeCategory.id, chargeVersionId }
+            )
+
+            await ChargeElementHelper.add({
+              chargeReferenceId,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 5
+            })
+
+            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+
+            chargeVersions = chargeVersionData.chargeVersions
+          })
+
+          describe('and there are no previous billed transactions', () => {
+            it('returns false (bill run is empty)', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+
+              expect(result).to.be.false()
+            })
+          })
+        })
+
+        describe('because the charge version status is "superseded"', () => {
+          describe('and there are no previously billed transactions', () => {
+            beforeEach(async () => {
+              const { id: chargeVersionId } = await ChargeVersionHelper.add(
+                {
+                  changeReasonId: changeReason.id,
+                  billingAccountId: billingAccount.id,
+                  startDate: new Date(2022, 7, 1, 9),
+                  licenceId: licence.id,
+                  status: 'superseded'
+                }
+              )
+              const { chargeElementId } = await ChargeReferenceHelper.add(
+                { chargeCategoryId: chargeCategory.id, chargeVersionId }
+              )
+
+              await ChargeElementHelper.add({
+                chargeElementId,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3
+              })
+
+              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+
+              chargeVersions = chargeVersionData.chargeVersions
+            })
+
+            it('returns false (bill run is empty)', async () => {
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+
+              expect(result).to.be.false()
+            })
+          })
+        })
+      })
+
       describe('and they are billable', () => {
         beforeEach(async () => {
           const { id: chargeVersionId } = await ChargeVersionHelper.add(
@@ -87,6 +164,7 @@ describe('Supplementary Process billing period service', () => {
           const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
             { chargeCategoryId: chargeCategory.id, chargeVersionId }
           )
+
           await ChargeElementHelper.add({
             chargeReferenceId,
             abstractionPeriodStartDay: 1,
@@ -96,6 +174,7 @@ describe('Supplementary Process billing period service', () => {
           })
 
           const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+
           chargeVersions = chargeVersionData.chargeVersions
 
           const sentTransactions = [{
@@ -148,77 +227,6 @@ describe('Supplementary Process billing period service', () => {
           expect(result).to.be.true()
         })
       })
-
-      describe('but none of them are billable', () => {
-        describe('because the billable days calculated as 0', () => {
-          beforeEach(async () => {
-            const { id: chargeVersionId } = await ChargeVersionHelper.add(
-              {
-                changeReasonId: changeReason.id,
-                billingAccountId: billingAccount.id,
-                startDate: new Date(2022, 7, 1, 9),
-                licenceId: licence.id
-              }
-            )
-            const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-              { chargeCategoryId: chargeCategory.id, chargeVersionId }
-            )
-            await ChargeElementHelper.add({
-              chargeReferenceId,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 5
-            })
-
-            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-            chargeVersions = chargeVersionData.chargeVersions
-          })
-
-          describe('and there are no previous billed transactions', () => {
-            it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
-
-              expect(result).to.be.false()
-            })
-          })
-        })
-
-        describe('because the charge version status is "superseded"', () => {
-          describe('and there are no previously billed transactions', () => {
-            beforeEach(async () => {
-              const { id: chargeVersionId } = await ChargeVersionHelper.add(
-                {
-                  changeReasonId: changeReason.id,
-                  billingAccountId: billingAccount.id,
-                  startDate: new Date(2022, 7, 1, 9),
-                  licenceId: licence.id,
-                  status: 'superseded'
-                }
-              )
-              const { chargeElementId } = await ChargeReferenceHelper.add(
-                { chargeCategoryId: chargeCategory.id, chargeVersionId }
-              )
-              await ChargeElementHelper.add({
-                chargeElementId,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3
-              })
-
-              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-              chargeVersions = chargeVersionData.chargeVersions
-            })
-
-            it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
-
-              expect(result).to.be.false()
-            })
-          })
-        })
-      })
     })
   })
 
@@ -232,9 +240,11 @@ describe('Supplementary Process billing period service', () => {
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
         { chargeCategoryId: chargeCategory.id, chargeVersionId }
       )
+
       await ChargeElementHelper.add({ chargeReferenceId })
 
       const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+
       chargeVersions = chargeVersionData.chargeVersions
     })
 
@@ -256,6 +266,7 @@ describe('Supplementary Process billing period service', () => {
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
         const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
+
         Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
       })
 

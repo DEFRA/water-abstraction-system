@@ -18,9 +18,9 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * It does this by sending a transaction based on the selected charge reference to the charging module so that it can
  * calculate the charge. The charge amount is then added to a flash message which will be displayed to the user.
  *
- * @param {String} licenceId - The UUID of the licence related to the charge
- * @param {String} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge on
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} licenceId - The UUID of the licence related to the charge
+ * @param {string} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge on
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go (licenceId, reviewChargeReferenceId, yar) {
   const reviewChargeReference = await _fetchReviewChargeReference(reviewChargeReferenceId)

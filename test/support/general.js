@@ -31,13 +31,13 @@
  * the 'crumb' in the POST request.
  *
  * @param {string} path - the full path for the request
- * @param {Object} [payload={}] - the payload to be sent in the request. Set to null if no payload should be sent
+ * @param {object} [payload={}] - the payload to be sent in the request. Set to null if no payload should be sent
  * @param {string[]} [scope=[billing]] - the auth scope to apply to the request. Set to null if no auth should be
  * applied
  * @param {string} [crumb=WYuCN5hiKnNkLpmUrEQj6Xer49FqfBPv20VO1C5wQHk] - the CSRF 'crumb' value to be used to verify the
  * request. Set to null if no crumb should be applied
  *
- * @returns {Object} the options to be used in the call to `server.inject()`
+ * @returns {object} the options to be used in the call to `server.inject()`
  */
 function postRequestOptions (
   path,
@@ -66,8 +66,8 @@ function postRequestOptions (
 /**
  * Generate a random integer within a range (inclusive)
  *
- * @param {Number} min - lowest number (integer) in the range (inclusive)
- * @param {Number} max - largest number (integer) in the range (inclusive)
+ * @param {number} min - lowest number (integer) in the range (inclusive)
+ * @param {number} max - largest number (integer) in the range (inclusive)
  *
  * Credit https://stackoverflow.com/a/7228322
  *
@@ -77,7 +77,42 @@ function randomInteger (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+/**
+ * Select a random entry from an array of entries
+ *
+ * Was built when we started using real reference data within the unit tests, for example, regions and purposes.
+ *
+ * Where we want to select a real value but don't care which, this can be used by the helper so select a random entry
+ * from the reference data.
+ *
+ * @param {object[]} data - an array of values to randomly select from
+ *
+ * @returns a random entry from the data provided
+ */
+function selectRandomEntry (data) {
+  const randomIndex = randomInteger(0, data.length - 1)
+
+  return data[randomIndex]
+}
+
+/**
+ * Generates a random region code
+ *
+ * Region codes should be between 1 and 9 based on the fixed region reference data.
+ *
+ * We see issues with this small range when tables have unique constraints when building external id's.
+ *
+ * This function is here to encapsulate this issue and remove any need to explain the issue else where in the tests.
+ *
+ * @returns a random number
+ */
+function randomRegionCode () {
+  return randomInteger(1, 999999)
+}
+
 module.exports = {
   postRequestOptions,
-  randomInteger
+  randomInteger,
+  randomRegionCode,
+  selectRandomEntry
 }

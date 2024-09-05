@@ -12,9 +12,9 @@ const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {Object[]} pointsData - The points data from the licence
+ * @param {object[]} pointsData - The points data from the licence
  *
- * @returns {Object} - The data formatted for the view template
+ * @returns {object} - The data formatted for the view template
  */
 function go (session, requirementIndex, pointsData) {
   const { id: sessionId, licence, requirements } = session

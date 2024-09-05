@@ -12,9 +12,9 @@ const errorMessage = 'Select a return version'
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/existing` page
  *
- * @param {Object} payload - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  *
- * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data, returnVersions) {

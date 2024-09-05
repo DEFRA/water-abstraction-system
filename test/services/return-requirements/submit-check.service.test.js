@@ -34,6 +34,7 @@ describe('Return Requirements - Submit Check service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
+          returnVersions: [],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',

@@ -43,14 +43,19 @@ describe('Remove Review Data service', () => {
     beforeEach(async () => {
       const { id: reviewLicenceId } = await ReviewLicenceHelper.add({ billRunId, licenceId })
       const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId })
+
       reviewReturnId = reviewReturn.id
       const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId })
+
       reviewChargeVersionId = reviewChargeVersion.id
       const reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId })
+
       reviewChargeReferenceId = reviewChargeReference.id
       const reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
+
       reviewChargeElementId = reviewChargeElement.id
       const reviewChargeElementReturn = await ReviewChargeElementReturnHelper.add({ reviewChargeElementId })
+
       reviewChargeElementReturnId = reviewChargeElementReturn.id
     })
 

@@ -14,9 +14,9 @@ const WriteTableToFileService = require('./write-table-to-file.service.js')
  * Exports the specific database table by fetching the database query (input stream) and passing it to a write stream
  * service which transforms the data to a CSV format
  *
- * @param {String} tableName The name of the database table to export
- * @param {String} schemaFolderPath The folder path where the schema files are stored
- * @param {String} schemaName The name of the database schema
+ * @param {string} tableName - The name of the database table to export
+ * @param {string} schemaFolderPath - The folder path where the schema files are stored
+ * @param {string} schemaName - The name of the database schema
  */
 async function go (tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)

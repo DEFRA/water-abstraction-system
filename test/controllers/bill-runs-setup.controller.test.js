@@ -15,6 +15,7 @@ const { postRequestOptions } = require('../support/general.js')
 const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
 const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
+const NoLicencesService = require('../../app/services/bill-runs/setup/no-licences.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SeasonService = require('../../app/services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
@@ -117,6 +118,25 @@ describe('Bill Runs Setup controller', () => {
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/bill-runs')
           })
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/no-licences', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('no-licences')
+
+        Sinon.stub(NoLicencesService, 'go').resolves('Test')
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('There are no licences marked for two-part tariff supplementary billing in the Test region')
         })
       })
     })
@@ -278,7 +298,7 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select a bill run type')
+          expect(response.payload).to.contain('Select bill run type')
         })
       })
     })
@@ -325,19 +345,45 @@ describe('Bill Runs Setup controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = _getOptions('year')
-
-        Sinon.stub(YearService, 'go').resolves({
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-          selectedYear: null
-        })
       })
 
-      describe('when the request succeeds', () => {
+      describe('when the request succeeds with at least 1 year to display', () => {
+        beforeEach(async () => {
+          Sinon.stub(YearService, 'go').resolves({
+            financialYearsData: [
+              {
+                text: '2023 to 2024',
+                value: 2024,
+                checked: false
+              }
+            ],
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedYear: null
+          })
+        })
+
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select the financial year')
+        })
+      })
+
+      describe('when the request succeeds with no years to display', () => {
+        beforeEach(async () => {
+          Sinon.stub(YearService, 'go').resolves({
+            financialYearsData: [],
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedYear: null
+          })
+        })
+
+        it('redirects to the no licences endpoint', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/no-licences')
         })
       })
     })

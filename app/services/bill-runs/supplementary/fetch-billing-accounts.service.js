@@ -10,9 +10,9 @@ const BillingAccountModel = require('../../../models/billing-account.model.js')
 /**
  * Fetch all billing accounts for the supplied charge versions
  *
- * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
+ * @param {module:ChargeVersionModel[]} chargeVersions - An array of charge versions
  *
- * @returns {Promise<Object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
+ * @returns {Promise<object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
 async function go (chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)

@@ -98,6 +98,7 @@ describe('Change address service', () => {
 
           beforeEach(async () => {
             const { uprn } = address
+
             existingAddress = await AddressHelper.add({ uprn })
           })
 
@@ -202,6 +203,7 @@ describe('Change address service', () => {
 
         beforeEach(async () => {
           const { companyNumber } = agentCompany
+
           existingCompany = await CompanyHelper.add({ companyNumber })
         })
 

@@ -40,7 +40,7 @@ describe('Fetch Billing Accounts service', () => {
   let reviewChargeVersion
 
   before(async () => {
-    region = await RegionHelper.add()
+    region = RegionHelper.select()
     billRun = await BillRunHelper.add({ regionId: region.id })
 
     licence = await LicenceHelper.add({ regionId: region.id })

@@ -60,6 +60,7 @@ describe('Pre-generate billing data service', () => {
         const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.keys(result)
+
         expect(keys).to.have.length(2)
       })
 
@@ -82,6 +83,7 @@ describe('Pre-generate billing data service', () => {
           const matchingBillingAccount = billingAccounts.find((billingAccount) => {
             return key === billingAccount.id
           })
+
           expect(value.accountNumber).to.equal(matchingBillingAccount.accountNumber)
         })
       })
@@ -96,6 +98,7 @@ describe('Pre-generate billing data service', () => {
         )
 
         const keys = Object.entries(result)
+
         expect(keys).to.have.length(3)
       })
 
@@ -125,6 +128,7 @@ describe('Pre-generate billing data service', () => {
           const matchingLicence = licences.find((licence) => {
             return key === `${value.billId}-${licence.id}`
           })
+
           expect(value.licenceRef).to.equal(matchingLicence.licenceRef)
         })
       })

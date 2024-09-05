@@ -24,7 +24,7 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
  * abstractionPeriods.
  *
  * @param {module:ChargeVersionModel} chargeVersion - The charge version to prepare
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
 function go (chargeVersion, billingPeriod) {
   const { chargeReferences } = chargeVersion

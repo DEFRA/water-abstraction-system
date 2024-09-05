@@ -9,12 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 
 // Thing under test
 const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
 
 describe('Return Requirements - Fetch Return Version service', () => {
   let licence
+  let modLog
   let returnVersion
   let user
 
@@ -24,6 +26,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
 
       licence = seedData.licence
       returnVersion = seedData.returnVersion
+      modLog = await ModLogHelper.add({ returnVersionId: returnVersion.id, note: 'This is a test note' })
       user = seedData.user
     })
 
@@ -34,6 +37,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
 
       expect(result).to.equal({
         createdAt: returnVersion.createdAt,
+        createdBy: user.id,
         id: returnVersion.id,
         multipleUpload: false,
         notes: null,
@@ -46,6 +50,15 @@ describe('Return Requirements - Fetch Return Version service', () => {
           licenceRef: licence.licenceRef,
           licenceDocument: null
         },
+        modLogs: [
+          {
+            id: modLog.id,
+            naldDate: new Date('2012-06-01T00:00:00.000Z'),
+            note: 'This is a test note',
+            reasonDescription: null,
+            userId: 'TTESTER'
+          }
+        ],
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
@@ -59,7 +72,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
             legacyId: returnRequirementsOne.legacyId,
             returnRequirementPoints: [
               {
-                description: null,
+                description: 'Point description',
                 id: returnRequirementsOne.returnRequirementPoints[0].id,
                 ngr1: returnRequirementsOne.returnRequirementPoints[0].ngr1,
                 ngr2: null,
@@ -95,7 +108,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
             legacyId: returnRequirementsTwo.legacyId,
             returnRequirementPoints: [
               {
-                description: null,
+                description: 'Point description',
                 id: returnRequirementsTwo.returnRequirementPoints[0].id,
                 ngr1: returnRequirementsTwo.returnRequirementPoints[0].ngr1,
                 ngr2: null,

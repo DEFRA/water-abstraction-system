@@ -34,7 +34,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being sent
  *
- * @returns {Promise<Number>} Resolves to the count of records updated
+ * @returns {Promise<number>} Resolves to the count of records updated
  */
 async function go (billRun) {
   const { scheme } = billRun
@@ -48,6 +48,8 @@ async function go (billRun) {
 
 /**
  * PRESROC
+ *
+ * @private
  */
 async function _updateOldScheme (billRun) {
   const { createdAt, regionId } = billRun
@@ -65,6 +67,8 @@ async function _updateOldScheme (billRun) {
 
 /**
  * SROC
+ *
+ * @private
  */
 async function _updateCurrentScheme (billRun) {
   const { id: billRunId, createdAt } = billRun

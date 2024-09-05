@@ -25,10 +25,10 @@ const Workflow = require('../../../models/workflow.model.js')
  * From this initial result we extract an array of unique licence IDs and then remove any that are non-chargeable (we
  * need to know about them in order to unset the licence's sroc billing flag).
  *
- * @param {String} regionId UUID of the region being billed that the licences must be linked to
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {string} regionId - UUID of the region being billed that the licences must be linked to
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<Object>} Contains an array of unique licence IDs and array of charge versions to be processed
+ * @returns {Promise<object>} Contains an array of unique licence IDs and array of charge versions to be processed
  */
 async function go (regionId, billingPeriod) {
   const allChargeVersions = await _fetch(regionId, billingPeriod)
@@ -128,6 +128,8 @@ async function _fetch (regionId, billingPeriod) {
  * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge version created that
  * has no `invoice_account_id`. For the purpose of billing we are not interested in non-chargeable charge versions.
  * We are interested in the associated licences to ensure that their supplementary billing flag is unset.
+ *
+ * @private
  */
 function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersions) {
   const chargeVersions = []

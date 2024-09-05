@@ -1,51 +1,37 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/licences/{id}` page
+ * Fetches the matching licence and its data needed for the view '/licences/{id}/*` pages
  * @module FetchLicenceService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetch the matching licence and return data needed for the view licence page
+ * Fetches the matching licence and its data needed for the view '/licences/{id}/*` pages
  *
  * Was built to provide the data needed for the '/licences/{id}' page
  *
- * @param {string} id The UUID for the licence to fetch
+ * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
+ * @returns {Promise<module:LicenceModel>} the matching `LicenceModel` populated with the data needed for the view
+ * licence page top section (shared by all tab pages) and some elements needed for the summary tab
  */
-async function go (id) {
-  const licence = await _fetchLicence(id)
-  const data = await _data(licence)
-
-  return data
+async function go (licenceId) {
+  return _fetch(licenceId)
 }
 
-async function _data (licence) {
-  const registeredTo = licence.$registeredTo() ?? null
-  const licenceName = registeredTo ? licence.$licenceName() : 'Unregistered licence'
-
-  return {
-    ...licence,
-    ends: licence.$ends(),
-    licenceName,
-    registeredTo
-  }
-}
-
-async function _fetchLicence (id) {
-  const result = await LicenceModel.query()
-    .findById(id)
+async function _fetch (licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
     .select([
       'id',
-      'include_in_presroc_billing',
-      'include_in_sroc_billing',
-      'licenceRef',
       'expiredDate',
-      'revokedDate',
-      'lapsedDate'
+      'lapsedDate',
+      'includeInPresrocBilling',
+      'includeInSrocBilling',
+      'licenceRef',
+      'revokedDate'
     ])
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
@@ -54,15 +40,25 @@ async function _fetchLicence (id) {
         'licenceDocumentHeaders.metadata'
       ])
     })
-    .modify('registeredToAndLicenceName')
+    .modify('licenceName')
+    .modify('primaryUser')
+    .withGraphFetched('licenceSupplementaryYears')
+    .modifyGraph('licenceSupplementaryYears', (builder) => {
+      builder
+        .select([
+          'id'
+        ])
+        .where('twoPartTariff', true)
+    })
     .withGraphFetched('workflows')
     .modifyGraph('workflows', (builder) => {
-      builder.select([
-        'workflows.status'
-      ])
+      builder
+        .select([
+          'id',
+          'status'
+        ])
+        .whereNull('deletedAt')
     })
-
-  return result
 }
 
 module.exports = {

@@ -16,7 +16,7 @@ const TypePresenter = require('../../../presenters/bill-runs/setup/type.presente
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
- * @returns {Promise<Object>} The view data for the type page
+ * @returns {Promise<object>} The view data for the type page
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)

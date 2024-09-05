@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -19,17 +19,14 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
 
 describe('Bill Runs Setup Submit Region service', () => {
-  const regions = [
-    { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
-    { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' },
-    { id: '3334054e-03b6-4696-9d74-62b8b76a3c64', displayName: 'Westerlands' }
-  ]
-
   let payload
+  let region
+  let regions
   let session
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    regions = RegionHelper.data
+    region = RegionHelper.select()
 
     session = await SessionHelper.add({ data: {} })
 
@@ -44,7 +41,7 @@ describe('Bill Runs Setup Submit Region service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          region: '19a027c6-4aad-47d3-80e3-3917a4579a5b'
+          region: region.id
         }
       })
 
@@ -58,7 +55,7 @@ describe('Bill Runs Setup Submit Region service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
+          expect(refreshedSession.region).to.equal(region.id)
           expect(result.setupComplete).to.be.true()
         })
       })
@@ -73,7 +70,22 @@ describe('Bill Runs Setup Submit Region service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
+          expect(refreshedSession.region).to.equal(region.id)
+          expect(result.setupComplete).to.be.false()
+        })
+      })
+
+      describe('and the bill run type was two-part tariff supplementary', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
+        })
+
+        it('saves the submitted value and returns an object confirming setup is not complete', async () => {
+          const result = await SubmitRegionService.go(session.id, payload)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.region).to.equal(region.id)
           expect(result.setupComplete).to.be.false()
         })
       })

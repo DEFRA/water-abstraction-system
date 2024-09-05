@@ -12,13 +12,13 @@ const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
-const SecondaryPurposeSeeder = require('../support/seeders/secondary-purpose.seeder.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 describe('Secondary Purpose model', () => {
-  const testRecordId = SecondaryPurposeSeeder.data[0].id
+  const testRecordId = SecondaryPurposeHelper.select().id
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {

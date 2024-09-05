@@ -18,10 +18,10 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * Initiating a new bill run means creating both the `billing_batch` and `event` record with the appropriate data,
  * along with a bill run record in the SROC Charging Module API.
  *
- * @param {Object} financialYearEndings Object that contains the from and to financial year endings
- * @param {String} regionId Id of the region the bill run is for
- * @param {String} batchType Type of bill run, for example, supplementary
- * @param {String} userEmail Email address of the user who initiated the bill run
+ * @param {object} financialYearEndings - Object that contains the from and to financial year endings
+ * @param {string} regionId - Id of the region the bill run is for
+ * @param {string} batchType - Type of bill run, for example, supplementary
+ * @param {string} userEmail - Email address of the user who initiated the bill run
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */

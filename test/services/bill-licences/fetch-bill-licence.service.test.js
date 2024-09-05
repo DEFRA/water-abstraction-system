@@ -18,8 +18,8 @@ const ChargeElementHelper = require('../../support/helpers/charge-element.helper
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../../app/models/purpose.model.js')
-const PurposeSeeder = require('../../support/seeders/purposes.seeder.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
@@ -91,7 +91,7 @@ describe('Fetch Bill Licence service', () => {
     describe('and it is for an SROC bill run', () => {
       beforeEach(async () => {
         linkedChargeReference = await ChargeReferenceHelper.add()
-        linkedPurpose = PurposeSeeder.data[0]
+        linkedPurpose = PurposeHelper.select()
 
         const { id: chargeReferenceId } = linkedChargeReference
 
@@ -159,7 +159,7 @@ describe('Fetch Bill Licence service', () => {
 
     describe('and it is for a PRESROC bill run', () => {
       beforeEach(async () => {
-        linkedPurpose = PurposeSeeder.data[0]
+        linkedPurpose = PurposeHelper.select()
         linkedChargeReference = await ChargeReferenceHelper.add({ purposeId: linkedPurpose.id })
 
         const { id: chargeReferenceId } = linkedChargeReference

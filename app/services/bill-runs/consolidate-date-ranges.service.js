@@ -11,42 +11,52 @@
  *
  * Say we have the following dates:
  *
+ * ```javascript
  * [
  *   { startDate: 2023-01-01, endDate: 2023-03-01 }, // Range 1
  *   { startDate: 2023-02-01, endDate: 2023-04-01 }, // Range 2
  *   { startDate: 2023-06-01, endDate: 2023-07-01 }  // Range 3
  * ]
+ * ```
  *
  * The first two date ranges overlap (as the second one starts before the first one ends) so we merge them into one date
  * range. The third date range does not overlap anything, so we leave it alone. Our resulting consolidated date ranges
  * therefore looks like this:
  *
+ * ```javascript
  * [
  *   { startDate: 2023-01-01, endDate: 2023-04-01 }, // Ranges 1 & 2 merged
  *   { startDate: 2023-06-01, endDate: 2023-07-01 }  // Range 3 unchanged
  * ]
+ * ```
  *
  * Note that if a range starts on the same day the previous range ends, that is classed as one continuous range. But a
  * range that starts the day _after_ the previous range ends is classed as a separate range to that previous one. eg:
  *
+ * ```javascript
  * [
  *   { startDate: 2023-01-01, endDate: 2023-04-01 }, // Range 1, ending on 1st April
  *   { startDate: 2023-04-01, endDate: 2023-07-01 }, // Range 2, starting on 1st April
  *   { startDate: 2023-10-01, endDate: 2023-10-31 }, // Range 3, ending on 31st October
  *   { startDate: 2023-11-01, endDate: 2023-12-01 }  // Range 4, starting on 1st November
  * ]
+ * ```
  *
  * Consolidates to:
  *
+ * ```javascript
  * [
  *   { startDate: 2023-01-01, endDate: 2023-07-01 }, // Ranges 1 & 2 merged
  *   { startDate: 2023-10-01, endDate: 2023-10-31 }, // Range 3 unchanged
  *   { startDate: 2023-11-01, endDate: 2023-12-01 }  // Range 4 unchanged
  * ]
+ * ```
  *
- * @param {{startDate: Date, endDate: Date}[]} dateRanges Array containing a series of date ranges to be consolidated.
+ * @param {object[]} dateRanges - The series of date ranges to be consolidated.
+ * @param {Date} dateRanges[].startDate - The start date for the range
+ * @param {Date} dateRanges[].endDate - The end date of the range
  *
- * @returns {{startDate: Date, endDate: Date}[]} An array of the consolidated date ranges
+ * @returns {object[]} An array of the consolidated date ranges
  */
 function go (dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
@@ -69,6 +79,8 @@ function _sortDates (dateRanges) {
  * or not they overlap.
  *
  * Based on https://stackoverflow.com/a/67717721
+ *
+ * @private
  */
 function _consolidateDates (dateRanges) {
   // We use reduce to build up an array of consolidated date ranges as we iterate over our initial dateRanges array.

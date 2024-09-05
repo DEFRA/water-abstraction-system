@@ -19,10 +19,10 @@ const SessionModel = require('../../models/session.model.js')
  * controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
- * @param {Object} payload - The submitted form data
- * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} If no errors it returns an empty object else the page data for the note page including the
+ * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
 async function go (sessionId, payload, yar) {
@@ -34,6 +34,7 @@ async function go (sessionId, payload, yar) {
 
   if (!validationResult) {
     const notification = _notification(session, payload)
+
     await _save(session, payload)
 
     if (notification) {
@@ -57,6 +58,8 @@ async function go (sessionId, payload, yar) {
 * When a single additional submission option is checked by the user, it returns as a string. When multiple options are
  * checked, the 'additionalSubmissionOptions' is returned as an array.
  * This function works to make those single selected string 'additionalSubmissionOptions' into an array for uniformity.
+ *
+ * @private
  */
 function _handleOneOptionSelected (payload) {
   if (!Array.isArray(payload.additionalSubmissionOptions)) {

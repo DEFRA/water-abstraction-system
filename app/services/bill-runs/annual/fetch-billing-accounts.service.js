@@ -24,10 +24,10 @@ const Workflow = require('../../../models/workflow.model.js')
  * - be linked to a charge version which has an end date after the start of the billing period
  * - be linked to a charge version which has a status of 'current'
  *
- * @param {String} regionId - UUID of the region being billed that the licences must be linked to
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {string} regionId - UUID of the region being billed that the licences must be linked to
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<[module:BillingAccountModel]>} An array of `BillingAccountModel` to be billed and their relevant
+ * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
  */
 async function go (regionId, billingPeriod) {
@@ -135,9 +135,11 @@ async function _fetchNew (regionId, billingPeriod) {
  *
  * @param {module:QueryBuilder} query - an instance of the Objection QueryBuilder being generated
  * @param {string} regionId - UUID of the region being billed that the licences must be linked to
- * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {module:QueryBuilder} the builder instance passed in with the additional `where` clauses added
+ *
+ * @private
  */
 function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
   return query
@@ -178,6 +180,8 @@ function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
  * Bill runs are formed of 'bills' which are a 1-to-1 with billing accounts. But whether a billing account should
  * be included is _all_ based on the charge versions they are linked to. So, all the work of filtering what will be
  * considered is done here by combining a `select(1)` with our `_whereClauseForChargeVersions()` function.
+ *
+ * @private
  */
 function _whereExistsClause (regionId, billingPeriod) {
   let query = ChargeVersionModel.query().select(1)
