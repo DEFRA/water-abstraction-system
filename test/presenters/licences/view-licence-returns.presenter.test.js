@@ -92,10 +92,10 @@ describe('View Licence returns presenter', () => {
           returnLogs[1].status = 'void'
         })
 
-        it('returns a link to the edit return log page', () => {
+        it('returns a link to the view return log page', () => {
           const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
-          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+          expect(result.returns[1].link).to.equal('/returns/return?id=v1:1:01/123:10046820:2020-01-02:2020-02-01')
         })
       })
     })
