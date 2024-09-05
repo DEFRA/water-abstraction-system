@@ -80,17 +80,13 @@ describe('Bill Runs Setup Submit Region service', () => {
           session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
         })
 
-        it('returns page data needed to re-render the view including the error', async () => {
+        it('saves the submitted value and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          expect(result).to.equal({
-            sessionId: session.id,
-            regions,
-            selectedRegion: payload.region,
-            error: {
-              text: 'Currently you can progress no further for a two-part tariff supplementary bill run'
-            }
-          })
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.region).to.equal(region.id)
+          expect(result.setupComplete).to.be.false()
         })
       })
     })
