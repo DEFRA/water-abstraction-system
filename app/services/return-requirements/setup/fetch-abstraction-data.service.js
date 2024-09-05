@@ -68,8 +68,8 @@ async function _fetch (licenceId) {
         // and secondary against a licence version purpose
         .modify('allPurposes')
         .withGraphFetched('licenceVersionPurposePoints')
-        .modifyGraph('licenceVersionPurposePoints', (builder) => {
-          builder.select([
+        .modifyGraph('licenceVersionPurposePoints', (pointsBuilder) => {
+          pointsBuilder.select([
             'licenceVersionPurposePoints.id',
             'licenceVersionPurposePoints.description'
           ])
