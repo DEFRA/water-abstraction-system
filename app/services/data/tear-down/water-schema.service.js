@@ -24,6 +24,10 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
+  ALTER TABLE water.licences DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purpose_conditions DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_points DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
@@ -339,6 +343,10 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
+  ALTER TABLE water.licences ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purpose_conditions ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_points ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements ENABLE TRIGGER ALL;
