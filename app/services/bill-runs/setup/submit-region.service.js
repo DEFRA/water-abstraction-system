@@ -39,16 +39,6 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    // Temporary if statement to end the journey if the bill run is for two-part tariff supplementary
-    if (session.type === 'two_part_supplementary') {
-      const temporaryFormattedData = RegionPresenter.go(session, regions)
-
-      return {
-        error: { text: 'Currently you can progress no further for a two-part tariff supplementary bill run' },
-        ...temporaryFormattedData
-      }
-    }
-
     // The journey is complete (we don't need any details) if the bill run type is not 2PT
     return { setupComplete: !session.type.startsWith('two_part') }
   }
