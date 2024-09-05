@@ -44,7 +44,8 @@ function defaults (data = {}) {
     name: 'Example Trading Ltd',
     type: 'organisation',
     companyNumber: generateCompanyNumber(),
-    organisationType: 'limitedCompany'
+    organisationType: 'limitedCompany',
+    externalId: generateExternalId()
   }
 
   return {
@@ -53,12 +54,32 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generate a company number
+ *
+ * @returns {int} - A random company number
+ */
 function generateCompanyNumber () {
   return randomInteger(1000000, 9999999).toString()
+}
+
+/**
+ * Generate a company extrnal id
+ *
+ * This is build from NALD import data using the region code and party id
+ *
+ * @returns {string} - A random company number
+ */
+function generateExternalId () {
+  const regionCode = randomInteger(1, 9)
+  const partyId = randomInteger(100, 99998)
+
+  return `${regionCode}:${partyId}`
 }
 
 module.exports = {
   add,
   defaults,
-  generateCompanyNumber
+  generateCompanyNumber,
+  generateExternalId
 }

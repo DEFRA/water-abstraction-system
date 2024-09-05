@@ -8,8 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const CompanyModel = require('../../../app/models/company.model.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
@@ -30,6 +32,8 @@ describe('Persist licence service', () => {
   let region
   let secondaryPurpose
   let transformedLicence
+  let transformedCompany
+  let transformedCompanies
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
@@ -40,12 +44,16 @@ describe('Persist licence service', () => {
 
     transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
       licenceVersionPurposeConditionType.id)
+
+    transformedCompany = _transformedCompany()
+
+    transformedCompanies = [{ ...transformedCompany }]
   })
 
   describe('when given a valid transformed licence', () => {
     describe('and that licence does not already exist', () => {
       it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
-        const result = await PersistLicenceService.go(transformedLicence)
+        const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
 
         const newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
 
@@ -70,6 +78,13 @@ describe('Persist licence service', () => {
 
         expect(newLicenceVersionPurposeCondition.externalId).to.equal(
           transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0].externalId)
+
+        //   Companies
+        const company = await _fetchPersistedCompany(transformedCompany.externalId)
+
+        expect(company.name).to.equal('ACME')
+        expect(company.type).to.equal('person')
+        expect(company.externalId).to.equal(transformedCompany.externalId)
       })
     })
 
@@ -78,6 +93,7 @@ describe('Persist licence service', () => {
       let existingLicenceVersion
       let existingLicenceVersionPurpose
       let existingLicenceVersionPurposeCondition
+      let existingCompany
 
       beforeEach(async () => {
         existingLicence = await LicenceHelper.add({
@@ -127,10 +143,16 @@ describe('Persist licence service', () => {
             .licenceVersionPurposeConditions[0].externalId,
           source: 'nald'
         })
+
+        existingCompany = await CompanyHelper.add({
+          externalId: transformedCompany.externalId
+        })
+
+        transformedCompanies = [{ ...existingCompany }]
       })
 
       it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
-        const result = await PersistLicenceService.go(transformedLicence)
+        const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
 
         expect(result).to.equal(existingLicence.id)
 
@@ -186,6 +208,13 @@ describe('Persist licence service', () => {
         expect(updatedLicVerPurCon.param1).to.equal(transformedLicVerPurCon.param1)
         expect(updatedLicVerPurCon.param2).to.equal(transformedLicVerPurCon.param2)
         expect(updatedLicVerPurCon.source).to.equal(transformedLicVerPurCon.source)
+
+        // Companies
+        const company = await _fetchPersistedCompany(existingCompany.externalId)
+
+        expect(company.name).to.equal('Example Trading Ltd')
+        expect(company.type).to.equal('organisation')
+        expect(company.externalId).to.equal(existingCompany.externalId)
       })
     })
   })
@@ -273,5 +302,21 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
         ]
       }
     ]
+  }
+}
+
+async function _fetchPersistedCompany (externalId) {
+  return CompanyModel
+    .query()
+    .where('externalId', externalId)
+    .limit(1)
+    .first()
+}
+
+function _transformedCompany () {
+  return {
+    externalId: CompanyHelper.generateExternalId(),
+    name: 'ACME',
+    type: 'person'
   }
 }
