@@ -24,6 +24,7 @@ describe('Licence Contacts presenter', () => {
       expect(result).to.equal({
         licenceId: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
         licenceRef: '00/111/222',
+        pageTitle: 'Licence contact details',
         licenceContacts: [
           {
             address: {
