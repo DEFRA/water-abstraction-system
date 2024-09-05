@@ -228,6 +228,18 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."licence_version_purpose_points" AS "lvpp"
+      USING "water"."licence_version_purposes" AS "lvp",
+    "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "lvpp"."licence_version_purpose_id" = "lvp"."licence_version_purpose_id"
+    AND "lvp"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."licence_version_purposes"
   WHERE
     "is_test" = TRUE;
