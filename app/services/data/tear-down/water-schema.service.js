@@ -200,6 +200,16 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."mod_logs" AS "ml"
+      USING "water"."return_versions" AS "rv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."return_version_id" = "rv"."return_version_id"
+    AND "rv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."return_versions" AS "rv"
       USING "water"."licences" AS "l"
   WHERE
@@ -243,6 +253,24 @@ async function _deleteAllTestData () {
     "water"."licence_version_purposes"
   WHERE
     "is_test" = TRUE;
+
+  DELETE
+  FROM
+    "water"."mod_logs" AS "ml"
+      USING "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."mod_logs" AS "ml"
+    USING "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."licence_id" = "l"."licence_id";
 
   DELETE
   FROM
