@@ -17,6 +17,7 @@ const LicenceSupplementaryProcessBillingFlagService = require('../../app/service
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
+const ViewLicenceContactService = require('../../app/services/licences/view-licence-contact.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
@@ -123,6 +124,34 @@ describe('Licences controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Contact details')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/licence-contact', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contact',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid and has contacts', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceContactService, 'go').resolves(_viewLicenceContact())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence contact details')
         })
       })
     })
@@ -377,6 +406,27 @@ function _viewLicenceContactDetails () {
     activeTab: 'contact-details',
     licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
+  }
+}
+
+function _viewLicenceContact () {
+  const commonLicenceData = _viewLicence()
+
+  commonLicenceData.pageTitle = null
+
+  return {
+    ...commonLicenceData,
+    activeTab: 'search',
+    licenceContacts: [
+      {
+        address: {
+          contactAddress: ['Address Line 1', 'Address Line 2', 'Address Line 3']
+        },
+        name: 'jimbo',
+        role: 'Licence holder'
+      }
+    ],
+    pageTitle: 'Licence contact details'
   }
 }
 
