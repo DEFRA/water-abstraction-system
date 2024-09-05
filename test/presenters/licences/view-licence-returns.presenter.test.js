@@ -49,6 +49,135 @@ describe('View Licence returns presenter', () => {
         ]
       })
     })
+
+    describe('the "dates" property', () => {
+      it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+        expect(result.returns[0].dates).to.equal('2 January 2020 to 1 February 2020')
+      })
+    })
+
+    describe('the "link" property', () => {
+      describe('when the return log has a status of "completed"', () => {
+        it('returns a link to the view return log page', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[0].link).to.equal('/returns/return?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
+        })
+      })
+
+      describe('when the return log has a status of "due"', () => {
+        it('returns a link to the edit return log page', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+        })
+      })
+
+      describe('when the return log has a status of "received"', () => {
+        beforeEach(() => {
+          returnLogs[1].status = 'received'
+        })
+
+        it('returns a link to the edit return log page', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+        })
+      })
+
+      describe('when the return log has a status of "void"', () => {
+        beforeEach(() => {
+          returnLogs[1].status = 'void'
+        })
+
+        it('returns a link to the edit return log page', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+        })
+      })
+    })
+
+    describe('the "purpose" property', () => {
+      describe("when the first purpose in the return log's metadata does not have an alias", () => {
+        it("returns the purpose's tertiary description", () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].purpose).to.equal('SPRAY IRRIGATION')
+        })
+      })
+
+      describe("when the first purpose in the return log's metadata is has an alias", () => {
+        beforeEach(() => {
+          returnLogs[1].metadata.purposes[0].alias = 'Spray irrigation - top field only'
+        })
+
+        it("returns the purpose's alias", () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].purpose).to.equal('Spray irrigation - top field only')
+        })
+      })
+    })
+
+    describe('the "status" property', () => {
+      describe('when the return log has a status of "completed"', () => {
+        it('returns "complete"', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[0].status).to.equal('complete')
+        })
+      })
+
+      describe('when the return log has a status of "due"', () => {
+        describe('and the due date is less than today', () => {
+          it('returns "overdue"', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+            expect(result.returns[1].status).to.equal('overdue')
+          })
+        })
+
+        describe('and the due date is equal to or greater than today', () => {
+          beforeEach(() => {
+            returnLogs[1].dueDate = new Date()
+            returnLogs[1].dueDate.setHours(0, 0, 0, 0)
+          })
+
+          it('returns "due"', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+            expect(result.returns[1].status).to.equal('due')
+          })
+        })
+      })
+
+      describe('when the return log has a status of "received"', () => {
+        beforeEach(() => {
+          returnLogs[1].status = 'received'
+        })
+
+        it('returns "received"', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].status).to.equal('received')
+        })
+      })
+
+      describe('when the return log has a status of "void"', () => {
+        beforeEach(() => {
+          returnLogs[1].status = 'void'
+        })
+
+        it('returns "void"', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
+
+          expect(result.returns[1].status).to.equal('void')
+        })
+      })
+    })
   })
 
   describe('the "noReturnsMessage" property', () => {
