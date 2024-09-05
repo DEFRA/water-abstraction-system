@@ -15,7 +15,7 @@ const { db } = require('../../../../db/db.js')
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
  *
- * @returns {Promise<ImportLegacyCompaniesType[]>}
+ * @returns {Promise<ImportLegacyCompanyType[]>}
  */
 async function go (regionCode, licenceId) {
   const query = _query()
@@ -89,7 +89,7 @@ module.exports = {
 }
 
 /**
- * @typedef {object} ImportLegacyCompaniesType
+ * @typedef {object} ImportLegacyCompanyType
  *
  * @property {string|null} salutation - The salutation of the person, or null if not applicable.
  * @property {string|null} firstName - The first name of the person, or null if not applicable.

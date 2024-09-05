@@ -146,14 +146,6 @@ async function _persistCompanies (trx, updatedAt, companies) {
 async function _persistCompany (trx, updatedAt, company) {
   const { ...propertiesToPersist } = company
 
-  // const createCompany = `
-  // INSERT INTO crm_v2.companies (name, type, external_id, date_created, date_updated, current_hash)
-  // VALUES ($1, $2, $3, NOW(), NOW(), md5(CONCAT($1::varchar, $2::varchar)::varchar))
-  // ON CONFLICT (external_id) DO UPDATE SET name=EXCLUDED.name,
-  // date_updated=EXCLUDED.date_updated, type=EXCLUDED.type,
-  // last_hash=EXCLUDED.current_hash, current_hash=md5(CONCAT(EXCLUDED.name::varchar,EXCLUDED.type::varchar)::varchar);`
-
-  // TODO: why do they hash ?
   // TODO: can we populate the company number here ?
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
