@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches the licence data from the import.NALD_PARTIES table for the licence ref
  *
- * After this point parties will be referred to as companies
+ * From this point parties will be referred to as companies and a party will be known as a company
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID

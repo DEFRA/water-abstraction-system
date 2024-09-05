@@ -45,8 +45,7 @@ describe('Import Legacy Transform Companies service', () => {
             salutation: 'Mr',
             firstname: 'Martin',
             lastname: 'Keeble',
-            party_id: '1938',
-            address_id: '1868'
+            party_id: '1938'
           }
         ],
         transformedCompanies: [
@@ -65,10 +64,16 @@ describe('Import Legacy Transform Companies service', () => {
       Sinon.stub(FetchCompanyService, 'go').resolves([])
     })
 
-    it('returns an empty array', async () => {
+    it('returns an empty array of transformedCompanies', async () => {
       const result = await TransformCompaniesService.go(regionCode, naldLicenceId)
 
       expect(result.transformedCompanies).to.equal([])
+    })
+
+    it('returns an empty array of companies', async () => {
+      const result = await TransformCompaniesService.go(regionCode, naldLicenceId)
+
+      expect(result.companies).to.equal([])
     })
   })
 })
@@ -81,7 +86,6 @@ function _legacyCompany () {
     salutation: 'Mr',
     firstname: 'Martin',
     lastname: 'Keeble',
-    party_id: '1938',
-    address_id: '1868'
+    party_id: '1938'
   }
 }

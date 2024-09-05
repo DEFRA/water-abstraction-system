@@ -9,9 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
+const CompanyModel = require('../../../app/models/company.model.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const CompanyModel = require('../../../app/models/company.model.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
@@ -31,9 +31,9 @@ describe('Persist licence service', () => {
   let purpose
   let region
   let secondaryPurpose
-  let transformedLicence
-  let transformedCompany
   let transformedCompanies
+  let transformedCompany
+  let transformedLicence
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()

@@ -7,13 +7,13 @@
 const Joi = require('joi')
 
 /**
- * Checks that imported company data that has been transformed is valid for persisting to WRLS
+ * Checks that the imported company data has been transformed and is valid for persisting to WRLS
  *
- * @param {object} licence - The transformed licence data
+ * @param {object} company - The transformed company data
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licence) {
+function go (company) {
   const schema = Joi.object({
     name: Joi.string().required(),
     type: Joi.string().valid('organisation', 'person').required(),
@@ -25,7 +25,7 @@ function go (licence) {
       })
   })
 
-  const result = schema.validate(licence, { convert: false })
+  const result = schema.validate(company, { convert: false })
 
   if (result.error) {
     throw result.error

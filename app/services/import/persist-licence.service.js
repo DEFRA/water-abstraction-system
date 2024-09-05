@@ -16,7 +16,7 @@ const CompanyModel = require('../../models/company.model.js')
  * Creates or updates an imported licence and its child entities that have been transformed and validated
  *
  * @param {object} transformedLicence - An object representing a valid WRLS licence
- * @param {object[]}transformedCompanies - a list fo companies representing a WRLS company
+ * @param {object[]} transformedCompanies - an array of companies representing a WRLS company
  *
  * @returns {Promise<object>}
  */
@@ -146,7 +146,6 @@ async function _persistCompanies (trx, updatedAt, companies) {
 async function _persistCompany (trx, updatedAt, company) {
   const { ...propertiesToPersist } = company
 
-  // TODO: can we populate the company number here ?
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('externalId')

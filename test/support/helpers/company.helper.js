@@ -68,7 +68,7 @@ function generateCompanyNumber () {
  *
  * This is build from NALD import data using the region code and party id
  *
- * @returns {string} - A random company number
+ * @returns {string} - A random external id
  */
 function generateExternalId () {
   const regionCode = randomInteger(1, 9)
