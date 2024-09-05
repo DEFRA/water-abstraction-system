@@ -20,14 +20,14 @@ const { db } = require('../../../../db/db.js')
 async function go (regionCode, licenceId) {
   const query = _query()
 
-  const { rows } = await db.raw(query, [regionCode, licenceId])
+  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
 
   return rows
 }
 
 function _query () {
   return `
-  SELECT
+  SELECT DISTINCT ON (np."ID")
     (concat_ws(':', np."FGAC_REGION_CODE", np."ID")) AS external_id,
     (
       CASE np."SALUTATION"
@@ -73,14 +73,18 @@ function _query () {
           )
         END
       )) AS name,
-    nlr."ACON_APAR_ID" as party_id,
-    nlr."ACON_AADD_ID" as address_id
-  FROM import."NALD_LIC_ROLES" nlr
-    INNER JOIN import."NALD_PARTIES" np
-      ON np."ID" = nlr."ACON_APAR_ID"
-      AND np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
-  WHERE nlr."FGAC_REGION_CODE" = ?
-  AND nlr."AABL_ID" = ?
+    np."ID" as id
+  FROM import."NALD_PARTIES" np
+    LEFT JOIN import."NALD_ABS_LIC_VERSIONS" nalv
+      ON nalv."ACON_APAR_ID" = np."ID"
+      AND nalv."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
+    LEFT JOIN import."NALD_LIC_ROLES" nlr
+      ON nlr."ACON_APAR_ID" = np."ID"
+      AND nlr."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
+  WHERE
+    (nalv."FGAC_REGION_CODE" = ? AND nalv."AABL_ID" = ?)
+  OR
+    (nlr."FGAC_REGION_CODE" = ? AND nlr."AABL_ID" = ?)
   `
 }
 
@@ -91,13 +95,12 @@ module.exports = {
 /**
  * @typedef {object} ImportLegacyCompanyType
  *
+ * @property {string} - The party id
  * @property {string|null} salutation - The salutation of the person, or null if not applicable.
  * @property {string|null} firstName - The first name of the person, or null if not applicable.
  * @property {string|null} lastName - The last name of the person, or null if not applicable.
  * @property {string} type - Indicates whether the entry is a 'person' or an 'organisation'.
  * @property {string|null} name - The full name, concatenated from salutation, forename/initials, and name.
  * @property {string} external_id - The external ID, formatted as 'FGAC_REGION_CODE:ID'.
- * @property {string} party_id - The ID from the "ACON_APAR_ID" column.
- * @property {string} address_id - The ID from the "ACON_AADD_ID" column.
  *
  */

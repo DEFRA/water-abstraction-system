@@ -60,23 +60,6 @@ describe('Import Legacy Transform Companies service', () => {
     })
   })
 
-  describe('when matching valid legacy companies are found with duplicate external ids ', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchCompanyService, 'go').resolves([legacyCompany, legacyCompany])
-    })
-
-    it('returns the companies and the companies transformed and validated for WRLS with no duplicates', async () => {
-      const result = await TransformCompaniesService.go(regionCode, naldLicenceId)
-
-      expect(result.transformedCompanies).to.equal(
-        [{
-          externalId: '1:1938',
-          name: 'ACME',
-          type: 'organisation'
-        }])
-    })
-  })
-
   describe('when no matching valid legacy companies are found', () => {
     beforeEach(() => {
       Sinon.stub(FetchCompanyService, 'go').resolves([])

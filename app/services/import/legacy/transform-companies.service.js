@@ -31,32 +31,9 @@ async function go (regionCode, licenceId) {
   })
 
   return {
-    transformedCompanies: _removeDuplicateCompanies(transformedCompanies),
+    transformedCompanies,
     companies
   }
-}
-
-/**
- * Remove duplicate companies from the transformed array
- *
- * We need to get the address and party id for each company.
- *
- * But some of these companies will share the same party id. We can remove these duplicates
- * and only persist the company once.
- *
- * @param {object[]} transformedCompanies - The transformed companies
- *
- * @param transformedCompanies
- * @returns {object[]} -The transformed companies array with no duplicates
- */
-function _removeDuplicateCompanies (transformedCompanies) {
-  return transformedCompanies.reduce((accumulator, currentValue) => {
-    if (!accumulator.some((obj) => { return obj.externalId === currentValue.externalId })) {
-      accumulator.push(currentValue)
-    }
-
-    return accumulator
-  }, [])
 }
 
 module.exports = {
