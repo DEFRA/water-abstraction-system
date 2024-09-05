@@ -39,6 +39,7 @@ const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role
 const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../../test/support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposePointHelper = require('../../../../test/support/helpers/licence-version-purpose-point.helper.js')
 const LicenceVersionHelper = require('../../../../test/support/helpers/licence-version.helper.js')
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
@@ -97,6 +98,7 @@ const LOAD_HELPERS = {
   LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
   licenceVersionPurposes: { helper: LicenceVersionPurposeHelper, test: true, legacy: { schema: 'water', table: 'licence_version_purposes', id: 'licence_version_purpose_id' } },
+  licenceVersionPurposePoints: { helper: LicenceVersionPurposePointHelper, test: false },
   licenceVersions: { helper: LicenceVersionHelper, test: true, legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' } },
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   permitLicences: { helper: PermitLicenceHelper, test: false },
