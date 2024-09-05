@@ -21,7 +21,6 @@ async function go (licenceId) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Licence contact details',
     ...formattedData
   }
 }
