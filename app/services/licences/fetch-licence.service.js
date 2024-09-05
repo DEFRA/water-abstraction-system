@@ -33,13 +33,13 @@ async function _fetch (licenceId) {
       'licenceRef',
       'revokedDate'
     ])
-    .withGraphFetched('licenceDocumentHeader')
-    .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'licenceDocumentHeaders.id',
-        'licenceDocumentHeaders.metadata'
-      ])
-    })
+    // .withGraphFetched('licenceDocumentHeader')
+    // .modifyGraph('licenceDocumentHeader', (builder) => {
+    //   builder.select([
+    //     'licenceDocumentHeaders.id',
+    //     'licenceDocumentHeaders.metadata'
+    //   ])
+    // })
     .modify('licenceName')
     .modify('primaryUser')
     .withGraphFetched('licenceSupplementaryYears')
