@@ -27,7 +27,7 @@ function go (returnLogs, hasRequirements) {
 }
 
 function _link (status, returnLogId) {
-  if (status === 'completed') {
+  if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }
 
