@@ -8,6 +8,8 @@
 /**
  * Formats data for the `/licences/{id}/licence-contact` view licence contact details link page
  *
+ * @param {module:LicenceModel} licence - The licence and related licenceDocumentHeader
+ *
  * @returns {Object} The data formatted for the view template
  */
 function go (licence) {
