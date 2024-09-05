@@ -18,7 +18,8 @@ function go (licence) {
   return {
     licenceId,
     licenceRef,
-    licenceContacts: _licenceContacts(licenceDocumentHeader)
+    licenceContacts: _licenceContacts(licenceDocumentHeader),
+    pageTitle: 'Licence contact details'
   }
 }
 
@@ -85,6 +86,7 @@ function _licenceContactName (contact) {
 
 function _licenceContacts (licenceDocumentHeader) {
   const licenceContactData = licenceDocumentHeader.metadata.contacts
+
   const filteredContacts = licenceContactData.filter((data) => {
     return data.role === 'Licence holder' || data.role === 'Returns to' || data.role === 'Licence contact'
   })
