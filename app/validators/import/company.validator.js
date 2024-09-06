@@ -17,12 +17,7 @@ function go (company) {
   const schema = Joi.object({
     name: Joi.string().required(),
     type: Joi.string().valid('organisation', 'person').required(),
-    externalId: Joi.string()
-      .pattern(/^\d:\d+$/) // One digit, colon, and one or more digits ('1:234')
-      .required()
-      .messages({
-        'string.pattern.base': '"externalId" must be in the format X:YYYY, where X is a single digit and YYYY are digits.'
-      })
+    externalId: Joi.string().required()
   })
 
   const result = schema.validate(company, { convert: false })

@@ -102,30 +102,6 @@ describe('Import Company validator', () => {
       })
     })
 
-    describe('when it is not a valid string in the external id format', () => {
-      beforeEach(() => {
-        transformedCompany.externalId = '1234'
-      })
-
-      it('throws an error', async () => {
-        expect(() => {
-          ImportCompanyValidator.go(transformedCompany)
-        }).to.throw('"externalId" must be in the format X:YYYY, where X is a single digit and YYYY are digits.')
-      })
-    })
-
-    describe('when it has letters', () => {
-      beforeEach(() => {
-        transformedCompany.externalId = 'A:1940'
-      })
-
-      it('throws an error', async () => {
-        expect(() => {
-          ImportCompanyValidator.go(transformedCompany)
-        }).to.throw('"externalId" must be in the format X:YYYY, where X is a single digit and YYYY are digits.')
-      })
-    })
-
     describe('when it is not present', () => {
       beforeEach(() => {
         delete transformedCompany.externalId
