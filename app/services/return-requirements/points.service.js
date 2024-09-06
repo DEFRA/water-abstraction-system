@@ -19,12 +19,12 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Promise<object>} The view data for the points page
-*/
+ */
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
-  const pointsData = await FetchPointsService.go(session.licence.id)
+  const licenceVersionPurposePoints = await FetchPointsService.go(session.licence.id)
 
-  const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
+  const formattedData = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
   return {
     activeNavBar: 'search',

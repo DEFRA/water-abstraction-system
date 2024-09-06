@@ -171,40 +171,16 @@ function _frequencyReported (licence, licenceVersionPurpose) {
 }
 
 /**
- * Locate the matching 'legacy' permit purpose for the one against the licence version purpose
- *
- * We have to identify the legacy purpose to get the points for the requirement (remember, it's a one-to-one for purpose
- * to requirement).
- *
- * Against the licence version purpose the water-abstraction-import app stores an external ID, for example, 1:79233. The
- * first part is the region code, but the second part is NALD's ID for the licence purpose. `_fetch()` will have
- * extracted the legacy purposes from permit licence's JSONB dump. We just need to grab the one that matches the ID we
- * get from `externalId`. With that we can get to the points info and generate `points:` and `siteDescription:`.
- *
- * @private
- */
-function _matchingPermitPurpose (permitLicence, licenceVersionPurpose) {
-  const { externalId } = licenceVersionPurpose
-  // NOTE: This uses https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-  // to 'magically' grab the second value returned by `split()` and instantiate it as a variable. Neat!
-  const [, legacyPurposeId] = externalId.split(':')
-
-  return permitLicence.purposes.find((purpose) => {
-    return purpose.ID === legacyPurposeId
-  })
-}
-
-/**
- * For each point in the matched permit licence purpose grab the ID and return it as an array of points.
+ * For each point grab the ID and return it as an array of points.
  *
  * Remember, we are transforming the data into what is needed for the session, not what is needed for the UI! Hence, we
  * only need the ID.
  *
  * @private
  */
-function _points (matchingPermitPurpose) {
-  return matchingPermitPurpose.purposePoints.map((purposePoint) => {
-    return purposePoint.point_detail.ID
+function _points (licenceVersionPurposePoints) {
+  return licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.id
   })
 }
 
@@ -213,20 +189,20 @@ function _points (matchingPermitPurpose) {
  *
  * > This is from the abs data the local name on the point
  *
- * The problem is a purpose can have multiple points. So, we grab all the local name values for each point in the
- * matched permit purpose, strip out any nulls or undefined and then select the first one to form the site description.
+ * The problem is a purpose can have multiple points. So, we grab all the descriptions for each point in the, strip out
+ * any nulls or undefined and then select the first one to form the site description.
  *
  * @private
  */
-function _siteDescription (matchingPermitPurpose) {
-  const localNames = matchingPermitPurpose.purposePoints.map((purposePoint) => {
-    return purposePoint.point_detail?.LOCAL_NAME
+function _siteDescription (licenceVersionPurposePoints) {
+  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.description
   })
 
-  // NOTE: This is doing two things at once. It first filters the local names by passing each one to Boolean(). It will
+  // NOTE: This is doing two things at once. It first filters the descriptions by passing each one to Boolean(). It will
   // return true or false depending on whether the value is 'truthy'. In our case this means null or undefined will be
-  // stripped from the array. From whats left we select the first one.
-  return localNames.filter(Boolean)[0]
+  // stripped from the array. From what's left we select the first one.
+  return descriptions.filter(Boolean)[0]
 }
 
 /**
@@ -247,16 +223,15 @@ function _transformForSetup (licence) {
       abstractionPeriodEndMonth: endMonth,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth,
+      licenceVersionPurposePoints,
       purpose
     } = licenceVersionPurpose
 
-    const matchingPermitPurpose = _matchingPermitPurpose(licence.permitLicence, licenceVersionPurpose)
-
     return {
-      points: _points(matchingPermitPurpose),
+      points: _points(licenceVersionPurposePoints),
       purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(startMonth, endMonth),
-      siteDescription: _siteDescription(matchingPermitPurpose),
+      siteDescription: _siteDescription(licenceVersionPurposePoints),
       abstractionPeriod: {
         'end-abstraction-period-day': endDay,
         'end-abstraction-period-month': endMonth,
