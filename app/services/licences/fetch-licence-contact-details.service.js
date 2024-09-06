@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/licence-contact` page
- * @module FetchLicenceContactService
+ * @module FetchLicenceContactDetailsService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
@@ -18,10 +18,10 @@ const LicenceModel = require('../../models/licence.model.js')
  * licence contact details page
  */
 async function go (licenceId) {
-  return _fetchLicenceDetails(licenceId)
+  return _fetch(licenceId)
 }
 
-async function _fetchLicenceDetails (licenceId) {
+async function _fetch (licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([

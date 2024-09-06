@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const LicenceContactPresenter = require('../../../app/presenters/licences/licence-contact.presenter.js')
+const ViewLicenceContactDetailsPresenter = require('../../../app/presenters/licences/view-licence-contact-details.presenter.js')
 
-describe('Licence Contacts presenter', () => {
-  let licenceContacts
+describe('View Licence Contact Details presenter', () => {
+  let licenceContactDetails
 
   beforeEach(() => {
-    licenceContacts = _testData()
+    licenceContactDetails = _testFetchLicenceContactDetailsData()
   })
 
   describe('when provided with populated licence contacts data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceContactPresenter.go(licenceContacts)
+      const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetails)
 
       expect(result).to.equal({
         licenceId: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
@@ -71,7 +71,7 @@ describe('Licence Contacts presenter', () => {
     describe('the "licenceContacts" property', () => {
       describe('the "licenceContact.address" property', () => {
         it('returns the address of the property', () => {
-          const result = LicenceContactPresenter.go(licenceContacts)
+          const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetails)
 
           expect(result.licenceContacts[0].address).to.equal({
             contactAddress: [
@@ -89,7 +89,7 @@ describe('Licence Contacts presenter', () => {
       describe('the "licenceContact.role" property', () => {
         describe('when one of the licence contacts has the role type of "Enforcement officer"', () => {
           it('returns the licenceContacts without the contact with the role type of "Enforcement officer"', () => {
-            const result = LicenceContactPresenter.go(licenceContacts)
+            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetails)
 
             const hasEnforcementOfficer = result.licenceContacts.some((contact) => {
               return contact.role === 'Enforcement officer'
@@ -103,11 +103,11 @@ describe('Licence Contacts presenter', () => {
       describe('the "licenceContacts.name" property', () => {
         describe('when the initials are null', () => {
           beforeEach(() => {
-            licenceContacts.licenceDocumentHeader.metadata.contacts[3].initials = null
+            licenceContactDetails.licenceDocumentHeader.metadata.contacts[3].initials = null
           })
 
           it("returns the licence contact's forename and name", () => {
-            const result = LicenceContactPresenter.go(licenceContacts)
+            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetails)
 
             expect(result.licenceContacts[2].name).to.equal('Mr Noel Edmonds')
           })
@@ -115,7 +115,7 @@ describe('Licence Contacts presenter', () => {
 
         describe('when the initials are not null', () => {
           it("returns the licence contact's forename and name", () => {
-            const result = LicenceContactPresenter.go(licenceContacts)
+            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetails)
 
             expect(result.licenceContacts[2].name).to.equal('Mr N Edmonds')
           })
@@ -125,7 +125,7 @@ describe('Licence Contacts presenter', () => {
   })
 })
 
-function _testData () {
+function _testFetchLicenceContactDetailsData () {
   return {
     id: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
     licenceRef: '00/111/222',

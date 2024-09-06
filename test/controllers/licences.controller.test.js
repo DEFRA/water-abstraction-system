@@ -144,7 +144,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactService, 'go').resolves(_viewLicenceContact())
+          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
         })
 
         it('returns the page successfully', async () => {
@@ -409,7 +409,7 @@ function _viewLicenceContacts () {
   }
 }
 
-function _viewLicenceContact () {
+function _viewLicenceContactDetails () {
   const commonLicenceData = _viewLicence()
 
   commonLicenceData.pageTitle = null

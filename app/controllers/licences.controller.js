@@ -65,10 +65,10 @@ async function viewCommunications (request, h) {
   })
 }
 
-async function viewLicenceContact (request, h) {
+async function viewLicenceContactDetails (request, h) {
   const { id } = request.params
 
-  const data = await ViewLicenceContactService.go(id)
+  const data = await ViewLicenceContactDetailsService.go(id)
 
   return h.view(ViewLicenceContactPage, {
     ...data
@@ -129,7 +129,7 @@ module.exports = {
   viewCommunications,
   viewLicenceContacts,
   viewHistory,
-  viewLicenceContact,
+  viewLicenceContactDetails,
   viewReturns,
   viewSetUp,
   viewSummary
