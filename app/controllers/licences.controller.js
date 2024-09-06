@@ -17,7 +17,6 @@ const ViewLicenceSetUpService = require('../services/licences/view-licence-set-u
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
 
 const ViewLicencePage = 'licences/view.njk'
-const ViewLicenceContactPage = 'licences/licence-contact.njk'
 
 async function noReturnsRequired (request, h) {
   const { id } = request.params
@@ -70,7 +69,7 @@ async function viewLicenceContactDetails (request, h) {
 
   const data = await ViewLicenceContactDetailsService.go(id)
 
-  return h.view(ViewLicenceContactPage, {
+  return h.view('licences/licence-contact-details.njk', {
     ...data
   })
 }
