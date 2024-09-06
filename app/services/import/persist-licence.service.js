@@ -10,20 +10,24 @@ const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
+const CompanyModel = require('../../models/company.model.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
  *
  * @param {object} transformedLicence - An object representing a valid WRLS licence
+ * @param {object[]} transformedCompanies - an array of companies representing a WRLS company
  *
  * @returns {Promise<object>}
  */
-async function go (transformedLicence) {
+async function go (transformedLicence, transformedCompanies) {
   return LicenceModel.transaction(async (trx) => {
     const updatedAt = timestampForPostgres()
     const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
 
     await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, id)
+
+    await _persistCompanies(trx, updatedAt, transformedCompanies)
 
     return id
   })
@@ -130,6 +134,26 @@ async function _persistLicenceVersionPurposeCondition (
       'updatedAt'
     ])
     .returning('id')
+}
+
+// Companies
+async function _persistCompanies (trx, updatedAt, companies) {
+  for (const company of companies) {
+    await _persistCompany(trx, updatedAt, company)
+  }
+}
+
+async function _persistCompany (trx, updatedAt, company) {
+  const { ...propertiesToPersist } = company
+
+  return CompanyModel.query(trx)
+    .insert({ ...propertiesToPersist, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'name',
+      'type',
+      'updatedAt'
+    ])
 }
 
 module.exports = {
