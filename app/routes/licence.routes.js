@@ -28,7 +28,7 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/contact-details',
-    handler: LicencesController.viewContacts
+    handler: LicencesController.viewLicenceContacts
   },
   {
     method: 'GET',

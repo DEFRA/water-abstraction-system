@@ -9,8 +9,8 @@ const LicenceSupplementaryProcessBillingFlagService = require('../services/licen
 const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
-const ViewLicenceContactService = require('../services/licences/view-licence-contact.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
+const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
@@ -75,10 +75,10 @@ async function viewLicenceContact (request, h) {
   })
 }
 
-async function viewContacts (request, h) {
+async function viewLicenceContacts (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceContactDetailsService.go(id, auth)
+  const data = await ViewLicenceContactsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
     ...data
@@ -127,7 +127,7 @@ module.exports = {
   supplementary,
   viewBills,
   viewCommunications,
-  viewContacts,
+  viewLicenceContacts,
   viewHistory,
   viewLicenceContact,
   viewReturns,

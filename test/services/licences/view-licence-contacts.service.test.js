@@ -9,16 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceContactsService =
-  require('../../../app/services/licences/fetch-licence-contacts.service.js')
-const FetchCustomerContactDetailsService =
-  require('../../../app/services/licences/fetch-customer-contacts.service.js')
+const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
+const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
-const ViewLicenceContactDetailsService = require('../../../app/services/licences/view-licence-contact-details.service.js')
+const ViewLicenceContactsService = require('../../../app/services/licences/view-licence-contacts.service.js')
 
-describe('View Licence Contact Details service', () => {
+describe('View Licence Contacts service', () => {
   const auth = {}
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
@@ -40,7 +38,7 @@ describe('View Licence Contact Details service', () => {
       country: 'United Kingdom'
     }])
 
-    Sinon.stub(FetchCustomerContactDetailsService, 'go').returns([{
+    Sinon.stub(FetchCustomerContactsService, 'go').returns([{
       communicationType: 'Additional Contact',
       email: 'dfd@email.com',
       firstName: 'Donald',
@@ -60,7 +58,7 @@ describe('View Licence Contact Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceContactDetailsService.go(testId, auth)
+      const result = await ViewLicenceContactsService.go(testId, auth)
 
       expect(result).to.equal({
         activeTab: 'contact-details',

@@ -16,8 +16,8 @@ const InitiateSessionService = require('../../app/services/return-requirements/i
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
+const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
-const ViewLicenceContactService = require('../../app/services/licences/view-licence-contact.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
@@ -116,7 +116,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
         })
 
         it('returns the page successfully', async () => {
@@ -398,7 +398,7 @@ function _viewLicenceCommunications () {
   }
 }
 
-function _viewLicenceContactDetails () {
+function _viewLicenceContacts () {
   const commonLicenceData = _viewLicence()
 
   return {
