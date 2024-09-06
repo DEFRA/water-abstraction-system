@@ -27,9 +27,9 @@ describe('Hapi Pino Ignore Request service', () => {
     })
   })
 
-  describe('when the request is for "/import/licence"', () => {
+  describe('when the request is for "/import/licence/legacy"', () => {
     it('returns true', () => {
-      const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/status' })
+      const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/import/licence/legacy' })
 
       expect(result).to.be.true()
     })

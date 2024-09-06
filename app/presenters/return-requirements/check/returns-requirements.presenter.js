@@ -1,7 +1,6 @@
 'use strict'
 
 const { formatAbstractionDate } = require('../../base.presenter.js')
-const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const agreementsExceptionsText = {
@@ -21,16 +20,16 @@ const agreementsExceptionsText = {
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  *
  * @param {object[]} requirements - The existing return requirements in the current session
- * @param {object[]} points - The points related to the licence
+ * @param {module:LicenceVersionPurposePoint[]} licenceVersionPurposePoints - All licence version purpose points linked
+ * to the current licence version
  * @param {string} journey - Whether the setup journey is 'no-returns-required' or 'returns-required'
  *
  * @returns {object} returns requirement data needed by the view template
  */
-
-function go (requirements, points, journey) {
+function go (requirements, licenceVersionPurposePoints, journey) {
   return {
     returnsRequired: journey === 'returns-required',
-    requirements: _requirements(requirements, points)
+    requirements: _requirements(requirements, licenceVersionPurposePoints)
   }
 }
 
@@ -64,7 +63,7 @@ function _agreementsExceptions (agreementsExceptions) {
     .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
 }
 
-function _requirements (requirements, points) {
+function _requirements (requirements, licenceVersionPurposePoints) {
   const completedRequirements = []
 
   for (const [index, requirement] of requirements.entries()) {
@@ -73,7 +72,7 @@ function _requirements (requirements, points) {
     // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
     // the journey
     if (agreementsExceptions) {
-      completedRequirements.push(_mapRequirement(requirement, index, points))
+      completedRequirements.push(_mapRequirement(requirement, index, licenceVersionPurposePoints))
     }
   }
 
@@ -90,25 +89,27 @@ function _mapPurposes (purposes) {
   })
 }
 
-function _mapRequirement (requirement, index, points) {
+function _mapRequirement (requirement, index, licenceVersionPurposePoints) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
     frequencyCollected: returnRequirementFrequencies[requirement.frequencyCollected],
     frequencyReported: returnRequirementFrequencies[requirement.frequencyReported],
     index,
-    points: _mapPoints(requirement.points, points),
+    points: _mapPoints(requirement.points, licenceVersionPurposePoints),
     purposes: _mapPurposes(requirement.purposes),
     returnsCycle: requirement.returnsCycle === 'summer' ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription
   }
 }
 
-function _mapPoints (requirementPoints, points) {
+function _mapPoints (requirementPoints, licenceVersionPurposePoints) {
   return requirementPoints.map((point) => {
-    const matchedPoint = points.find((pid) => { return pid.ID === point })
+    const matchedPoint = licenceVersionPurposePoints.find((licenceVersionPurposePoint) => {
+      return licenceVersionPurposePoint.id === point
+    })
 
-    return generateAbstractionPointDetail(matchedPoint)
+    return matchedPoint.$describe()
   })
 }
 

@@ -3,27 +3,26 @@
 /**
  * Formats data for the `/return-requirements/{sessionId}/points` page
  * @module PointsPresenter
-*/
-
-const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
+ */
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/points` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {object[]} pointsData - The points data from the licence
+ * @param {module:LicenceVersionPurposePoint[]} licenceVersionPurposePoints - All licence version purpose points linked
+ * to the current licence version
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex, pointsData) {
+function go (session, requirementIndex, licenceVersionPurposePoints) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
   return {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
-    licencePoints: _licencePoints(pointsData),
+    licencePoints: _licencePoints(licenceVersionPurposePoints),
     licenceRef: licence.licenceRef,
     points: requirement?.points ? requirement.points.join(',') : '',
     sessionId
@@ -40,30 +39,20 @@ function _backLink (session, requirementIndex) {
   return `/system/return-requirements/${id}/purpose/${requirementIndex}`
 }
 
-function _licencePoints (pointsData) {
-  const abstractionPoints = []
-
-  if (!pointsData) {
-    return abstractionPoints
-  }
-
-  pointsData.forEach((pointDetail) => {
-    const point = {
-      id: pointDetail.ID,
-      description: generateAbstractionPointDetail(pointDetail)
-    }
-
-    if (_pointNotInArray(abstractionPoints, point)) {
-      abstractionPoints.push(point)
+function _licencePoints (licenceVersionPurposePoints) {
+  // First extract our points from the data, including generating the descriptions
+  const licencePoints = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return {
+      id: licenceVersionPurposePoint.id,
+      description: licenceVersionPurposePoint.$describe()
     }
   })
 
-  return abstractionPoints
-}
-
-function _pointNotInArray (abstractionPointsArray, abstractionPoint) {
-  return !abstractionPointsArray.some((point) => {
-    return point.id === abstractionPoint.id
+  // Then sort by the descriptions to give us a consistent display order
+  return licencePoints.sort((first, second) => {
+    // NOTE: localeCompare() handles dealing with values in different cases automatically! So we don't have to lowercase
+    // everything before then comparing.
+    return first.description.localeCompare(second.description)
   })
 }
 

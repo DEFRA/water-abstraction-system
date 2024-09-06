@@ -4,12 +4,14 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -17,100 +19,59 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 
 describe('Return Requirements - Fetch Points service', () => {
   let licence
-  let region
+  let licenceVersionPurposePoints
 
-  beforeEach(async () => {
-    region = RegionHelper.select()
+  before(async () => {
+    const region = RegionHelper.select()
 
     // Create the initial licenceId
     licence = await LicenceHelper.add({
       regionId: region.id
     })
 
-    await PermitLicenceHelper.add({
-      licenceRef: licence.licenceRef,
-      licenceDataValue: {
-        data: {
-          current_version: {
-            purposes: [{
-              purposePoints: [
-                {
-                  point_detail: {
-                    NGR1_EAST: '69212',
-                    NGR2_EAST: 'null',
-                    NGR3_EAST: 'null',
-                    NGR4_EAST: 'null',
-                    LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-                    NGR1_NORTH: '50394',
-                    NGR1_SHEET: 'TQ',
-                    NGR2_NORTH: 'null',
-                    NGR2_SHEET: 'null',
-                    NGR3_NORTH: 'null',
-                    NGR3_SHEET: 'null',
-                    NGR4_NORTH: 'null',
-                    NGR4_SHEET: 'null'
-                  }
-                },
-                {
-                  point_detail: {
-                    NGR1_EAST: '6520',
-                    NGR2_EAST: 'null',
-                    NGR3_EAST: 'null',
-                    NGR4_EAST: 'null',
-                    LOCAL_NAME: 'POINT A, ADDINGTON SANDPITS',
-                    NGR1_NORTH: '5937',
-                    NGR1_SHEET: 'TQ',
-                    NGR2_NORTH: 'null',
-                    NGR2_SHEET: 'null',
-                    NGR3_NORTH: 'null',
-                    NGR3_SHEET: 'null',
-                    NGR4_NORTH: 'null',
-                    NGR4_SHEET: 'null'
-                  }
-                }
-              ]
-            }]
-          }
-        }
-      }
-    })
+    const licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+
+    licenceVersionPurposePoints = []
+    for (let i = 0; i < 2; i++) {
+      // To demonstrate that we are fetching the points from _all_ purposes we add two purposes each with their own
+      // point
+      const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId: licenceVersion.id })
+      const licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+        description: `I am point ${i + 1}`,
+        licenceVersionPurposeId: licenceVersionPurpose.id
+      })
+
+      licenceVersionPurposePoints.push(licenceVersionPurposePoint)
+    }
   })
 
-  describe('when called', () => {
-    it('returns result', async () => {
+  describe('when the matching licence exists', () => {
+    it('returns the licence version purpose points for the licence', async () => {
       const results = await FetchPointsService.go(licence.id)
 
       expect(results[0]).to.equal({
-        NGR1_EAST: '6520',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'POINT A, ADDINGTON SANDPITS',
-        NGR1_NORTH: '5937',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
+        id: licenceVersionPurposePoints[0].id,
+        description: licenceVersionPurposePoints[0].description,
+        ngr1: licenceVersionPurposePoints[0].ngr1,
+        ngr2: licenceVersionPurposePoints[0].ngr2,
+        ngr3: licenceVersionPurposePoints[0].ngr3,
+        ngr4: licenceVersionPurposePoints[0].ngr4
       })
 
       expect(results[1]).to.equal({
-        NGR1_EAST: '69212',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-        NGR1_NORTH: '50394',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
+        id: licenceVersionPurposePoints[1].id,
+        description: licenceVersionPurposePoints[1].description,
+        ngr1: licenceVersionPurposePoints[1].ngr1,
+        ngr2: licenceVersionPurposePoints[1].ngr2,
+        ngr3: licenceVersionPurposePoints[1].ngr3,
+        ngr4: licenceVersionPurposePoints[1].ngr4
       })
+    })
+  })
+
+  describe('when the matching licence does not exist', () => {
+    it('throws an error', async () => {
+      await expect(FetchPointsService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')).to.reject()
     })
   })
 })
