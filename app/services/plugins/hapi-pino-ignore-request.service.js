@@ -56,7 +56,7 @@
  * @returns {boolean} true if the request should be ignored, else false
  */
 function go (options, request) {
-  const staticPaths = ['/', '/import/licence', '/status', '/favicon.ico']
+  const staticPaths = ['/', '/import/licence/legacy', '/status', '/favicon.ico']
 
   // If request is a known path ignore it
   if (staticPaths.includes(request.path)) {
