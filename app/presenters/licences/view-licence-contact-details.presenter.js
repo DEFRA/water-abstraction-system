@@ -10,7 +10,7 @@
  *
  * @param {module:LicenceModel} licence - The licence and related licenceDocumentHeader
  *
- * @returns {Object} The data formatted for the view template
+ * @returns {object} The data formatted for the view template
  */
 function go (licence) {
   const { id: licenceId, licenceDocumentHeader, licenceRef } = licence
@@ -18,80 +18,66 @@ function go (licence) {
   return {
     licenceId,
     licenceRef,
-    licenceContacts: _licenceContacts(licenceDocumentHeader),
+    licenceContactDetails: _licenceContactDetails(licenceDocumentHeader),
     pageTitle: 'Licence contact details'
   }
 }
 
 function _licenceContactAddress (contact) {
-  const contactAddress = []
+  const contactAddressFields = [
+    'addressLine1',
+    'addressLine2',
+    'addressLine3',
+    'addressLine4',
+    'town',
+    'county',
+    'postcode',
+    'country'
+  ]
 
-  if (contact.addressLine1) {
-    contactAddress.push(`${contact.addressLine1}`)
-  }
-  if (contact.addressLine2) {
-    contactAddress.push(`${contact.addressLine2}`)
-  }
-  if (contact.addressLine3) {
-    contactAddress.push(`${contact.addressLine3}`)
-  }
-  if (contact.addressLine4) {
-    contactAddress.push(`${contact.addressLine4}`)
-  }
-  if (contact.town) {
-    contactAddress.push(`${contact.town}`)
-  }
-  if (contact.county) {
-    contactAddress.push(`${contact.county}`)
-  }
-  if (contact.postcode) {
-    contactAddress.push(`${contact.postcode}`)
-  }
-  if (contact.country) {
-    contactAddress.push(`${contact.country}`)
-  }
+  // NOTE:  Maps over the `contactAddressFields` array to create an array of values from the `contact` object. Each
+  // `contactAddressField` corresponds to a property in the `contact` object, mapping and creating a contactAddress
+  // array. The `filter(Boolean)` function then removes falsy values from the `contactAddress` array.
+  const contactAddress = contactAddressFields.map((contactAddressField) => {
+    return contact[contactAddressField]
+  }).filter(Boolean)
 
-  return {
-    contactAddress
-  }
+  return contactAddress
 }
 
 function _licenceContactName (contact) {
   if (contact.type === 'Person') {
-    const initials = _determineInitials(contact)
+    const { salutation, forename, initials, name } = contact
 
-    const allNameParts = [
-      contact.salutation,
-      initials || contact.forename, // if we have initials use them else use firstName
-      contact.name
+    // NOTE: Prioritise the initials and use the contact forename if initials is null
+    const initialsOrForename = initials || forename
+
+    const nameComponents = [
+      salutation,
+      initialsOrForename,
+      name
     ]
 
-    function _determineInitials (contact) {
-      if (contact.initials) {
-        return contact.initials
-      }
-
-      return null
-    }
-
-    const onlyPopulatedNameParts = allNameParts.filter((item) => {
+    const filteredNameComponents = nameComponents.filter((item) => {
       return item
     })
 
-    return onlyPopulatedNameParts.join(' ')
+    return filteredNameComponents.join(' ')
   }
 
   return contact.name
 }
 
-function _licenceContacts (licenceDocumentHeader) {
-  const licenceContactData = licenceDocumentHeader.metadata.contacts
+function _licenceContactDetails (licenceDocumentHeader) {
+  const licenceContactDetailsData = licenceDocumentHeader.metadata.contacts
 
-  const filteredContacts = licenceContactData.filter((data) => {
-    return data.role === 'Licence holder' || data.role === 'Returns to' || data.role === 'Licence contact'
+  const roles = ['Licence holder', 'Returns to', 'Licence contact']
+
+  const filteredContactDetails = licenceContactDetailsData.filter((licenceContactDetail) => {
+    return roles.includes(licenceContactDetail.role)
   })
 
-  return filteredContacts.map((contact) => {
+  return filteredContactDetails.map((contact) => {
     return {
       address: _licenceContactAddress(contact),
       role: contact.role,
