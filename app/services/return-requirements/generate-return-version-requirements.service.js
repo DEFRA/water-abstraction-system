@@ -31,9 +31,7 @@ async function go (licenceId, requirements) {
   for (const requirement of requirements) {
     const externalId = `${naldRegionId}:${legacyId}`
 
-    const returnRequirementPoints = _generateReturnRequirementPoints(
-      licenceVersionPurposePoints, externalId, requirement.points
-    )
+    const returnRequirementPoints = _generateReturnRequirementPoints(licenceVersionPurposePoints, requirement.points)
     const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
@@ -73,7 +71,7 @@ async function _fetchNaldRegionId (licenceId) {
   return naldRegionId
 }
 
-function _generateReturnRequirementPoints (licenceVersionPurposePoints, requirementExternalId, points) {
+function _generateReturnRequirementPoints (licenceVersionPurposePoints, points) {
   const returnRequirementPoints = []
 
   points.forEach((point) => {
