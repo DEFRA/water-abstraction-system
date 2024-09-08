@@ -106,7 +106,7 @@ function _mapRequirement (requirement, index, licenceVersionPurposePoints) {
 function _mapPoints (requirementPoints, licenceVersionPurposePoints) {
   return requirementPoints.map((point) => {
     const matchedPoint = licenceVersionPurposePoints.find((licenceVersionPurposePoint) => {
-      return licenceVersionPurposePoint.naldPointId.toString() === point.toString()
+      return licenceVersionPurposePoint.naldPointId.toString() === point
     })
 
     return matchedPoint.$describe()

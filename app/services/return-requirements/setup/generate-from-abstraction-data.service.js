@@ -180,7 +180,7 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  */
 function _points (licenceVersionPurposePoints) {
   return licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.naldPointId
+    return licenceVersionPurposePoint.naldPointId.toString()
   })
 }
 
