@@ -131,11 +131,11 @@ describe('Return Requirements - Submit Points service', () => {
         backLink: `/system/return-requirements/${session.id}/purpose/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+          naldPointId: '100789',
           description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         }],
         licenceRef: '01/ABC',
-        points: ''
+        selectedNaldPointIds: ''
       }, { skip: ['sessionId', 'error'] })
     })
 
@@ -158,7 +158,8 @@ function _points () {
     ngr1: 'TQ 69212 50394',
     ngr2: null,
     ngr3: null,
-    ngr4: null
+    ngr4: null,
+    naldPointId: 100789
   })
 
   return [point]

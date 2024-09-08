@@ -71,7 +71,8 @@ async function _fetch (licenceId) {
         .modifyGraph('licenceVersionPurposePoints', (pointsBuilder) => {
           pointsBuilder.select([
             'licenceVersionPurposePoints.id',
-            'licenceVersionPurposePoints.description'
+            'licenceVersionPurposePoints.description',
+            'licenceVersionPurposePoints.naldPointId'
           ])
         })
     })

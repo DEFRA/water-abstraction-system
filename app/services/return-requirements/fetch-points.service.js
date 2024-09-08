@@ -37,7 +37,8 @@ async function _fetch (licenceId) {
         'ngr1',
         'ngr2',
         'ngr3',
-        'ngr4'
+        'ngr4',
+        'naldPointId'
       ])
     })
 

@@ -24,7 +24,7 @@ function go (session, requirementIndex, licenceVersionPurposePoints) {
     licenceId: licence.id,
     licencePoints: _licencePoints(licenceVersionPurposePoints),
     licenceRef: licence.licenceRef,
-    points: requirement?.points ? requirement.points.join(',') : '',
+    selectedNaldPointIds: requirement?.points ? requirement.points.join(',') : '',
     sessionId
   }
 }
@@ -43,7 +43,7 @@ function _licencePoints (licenceVersionPurposePoints) {
   // First extract our points from the data, including generating the descriptions
   const licencePoints = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
     return {
-      id: licenceVersionPurposePoint.id,
+      naldPointId: licenceVersionPurposePoint.naldPointId.toString(),
       description: licenceVersionPurposePoint.$describe()
     }
   })

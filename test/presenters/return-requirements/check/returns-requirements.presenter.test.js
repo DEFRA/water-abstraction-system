@@ -206,7 +206,8 @@ function _point () {
     ngr1: 'TQ 69212 50394',
     ngr2: null,
     ngr3: null,
-    ngr4: null
+    ngr4: null,
+    naldPointId: 100789
   })
 }
 
@@ -224,7 +225,7 @@ function _requirement () {
     frequencyCollected: 'day',
     frequencyReported: 'day',
     points: [
-      'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'
+      '100789'
     ],
     purposes: [{
       id: '772136d1-9184-417b-90cd-91053287d1df',

@@ -38,7 +38,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
 
         expect(result).to.equal([
           {
-            points: ['d60b0dfe-ef2b-4bc2-a963-b74b25433127', '6c664140-f7ee-4e98-aa88-74590d3fd8fb'],
+            points: ['100987', '100789'],
             purposes: [{
               alias: '', description: 'Heat Pump', id: '24939b40-a187-4bd1-9222-f552a3af6368'
             }],
@@ -55,7 +55,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
             agreementsExceptions: ['none']
           },
           {
-            points: ['bf6a409e-7882-4c5d-9e49-2ebae2936576'],
+            points: ['100123'],
             purposes: [{
               alias: '',
               description: 'Vegetable Washing',
@@ -74,7 +74,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
             agreementsExceptions: ['none']
           },
           {
-            points: ['554cd6c5-5bfe-4133-9828-2f10aa6ac5f8'],
+            points: ['100321'],
             purposes: [{
               alias: '',
               description: 'Spray Irrigation - Direct',
@@ -184,8 +184,8 @@ function _fetchResult (licenceId) {
             },
             secondaryPurpose: { id: '235ed780-f535-4b8d-b367-b5438ac130e9', legacyId: 'ELC' },
             licenceVersionPurposePoints: [
-              { description: 'INTAKE POINT', id: 'd60b0dfe-ef2b-4bc2-a963-b74b25433127' },
-              { description: 'OUT TAKE POINT', id: '6c664140-f7ee-4e98-aa88-74590d3fd8fb' }
+              { description: 'INTAKE POINT', id: 'd60b0dfe-ef2b-4bc2-a963-b74b25433127', naldPointId: 100987 },
+              { description: 'OUT TAKE POINT', id: '6c664140-f7ee-4e98-aa88-74590d3fd8fb', naldPointId: 100789 }
             ]
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -205,7 +205,7 @@ function _fetchResult (licenceId) {
             },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' },
             licenceVersionPurposePoints: [
-              { description: 'SOUTH BOREHOLE', id: 'bf6a409e-7882-4c5d-9e49-2ebae2936576' }
+              { description: 'SOUTH BOREHOLE', id: 'bf6a409e-7882-4c5d-9e49-2ebae2936576', naldPointId: 100123 }
             ]
           }),
           LicenceVersionPurposeModel.fromJson({
@@ -225,7 +225,7 @@ function _fetchResult (licenceId) {
             },
             secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' },
             licenceVersionPurposePoints: [
-              { description: 'MAIN INTAKE', id: '554cd6c5-5bfe-4133-9828-2f10aa6ac5f8' }
+              { description: 'MAIN INTAKE', id: '554cd6c5-5bfe-4133-9828-2f10aa6ac5f8', naldPointId: 100321 }
             ]
           })
         ]
