@@ -23,13 +23,18 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  */
 async function go (licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)
-  const licencePoints = await FetchPointsService.go(licenceId)
+  const licenceVersionPurposePoints = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   let legacyId = await _nextLegacyId(naldRegionId)
 
   for (const requirement of requirements) {
     const externalId = `${naldRegionId}:${legacyId}`
+
+    const returnRequirementPoints = _generateReturnRequirementPoints(
+      licenceVersionPurposePoints, externalId, requirement.points
+    )
+    const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
       abstractionPeriodStartDay: requirement.abstractionPeriod['start-abstraction-period-day'],
@@ -44,8 +49,8 @@ async function go (licenceId, requirements) {
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       reportingFrequency: requirement.frequencyReported,
       returnsFrequency: 'year',
-      returnRequirementPoints: _generateReturnRequirementPoints(licencePoints, externalId, requirement.points),
-      returnRequirementPurposes: await _generateReturnRequirementPurposes(licenceId, requirement.purposes),
+      returnRequirementPoints,
+      returnRequirementPurposes,
       siteDescription: requirement.siteDescription,
       summer: requirement.returnsCycle === 'summer',
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff')
@@ -68,22 +73,21 @@ async function _fetchNaldRegionId (licenceId) {
   return naldRegionId
 }
 
-function _generateReturnRequirementPoints (licencePoints, requirementExternalId, requirementPoints) {
+function _generateReturnRequirementPoints (licenceVersionPurposePoints, requirementExternalId, points) {
   const returnRequirementPoints = []
 
-  requirementPoints.forEach((requirementPoint) => {
-    const point = licencePoints.find((licencePoint) => {
-      return licencePoint.ID === requirementPoint
+  points.forEach((point) => {
+    const matchedPoint = licenceVersionPurposePoints.find((licenceVersionPurposePoint) => {
+      return licenceVersionPurposePoint.naldPointId.toString() === point
     })
 
     const returnRequirementPoint = {
-      description: point.LOCAL_NAME,
-      externalId: `${requirementExternalId}:${point.ID}`,
-      naldPointId: point.ID,
-      ngr1: point.NGR1_SHEET !== 'null' ? `${point.NGR1_SHEET} ${point.NGR1_EAST} ${point.NGR1_NORTH}` : null,
-      ngr2: point.NGR2_SHEET !== 'null' ? `${point.NGR2_SHEET} ${point.NGR2_EAST} ${point.NGR2_NORTH}` : null,
-      ngr3: point.NGR3_SHEET !== 'null' ? `${point.NGR3_SHEET} ${point.NGR3_EAST} ${point.NGR3_NORTH}` : null,
-      ngr4: point.NGR4_SHEET !== 'null' ? `${point.NGR4_SHEET} ${point.NGR4_EAST} ${point.NGR4_NORTH}` : null
+      description: matchedPoint.description,
+      ngr1: matchedPoint.ngr1,
+      ngr2: matchedPoint.ngr2,
+      ngr3: matchedPoint.ngr3,
+      ngr4: matchedPoint.ngr4,
+      naldPointId: matchedPoint.naldPointId
     }
 
     returnRequirementPoints.push(returnRequirementPoint)
