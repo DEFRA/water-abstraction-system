@@ -43,7 +43,7 @@ function _licencePoints (licenceVersionPurposePoints) {
   // First extract our points from the data, including generating the descriptions
   const licencePoints = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
     return {
-      id: licenceVersionPurposePoint.id,
+      id: licenceVersionPurposePoint.naldPointId,
       description: licenceVersionPurposePoint.$describe()
     }
   })
