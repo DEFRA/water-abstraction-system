@@ -1,0 +1,54 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: '/system/licences/' + licenceId + '/set-up'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-body">
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: [
+          {
+            html: error.text,
+            href: '#supplementary-years-error'
+          }
+        ]
+      }) }}
+    {% endif %}
+
+  {# Main heading #}
+  <span class="govuk-caption-l">Licence {{licenceRef}}</span>
+  <form method="post">
+    {{ govukCheckboxes({
+      name: "supplementaryYears",
+      fieldset: {
+        legend: {
+          text: "Select which years you need to recalculate bills for",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        text: "Select all that apply."
+      },
+      errorMessage: error.text,
+      items: financialYears
+    }) }}
+
+  <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
