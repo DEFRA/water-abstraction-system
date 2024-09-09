@@ -10,10 +10,14 @@ const { expect } = Code
 
 // Test helpers
 const Boom = require('@hapi/boom')
+const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
+const MarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/marked-for-supplementary-billing.service.js')
+const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
+const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
@@ -347,7 +351,99 @@ describe('Licences controller', () => {
       })
     })
   })
+
+  describe('/licences/{id}/mark-for-supplementary-billing', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/mark-for-supplementary-billing',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(MarkForSupplementaryBillingService, 'go').resolves(_markForSupplementaryBilling())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Mark for the supplementary bill run')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(async () => {
+        options = postRequestOptions('/licences/7861814c-ca19-43f2-be11-3c612f0d744b/mark-for-supplementary-billing')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitMarkForSupplementaryBillingService, 'go').resolves({ error: null })
+        })
+
+        it('redirects to the marked for supplementary billing page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/system/licences/7861814c-ca19-43f2-be11-3c612f0d744b/marked-for-supplementary-billing'
+          )
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/marked-for-supplementary-billing', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/marked-for-supplementary-billing',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
+            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b', licenceRef: '01/test'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('You’ve marked this licence for the next supplementary bill run')
+        })
+      })
+    })
+  })
 })
+
+function _markForSupplementaryBilling () {
+  return {
+    licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+    licenceRef: '01/test',
+    financialYears: [
+      { text: '2024 to 2025', value: 2025 },
+      { text: '2023 to 2024', value: 2024 },
+      { text: '2022 to 2023', value: 2023 },
+      { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+    ]
+  }
+}
 
 function _viewLicenceBills () {
   const commonLicenceData = _viewLicence()
