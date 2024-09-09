@@ -12,7 +12,7 @@ async function seed () {
 
 async function _upsert (chargeCategory) {
   return ChargeCategoryModel.query()
-    .insert({ ...chargeCategory, updatedAt: timestampForPostgres() })
+    .insert({ ...chargeCategory, createdAt: timestampForPostgres(), updatedAt: timestampForPostgres() })
     .onConflict('reference')
     .merge([
       'description',
