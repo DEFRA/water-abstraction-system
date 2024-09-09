@@ -125,10 +125,6 @@ describe('Licences - Set Up presenter', () => {
               {
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                 text: 'End'
-              },
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-                text: 'Recalculate bills'
               }
             ],
             signedOn: '',
@@ -140,7 +136,7 @@ describe('Licences - Set Up presenter', () => {
       })
 
       describe('when all the actions are available for an agreement', () => {
-        it('shows delete, end and recalculate bills actions', () => {
+        it('shows delete and end', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
           expect(result.agreements[0].action).to.equal([
@@ -151,10 +147,6 @@ describe('Licences - Set Up presenter', () => {
             {
               link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
               text: 'End'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-              text: 'Recalculate bills'
             }
           ])
         })
@@ -185,10 +177,6 @@ describe('Licences - Set Up presenter', () => {
               {
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
                 text: 'End'
-              },
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-                text: 'Recalculate bills'
               }
             ])
           })
@@ -206,27 +194,6 @@ describe('Licences - Set Up presenter', () => {
               {
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                 text: 'Delete'
-              }
-            ])
-          })
-        })
-
-        describe('when user can not Recalculate bills for an agreement because of pre sroc billing', () => {
-          beforeEach(() => {
-            commonData.includeInPresrocBilling = 'yes'
-          })
-
-          it('there is no action link to Recalculate bills', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].action).to.equal([
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-                text: 'Delete'
-              },
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-                text: 'End'
               }
             ])
           })
@@ -279,47 +246,45 @@ describe('Licences - Set Up presenter', () => {
         })
       })
 
-      describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
-        beforeEach(() => {
-          agreement.financialAgreement.code = 'S127'
+      describe('when all the actions are available for an agreement', () => {
+        describe('and the licence is less than 6 years old', () => {
+          beforeEach(() => {
+            agreement.financialAgreement.code = 'S127'
+          })
+
+          it('shows delete and end', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.agreements[0].action).to.equal([
+              {
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+                text: 'Delete'
+              },
+              {
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+                text: 'End'
+              }
+            ])
+          })
         })
 
-        it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+        describe('and the licence is more than 6 years old', () => {
+          beforeEach(() => {
+            const sixYearsAndOneDayAgo = new Date()
 
-          expect(result.agreements[0].action).to.equal([
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-              text: 'Delete'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-              text: 'End'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-              text: 'Recalculate bills'
+            sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+            sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+            commonData.ends = {
+              date: sixYearsAndOneDayAgo
             }
-          ])
-        })
-      })
+          })
 
-      describe('when the licence is more than 6 years old and all the actions are available for an agreement', () => {
-        beforeEach(() => {
-          const sixYearsAndOneDayAgo = new Date()
+          it('does not show delete and end', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-          sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-          commonData.ends = {
-            date: sixYearsAndOneDayAgo
-          }
-        })
-
-        it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-          expect(result.agreements[0].action).to.equal([])
+            expect(result.agreements[0].action).to.equal([])
+          })
         })
       })
     })
