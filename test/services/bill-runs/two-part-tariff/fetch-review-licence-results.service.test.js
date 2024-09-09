@@ -14,7 +14,6 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -35,10 +34,6 @@ const FetchReviewLicenceResultsService = require('../../../../app/services/bill-
 describe('Fetch Review Licence Results Service', () => {
   let billRun
   let region
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   afterEach(() => {
     Sinon.restore()
@@ -74,7 +69,7 @@ describe('Fetch Review Licence Results Service', () => {
           chargeVersionId: chargeVersion.id
         })
 
-        chargeCategory = await ChargeCategoryHelper.add()
+        chargeCategory = ChargeCategoryHelper.select()
         chargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: chargeVersion.id,
           chargeCategoryId: chargeCategory.id

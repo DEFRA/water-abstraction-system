@@ -12,7 +12,6 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
@@ -21,10 +20,6 @@ const ReviewChargeVersionHelper = require('../../../support/helpers/review-charg
 const FetchAuthorisedVolumeService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-authorised-volume.service.js')
 
 describe('Fetch Authorised Volume service', () => {
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   afterEach(() => {
     Sinon.restore()
   })
@@ -45,7 +40,7 @@ describe('Fetch Authorised Volume service', () => {
 
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
-        chargeCategory = await ChargeCategoryHelper.add()
+        chargeCategory = ChargeCategoryHelper.select()
         chargeReference = await ChargeReferenceHelper.add({ chargeCategoryId: chargeCategory.id })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,

@@ -30,8 +30,8 @@ const billingChargeCategoriesColumnInfo = [
 ]
 
 describe('Fetch table service', () => {
-  beforeEach(async () => {
-    await ChargeCategoryHelper.add()
+  beforeEach(() => {
+    ChargeCategoryHelper.select()
   })
 
   describe('when we connect to the db', () => {

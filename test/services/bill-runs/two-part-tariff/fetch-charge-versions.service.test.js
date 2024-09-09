@@ -50,7 +50,7 @@ describe('Fetch Charge Versions service', () => {
 
   before(async () => {
     purpose = PurposeHelper.select(PURPOSE_SPRAY_IRRIGATION_INDEX)
-    chargeCategory = await ChargeCategoryHelper.add()
+    chargeCategory = ChargeCategoryHelper.select()
     changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
   })
 
@@ -300,8 +300,8 @@ describe('Fetch Charge Versions service', () => {
           charge: null,
           chargeCategory: {
             reference: chargeCategory.reference,
-            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-            subsistenceCharge: 12000
+            shortDescription: chargeCategory.shortDescription,
+            subsistenceCharge: chargeCategory.subsistenceCharge
           },
           chargeElements: [
             {
