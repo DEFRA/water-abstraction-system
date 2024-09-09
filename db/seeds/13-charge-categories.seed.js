@@ -15,15 +15,15 @@ async function _upsert (chargeCategory) {
     .insert({ ...chargeCategory, updatedAt: timestampForPostgres() })
     .onConflict('reference')
     .merge([
-      'subsistenceCharge',
       'description',
-      'shortDescription',
-      'tidal',
       'lossFactor',
+      'maxVolume',
+      'minVolume',
       'modelTier',
       'restrictedSource',
-      'minVolume',
-      'maxVolume',
+      'shortDescription',
+      'subsistenceCharge',
+      'tidal',
       'updatedAt'
     ])
 }
