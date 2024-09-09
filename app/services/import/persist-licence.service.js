@@ -5,12 +5,13 @@
  * @module PersistLicenceService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+const CompanyModel = require('../../models/company.model.js')
+const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
-const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
-const CompanyModel = require('../../models/company.model.js')
+const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -140,6 +141,10 @@ async function _persistLicenceVersionPurposeCondition (
 async function _persistCompanies (trx, updatedAt, companies) {
   for (const company of companies) {
     await _persistCompany(trx, updatedAt, company)
+
+    if (company.contact) {
+      await _persistContact(trx, updatedAt, company.contact)
+    }
   }
 }
 
@@ -152,6 +157,19 @@ async function _persistCompany (trx, updatedAt, company) {
     .merge([
       'name',
       'type',
+      'updatedAt'
+    ])
+}
+
+async function _persistContact (trx, updatedAt, contact) {
+  return ContactModel.query(trx)
+    .insert({ ...contact, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'salutation',
+      'initials',
+      'firstName',
+      'lastName',
       'updatedAt'
     ])
 }

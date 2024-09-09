@@ -18,8 +18,8 @@ function go (contact) {
     externalId: contact.external_id,
     salutation: contact.salutation,
     initials: contact.initials,
-    firstName: contact.firstName,
-    lastName: contact.lastName
+    firstName: contact.first_name,
+    lastName: contact.last_name
   }
 }
 

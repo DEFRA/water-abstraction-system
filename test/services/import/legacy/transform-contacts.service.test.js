@@ -73,8 +73,8 @@ function _legacyContact () {
   return {
     salutation: 'Mr',
     initials: 'H',
-    firstName: 'James',
-    lastName: 'Bond',
+    first_name: 'James',
+    last_name: 'Bond',
     external_id: '1:007'
   }
 }

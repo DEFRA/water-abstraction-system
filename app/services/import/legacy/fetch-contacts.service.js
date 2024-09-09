@@ -10,7 +10,8 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches the licence data from the import.NALD_PARTIES table for the licence ref
  *
- * From this point parties will be referred to as companies and a party will be known as a company
+ * When a company has at least one licence version and the type of contact is not an organisation.
+ * Then it will have a contact.
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
@@ -20,7 +21,7 @@ const { db } = require('../../../../db/db.js')
 async function go (regionCode, licenceId) {
   const query = _query()
 
-  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
+  const { rows } = await db.raw(query, [regionCode, licenceId])
 
   return rows
 }
@@ -46,24 +47,20 @@ function _query () {
         WHEN 'null' THEN NULL
         ELSE np."FORENAME"
         END
-      )  AS firstName,
+      )  AS first_name,
     (
       CASE np."NAME"
         WHEN 'null' THEN NULL
         ELSE np."NAME"
         END
-      )  AS lastName
+      )  AS last_name
   FROM import."NALD_PARTIES" np
     LEFT JOIN import."NALD_ABS_LIC_VERSIONS" nalv
       ON nalv."ACON_APAR_ID" = np."ID"
       AND nalv."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
-    LEFT JOIN import."NALD_LIC_ROLES" nlr
-      ON nlr."ACON_APAR_ID" = np."ID"
-      AND nlr."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
-  WHERE
-    (nalv."FGAC_REGION_CODE" = ? AND nalv."AABL_ID" = ?)
-  OR
-    (nlr."FGAC_REGION_CODE" = ? AND nlr."AABL_ID" = ?)
+  WHERE np."APAR_TYPE" != 'ORG'
+    AND nalv."FGAC_REGION_CODE" = ?
+    AND nalv."AABL_ID" = ?
   `
 }
 

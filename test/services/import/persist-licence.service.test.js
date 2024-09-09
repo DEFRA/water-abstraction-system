@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
+const ContactHelper = require('../../support/helpers/contact.helper.js')
+const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -50,7 +52,7 @@ describe('Persist licence service', () => {
     transformedCompanies = [{ ...transformedCompany }]
   })
 
-  describe('when given a valid transformed licence', () => {
+  describe.only('when given a valid transformed licence', () => {
     describe('and that licence does not already exist', () => {
       it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
         const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
@@ -85,6 +87,12 @@ describe('Persist licence service', () => {
         expect(company.name).to.equal('ACME')
         expect(company.type).to.equal('person')
         expect(company.externalId).to.equal(transformedCompany.externalId)
+
+        // Contact
+
+        const contact = await _fetchPersistedContact(transformedCompany.externalId)
+
+        expect(contact.salutation).to.equal('ACME')
       })
     })
 
@@ -313,10 +321,27 @@ async function _fetchPersistedCompany (externalId) {
     .first()
 }
 
+async function _fetchPersistedContact (externalId) {
+  return ContactModel
+    .query()
+    .where('externalId', externalId)
+    .limit(1)
+    .first()
+}
+
 function _transformedCompany () {
+  const externalId = CompanyHelper.generateExternalId()
+
   return {
-    externalId: CompanyHelper.generateExternalId(),
+    externalId,
     name: 'ACME',
-    type: 'person'
+    type: 'person',
+    contact: {
+      salutation: 'Mr',
+      initials: 'H',
+      firstName: 'James',
+      lastName: 'Bond',
+      externalId
+    }
   }
 }
