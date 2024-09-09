@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company data from the import.NALD_PARTIES table for the licence ref
- * @module FetchCompanyService
+ * @module FetchCompanyContactsService
  */
 
 const { db } = require('../../../../db/db.js')
@@ -15,7 +15,7 @@ const { db } = require('../../../../db/db.js')
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
  *
- * @returns {Promise<ImportLegacyCompanyType[]>}
+ * @returns {Promise<ImportLegacyCompanyContactType[]>}
  */
 async function go (regionCode, licenceId) {
   const query = _query()
@@ -30,31 +30,29 @@ function _query () {
   SELECT DISTINCT ON (np."ID")
     (concat_ws(':', np."FGAC_REGION_CODE", np."ID")) AS external_id,
     (
-      CASE np."APAR_TYPE"
-        WHEN 'PER' THEN 'person'
-        ELSE 'organisation'
+      CASE np."SALUTATION"
+        WHEN 'null' THEN NULL
+        ELSE np."SALUTATION"
         END
-      )  AS type,
-    TRIM(BOTH ' ' FROM (
-      CASE
-        -- If FORENAME or INITIALS are NULL, use NAME directly
-        WHEN np."FORENAME" = 'null' AND np."INITIALS" = 'null' THEN np."NAME"
-        ELSE CONCAT_WS(' ',
-          CASE
-            WHEN np."SALUTATION" = 'null' THEN NULL
-            ELSE np."SALUTATION"
-          END,
-          CASE
-            WHEN np."FORENAME" = 'null' THEN np."INITIALS"
-            ELSE np."FORENAME"
-          END,
-          CASE
-            WHEN np."NAME" = 'null' THEN NULL
-            ELSE np."NAME"
-          END
-          )
+      )  AS salutation,
+    (
+      CASE np."INITIALS"
+        WHEN 'null' THEN NULL
+        ELSE np."INITIALS"
         END
-      )) AS name
+      )  AS initials,
+    (
+      CASE np."FORENAME"
+        WHEN 'null' THEN NULL
+        ELSE np."FORENAME"
+        END
+      )  AS firstName,
+    (
+      CASE np."NAME"
+        WHEN 'null' THEN NULL
+        ELSE np."NAME"
+        END
+      )  AS lastName
   FROM import."NALD_PARTIES" np
     LEFT JOIN import."NALD_ABS_LIC_VERSIONS" nalv
       ON nalv."ACON_APAR_ID" = np."ID"
@@ -74,10 +72,12 @@ module.exports = {
 }
 
 /**
- * @typedef {object} ImportLegacyCompanyType
+ * @typedef {object} ImportLegacyCompanyContactType
  *
- * @property {string} type - Indicates whether the entry is a 'person' or an 'organisation'.
- * @property {string|null} name - The full name, concatenated from salutation, forename/initials, and name.
+ * @property {string|null} salutation - The salutation of the person, or null if not applicable.
+ * @property {string|null} initials - The initials of the person, or null if not applicable.
+ * @property {string|null} firstName - The first name of the person, or null if not applicable.
+ * @property {string|null} lastName - The last name of the person, or null if not applicable.
  * @property {string} external_id - The external ID, formatted as 'FGAC_REGION_CODE:ID'.
  *
  */
