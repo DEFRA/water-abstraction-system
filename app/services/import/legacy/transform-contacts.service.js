@@ -29,7 +29,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
 
     ImportContactValidator.go(transformedContact)
 
-    matchingCompany.contact = transformedContact
+    matchingCompany.contact = { ...transformedContact, dataSource: 'nald' }
   })
 }
 

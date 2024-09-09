@@ -20,6 +20,7 @@ function go (contact) {
     initials: contact.initials,
     firstName: contact.first_name,
     lastName: contact.last_name
+
   }
 }
 

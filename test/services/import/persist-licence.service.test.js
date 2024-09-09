@@ -52,7 +52,7 @@ describe('Persist licence service', () => {
     transformedCompanies = [{ ...transformedCompany }]
   })
 
-  describe.only('when given a valid transformed licence', () => {
+  describe('when given a valid transformed licence', () => {
     describe('and that licence does not already exist', () => {
       it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
         const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
@@ -88,11 +88,14 @@ describe('Persist licence service', () => {
         expect(company.type).to.equal('person')
         expect(company.externalId).to.equal(transformedCompany.externalId)
 
-        // Contact
-
+        // Contact - related to the company
         const contact = await _fetchPersistedContact(transformedCompany.externalId)
 
-        expect(contact.salutation).to.equal('ACME')
+        expect(contact.salutation).to.equal('Mr')
+        expect(contact.initials).to.equal('H')
+        expect(contact.firstName).to.equal('James')
+        expect(contact.lastName).to.equal('Bond')
+        expect(contact.dataSource).to.equal('nald')
       })
     })
 
@@ -102,6 +105,7 @@ describe('Persist licence service', () => {
       let existingLicenceVersionPurpose
       let existingLicenceVersionPurposeCondition
       let existingCompany
+      let exisitngContact
 
       beforeEach(async () => {
         existingLicence = await LicenceHelper.add({
@@ -156,7 +160,11 @@ describe('Persist licence service', () => {
           externalId: transformedCompany.externalId
         })
 
-        transformedCompanies = [{ ...existingCompany }]
+        exisitngContact = await ContactHelper.add({
+          externalId: transformedCompany.externalId
+        })
+
+        transformedCompanies = [{ ...existingCompany, contact: exisitngContact }]
       })
 
       it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
@@ -223,6 +231,15 @@ describe('Persist licence service', () => {
         expect(company.name).to.equal('Example Trading Ltd')
         expect(company.type).to.equal('organisation')
         expect(company.externalId).to.equal(existingCompany.externalId)
+
+        // Contact - related to the company
+        const contact = await _fetchPersistedContact(exisitngContact.externalId)
+
+        expect(contact.salutation).to.be.null()
+        expect(contact.initials).to.be.null()
+        expect(contact.firstName).to.equal('Amara')
+        expect(contact.lastName).to.equal('Gupta')
+        expect(contact.dataSource).to.equal('wrls')
       })
     })
   })
@@ -341,7 +358,8 @@ function _transformedCompany () {
       initials: 'H',
       firstName: 'James',
       lastName: 'Bond',
-      externalId
+      externalId,
+      dataSource: 'nald'
     }
   }
 }
