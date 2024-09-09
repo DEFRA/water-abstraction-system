@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -47,24 +48,17 @@ describe('Return Requirements - Select Points service', () => {
       }
     })
 
-    Sinon.stub(FetchPointsService, 'go').resolves([
-      {
-        ID: '1234',
-        NGR1_EAST: '69212',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-        NGR1_NORTH: '50394',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
-      }
-    ])
+    const point = LicenceVersionPurposePointModel.fromJson({
+      description: 'RIVER MEDWAY AT YALDING INTAKE',
+      id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+      ngr1: 'TQ 69212 50394',
+      ngr2: null,
+      ngr3: null,
+      ngr4: null,
+      naldPointId: 100789
+    })
+
+    Sinon.stub(FetchPointsService, 'go').resolves([point])
   })
 
   afterEach(() => {
@@ -88,12 +82,12 @@ describe('Return Requirements - Select Points service', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
           {
-            id: '1234',
+            naldPointId: '100789',
             description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
           }
         ],
         licenceRef: '01/ABC',
-        points: ''
+        selectedNaldPointIds: ''
       }, { skip: ['sessionId'] })
     })
   })

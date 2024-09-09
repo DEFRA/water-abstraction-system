@@ -7,17 +7,20 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
+
 // Thing under test
 const PointsPresenter = require('../../../app/presenters/return-requirements/points.presenter.js')
 
 describe('Return Requirements - Points presenter', () => {
   const requirementIndex = 0
 
-  let pointsData
+  let licenceVersionPurposePoints
   let session
 
   beforeEach(() => {
-    pointsData = _pointsData()
+    licenceVersionPurposePoints = _licenceVersionPurposePoints()
 
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
@@ -39,23 +42,23 @@ describe('Return Requirements - Points presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = PointsPresenter.go(session, requirementIndex, pointsData)
+      const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [{
-          id: '1234',
+          naldPointId: '100789',
           description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         }, {
-          id: '1235',
+          naldPointId: '100123',
           description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
         }, {
-          id: '1236',
+          naldPointId: '100321',
           description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
         }],
         licenceRef: '01/ABC',
-        points: '',
+        selectedNaldPointIds: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
@@ -68,7 +71,7 @@ describe('Return Requirements - Points presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
       })
@@ -76,7 +79,7 @@ describe('Return Requirements - Points presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "purpose" page', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0')
       })
@@ -86,14 +89,14 @@ describe('Return Requirements - Points presenter', () => {
   describe('the "licencePoints" property', () => {
     describe('when the points data contains a single grid reference point', () => {
       beforeEach(() => {
-        pointsData = [_pointsData()[0]]
+        licenceVersionPurposePoints = [_licenceVersionPurposePoints()[0]]
       })
 
       it('returns a At "National Grid Reference ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: '1234',
+          naldPointId: '100789',
           description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         }])
       })
@@ -101,14 +104,14 @@ describe('Return Requirements - Points presenter', () => {
 
     describe('when the points data contains a double grid reference point', () => {
       beforeEach(() => {
-        pointsData = [_pointsData()[1]]
+        licenceVersionPurposePoints = [_licenceVersionPurposePoints()[1]]
       })
 
       it('returns a "Between National Grid References ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: '1235',
+          naldPointId: '100123',
           description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
         }])
       })
@@ -116,95 +119,75 @@ describe('Return Requirements - Points presenter', () => {
 
     describe('when the points data contains a multiple grid reference', () => {
       beforeEach(() => {
-        pointsData = [_pointsData()[2]]
+        licenceVersionPurposePoints = [_licenceVersionPurposePoints()[2]]
       })
 
       it('returns a "Within the area formed by the straight lines running between National Grid References ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: '1236',
+          naldPointId: '100321',
           description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
         }])
       })
     })
   })
 
-  describe('the "points" property', () => {
+  describe('the "selectedNaldPointIds" property', () => {
     describe('when the user has previously submitted points', () => {
       beforeEach(() => {
-        session.requirements[0].points = [
-          '1234',
-          '1235'
-        ]
+        session.requirements[0].points = ['100123', '100321']
       })
 
-      it('returns a populated points', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+      it('returns a string containing the selected points concatenated', () => {
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
-        expect(result.points).to.equal('1234,1235')
+        expect(result.selectedNaldPointIds).to.equal('100123,100321')
       })
     })
 
     describe('when the user has not previously submitted a point', () => {
-      it('returns an empty points', () => {
-        const result = PointsPresenter.go(session, requirementIndex, pointsData)
+      it('returns an empty string', () => {
+        const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
-        expect(result.points).to.equal('')
+        expect(result.selectedNaldPointIds).to.equal('')
       })
     })
   })
 })
 
-function _pointsData () {
-  return [
-    {
-      ID: '1234',
-      NGR1_EAST: '69212',
-      NGR2_EAST: 'null',
-      NGR3_EAST: 'null',
-      NGR4_EAST: 'null',
-      LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-      NGR1_NORTH: '50394',
-      NGR1_SHEET: 'TQ',
-      NGR2_NORTH: 'null',
-      NGR2_SHEET: 'null',
-      NGR3_NORTH: 'null',
-      NGR3_SHEET: 'null',
-      NGR4_NORTH: 'null',
-      NGR4_SHEET: 'null'
-    },
-    {
-      ID: '1235',
-      NGR1_EAST: '524',
-      NGR2_EAST: '531',
-      NGR3_EAST: 'null',
-      NGR4_EAST: 'null',
-      LOCAL_NAME: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
-      NGR1_NORTH: '692',
-      NGR1_SHEET: 'SO',
-      NGR2_NORTH: '689',
-      NGR2_SHEET: 'SO',
-      NGR3_NORTH: 'null',
-      NGR3_SHEET: 'null',
-      NGR4_NORTH: 'null',
-      NGR4_SHEET: 'null'
-    },
-    {
-      ID: '1236',
-      NGR1_EAST: '892',
-      NGR2_EAST: '895',
-      NGR3_EAST: '893',
-      NGR4_EAST: '892',
-      LOCAL_NAME: 'AREA D',
-      NGR1_NORTH: '055',
-      NGR1_SHEET: 'NZ',
-      NGR2_NORTH: '054',
-      NGR2_SHEET: 'NZ',
-      NGR3_NORTH: '053',
-      NGR3_SHEET: 'NZ',
-      NGR4_NORTH: '053',
-      NGR4_SHEET: 'NZ'
-    }
-  ]
+function _licenceVersionPurposePoints () {
+  const points = []
+
+  points.push(LicenceVersionPurposePointModel.fromJson({
+    description: 'RIVER MEDWAY AT YALDING INTAKE',
+    id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+    ngr1: 'TQ 69212 50394',
+    ngr2: null,
+    ngr3: null,
+    ngr4: null,
+    naldPointId: 100789
+  }))
+
+  points.push(LicenceVersionPurposePointModel.fromJson({
+    description: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
+    id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+    ngr1: 'SO 524 692',
+    ngr2: 'SO 531 689',
+    ngr3: null,
+    ngr4: null,
+    naldPointId: 100123
+  }))
+
+  points.push(LicenceVersionPurposePointModel.fromJson({
+    description: 'AREA D',
+    id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+    ngr1: 'NZ 892 055',
+    ngr2: 'NZ 895 054',
+    ngr3: 'NZ 893 053',
+    ngr4: 'NZ 892 053',
+    naldPointId: 100321
+  }))
+
+  return points
 }

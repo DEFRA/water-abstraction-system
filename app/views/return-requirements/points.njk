@@ -41,12 +41,12 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {% set checkBoxItems = [] %}
-      {% for point in licencePoints %}
+      {% for licencePoint in licencePoints %}
 
         {% set checkBoxItem = {
-          value: point.id,
-          text: point.description,
-          checked: point.id in points
+          value: licencePoint.naldPointId,
+          text: licencePoint.description,
+          checked: licencePoint.naldPointId in selectedNaldPointIds
         } %}
 
         {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
