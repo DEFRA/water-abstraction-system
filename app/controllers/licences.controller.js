@@ -9,7 +9,7 @@ const InitiateSessionService = require('../services/return-requirements/initiate
 const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const MarkedForSupplementaryBillingService = require('../services/licences/supplementary/marked-for-supplementary-billing.service.js')
 const MarkForSupplementaryBillingService = require('../services/licences/supplementary/mark-for-supplementary-billing.service.js')
-const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary.service.js')
+const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
@@ -63,7 +63,7 @@ async function returnsRequired (request, h) {
 async function submitMarkForSupplementaryBilling (request, h) {
   const { id: licenceId } = request.params
 
-  const pageData = await SubmitMarkForSupplementaryBillingService.go(licenceId, request.payload)
+  const pageData = await SubmitMarkForSupplementaryBillingService.go(licenceId, request.payload, request.auth.credentials.user)
 
   if (pageData.error) {
     return h.view('licences/mark-for-supplementary-billing.njk', pageData)
