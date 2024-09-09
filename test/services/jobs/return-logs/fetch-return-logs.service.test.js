@@ -9,12 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
+const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
 const FetchReturnLogsService = require('../../../../app/services/jobs/return-logs/fetch-return-logs.service.js')
@@ -28,6 +30,10 @@ describe('Fetch return logs service', () => {
   const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
 
   describe('When isSummer is false, one return requirement and a licenceRef provided', () => {
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
+
     let licence
     let region
     let returnVersion
@@ -41,7 +47,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -63,13 +74,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -80,6 +111,10 @@ describe('Fetch return logs service', () => {
   })
 
   describe('when isSummer is true, one return requirement and a licenceRef provided', () => {
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
+
     let licence
     let region
     let returnVersion
@@ -93,7 +128,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -115,13 +155,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -132,6 +192,13 @@ describe('Fetch return logs service', () => {
   })
 
   describe('when isSummer is false, two return requirements and a licenceRef provided', () => {
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const primaryPurpose2 = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const purpose2 = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
+    const secondaryPurpose2 = SecondaryPurposeHelper.select()
+
     let licence
     let region
     let returnVersion
@@ -149,10 +216,18 @@ describe('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirement2 = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
       returnRequirementPoint2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
-        returnRequirementId: returnRequirement2.id
+        primaryPurposeId: primaryPurpose2.id,
+        purposeId: purpose2.id,
+        returnRequirementId: returnRequirement2.id,
+        secondaryPurposeId: secondaryPurpose2.id
       })
     })
 
@@ -175,13 +250,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -203,13 +298,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement2.legacyId,
-          periodStartDay: returnRequirement2.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement2.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement2.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement2.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint2],
-        purposes: [returnRequirementPurpose2],
+        points: [{
+          name: returnRequirementPoint2.description,
+          ngr1: returnRequirementPoint2.ngr1,
+          ngr2: returnRequirementPoint2.ngr2,
+          ngr3: returnRequirementPoint2.ngr3,
+          ngr4: returnRequirementPoint2.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose2.alias,
+          primary: {
+            code: primaryPurpose2.legacyId,
+            description: primaryPurpose2.description
+          },
+          secondary: {
+            code: secondaryPurpose2.legacyId,
+            description: secondaryPurpose2.description
+          },
+          tertiary: {
+            code: purpose2.legacyId,
+            description: purpose2.description
+          }
+        }],
         version: 1
       })
       expect(result[1].returnsFrequency).to.equal('day')
@@ -220,6 +335,13 @@ describe('Fetch return logs service', () => {
   })
 
   describe('when isSummer is true, two return requirements and a licenceRef provided', () => {
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const primaryPurpose2 = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const purpose2 = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
+    const secondaryPurpose2 = SecondaryPurposeHelper.select()
+
     let licence
     let region
     let returnVersion
@@ -237,37 +359,18 @@ describe('Fetch return logs service', () => {
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirement2 = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
       returnRequirementPoint2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
-        returnRequirementId: returnRequirement2.id
-      })
-      await ReturnLogHelper.add({
-        dueDate: summerDueDate,
-        endDate: summerEndDate,
-        licenceRef: licence.licenceRef,
-        metadata: {
-          description: 'BOREHOLE AT AVALON',
-          isCurrent: true,
-          isFinal: false,
-          isSummer: false,
-          isTwoPartTariff: false,
-          isUpload: false,
-          nald: {
-            regionCode: region.naldRegionId,
-            areaCode: licence.regions.historicalAreaCode,
-            formatId: returnRequirement.legacyId,
-            periodStartDay: returnRequirement.abstractionPeriodStartDay,
-            periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-            periodEndDay: returnRequirement.abstractionPeriodEndDay,
-            periodEndMonth: returnRequirement.abstractionPeriodEndMonth
-          },
-          points: [returnRequirementPoint],
-          purposes: [returnRequirementPurpose],
-          version: 1
-        },
-        returnReference: returnRequirement.legacyId,
-        startDate: summerStartDate
+        primaryPurposeId: primaryPurpose2.id,
+        purposeId: purpose2.id,
+        returnRequirementId: returnRequirement2.id,
+        secondaryPurposeId: secondaryPurpose2.id
       })
     })
 
@@ -290,13 +393,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -318,13 +441,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement2.legacyId,
-          periodStartDay: returnRequirement2.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement2.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement2.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement2.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint2],
-        purposes: [returnRequirementPurpose2],
+        points: [{
+          name: returnRequirementPoint2.description,
+          ngr1: returnRequirementPoint2.ngr1,
+          ngr2: returnRequirementPoint2.ngr2,
+          ngr3: returnRequirementPoint2.ngr3,
+          ngr4: returnRequirementPoint2.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose2.alias,
+          primary: {
+            code: primaryPurpose2.legacyId,
+            description: primaryPurpose2.description
+          },
+          secondary: {
+            code: secondaryPurpose2.legacyId,
+            description: secondaryPurpose2.description
+          },
+          tertiary: {
+            code: purpose2.legacyId,
+            description: purpose2.description
+          }
+        }],
         version: 1
       })
       expect(result[1].returnsFrequency).to.equal('day')
@@ -336,6 +479,9 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 1, 31).toISOString().split('T')[0]
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -350,7 +496,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -372,13 +523,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -390,6 +561,9 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 3, 31).toISOString().split('T')[0]
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -404,7 +578,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -426,13 +605,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -444,6 +643,9 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
     const lapsedDate = new Date(new Date().getFullYear() + 1, 8, 31).toISOString().split('T')[0]
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -458,7 +660,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -480,13 +687,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')
@@ -498,6 +725,9 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
     const revokedDate = new Date(new Date().getFullYear() + 1, 10, 31).toISOString().split('T')[0]
+    const primaryPurpose = PrimaryPurposeHelper.select()
+    const purpose = PurposeHelper.select()
+    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -512,7 +742,12 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
     })
 
     it('should return one return log payload', async () => {
@@ -534,13 +769,33 @@ describe('Fetch return logs service', () => {
           regionCode: region.naldRegionId,
           areaCode: licence.regions.historicalAreaCode,
           formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay,
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-          periodEndDay: returnRequirement.abstractionPeriodEndDay,
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth
+          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [returnRequirementPoint],
-        purposes: [returnRequirementPurpose],
+        points: [{
+          name: returnRequirementPoint.description,
+          ngr1: returnRequirementPoint.ngr1,
+          ngr2: returnRequirementPoint.ngr2,
+          ngr3: returnRequirementPoint.ngr3,
+          ngr4: returnRequirementPoint.ngr4
+        }],
+        purposes: [{
+          alias: returnRequirementPurpose.alias,
+          primary: {
+            code: primaryPurpose.legacyId,
+            description: primaryPurpose.description
+          },
+          secondary: {
+            code: secondaryPurpose.legacyId,
+            description: secondaryPurpose.description
+          },
+          tertiary: {
+            code: purpose.legacyId,
+            description: purpose.description
+          }
+        }],
         version: 1
       })
       expect(result[0].returnsFrequency).to.equal('day')

@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const licenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
@@ -17,11 +18,19 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 
 describe('Fetch Licence service', () => {
   let licence
+  let licenceSupplementaryYearId
   let workflow
 
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
+
+      const licenceSupplementaryYear = await licenceSupplementaryYearHelper.add({
+        licenceId: licence.id,
+        twoPartTariff: true
+      })
+
+      licenceSupplementaryYearId = licenceSupplementaryYear.id
 
       // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
       // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
@@ -43,6 +52,9 @@ describe('Fetch Licence service', () => {
         revokedDate: null,
         lapsedDate: null,
         licenceDocumentHeader: null,
+        licenceSupplementaryYears: [{
+          id: licenceSupplementaryYearId
+        }],
         workflows: [{
           id: workflow.id,
           status: workflow.status

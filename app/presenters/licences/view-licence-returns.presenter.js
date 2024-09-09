@@ -27,7 +27,7 @@ function go (returnLogs, hasRequirements) {
 }
 
 function _link (status, returnLogId) {
-  if (status === 'completed') {
+  if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }
 
@@ -80,6 +80,10 @@ function _status (returnLog) {
 
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
   const today = new Date()
+
+  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
+  // 'today' would be flagged as overdue when it is still due (just!)
+  today.setHours(0, 0, 0, 0)
 
   if (status === 'due' && dueDate < today) {
     return 'overdue'

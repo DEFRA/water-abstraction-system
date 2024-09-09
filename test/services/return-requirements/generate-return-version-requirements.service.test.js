@@ -92,17 +92,12 @@ describe('Return Requirements - Generate Return Version Requirements service', (
 
       // The data that will populate the "return_requirement_points" table
       expect(result[0].returnRequirementPoints).to.have.length(1)
-      expect(result[0].returnRequirementPoints[0].description).to.equal(licencePoints[0].LOCAL_NAME)
-      expect(result[0].returnRequirementPoints[0].externalId).to.equal(
-        `${result[0].externalId}:${licencePoints[0].ID}`
-      )
-      expect(result[0].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].ID)
-      expect(result[0].returnRequirementPoints[0].ngr1).to.equal(
-        `${licencePoints[0].NGR1_SHEET} ${licencePoints[0].NGR1_EAST} ${licencePoints[0].NGR1_NORTH}`
-      )
+      expect(result[0].returnRequirementPoints[0].description).to.equal(licencePoints[0].description)
+      expect(result[0].returnRequirementPoints[0].ngr1).to.equal(licencePoints[0].ngr1)
       expect(result[0].returnRequirementPoints[0].ngr2).to.be.null()
       expect(result[0].returnRequirementPoints[0].ngr3).to.be.null()
       expect(result[0].returnRequirementPoints[0].ngr4).to.be.null()
+      expect(result[0].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].naldPointId)
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[0].returnRequirementPurposes).to.have.length(1)
@@ -176,34 +171,18 @@ describe('Return Requirements - Generate Return Version Requirements service', (
 
       // The data that will populate the "return_requirement_points" table
       expect(result[1].returnRequirementPoints).to.have.length(2)
-      expect(result[1].returnRequirementPoints[0].description).to.equal(licencePoints[0].LOCAL_NAME)
-      expect(result[1].returnRequirementPoints[1].description).to.equal(licencePoints[2].LOCAL_NAME)
-      expect(result[1].returnRequirementPoints[0].externalId).to.equal(
-        `${result[1].externalId}:${licencePoints[0].ID}`
-      )
-      expect(result[1].returnRequirementPoints[1].externalId).to.equal(
-        `${result[1].externalId}:${licencePoints[2].ID}`
-      )
-      expect(result[1].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].ID)
-      expect(result[1].returnRequirementPoints[1].naldPointId).to.equal(licencePoints[2].ID)
-      expect(result[1].returnRequirementPoints[0].ngr1).to.equal(
-        `${licencePoints[0].NGR1_SHEET} ${licencePoints[0].NGR1_EAST} ${licencePoints[0].NGR1_NORTH}`
-      )
-      expect(result[1].returnRequirementPoints[1].ngr1).to.equal(
-        `${licencePoints[2].NGR1_SHEET} ${licencePoints[2].NGR1_EAST} ${licencePoints[2].NGR1_NORTH}`
-      )
-      expect(result[1].returnRequirementPoints[0].ngr2).to.be.null()
-      expect(result[1].returnRequirementPoints[1].ngr2).to.equal(
-        `${licencePoints[2].NGR2_SHEET} ${licencePoints[2].NGR2_EAST} ${licencePoints[2].NGR2_NORTH}`
-      )
+      expect(result[1].returnRequirementPoints[0].description).to.equal(licencePoints[1].description)
+      expect(result[1].returnRequirementPoints[1].description).to.equal(licencePoints[2].description)
+      expect(result[1].returnRequirementPoints[0].ngr1).to.equal(licencePoints[1].ngr1)
+      expect(result[1].returnRequirementPoints[1].ngr1).to.equal(licencePoints[2].ngr1)
+      expect(result[1].returnRequirementPoints[0].ngr2).to.equal(licencePoints[1].ngr2)
+      expect(result[1].returnRequirementPoints[1].ngr2).to.equal(licencePoints[2].ngr2)
       expect(result[1].returnRequirementPoints[0].ngr3).to.be.null()
-      expect(result[1].returnRequirementPoints[1].ngr3).to.equal(
-        `${licencePoints[2].NGR3_SHEET} ${licencePoints[2].NGR3_EAST} ${licencePoints[2].NGR3_NORTH}`
-      )
+      expect(result[1].returnRequirementPoints[1].ngr3).to.equal(licencePoints[2].ngr3)
       expect(result[1].returnRequirementPoints[0].ngr4).to.be.null()
-      expect(result[1].returnRequirementPoints[1].ngr4).to.equal(
-        `${licencePoints[2].NGR4_SHEET} ${licencePoints[2].NGR4_EAST} ${licencePoints[2].NGR4_NORTH}`
-      )
+      expect(result[1].returnRequirementPoints[1].ngr4).to.equal(licencePoints[2].ngr4)
+      expect(result[1].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[1].naldPointId)
+      expect(result[1].returnRequirementPoints[1].naldPointId).to.equal(licencePoints[2].naldPointId)
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[1].returnRequirementPurposes).to.have.length(2)
@@ -222,55 +201,34 @@ describe('Return Requirements - Generate Return Version Requirements service', (
 function _generateLicencePoints (multiplePoints) {
   const licencePoints = [
     {
-      ID: '12345',
-      NGR1_EAST: '123',
-      NGR2_EAST: 'null',
-      NGR3_EAST: 'null',
-      NGR4_EAST: 'null',
-      LOCAL_NAME: 'POINT NUMBER ONE',
-      NGR1_NORTH: '456',
-      NGR1_SHEET: 'ST',
-      NGR2_NORTH: 'null',
-      NGR2_SHEET: 'null',
-      NGR3_NORTH: 'null',
-      NGR3_SHEET: 'null',
-      NGR4_NORTH: 'null',
-      NGR4_SHEET: 'null'
+      description: 'RIVER MEDWAY AT YALDING INTAKE',
+      id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+      ngr1: 'TQ 69212 50394',
+      ngr2: null,
+      ngr3: null,
+      ngr4: null,
+      naldPointId: 100789
     }
   ]
 
   const additionalPoints = [
     {
-      ID: '99999',
-      NGR1_EAST: '990',
-      NGR2_EAST: 'null',
-      NGR3_EAST: 'null',
-      NGR4_EAST: 'null',
-      LOCAL_NAME: 'POINT NUMBER TWO',
-      NGR1_NORTH: '991',
-      NGR1_SHEET: 'ZZ',
-      NGR2_NORTH: 'null',
-      NGR2_SHEET: 'null',
-      NGR3_NORTH: 'null',
-      NGR3_SHEET: 'null',
-      NGR4_NORTH: 'null',
-      NGR4_SHEET: 'null'
+      description: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
+      id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+      ngr1: 'SO 524 692',
+      ngr2: 'SO 531 689',
+      ngr3: null,
+      ngr4: null,
+      naldPointId: 100123
     },
     {
-      ID: '67890',
-      NGR1_EAST: '110',
-      NGR2_EAST: '220',
-      NGR3_EAST: '330',
-      NGR4_EAST: '440',
-      LOCAL_NAME: 'POINT NUMBER THREE',
-      NGR1_NORTH: '111',
-      NGR1_SHEET: 'AA',
-      NGR2_NORTH: '221',
-      NGR2_SHEET: 'BB',
-      NGR3_NORTH: '331',
-      NGR3_SHEET: 'CC',
-      NGR4_NORTH: '441',
-      NGR4_SHEET: 'DD'
+      description: 'AREA D',
+      id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+      ngr1: 'NZ 892 055',
+      ngr2: 'NZ 895 054',
+      ngr3: 'NZ 893 053',
+      ngr4: 'NZ 892 053',
+      naldPointId: 100321
     }
   ]
 
@@ -285,7 +243,7 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
   const requirements = [
     {
       points: [
-        '12345'
+        '100789'
       ],
       purposes: [
         {
@@ -311,8 +269,8 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
 
   const additionalRequirements = {
     points: [
-      '12345',
-      '67890'
+      '100123',
+      '100321'
     ],
     purposes: [
       {
