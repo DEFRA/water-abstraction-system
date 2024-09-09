@@ -144,7 +144,7 @@ async function _persistCompanies (trx, updatedAt, companies) {
 }
 
 async function _persistCompany (trx, updatedAt, company) {
-  const { ...propertiesToPersist } = company
+  const { contact, ...propertiesToPersist } = company
 
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })

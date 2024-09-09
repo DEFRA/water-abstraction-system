@@ -8,17 +8,17 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CompanyContactPresenter = require('../../../../app/presenters/import/legacy/company-contact.presenter.js')
+const ContactPresenter = require('../../../../app/presenters/import/legacy/contact.presenter.js')
 
-describe('Import Legacy Company Contact presenter', () => {
-  let legacyCompany
+describe('Import Legacy Contact presenter', () => {
+  let legacyContact
 
   beforeEach(() => {
-    legacyCompany = _legacyCompany()
+    legacyContact = _legacyContact()
   })
 
   it('correctly transforms the data', () => {
-    const result = CompanyContactPresenter.go(legacyCompany)
+    const result = ContactPresenter.go(legacyContact)
 
     expect(result).to.equal({
       salutation: 'Mr',
@@ -30,7 +30,7 @@ describe('Import Legacy Company Contact presenter', () => {
   })
 })
 
-function _legacyCompany () {
+function _legacyContact () {
   return {
     salutation: 'Mr',
     initials: 'H',

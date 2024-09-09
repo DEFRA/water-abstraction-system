@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company data from the import.NALD_PARTIES table for the licence ref
- * @module FetchCompanyContactsService
+ * @module FetchContactsService
  */
 
 const { db } = require('../../../../db/db.js')
@@ -15,7 +15,7 @@ const { db } = require('../../../../db/db.js')
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
  *
- * @returns {Promise<ImportLegacyCompanyContactType[]>}
+ * @returns {Promise<ImportLegacyContactType[]>}
  */
 async function go (regionCode, licenceId) {
   const query = _query()
@@ -72,7 +72,7 @@ module.exports = {
 }
 
 /**
- * @typedef {object} ImportLegacyCompanyContactType
+ * @typedef {object} ImportLegacyContactType
  *
  * @property {string|null} salutation - The salutation of the person, or null if not applicable.
  * @property {string|null} initials - The initials of the person, or null if not applicable.

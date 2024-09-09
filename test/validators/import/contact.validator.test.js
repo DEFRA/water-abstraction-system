@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ImportCompanyContactValidator = require('../../../app/validators/import/company-contact.validator.js')
+const ImportCompanyContactValidator = require('../../../app/validators/import/contact.validator.js')
 
-describe('Import Company Contact validator', () => {
+describe('Import Contact validator', () => {
   let transformedContact
 
   beforeEach(async () => {

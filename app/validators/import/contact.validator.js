@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module ImportCompanyContactValidator
+ * @module ImportContactValidator
  */
 
 const Joi = require('joi')
@@ -9,11 +9,11 @@ const Joi = require('joi')
 /**
  * Checks that the imported company contact data has been transformed and is valid for persisting to WRLS
  *
- * @param {object} company - The transformed company contact data
+ * @param {object} contact - The transformed company contact data
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (company) {
+function go (contact) {
   const schema = Joi.object({
     salutation: Joi.string().allow(null),
     initials: Joi.string().allow(null),
@@ -22,7 +22,7 @@ function go (company) {
     externalId: Joi.string().required()
   })
 
-  const result = schema.validate(company, { convert: false })
+  const result = schema.validate(contact, { convert: false })
 
   if (result.error) {
     throw result.error

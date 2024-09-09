@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things to stub
-const FetchCompanyContactService = require('../../../../app/services/import/legacy/fetch-company-contacts.service.js')
+const FetchCompanyContactService = require('../../../../app/services/import/legacy/fetch-contacts.service.js')
 
 // Thing under test
-const TransformCompanyContactsService = require('../../../../app/services/import/legacy/transform-company-contacts.service.js')
+const TransformCompanyContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
 
-describe('Import Legacy Transform Companies contact service', () => {
+describe('Import Legacy Transform Contact service', () => {
   // NOTE: Clearly this is an incomplete representation of the company returned from TransformedCompaniesService.
   // But for the purposes of this service it is all that is needed
   const transformedCompany = { externalId: '1:007' }
@@ -35,7 +35,7 @@ describe('Import Legacy Transform Companies contact service', () => {
     Sinon.restore()
   })
 
-  describe('when matching valid legacy companies contact is found', () => {
+  describe('when matching valid legacy contact is found', () => {
     beforeEach(() => {
       Sinon.stub(FetchCompanyContactService, 'go').resolves([legacyContact])
     })
@@ -56,7 +56,7 @@ describe('Import Legacy Transform Companies contact service', () => {
     })
   })
 
-  describe('when no matching valid legacy companies are found', () => {
+  describe('when no matching valid legacy contact is found', () => {
     beforeEach(() => {
       Sinon.stub(FetchCompanyContactService, 'go').resolves([])
     })

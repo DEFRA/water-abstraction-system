@@ -2,12 +2,12 @@
 
 /**
  * Transforms NALD company data into a valid object that matches the WRLS structure
- * @module ImportLegacyTransformCompanyContactsService
+ * @module ImportLegacyTransformContactsService
  */
 
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const CompanyContactPresenter = require('../../../presenters/import/legacy/company-contact.presenter.js')
-const ImportCompanyContactValidator = require('../../../validators/import/company-contact.validator.js')
+const FetchContactsService = require('./fetch-contacts.service.js')
+const ContactPresenter = require('../../../presenters/import/legacy/contact.presenter.js')
+const ImportContactValidator = require('../../../validators/import/contact.validator.js')
 
 /**
  * Transforms NALD company data into a validated object that matches the WRLS structure
@@ -20,14 +20,14 @@ const ImportCompanyContactValidator = require('../../../validators/import/compan
  * an array of companies from the db
  */
 async function go (regionCode, licenceId, transformedCompanies) {
-  const naldContacts = await FetchCompanyContactsService.go(regionCode, licenceId)
+  const naldContacts = await FetchContactsService.go(regionCode, licenceId)
 
   naldContacts.forEach((naldContact) => {
     const matchingCompany = _matchingCompany(transformedCompanies, naldContact)
 
-    const transformedContact = CompanyContactPresenter.go(naldContact)
+    const transformedContact = ContactPresenter.go(naldContact)
 
-    ImportCompanyContactValidator.go(transformedContact)
+    ImportContactValidator.go(transformedContact)
 
     matchingCompany.contact = transformedContact
   })

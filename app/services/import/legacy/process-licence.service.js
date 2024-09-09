@@ -8,7 +8,7 @@
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
-const TransformCompanyContactsService = require('./transform-company-contacts.service.js')
+const TransformContactsService = require('./transform-contacts.service.js')
 const TransformLicenceService = require('./transform-licence.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('./transform-licence-version-purpose-conditions.service.js')
 const TransformLicenceVersionPurposesService = require('./transform-licence-version-purposes.service.js')
@@ -38,7 +38,7 @@ async function go (licenceRef) {
     const { transformedCompanies } = await TransformCompaniesService.go(regionCode, naldLicenceId)
 
     // Pass the transformed companies through each transformation step, building the company as we go
-    await TransformCompanyContactsService.go(regionCode, naldLicenceId, transformedCompanies)
+    await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies)
 
     // Ensure the built licence has all the valid child records we require
     LicenceStructureValidator.go(transformedLicence)
