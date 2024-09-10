@@ -45,6 +45,7 @@ describe('Import Legacy Transform Contact service', () => {
 
       expect(transformedCompanies[0]).to.equal({
         contact: {
+          dataSource: 'nald',
           externalId: '1:007',
           firstName: 'James',
           initials: 'H',
