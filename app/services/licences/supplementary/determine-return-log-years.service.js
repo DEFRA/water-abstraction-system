@@ -34,7 +34,7 @@ async function go (returnLogId) {
     flagForBilling: false
   }
 
-  if (startDate < SROC_START_DATE) {
+  if (endDate < SROC_START_DATE) {
     return result
   }
 
