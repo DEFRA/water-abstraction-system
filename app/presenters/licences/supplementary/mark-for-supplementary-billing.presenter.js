@@ -7,6 +7,10 @@
 
 const { formatFinancialYear } = require('../../base.presenter.js')
 
+const APRIL = 3
+const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
+const PREVIOUS_SIX_YEARS = 6
+
 /**
  * Formats data for the `/licences/{licenceId}/mark-for-supplementary-billing` page
  *
@@ -32,7 +36,7 @@ function _determineCurrentFinancialYearEnd () {
   const currentYear = currentDate.getFullYear()
   const currentMonth = currentDate.getMonth()
 
-  const currentFinancialYearEnd = (currentMonth >= 3) ? currentYear + 1 : currentYear
+  const currentFinancialYearEnd = (currentMonth >= APRIL) ? currentYear + 1 : currentYear
 
   return currentFinancialYearEnd
 }
@@ -49,22 +53,13 @@ function _yearsToDisplay () {
   const currentFinancialYearEnd = _determineCurrentFinancialYearEnd()
   const lastSixFinancialYears = []
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < PREVIOUS_SIX_YEARS; i++) {
     const year = currentFinancialYearEnd - i
 
-    if (year > 2022) {
-      lastSixFinancialYears.push({
-        text: formatFinancialYear(year),
-        value: year
-      })
+    if (year > LAST_PRE_SROC_FINANCIAL_YEAR_END) {
+      lastSixFinancialYears.push({ text: formatFinancialYear(year), value: year })
     } else {
-      lastSixFinancialYears.push({
-        text: 'Before 2022',
-        value: 'preSroc',
-        hint: {
-          text: 'Old charge scheme'
-        }
-      })
+      lastSixFinancialYears.push({ text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } })
 
       break
     }
