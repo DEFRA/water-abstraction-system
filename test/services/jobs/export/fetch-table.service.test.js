@@ -32,7 +32,7 @@ describe('Fetch table service', () => {
       expect(result.headers).to.equal(regionsColumnInfo)
     })
 
-    it('returns the query to fetch the billing-charge-categories table', async () => {
+    it('returns the query to fetch the regions table', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
       expect(result.rows).to.be.an.instanceof(Promise)
