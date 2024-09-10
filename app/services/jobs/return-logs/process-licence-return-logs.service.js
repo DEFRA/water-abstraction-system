@@ -29,11 +29,9 @@ async function go (licenceReference) {
   try {
     const startTime = currentTimeInNanoseconds()
     const returnRequirements = await FetchLicenceReturnLogsService.go(licenceReference)
-    console.log(returnRequirements)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
-    console.log(returnLogs)
 
-    // await _createReturnLogs(returnLogs)
+    await _createReturnLogs(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
   } catch (error) {

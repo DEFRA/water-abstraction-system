@@ -7,6 +7,7 @@
 
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
+const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
 const TransformLicenceService = require('./transform-licence.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('./transform-licence-version-purpose-conditions.service.js')
@@ -26,7 +27,8 @@ async function go (licenceRef) {
     const startTime = currentTimeInNanoseconds()
 
     // Transform the parent legacy licence record first
-    const { naldLicenceId, regionCode, transformedLicence } = await TransformLicenceService.go(licenceRef)
+    const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
+      await TransformLicenceService.go(licenceRef)
 
     // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
@@ -41,6 +43,10 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+
+    if (wrlsLicenceId) {
+      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
+    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {

@@ -40,7 +40,7 @@ async function go (cycle, licenceReference = null) {
     const returnRequirements = await FetchReturnRequirementsService.go(isSummer, licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
-    // await _createReturnLogs(returnLogs)
+    await _createReturnLogs(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle, licenceReference })
   } catch (error) {

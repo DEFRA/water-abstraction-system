@@ -67,10 +67,13 @@ function _query () {
           AND nalv."STATUS" <> 'DRAFT'
       ) AS earliest_version_start_date,
       r.id AS region_id
+      l.id as wrls_licence_id
     FROM
       "import"."NALD_ABS_LICENCES" nal
     LEFT JOIN
       public.regions r ON r.nald_region_id = (nal."FGAC_REGION_CODE")::INTEGER
+    LEFT JOIN
+      public.licences l ON l.licence_ref = nal."LIC_NO"
     WHERE
       nal."LIC_NO" = ?;
   `
@@ -98,4 +101,5 @@ module.exports = {
  * @property {Date} revoked_date
  * @property {Date} earliest_version_start_date
  * @property {string} region_id
+ * @property {uuid} wrls_licence_id - licence id used to determine if a licence already exists in WRLS
  */
