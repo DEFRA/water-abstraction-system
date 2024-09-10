@@ -6,7 +6,8 @@
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const FetchReturnLogsService = require('./fetch-return-logs.service.js')
+const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
+const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
@@ -36,8 +37,8 @@ async function go (cycle, licenceReference = null) {
   try {
     const startTime = currentTimeInNanoseconds()
     const isSummer = cycle === 'summer'
-    const returnLogs = await FetchReturnLogsService.go(isSummer, licenceReference)
-
+    const returnRequirements = await FetchReturnRequirementsService.go(isSummer, licenceReference)
+    const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
     // await _createReturnLogs(returnLogs)
 

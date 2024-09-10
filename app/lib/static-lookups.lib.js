@@ -23,6 +23,21 @@ const organisationTypes = [
   'publicLimitedCompany'
 ]
 
+const returnCycleDates = {
+  allYearDueDateDay: 28,
+  allYearDueDateMonth: 3,
+  allYearEndDateDay: 31,
+  allYearEndDateMonth: 2,
+  allYearStartDateDay: 1,
+  allYearStartDateMonth: 3,
+  summerDueDateDay: 28,
+  summerDueDateMonth: 10,
+  summerEndDateDay: 31,
+  summerEndDateMonth: 9,
+  summerStartDateDay: 1,
+  summerStartDateMonth: 10
+}
+
 const returnRequirementFrequencies = {
   day: 'daily',
   week: 'weekly',
@@ -93,6 +108,7 @@ module.exports = {
   companyTypes,
   contactTypes,
   organisationTypes,
+  returnCycleDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
   naldRegions,

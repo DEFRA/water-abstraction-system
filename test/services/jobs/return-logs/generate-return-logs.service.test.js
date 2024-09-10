@@ -9,8 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
+const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -19,12 +18,11 @@ const ReturnRequirementPointHelper = require('../../../support/helpers/return-re
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
 const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const FetchReturnLogsService = require('../../../../app/services/jobs/return-logs/fetch-return-logs.service.js')
+const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
 
-describe('Fetch return logs service', () => {
+describe('Generate return logs service', () => {
   const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
   const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
@@ -34,11 +32,7 @@ describe('Fetch return logs service', () => {
   const summerReturns = []
   const allYearReturns = []
 
-  describe('When isSummer is false, one return requirement and a licenceRef provided', () => {
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
-
+  describe('when summer is false, one return requirement and a licenceRef provided', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
@@ -66,7 +60,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(false, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(false, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(allYearDueDate)
@@ -88,10 +83,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -101,29 +92,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -146,11 +114,7 @@ describe('Fetch return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, one return requirement and a licenceRef provided', () => {
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
-
+  describe('when summer is true, one return requirement and a licenceRef provided', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
@@ -178,7 +142,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(true, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
@@ -209,29 +174,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -262,13 +204,6 @@ describe('Fetch return logs service', () => {
     const secondaryPurpose = SecondaryPurposeHelper.select()
     const secondaryPurpose2 = SecondaryPurposeHelper.select()
 
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const primaryPurpose2 = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const purpose2 = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
-    const secondaryPurpose2 = SecondaryPurposeHelper.select()
-
     let licence
     let region
     let returnVersion
@@ -292,18 +227,8 @@ describe('Fetch return logs service', () => {
         returnRequirementId: returnRequirement.id,
         secondaryPurposeId: secondaryPurpose.id
       })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
       returnRequirementPoint2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose2.id,
-        purposeId: purpose2.id,
-        returnRequirementId: returnRequirement2.id,
-        secondaryPurposeId: secondaryPurpose2.id
         primaryPurposeId: primaryPurpose2.id,
         purposeId: purpose2.id,
         returnRequirementId: returnRequirement2.id,
@@ -314,7 +239,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return two return log payloads', async () => {
-      const result = await FetchReturnLogsService.go(false, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(false, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(2)
       expect(result[0].dueDate).to.equal(allYearDueDate)
@@ -336,10 +262,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -349,29 +271,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -419,29 +318,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint2.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose2.alias,
-          primary: {
-            code: primaryPurpose2.legacyId,
-            description: primaryPurpose2.description
-          },
-          secondary: {
-            code: secondaryPurpose2.legacyId,
-            description: secondaryPurpose2.description
-          },
-          tertiary: {
-            code: purpose2.legacyId,
-            description: purpose2.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint2.description,
-          ngr1: returnRequirementPoint2.ngr1,
-          ngr2: returnRequirementPoint2.ngr2,
-          ngr3: returnRequirementPoint2.ngr3,
-          ngr4: returnRequirementPoint2.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose2.alias,
           primary: {
             code: primaryPurpose2.legacyId,
             description: primaryPurpose2.description
@@ -472,13 +348,6 @@ describe('Fetch return logs service', () => {
     const secondaryPurpose = SecondaryPurposeHelper.select()
     const secondaryPurpose2 = SecondaryPurposeHelper.select()
 
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const primaryPurpose2 = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const purpose2 = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
-    const secondaryPurpose2 = SecondaryPurposeHelper.select()
-
     let licence
     let region
     let returnVersion
@@ -502,12 +371,6 @@ describe('Fetch return logs service', () => {
         returnRequirementId: returnRequirement.id,
         secondaryPurposeId: secondaryPurpose.id
       })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
       returnRequirementPoint2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose2.id,
@@ -520,7 +383,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return two return log payloads', async () => {
-      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(true, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(2)
       expect(result[0].dueDate).to.equal(summerDueDate)
@@ -542,10 +406,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -555,29 +415,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -625,29 +462,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint2.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose2.alias,
-          primary: {
-            code: primaryPurpose2.legacyId,
-            description: primaryPurpose2.description
-          },
-          secondary: {
-            code: secondaryPurpose2.legacyId,
-            description: secondaryPurpose2.description
-          },
-          tertiary: {
-            code: purpose2.legacyId,
-            description: purpose2.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint2.description,
-          ngr1: returnRequirementPoint2.ngr1,
-          ngr2: returnRequirementPoint2.ngr2,
-          ngr3: returnRequirementPoint2.ngr3,
-          ngr4: returnRequirementPoint2.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose2.alias,
           primary: {
             code: primaryPurpose2.legacyId,
             description: primaryPurpose2.description
@@ -675,9 +489,6 @@ describe('Fetch return logs service', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -702,7 +513,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(false, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(false, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(allYearDueDate)
@@ -724,10 +536,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -737,29 +545,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -787,9 +572,6 @@ describe('Fetch return logs service', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -814,7 +596,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(false, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(false, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(allYearDueDate)
@@ -836,10 +619,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -849,29 +628,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -899,9 +655,6 @@ describe('Fetch return logs service', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -926,7 +679,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(true, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
@@ -948,10 +702,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -961,29 +711,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -1011,9 +738,6 @@ describe('Fetch return logs service', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
     const secondaryPurpose = SecondaryPurposeHelper.select()
-    const primaryPurpose = PrimaryPurposeHelper.select()
-    const purpose = PurposeHelper.select()
-    const secondaryPurpose = SecondaryPurposeHelper.select()
 
     let licence
     let region
@@ -1038,7 +762,8 @@ describe('Fetch return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(true, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
@@ -1060,10 +785,6 @@ describe('Fetch return logs service', () => {
           periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
         points: [{
           name: returnRequirementPoint.description,
@@ -1073,29 +794,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        points: [{
-          name: returnRequirementPoint.description,
-          ngr1: returnRequirementPoint.ngr1,
-          ngr2: returnRequirementPoint.ngr2,
-          ngr3: returnRequirementPoint.ngr3,
-          ngr4: returnRequirementPoint.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -1137,12 +835,18 @@ describe('Fetch return logs service', () => {
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, startDate })
       returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
       returnRequirementPoint = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
       summerReturns.push(returnRequirement.legacyId.toString())
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnLogsService.go(true, licence.licenceRef)
+      const returnRequirements = await FetchReturnRequirementsService.go(true, licence.licenceRef)
+      const result = await GenerateReturnLogsService.go(returnRequirements)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
@@ -1173,7 +877,6 @@ describe('Fetch return logs service', () => {
           ngr4: returnRequirementPoint.ngr4
         }],
         purposes: [{
-          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -1198,7 +901,8 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return five return log payloads', async () => {
-      const results = await FetchReturnLogsService.go(false)
+      const returnRequirements = await FetchReturnRequirementsService.go(false)
+      const results = await GenerateReturnLogsService.go(returnRequirements)
 
       const returnRequirementExternalId = results.map((returnLog) => {
         return returnLog.returnReference
@@ -1210,7 +914,8 @@ describe('Fetch return logs service', () => {
 
   describe('when isSummer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return five return log payloads', async () => {
-      const results = await FetchReturnLogsService.go(true)
+      const returnRequirements = await FetchReturnRequirementsService.go(true)
+      const results = await GenerateReturnLogsService.go(returnRequirements)
 
       const returnRequirementExternalId = results.map((returnLog) => {
         return returnLog.returnReference

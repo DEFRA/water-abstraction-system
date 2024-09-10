@@ -9,6 +9,7 @@ const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
+const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 
 const redirectStatusCode = 204
@@ -65,10 +66,23 @@ async function returnLogs (request, h) {
   return h.response().code(redirectStatusCode)
 }
 
+async function returnLogsForLicence (_request, h) {
+  let licenceReference
+
+  if (h.request.payload !== null && h.request.payload.licenceReference) {
+    licenceReference = h.request.payload.licenceReference
+  }
+
+  ProcessLicenceReturnLogsService.go(licenceReference)
+
+  return h.response().code(redirectStatusCode)
+}
+
 module.exports = {
   exportDb,
   licenceUpdates,
   returnLogs,
+  returnLogsForLicence,
   sessionCleanup,
   timeLimited
 }
