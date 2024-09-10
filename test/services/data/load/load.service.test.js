@@ -81,7 +81,6 @@ describe('Load service', () => {
 
       describe('that includes an entity instance with a lookup', () => {
         let chargeCategory
-        // let chargeCategoryId
 
         beforeEach(() => {
           chargeCategory = ChargeCategoryHelper.select()
