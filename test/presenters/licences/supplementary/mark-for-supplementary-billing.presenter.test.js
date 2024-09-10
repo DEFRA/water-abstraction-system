@@ -83,5 +83,33 @@ describe('Mark For Supplementary Billing presenter', () => {
         })
       })
     })
+
+    describe('and the previous 6 years no longer include pre sroc years', () => {
+      beforeEach(() => {
+        testDate = new Date('2028-03-31')
+        clock = Sinon.useFakeTimers(testDate)
+      })
+
+      afterEach(() => {
+        clock.restore()
+      })
+
+      it('correctly presents the data', () => {
+        const result = MarkForSupplementaryBillingPresenter.go(licence)
+
+        expect(result).to.equal({
+          licenceId: 'test-id',
+          licenceRef: '01/Test',
+          financialYears: [
+            { text: '2027 to 2028', value: 2028 },
+            { text: '2026 to 2027', value: 2027 },
+            { text: '2025 to 2026', value: 2026 },
+            { text: '2024 to 2025', value: 2025 },
+            { text: '2023 to 2024', value: 2024 },
+            { text: '2022 to 2023', value: 2023 }
+          ]
+        })
+      })
+    })
   })
 })
