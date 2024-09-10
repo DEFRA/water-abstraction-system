@@ -26,7 +26,8 @@ async function go (licenceRef) {
   return {
     naldLicenceId: naldLicence.id,
     regionCode: naldLicence.region_code,
-    transformedLicence
+    transformedLicence,
+    wrlsLicenceId: naldLicence.wrls_licence_id
   }
 }
 
