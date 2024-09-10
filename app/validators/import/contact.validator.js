@@ -7,9 +7,9 @@
 const Joi = require('joi')
 
 /**
- * Checks that the imported company contact data has been transformed and is valid for persisting to WRLS
+ * Checks that the imported contact data has been transformed and is valid for persisting to WRLS
  *
- * @param {object} contact - The transformed company contact data
+ * @param {object} contact - The transformed contact data
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
