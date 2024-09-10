@@ -42,7 +42,7 @@ exports.down = function (knex) {
         'contacts.first_name',
         'contacts.middle_initials',
         'contacts.last_name',
-        // external_id is populated for contacts migrated from NALD and is used to resolve import conflicts
+        // 'external_id', // is populated for contacts migrated from NALD and is used to resolve import conflicts
         // 'contacts.external_id',
         'contacts.initials',
         // 'contacts.is_test', // we ignore this legacy test column in tables
