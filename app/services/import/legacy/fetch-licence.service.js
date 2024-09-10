@@ -66,7 +66,7 @@ function _query () {
           AND nalv."AABL_ID" = nal."ID"
           AND nalv."STATUS" <> 'DRAFT'
       ) AS earliest_version_start_date,
-      r.id AS region_id
+      r.id AS region_id,
       l.id as wrls_licence_id
     FROM
       "import"."NALD_ABS_LICENCES" nal
