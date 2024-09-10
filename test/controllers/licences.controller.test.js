@@ -398,6 +398,32 @@ describe('Licences controller', () => {
           )
         })
       })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitMarkForSupplementaryBillingService, 'go').resolves({
+            activeNavBar: 'search',
+            pageTitle: 'Mark for the supplementary bill run',
+            error: { text: 'Select at least one financial year' },
+            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+            licenceRef: '01/Test',
+            financialYears: [
+              { text: '2024 to 2025', value: 2025 },
+              { text: '2023 to 2024', value: 2024 },
+              { text: '2022 to 2023', value: 2023 },
+              { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+            ]
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select at least one financial year')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
     })
   })
 
