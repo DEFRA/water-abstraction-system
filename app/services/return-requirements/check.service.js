@@ -46,9 +46,9 @@ async function _markCheckPageVisited (session) {
 async function _returnRequirements (session) {
   const { licence, requirements, journey } = session
 
-  const points = await FetchPointsService.go(licence.id)
+  const licenceVersionPurposePoints = await FetchPointsService.go(licence.id)
 
-  return ReturnRequirementsPresenter.go(requirements, points, journey)
+  return ReturnRequirementsPresenter.go(requirements, licenceVersionPurposePoints, journey)
 }
 
 module.exports = {

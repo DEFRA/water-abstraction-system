@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceVersionPurposePointModel = require('../../../../app/models/licence-version-purpose-point.model.js')
+
 // Thing under test
 const ReturnRequirementsPresenter = require('../../../../app/presenters/return-requirements/check/returns-requirements.presenter.js')
 
@@ -39,7 +42,7 @@ describe('Return Requirements presenter', () => {
             frequencyReported: 'daily',
             index: 0,
             points: [
-              'At National Grid Reference TQ 1234 1234 (Test local name)'
+              'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
             ],
             purposes: [
               'Spray irrigation'
@@ -121,7 +124,7 @@ describe('Return Requirements presenter', () => {
 
           const { points } = result.requirements[0]
 
-          expect(points).to.equal(['At National Grid Reference TQ 1234 1234 (Test local name)'])
+          expect(points).to.equal(['At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'])
         })
       })
 
@@ -197,15 +200,15 @@ describe('Return Requirements presenter', () => {
 })
 
 function _point () {
-  return {
-    ID: '9000031',
-    AADD_ID: '9000020',
-    NGR1_EAST: '1234',
-    LOCAL_NAME: 'Test local name',
-    NGR1_NORTH: '1234',
-    NGR1_SHEET: 'TQ',
-    FGAC_REGION_CODE: '9'
-  }
+  return LicenceVersionPurposePointModel.fromJson({
+    description: 'RIVER MEDWAY AT YALDING INTAKE',
+    id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+    ngr1: 'TQ 69212 50394',
+    ngr2: null,
+    ngr3: null,
+    ngr4: null,
+    naldPointId: 100789
+  })
 }
 
 function _requirement () {
@@ -222,7 +225,7 @@ function _requirement () {
     frequencyCollected: 'day',
     frequencyReported: 'day',
     points: [
-      '9000031'
+      '100789'
     ],
     purposes: [{
       id: '772136d1-9184-417b-90cd-91053287d1df',

@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const CreateService = require('../services/bill-runs/setup/create.service.js')
 const ExistsService = require('../services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
+const NoLicencesService = require('../services/bill-runs/setup/no-licences.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SeasonService = require('../services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
@@ -42,6 +43,18 @@ async function create (request, h) {
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
+}
+
+async function noLicences (request, h) {
+  const { sessionId } = request.params
+
+  const regionName = await NoLicencesService.go(sessionId)
+
+  return h.view('bill-runs/setup/no-licences.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
+    sessionId
+  })
 }
 
 async function region (request, h) {
@@ -139,6 +152,12 @@ async function submitYear (request, h) {
     })
   }
 
+  // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
+  // is not currently possible
+  if (pageData.goBackToBillRuns) {
+    return h.redirect('/system/bill-runs')
+  }
+
   if (pageData.setupComplete) {
     return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }
@@ -163,6 +182,10 @@ async function year (request, h) {
 
   const pageData = await YearService.go(sessionId)
 
+  if (pageData.financialYearsData.length === 0) {
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/no-licences`)
+  }
+
   return h.view('bill-runs/setup/year.njk', {
     activeNavBar: 'bill-runs',
     pageTitle: 'Select the financial year',
@@ -172,6 +195,7 @@ async function year (request, h) {
 
 module.exports = {
   create,
+  noLicences,
   region,
   season,
   setup,
