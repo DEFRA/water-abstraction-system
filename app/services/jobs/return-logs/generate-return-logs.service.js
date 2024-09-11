@@ -31,6 +31,7 @@ async function go (returnRequirements) {
 
     return {
       createdAt: new Date(),
+      updatedAt: new Date(),
       dueDate: getCycleDueDate(requirements.summer),
       endDate,
       id,
