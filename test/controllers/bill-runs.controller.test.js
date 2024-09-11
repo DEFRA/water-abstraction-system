@@ -533,6 +533,20 @@ describe('Bill Runs controller', () => {
         })
       })
 
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedAdjustmentFactorService, 'go').resolves(_chargeReferenceData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('The aggregate factor must be a number')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
           beforeEach(async () => {
@@ -596,6 +610,20 @@ describe('Bill Runs controller', () => {
         })
       })
 
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedAuthorisedVolumeService, 'go').resolves(_authorisedVolumeData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('The authorised volume must be a number')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
           beforeEach(async () => {
@@ -649,19 +677,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(AmendBillableReturnsService, 'go').resolves({
-            chargeElement: {
-              description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
-              dates: '25 July 2022 to 29 December 2022'
-            },
-            billRun: {
-              financialYear: '2022 to 2023'
-            },
-            chargeVersion: {
-              chargePeriod: '1 April 2022 to 31 March 2023'
-            },
-            authorisedQuantity: 40
-          })
+          Sinon.stub(AmendBillableReturnsService, 'go').resolves(_billableReturnData())
         })
 
         it('returns a 200 response', async () => {
@@ -694,6 +710,20 @@ describe('Bill Runs controller', () => {
           expect(response.headers.location).to.equal(
             '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
           )
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves(_billableReturnData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the billable quantity')
+          expect(response.payload).to.contain('There is a problem')
         })
       })
 
@@ -840,8 +870,8 @@ describe('Bill Runs controller', () => {
   })
 })
 
-function _authorisedVolumeData () {
-  return {
+function _authorisedVolumeData (error = false) {
+  const pageData = {
     billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
     financialYear: '2022 to 2023',
     chargePeriod: '1 April 2022 to 31 March 2023',
@@ -856,6 +886,33 @@ function _authorisedVolumeData () {
       maxVolume: 170
     }
   }
+
+  if (error) {
+    pageData.error = { authorisedVolume: 'The authorised volume must be a number' }
+  }
+
+  return pageData
+}
+
+function _billableReturnData (error = false) {
+  const pageDate = {
+    chargeElement: {
+      description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
+      dates: '25 July 2022 to 29 December 2022'
+    },
+    billRun: {
+      financialYear: '2022 to 2023'
+    },
+    chargeVersion: {
+      chargePeriod: '1 April 2022 to 31 March 2023'
+    },
+    authorisedQuantity: 40
+  }
+  if (error) {
+    pageDate.error = { message: 'Select the billable quantity' }
+  }
+
+  return pageDate
 }
 
 function _chargeElementDetails () {
@@ -876,8 +933,8 @@ function _chargeElementDetails () {
   }
 }
 
-function _chargeReferenceData () {
-  return {
+function _chargeReferenceData (error = false) {
+  const pageData = {
     billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
     financialYear: '2022 to 2023',
     chargePeriod: '1 April 2022 to 31 March 2023',
@@ -889,6 +946,18 @@ function _chargeReferenceData () {
       adjustments: ['Aggregate factor (0.5)']
     }
   }
+
+  if (error) {
+    pageData.error = {
+      aggregateFactorElement: {
+        text: 'The aggregate factor must be a number'
+      },
+      chargeAdjustmentElement: null
+    }
+    pageData.inputtedAggregateValue = '10'
+  }
+
+  return pageData
 }
 
 function _getRequestOptions (path) {

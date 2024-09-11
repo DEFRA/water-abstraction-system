@@ -17,6 +17,7 @@ const LicenceSupplementaryProcessBillingFlagService = require('../../app/service
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
+const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
@@ -123,6 +124,34 @@ describe('Licences controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Contact details')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/history', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/history',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid and has contacts', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceHistoryService, 'go').resolves(_viewLicenceHistory())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('History')
         })
       })
     })
@@ -348,6 +377,15 @@ describe('Licences controller', () => {
     })
   })
 })
+
+function _viewLicenceHistory () {
+  return {
+    entries: [{}],
+    licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+    licenceRef: 'AT/Test',
+    pageTitle: 'History for AT/Test'
+  }
+}
 
 function _viewLicenceBills () {
   const commonLicenceData = _viewLicence()
