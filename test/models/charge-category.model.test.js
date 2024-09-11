@@ -18,8 +18,8 @@ const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
 describe('Charge Category model', () => {
   let testRecord
 
-  beforeEach(async () => {
-    testRecord = await ChargeCategoryHelper.add()
+  beforeEach(() => {
+    testRecord = ChargeCategoryHelper.select()
   })
 
   describe('Basic query', () => {

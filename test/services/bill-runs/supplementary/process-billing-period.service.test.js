@@ -53,7 +53,7 @@ describe('Supplementary Process billing period service', () => {
     licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId: region.id })
     changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
     billingAccount = await BillingAccountHelper.add()
-    chargeCategory = await ChargeCategoryHelper.add()
+    chargeCategory = ChargeCategoryHelper.select()
 
     billRun = await BillRunHelper.add({ regionId: region.id })
   })
