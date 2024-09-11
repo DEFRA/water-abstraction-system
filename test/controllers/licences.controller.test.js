@@ -142,7 +142,7 @@ describe('Licences controller', () => {
         }
       })
 
-      describe('when a request is valid and has contacts', () => {
+      describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(ViewLicenceHistoryService, 'go').resolves(_viewLicenceHistory())
         })
