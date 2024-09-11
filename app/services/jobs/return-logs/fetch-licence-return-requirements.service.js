@@ -12,7 +12,6 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
 const { db } = require('../../../../db/db.js')
 const { getCycleEndDate, getCycleStartDate, startOfWinterAndAllYearCycle } = require('../../../lib/dates.lib.js')
 
-
 /**
  * Given the licence reference this service returns the return requirements to be turned into return logs.
  *
