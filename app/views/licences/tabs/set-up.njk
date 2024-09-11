@@ -209,11 +209,13 @@
     href: links.agreements.setUpAgreement,
     classes: "govuk-button--secondary"
   }) }}
+{% endif %}
 
+{% if links.recalculateBills %}
   <div>
     {{ govukButton({
       text: "Recalculate bills",
-      href: '/system/licences/' + licenceId + '/mark-for-supplementary-billing',
+      href: links.recalculateBills,
       classes: "govuk-button--secondary"
     }) }}
   </div>

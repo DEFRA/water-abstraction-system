@@ -43,7 +43,8 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
-      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns)
+      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns),
+      recalculateBills: _recalculateBills(agreements, auth, commonData)
     },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
@@ -161,6 +162,12 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreement.code
 }
 
+function _hasTwoPartTariffAgreement (agreements) {
+  return agreements.some((agreement) => {
+    return agreement.financialAgreement.code === 'S127'
+  })
+}
+
 /**
  * The history helper $reason() will return either the reason saved against the return version record, the reason
  * captured in the first mod log entry, or null.
@@ -178,6 +185,12 @@ function _reason (returnVersion) {
   }
 
   return reason ?? ''
+}
+
+function _recalculateBills (agreements, auth, commonData) {
+  if (auth.credentials.scope.includes(roles.billing) && _hasTwoPartTariffAgreement(agreements)) {
+    return `/system/licences/${commonData.licenceId}/mark-for-supplementary-billing`
+  }
 }
 
 function _returnVersions (returnVersions = [{}]) {

@@ -237,6 +237,7 @@ describe('Licences - Set Up presenter', () => {
           beforeEach(() => {
             agreement.financialAgreement.code = 'S126'
           })
+
           it('correctly maps the code to the description', () => {
             const result = SetUpPresenter
               .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
@@ -628,6 +629,55 @@ describe('Licences - Set Up presenter', () => {
 
               expect(result.setUpAgreement).to.be.undefined()
             })
+          })
+        })
+      })
+
+      describe('when the user wants to recalculate bills on the licence', () => {
+        describe('and the user has billing permission', () => {
+          describe('and the licence has an agreement that is two-part tariff', () => {
+            beforeEach(() => {
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope.push('billing')
+            })
+
+            it('correctly presents the recalculate bills link', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.recalculateBills).to.equal(
+                '/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing'
+              )
+            })
+          })
+
+          describe('but the licence has no two-part tariff agreements', () => {
+            beforeEach(() => {
+              agreement.financialAgreement.code = 'S130S'
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope.push('billing')
+            })
+
+            it('the recalculate bills link is not present', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.recalculateBills).to.be.undefined()
+            })
+          })
+        })
+
+        describe('and the user does not have permission to recalculate bills', () => {
+          beforeEach(() => {
+            agreements = [{ ...agreement }]
+
+            auth.credentials.scope = []
+          })
+
+          it('the recalculate bills link is not present', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.recalculateBills).to.be.undefined()
           })
         })
       })
