@@ -174,13 +174,13 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  * For each point grab the ID and return it as an array of points.
  *
  * Remember, we are transforming the data into what is needed for the session, not what is needed for the UI! Hence, we
- * only need the ID.
+ * only need the naldPointId.
  *
  * @private
  */
 function _points (licenceVersionPurposePoints) {
   return licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.id
+    return licenceVersionPurposePoint.naldPointId.toString()
   })
 }
 

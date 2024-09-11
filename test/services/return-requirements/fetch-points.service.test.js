@@ -55,7 +55,8 @@ describe('Return Requirements - Fetch Points service', () => {
         ngr1: licenceVersionPurposePoints[0].ngr1,
         ngr2: licenceVersionPurposePoints[0].ngr2,
         ngr3: licenceVersionPurposePoints[0].ngr3,
-        ngr4: licenceVersionPurposePoints[0].ngr4
+        ngr4: licenceVersionPurposePoints[0].ngr4,
+        naldPointId: licenceVersionPurposePoints[0].naldPointId
       })
 
       expect(results[1]).to.equal({
@@ -64,7 +65,8 @@ describe('Return Requirements - Fetch Points service', () => {
         ngr1: licenceVersionPurposePoints[1].ngr1,
         ngr2: licenceVersionPurposePoints[1].ngr2,
         ngr3: licenceVersionPurposePoints[1].ngr3,
-        ngr4: licenceVersionPurposePoints[1].ngr4
+        ngr4: licenceVersionPurposePoints[1].ngr4,
+        naldPointId: licenceVersionPurposePoints[1].naldPointId
       })
     })
   })

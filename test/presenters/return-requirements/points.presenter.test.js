@@ -48,17 +48,17 @@ describe('Return Requirements - Points presenter', () => {
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+          naldPointId: '100789',
           description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         }, {
-          id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+          naldPointId: '100123',
           description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
         }, {
-          id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+          naldPointId: '100321',
           description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
         }],
         licenceRef: '01/ABC',
-        points: '',
+        selectedNaldPointIds: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
@@ -96,7 +96,7 @@ describe('Return Requirements - Points presenter', () => {
         const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+          naldPointId: '100789',
           description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         }])
       })
@@ -111,7 +111,7 @@ describe('Return Requirements - Points presenter', () => {
         const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+          naldPointId: '100123',
           description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
         }])
       })
@@ -126,34 +126,31 @@ describe('Return Requirements - Points presenter', () => {
         const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
         expect(result.licencePoints).to.equal([{
-          id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+          naldPointId: '100321',
           description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
         }])
       })
     })
   })
 
-  describe('the "points" property', () => {
+  describe('the "selectedNaldPointIds" property', () => {
     describe('when the user has previously submitted points', () => {
       beforeEach(() => {
-        session.requirements[0].points = [
-          'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-          '07820640-c95a-497b-87d6-9e0d3ef322db'
-        ]
+        session.requirements[0].points = ['100123', '100321']
       })
 
-      it('returns a populated points', () => {
+      it('returns a string containing the selected points concatenated', () => {
         const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
-        expect(result.points).to.equal('d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6,07820640-c95a-497b-87d6-9e0d3ef322db')
+        expect(result.selectedNaldPointIds).to.equal('100123,100321')
       })
     })
 
     describe('when the user has not previously submitted a point', () => {
-      it('returns an empty points', () => {
+      it('returns an empty string', () => {
         const result = PointsPresenter.go(session, requirementIndex, licenceVersionPurposePoints)
 
-        expect(result.points).to.equal('')
+        expect(result.selectedNaldPointIds).to.equal('')
       })
     })
   })
@@ -168,7 +165,8 @@ function _licenceVersionPurposePoints () {
     ngr1: 'TQ 69212 50394',
     ngr2: null,
     ngr3: null,
-    ngr4: null
+    ngr4: null,
+    naldPointId: 100789
   }))
 
   points.push(LicenceVersionPurposePointModel.fromJson({
@@ -177,7 +175,8 @@ function _licenceVersionPurposePoints () {
     ngr1: 'SO 524 692',
     ngr2: 'SO 531 689',
     ngr3: null,
-    ngr4: null
+    ngr4: null,
+    naldPointId: 100123
   }))
 
   points.push(LicenceVersionPurposePointModel.fromJson({
@@ -186,7 +185,8 @@ function _licenceVersionPurposePoints () {
     ngr1: 'NZ 892 055',
     ngr2: 'NZ 895 054',
     ngr3: 'NZ 893 053',
-    ngr4: 'NZ 892 053'
+    ngr4: 'NZ 892 053',
+    naldPointId: 100321
   }))
 
   return points

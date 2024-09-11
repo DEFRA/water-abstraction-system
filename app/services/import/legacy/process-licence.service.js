@@ -26,7 +26,8 @@ async function go (licenceRef) {
     const startTime = currentTimeInNanoseconds()
 
     // Transform the parent legacy licence record first
-    const { naldLicenceId, regionCode, transformedLicence } = await TransformLicenceService.go(licenceRef)
+    const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
+      await TransformLicenceService.go(licenceRef)
 
     // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
@@ -41,6 +42,10 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+
+    if (wrlsLicenceId) {
+      // Process mod logs
+    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {

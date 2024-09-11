@@ -47,8 +47,16 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 purpose: { description: 'Heat Pump', id: seedIds.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' },
                 licenceVersionPurposePoints: [
-                  { description: 'INTAKE POINT', id: seedIds.licenceVersionPurposePoints.electricity1.id },
-                  { description: 'OUT TAKE POINT', id: seedIds.licenceVersionPurposePoints.electricity2.id }
+                  {
+                    description: 'INTAKE POINT',
+                    id: seedIds.licenceVersionPurposePoints.electricity1.id,
+                    naldPointId: seedIds.licenceVersionPurposePoints.electricity1.naldPointId
+                  },
+                  {
+                    description: 'OUT TAKE POINT',
+                    id: seedIds.licenceVersionPurposePoints.electricity2.id,
+                    naldPointId: seedIds.licenceVersionPurposePoints.electricity2.naldPointId
+                  }
                 ]
               },
               {
@@ -63,7 +71,11 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 purpose: { description: 'Vegetable Washing', id: seedIds.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
                 licenceVersionPurposePoints: [
-                  { description: 'SOUTH BOREHOLE', id: seedIds.licenceVersionPurposePoints.standard.id }
+                  {
+                    description: 'SOUTH BOREHOLE',
+                    id: seedIds.licenceVersionPurposePoints.standard.id,
+                    naldPointId: seedIds.licenceVersionPurposePoints.standard.naldPointId
+                  }
                 ]
               },
               {
@@ -78,7 +90,11 @@ describe('Return Requirements - Fetch Abstraction Data service', () => {
                 purpose: { description: 'Spray Irrigation - Direct', id: seedIds.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
                 secondaryPurpose: { id: seedIds.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
                 licenceVersionPurposePoints: [
-                  { description: 'MAIN INTAKE', id: seedIds.licenceVersionPurposePoints.twoPartTariff.id }
+                  {
+                    description: 'MAIN INTAKE',
+                    id: seedIds.licenceVersionPurposePoints.twoPartTariff.id,
+                    naldPointId: seedIds.licenceVersionPurposePoints.twoPartTariff.naldPointId
+                  }
                 ]
               }
             ]
