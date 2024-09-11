@@ -22,6 +22,8 @@ const SupplementaryYearValidator = require('../../../validators/licences/supplem
  * @param {string} licenceId - The UUID of the licence to flag
  * @param {object} payload - The submitted form data
  * @param {object} user - Instance of `UserModel` that represents the user making the request
+ *
+ * @returns {Promise<object>} The licence marked for supplementary billing
  */
 async function go (licenceId, payload, user) {
   const validationResult = _validate(payload)
