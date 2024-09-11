@@ -43,7 +43,6 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
@@ -61,8 +60,9 @@ describe('Import Legacy Process Licence service', () => {
     delete global.GlobalNotifier
   })
 
-  describe('when there is a valid NALD licence to import', () => {
+  describe('when there is a valid NALD licence to import with an existing licence', () => {
     beforeEach(() => {
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
       persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
       processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
@@ -86,6 +86,21 @@ describe('Import Legacy Process Licence service', () => {
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.licenceId).to.equal(licenceId)
       expect(logDataArg.licenceRef).to.equal(licenceRef)
+    })
+  })
+
+  describe('when there is a valid NALD licence to import without an existing licence', () => {
+    beforeEach(() => {
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
+      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+    })
+
+    it('saves the imported licence and creates the return logs', async () => {
+      await ProcessLicenceService.go(licenceRef)
+
+      expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.false()
     })
   })
 
