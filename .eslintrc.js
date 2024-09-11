@@ -5,7 +5,7 @@ module.exports = {
   ignorePatterns: ['docs/*'],
   overrides: [
     {
-      files: ['*.controller.js'],
+      files: ['*.controller.js', '*.seed.js'],
       rules: {
         'jsdoc/require-jsdoc': 'off'
       }

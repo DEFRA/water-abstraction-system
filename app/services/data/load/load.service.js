@@ -18,7 +18,6 @@ const BillHelper = require('../../../../test/support/helpers/bill.helper.js')
 const BillingAccountAddressHelper = require('../../../../test/support/helpers/billing-account-address.helper.js')
 const BillingAccountHelper = require('../../../../test/support/helpers/billing-account.helper.js')
 const ChangeReasonHelper = require('../../../../test/support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../../test/support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../../test/support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../../test/support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../../test/support/helpers/charge-version.helper.js')
@@ -78,7 +77,6 @@ const LOAD_HELPERS = {
   billingAccountAddresses: { helper: BillingAccountAddressHelper, test: true, legacy: { schema: 'crm_v2', table: 'invoice_account_addresses', id: 'invoice_account_address_id' } },
   billingAccounts: { helper: BillingAccountHelper, test: true, legacy: { schema: 'crm_v2', table: 'invoice_accounts', id: 'invoice_account_id' } },
   changeReasons: { helper: ChangeReasonHelper, test: false },
-  chargeCategories: { helper: ChargeCategoryHelper, test: true, legacy: { schema: 'water', table: 'billing_charge_categories', id: 'billing_charge_category_id' } },
   chargeElements: { helper: ChargeElementHelper, test: true, legacy: { schema: 'water', table: 'charge_purposes', id: 'charge_purpose_id' } },
   chargeReferences: { helper: ChargeReferenceHelper, test: true, legacy: { schema: 'water', table: 'charge_elements', id: 'charge_element_id' } },
   chargeVersions: { helper: ChargeVersionHelper, test: true, legacy: { schema: 'water', table: 'charge_versions', id: 'charge_version_id' } },

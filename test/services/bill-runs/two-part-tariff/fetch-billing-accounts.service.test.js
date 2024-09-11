@@ -62,7 +62,7 @@ describe('Fetch Billing Accounts service', () => {
     reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId, reviewLicenceId })
     const { id: reviewChargeVersionId } = reviewChargeVersion
 
-    chargeCategory = await ChargeCategoryHelper.add()
+    chargeCategory = ChargeCategoryHelper.select()
     const { id: chargeCategoryId } = chargeCategory
 
     chargeReference = await ChargeReferenceHelper.add({ chargeVersionId, chargeCategoryId })
