@@ -31,20 +31,8 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukRadios({
-        attributes: {
-          'data-test': 'bill-run-type'
-        },
-        name: 'type',
-        errorMessage: error,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
-          }
-        },
-        items: [
+      {% if enableTwoPartTariffSupplementary %}
+        {% set typeItems = [
           {
             text: 'Annual',
             value: 'annual',
@@ -71,7 +59,41 @@
               text: 'Second part charges for the current charge scheme only'
             }
           }
-        ]
+        ] %}
+      {% else %}
+        {% set typeItems = [
+          {
+            text: 'Annual',
+            value: 'annual',
+            checked: 'annual' == selectedType
+          },
+          {
+            text: 'Supplementary',
+            value: 'supplementary',
+            checked: 'supplementary' == selectedType
+          },
+          {
+            text: 'Two-part tariff',
+            value: 'two_part_tariff',
+            checked: 'two_part_tariff' == selectedType
+          }
+        ] %}
+      {% endif %}
+
+      {{ govukRadios({
+        attributes: {
+          'data-test': 'bill-run-type'
+        },
+        name: 'type',
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+          }
+        },
+        items: typeItems
       }) }}
 
       {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
