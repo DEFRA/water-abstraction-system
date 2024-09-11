@@ -908,6 +908,7 @@ function _billableReturnData (error = false) {
     },
     authorisedQuantity: 40
   }
+
   if (error) {
     pageDate.error = { message: 'Select the billable quantity' }
   }
