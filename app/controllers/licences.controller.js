@@ -23,24 +23,24 @@ const ViewLicencePage = 'licences/view.njk'
 async function markedForSupplementaryBilling (request, h) {
   const { id: licenceId } = request.params
 
-  const data = await MarkedForSupplementaryBillingService.go(licenceId)
+  const pageData = await MarkedForSupplementaryBillingService.go(licenceId)
 
   return h.view('licences/marked-for-supplementary-billing.njk', {
     pageTitle: 'You’ve marked this licence for the next supplementary bill run',
     activeNavBar: 'search',
-    ...data
+    ...pageData
   })
 }
 
 async function markForSupplementaryBilling (request, h) {
   const { id: licenceId } = request.params
 
-  const data = await MarkForSupplementaryBillingService.go(licenceId)
+  const pageData = await MarkForSupplementaryBillingService.go(licenceId)
 
   return h.view('licences/mark-for-supplementary-billing.njk', {
     pageTitle: 'Mark for the supplementary bill run',
     activeNavBar: 'search',
-    ...data
+    ...pageData
   })
 }
 
@@ -84,70 +84,70 @@ async function supplementary (request, h) {
 async function viewBills (request, h) {
   const { params: { id }, auth, query: { page = 1 } } = request
 
-  const data = await ViewLicenceBillsService.go(id, auth, page)
+  const pageData = await ViewLicenceBillsService.go(id, auth, page)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
 async function viewCommunications (request, h) {
   const { params: { id }, auth, query: { page = 1 } } = request
 
-  const data = await ViewLicenceCommunicationsService.go(id, auth, page)
+  const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
 async function viewContacts (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceContactDetailsService.go(id, auth)
+  const pageData = await ViewLicenceContactDetailsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
 async function viewHistory (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceHistoryService.go(id, auth)
+  const pageData = await ViewLicenceHistoryService.go(id, auth)
 
   return h.view('licences/history.njk', {
-    ...data
+    ...pageData
   })
 }
 
 async function viewReturns (request, h) {
   const { params: { id }, auth, query: { page = 1 } } = request
 
-  const data = await ViewLicenceReturnsService.go(id, auth, page)
+  const pageData = await ViewLicenceReturnsService.go(id, auth, page)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
 async function viewSetUp (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceSetUpService.go(id, auth)
+  const pageData = await ViewLicenceSetUpService.go(id, auth)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
 async function viewSummary (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceSummaryService.go(id, auth)
+  const pageData = await ViewLicenceSummaryService.go(id, auth)
 
   return h.view(ViewLicencePage, {
-    ...data
+    ...pageData
   })
 }
 
