@@ -58,7 +58,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       })
     })
 
-    describe('and the current date is after April', () => {
+    describe('and the current date is during or after April', () => {
       beforeEach(() => {
         testDate = new Date('2024-04-01')
         clock = Sinon.useFakeTimers(testDate)
