@@ -33,11 +33,11 @@ function _query () {
       to_date(nalc."EFF_ST_DATE", 'DD/MM/YYYY') as start_date,
       lr.id as licence_role_id
     FROM import."NALD_PARTIES" np
-           INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalc
-                      ON nalc."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
-                        AND nalc."ACON_APAR_ID" = np."ID"
-           INNER JOIN public.licence_roles lr
-                      ON lr.name = 'licenceHolder'
+      INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalc
+        ON nalc."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
+        AND nalc."ACON_APAR_ID" = np."ID"
+      INNER JOIN public.licence_roles lr
+        ON lr.name = 'licenceHolder'
     WHERE nalc."FGAC_REGION_CODE" = ?
       AND nalc."AABL_ID" = ?
       AND np."APAR_TYPE" != 'ORG'
