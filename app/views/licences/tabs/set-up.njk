@@ -211,11 +211,11 @@
   }) }}
 {% endif %}
 
-{% if links.recalculateBills %}
+{% if links.recalculateBills.markForSupplementaryBilling %}
   <div>
     {{ govukButton({
       text: "Recalculate bills",
-      href: links.recalculateBills,
+      href: links.recalculateBills.markForSupplementaryBilling,
       classes: "govuk-button--secondary"
     }) }}
   </div>
