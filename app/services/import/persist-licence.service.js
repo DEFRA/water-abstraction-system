@@ -6,11 +6,12 @@
  */
 
 const { timestampForPostgres } = require('../../lib/general.lib.js')
+const CompanyContactModel = require('../../models/company-contact.model.js')
+const CompanyModel = require('../../models/company.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
-const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
-const CompanyModel = require('../../models/company.model.js')
+const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -138,8 +139,14 @@ async function _persistLicenceVersionPurposeCondition (
 
 // Companies
 async function _persistCompanies (trx, updatedAt, companies) {
-  for (const company of companies) {
+  for (const companyToPersist of companies) {
+    const { licenceHolder, ...company } = companyToPersist
+
     await _persistCompany(trx, updatedAt, company)
+
+    if (licenceHolder) {
+      await _persistLicenceHolder(trx, updatedAt, licenceHolder)
+    }
   }
 }
 
@@ -154,6 +161,22 @@ async function _persistCompany (trx, updatedAt, company) {
       'type',
       'updatedAt'
     ])
+}
+
+async function _persistLicenceHolder (trx, updatedAt, licenceHolder) {
+  // return CompanyContactModel.query(trx)
+  //   .insert({ ...licenceHolder, updatedAt })
+  //   .onConflict([])
+
+//   SELECT c.company_id, o.contact_id, r.role_id, $4, $5, true, NOW(), NOW()
+// FROM crm_v2.companies c
+// JOIN crm_v2.contacts o ON o.external_id=$2
+// JOIN crm_v2.roles r ON r.name=$3
+// WHERE c.external_id=$1 ON CONFLICT (company_id, contact_id, role_id, start_date) DO UPDATE SET
+//   contact_id=EXCLUDED.contact_id,
+//   is_default=EXCLUDED.is_default,
+//   end_date=EXCLUDED.end_date,
+//   date_updated=EXCLUDED.date_updated;`
 }
 
 module.exports = {
