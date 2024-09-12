@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -20,8 +19,6 @@ describe('Cancel Bill Run service', () => {
   let testBillRunId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     region = RegionHelper.select()
     const billRun = await BillRunHelper.add({
       billRunNumber: 10101,
