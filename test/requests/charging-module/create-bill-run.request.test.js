@@ -17,7 +17,7 @@ const ChargingModuleRequest = require('../../../app/requests/charging-module.req
 // Thing under test
 const CreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
 
-describe.only('Charging Module Create Bill Run request', () => {
+describe('Charging Module Create Bill Run request', () => {
   let testRegion
 
   beforeEach(async () => {
