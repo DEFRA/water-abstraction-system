@@ -96,6 +96,42 @@ const routes = [
         crumb: false
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/mark-for-supplementary-billing',
+    options: {
+      handler: LicencesController.markForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licences/{id}/mark-for-supplementary-billing',
+    options: {
+      handler: LicencesController.submitMarkForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/marked-for-supplementary-billing',
+    options: {
+      handler: LicencesController.markedForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
