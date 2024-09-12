@@ -29,6 +29,7 @@ describe('View Licence Set Up service', () => {
 
   beforeEach(() => {
     Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
 
     Sinon.stub(FetchAgreementsService, 'go').returns([
       {
@@ -144,7 +145,7 @@ describe('View Licence Set Up service', () => {
             makeLicenceNonChargeable: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
             setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
           },
-          recalculateBills: '/system/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/mark-for-supplementary-billing',
+          recalculateBills: {},
           returnVersions: {}
         },
         returnVersions: [
