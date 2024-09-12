@@ -350,7 +350,8 @@ describe('Licences - Set Up presenter', () => {
             },
             {
               action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                link: '/licences/' +
+                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
                 text: 'View'
               }],
               id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
@@ -380,7 +381,8 @@ describe('Licences - Set Up presenter', () => {
 
             expect(result.chargeInformation).to.equal([{
               action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                link: '/licences/' +
+                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
                 text: 'View'
               }],
               id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
@@ -403,7 +405,8 @@ describe('Licences - Set Up presenter', () => {
 
             expect(result.chargeInformation).to.equal([{
               action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                link: '/licences' +
+                '/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
                 text: 'View'
               }],
               id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
@@ -436,7 +439,8 @@ describe('Licences - Set Up presenter', () => {
 
               expect(result.chargeInformation).to.equal([{
                 action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
                   text: 'Review'
                 }],
                 id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
@@ -480,7 +484,8 @@ describe('Licences - Set Up presenter', () => {
 
               expect(result.chargeInformation).to.equal([{
                 action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
                   text: 'Review'
                 }],
                 id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
@@ -524,7 +529,8 @@ describe('Licences - Set Up presenter', () => {
 
               expect(result.chargeInformation).to.equal([{
                 action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
                   text: 'Review'
                 }],
                 id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
@@ -626,9 +632,17 @@ describe('Licences - Set Up presenter', () => {
               })
 
               it('correctly presents the set up agreement link ', () => {
-                const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
 
-                expect(result.links.agreements.setUpAgreement).to.equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type')
+                expect(result.links.agreements.setUpAgreement).to.equal(
+                  '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type'
+                )
               })
             })
           })
@@ -664,7 +678,13 @@ describe('Licences - Set Up presenter', () => {
               })
 
               it('the agreement link is not present', () => {
-                const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
 
                 expect(result.setUpAgreement).to.be.undefined()
               })
@@ -676,10 +696,17 @@ describe('Licences - Set Up presenter', () => {
           describe('and the user can edit a workflow  ', () => {
             describe('and the licence does not end more than 6 years ago', () => {
               it('return the associated links', () => {
-                const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
 
                 expect(result.links.chargeInformation.makeLicenceNonChargeable).to
-                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1')
+                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                    'non-chargeable-reason?start=1')
                 expect(result.links.chargeInformation.setupNewCharge).to
                   .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
               })
@@ -701,7 +728,13 @@ describe('Licences - Set Up presenter', () => {
               })
 
               it('returns no links for editing', () => {
-                const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
 
                 expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
                 expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
