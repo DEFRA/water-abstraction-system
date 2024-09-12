@@ -11,20 +11,17 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const DatabaseSupport = require('../../support/database.js')
 const EventModel = require('../../../app/models/event.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
 
-describe('Create Bill Run Event service', () => {
+describe.only('Create Bill Run Event service', () => {
   let clock
   let testDate
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testDate = new Date(2015, 9, 21, 20, 31, 57)
     clock = Sinon.useFakeTimers(testDate)
   })
