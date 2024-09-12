@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ describe('Fetch Bill Runs service', () => {
   let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    await BillRunModel.query().delete()
 
     region = RegionHelper.select()
 
