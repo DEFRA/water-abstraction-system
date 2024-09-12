@@ -17,7 +17,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
 
-describe.only('Create Bill Run Event service', () => {
+describe('Create Bill Run Event service', () => {
   let clock
   let testDate
 
