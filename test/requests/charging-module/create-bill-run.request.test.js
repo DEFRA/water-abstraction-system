@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
@@ -18,12 +17,10 @@ const ChargingModuleRequest = require('../../../app/requests/charging-module.req
 // Thing under test
 const CreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
 
-describe('Charging Module Create Bill Run request', () => {
+describe.only('Charging Module Create Bill Run request', () => {
   let testRegion
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     testRegion = RegionHelper.select()
   })
 
