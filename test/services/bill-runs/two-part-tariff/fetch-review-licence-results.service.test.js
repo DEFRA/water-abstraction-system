@@ -74,7 +74,7 @@ describe('Fetch Review Licence Results Service', () => {
           chargeVersionId: chargeVersion.id
         })
 
-        chargeCategory = await ChargeCategoryHelper.add()
+        chargeCategory = ChargeCategoryHelper.select()
         chargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: chargeVersion.id,
           chargeCategoryId: chargeCategory.id

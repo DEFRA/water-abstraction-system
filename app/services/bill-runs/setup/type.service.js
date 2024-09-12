@@ -8,6 +8,8 @@
 const SessionModel = require('../../../models/session.model.js')
 const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
 
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
  *
@@ -23,6 +25,7 @@ async function go (sessionId) {
   const formattedData = TypePresenter.go(session)
 
   return {
+    enableTwoPartTariffSupplementary: FeatureFlagsConfig.enableTwoPartTariffSupplementary,
     ...formattedData
   }
 }

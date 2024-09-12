@@ -58,7 +58,6 @@ describe('Charging Module Create Transaction presenter', () => {
       // standard transaction instance and amend some of the properties to match what FormatSrocTransactionLineService
       // does.
       transaction = await TransactionHelper.add()
-      transaction.chargeCategoryCode = '4.5.6'
       transaction.section127Agreement = false
       transaction.section130Agreement = false
       transaction.startDate = new Date('2022-04-01')
@@ -81,8 +80,8 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.authorisedDays).to.equal(365)
       expect(result.authorisedVolume).to.equal(11)
       expect(result.billableDays).to.equal(365)
-      expect(result.chargeCategoryCode).to.equal('4.5.6')
-      expect(result.chargeCategoryDescription).to.equal('Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model')
+      expect(result.chargeCategoryCode).to.equal(transaction.chargeCategoryCode)
+      expect(result.chargeCategoryDescription).to.equal(transaction.chargeCategoryDescription)
       expect(result.chargePeriod).to.equal('01-APR-2022 - 31-MAR-2023')
       expect(result.compensationCharge).to.equal(false)
       expect(result.customerReference).to.equal(accountNumber)

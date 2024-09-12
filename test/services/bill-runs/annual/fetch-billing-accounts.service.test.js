@@ -185,7 +185,7 @@ describe('Fetch Billing Accounts service', () => {
         }
       )
 
-      chargeCategory = await ChargeCategoryHelper.add()
+      chargeCategory = ChargeCategoryHelper.select()
       chargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: chargeVersion.id, chargeCategoryId: chargeCategory.id
       })
@@ -259,7 +259,7 @@ describe('Fetch Billing Accounts service', () => {
           chargeCategory: {
             id: chargeCategory.id,
             reference: chargeCategory.reference,
-            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
+            shortDescription: chargeCategory.shortDescription
           },
           chargeElements: [{
             id: chargeElement.id,

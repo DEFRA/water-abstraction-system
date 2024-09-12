@@ -85,7 +85,7 @@ describe('Charge Reference model', () => {
       let testChargeCategory
 
       beforeEach(async () => {
-        testChargeCategory = await ChargeCategoryHelper.add()
+        testChargeCategory = ChargeCategoryHelper.select()
 
         const { id: chargeCategoryId } = testChargeCategory
 
@@ -108,7 +108,7 @@ describe('Charge Reference model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.chargeCategory).to.be.an.instanceOf(ChargeCategoryModel)
-        expect(result.chargeCategory).to.equal(testChargeCategory)
+        expect(result.chargeCategory).to.include(testChargeCategory)
       })
     })
 

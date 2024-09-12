@@ -45,7 +45,7 @@ describe('Fetch Authorised Volume service', () => {
 
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
-        chargeCategory = await ChargeCategoryHelper.add()
+        chargeCategory = ChargeCategoryHelper.select()
         chargeReference = await ChargeReferenceHelper.add({ chargeCategoryId: chargeCategory.id })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,
