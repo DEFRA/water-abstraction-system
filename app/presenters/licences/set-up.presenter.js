@@ -38,32 +38,34 @@ const agreementDescriptions = {
  */
 function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
+  const enableTwoPartSupplementary = FeatureFlagsConfig.enableTwoPartTariffSupplementary
 
   return {
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
-      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns)
+      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns),
+      recalculateBills: _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary)
     },
-    agreements: _agreements(commonData, agreements, auth),
+    agreements: _agreements(commonData, agreements, auth, enableTwoPartSupplementary),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     returnVersions: _returnVersions(returnVersions)
   }
 }
 
-function _agreements (commonData, agreements, auth) {
+function _agreements (commonData, agreements, auth, enableTwoPartSupplementary) {
   return agreements.map((agreement) => {
     return {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: agreementDescriptions[_financialAgreementCode(agreement)],
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
-      action: _agreementActionLinks(commonData, agreement, auth)
+      action: _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary)
     }
   })
 }
 
-function _agreementActionLinks (commonData, agreement, auth) {
+function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupplementary) {
   if (!auth.credentials.scope.includes(roles.manageAgreements)) {
     return []
   }
@@ -74,8 +76,6 @@ function _agreementActionLinks (commonData, agreement, auth) {
 
   const actionLinks = []
   const hasNotEnded = agreement.endDate === null
-  const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
-  const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
 
   if (auth.credentials.scope.includes(roles.deleteAgreements)) {
     actionLinks.push({
@@ -91,12 +91,18 @@ function _agreementActionLinks (commonData, agreement, auth) {
     })
   }
 
-  if (hasNotEnded && is2PTAgreement && isNotMarkedForSupplementaryBilling &&
-    auth.credentials.scope.includes(roles.billing)) {
-    actionLinks.push({
-      text: 'Recalculate bills',
-      link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
-    })
+  // Feature flag for the new two-part tariff supplementary
+  if (!enableTwoPartSupplementary) {
+    const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
+    const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
+
+    if (hasNotEnded && is2PTAgreement && isNotMarkedForSupplementaryBilling &&
+      auth.credentials.scope.includes(roles.billing)) {
+      actionLinks.push({
+        text: 'Recalculate bills',
+        link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
+      })
+    }
   }
 
   return actionLinks
@@ -172,6 +178,12 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreement.code
 }
 
+function _hasTwoPartTariffAgreement (agreements) {
+  return agreements.some((agreement) => {
+    return agreement.financialAgreement.code === 'S127'
+  })
+}
+
 /**
  * The history helper $reason() will return either the reason saved against the return version record, the reason
  * captured in the first mod log entry, or null.
@@ -189,6 +201,17 @@ function _reason (returnVersion) {
   }
 
   return reason ?? ''
+}
+
+function _recalculateBills (agreements, auth, commonData, enableTwoPartSupplementary) {
+  if (auth.credentials.scope.includes(roles.billing) &&
+    _hasTwoPartTariffAgreement(agreements) &&
+    enableTwoPartSupplementary
+  ) {
+    return { markForSupplementaryBilling: `/system/licences/${commonData.licenceId}/mark-for-supplementary-billing` }
+  }
+
+  return {}
 }
 
 function _returnVersions (returnVersions = [{}]) {
