@@ -4,23 +4,25 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../support/database.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 
 // Thing under test
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 
 describe('Check Busy Bill Runs service', () => {
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // We always add a bill run that is not 'busy' to confirm the service is differentiating between 'busy' and
     // 'not busy'.
     await BillRunHelper.add({ status: 'ready' })
+  })
+
+  afterEach(async () => {
+    await BillRunModel.query().delete()
   })
 
   describe('when there are both building and cancelling bill runs', () => {
