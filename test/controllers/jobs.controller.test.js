@@ -18,7 +18,7 @@ const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/pr
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Jobs controller', () => {
+describe('Jobs controller', () => {
   let options
   let server
 
