@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -20,8 +19,6 @@ describe('Fetch Matching Bill Run service', () => {
   let regionId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const region = RegionHelper.select()
 
     regionId = region.id
