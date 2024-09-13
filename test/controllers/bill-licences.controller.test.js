@@ -12,6 +12,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const Boom = require('@hapi/boom')
 const RemoveBillLicenceService = require('../../app/services/bill-licences/remove-bill-licence.service.js')
 const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
 const ViewBillLicenceService = require('../../app/services/bill-licences/view-bill-licence.service.js')
@@ -104,19 +105,39 @@ describe('Bill Licences controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         options = postRequestOptions('/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316/remove')
-
-        Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
-          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
-        )
       })
 
-      it('redirects to the legacy processing bill run page', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
+            '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+          )
+        })
 
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(
-          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
-        )
+        it('redirects to the legacy processing bill run page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+          )
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the removing service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(SubmitRemoveBillLicenceService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
+        })
       })
     })
   })

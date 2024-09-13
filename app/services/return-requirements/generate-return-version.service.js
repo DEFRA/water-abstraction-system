@@ -60,7 +60,8 @@ async function _generateReturnVersion (returnVersionsExist, sessionData, userId)
   const startDate = _calculateStartDate(sessionData)
   let endDate = null
 
-  if (returnVersionsExist) {
+  // If the journey is for 'no-returns-required' `returnVersionsExist` will always be false
+  if (returnVersionsExist || sessionData.journey === 'no-returns-required') {
     endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
   }
 
