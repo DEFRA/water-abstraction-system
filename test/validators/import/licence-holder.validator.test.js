@@ -106,33 +106,7 @@ describe('Import Licence Holder validator', () => {
     })
   })
 
-  describe('the "contactExternalId" property', () => {
-    describe('when it is not a null', () => {
-      beforeEach(() => {
-        transformedLicenceHolder.endDate = 1
-      })
-
-      it('throws an error', async () => {
-        expect(() => {
-          ImportLicenceHolderValidator.go(transformedLicenceHolder)
-        }).to.throw('"endDate" must be [null]')
-      })
-    })
-
-    describe('when it is not present', () => {
-      beforeEach(() => {
-        delete transformedLicenceHolder.endDate
-      })
-
-      it('throws an error', async () => {
-        expect(() => {
-          ImportLicenceHolderValidator.go(transformedLicenceHolder)
-        }).to.throw('"endDate" is required')
-      })
-    })
-  })
-
-  describe('the "contactExternalId" property', () => {
+  describe('the "licenceRoleId" property', () => {
     describe('when it is not a string', () => {
       beforeEach(() => {
         transformedLicenceHolder.licenceRoleId = 1
@@ -176,7 +150,6 @@ function _transfromedLicenceHolder () {
     companyExternalId: '1:007',
     contactExternalId: '1:007',
     startDate: new Date('2001-01-01'),
-    endDate: null,
     licenceRoleId: generateUUID()
   }
 }

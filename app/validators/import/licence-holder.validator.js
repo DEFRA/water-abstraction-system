@@ -18,7 +18,6 @@ function go (contact) {
     companyExternalId: Joi.string().required(),
     contactExternalId: Joi.string().required(),
     startDate: Joi.date().required(),
-    endDate: Joi.valid(null).required(),
     licenceRoleId: Joi.string().guid().required()
   })
 

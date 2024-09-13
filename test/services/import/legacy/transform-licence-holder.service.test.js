@@ -53,7 +53,6 @@ describe('Import Legacy Transform Licence Holder service', () => {
           licenceHolder: {
             companyExternalId: '1:007',
             contactExternalId: '1:007',
-            endDate: null,
             licenceRoleId,
             startDate: new Date('2001-01-01')
           }
@@ -80,7 +79,6 @@ function _legacyLicenceHolder (licenceRoleId) {
     company_external_id: '1:007',
     contact_external_id: '1:007',
     start_date: new Date('2001-01-01'),
-    endDate: null,
     licence_role_id: licenceRoleId
   }
 }

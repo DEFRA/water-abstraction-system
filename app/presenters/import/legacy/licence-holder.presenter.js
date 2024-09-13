@@ -18,7 +18,6 @@ function go (licenceHolder) {
     companyExternalId: licenceHolder.company_external_id,
     contactExternalId: licenceHolder.contact_external_id,
     startDate: licenceHolder.start_date,
-    endDate: null,
     licenceRoleId: licenceHolder.licence_role_id
   }
 }
