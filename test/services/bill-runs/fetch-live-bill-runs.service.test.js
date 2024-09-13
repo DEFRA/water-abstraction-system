@@ -4,12 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
@@ -26,9 +25,7 @@ describe('Fetch Live Bill Runs service', () => {
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       before(async () => {
-        await BillRunModel.query().delete()
-
-        const region = RegionHelper.select(0)
+        const region = RegionHelper.select(7)
 
         regionId = region.id
 
@@ -39,6 +36,10 @@ describe('Fetch Live Bill Runs service', () => {
           toFinancialYearEnding: currentFinancialYear.endDate.getFullYear(),
           scheme: 'sroc'
         })
+      })
+
+      after(async () => {
+        await billRun.$query().delete()
       })
 
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
@@ -95,6 +96,10 @@ describe('Fetch Live Bill Runs service', () => {
         })
       })
 
+      after(async () => {
+        await billRun.$query().delete()
+      })
+
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
         beforeEach(async () => {
           financialYearEnding = currentFinancialYear.endDate.getFullYear()
@@ -146,6 +151,10 @@ describe('Fetch Live Bill Runs service', () => {
           toFinancialYearEnding: 2022,
           scheme: 'alcs'
         })
+      })
+
+      after(async () => {
+        await billRun.$query().delete()
       })
 
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
