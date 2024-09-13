@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
@@ -25,6 +26,8 @@ describe('Fetch Live Bill Runs service', () => {
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       before(async () => {
+        await BillRunModel.query().delete()
+
         const region = RegionHelper.select(0)
 
         regionId = region.id
