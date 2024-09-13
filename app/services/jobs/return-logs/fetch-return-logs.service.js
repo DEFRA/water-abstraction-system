@@ -31,7 +31,7 @@ const endOfWinterAndAllYearCycle = new Date(new Date().getFullYear() + 1, ALL_YE
 /**
  * Fetch all return requirements that need return logs created.
  *
- * @param {boolean} isSummer - are we running summer cycel or all year
+ * @param {boolean} isSummer - are we running summer cycle or all year
  * @param {string} licenceReference - if provided only do the return log for that licence reference
  *
  * @returns {Promise<Array>} the list of return requirement ids
