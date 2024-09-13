@@ -13,19 +13,16 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
 
-describe('Fetch Bills To Be Reissued service', () => {
+describe.only('Fetch Bills To Be Reissued service', () => {
   let billRun
   let bill
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     billRun = await BillRunHelper.add()
     bill = await BillHelper.add({ billRunId: billRun.id })
     const { id: billLicenceId } = await BillLicenceHelper.add({ billId: bill.id })
