@@ -12,6 +12,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const Boom = require('@hapi/boom')
 const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
 const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
@@ -117,6 +118,28 @@ describe('Bill Runs Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/bill-runs')
+          })
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the create service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(ExistsService, 'go').resolves({
+              matchResults: [],
+              pageData: null,
+              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
+              yearToUse: 2024
+            })
+            Sinon.stub(CreateService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
         })
       })
@@ -417,6 +440,19 @@ describe('Bill Runs Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season')
+          })
+        })
+
+        describe('and the bill run type is two-part tariff supplementary', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitYearService, 'go').resolves({ goBackToBillRuns: true })
+          })
+
+          it('redirects to the bill runs page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/bill-runs')
           })
         })
       })
