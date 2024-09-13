@@ -24,7 +24,7 @@ const UnflagBilledLicencesService = require('../../../app/services/bill-runs/sup
 // Thing under test
 const SubmitSendBillBunService = require('../../../app/services/bill-runs/submit-send-bill-run.service.js')
 
-describe.only('Submit Send Bill Run service', () => {
+describe('Submit Send Bill Run service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the send happens in the
   // background and is not awaited. We want to confirm things like the records have been updated. But the only way to do
   // so is to give the background process time to complete.
