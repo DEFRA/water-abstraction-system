@@ -21,7 +21,7 @@ const { db } = require('../../../../db/db.js')
 async function go (regionCode, licenceId) {
   const query = _query()
 
-  const { rows } = await db.raw(query, [regionCode, licenceId])
+  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
 
   return rows
 }
@@ -58,9 +58,15 @@ function _query () {
     LEFT JOIN import."NALD_ABS_LIC_VERSIONS" nalv
       ON nalv."ACON_APAR_ID" = np."ID"
       AND nalv."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
+    LEFT JOIN import."NALD_LIC_ROLES" nlr
+      ON nlr."ACON_APAR_ID" = np."ID"
+      AND nlr."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
   WHERE np."APAR_TYPE" != 'ORG'
-    AND nalv."FGAC_REGION_CODE" = ?
-    AND nalv."AABL_ID" = ?
+    AND (
+    (nalv."FGAC_REGION_CODE" = ? AND nalv."AABL_ID" = ?)
+      OR
+    (nlr."FGAC_REGION_CODE" = ? AND nlr."AABL_ID" = ?)
+    );
   `
 }
 
