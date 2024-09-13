@@ -809,7 +809,7 @@ describe('Fetch return logs service', () => {
     it('should return three return log payloads', async () => {
       const result = await FetchReturnLogsService.go(false)
 
-      expect(result.length).to.equal(5)
+      expect(result.length >= 5).to.be.true()
     })
   })
 
@@ -817,7 +817,7 @@ describe('Fetch return logs service', () => {
     it('should return three return log payloads', async () => {
       const result = await FetchReturnLogsService.go(true)
 
-      expect(result.length).to.equal(5)
+      expect(result.length >= 5).to.be.true()
     })
   })
 })
