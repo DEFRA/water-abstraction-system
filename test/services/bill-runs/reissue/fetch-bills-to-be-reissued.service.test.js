@@ -18,7 +18,7 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
 
-describe.only('Fetch Bills To Be Reissued service', () => {
+describe('Fetch Bills To Be Reissued service', () => {
   let billRun
   let bill
 
