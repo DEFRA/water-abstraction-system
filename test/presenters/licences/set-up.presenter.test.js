@@ -100,24 +100,55 @@ describe('Licences - Set Up presenter', () => {
   })
 
   describe('when provided with populated licence set up data', () => {
-    describe('that includes licence agreements', () => {
+    describe('and the two-part tariff supplementary billing feature flag is false', () => {
       beforeEach(() => {
-        agreements = [{ ...agreement }]
-        chargeVersions = []
-        workflows = []
-
-        commonData.includeInPresrocBilling = 'no'
-
-        auth.credentials.roles = [...auth.credentials.roles, 'manage_agreements', 'delete_agreements']
-        auth.credentials.scope = [...auth.credentials.scope, 'manage_agreements', 'delete_agreements']
+        Sinon.stub(FeatureFlagsConfig, 'enableTwoPartTariffSupplementary').value(false)
       })
 
-      it('correctly presents the agreements data', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+      describe('that includes licence agreements', () => {
+        beforeEach(() => {
+          agreements = [{ ...agreement }]
+          chargeVersions = []
+          workflows = []
 
-        expect(result.agreements).to.equal([
-          {
-            action: [
+          commonData.includeInPresrocBilling = 'no'
+
+          auth.credentials.roles = [...auth.credentials.roles, 'manage_agreements', 'delete_agreements']
+          auth.credentials.scope = [...auth.credentials.scope, 'manage_agreements', 'delete_agreements']
+        })
+
+        it('correctly presents the agreements data', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+          expect(result.agreements).to.equal([
+            {
+              action: [
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+                  text: 'Delete'
+                },
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+                  text: 'End'
+                },
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
+                  text: 'Recalculate bills'
+                }
+              ],
+              signedOn: '',
+              description: 'Two-part tariff',
+              endDate: '',
+              startDate: '1 January 2020'
+            }
+          ])
+        })
+
+        describe('when all the actions are available for an agreement', () => {
+          it('shows delete, end and recalculate bills actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.agreements[0].action).to.equal([
               {
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
                 text: 'Delete'
@@ -130,460 +161,414 @@ describe('Licences - Set Up presenter', () => {
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
                 text: 'Recalculate bills'
               }
-            ],
-            signedOn: '',
-            description: 'Two-part tariff',
-            endDate: '',
-            startDate: '1 January 2020'
-          }
-        ])
-      })
-
-      describe('when all the actions are available for an agreement', () => {
-        it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-          expect(result.agreements[0].action).to.equal([
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-              text: 'Delete'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-              text: 'End'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-              text: 'Recalculate bills'
-            }
-          ])
+            ])
+          })
         })
-      })
 
-      describe('when actions are not available for an agreement', () => {
-        describe('when the user can not manage agreements', () => {
-          beforeEach(() => {
-            auth.credentials.scope = []
+        describe('when actions are not available for an agreement', () => {
+          describe('when the user can not manage agreements', () => {
+            beforeEach(() => {
+              auth.credentials.scope = []
+            })
+
+            it('there are no actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].action).to.equal([])
+            })
           })
 
-          it('there are no actions', () => {
+          describe('when the user does not have permission to delete an agreement', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['billing', 'manage_agreements']
+            })
+
+            it('there is no action link to delete', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].action).to.equal([
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+                  text: 'End'
+                },
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
+                  text: 'Recalculate bills'
+                }
+              ])
+            })
+          })
+
+          describe('when a licence has ended', () => {
+            beforeEach(() => {
+              agreements = [{ ...agreement, endDate: new Date() }]
+            })
+
+            it('there is no action link to end the agreement', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].action).to.equal([
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+                  text: 'Delete'
+                }
+              ])
+            })
+          })
+
+          describe('when user can not Recalculate bills for an agreement because of pre sroc billing', () => {
+            beforeEach(() => {
+              commonData.includeInPresrocBilling = 'yes'
+            })
+
+            it('there is no action link to Recalculate bills', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].action).to.equal([
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+                  text: 'Delete'
+                },
+                {
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+                  text: 'End'
+                }
+              ])
+            })
+          })
+        })
+
+        describe('when the financial agreement code ', () => {
+          describe('is for Two-part tariff ', () => {
+            it('correctly maps the code to the description', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].description).to.equal('Two-part tariff')
+            })
+          })
+
+          describe('is for Canal and Rivers Trust, supported source (S130S) ', () => {
+            beforeEach(() => {
+              agreement.financialAgreement.code = 'S130S'
+            })
+
+            it('correctly maps the code to the description', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, supported source (S130S)')
+            })
+          })
+
+          describe('is for Canal and Rivers Trust, unsupported source (S130U)', () => {
+            beforeEach(() => {
+              agreement.financialAgreement.code = 'S130U'
+            })
+
+            it('correctly maps the code to the description', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, unsupported source (S130U)')
+            })
+          })
+
+          describe('is for Abatement', () => {
+            beforeEach(() => {
+              agreement.financialAgreement.code = 'S126'
+            })
+            it('correctly maps the code to the description', () => {
+              const result = SetUpPresenter
+                .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.agreements[0].description).to.equal('Abatement')
+            })
+          })
+        })
+
+        describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
+          beforeEach(() => {
+            agreement.financialAgreement.code = 'S127'
+          })
+
+          it('shows delete, end and recalculate bills actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.agreements[0].action).to.equal([
+              {
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+                text: 'Delete'
+              },
+              {
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+                text: 'End'
+              },
+              {
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
+                text: 'Recalculate bills'
+              }
+            ])
+          })
+        })
+
+        describe('when the licence is more than 6 years old and all the actions are available for an agreement', () => {
+          beforeEach(() => {
+            const sixYearsAndOneDayAgo = new Date()
+
+            sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+            sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+            commonData.ends = {
+              date: sixYearsAndOneDayAgo
+            }
+          })
+
+          it('shows delete, end and recalculate bills actions', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.agreements[0].action).to.equal([])
           })
         })
-
-        describe('when the user does not have permission to delete an agreement', () => {
-          beforeEach(() => {
-            auth.credentials.scope = ['billing', 'manage_agreements']
-          })
-
-          it('there is no action link to delete', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].action).to.equal([
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-                text: 'End'
-              },
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-                text: 'Recalculate bills'
-              }
-            ])
-          })
-        })
-
-        describe('when a licence has ended', () => {
-          beforeEach(() => {
-            agreements = [{ ...agreement, endDate: new Date() }]
-          })
-
-          it('there is no action link to end the agreement', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].action).to.equal([
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-                text: 'Delete'
-              }
-            ])
-          })
-        })
-
-        describe('when user can not Recalculate bills for an agreement because of pre sroc billing', () => {
-          beforeEach(() => {
-            commonData.includeInPresrocBilling = 'yes'
-          })
-
-          it('there is no action link to Recalculate bills', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].action).to.equal([
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-                text: 'Delete'
-              },
-              {
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-                text: 'End'
-              }
-            ])
-          })
-        })
       })
 
-      describe('when the financial agreement code ', () => {
-        describe('is for Two-part tariff ', () => {
-          it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].description).to.equal('Two-part tariff')
-          })
-        })
-
-        describe('is for Canal and Rivers Trust, supported source (S130S) ', () => {
-          beforeEach(() => {
-            agreement.financialAgreement.code = 'S130S'
-          })
-
-          it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, supported source (S130S)')
-          })
-        })
-
-        describe('is for Canal and Rivers Trust, unsupported source (S130U)', () => {
-          beforeEach(() => {
-            agreement.financialAgreement.code = 'S130U'
-          })
-
-          it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, unsupported source (S130U)')
-          })
-        })
-
-        describe('is for Abatement', () => {
-          beforeEach(() => {
-            agreement.financialAgreement.code = 'S126'
-          })
-          it('correctly maps the code to the description', () => {
-            const result = SetUpPresenter
-              .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.agreements[0].description).to.equal('Abatement')
-          })
-        })
-      })
-
-      describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
+      describe('that includes both charge versions and workflows', () => {
         beforeEach(() => {
-          agreement.financialAgreement.code = 'S127'
+          agreements = []
+          chargeVersions = [{ ...chargeVersion }]
+          workflows = [{ ...workflow }]
         })
 
-        it('shows delete, end and recalculate bills actions', () => {
+        it('groups both types of data into the "chargeInformation" property', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          expect(result.agreements[0].action).to.equal([
+          expect(result.chargeInformation).to.equal([
             {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
-              text: 'Delete'
+              action: [],
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+              startDate: '1 April 2022',
+              endDate: '',
+              status: 'review',
+              reason: 'changed something'
             },
             {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
-              text: 'End'
-            },
-            {
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
-              text: 'Recalculate bills'
+              action: [{
+                link: '/licences/' +
+                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                text: 'View'
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '',
+              status: 'current',
+              reason: 'Major change'
             }
           ])
         })
       })
 
-      describe('when the licence is more than 6 years old and all the actions are available for an agreement', () => {
+      describe('that includes charge versions', () => {
         beforeEach(() => {
-          const sixYearsAndOneDayAgo = new Date()
-
-          sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-          sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-          commonData.ends = {
-            date: sixYearsAndOneDayAgo
-          }
+          agreements = []
+          workflows = []
         })
 
-        it('shows delete, end and recalculate bills actions', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-          expect(result.agreements[0].action).to.equal([])
-        })
-      })
-    })
-
-    describe('that includes both charge versions and workflows', () => {
-      beforeEach(() => {
-        agreements = []
-        chargeVersions = [{ ...chargeVersion }]
-        workflows = [{ ...workflow }]
-      })
-
-      it('groups both types of data into the "chargeInformation" property', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-        expect(result.chargeInformation).to.equal([
-          {
-            action: [],
-            id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-            startDate: '1 April 2022',
-            endDate: '',
-            status: 'review',
-            reason: 'changed something'
-          },
-          {
-            action: [{
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-              text: 'View'
-            }],
-            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-            startDate: '1 January 2020',
-            endDate: '',
-            status: 'current',
-            reason: 'Major change'
-          }
-        ])
-      })
-    })
-
-    describe('that includes charge versions', () => {
-      beforeEach(() => {
-        agreements = []
-        workflows = []
-      })
-
-      describe('where the end date is not populated', () => {
-        beforeEach(() => {
-          chargeVersions = [{ ...chargeVersion }]
-          chargeVersions[0].endDate = null
-        })
-
-        it('correctly presents the data with a dash for the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-          expect(result.chargeInformation).to.equal([{
-            action: [{
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-              text: 'View'
-            }],
-            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-            startDate: '1 January 2020',
-            endDate: '',
-            status: 'current',
-            reason: 'Major change'
-          }])
-        })
-      })
-
-      describe('where the end date is populated', () => {
-        beforeEach(() => {
-          chargeVersions = [{ ...chargeVersion }]
-          chargeVersions[0].endDate = new Date('2024-03-31')
-        })
-
-        it('correctly presents the data with the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-          expect(result.chargeInformation).to.equal([{
-            action: [{
-              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-              text: 'View'
-            }],
-            id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-            startDate: '1 January 2020',
-            endDate: '31 March 2024',
-            status: 'current',
-            reason: 'Major change'
-          }])
-        })
-      })
-    })
-
-    describe('that includes workflow records', () => {
-      beforeEach(() => {
-        chargeVersions = []
-      })
-
-      describe('that have a status of "review"', () => {
-        beforeEach(() => {
-          workflows = [{ ...workflow }]
-        })
-
-        describe('and the user is permitted to review workflow records', () => {
+        describe('where the end date is not populated', () => {
           beforeEach(() => {
-            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+            chargeVersions = [{ ...chargeVersion }]
+            chargeVersions[0].endDate = null
           })
 
-          it('correctly presents the data and workflow actions', () => {
+          it('correctly presents the data with a dash for the end date', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
             expect(result.chargeInformation).to.equal([{
               action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                text: 'Review'
-              }],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2022',
-              endDate: '',
-              status: 'review',
-              reason: 'changed something'
-            }])
-          })
-        })
-
-        describe('and the user is not permitted to review workflow records', () => {
-          it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.chargeInformation).to.equal([{
-              action: [],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2022',
-              endDate: '',
-              status: 'review',
-              reason: 'changed something'
-            }])
-          })
-        })
-      })
-
-      describe('that have a status of "changes_requested"', () => {
-        beforeEach(() => {
-          workflows = [{ ...workflow }]
-          workflows[0].status = 'changes_requested'
-        })
-
-        describe('and the user is permitted to review workflow records', () => {
-          beforeEach(() => {
-            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
-          })
-
-          it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.chargeInformation).to.equal([{
-              action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                text: 'Review'
-              }],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2022',
-              endDate: '',
-              status: 'changes_requested',
-              reason: 'changed something'
-            }])
-          })
-        })
-
-        describe('and the user is not permitted to review workflow records', () => {
-          it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.chargeInformation).to.equal([{
-              action: [],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '1 April 2022',
-              endDate: '',
-              status: 'changes_requested',
-              reason: 'changed something'
-            }])
-          })
-        })
-      })
-
-      describe('that have a status of "to_setup"', () => {
-        beforeEach(() => {
-          workflows = [{ ...workflow }]
-          workflows[0].status = 'to_setup'
-        })
-
-        describe('and the user is permitted to edit workflow records', () => {
-          beforeEach(() => {
-            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
-          })
-
-          it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.chargeInformation).to.equal([{
-              action: [{
-                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                text: 'Review'
-              }],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '',
-              endDate: '',
-              status: 'to_setup',
-              reason: 'changed something'
-            }])
-          })
-        })
-
-        describe('and the user is not permitted to edit workflow records', () => {
-          beforeEach(() => {
-            auth.credentials.scope = ['billing']
-          })
-
-          it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-            expect(result.chargeInformation).to.equal([{
-              action: [],
-              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-              startDate: '',
-              endDate: '',
-              status: 'to_setup',
-              reason: 'changed something'
-            }])
-          })
-        })
-      })
-    })
-
-    describe('that includes return versions', () => {
-      beforeEach(() => {
-        returnVersions = [returnVersion]
-      })
-
-      it('correctly presents the returns versions data', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-        expect(result.returnVersions).to.equal([
-          {
-            action: [
-              {
-                link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d/view',
+                link: '/licences/' +
+                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
                 text: 'View'
-              }
-            ],
-            endDate: '',
-            reason: 'Change to special agreement',
-            startDate: '1 January 2020',
-            status: 'current'
-          }
-        ])
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '',
+              status: 'current',
+              reason: 'Major change'
+            }])
+          })
+        })
+
+        describe('where the end date is populated', () => {
+          beforeEach(() => {
+            chargeVersions = [{ ...chargeVersion }]
+            chargeVersions[0].endDate = new Date('2024-03-31')
+          })
+
+          it('correctly presents the data with the end date', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+            expect(result.chargeInformation).to.equal([{
+              action: [{
+                link: '/licences' +
+                '/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                text: 'View'
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '31 March 2024',
+              status: 'current',
+              reason: 'Major change'
+            }])
+          })
+        })
       })
 
-      describe('and the data is missing', () => {
+      describe('that includes workflow records', () => {
         beforeEach(() => {
-          returnVersion.endDate = null
-          returnVersion.reason = null
+          chargeVersions = []
+        })
+
+        describe('that have a status of "review"', () => {
+          beforeEach(() => {
+            workflows = [{ ...workflow }]
+          })
+
+          describe('and the user is permitted to review workflow records', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+            })
+
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [{
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  text: 'Review'
+                }],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 April 2022',
+                endDate: '',
+                status: 'review',
+                reason: 'changed something'
+              }])
+            })
+          })
+
+          describe('and the user is not permitted to review workflow records', () => {
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 April 2022',
+                endDate: '',
+                status: 'review',
+                reason: 'changed something'
+              }])
+            })
+          })
+        })
+
+        describe('that have a status of "changes_requested"', () => {
+          beforeEach(() => {
+            workflows = [{ ...workflow }]
+            workflows[0].status = 'changes_requested'
+          })
+
+          describe('and the user is permitted to review workflow records', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+            })
+
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [{
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  text: 'Review'
+                }],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 April 2022',
+                endDate: '',
+                status: 'changes_requested',
+                reason: 'changed something'
+              }])
+            })
+          })
+
+          describe('and the user is not permitted to review workflow records', () => {
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 April 2022',
+                endDate: '',
+                status: 'changes_requested',
+                reason: 'changed something'
+              }])
+            })
+          })
+        })
+
+        describe('that have a status of "to_setup"', () => {
+          beforeEach(() => {
+            workflows = [{ ...workflow }]
+            workflows[0].status = 'to_setup'
+          })
+
+          describe('and the user is permitted to edit workflow records', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+            })
+
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [{
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  text: 'Review'
+                }],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '',
+                endDate: '',
+                status: 'to_setup',
+                reason: 'changed something'
+              }])
+            })
+          })
+
+          describe('and the user is not permitted to edit workflow records', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['billing']
+            })
+
+            it('correctly presents the data and workflow actions', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.chargeInformation).to.equal([{
+                action: [],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '',
+                endDate: '',
+                status: 'to_setup',
+                reason: 'changed something'
+              }])
+            })
+          })
+        })
+      })
+
+      describe('that includes return versions', () => {
+        beforeEach(() => {
           returnVersions = [returnVersion]
         })
 
-        it('correctly presents the returns versions data with the missing data defaults', () => {
+        it('correctly presents the returns versions data', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
           expect(result.returnVersions).to.equal([
@@ -595,137 +580,246 @@ describe('Licences - Set Up presenter', () => {
                 }
               ],
               endDate: '',
-              reason: 'Special Agreement - Change',
+              reason: 'Change to special agreement',
               startDate: '1 January 2020',
               status: 'current'
             }
           ])
         })
-      })
-    })
 
-    describe('the "links" property', () => {
-      beforeEach(() => {
-        agreements = []
-        chargeVersions = [{ ...chargeVersion }]
-        workflows = [{ ...workflow }]
-      })
-
-      describe('when the user wants to manage agreements', () => {
-        describe('when the user can set up agreements', () => {
-          describe('and the licence does not end more than 6 years ago', () => {
-            beforeEach(() => {
-              agreements = [{ ...agreement }]
-
-              auth.credentials.scope.push('manage_agreements')
-            })
-
-            it('correctly presents the set up agreement link ', () => {
-              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-              expect(result.links.agreements.setUpAgreement).to.equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type')
-            })
-          })
-        })
-
-        describe('when the user can not set up agreements ', () => {
-          describe('and the user does not have permission', () => {
-            beforeEach(() => {
-              agreements = [{ ...agreement }]
-
-              auth.credentials.scope = []
-            })
-
-            it('the agreement link is not present', () => {
-              const result = SetUpPresenter
-                .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-              expect(result.links.agreements.setUpAgreement).to.be.undefined()
-            })
+        describe('and the data is missing', () => {
+          beforeEach(() => {
+            returnVersion.endDate = null
+            returnVersion.reason = null
+            returnVersions = [returnVersion]
           })
 
-          describe('and the licence ends more than 6 years ago', () => {
-            beforeEach(() => {
-              const sixYearsAndOneDayAgo = new Date()
+          it('correctly presents the returns versions data with the missing data defaults', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-              sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-              sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-              commonData.ends = {
-                date: sixYearsAndOneDayAgo
+            expect(result.returnVersions).to.equal([
+              {
+                action: [
+                  {
+                    link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d/view',
+                    text: 'View'
+                  }
+                ],
+                endDate: '',
+                reason: 'Special Agreement - Change',
+                startDate: '1 January 2020',
+                status: 'current'
               }
-
-              agreements = [{ ...agreement }]
-            })
-
-            it('the agreement link is not present', () => {
-              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
-
-              expect(result.setUpAgreement).to.be.undefined()
-            })
+            ])
           })
         })
       })
 
-      describe('when the user wants to manage charge information', () => {
-        describe('and the user can edit a workflow  ', () => {
-          describe('and the licence does not end more than 6 years ago', () => {
+      describe('the "links" property', () => {
+        beforeEach(() => {
+          agreements = []
+          chargeVersions = [{ ...chargeVersion }]
+          workflows = [{ ...workflow }]
+        })
+
+        describe('when the user wants to manage agreements', () => {
+          describe('when the user can set up agreements', () => {
+            describe('and the licence does not end more than 6 years ago', () => {
+              beforeEach(() => {
+                agreements = [{ ...agreement }]
+
+                auth.credentials.scope.push('manage_agreements')
+              })
+
+              it('correctly presents the set up agreement link ', () => {
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
+
+                expect(result.links.agreements.setUpAgreement).to.equal(
+                  '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type'
+                )
+              })
+            })
+          })
+
+          describe('when the user can not set up agreements ', () => {
+            describe('and the user does not have permission', () => {
+              beforeEach(() => {
+                agreements = [{ ...agreement }]
+
+                auth.credentials.scope = []
+              })
+
+              it('the agreement link is not present', () => {
+                const result = SetUpPresenter
+                  .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+                expect(result.links.agreements.setUpAgreement).to.be.undefined()
+              })
+            })
+
+            describe('and the licence ends more than 6 years ago', () => {
+              beforeEach(() => {
+                const sixYearsAndOneDayAgo = new Date()
+
+                sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+                sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+                commonData.ends = {
+                  date: sixYearsAndOneDayAgo
+                }
+
+                agreements = [{ ...agreement }]
+              })
+
+              it('the agreement link is not present', () => {
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
+
+                expect(result.setUpAgreement).to.be.undefined()
+              })
+            })
+          })
+        })
+
+        describe('when the user wants to manage charge information', () => {
+          describe('and the user can edit a workflow  ', () => {
+            describe('and the licence does not end more than 6 years ago', () => {
+              it('return the associated links', () => {
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
+
+                expect(result.links.chargeInformation.makeLicenceNonChargeable).to
+                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                    'non-chargeable-reason?start=1')
+                expect(result.links.chargeInformation.setupNewCharge).to
+                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
+              })
+            })
+            describe('and the licence "ends" more than 6 years ago', () => {
+              beforeEach(() => {
+                const sixYearsAndOneDayAgo = new Date()
+
+                sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+                sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+                commonData.ends = {
+                  date: sixYearsAndOneDayAgo
+                }
+
+                chargeVersions = []
+                workflows = [{ ...workflow }]
+                agreements = []
+              })
+
+              it('returns no links for editing', () => {
+                const result = SetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData)
+
+                expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
+                expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
+              })
+            })
+          })
+        })
+
+        describe('when the user wants to manage return versions', () => {
+          describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
             it('return the associated links', () => {
               const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-              expect(result.links.chargeInformation.makeLicenceNonChargeable).to
-                .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1')
-              expect(result.links.chargeInformation.setupNewCharge).to
-                .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
+              expect(result.links.returnVersions.returnsRequired).to
+                .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required')
+              expect(result.links.returnVersions.noReturnsRequired).to
+                .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required')
             })
           })
-          describe('and the licence "ends" more than 6 years ago', () => {
+
+          describe('and the "enableRequirementsForReturns" feature toggle is false', () => {
             beforeEach(() => {
-              const sixYearsAndOneDayAgo = new Date()
-
-              sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
-              sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
-
-              commonData.ends = {
-                date: sixYearsAndOneDayAgo
-              }
-
-              chargeVersions = []
-              workflows = [{ ...workflow }]
-              agreements = []
+              Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
             })
 
-            it('returns no links for editing', () => {
+            it('return no returnVersions links', () => {
               const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-              expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
-              expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
+              expect(result.links.returnVersions).to.equal({})
             })
           })
         })
       })
+    })
 
-      describe('when the user wants to manage return versions', () => {
-        describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
-          it('return the associated links', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+    describe('when the two-part tariff supplementary billing feature flag is true', () => {
+      beforeEach(() => {
+        Sinon.stub(FeatureFlagsConfig, 'enableTwoPartTariffSupplementary').value(true)
+      })
 
-            expect(result.links.returnVersions.returnsRequired).to
-              .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required')
-            expect(result.links.returnVersions.noReturnsRequired).to
-              .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required')
+      describe('when the user wants to recalculate bills on the licence', () => {
+        describe('and the user has billing permission', () => {
+          describe('and the licence has an agreement that is two-part tariff', () => {
+            beforeEach(() => {
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope.push('billing')
+            })
+
+            it('correctly presents the recalculate bills link', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.links.recalculateBills.markForSupplementaryBilling).to.equal(
+                '/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing'
+              )
+            })
+          })
+
+          describe('but the licence has no two-part tariff agreements', () => {
+            beforeEach(() => {
+              agreement.financialAgreement.code = 'S130S'
+              agreements = [{ ...agreement }]
+
+              auth.credentials.scope.push('billing')
+            })
+
+            it('the recalculate bills link is not present', () => {
+              const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+
+              expect(result.recalculateBills).to.be.undefined()
+            })
           })
         })
 
-        describe('and the "enableRequirementsForReturns" feature toggle is false', () => {
+        describe('and the user does not have permission to recalculate bills', () => {
           beforeEach(() => {
-            Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+            agreements = [{ ...agreement }]
+
+            auth.credentials.scope = []
           })
 
-          it('return no returnVersions links', () => {
+          it('the recalculate bills link is not present', () => {
             const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-            expect(result.links.returnVersions).to.equal({})
+            expect(result.recalculateBills).to.be.undefined()
           })
         })
       })
