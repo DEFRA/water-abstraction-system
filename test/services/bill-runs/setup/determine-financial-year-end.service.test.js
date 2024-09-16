@@ -4,32 +4,24 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
 const DetermineFinancialYearEndService = require('../../../../app/services/bill-runs/setup/determine-financial-year-end.service.js')
 
 describe('Bill Runs Setup Determine Financial Year End service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
+  const regionId = '42995569-bc1f-4330-8ed3-3b9c550c3cac'
 
   let currentFinancialYearEnd
-  let regionId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     currentFinancialYearEnd = currentFinancialYear.endDate.getFullYear()
-
-    const region = RegionHelper.select()
-
-    regionId = region.id
   })
 
   describe('when called for an annual bill run', () => {
@@ -60,10 +52,16 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
   describe('when called for an supplementary bill run', () => {
     describe('and the last "sent" annual bill run is in the current financial year', () => {
+      let billRun
+
       beforeEach(async () => {
-        await BillRunHelper.add({
+        billRun = await BillRunHelper.add({
           batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
         })
+      })
+
+      afterEach(async () => {
+        await billRun.$query().delete()
       })
 
       it('returns the current financial year end', async () => {
@@ -74,10 +72,16 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
 
     describe('and the last "sent" annual bill run is in the previous financial year', () => {
+      let billRun
+
       beforeEach(async () => {
-        await BillRunHelper.add({
+        billRun = await BillRunHelper.add({
           batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd - 1
         })
+      })
+
+      afterEach(async () => {
+        await billRun.$query().delete()
       })
 
       it('returns the previous financial year end', async () => {
@@ -91,15 +95,21 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     // to move annual bill runs out of the way. We would hate to break this ability so we have logic to only look at
     // sent annual bill runs with an end year less than or equal to the current financial end year
     describe('and the last "sent" annual bill run is in the next financial year', () => {
+      let billRunOne
+      let billRunTwo
+
       beforeEach(async () => {
-        await Promise.all([
-          BillRunHelper.add({
-            batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
-          }),
-          BillRunHelper.add({
-            batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd + 1
-          })
-        ])
+        billRunOne = await BillRunHelper.add({
+          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
+        })
+        billRunTwo = await BillRunHelper.add({
+          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd + 1
+        })
+      })
+
+      afterEach(async () => {
+        await billRunOne.$query().delete()
+        await billRunTwo.$query().delete()
       })
 
       it('returns the financial year end of the bill run in the current year', async () => {
@@ -110,13 +120,21 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
 
     describe('and the last "sent" bill run is not an annual', () => {
+      let billRunOne
+      let billRunTwo
+
       beforeEach(async () => {
-        await BillRunHelper.add({
+        billRunOne = await BillRunHelper.add({
           batchType: 'two_part_tariff', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
         })
-        await BillRunHelper.add({
+        billRunTwo = await BillRunHelper.add({
           batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd - 1
         })
+      })
+
+      afterEach(async () => {
+        await billRunOne.$query().delete()
+        await billRunTwo.$query().delete()
       })
 
       it('ignores the other bill run and returns the financial year end of the first matching "sent" annual', async () => {
@@ -129,13 +147,19 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     // NOTE: This would never happen in a 'real' environment. All regions have 'sent' annual bill runs so a result
     // would always be found
     describe('and there is no "sent" annual bill run for the same region', () => {
+      let billRun
+
       beforeEach(async () => {
-        await BillRunHelper.add({
+        billRun = await BillRunHelper.add({
           batchType: 'annual',
           regionId: '576fde36-c19f-4e20-b852-7328d20d2aa0',
           status: 'sent',
           toFinancialYearEnding: currentFinancialYearEnd
         })
+      })
+
+      afterEach(async () => {
+        await billRun.$query().delete()
       })
 
       it('throws an error', async () => {
