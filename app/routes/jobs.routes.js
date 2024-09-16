@@ -72,7 +72,7 @@ const routes = [
         crumb: false
       }
     }
-  },
+  }
 ]
 
 module.exports = routes
