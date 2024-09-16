@@ -10,7 +10,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { getCycleEndDate, getCycleStartDate, startOfWinterAndAllYearCycle } = require('../../../lib/dates.lib.js')
+const { cycleEndDate, cycleStartDate, startOfWinterAndAllYearCycle } = require('../../../lib/dates.lib.js')
 
 /**
  * Given the licence reference this service returns the return requirements to be turned into return logs.
@@ -27,8 +27,7 @@ async function go (licenceReference) {
 
 async function _fetchExternalIds (licenceReference) {
   const externalIds = await ReturnLogModel.query()
-    .select([db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")])
-    .from('returns.returns as ret')
+    .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
     .where('startDate', '>=', startOfWinterAndAllYearCycle())
     .where('licenceRef', licenceReference)
 
@@ -40,13 +39,14 @@ async function _fetchExternalIds (licenceReference) {
 }
 
 async function _fetchReturnRequirements (licenceReference) {
-  const cycleEndDate = getCycleEndDate(false)
-  const cycleStartDate = getCycleStartDate(false)
+  // pass in false to ge the all year start and end date to make sure we cover the entire year
+  const _cycleEndDate = cycleEndDate(false)
+  const _cycleStartDate = cycleStartDate(false)
   const externalIds = await _fetchExternalIds(licenceReference)
 
   return await ReturnRequirementModel.query()
     .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(licenceReference, cycleStartDate, cycleEndDate))
+    .whereExists(_whereExistsClause(licenceReference, _cycleStartDate, _cycleEndDate))
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (builder) => {
       builder.select(['endDate',

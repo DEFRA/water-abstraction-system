@@ -10,18 +10,18 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { getCycleEndDate, getCycleStartDate } = require('../../../lib/dates.lib.js')
+const { cycleEndDate, cycleStartDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Fetch all return requirements that need return logs created.
  *
- * @param {boolean} isSummer - are we running summer cycle or all year
+ * @param {boolean} summer - are we running summer cycle or all year
  * @param {string} licenceReference - if provided only do the return log for that licence reference
  *
  * @returns {Promise<Array>} the list of return requirement ids
  */
-async function go (isSummer, licenceReference) {
-  const returnRequirements = await _fetchReturnRequirements(isSummer, licenceReference)
+async function go (summer, licenceReference) {
+  const returnRequirements = await _fetchReturnRequirements(summer, licenceReference)
 
   return returnRequirements
 }
@@ -29,9 +29,8 @@ async function go (isSummer, licenceReference) {
 async function _fetchExternalIds (cycleStartDate) {
   const externalIds = await ReturnLogModel.query()
     .select(['licenceRef',
-      db.raw("concat(ret.metadata->'nald'->>'regionCode', ':', ret.return_requirement) as externalid")
+      db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")
     ])
-    .from('returns.returns as ret')
     .where('startDate', '>=', cycleStartDate)
 
   const externalIdsArray = externalIds.map((item) => {
@@ -41,10 +40,10 @@ async function _fetchExternalIds (cycleStartDate) {
   return externalIdsArray
 }
 
-async function _fetchReturnRequirements (isSummer, licenceReference) {
-  const cycleEndDate = getCycleEndDate(isSummer)
-  const cycleStartDate = getCycleStartDate(isSummer)
-  const externalIds = await _fetchExternalIds(cycleStartDate)
+async function _fetchReturnRequirements (summer, licenceReference) {
+  const _cycleEndDate = cycleEndDate(summer)
+  const _cycleStartDate = cycleStartDate(summer)
+  const externalIds = await _fetchExternalIds(_cycleStartDate)
 
   const results = await ReturnRequirementModel.query()
     .select(['id',
@@ -62,8 +61,8 @@ async function _fetchReturnRequirements (isSummer, licenceReference) {
       'twoPartTariff'
     ])
     .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(licenceReference, cycleStartDate, cycleEndDate))
-    .where('returnRequirements.summer', isSummer)
+    .whereExists(_whereExistsClause(licenceReference, _cycleStartDate, _cycleEndDate))
+    .where('returnRequirements.summer', summer)
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (builder) => {
       builder.select(['endDate',

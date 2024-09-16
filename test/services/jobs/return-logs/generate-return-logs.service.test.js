@@ -194,7 +194,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is false, two return requirements and a licenceRef provided', () => {
+  describe('when summer is false, two return requirements and a licenceRef provided', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const primaryPurpose2 = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -336,7 +336,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, two return requirements and a licenceRef provided', () => {
+  describe('when summer is true, two return requirements and a licenceRef provided', () => {
     const primaryPurpose = PrimaryPurposeHelper.select()
     const primaryPurpose2 = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -478,7 +478,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
+  describe('when summer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 1, 31).toISOString().split('T')[0]
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -560,7 +560,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
+  describe('when summer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
     const expiredDate = new Date(new Date().getFullYear() + 1, 3, 31).toISOString().split('T')[0]
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -642,7 +642,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
+  describe('when summer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
     const lapsedDate = new Date(new Date().getFullYear() + 1, 8, 31).toISOString().split('T')[0]
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -724,7 +724,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
+  describe('when summer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
     const revokedDate = new Date(new Date().getFullYear() + 1, 10, 31).toISOString().split('T')[0]
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -806,7 +806,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
+  describe('when summer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
     const startDate = new Date(new Date().getFullYear(), 11, 1).toISOString().split('T')[0]
     const primaryPurpose = PrimaryPurposeHelper.select()
     const purpose = PurposeHelper.select()
@@ -888,7 +888,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
+  describe('when summer is false, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return five return log payloads', async () => {
       const returnRequirements = await FetchReturnRequirementsService.go(false)
       const results = await GenerateReturnLogsService.go(returnRequirements)
@@ -901,7 +901,7 @@ describe('Generate return logs service', () => {
     })
   })
 
-  describe('when isSummer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
+  describe('when summer is true, and no licenceReference is provided it should return all the return logs that are eligible', () => {
     it('should return five return log payloads', async () => {
       const returnRequirements = await FetchReturnRequirementsService.go(true)
       const results = await GenerateReturnLogsService.go(returnRequirements)

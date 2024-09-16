@@ -36,8 +36,8 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 async function go (cycle, licenceReference = null) {
   try {
     const startTime = currentTimeInNanoseconds()
-    const isSummer = cycle === 'summer'
-    const returnRequirements = await FetchReturnRequirementsService.go(isSummer, licenceReference)
+    const summer = cycle === 'summer'
+    const returnRequirements = await FetchReturnRequirementsService.go(summer, licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
     await _createReturnLogs(returnLogs)

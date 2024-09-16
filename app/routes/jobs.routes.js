@@ -73,20 +73,6 @@ const routes = [
       }
     }
   },
-  {
-    method: 'POST',
-    path: '/jobs/licence-return-logs',
-    options: {
-      handler: JobsController.returnLogsForLicence,
-      app: {
-        plainOutput: true
-      },
-      auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  }
 ]
 
 module.exports = routes

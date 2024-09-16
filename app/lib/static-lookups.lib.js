@@ -24,18 +24,16 @@ const organisationTypes = [
 ]
 
 const returnCycleDates = {
-  allYearDueDateDay: 28,
-  allYearDueDateMonth: 3,
-  allYearEndDateDay: 31,
-  allYearEndDateMonth: 2,
-  allYearStartDateDay: 1,
-  allYearStartDateMonth: 3,
-  summerDueDateDay: 28,
-  summerDueDateMonth: 10,
-  summerEndDateDay: 31,
-  summerEndDateMonth: 9,
-  summerStartDateDay: 1,
-  summerStartDateMonth: 10
+  allYear: {
+    dueDate: { day: 28, month: 3 },
+    endDate: { day: 31, month: 2 },
+    startDate: { day: 1, month: 3 }
+  },
+  summer: {
+    dueDate: { day: 28, month: 10 },
+    endDate: { day: 31, month: 9 },
+    startDate: { day: 1, month: 10 }
+  }
 }
 
 const returnRequirementFrequencies = {
