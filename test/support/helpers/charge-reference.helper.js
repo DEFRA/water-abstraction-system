@@ -6,6 +6,7 @@
 
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const ChargeCategoryHelper = require('./charge-category.helper.js')
 
 /**
  * Add a new charge reference
@@ -21,7 +22,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * - `restrictedSource` - true
  * - `waterModel` - no model
  * - `volume` - 6.819
- * - `chargeCategoryId` - [random UUID]
+ * - `chargeCategoryId` - random chargeCategoryId from charge category seed data
  * - `additionalCharges` - { isSupplyPublicWater: true }
  * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
  * - `eiucRegion` - Anglian
@@ -53,6 +54,8 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: chargeCategoryId } = ChargeCategoryHelper.select()
+
   const defaults = {
     chargeVersionId: generateUUID(),
     source: 'non-tidal',
@@ -63,7 +66,7 @@ function defaults (data = {}) {
     restrictedSource: true,
     waterModel: 'no model',
     volume: 6.819,
-    chargeCategoryId: generateUUID(),
+    chargeCategoryId,
     additionalCharges: { isSupplyPublicWater: true },
     adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443' },
     eiucRegion: 'Anglian',
