@@ -45,13 +45,13 @@ describe('Persist licence service', () => {
     transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
       licenceVersionPurposeConditionType.id)
 
-    transformedCompany = _transformedCompany()
+    transformedCompany = await _transformedCompany()
 
     transformedCompanies = [{ ...transformedCompany }]
   })
 
   describe('when given a valid transformed licence', () => {
-    describe('and that licence does not already exist', () => {
+    describe.only('and that licence does not already exist', () => {
       it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
         const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
 
@@ -85,6 +85,8 @@ describe('Persist licence service', () => {
         expect(company.name).to.equal('ACME')
         expect(company.type).to.equal('person')
         expect(company.externalId).to.equal(transformedCompany.externalId)
+
+        // Company Licence holder
       })
     })
 
@@ -313,10 +315,18 @@ async function _fetchPersistedCompany (externalId) {
     .first()
 }
 
-function _transformedCompany () {
+async function _transformedCompany () {
+  const externalId = CompanyHelper.generateExternalId()
+
   return {
-    externalId: CompanyHelper.generateExternalId(),
+    externalId,
     name: 'ACME',
-    type: 'person'
+    type: 'person',
+    licenceHolder: {
+      companyExternalId: externalId,
+      contactExternalId: externalId,
+      licenceRoleId: 'fix me - with seed',
+      startDate: new Date('2001-01-01')
+    }
   }
 }

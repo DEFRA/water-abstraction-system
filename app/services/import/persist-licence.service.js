@@ -143,10 +143,11 @@ async function _persistCompanies (trx, updatedAt, companies) {
   for (const companyToPersist of companies) {
     const { licenceHolder, ...company } = companyToPersist
 
-    await _persistCompany(trx, updatedAt, company)
+    const { id: companyId } = await _persistCompany(trx, updatedAt, company)
 
     if (licenceHolder) {
-      await _persistLicenceHolder(trx, updatedAt, licenceHolder)
+      // needs the transaction id's for contact id and company id
+      await _persistLicenceHolder(trx, updatedAt, licenceHolder, companyId)
     }
   }
 }
@@ -164,10 +165,10 @@ async function _persistCompany (trx, updatedAt, company) {
     ])
 }
 
-async function _persistLicenceHolder (trx, updatedAt, licenceHolder) {
+async function _persistLicenceHolder (trx, updatedAt, licenceHolder, companyId) {
   const { companyExternalId, contactExternalId, ...propertiesToPersist } = licenceHolder
 
-  const { id: companyId } = await CompanyModel.query().select().where('externalId', companyExternalId).first()
+  // this need fixing - pass in the contact id
   const { id: contactId } = await ContactModel.query().select().where('externalId', contactExternalId).first()
 
   return CompanyContactModel.query(trx)

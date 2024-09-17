@@ -13,7 +13,7 @@ const NALD_STATUSES = {
 /**
  * Maps legacy NALD licence version data to the WRLS format
  *
- * @param {ImportLegacyLicenceVersionTyp} licenceVersion - the legacy NALD licence version
+ * @param {ImportLegacyLicenceVersionType} licenceVersion - the legacy NALD licence version
  *
  * @returns {object} the NALD licence version data transformed into the WRLS format ready for validation and persisting
  */
