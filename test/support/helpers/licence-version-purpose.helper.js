@@ -9,6 +9,7 @@ const LicenceVersionPurposeModel = require('../../../app/models/licence-version-
 const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
 const PurposeHelper = require('./purpose.helper.js')
 const { randomInteger } = require('../general.js')
+const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
 
 /**
  * Add a new licence version purpose
@@ -23,7 +24,7 @@ const { randomInteger } = require('../general.js')
  * - `licenceVersionId` - [random UUID]
  * - `primaryPurposeId` - [randomly selected UUID from primary purposes]
  * - `purposeId` - [randomly selected UUID from purposes]
- * - `secondaryPurposeId` - [random UUID]
+ * - `secondaryPurposeId` - [randomly selected UUID from secondary purposes]
  * - `created` - new Date()
  * - `updated` - new Date()
  *
@@ -52,6 +53,7 @@ async function add (data = {}) {
 function defaults (data = {}) {
   const { id: primaryPurposeId } = PrimaryPurposeHelper.select()
   const { id: purposeId } = PurposeHelper.select()
+  const { id: secondaryPurposeId } = SecondaryPurposeHelper.select()
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -63,7 +65,7 @@ function defaults (data = {}) {
     licenceVersionId: generateUUID(),
     primaryPurposeId,
     purposeId,
-    secondaryPurposeId: generateUUID(),
+    secondaryPurposeId,
     // INFO: The table does not have a default for the date columns
     createdAt: timestamp,
     updatedAt: timestamp
