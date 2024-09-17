@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view licence contact details page
- * @module ViewLicenceContactDetailsPresenter
+ * @module ViewLicenceContactsPresenter
  */
 
 /**
