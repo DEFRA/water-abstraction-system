@@ -6,6 +6,7 @@
 
 const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const LicenceVersionPurposeConditionModel = require('../../../app/models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeConditionTypeHelper = require('./licence-version-purpose-condition-type.helper.js')
 const { randomInteger } = require('../general.js')
 
 /**
@@ -15,7 +16,7 @@ const { randomInteger } = require('../general.js')
  *
  * - `licenceVersionPurposeConditionId` - [random UUID]
  * - `licenceVersionPurposeId` - [random UUID]
- * - `licenceVersionPurposeConditionTypeId` - [random UUID]
+ * - `licenceVersionPurposeConditionTypeId` - random licenceVersionPurposeConditionTypeId from seed data
  * - `externalId` - [9:${randomInteger(10000, 99999)}:1:0]
  * - `source` - [nald]
  * - `dateCreated` - new Date()
@@ -44,11 +45,12 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: licenceVersionPurposeConditionTypeId } = LicenceVersionPurposeConditionTypeHelper.select()
   const timestamp = timestampForPostgres()
 
   const defaults = {
     licenceVersionPurposeId: generateUUID(),
-    licenceVersionPurposeConditionTypeId: generateUUID(),
+    licenceVersionPurposeConditionTypeId,
     externalId: `9:${randomInteger(10000, 99999)}:1:0`,
     source: 'nald',
     createdAt: timestamp,
