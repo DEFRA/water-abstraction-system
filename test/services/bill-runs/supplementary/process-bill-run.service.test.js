@@ -12,7 +12,6 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const DatabaseSupport = require('../../../support/database.js')
 
 // Things we need to stub
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
@@ -26,7 +25,7 @@ const UnflagUnbilledLicencesService = require('../../../../app/services/bill-run
 // Thing under test
 const SupplementaryProcessBillRunService = require('../../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 
-describe('Supplementary Process Bill Run service', () => {
+describe.only('Supplementary Process Bill Run service', () => {
   const billingPeriods = [
     { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
     { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -39,8 +38,6 @@ describe('Supplementary Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     billRun = await BillRunHelper.add()
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
