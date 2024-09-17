@@ -105,17 +105,17 @@ async function viewCommunications (request, h) {
 async function viewLicenceContactDetails (request, h) {
   const { id } = request.params
 
-  const data = await ViewLicenceContactDetailsService.go(id)
+  const pageData = await ViewLicenceContactDetailsService.go(id)
 
   return h.view('licences/licence-contact-details.njk', {
-    ...data
+    ...pageData
   })
 }
 
 async function viewLicenceContacts (request, h) {
   const { params: { id }, auth } = request
 
-  const data = await ViewLicenceContactsService.go(id, auth)
+  const pageData = await ViewLicenceContactsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
     ...pageData
