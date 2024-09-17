@@ -16,7 +16,7 @@ const { randomInteger } = require('../general.js')
  *
  * - `licenceVersionPurposeConditionId` - [random UUID]
  * - `licenceVersionPurposeId` - [random UUID]
- * - `licenceVersionPurposeConditionTypeId` - random licenceVersionPurposeConditionTypeId from seed data
+ * - `licenceVersionPurposeConditionTypeId` - [randomly selected UUID from licence version purpose condition types]
  * - `externalId` - [9:${randomInteger(10000, 99999)}:1:0]
  * - `source` - [nald]
  * - `dateCreated` - new Date()

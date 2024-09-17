@@ -19,7 +19,7 @@ const DEFAULT_INDEX = 4
  * If no `data` is provided, default values will be used. These are
  *
  * - `userId` - [randomly generated - 100001]
- * - `groupId` - random groupId from group seed data
+ * - `groupId` - [randomly selected UUID from groups]
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *

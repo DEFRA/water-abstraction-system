@@ -22,7 +22,7 @@ const ChargeCategoryHelper = require('./charge-category.helper.js')
  * - `restrictedSource` - true
  * - `waterModel` - no model
  * - `volume` - 6.819
- * - `chargeCategoryId` - random chargeCategoryId from charge category seed data
+ * - `chargeCategoryId` - [randomly selected UUID from charge categories]
  * - `additionalCharges` - { isSupplyPublicWater: true }
  * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
  * - `eiucRegion` - Anglian

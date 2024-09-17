@@ -12,7 +12,7 @@ const RegionHelper = require('./region.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `regionId` - random regionId from region seed data
+ * - `regionId` - [randomly selected UUID from regions]
  * - `batchType` - supplementary
  * - `fromFinancialYearEnding` - 2023
  * - `toFinancialYearEnding` - 2023

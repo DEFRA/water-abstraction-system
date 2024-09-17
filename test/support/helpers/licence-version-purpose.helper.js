@@ -21,8 +21,8 @@ const { randomInteger } = require('../general.js')
  * - `abstractionPeriodEndMonth` - [3]
  * - `externalId` - [randomly generated - 9:99999]
  * - `licenceVersionId` - [random UUID]
- * - `primaryPurposeId` - random id from the primary purpose seed data
- * - `purposeId` - random id from the purpose seed data
+ * - `primaryPurposeId` - [randomly selected UUID from primary purposes]
+ * - `purposeId` - [randomly selected UUID from purposes]
  * - `secondaryPurposeId` - [random UUID]
  * - `created` - new Date()
  * - `updated` - new Date()

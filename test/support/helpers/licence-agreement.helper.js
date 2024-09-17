@@ -13,7 +13,7 @@ const LicenceHelper = require('./licence.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `financialAgreementId` - random financialAgreementId from financial agreement seed data
+ * - `financialAgreementId` - [randomly selected UUID from financial agreements]
  * - `licenceRef` - [randomly generated - 01/123]
  * - `startDate` - 2023-01-01
  *

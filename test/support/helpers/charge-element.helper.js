@@ -27,7 +27,7 @@ const PurposeHelper = require('./purpose.helper.js')
  * - `description` - Trickle Irrigation - Direct
  * - `purposePrimaryId` - [random UUID]
  * - `purposeSecondaryId` - [random UUID]
- * - `purposeId` - random id from purpose seed data
+ * - `purposeId` - [randomly selected UUID from purposes]
  * - `section127Agreement` - true
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
