@@ -5,14 +5,14 @@
  */
 
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const RegionHelper = require('./region.helper.js')
 
 /**
  * Add a new bill run
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `regionId` - [random UUID]
+ * - `regionId` - random regionId from region seed data
  * - `batchType` - supplementary
  * - `fromFinancialYearEnding` - 2023
  * - `toFinancialYearEnding` - 2023
@@ -43,8 +43,10 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: regionId } = RegionHelper.select()
+
   const defaults = {
-    regionId: generateUUID(),
+    regionId,
     batchType: 'supplementary',
     fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023,
