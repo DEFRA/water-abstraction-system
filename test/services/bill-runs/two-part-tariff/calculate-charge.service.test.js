@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
@@ -23,7 +22,7 @@ const CalculateChargeRequest = require('../../../../app/requests/charging-module
 // Thing under test
 const CalculateChargeService = require('../../../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
 
-describe('Calculate Charge service', () => {
+describe.only('Calculate Charge service', () => {
   let calculateChargeRequestStub
   let chargeCategoryReference
   let licenceId
@@ -31,8 +30,6 @@ describe('Calculate Charge service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const testLicence = await LicenceHelper.add({ waterUndertaker: true })
 
     licenceId = testLicence.id
