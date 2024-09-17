@@ -133,7 +133,7 @@ describe('Licences controller', () => {
       })
     })
   })
-  
+
   describe('/licences/{id}/history', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -161,7 +161,7 @@ describe('Licences controller', () => {
       })
     })
   })
-  
+
   describe('/licences/{id}/licence-contact', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -559,7 +559,7 @@ function _viewLicenceContacts () {
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
   }
 }
-  
+
 function _viewLicenceHistory () {
   return {
     entries: [{}],
@@ -568,7 +568,7 @@ function _viewLicenceHistory () {
     pageTitle: 'History for AT/Test'
   }
 }
-  
+
 function _viewLicenceContactDetails () {
   const commonLicenceData = _viewLicence()
 
