@@ -34,7 +34,7 @@ async function _insert (licenceRole) {
 }
 
 async function _update (licenceRole) {
-  const { label, name } = region
+  const { label, name } = licenceRole
 
   return LicenceRoleModel.query()
     .patch({ label, name, updatedAt: timestampForPostgres() })
