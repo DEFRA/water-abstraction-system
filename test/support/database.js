@@ -23,6 +23,7 @@ const RolesSeeder = require('../../db/seeds/07-roles.seed.js')
 const SecondaryPurposesSeeder = require('../../db/seeds/04-secondary-purposes.seed.js')
 const UserGroupsSeeder = require('../../db/seeds/10-user-groups.seed.js')
 const UsersSeeder = require('../../db/seeds/09-users.seed.js')
+const LicenceRoleSeeder = require('../../db/seeds/14-licence-roles.seed.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -99,6 +100,7 @@ async function _seed () {
   await FinancialAgreementsSeeder.seed()
   await ChangeReasonsSeeder.seed()
   await ChargeCategoriesSeeder.seed()
+  await LicenceRoleSeeder.seed()
 }
 
 async function _tableNames (schema) {
