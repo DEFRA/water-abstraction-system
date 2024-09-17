@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view customer contact details page
- * @module CustomerContactDetailsPresenter
+ * @module CustomerContactsPresenter
  */
 
 const ContactModel = require('../../models/contact.model.js')
