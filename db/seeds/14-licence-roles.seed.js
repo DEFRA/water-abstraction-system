@@ -33,7 +33,7 @@ async function _insert (licenceRole) {
   return LicenceRoleModel.query().insert(licenceRole)
 }
 
-async function _update (region) {
+async function _update (licenceRole) {
   const { label, name } = region
 
   return LicenceRoleModel.query()
