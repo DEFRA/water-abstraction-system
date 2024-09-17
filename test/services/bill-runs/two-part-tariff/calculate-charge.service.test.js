@@ -22,7 +22,7 @@ const CalculateChargeRequest = require('../../../../app/requests/charging-module
 // Thing under test
 const CalculateChargeService = require('../../../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
 
-describe.only('Calculate Charge service', () => {
+describe('Calculate Charge service', () => {
   let calculateChargeRequestStub
   let chargeCategoryReference
   let licenceId
