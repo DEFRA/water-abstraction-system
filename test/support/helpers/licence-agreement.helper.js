@@ -4,7 +4,7 @@
  * @module LicenceAgreementHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const FinancialAgreementHelper = require('./financial-agreement.helper.js')
 const LicenceAgreementModel = require('../../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('./licence.helper.js')
 
@@ -13,7 +13,7 @@ const LicenceHelper = require('./licence.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `financialAgreementId` - [random UUID]
+ * - `financialAgreementId` - random financialAgreementId from financial agreement seed data
  * - `licenceRef` - [randomly generated - 01/123]
  * - `startDate` - 2023-01-01
  *
@@ -40,8 +40,10 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: financialAgreementId } = FinancialAgreementHelper.select()
+
   const defaults = {
-    financialAgreementId: generateUUID(),
+    financialAgreementId,
     licenceRef: LicenceHelper.generateLicenceRef(),
     startDate: new Date('2023-01-01')
   }
