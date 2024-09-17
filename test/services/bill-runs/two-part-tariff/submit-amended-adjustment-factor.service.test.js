@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const AmendAdjustmentFactorPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-adjustment-factor.presenter.js')
-const DatabaseSupport = require('../../../support/database.js')
 const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-charge-reference.service.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../../../app/models/review-charge-reference.model.js')
@@ -27,8 +26,6 @@ describe('Submit Amended Adjustment Factor Service', () => {
   let yarStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     yarStub = { flash: Sinon.stub() }
 
     reviewChargeReference = await ReviewChargeReferenceHelper.add()
