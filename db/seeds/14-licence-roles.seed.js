@@ -29,7 +29,7 @@ async function _exists (licenceRole) {
   return !!result
 }
 
-async function _insert (region) {
+async function _insert (licenceRole) {
   return LicenceRoleModel.query().insert(region)
 }
 
