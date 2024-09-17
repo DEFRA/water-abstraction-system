@@ -22,11 +22,9 @@ const ViewLicenceService = require('./view-licence.service.js')
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  // Licence contact details
   const licenceContacts = await FetchLicenceContactsService.go(licenceId)
   const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
 
-  // Customer contacts details
   const customerContacts = await FetchCustomerContactsService.go(licenceId)
   const customerContactsData = CustomerContactsPresenter.go(customerContacts)
 
