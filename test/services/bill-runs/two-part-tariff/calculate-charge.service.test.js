@@ -37,7 +37,7 @@ describe('Calculate Charge service', () => {
 
     licenceId = testLicence.id
 
-    const testChargeCategory = await ChargeCategoryHelper.add()
+    const testChargeCategory = ChargeCategoryHelper.select()
 
     chargeCategoryReference = testChargeCategory.reference
 

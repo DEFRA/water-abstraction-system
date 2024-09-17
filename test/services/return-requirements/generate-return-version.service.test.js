@@ -27,6 +27,7 @@ describe('Generate Return Version service', () => {
 
   beforeEach(async () => {
     Sinon.stub(GenerateReturnVersionRequirementsService, 'go').resolves('return requirements data')
+    Sinon.stub(ProcessExistingReturnVersionsService, 'go').resolves('2024-04-01T00:00:00.000Z')
   })
 
   afterEach(() => {
@@ -67,8 +68,6 @@ describe('Generate Return Version service', () => {
 
       await ReturnVersionHelper.add({ licenceId, version: 100 })
       await ReturnVersionHelper.add({ licenceId, version: 102 })
-
-      Sinon.stub(ProcessExistingReturnVersionsService, 'go').resolves('2024-04-01T00:00:00.000Z')
     })
 
     it('generates the data required to populate a record in the "return_version" table', async () => {
@@ -85,6 +84,13 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
+      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
+    })
+
+    it('processes the existing return versions', async () => {
+      await GenerateReturnVersionService.go(sessionData, userId)
+
+      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
     })
   })
 
@@ -136,6 +142,12 @@ describe('Generate Return Version service', () => {
       // Version number is 1 because no previous return versions exist
       expect(result.returnVersion.version).to.equal(1)
     })
+
+    it('does not process any existing return versions', async () => {
+      await GenerateReturnVersionService.go(sessionData, userId)
+
+      expect(ProcessExistingReturnVersionsService.go.called).to.be.false()
+    })
   })
 
   describe('when called with session data from the "no-returns-required" journey', () => {
@@ -164,7 +176,7 @@ describe('Generate Return Version service', () => {
 
       expect(result.returnRequirements).to.equal([])
       expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.be.null()
+      expect(result.returnVersion.endDate).to.equal('2024-04-01T00:00:00.000Z')
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
@@ -172,6 +184,12 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
       expect(result.returnVersion.status).to.equal('current')
       expect(result.returnVersion.version).to.equal(1)
+    })
+
+    it('processes the existing return versions', async () => {
+      await GenerateReturnVersionService.go(sessionData, userId)
+
+      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
     })
   })
 })

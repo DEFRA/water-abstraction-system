@@ -4,7 +4,7 @@
  * @module TransactionHelper
  */
 
-const { generateChargeReference } = require('./charge-category.helper.js')
+const ChargeCategoryHelper = require('./charge-category.helper.js')
 const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
@@ -61,6 +61,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const { startDate, endDate } = determineCurrentFinancialYear()
+  const { reference, shortDescription } = ChargeCategoryHelper.select()
 
   const defaults = {
     adjustmentFactor: 1,
@@ -70,8 +71,8 @@ function defaults (data = {}) {
     billableDays: 365,
     billableQuantity: 11,
     billLicenceId: generateUUID(),
-    chargeCategoryCode: generateChargeReference(),
-    chargeCategoryDescription: 'Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model',
+    chargeCategoryCode: reference,
+    chargeCategoryDescription: shortDescription,
     chargeReferenceId: generateUUID(),
     chargeType: 'standard',
     credit: false,

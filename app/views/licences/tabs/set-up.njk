@@ -210,3 +210,13 @@
     classes: "govuk-button--secondary"
   }) }}
 {% endif %}
+
+{% if links.recalculateBills.markForSupplementaryBilling %}
+  <div>
+    {{ govukButton({
+      text: "Recalculate bills",
+      href: links.recalculateBills.markForSupplementaryBilling,
+      classes: "govuk-button--secondary"
+    }) }}
+  </div>
+{% endif %}

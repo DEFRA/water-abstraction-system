@@ -22,10 +22,10 @@ const GenerateTransactionsService = require('../../../app/services/bill-runs/gen
 
 describe('Generate Transactions service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'
-  const reference = '4.4.5'
 
-  let chargePeriod
+  let chargeCategory
   let chargeElement
+  let chargePeriod
   let chargeReference
   let newLicence
   let waterUndertaker
@@ -38,7 +38,7 @@ describe('Generate Transactions service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    const chargeCategory = await ChargeCategoryHelper.add({ reference })
+    chargeCategory = ChargeCategoryHelper.select()
     const { id: chargeCategoryId } = chargeCategory
 
     const baseChargeReference = await ChargeReferenceHelper.add({ chargeCategoryId })
@@ -89,8 +89,8 @@ describe('Generate Transactions service', () => {
         scheme: 'sroc',
         aggregateFactor: 0.562114443,
         adjustmentFactor: 1,
-        chargeCategoryCode: '4.4.5',
-        chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+        chargeCategoryCode: chargeCategory.reference,
+        chargeCategoryDescription: chargeCategory.shortDescription,
         supportedSource: false,
         supportedSourceName: null,
         waterCompanyCharge: true,
