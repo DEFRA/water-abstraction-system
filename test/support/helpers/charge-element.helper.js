@@ -6,6 +6,9 @@
 
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
+const PurposeHelper = require('./purpose.helper.js')
+const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
 
 /**
  * Add a new charge element
@@ -24,9 +27,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * - `timeLimitedStartDate` - 2022-04-01
  * - `timeLimitedEndDate` - 2030-03-30
  * - `description` - Trickle Irrigation - Direct
- * - `purposePrimaryId` - [random UUID]
- * - `purposeSecondaryId` - [random UUID]
- * - `purposeId` - [random UUID]
+ * - `purposePrimaryId` - [randomly selected UUID from primary purposes]
+ * - `purposeSecondaryId` - [randomly selected UUID from secondary purposes]
+ * - `purposeId` - [randomly selected UUID from purposes]
  * - `section127Agreement` - true
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -52,6 +55,10 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: purposeId } = PurposeHelper.select()
+  const { id: purposePrimaryId } = PrimaryPurposeHelper.select()
+  const { id: purposeSecondaryId } = SecondaryPurposeHelper.select()
+
   const defaults = {
     chargeReferenceId: generateUUID(),
     abstractionPeriodStartDay: 1,
@@ -65,9 +72,9 @@ function defaults (data = {}) {
     timeLimitedStartDate: new Date('2022-04-01'),
     timeLimitedEndDate: new Date('2030-03-30'),
     description: 'Trickle Irrigation - Direct',
-    purposePrimaryId: generateUUID(),
-    purposeSecondaryId: generateUUID(),
-    purposeId: generateUUID(),
+    purposePrimaryId,
+    purposeSecondaryId,
+    purposeId,
     section127Agreement: true
   }
 

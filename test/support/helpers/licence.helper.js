@@ -15,7 +15,7 @@ const RegionHelper = require('./region.helper.js')
  *
  * - `waterUndertaker` - false
  * - `licenceRef` - [randomly generated - 01/12/34/1000]
- * - `regionId` - [random UUID]
+ * - `regionId` - [randomly selected UUID from regions]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
  *

@@ -1,40 +1,27 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the view licence contact details tab
+ * Orchestrates fetching and presenting the data needed for the view licence contact details link page
  * @module ViewLicenceContactDetailsService
  */
 
-const CustomerContactDetailsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
-const FetchCustomerContactDetailsService = require('./fetch-customer-contacts.service.js')
-const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
-const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
-const ViewLicenceService = require('./view-licence.service.js')
+const ViewLicenceContactDetailsPresenter = require('../../presenters/licences/view-licence-contact-details.presenter.js')
+const FetchLicenceContactDetailsService = require('./fetch-licence-contact-details.service.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the licence contact details page
+ * Orchestrates fetching and presenting the data needed for the licence contact details link page
  *
  * @param {string} licenceId - The UUID of the licence
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
+ * @returns {Promise<object>} The view data for the licence contacts page
  */
-async function go (licenceId, auth) {
-  const commonData = await ViewLicenceService.go(licenceId, auth)
-
-  // Licence contact details
-  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
-  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
-
-  // Customer contacts details
-  const customerContacts = await FetchCustomerContactDetailsService.go(licenceId)
-  const customerContactsData = CustomerContactDetailsPresenter.go(customerContacts)
+async function go (licenceId) {
+  const licence = await FetchLicenceContactDetailsService.go(licenceId)
+  const formattedData = await ViewLicenceContactDetailsPresenter.go(licence)
 
   return {
-    activeTab: 'contact-details',
-    ...commonData,
-    ...customerContactsData,
-    ...licenceContactsData
+    activeNavBar: 'search',
+    ...formattedData
   }
 }
 
