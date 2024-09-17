@@ -12,30 +12,6 @@ const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
 
 /**
- * Get the next summer return cycle end date.
- *
- * @returns {Date} the end date of the next summer cycle
- */
-function endOfSummerCycle () {
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.summer.endDate.month,
-    returnCycleDates.summer.endDate.day
-  )
-}
-
-/**
- * Get the next winter and all year return cycle end date.
- *
- * @returns {Date} the end date of the next winter and all year cycle
- */
-function endOfWinterAndAllYearCycle () {
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.allYear.endDate.month,
-    returnCycleDates.allYear.endDate.day
-  )
-}
-
-/**
  * Formats a string assumed to be a date in the format 01/01/2001
  *
  * Formats to iso format 2001-01-01
