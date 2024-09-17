@@ -12,30 +12,6 @@ const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
 
 /**
- * Get the next summer return cycle due date.
- *
- * @returns {Date} the due date of the next summer return cycle
- */
-function dueDateOfSummerCycle () {
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.summer.dueDate.month,
-    returnCycleDates.summer.dueDate.day
-  )
-}
-
-/**
- * Get the next winter and all year cycle due date.
- *
- * @returns {Date} the due date of the next winter and all year return cycle
- */
-function dueDateOfWinterAndAllYearCycle () {
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.allYear.dueDate.month,
-    returnCycleDates.allYear.dueDate.day
-  )
-}
-
-/**
  * Get the next summer return cycle end date.
  *
  * @returns {Date} the end date of the next summer cycle
@@ -99,12 +75,40 @@ function formatDateObjectToISO (date) {
  * Get the due date of next provided cycle. Either summer or winter or all year.
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {string} - the due date of the next cycle as an ISO string.
+ */
+function cycleDueDateAsISO (summer) {
+  return formatDateObjectToISO(cycleDueDate(summer))
+}
+
+/**
+ * Get the due date of next provided cycle. Either summer or winter or all year.
+ *
+ * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the due date of the next cycle.
  */
 function cycleDueDate (summer) {
-  return summer
-    ? formatDateObjectToISO(dueDateOfSummerCycle())
-    : formatDateObjectToISO(dueDateOfWinterAndAllYearCycle())
+  if (summer) {
+    return new Date(new Date().getFullYear() + 1,
+      returnCycleDates.summer.dueDate.month,
+      returnCycleDates.summer.dueDate.day
+    )
+  }
+
+  return new Date(new Date().getFullYear() + 1,
+    returnCycleDates.allYear.dueDate.month,
+    returnCycleDates.allYear.dueDate.day
+  )
+}
+
+/**
+ * Get the end date of next provided cycle. Either summer or winter or all year.
+ *
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {string} - the end date of the next cycle as an ISO string.
+ */
+function cycleEndDateAsISO (summer) {
+  return formatDateObjectToISO(cycleEndDate(summer))
 }
 
 /**
@@ -114,9 +118,27 @@ function cycleDueDate (summer) {
  * @returns {Date} - the end date of the next cycle.
  */
 function cycleEndDate (summer) {
-  return summer
-    ? formatDateObjectToISO(endOfSummerCycle())
-    : formatDateObjectToISO(endOfWinterAndAllYearCycle())
+  if (summer) {
+    return new Date(new Date().getFullYear() + 1,
+      returnCycleDates.summer.endDate.month,
+      returnCycleDates.summer.endDate.day
+    )
+  }
+
+  return new Date(new Date().getFullYear() + 1,
+    returnCycleDates.allYear.endDate.month,
+    returnCycleDates.allYear.endDate.day
+  )
+}
+
+/**
+ * Get the start date of next provided cycle. Either summer or winter or all year.
+ *
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {string} - the start date of the next cycle as an ISO string.
+ */
+function cycleStartDateAsISO (summer) {
+  return formatDateObjectToISO(cycleStartDate(summer))
 }
 
 /**
@@ -126,7 +148,17 @@ function cycleEndDate (summer) {
  * @returns {Date} - the start date of the next cycle.
  */
 function cycleStartDate (summer) {
-  return summer ? formatDateObjectToISO(startOfSummerCycle()) : formatDateObjectToISO(startOfWinterAndAllYearCycle())
+  if (summer) {
+    return new Date(new Date().getFullYear(),
+      returnCycleDates.summer.startDate.month,
+      returnCycleDates.summer.startDate.day
+    )
+  }
+
+  return new Date(new Date().getFullYear(),
+    returnCycleDates.allYear.startDate.month,
+    returnCycleDates.allYear.startDate.day
+  )
 }
 
 /**
@@ -197,42 +229,15 @@ function _isLeapYear (year) {
   return false
 }
 
-/**
- * Get the next summer return cycle start date.
- *
- * @returns {Date} the start date of the next summer cycle
- */
-function startOfSummerCycle () {
-  return new Date(new Date().getFullYear(),
-    returnCycleDates.summer.startDate.month,
-    returnCycleDates.summer.startDate.day
-  )
-}
-
-/**
- * Get the next winter and all year return cycle start date.
- *
- * @returns {Date} the start date of the next winter and all year cycle
- */
-function startOfWinterAndAllYearCycle () {
-  return new Date(new Date().getFullYear(),
-    returnCycleDates.allYear.startDate.month,
-    returnCycleDates.allYear.startDate.day
-  )
-}
-
 module.exports = {
-  dueDateOfSummerCycle,
-  dueDateOfWinterAndAllYearCycle,
-  endOfSummerCycle,
-  endOfWinterAndAllYearCycle,
   formatDateObjectToISO,
   formatStandardDateToISO,
   cycleDueDate,
+  cycleDueDateAsISO,
   cycleEndDate,
+  cycleEndDateAsISO,
   cycleStartDate,
+  cycleStartDateAsISO,
   isISODateFormat,
-  isValidDate,
-  startOfSummerCycle,
-  startOfWinterAndAllYearCycle
+  isValidDate
 }

@@ -10,7 +10,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { cycleEndDate, cycleStartDate } = require('../../../lib/dates.lib.js')
+const { cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/dates.lib.js')
 
 /**
  * Fetch all return requirements that need return logs created.
@@ -21,9 +21,7 @@ const { cycleEndDate, cycleStartDate } = require('../../../lib/dates.lib.js')
  * @returns {Promise<Array>} the list of return requirement ids
  */
 async function go (summer, licenceReference) {
-  const returnRequirements = await _fetchReturnRequirements(summer, licenceReference)
-
-  return returnRequirements
+  return _fetchReturnRequirements(summer, licenceReference)
 }
 
 async function _fetchExternalIds (cycleStartDate) {
@@ -41,11 +39,11 @@ async function _fetchExternalIds (cycleStartDate) {
 }
 
 async function _fetchReturnRequirements (summer, licenceReference) {
-  const _cycleEndDate = cycleEndDate(summer)
-  const _cycleStartDate = cycleStartDate(summer)
+  const _cycleEndDate = cycleEndDateAsISO(summer)
+  const _cycleStartDate = cycleStartDateAsISO(summer)
   const externalIds = await _fetchExternalIds(_cycleStartDate)
 
-  const results = await ReturnRequirementModel.query()
+  return ReturnRequirementModel.query()
     .select(['id',
       'returnVersionId',
       'summer',
@@ -103,8 +101,6 @@ async function _fetchReturnRequirements (summer, licenceReference) {
     .modifyGraph('returnRequirementPurposes.purpose', (builder) => {
       builder.select(['legacyId', 'description'])
     })
-
-  return results
 }
 
 function _whereExistsClause (licenceReference, cycleStartDate, cycleEndDate) {

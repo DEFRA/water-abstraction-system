@@ -6,13 +6,12 @@
  */
 
 const {
-  endOfSummerCycle,
-  endOfWinterAndAllYearCycle,
-  formatDateObjectToISO,
-  cycleDueDate,
+  cycleDueDateAsISO,
   cycleEndDate,
+  cycleEndDateAsISO,
+  cycleStartDateAsISO,
   cycleStartDate,
-  startOfSummerCycle
+  formatDateObjectToISO
 } = require('../../../lib/dates.lib.js')
 
 /**
@@ -24,15 +23,15 @@ const {
  */
 async function go (returnRequirements) {
   const returnLogs = returnRequirements.map(async (requirements) => {
-    const startDate = _getStartDate(requirements.summer, requirements.returnVersion)
-    const endDate = _getLicenceEndDate(requirements.summer, requirements.returnVersion)
-    const id = _createReturnLogId(requirements, startDate, endDate)
-    const metadata = await _createMetaData(requirements.summer, endDate, requirements)
+    const startDate = _startDate(requirements.summer, requirements.returnVersion)
+    const endDate = _endDate(requirements.summer, requirements.returnVersion)
+    const id = _id(requirements, startDate, endDate)
+    const metadata = await _metadata(requirements.summer, endDate, requirements)
 
     return {
       createdAt: new Date(),
       updatedAt: new Date(),
-      dueDate: cycleDueDate(requirements.summer),
+      dueDate: cycleDueDateAsISO(requirements.summer),
       endDate,
       id,
       licenceRef: requirements.returnVersion.licence.licenceRef,
@@ -50,7 +49,7 @@ async function go (returnRequirements) {
   return results
 }
 
-async function _createMetaData (summer, endDate, requirements) {
+async function _metadata (summer, endDate, requirements) {
   return {
     description: requirements.siteDescription,
     isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
@@ -67,13 +66,13 @@ async function _createMetaData (summer, endDate, requirements) {
       periodEndDay: requirements.abstractionPeriodEndDay.toString(),
       periodEndMonth: requirements.abstractionPeriodEndMonth.toString()
     },
-    points: _createPointsMetaData(requirements.returnRequirementPoints),
-    purposes: _createPurposesMetaData(requirements.returnRequirementPurposes),
+    points: _metadataPoints(requirements.returnRequirementPoints),
+    purposes: _metadataPurposes(requirements.returnRequirementPurposes),
     version: 1
   }
 }
 
-function _createPointsMetaData (returnRequirementPoints) {
+function _metadataPoints (returnRequirementPoints) {
   return returnRequirementPoints.map((returnRequirementPoint) => {
     return {
       name: returnRequirementPoint.description,
@@ -85,7 +84,7 @@ function _createPointsMetaData (returnRequirementPoints) {
   })
 }
 
-function _createPurposesMetaData (returnRequirementPurposes) {
+function _metadataPurposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
       primary: {
@@ -104,7 +103,7 @@ function _createPurposesMetaData (returnRequirementPurposes) {
   })
 }
 
-function _createReturnLogId (requirements, startDate, endDate) {
+function _id (requirements, startDate, endDate) {
   const regionCode = requirements.returnVersion.licence.region.naldRegionId
   const licenceReference = requirements.returnVersion.licence.licenceRef
   const legacyId = requirements.legacyId
@@ -112,7 +111,19 @@ function _createReturnLogId (requirements, startDate, endDate) {
   return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
 }
 
-function _getLicenceEndDate (summer, returnVersion) {
+function _endDate (summer, returnVersion) {
+  const earliestDate = _earliestDate(summer, returnVersion)
+
+  const _cycleEndDate = cycleEndDate(summer)
+
+  if (earliestDate < _cycleEndDate) {
+    return formatDateObjectToISO(earliestDate)
+  }
+
+  return cycleEndDateAsISO(summer)
+}
+
+function _earliestDate (summer, returnVersion) {
   const dates = [returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
     returnVersion.licence.revokedDate,
@@ -121,43 +132,28 @@ function _getLicenceEndDate (summer, returnVersion) {
     .map((date) => { return new Date(date) })
 
   if (dates.length === 0) {
-    return cycleEndDate(summer)
+    return cycleEndDateAsISO(summer)
   }
 
   dates.map((date) => { return date.getTime() })
-  const _earliestEndDate = new Date(Math.min(...dates))
 
-  if (summer) {
-    const _endOfSummerCycle = endOfSummerCycle()
-
-    if (_earliestEndDate < _endOfSummerCycle) {
-      return formatDateObjectToISO(_earliestEndDate)
-    }
-
-    return formatDateObjectToISO(_endOfSummerCycle)
-  }
-
-  if (_earliestEndDate < endOfWinterAndAllYearCycle()) {
-    return formatDateObjectToISO(_earliestEndDate)
-  }
-
-  return formatDateObjectToISO(endOfWinterAndAllYearCycle())
+  return new Date(Math.min(...dates))
 }
 
-function _getStartDate (summer, returnVersion) {
+function _startDate (summer, returnVersion) {
   const returnVersionStartDate = new Date(returnVersion.startDate)
 
-  if (returnVersionStartDate > startOfSummerCycle()) {
+  if (returnVersionStartDate > cycleStartDate(summer)) {
     return formatDateObjectToISO(returnVersionStartDate)
   }
 
-  return cycleStartDate(summer)
+  return cycleStartDateAsISO(summer)
 }
 
 function _isFinal (endDateString, summer) {
   const endDate = new Date(endDateString)
 
-  return ((summer && endDate < endOfSummerCycle()) || (!summer && endDate < endOfWinterAndAllYearCycle()))
+  return endDate < cycleEndDate(summer)
 }
 
 module.exports = {

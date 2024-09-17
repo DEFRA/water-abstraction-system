@@ -10,7 +10,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { cycleEndDate, cycleStartDate, startOfWinterAndAllYearCycle } = require('../../../lib/dates.lib.js')
+const { cycleEndDateAsISO, cycleStartDateAsISO, cycleStartDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Given the licence reference this service returns the return requirements to be turned into return logs.
@@ -20,15 +20,13 @@ const { cycleEndDate, cycleStartDate, startOfWinterAndAllYearCycle } = require('
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
 async function go (licenceReference) {
-  const returnRequirements = await _fetchReturnRequirements(licenceReference)
-
-  return returnRequirements
+  return _fetchReturnRequirements(licenceReference)
 }
 
 async function _fetchExternalIds (licenceReference) {
   const externalIds = await ReturnLogModel.query()
     .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
-    .where('startDate', '>=', startOfWinterAndAllYearCycle())
+    .where('startDate', '>=', cycleStartDate(false))
     .where('licenceRef', licenceReference)
 
   const externalIdsArray = externalIds.map((item) => {
@@ -40,11 +38,11 @@ async function _fetchExternalIds (licenceReference) {
 
 async function _fetchReturnRequirements (licenceReference) {
   // pass in false to ge the all year start and end date to make sure we cover the entire year
-  const _cycleEndDate = cycleEndDate(false)
-  const _cycleStartDate = cycleStartDate(false)
+  const _cycleEndDate = cycleEndDateAsISO(false)
+  const _cycleStartDate = cycleStartDateAsISO(false)
   const externalIds = await _fetchExternalIds(licenceReference)
 
-  return await ReturnRequirementModel.query()
+  return ReturnRequirementModel.query()
     .whereNotIn('returnRequirements.externalId', externalIds)
     .whereExists(_whereExistsClause(licenceReference, _cycleStartDate, _cycleEndDate))
     .withGraphFetched('returnVersion')

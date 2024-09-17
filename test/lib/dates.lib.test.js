@@ -87,109 +87,97 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('dueDateOfSummerCycle', () => {
-    it('should return the due date of the summer cycle', () => {
-      const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28)
-      const result = DateLib.dueDateOfSummerCycle()
-
-      expect(result).to.equal(summerDueDate)
-    })
-  })
-
-  describe('dueDateOfWinterAndAllYearCycle', () => {
-    it('should return the due date of the winter and all year cycle', () => {
-      const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28)
-      const result = DateLib.dueDateOfWinterAndAllYearCycle()
-
-      expect(result).to.equal(allYearDueDate)
-    })
-  })
-
-  describe('endOfSummerCycle', () => {
-    it('should return the end date of the summer cycle', () => {
-      const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31)
-      const result = DateLib.endOfSummerCycle()
-
-      expect(result).to.equal(summerEndDate)
-    })
-  })
-
-  describe('endOfWinterAndAllYearCycle', () => {
-    it('should return the end date of the winter and all year cycle', () => {
-      const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31)
-      const result = DateLib.endOfWinterAndAllYearCycle()
-
-      expect(result).to.equal(allYearEndDate)
-    })
-  })
-
   describe('cycleDueDate', () => {
-    it('should return the due date of the summer cycle as an ISO string', () => {
-      const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
+    it('should return the due date of the summer cycle with summer as true', () => {
+      const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28)
       const result = DateLib.cycleDueDate(true)
 
       expect(result).to.equal(summerDueDate)
     })
-  })
 
-  describe('cycleDueDate', () => {
-    it('should return the due date of the winter and all year cycle as an ISO string', () => {
-      const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
+    it('should return the due date of the winter and all year cycle  with summer as false', () => {
+      const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28)
       const result = DateLib.cycleDueDate(false)
 
       expect(result).to.equal(allYearDueDate)
     })
   })
 
-  describe('cycleEndDate', () => {
-    it('should return the end date of the summer cycle as an ISO string', () => {
-      const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
-      const result = DateLib.cycleEndDate(true)
+  describe('cycleDueDateAsISO', () => {
+    it('should return the due date of the summer cycle as an ISO string', () => {
+      const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
+      const result = DateLib.cycleDueDateAsISO(true)
 
-      expect(result).to.equal(summerEndDate)
+      expect(result).to.equal(summerDueDate)
+    })
+
+    it('should return the due date of the winter and all year cycle as an ISO string', () => {
+      const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
+      const result = DateLib.cycleDueDateAsISO(false)
+
+      expect(result).to.equal(allYearDueDate)
     })
   })
 
   describe('cycleEndDate', () => {
-    it('should return the end date of the winter and all year cycle as an ISO string', () => {
-      const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
+    it('should return the end date of the summer cycle with summer as true', () => {
+      const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31)
+      const result = DateLib.cycleEndDate(true)
+
+      expect(result).to.equal(summerEndDate)
+    })
+
+    it('should return the end date of the winter and all year cycle with summer as false', () => {
+      const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31)
       const result = DateLib.cycleEndDate(false)
 
       expect(result).to.equal(allYearEndDate)
     })
   })
 
-  describe('cycleStartDate', () => {
-    it('should return the start date of the summer cycle as an ISO string', () => {
-      const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
-      const result = DateLib.cycleStartDate(true)
+  describe('cycleEndDateAsISO', () => {
+    it('should return the end date of the summer cycle as an ISO string', () => {
+      const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
+      const result = DateLib.cycleEndDateAsISO(true)
 
-      expect(result).to.equal(summerStartDate)
+      expect(result).to.equal(summerEndDate)
+    })
+
+    it('should return the end date of the winter and all year cycle as an ISO string', () => {
+      const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
+      const result = DateLib.cycleEndDateAsISO(false)
+
+      expect(result).to.equal(allYearEndDate)
     })
   })
 
-  describe('cycleStartDate', () => {
+  describe('cycleStartDateAsISO', () => {
+    it('should return the start date of the summer cycle as an ISO string', () => {
+      const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
+      const result = DateLib.cycleStartDateAsISO(true)
+
+      expect(result).to.equal(summerStartDate)
+    })
+
     it('should return the start date of the winter and all year cycle as an ISO string', () => {
       const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
-      const result = DateLib.cycleStartDate(false)
+      const result = DateLib.cycleStartDateAsISO(false)
 
       expect(result).to.equal(allYearStartDate)
     })
   })
 
-  describe('startOfSummerCycle', () => {
-    it('should return the start date of the summer cycle', () => {
+  describe('cycleStartDate', () => {
+    it('should return the start date of the summer cycle with summer as true', () => {
       const summerStartDate = new Date(new Date().getFullYear(), 10, 1)
-      const result = DateLib.startOfSummerCycle()
+      const result = DateLib.cycleStartDate(true)
 
       expect(result).to.equal(summerStartDate)
     })
-  })
 
-  describe('startOfWinterAndAllYearCycle', () => {
-    it('should return the start date of the winter and all year cycle', () => {
+    it('should return the start date of the winter and all year cycle with summer as false', () => {
       const allYearStartDate = new Date(new Date().getFullYear(), 3, 1)
-      const result = DateLib.startOfWinterAndAllYearCycle()
+      const result = DateLib.cycleStartDate(false)
 
       expect(result).to.equal(allYearStartDate)
     })
