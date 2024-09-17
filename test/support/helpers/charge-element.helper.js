@@ -6,6 +6,7 @@
 
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const PurposeHelper = require('./purpose.helper.js')
 
 /**
  * Add a new charge element
@@ -26,7 +27,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * - `description` - Trickle Irrigation - Direct
  * - `purposePrimaryId` - [random UUID]
  * - `purposeSecondaryId` - [random UUID]
- * - `purposeId` - [random UUID]
+ * - `purposeId` - random id from purpose seed data
  * - `section127Agreement` - true
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -52,6 +53,8 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: purposeId } = PurposeHelper.select()
+
   const defaults = {
     chargeReferenceId: generateUUID(),
     abstractionPeriodStartDay: 1,
@@ -67,7 +70,7 @@ function defaults (data = {}) {
     description: 'Trickle Irrigation - Direct',
     purposePrimaryId: generateUUID(),
     purposeSecondaryId: generateUUID(),
-    purposeId: generateUUID(),
+    purposeId,
     section127Agreement: true
   }
 
