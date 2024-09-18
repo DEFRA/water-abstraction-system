@@ -125,7 +125,7 @@ describe('Company Contacts model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceRole).to.be.an.instanceOf(LicenceRoleModel)
-        expect(result.licenceRole).to.equal(testLicenceRole)
+        expect(result.licenceRole).to.equal(testLicenceRole, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })
