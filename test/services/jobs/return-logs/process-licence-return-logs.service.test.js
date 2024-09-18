@@ -25,7 +25,7 @@ describe('Process licence return logs service', () => {
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
   const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
 
-  describe('a valid licence reference is provided', () => {
+  describe('when a valid licence reference is provided', () => {
     let licence
     let region
     let returnVersion
@@ -48,7 +48,7 @@ describe('Process licence return logs service', () => {
       global.GlobalNotifier = notifierStub
     })
 
-    it('can successfully save a return log in the database', async () => {
+    it('generates and saves any returns logs required for the current cycle', async () => {
       await ProcessLicenceReturnLogsService.go(licence.licenceRef)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)

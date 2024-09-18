@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches data needed for the generating return logs
+ * Fetches data needed for generating return logs
  * @module FetchReturnRequirementsService
  */
 

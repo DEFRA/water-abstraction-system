@@ -49,6 +49,57 @@ async function go (returnRequirements) {
   return results
 }
 
+function _endDate (summer, returnVersion) {
+  const earliestDate = _earliestDate(summer, returnVersion)
+
+  const _cycleEndDate = cycleEndDate(summer)
+
+  if (earliestDate < _cycleEndDate) {
+    return formatDateObjectToISO(earliestDate)
+  }
+
+  return cycleEndDateAsISO(summer)
+}
+
+function _earliestDate (summer, returnVersion) {
+  const dates = [
+    returnVersion.licence.expiredDate,
+    returnVersion.licence.lapsedDate,
+    returnVersion.licence.revokedDate,
+    returnVersion.endDate
+  ]
+    .filter((date) => {
+      return date
+    })
+    .map((date) => {
+      return new Date(date)
+    })
+
+  if (dates.length === 0) {
+    return cycleEndDateAsISO(summer)
+  }
+
+  dates.map((date) => {
+    return date.getTime()
+  })
+
+  return new Date(Math.min(...dates))
+}
+
+function _id (requirements, startDate, endDate) {
+  const regionCode = requirements.returnVersion.licence.region.naldRegionId
+  const licenceReference = requirements.returnVersion.licence.licenceRef
+  const legacyId = requirements.legacyId
+
+  return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
+}
+
+function _isFinal (endDateString, summer) {
+  const endDate = new Date(endDateString)
+
+  return endDate < cycleEndDate(summer)
+}
+
 async function _metadata (summer, endDate, requirements) {
   return {
     description: requirements.siteDescription,
@@ -103,43 +154,6 @@ function _metadataPurposes (returnRequirementPurposes) {
   })
 }
 
-function _id (requirements, startDate, endDate) {
-  const regionCode = requirements.returnVersion.licence.region.naldRegionId
-  const licenceReference = requirements.returnVersion.licence.licenceRef
-  const legacyId = requirements.legacyId
-
-  return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
-}
-
-function _endDate (summer, returnVersion) {
-  const earliestDate = _earliestDate(summer, returnVersion)
-
-  const _cycleEndDate = cycleEndDate(summer)
-
-  if (earliestDate < _cycleEndDate) {
-    return formatDateObjectToISO(earliestDate)
-  }
-
-  return cycleEndDateAsISO(summer)
-}
-
-function _earliestDate (summer, returnVersion) {
-  const dates = [returnVersion.licence.expiredDate,
-    returnVersion.licence.lapsedDate,
-    returnVersion.licence.revokedDate,
-    returnVersion.endDate]
-    .filter((date) => { return date !== null })
-    .map((date) => { return new Date(date) })
-
-  if (dates.length === 0) {
-    return cycleEndDateAsISO(summer)
-  }
-
-  dates.map((date) => { return date.getTime() })
-
-  return new Date(Math.min(...dates))
-}
-
 function _startDate (summer, returnVersion) {
   const returnVersionStartDate = new Date(returnVersion.startDate)
 
@@ -148,12 +162,6 @@ function _startDate (summer, returnVersion) {
   }
 
   return cycleStartDateAsISO(summer)
-}
-
-function _isFinal (endDateString, summer) {
-  const endDate = new Date(endDateString)
-
-  return endDate < cycleEndDate(summer)
 }
 
 module.exports = {

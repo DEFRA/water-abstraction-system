@@ -48,7 +48,7 @@ function formatDateObjectToISO (date) {
 }
 
 /**
- * Get the due date of next provided cycle. Either summer or winter or all year.
+ * Get the due date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the due date of the next cycle as an ISO string.
@@ -58,7 +58,7 @@ function cycleDueDateAsISO (summer) {
 }
 
 /**
- * Get the due date of next provided cycle. Either summer or winter or all year.
+ * Get the due date of next provided cycle, either summer or winter and all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the due date of the next cycle.
@@ -78,7 +78,7 @@ function cycleDueDate (summer) {
 }
 
 /**
- * Get the end date of next provided cycle. Either summer or winter or all year.
+ * Get the end date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the end date of the next cycle as an ISO string.
@@ -88,7 +88,7 @@ function cycleEndDateAsISO (summer) {
 }
 
 /**
- * Get the end date of next provided cycle. Either summer or winter or all year.
+ * Get the end date of next provided cycle, either summer and winter or all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the end date of the next cycle.
@@ -108,7 +108,7 @@ function cycleEndDate (summer) {
 }
 
 /**
- * Get the start date of next provided cycle. Either summer or winter or all year.
+ * Get the start date of next provided cycle, either summer and winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the start date of the next cycle as an ISO string.
@@ -118,7 +118,7 @@ function cycleStartDateAsISO (summer) {
 }
 
 /**
- * Get the start date of next provided cycle. Either summer or winter or all year.
+ * Get the start date of next provided cycle, either summer or winter and all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the start date of the next cycle.

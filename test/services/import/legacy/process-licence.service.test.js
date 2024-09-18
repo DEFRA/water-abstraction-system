@@ -96,7 +96,7 @@ describe('Import Legacy Process Licence service', () => {
       processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
-    it('saves the imported licence and creates the return logs', async () => {
+    it('saves the imported licence but does not process the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
