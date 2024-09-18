@@ -20,6 +20,7 @@ const MarkForSupplementaryBillingService = require('../../app/services/licences/
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
+const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
@@ -120,7 +121,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
         })
 
         it('returns the page successfully', async () => {
@@ -156,6 +157,34 @@ describe('Licences controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('History')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/licence-contact', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contact',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid and has contacts', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence contact details')
         })
       })
     })
@@ -520,7 +549,7 @@ function _viewLicenceCommunications () {
   }
 }
 
-function _viewLicenceContactDetails () {
+function _viewLicenceContacts () {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -537,6 +566,27 @@ function _viewLicenceHistory () {
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
     licenceRef: 'AT/Test',
     pageTitle: 'History for AT/Test'
+  }
+}
+
+function _viewLicenceContactDetails () {
+  const commonLicenceData = _viewLicence()
+
+  commonLicenceData.pageTitle = null
+
+  return {
+    ...commonLicenceData,
+    activeTab: 'search',
+    licenceContacts: [
+      {
+        address: {
+          contactAddress: ['Address Line 1', 'Address Line 2', 'Address Line 3']
+        },
+        name: 'jimbo',
+        role: 'Licence holder'
+      }
+    ],
+    pageTitle: 'Licence contact details'
   }
 }
 
