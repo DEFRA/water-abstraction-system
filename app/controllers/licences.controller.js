@@ -13,6 +13,7 @@ const SubmitMarkForSupplementaryBillingService = require('../services/licences/s
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
+const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
@@ -101,10 +102,20 @@ async function viewCommunications (request, h) {
   })
 }
 
-async function viewContacts (request, h) {
+async function viewLicenceContactDetails (request, h) {
+  const { id } = request.params
+
+  const pageData = await ViewLicenceContactDetailsService.go(id)
+
+  return h.view('licences/licence-contact-details.njk', {
+    ...pageData
+  })
+}
+
+async function viewLicenceContacts (request, h) {
   const { params: { id }, auth } = request
 
-  const pageData = await ViewLicenceContactDetailsService.go(id, auth)
+  const pageData = await ViewLicenceContactsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
     ...pageData
@@ -160,8 +171,9 @@ module.exports = {
   supplementary,
   viewBills,
   viewCommunications,
-  viewContacts,
+  viewLicenceContacts,
   viewHistory,
+  viewLicenceContactDetails,
   viewReturns,
   viewSetUp,
   viewSummary
