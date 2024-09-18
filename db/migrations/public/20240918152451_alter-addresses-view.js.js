@@ -33,7 +33,7 @@ exports.up = function (knex) {
 exports.down = function (knex) {
   return knex
     .schema
-    .dropViewIfExists(viewName)
+    .dropView(viewName)
     .createView(viewName, (view) => {
       // NOTE: We have commented out unused columns from the source table
       view.as(knex(viewName).withSchema('crm_v2').select([
