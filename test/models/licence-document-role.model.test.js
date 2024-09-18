@@ -168,7 +168,7 @@ describe('Licence Document Role model', () => {
       let testLicenceRole
 
       beforeEach(async () => {
-        testLicenceRole = await LicenceRoleHelper.add()
+        testLicenceRole = await LicenceRoleHelper.select()
 
         const { id: licenceRoleId } = testLicenceRole
 

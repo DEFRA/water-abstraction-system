@@ -4,51 +4,28 @@
  * @module LicenceRoleHelper
  */
 
-const LicenceRoleModel = require('../../../app/models/licence-role.model.js')
+const { data: licenceRoles } = require('../../../db/seeds/data/licence-roles.js')
 
 /**
- * Add a new licence role
+ * Select an entry from the reference data entries seeded at the start of testing
  *
- * If no `data` is provided, default values will be used. These are
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
  *
- * - `name` - licenceHolder
- * - `label` - Licence Holder
+ * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
+ * select a specific entry.
  *
- * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ * @param {string} [name] - The reference entry to select. Defaults to 'licenceHolder'
  *
- * @returns {Promise<module:LicenceRoleModel>} The instance of the newly created record
+ * @returns {object} The selected reference entry or one picked at random
  */
-async function add (data = {}) {
-  const insertData = defaults(data)
-
-  return LicenceRoleModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
-
-/**
- * Returns the defaults used
- *
- * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
- * for use in tests to avoid having to duplicate values.
- *
- * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {object} - Returns the set defaults with the override data spread
- */
-function defaults (data = {}) {
-  const defaults = {
-    name: 'licenceHolder',
-    label: 'Licence Holder'
-  }
-
-  return {
-    ...defaults,
-    ...data
-  }
+function select (name = 'licenceHolder') {
+  return licenceRoles.find((licenceRole) => {
+    return licenceRole.name === name
+  })
 }
 
 module.exports = {
-  add,
-  defaults
+  data: licenceRoles,
+  select
 }
