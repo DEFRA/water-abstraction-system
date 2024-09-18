@@ -14,6 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 
 // Things to stub
 const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
+const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
 const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
@@ -32,15 +33,17 @@ describe('Import Legacy Process Licence service', () => {
   let licenceRef
   let notifierStub
   let persistLicenceServiceStub
+  let processLicenceReturnLogsServiceStub
   let transformedLicence
+  let wrlsLicenceId
 
   beforeEach(() => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
+    wrlsLicenceId = licenceId
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
@@ -59,15 +62,18 @@ describe('Import Legacy Process Licence service', () => {
     delete global.GlobalNotifier
   })
 
-  describe('when there is a valid NALD licence to import', () => {
+  describe('when there is a valid NALD licence to import with an existing licence', () => {
     beforeEach(() => {
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
       persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
+      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
-    it('saves the imported licence', async () => {
+    it('saves the imported licence and creates the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.true()
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -82,6 +88,21 @@ describe('Import Legacy Process Licence service', () => {
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.licenceId).to.equal(licenceId)
       expect(logDataArg.licenceRef).to.equal(licenceRef)
+    })
+  })
+
+  describe('when there is a valid NALD licence to import without an existing licence', () => {
+    beforeEach(() => {
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
+      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+    })
+
+    it('saves the imported licence but does not process the return logs', async () => {
+      await ProcessLicenceService.go(licenceRef)
+
+      expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.false()
     })
   })
 
