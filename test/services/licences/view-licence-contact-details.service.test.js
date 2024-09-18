@@ -5,87 +5,91 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceContactsService =
-  require('../../../app/services/licences/fetch-licence-contacts.service.js')
-const FetchCustomerContactDetailsService =
-  require('../../../app/services/licences/fetch-customer-contacts.service.js')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
+const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
 
 // Thing under test
 const ViewLicenceContactDetailsService = require('../../../app/services/licences/view-licence-contact-details.service.js')
 
 describe('View Licence Contact Details service', () => {
-  const auth = {}
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+  const licenceId = 'fea88a95-d81f-4c5c-b497-00e5891a5861'
 
-  beforeEach(() => {
-    Sinon.stub(FetchLicenceContactsService, 'go').returns([{
-      communicationType: 'Licence Holder',
-      companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
-      companyName: 'Acme ltd',
-      contactId: null,
-      firstName: null,
-      lastName: null,
-      address1: '34 Eastgate',
-      address2: null,
-      address3: null,
-      address4: null,
-      address5: null,
-      address6: null,
-      postcode: 'CF71 7DG',
-      country: 'United Kingdom'
-    }])
-
-    Sinon.stub(FetchCustomerContactDetailsService, 'go').returns([{
-      communicationType: 'Additional Contact',
-      email: 'dfd@email.com',
-      firstName: 'Donald',
-      initials: null,
-      lastName: 'Duck',
-      middleInitials: null,
-      salutation: null,
-      suffix: null
-    }])
-
-    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
+  before(() => {
+    Sinon.stub(FetchLicenceContactDetailsService, 'go').returns(_testFetchLicenceContactDetailsData())
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
-  describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewLicenceContactDetailsService.go(testId, auth)
+  describe('when a licence with a matching ID exists', () => {
+    it('correctly presents the data', async () => {
+      const result = await ViewLicenceContactDetailsService.go(licenceId)
 
       expect(result).to.equal({
-        activeTab: 'contact-details',
-        customerContacts: [{
-          communicationType: 'Additional Contact',
-          email: 'dfd@email.com',
-          name: 'Donald Duck'
-        }],
-        licenceName: 'fake licence',
-        customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
-        licenceContacts: [{
-          address: {
-            address1: '34 Eastgate',
-            address2: null,
-            address3: null,
-            address4: null,
-            address5: null,
-            address6: null,
-            country: 'United Kingdom',
-            postcode: 'CF71 7DG'
-          },
-          communicationType: 'Licence Holder',
-          name: 'Acme ltd'
-        }]
+        activeNavBar: 'search',
+        licenceContactDetails: [
+          {
+            address: [
+              'ENVIRONMENT AGENCY',
+              'HORIZON HOUSE',
+              'DEANERY ROAD',
+              'BRISTOL',
+              'AVON',
+              'BS1 5AH'
+            ],
+            name: 'A GUPTA',
+            role: 'Licence holder'
+          }
+        ],
+        licenceId: 'fea88a95-d81f-4c5c-b497-00e5891a5861',
+        licenceRef: '01/123',
+        pageTitle: 'Licence contact details'
       })
     })
   })
 })
+
+function _testFetchLicenceContactDetailsData () {
+  return {
+    id: 'fea88a95-d81f-4c5c-b497-00e5891a5861',
+    licenceRef: '01/123',
+    licenceDocumentHeader: {
+      id: 'e27682b4-8c28-4db0-bb0a-685380537bc5',
+      metadata: {
+        Name: 'GUPTA',
+        Town: 'BRISTOL',
+        County: 'AVON',
+        Country: '',
+        Expires: null,
+        Forename: 'AMARA',
+        Initials: 'A',
+        Modified: '20080327',
+        Postcode: 'BS1 5AH',
+        contacts: [
+          {
+            name: 'GUPTA',
+            role: 'Licence holder',
+            town: 'BRISTOL',
+            type: 'Person',
+            county: 'AVON',
+            country: null,
+            forename: 'AMARA',
+            initials: 'A',
+            postcode: 'BS1 5AH',
+            salutation: null,
+            addressLine1: 'ENVIRONMENT AGENCY',
+            addressLine2: 'HORIZON HOUSE',
+            addressLine3: 'DEANERY ROAD',
+            addressLine4: null
+          }
+        ],
+        IsCurrent: true,
+        Salutation: '',
+        AddressLine1: 'ENVIRONMENT AGENCY',
+        AddressLine2: 'HORIZON HOUSE',
+        AddressLine3: 'DEANERY ROAD',
+        AddressLine4: ''
+      }
+    }
+  }
+}

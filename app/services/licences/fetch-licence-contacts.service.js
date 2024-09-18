@@ -2,7 +2,7 @@
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchLicenceContactDetailsService
+ * @module FetchLicenceContactService
  */
 
 const { db } = require('../../../db/db.js')
