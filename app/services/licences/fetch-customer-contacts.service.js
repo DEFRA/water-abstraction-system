@@ -2,7 +2,7 @@
 
 /**
  * Fetches all customer contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchCustomerContactDetailsService
+ * @module FetchCustomerContactsService
  */
 
 const { db } = require('../../../db/db.js')
