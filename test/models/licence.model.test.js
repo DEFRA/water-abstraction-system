@@ -814,8 +814,8 @@ describe('Licence model', () => {
 
         // Create 2 licence roles so we can test the service only gets the licence document role record that is for
         // 'licence holder'
-        licenceRoles.billing = await LicenceRoleHelper.add({ name: 'billing', label: 'Billing' })
-        licenceRoles.holder = await LicenceRoleHelper.add()
+        licenceRoles.billing = await LicenceRoleHelper.select('billing')
+        licenceRoles.holder = await LicenceRoleHelper.select()
 
         // Create company and contact records. We create an additional company so we can create 2 licence document role
         // records for our licence to test the one with the latest start date is used.
