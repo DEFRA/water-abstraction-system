@@ -19,8 +19,6 @@ async function go (licenceId) {
 
   licence.chargeVersions = _filterChargeVersions(chargeVersions)
 
-  console.log('Licence :', licence)
-
   return licence
 }
 

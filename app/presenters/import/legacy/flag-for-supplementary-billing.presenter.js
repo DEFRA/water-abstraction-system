@@ -17,13 +17,7 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  * @param {*} wrlsLicence
  */
 async function go (transformedLicence, wrlsLicence) {
-  const { chargeVersions } = wrlsLicence
-
-  const dates = _updatedLicenceEndDate(wrlsLicence, transformedLicence)
-
-  // If todays date is (17th September 2024) then this is 31st March 2025
-  const currentFinancialYearEnd = _currentFinancialYearEnd()
-  const financialYearEnds = []
+  const { chargeVersions, id: licenceId } = wrlsLicence
 
   const result = {
     includeInPresrocBilling: wrlsLicence.includeInPresrocBilling,
@@ -31,45 +25,47 @@ async function go (transformedLicence, wrlsLicence) {
     licenceSupplementaryYears: []
   }
 
+  const dates = _updatedLicenceEndDate(wrlsLicence, transformedLicence)
+
   if (dates.length === 0) {
     return result
   }
 
-  for (const date of dates) {
-    // If the licence end date is greater then the end of the current financial period then no flags need to be set
-    if (date > currentFinancialYearEnd) {
-      return
-    }
+  const financialYearEnds = []
 
-    for (const chargeVersion of chargeVersions) {
-      const twoPartTariffChargeVersion = _twoPartTariffChargeVersion(chargeVersion)
-
-      _flagForPreSrocSupplementary(chargeVersion, result)
-      _flagForSrocSupplementary(chargeVersion, result, twoPartTariffChargeVersion)
-
-      await _flagForTwoPartTariffSupplementary(
-        chargeVersion,
-        date,
-        financialYearEnds,
-        twoPartTariffChargeVersion,
-        wrlsLicence.id)
-    }
-  }
-  result.licenceSupplementaryYears.push(...new Set(financialYearEnds))
-
-  const licenceSupplementaryYearsToPersist = result.licenceSupplementaryYears.map((year) => {
-    return {
-      financialYearEnd: year,
-      twoPartTariff: true,
-      licenceId: wrlsLicence.id
-    }
-  })
+  await _compareLicenceEndDates(dates, chargeVersions, financialYearEnds, result, licenceId)
+  const licenceSupplementaryYearsToPersist = _licenceSupplementaryYearsToPersist(financialYearEnds, wrlsLicence.id)
 
   transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
   transformedLicence.includeInSrocBilling = result.includeInSrocBilling
   transformedLicence.licenceSupplementaryYears = licenceSupplementaryYearsToPersist
+}
 
-  console.log('Result :', transformedLicence)
+async function _compareChargeVersions (chargeVersions, date, financialYearEnds, result, licenceId) {
+  for (const chargeVersion of chargeVersions) {
+    const twoPartTariff = _twoPartTariffChargeVersion(chargeVersion)
+
+    _flagForPreSrocSupplementary(chargeVersion, result)
+    _flagForSrocSupplementary(chargeVersion, result, twoPartTariff)
+
+    await _flagForTwoPartTariffSupplementary(chargeVersion, date, financialYearEnds, twoPartTariff, licenceId)
+  }
+}
+
+async function _compareLicenceEndDates (dates, chargeVersions, financialYearEnds, result, licenceId) {
+  for (const date of dates) {
+    if (date > _currentFinancialYearEnd()) {
+      return
+    }
+
+    await _compareChargeVersions(chargeVersions, date, financialYearEnds, result, licenceId)
+  }
+}
+
+function _currentFinancialYearEnd () {
+  const financialYearEnd = _getFinancialYearEnd(new Date())
+
+  return new Date(financialYearEnd, 2, 31)
 }
 
 async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYearEnd) {
@@ -83,57 +79,99 @@ async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYear
     .first()
 }
 
-async function _flagForTwoPartTariffSupplementary (
-  chargeVersion,
-  date,
-  financialYearEnds,
-  twoPartTariffChargeVersion,
-  wrlsLicenceId
-) {
-  if (twoPartTariffChargeVersion) {
-    chargeVersion.endDate = chargeVersion.endDate === null ? date : chargeVersion.endDate
-    let chargeVersionStartYear = chargeVersion.startDate.getFullYear()
-    let chargeVersionEndYear = chargeVersion.endDate.getFullYear()
+/**
+ * If a licence is already flagged for the pre sroc supplementary bill run then we ignore flagging it again
+ * If the charge version start date is before the start of the sroc period (1st April 2022), then we flag it for pre
+ * sroc supplementary billing
+ *
+ * @private
+ */
+function _flagForPreSrocSupplementary (chargeVersion, result) {
+  if (result.includeInPresrocBilling === 'yes') {
+    return
+  }
 
-    if (chargeVersion.startDate.getMonth() >= APRIL) {
-      chargeVersionStartYear++
-    }
-
-    if (chargeVersion.endDate.getMonth() >= APRIL) {
-      chargeVersionEndYear++
-    }
-
-    for (let year = chargeVersionStartYear; year <= chargeVersionEndYear; year++) {
-      const match = await _fetchExistingLicenceSupplementaryYears(wrlsLicenceId, year)
-
-      if (match) {
-        continue
-      }
-
-      financialYearEnds.push(year)
-    }
+  if (chargeVersion.startDate < SROC_START_DATE) {
+    result.includeInPresrocBilling = 'yes'
   }
 }
 
-function _flagForSrocSupplementary (chargeVersion, result, twoPartTariffChargeVersion) {
-  if (result.flagForSrocSupplementary === false) {
-    if ((chargeVersion.endDate > SROC_START_DATE || chargeVersion.endDate === null) &&
-    !twoPartTariffChargeVersion) {
-      result.includeInSrocBilling = true
-    }
-  } else {
+/**
+ * If a licence is already flagged for the sroc supplementary bill run then we ignore flagging it again
+ * If the charge version end date is null or after the start of the sroc period (1st April 2022) and the charge version
+ * being checked is not a two-part tariff one, then we flag it for sroc supplementary billing
+ *
+ * @private
+ */
+function _flagForSrocSupplementary (chargeVersion, result, twoPartTariff) {
+  if (result.flagForSrocSupplementary === true) {
+    return
+  }
+
+  if ((chargeVersion.endDate > SROC_START_DATE || chargeVersion.endDate === null) && !twoPartTariff) {
     result.includeInSrocBilling = true
   }
 }
 
-function _flagForPreSrocSupplementary (chargeVersion, result) {
-  if (result.includeInPresrocBilling === 'no') {
-    if (chargeVersion.startDate < SROC_START_DATE) {
-      result.includeInPresrocBilling = 'yes'
-    }
-  } else {
-    result.includeInPresrocBilling = 'yes'
+/**
+ * Flagging a licence for two-part tariff supplementary billing means we need to work out which years have been affected
+ * by the licence end date.
+ * Firstly if the charge version we are checking is not two-part tariff then we don't want to flag it.
+ * Next we need to populate the charge version end date if it doesn't exist.
+ * Using our charge version start and end dates we now need to work out which financial years are impacted.
+ * If a charge version started in April for example (1st April 2022), the financial year end that is impacted is not
+ * 2022 but rather 2023, because the financial year runs 1st April to 31st March.
+ * Once we have the year range impacted we loop through the years and check if there is already a record on the licence
+ * supplementary years table (flagging that year already on the licence).
+ * If theres a match then we don't want to add a duplicate record so we continue. If there is no match then we add this
+ * year to our financialYearEnds.
+ *
+ * @private
+ */
+async function _flagForTwoPartTariffSupplementary (chargeVersion, date, financialYearEnds, twoPartTariff, licenceId) {
+  if (!twoPartTariff) {
+    return
   }
+
+  chargeVersion.endDate = chargeVersion.endDate === null ? date : chargeVersion.endDate
+  const chargeVersionStartYear = _getFinancialYearEnd(chargeVersion.startDate)
+  const chargeVersionEndYear = _getFinancialYearEnd(chargeVersion.endDate)
+
+  for (let year = chargeVersionStartYear; year <= chargeVersionEndYear; year++) {
+    const match = await _fetchExistingLicenceSupplementaryYears(licenceId, year)
+
+    if (match) {
+      continue
+    }
+
+    financialYearEnds.push(year)
+  }
+}
+
+/**
+ * This function calculates the financial year end for a given date
+ * @private
+ */
+function _getFinancialYearEnd (date) {
+  let year = date.getFullYear()
+
+  if (date.getMonth() >= APRIL) {
+    year++
+  }
+
+  return year
+}
+
+function _licenceSupplementaryYearsToPersist (financialYearEnds, id) {
+  const uniqueYears = [...new Set(financialYearEnds)]
+
+  return uniqueYears.map((year) => {
+    return {
+      financialYearEnd: year,
+      twoPartTariff: true,
+      licenceId: id
+    }
+  })
 }
 
 function _twoPartTariffChargeVersion (chargeVersion) {
@@ -150,17 +188,12 @@ function _twoPartTariffChargeVersion (chargeVersion) {
   return twoPartTariffChargeVersion
 }
 
-function _currentFinancialYearEnd () {
-  const date = new Date()
-  let year = date.getFullYear()
-
-  if (date.getMonth() >= APRIL) {
-    year++
-  }
-
-  return new Date(year, 2, 31)
-}
-
+/**
+ * Compares the end dates for the nald licence being imported and the current records that we hold for that licence in
+ * the WRLS database. If any of the dates are different it means we need to go through the process of flagging the
+ * licence for supplementary billing
+ * @private
+ */
 function _updatedLicenceEndDate (wrlsLicence, transformedLicence) {
   const dates = []
 
