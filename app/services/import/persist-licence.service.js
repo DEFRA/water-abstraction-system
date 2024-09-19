@@ -145,6 +145,10 @@ async function _persistCompanies (trx, updatedAt, companies) {
     if (company.contact) {
       await _persistContact(trx, updatedAt, company.contact)
     }
+
+    if (company.companyContact) {
+      await _persistsCompanyContact(trx, updatedAt, company.companyContact)
+    }
   }
 }
 
@@ -172,6 +176,10 @@ async function _persistContact (trx, updatedAt, contact) {
       'lastName',
       'updatedAt'
     ])
+}
+
+async function _persistsCompanyContact (trx, updatedAt, contact) {
+  // raw query needed here to link the id's together
 }
 
 module.exports = {

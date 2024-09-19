@@ -7,6 +7,7 @@
 
 const FetchContactsService = require('./fetch-contacts.service.js')
 const ContactPresenter = require('../../../presenters/import/legacy/contact.presenter.js')
+const CompanyContactPresenter = require('../../../presenters/import/legacy/company-contact.presenter.js')
 const ImportContactValidator = require('../../../validators/import/contact.validator.js')
 
 /**
@@ -26,10 +27,12 @@ async function go (regionCode, licenceId, transformedCompanies) {
     const matchingCompany = _matchingCompany(transformedCompanies, naldContact)
 
     const transformedContact = ContactPresenter.go(naldContact)
+    const transformedCompanyContact = CompanyContactPresenter.go(naldContact)
 
     ImportContactValidator.go(transformedContact)
 
     matchingCompany.contact = { ...transformedContact, dataSource: 'nald' }
+    matchingCompany.companyContact = transformedCompanyContact
   })
 }
 
