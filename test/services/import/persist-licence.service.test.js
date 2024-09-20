@@ -8,12 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
@@ -36,6 +38,7 @@ describe('Persist licence service', () => {
   let transformedCompanies
   let transformedCompany
   let transformedLicence
+  let licenceHolderRoleId
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
@@ -47,7 +50,9 @@ describe('Persist licence service', () => {
     transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
       licenceVersionPurposeConditionType.id)
 
-    transformedCompany = _transformedCompany()
+    licenceHolderRoleId = LicenceRoleHelper.select().id
+
+    transformedCompany = _transformedCompany(licenceHolderRoleId)
 
     transformedCompanies = [{ ...transformedCompany }]
   })
@@ -96,6 +101,15 @@ describe('Persist licence service', () => {
         expect(contact.firstName).to.equal('James')
         expect(contact.lastName).to.equal('Bond')
         expect(contact.dataSource).to.equal('nald')
+
+        // Company contact - the company and contact id are used to relate the contact to the company
+        const companyContact = contact.companyContacts[0]
+
+        expect(companyContact.companyId).to.equal(company.id)
+        expect(companyContact.contactId).to.equal(contact.id)
+        expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
+        expect(companyContact.startDate).to.equal(transformedCompany.companyContact.startDate)
+        expect(companyContact.default).to.be.true()
       })
     })
 
@@ -162,6 +176,13 @@ describe('Persist licence service', () => {
 
         exisitngContact = await ContactHelper.add({
           externalId: transformedCompany.externalId
+        })
+
+        await CompanyContactHelper.add({
+          companyId: existingCompany.id,
+          contactId: exisitngContact.id,
+          licenceRoleId: licenceHolderRoleId,
+          startDate: new Date('1999-01-01')
         })
 
         transformedCompanies = [{ ...existingCompany, contact: exisitngContact }]
@@ -240,6 +261,15 @@ describe('Persist licence service', () => {
         expect(contact.firstName).to.equal('Amara')
         expect(contact.lastName).to.equal('Gupta')
         expect(contact.dataSource).to.equal('wrls')
+
+        //  Company contact - the company and contact id are used to relate the contact to the company
+        const companyContact = contact.companyContacts[0]
+
+        expect(companyContact.companyId).to.equal(existingCompany.id)
+        expect(companyContact.contactId).to.equal(exisitngContact.id)
+        expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
+        expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
+        expect(companyContact.default).to.be.true()
       })
     })
   })
@@ -334,6 +364,7 @@ async function _fetchPersistedCompany (externalId) {
   return CompanyModel
     .query()
     .where('externalId', externalId)
+    .withGraphFetched('companyContacts')
     .limit(1)
     .first()
 }
@@ -342,11 +373,12 @@ async function _fetchPersistedContact (externalId) {
   return ContactModel
     .query()
     .where('externalId', externalId)
+    .withGraphFetched('companyContacts')
     .limit(1)
     .first()
 }
 
-function _transformedCompany () {
+function _transformedCompany (licenceRoleId) {
   const externalId = CompanyHelper.generateExternalId()
 
   return {
@@ -360,6 +392,11 @@ function _transformedCompany () {
       lastName: 'Bond',
       externalId,
       dataSource: 'nald'
+    },
+    companyContact: {
+      externalId,
+      startDate: new Date('1999-01-01'),
+      licenceRoleId
     }
   }
 }

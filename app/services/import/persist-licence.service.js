@@ -184,17 +184,19 @@ async function _persistsCompanyContact (trx, updatedAt, companyContact) {
   const { externalId, startDate, licenceRoleId } = companyContact
 
   return db.raw(`
-    INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, created_at, updated_at)
-    SELECT com.id, con.id, lr.id, ?, NOW(), ?
+    INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
+    SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
     FROM public.companies com
-    JOIN public.contacts con on con.external_id = com.external_id
-    JOIN public."licence_roles" lr on lr.id = ?
+      JOIN public.contacts con ON con.external_id = ?
+      JOIN public."licence_roles" lr on lr.id = ?
     WHERE com.external_id = ?
     ON CONFLICT (company_id, contact_id, licence_role_id, start_date)
       DO UPDATE SET
         contact_id = EXCLUDED.contact_id,
+        "default" = EXCLUDED."default",
         updated_at = EXCLUDED.updated_at
-  `, [startDate, updatedAt, licenceRoleId, externalId])
+  `, [startDate, updatedAt, externalId, licenceRoleId, externalId])
+    .transacting(trx)
 }
 
 module.exports = {
