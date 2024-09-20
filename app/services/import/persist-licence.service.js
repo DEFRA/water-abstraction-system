@@ -5,6 +5,7 @@
  * @module PersistLicenceService
  */
 
+const CompanyContactModel = require('../../models/company-contact.model.js')
 const CompanyModel = require('../../models/company.model.js')
 const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
@@ -12,6 +13,7 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -153,7 +155,7 @@ async function _persistCompanies (trx, updatedAt, companies) {
 }
 
 async function _persistCompany (trx, updatedAt, company) {
-  const { contact, ...propertiesToPersist } = company
+  const { contact, companyContact, ...propertiesToPersist } = company
 
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
@@ -178,8 +180,21 @@ async function _persistContact (trx, updatedAt, contact) {
     ])
 }
 
-async function _persistsCompanyContact (trx, updatedAt, contact) {
-  // raw query needed here to link the id's together
+async function _persistsCompanyContact (trx, updatedAt, companyContact) {
+  const { externalId, startDate, licenceRoleId } = companyContact
+
+  return db.raw(`
+    INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, created_at, updated_at)
+    SELECT com.id, con.id, lr.id, ?, NOW(), ?
+    FROM public.companies com
+    JOIN public.contacts con on con.external_id = com.external_id
+    JOIN public."licence_roles" lr on lr.id = ?
+    WHERE com.external_id = ?
+    ON CONFLICT (company_id, contact_id, licence_role_id, start_date)
+      DO UPDATE SET
+        contact_id = EXCLUDED.contact_id,
+        updated_at = EXCLUDED.updated_at
+  `, [startDate, updatedAt, licenceRoleId, externalId])
 }
 
 module.exports = {
