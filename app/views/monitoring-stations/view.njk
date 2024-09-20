@@ -1,0 +1,53 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      {{ monitoringStationName }}
+    </h1>
+  </div>
+
+  <div>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'meta-data'
+      },
+      rows: [
+        {
+          key: { text: "Grid reference", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-created">' + gridReference + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "WISKI ID", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-created">' + wiskiId + '</span>', classes: "meta-data__value" }
+        },
+        {
+          key: { text: "Station reference", classes: "meta-data__label" },
+          value: { html: '<span data-test="meta-data-created">' + stationReference + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    }) }}
+  </div>
+
+  <div>
+    {{ govukButton({
+      text: "Create a water abstraction alert",
+      href: ""
+    }) }}
+  </div>
+{% endblock %}

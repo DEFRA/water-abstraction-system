@@ -103,6 +103,10 @@
             <li>
               <a href="/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a>
             </li>
+
+            <div>
+              <a href="/system/monitoring-stations/{{ monitoringStation.id }}/view">Test Monitoring Station View</a>
+            </div>
           {% endfor %}
         </ul>
       {% else %}
