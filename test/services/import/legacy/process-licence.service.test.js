@@ -15,6 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Things to stub
 const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
+const TransformLicenceSupplementaryFlagsService = require('../../../../app/services/import/legacy/transform-licence-supplementary-flags.service.js')
 const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
@@ -40,6 +41,7 @@ describe('Import Legacy Process Licence service', () => {
     transformedLicence = _transformedLicence(licenceRef)
 
     Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+    Sinon.stub(TransformLicenceSupplementaryFlagsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
