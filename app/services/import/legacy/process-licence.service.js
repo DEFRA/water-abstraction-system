@@ -30,11 +30,6 @@ async function go (licenceRef) {
     const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
       await TransformLicenceService.go(licenceRef)
 
-    // console.log('naldLicenceId :', naldLicenceId)
-    // console.log('regionCode :', regionCode)
-    // console.log('transformedLicence :', transformedLicence)
-    // console.log('wrlsLicenceId  :', wrlsLicenceId)
-
     // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceSupplementaryFlagsService.go(transformedLicence, wrlsLicenceId)
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
