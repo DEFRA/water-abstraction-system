@@ -149,6 +149,15 @@ describe('Persist licence service', () => {
         })
 
         transformedCompanies = [{ ...existingCompany }]
+
+        // These properties are only present on a licence if it already exists in WRLS
+        transformedLicence.includeInPresrocBilling = 'no'
+        transformedLicence.includeInSrocBilling = true
+        transformedLicence.licenceSupplementaryYears = [{
+          financialYearEnd: 2023,
+          twoPartTariff: true,
+          licenceId: existingLicence.id
+        }]
       })
 
       it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
@@ -164,6 +173,20 @@ describe('Persist licence service', () => {
         expect(updatedLicence.regions).to.equal(transformedLicence.regions)
         expect(updatedLicence.revokedDate).to.equal(transformedLicence.revokedDate)
         expect(updatedLicence.startDate).to.equal(transformedLicence.startDate)
+        expect(updatedLicence.includeInPresrocBilling).to.equal(transformedLicence.includeInPresrocBilling)
+        expect(updatedLicence.includeInSrocBilling).to.equal(transformedLicence.includeInSrocBilling)
+
+        // Licence supplementary years comparison
+        const { licenceSupplementaryYears } = updatedLicence
+
+        expect(licenceSupplementaryYears[0].licenceId).to.equal(existingLicence.id)
+        expect(licenceSupplementaryYears[0].billRunId).to.equal(null)
+        expect(licenceSupplementaryYears[0].twoPartTariff).to.equal(
+          transformedLicence.licenceSupplementaryYears[0].twoPartTariff
+        )
+        expect(licenceSupplementaryYears[0].financialYearEnd).to.equal(
+          transformedLicence.licenceSupplementaryYears[0].financialYearEnd
+        )
 
         // Licence version comparison
         const updatedLicVer = updatedLicence.licenceVersions[0]
@@ -240,6 +263,7 @@ async function _fetchPersistedLicence (licenceRef) {
   return LicenceModel
     .query()
     .where('licenceRef', licenceRef)
+    .withGraphFetched('licenceSupplementaryYears')
     .withGraphFetched('licenceVersions')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')

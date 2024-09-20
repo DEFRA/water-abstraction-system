@@ -26,7 +26,7 @@ async function go (transformedLicence, transformedCompanies) {
     const updatedAt = timestampForPostgres()
     const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
 
-    if (transformedLicence.licenceSupplementaryYears.length > 0) {
+    if (transformedLicence.licenceSupplementaryYears) {
       await _persistSupplementaryBillingYears(trx, transformedLicence.licenceSupplementaryYears)
     }
 

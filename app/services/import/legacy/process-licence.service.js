@@ -31,7 +31,10 @@ async function go (licenceRef) {
       await TransformLicenceService.go(licenceRef)
 
     // Pass the transformed licence through each transformation step, building the licence as we go
-    await TransformLicenceSupplementaryFlagsService.go(transformedLicence, wrlsLicenceId)
+    if (wrlsLicenceId) {
+      await TransformLicenceSupplementaryFlagsService.go(transformedLicence, wrlsLicenceId)
+    }
+
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposeConditionsService.go(regionCode, naldLicenceId, transformedLicence)
