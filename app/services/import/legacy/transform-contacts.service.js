@@ -27,12 +27,14 @@ async function go (regionCode, licenceId, transformedCompanies) {
     const matchingCompany = _matchingCompany(transformedCompanies, naldContact)
 
     const transformedContact = ContactPresenter.go(naldContact)
-    const transformedCompanyContact = CompanyContactPresenter.go(naldContact)
 
     ImportContactValidator.go(transformedContact)
 
     matchingCompany.contact = { ...transformedContact, dataSource: 'nald' }
-    matchingCompany.companyContact = transformedCompanyContact
+
+    if (naldContact.licence_role_id && naldContact.start_date) {
+      matchingCompany.companyContact = CompanyContactPresenter.go(naldContact)
+    }
   })
 }
 

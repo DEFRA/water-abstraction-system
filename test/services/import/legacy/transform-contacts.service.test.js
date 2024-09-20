@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Things to stub
 const FetchCompanyContactService = require('../../../../app/services/import/legacy/fetch-contacts.service.js')
 
@@ -15,18 +18,16 @@ const FetchCompanyContactService = require('../../../../app/services/import/lega
 const TransformCompanyContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
 
 describe('Import Legacy Transform Contact service', () => {
-  // NOTE: Clearly this is an incomplete representation of the company returned from TransformedCompaniesService.
-  // But for the purposes of this service it is all that is needed
-  const transformedCompany = { externalId: '1:007' }
-
   const naldLicenceId = '2113'
   const regionCode = '1'
+  const licenceRoleId = generateUUID()
 
   let legacyContact
+  let legacyContactWithCompanyContacts
   let transformedCompanies
 
   beforeEach(() => {
-    transformedCompanies = [{ ...transformedCompany }]
+    transformedCompanies = [{ externalId: '1:007' }, { externalId: '1:009' }]
 
     legacyContact = _legacyContact()
   })
@@ -37,7 +38,9 @@ describe('Import Legacy Transform Contact service', () => {
 
   describe('when matching valid legacy contact is found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchCompanyContactService, 'go').resolves([legacyContact])
+      legacyContactWithCompanyContacts = { ..._legacyContact(), external_id: '1:009', start_date: '2020-01-01', licence_role_id: licenceRoleId }
+
+      Sinon.stub(FetchCompanyContactService, 'go').resolves([legacyContact, legacyContactWithCompanyContacts])
     })
 
     it('attaches the record transformed and validated for WRLS to the transformed company', async () => {
@@ -53,6 +56,29 @@ describe('Import Legacy Transform Contact service', () => {
           salutation: 'Mr'
         },
         externalId: '1:007'
+      })
+    })
+
+    describe('and there is a company contact', () => {
+      it('attaches the company contact transformed for WRLS to the transformed company', async () => {
+        await TransformCompanyContactsService.go(regionCode, naldLicenceId, transformedCompanies)
+
+        expect(transformedCompanies[1]).to.equal({
+          companyContact: {
+            externalId: '1:009',
+            licenceRoleId,
+            startDate: '2020-01-01'
+          },
+          contact: {
+            dataSource: 'nald',
+            externalId: '1:009',
+            firstName: 'James',
+            initials: 'H',
+            lastName: 'Bond',
+            salutation: 'Mr'
+          },
+          externalId: '1:009'
+        })
       })
     })
   })
