@@ -5,7 +5,6 @@
  * @module PersistLicenceService
  */
 
-const CompanyContactModel = require('../../models/company-contact.model.js')
 const CompanyModel = require('../../models/company.model.js')
 const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
@@ -187,15 +186,15 @@ async function _persistsCompanyContact (trx, updatedAt, companyContact) {
     INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
     SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
     FROM public.companies com
-      JOIN public.contacts con ON con.external_id = ?
       JOIN public."licence_roles" lr on lr.id = ?
+      JOIN public.contacts con ON con.external_id = ?
     WHERE com.external_id = ?
     ON CONFLICT (company_id, contact_id, licence_role_id, start_date)
       DO UPDATE SET
         contact_id = EXCLUDED.contact_id,
         "default" = EXCLUDED."default",
         updated_at = EXCLUDED.updated_at
-  `, [startDate, updatedAt, externalId, licenceRoleId, externalId])
+  `, [startDate, updatedAt, licenceRoleId, externalId, externalId])
     .transacting(trx)
 }
 

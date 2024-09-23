@@ -30,6 +30,8 @@ const { randomInteger } = require('../../support/general.js')
 const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
 
 describe('Persist licence service', () => {
+  const companyContactStartDate = new Date('1999-01-01')
+
   let licenceVersionPurposeConditionType
   let primaryPurpose
   let purpose
@@ -182,10 +184,19 @@ describe('Persist licence service', () => {
           companyId: existingCompany.id,
           contactId: exisitngContact.id,
           licenceRoleId: licenceHolderRoleId,
-          startDate: new Date('1999-01-01')
+          startDate: companyContactStartDate
         })
 
-        transformedCompanies = [{ ...existingCompany, contact: exisitngContact }]
+        transformedCompanies = [{
+          ...existingCompany,
+          contact: exisitngContact,
+          companyContact: {
+            externalId: existingCompany.externalId,
+            startDate: companyContactStartDate,
+            licenceRoleId: licenceHolderRoleId
+          }
+        }
+        ]
       })
 
       it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
