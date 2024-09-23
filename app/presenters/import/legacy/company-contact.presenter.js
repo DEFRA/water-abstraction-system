@@ -8,13 +8,14 @@
 /**
  * Creates a company contact in the WRLS format
  *
- * NALD does not have the concept of a compnay contact it is a WRLS construct.
+ * NALD does not have the concept of a 'company contact'. It is a WRLS construct only.
  *
- * A company contact is the join/ link between the NALD contacts and companies.
+ * If the NALD party is of type 'PERS', WRLS on import splits it into a 'company' and 'contact' record. The
+ * 'company-contact' record is the thing that links then together in WRLS.
  *
- * @param {ImportLegacyContactType} contact - the legacy NALD contact
+ * @param {ImportLegacyContactType} contact - the legacy NALD contact derived from the 'party'
  *
- * @returns {object} the company contact required to create and to persit the company contact to wrls
+ * @returns {object} the details needed to persist the company contact in WRLS
  */
 function go (contact) {
   return {
