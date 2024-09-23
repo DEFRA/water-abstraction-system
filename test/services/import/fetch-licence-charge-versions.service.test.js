@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
+const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchLicenceChargeVersionsService = require('../../../app/services/import/fetch-licence-charge-versions.service.js')
@@ -20,11 +20,6 @@ const FetchLicenceChargeVersionsService = require('../../../app/services/import/
 describe('Fetch Licence Charge Versions service', () => {
   let clock
   let testDate
-
-  beforeEach(() => {
-    testDate = new Date('2024-03-31')
-    clock = Sinon.useFakeTimers(testDate)
-  })
 
   afterEach(() => {
     clock.restore()
@@ -42,6 +37,9 @@ describe('Fetch Licence Charge Versions service', () => {
 
     describe('and the licence has charge version data over 6 years old', () => {
       beforeEach(async () => {
+        testDate = new Date('2024-03-31')
+        clock = Sinon.useFakeTimers(testDate)
+
         chargeVersion = await ChargeVersionHelper.add({
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
@@ -72,6 +70,9 @@ describe('Fetch Licence Charge Versions service', () => {
 
     describe('and the licence has charge version data with no end date', () => {
       beforeEach(async () => {
+        testDate = new Date('2024-03-31')
+        clock = Sinon.useFakeTimers(testDate)
+
         chargeVersion = await ChargeVersionHelper.add({
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
@@ -113,6 +114,9 @@ describe('Fetch Licence Charge Versions service', () => {
 
     describe('and the licence has charge versions data that ended within the last 6 years', () => {
       beforeEach(async () => {
+        testDate = new Date('2024-04-01')
+        clock = Sinon.useFakeTimers(testDate)
+
         chargeVersion = await ChargeVersionHelper.add({
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
