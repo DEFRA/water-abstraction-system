@@ -63,6 +63,13 @@ const data = [
     naldRegionId: 9,
     name: 'Test',
     displayName: 'Test Region'
+  },
+  {
+    id: 'c502e4ca-9ae9-469d-8180-9f347d8e2bfd',
+    chargeRegionId: 'S',
+    naldRegionId: 10,
+    name: 'Bill Run',
+    displayName: 'Bill Run Testing Region'
   }
 ]
 

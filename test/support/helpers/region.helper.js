@@ -4,9 +4,12 @@
  * @module RegionHelper
  */
 
-const { selectRandomEntry } = require('../general.js')
+const { randomInteger } = require('../general.js')
 const { data: regions } = require('../../../db/seeds/data/regions.js')
 
+// The `BILL_RUN_REGION_INDEX` is only to be used for testing bill run services that need to know details of bill runs
+// per region. This region is not selected randomly to prevent unit tests from using this region unless necessary.
+const BILL_RUN_REGION_INDEX = 9
 const TEST_REGION_INDEX = 8
 
 /**
@@ -28,11 +31,15 @@ function select (index = -1) {
     return regions[index]
   }
 
-  return selectRandomEntry(regions)
+  // 2 is deducted from the length of the array so that the Test Bill Run Region is not selected randomly
+  const randomIndex = randomInteger(0, regions.length - 2)
+
+  return regions[randomIndex]
 }
 
 module.exports = {
   data: regions,
   select,
+  BILL_RUN_REGION_INDEX,
   TEST_REGION_INDEX
 }
