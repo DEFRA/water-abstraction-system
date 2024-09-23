@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceChargeVersionsService = require('./fetch-licence-charge-versions.service.js')
-const FlagForSupplementaryBillingPresenter = require('../../presenters/import/flag-for-supplementary-billing.presenter.js')
+const FlagForSupplementaryBillingService = require('./flag-for-supplementary-billing.service.js')
 
 /**
  * Transforms NALD licence data to determine eligibility for supplementary billing.
@@ -20,7 +20,7 @@ const FlagForSupplementaryBillingPresenter = require('../../presenters/import/fl
 async function go (transformedLicence, wrlsLicenceId) {
   const wrlsLicence = await FetchLicenceChargeVersionsService.go(wrlsLicenceId)
 
-  await FlagForSupplementaryBillingPresenter.go(transformedLicence, wrlsLicence)
+  await FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicence)
 }
 
 module.exports = {

@@ -1,7 +1,8 @@
 'use strict'
 
 /**
- * @module FlagForSupplementaryBillingPresenter
+ * Determines if a licence should be flagged for supplementary billing
+ * @module FlagForSupplementaryBillingService
  */
 
 const APRIL = 3
@@ -9,12 +10,15 @@ const SROC_START_DATE = new Date('2022-04-01')
 
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
-// Consider new licence
-
 /**
- * hah
- * @param {*} transformedLicence
- * @param {*} wrlsLicence
+ * Determines if a licence should be flagged for supplementary billing.
+ *
+ * This service is responsible for determining whether a licence imported from NALD should be flagged for
+ * supplementary billing. It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS
+ * and the transformed data, and flags the licence for inclusion in pre-sroc, sroc or sroc two-part tariff billing if
+ * necessary.
+ * @param {object} transformedLicence - the legacy NALD licence
+ * @param {object} wrlsLicence - the WRLS licence data
  */
 async function go (transformedLicence, wrlsLicence) {
   const { chargeVersions, id: licenceId } = wrlsLicence
@@ -28,29 +32,26 @@ async function go (transformedLicence, wrlsLicence) {
   const dates = _updatedLicenceEndDate(wrlsLicence, transformedLicence)
 
   if (dates.length === 0) {
-    console.log('Result :', result)
-    transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
-    transformedLicence.includeInSrocBilling = result.includeInSrocBilling
-    transformedLicence.licenceSupplementaryYears = []
-
-    return
+    _setResult(transformedLicence, result)
   }
 
   const financialYearEnds = []
 
   await _compareLicenceEndDates(dates, chargeVersions, financialYearEnds, result, licenceId)
-  const licenceSupplementaryYearsToPersist = _licenceSupplementaryYearsToPersist(financialYearEnds, wrlsLicence.id)
 
+  _setResult(transformedLicence, result)
+}
+
+function _setResult (transformedLicence, result) {
   transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
   transformedLicence.includeInSrocBilling = result.includeInSrocBilling
-  transformedLicence.licenceSupplementaryYears = licenceSupplementaryYearsToPersist
+  transformedLicence.licenceSupplementaryYears = result.licenceSupplementaryYears
 }
 
 async function _compareChargeVersions (chargeVersions, date, financialYearEnds, result, licenceId) {
   for (const chargeVersion of chargeVersions) {
     const twoPartTariff = _twoPartTariffChargeVersion(chargeVersion)
 
-    console.log('twoPartTariff :', twoPartTariff)
     _flagForPreSrocSupplementary(chargeVersion, result)
     _flagForSrocSupplementary(chargeVersion, result, twoPartTariff)
 
@@ -66,6 +67,8 @@ async function _compareLicenceEndDates (dates, chargeVersions, financialYearEnds
 
     await _compareChargeVersions(chargeVersions, date, financialYearEnds, result, licenceId)
   }
+
+  result.licenceSupplementaryYears = _licenceSupplementaryYearsToPersist(financialYearEnds, licenceId)
 }
 
 function _currentFinancialYearEnd () {
