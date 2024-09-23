@@ -11,7 +11,7 @@ const CompanyContactPresenter = require('../../../presenters/import/legacy/compa
 const ImportContactValidator = require('../../../validators/import/contact.validator.js')
 
 /**
- * Transforms NALD company data into a validated object that matches the WRLS structure
+ * Transforms NALD contact data into a validated object that matches the WRLS structure
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
