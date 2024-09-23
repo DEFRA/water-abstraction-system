@@ -1,17 +1,22 @@
 'use strict'
 
 /**
+ * Fetches the licence and charge version data for the given licenceId
  * @module FetchLicenceChargeVersionsService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 const { ref } = require('objection')
 const APRIL = 3
 
 /**
- *  hah
- * @param {*} licenceId
- * @returns
+ * Fetches the licence data for the given id
+ * Since supplementary billing only happens for the previous 6 years, we filter out the charge versions to only return
+ * those with an end date within the last 6 years
+ *
+ * @param {string} licenceId - The UUID of the wrls licence
+ *
+ * @returns {Promise<object>} an object containing our WRLS licence data and filtered charge versions
  */
 async function go (licenceId) {
   const licence = await _fetchLicenceData(licenceId)
