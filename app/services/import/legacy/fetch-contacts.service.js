@@ -12,6 +12,8 @@ const licenceHolderName = 'licenceHolder'
 /**
  * Fetches the company data from the import.NALD_PARTIES table for the licence ref
  *
+ * The only contact currently imported and saved to WRLS is the licence holder.
+ *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
  *
