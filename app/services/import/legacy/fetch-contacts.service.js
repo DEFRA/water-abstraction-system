@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the company data from the import.NALD_PARTIES table for the licence ref
+ * Fetches the contact data from the import.NALD_PARTIES table for the licence ref
  * @module FetchContactsService
  */
 
