@@ -17,8 +17,6 @@ const ImportContactValidator = require('../../../validators/import/contact.valid
  * @param {string} licenceId - The NALD licence ID
  * @param {object[]} transformedCompanies
  *
- * @returns {Promise<object>} an object representing an array of valid WRLS transformed companies and
- * an array of companies from the db
  */
 async function go (regionCode, licenceId, transformedCompanies) {
   const naldContacts = await FetchContactsService.go(regionCode, licenceId)
