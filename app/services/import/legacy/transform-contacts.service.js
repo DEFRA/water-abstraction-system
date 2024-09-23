@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Transforms NALD company data into a valid object that matches the WRLS structure
+ * Transforms NALD contact data into a valid object that matches the WRLS structure
  * @module ImportLegacyTransformContactsService
  */
 
