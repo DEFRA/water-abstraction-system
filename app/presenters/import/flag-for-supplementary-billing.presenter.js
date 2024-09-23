@@ -7,7 +7,7 @@
 const APRIL = 3
 const SROC_START_DATE = new Date('2022-04-01')
 
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
+const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
 // Consider new licence
 
@@ -28,7 +28,12 @@ async function go (transformedLicence, wrlsLicence) {
   const dates = _updatedLicenceEndDate(wrlsLicence, transformedLicence)
 
   if (dates.length === 0) {
-    return result
+    console.log('Result :', result)
+    transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
+    transformedLicence.includeInSrocBilling = result.includeInSrocBilling
+    transformedLicence.licenceSupplementaryYears = []
+
+    return
   }
 
   const financialYearEnds = []
@@ -45,6 +50,7 @@ async function _compareChargeVersions (chargeVersions, date, financialYearEnds, 
   for (const chargeVersion of chargeVersions) {
     const twoPartTariff = _twoPartTariffChargeVersion(chargeVersion)
 
+    console.log('twoPartTariff :', twoPartTariff)
     _flagForPreSrocSupplementary(chargeVersion, result)
     _flagForSrocSupplementary(chargeVersion, result, twoPartTariff)
 
