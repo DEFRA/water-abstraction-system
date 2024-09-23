@@ -25,7 +25,7 @@ describe('Fetch Live Bill Runs service', () => {
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(7)
+        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
         regionId = region.id
 
@@ -83,7 +83,7 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the previous year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(1)
+        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
         regionId = region.id
 
@@ -140,7 +140,7 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the last PRESROC year (PRESROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(2)
+        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
         regionId = region.id
 
@@ -198,7 +198,7 @@ describe('Fetch Live Bill Runs service', () => {
 
   describe('when there are no live bill runs', () => {
     beforeEach(async () => {
-      const region = RegionHelper.select(3)
+      const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
       regionId = region.id
     })
