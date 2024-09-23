@@ -10,10 +10,7 @@ const { db } = require('../../../../db/db.js')
 const licenceHolderName = 'licenceHolder'
 
 /**
- * Fetches the licence data from the import.NALD_PARTIES table for the licence ref
- *
- * When a company has at least one licence version and the type of contact is not an organisation.
- * Then it will have a contact.
+ * Fetches the company data from the import.NALD_PARTIES table for the licence ref
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID

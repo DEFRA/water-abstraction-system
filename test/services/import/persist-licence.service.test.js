@@ -95,7 +95,7 @@ describe('Persist licence service', () => {
         expect(company.type).to.equal('person')
         expect(company.externalId).to.equal(transformedCompany.externalId)
 
-        // Contact - related to the company
+        // Contact
         const contact = await _fetchPersistedContact(transformedCompany.externalId)
 
         expect(contact.salutation).to.equal('Mr')
@@ -264,7 +264,7 @@ describe('Persist licence service', () => {
         expect(company.type).to.equal('organisation')
         expect(company.externalId).to.equal(existingCompany.externalId)
 
-        // Contact - related to the company
+        // Contact
         const contact = await _fetchPersistedContact(exisitngContact.externalId)
 
         expect(contact.salutation).to.be.null()

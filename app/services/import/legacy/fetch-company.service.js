@@ -8,7 +8,7 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the licence data from the import.NALD_PARTIES table for the licence ref
+ * Fetches the party data from the import.NALD_PARTIES table for the licence ref
  *
  * From this point parties will be referred to as companies and a party will be known as a company
  *
