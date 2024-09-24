@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Model for roles (idm.roles)
- * @module RoleModel
+ * Model for sources (water.sources)
+ * @module SourceModel
  */
 
 const { Model } = require('objection')

@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Model for roles (idm.roles)
- * @module RoleModel
+ * Model for points (water.points)
+ * @module PointModel
  */
 
 const { Model } = require('objection')
