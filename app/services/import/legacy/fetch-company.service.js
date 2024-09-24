@@ -8,7 +8,7 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the licence data from the import.NALD_PARTIES table for the licence ref
+ * Fetches the party data from the import.NALD_PARTIES table for the licence ref
  *
  * From this point parties will be referred to as companies and a party will be known as a company
  *
@@ -29,24 +29,6 @@ function _query () {
   return `
   SELECT DISTINCT ON (np."ID")
     (concat_ws(':', np."FGAC_REGION_CODE", np."ID")) AS external_id,
-    (
-      CASE np."SALUTATION"
-        WHEN 'null' THEN NULL
-        ELSE np."SALUTATION"
-        END
-      )  AS salutation,
-    (
-      CASE np."FORENAME"
-        WHEN 'null' THEN NULL
-        ELSE np."FORENAME"
-        END
-      )  AS firstName,
-    (
-      CASE np."NAME"
-        WHEN 'null' THEN NULL
-        ELSE np."NAME"
-        END
-      )  AS lastName,
     (
       CASE np."APAR_TYPE"
         WHEN 'PER' THEN 'person'
@@ -72,8 +54,7 @@ function _query () {
           END
           )
         END
-      )) AS name,
-    np."ID" as id
+      )) AS name
   FROM import."NALD_PARTIES" np
     LEFT JOIN import."NALD_ABS_LIC_VERSIONS" nalv
       ON nalv."ACON_APAR_ID" = np."ID"
@@ -95,10 +76,6 @@ module.exports = {
 /**
  * @typedef {object} ImportLegacyCompanyType
  *
- * @property {string} - The party id
- * @property {string|null} salutation - The salutation of the person, or null if not applicable.
- * @property {string|null} firstName - The first name of the person, or null if not applicable.
- * @property {string|null} lastName - The last name of the person, or null if not applicable.
  * @property {string} type - Indicates whether the entry is a 'person' or an 'organisation'.
  * @property {string|null} name - The full name, concatenated from salutation, forename/initials, and name.
  * @property {string} external_id - The external ID, formatted as 'FGAC_REGION_CODE:ID'.

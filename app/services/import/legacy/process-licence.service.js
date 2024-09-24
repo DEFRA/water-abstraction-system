@@ -7,7 +7,9 @@
 
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
+const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
+const TransformContactsService = require('./transform-contacts.service.js')
 const TransformLicenceService = require('./transform-licence.service.js')
 const TransformLicenceSupplementaryFlagsService = require('../transform-licence-supplementary-flags.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('./transform-licence-version-purpose-conditions.service.js')
@@ -42,6 +44,9 @@ async function go (licenceRef) {
     // Transform the company data
     const { transformedCompanies } = await TransformCompaniesService.go(regionCode, naldLicenceId)
 
+    // Pass the transformed companies through each transformation step, building the company as we go
+    await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies)
+
     // Ensure the built licence has all the valid child records we require
     LicenceStructureValidator.go(transformedLicence)
 
@@ -49,7 +54,7 @@ async function go (licenceRef) {
     const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
 
     if (wrlsLicenceId) {
-      // Process mod logs
+      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
     }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })

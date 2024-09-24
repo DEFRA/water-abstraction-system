@@ -6,12 +6,14 @@
  */
 
 const CompanyModel = require('../../models/company.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
-const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -156,11 +158,19 @@ async function _persistLicenceVersionPurposeCondition (
 async function _persistCompanies (trx, updatedAt, companies) {
   for (const company of companies) {
     await _persistCompany(trx, updatedAt, company)
+
+    if (company.contact) {
+      await _persistContact(trx, updatedAt, company.contact)
+    }
+
+    if (company.companyContact) {
+      await _persistsCompanyContact(trx, updatedAt, company.companyContact)
+    }
   }
 }
 
 async function _persistCompany (trx, updatedAt, company) {
-  const { ...propertiesToPersist } = company
+  const { contact, companyContact, ...propertiesToPersist } = company
 
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
@@ -170,6 +180,38 @@ async function _persistCompany (trx, updatedAt, company) {
       'type',
       'updatedAt'
     ])
+}
+
+async function _persistContact (trx, updatedAt, contact) {
+  return ContactModel.query(trx)
+    .insert({ ...contact, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'salutation',
+      'initials',
+      'firstName',
+      'lastName',
+      'updatedAt'
+    ])
+}
+
+async function _persistsCompanyContact (trx, updatedAt, companyContact) {
+  const { externalId, startDate, licenceRoleId } = companyContact
+
+  return db.raw(`
+    INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
+    SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
+    FROM public.companies com
+      JOIN public."licence_roles" lr on lr.id = ?
+      JOIN public.contacts con ON con.external_id = ?
+    WHERE com.external_id = ?
+    ON CONFLICT (company_id, contact_id, licence_role_id, start_date)
+      DO UPDATE SET
+        contact_id = EXCLUDED.contact_id,
+        "default" = EXCLUDED."default",
+        updated_at = EXCLUDED.updated_at
+  `, [startDate, updatedAt, licenceRoleId, externalId, externalId])
+    .transacting(trx)
 }
 
 module.exports = {

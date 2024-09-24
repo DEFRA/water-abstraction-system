@@ -4,9 +4,9 @@
  * @module LicenceHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { randomInteger } = require('../general.js')
+const RegionHelper = require('./region.helper.js')
 
 /**
  * Add a new licence
@@ -15,7 +15,7 @@ const { randomInteger } = require('../general.js')
  *
  * - `waterUndertaker` - false
  * - `licenceRef` - [randomly generated - 01/12/34/1000]
- * - `regionId` - [random UUID]
+ * - `regionId` - [randomly selected UUID from regions]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
  *
@@ -42,10 +42,12 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: regionId } = RegionHelper.select()
+
   const defaults = {
     waterUndertaker: false,
     licenceRef: generateLicenceRef(),
-    regionId: generateUUID(),
+    regionId,
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
     startDate: new Date('2022-01-01')
   }
@@ -56,6 +58,11 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generated licence reference
+ *
+ * @returns {string} - A randomly generated licence reference
+ */
 function generateLicenceRef () {
   const secondPart = randomInteger(10, 99)
   const thirdPart = randomInteger(10, 99)
