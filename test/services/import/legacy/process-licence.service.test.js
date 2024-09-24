@@ -20,6 +20,7 @@ const TransformLicenceVersionsService = require('../../../../app/services/import
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
+const TransformContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
 
 // Thing under test
 const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
@@ -47,6 +48,7 @@ describe('Import Legacy Process Licence service', () => {
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformCompaniesService, 'go').resolves({ company: [], transformedCompany: [] })
+    Sinon.stub(TransformContactsService, 'go').resolves()
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
