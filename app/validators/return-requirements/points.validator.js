@@ -27,7 +27,8 @@ function go (points) {
       .required()
   }).messages({
     'any.required': errorMessage,
-    'array.sparse': errorMessage
+    'array.sparse': errorMessage,
+    'string.base': errorMessage
   })
 
   return schema.validate({ points }, { abortEarly: false })
