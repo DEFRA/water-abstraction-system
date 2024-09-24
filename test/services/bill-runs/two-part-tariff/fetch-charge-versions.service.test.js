@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -22,17 +22,17 @@ const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service.js')
+const regionHelper = require('../../../support/helpers/region.helper.js')
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
-const REGION_NORTH_EAST_INDEX = 2
-const REGION_NORTH_WEST_INDEX = 3
 
 describe('Fetch Charge Versions service', () => {
   const billingPeriod = {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')
   }
+  const region = RegionHelper.select(regionHelper.BILL_RUN_REGION_INDEX)
 
   let changeReason
   let chargeCategory
@@ -45,7 +45,7 @@ describe('Fetch Charge Versions service', () => {
   let otherChargeVersion
   let otherChargeReference
   let otherLicence
-  let region
+  // let region
   let purpose
 
   before(async () => {
@@ -55,9 +55,9 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are no applicable charge versions', () => {
-    before(() => {
-      region = RegionHelper.select(REGION_NORTH_WEST_INDEX)
-    })
+    // before(() => {
+    //   region = RegionHelper.select(REGION_NORTH_WEST_INDEX)
+    // })
 
     describe('because the scheme is "presroc"', () => {
       beforeEach(async () => {
@@ -70,6 +70,12 @@ describe('Fetch Charge Versions service', () => {
         chargeReference = await ChargeReferenceHelper.add(
           { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
         )
+      })
+
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -92,6 +98,12 @@ describe('Fetch Charge Versions service', () => {
         )
       })
 
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
+      })
+
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -110,6 +122,12 @@ describe('Fetch Charge Versions service', () => {
         chargeReference = await ChargeReferenceHelper.add(
           { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
         )
+      })
+
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -132,6 +150,12 @@ describe('Fetch Charge Versions service', () => {
         )
       })
 
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
+      })
+
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -148,6 +172,12 @@ describe('Fetch Charge Versions service', () => {
         chargeReference = await ChargeReferenceHelper.add(
           { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
         )
+      })
+
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -170,6 +200,12 @@ describe('Fetch Charge Versions service', () => {
         )
 
         await WorkflowHelper.add({ licenceId: licence.id })
+      })
+
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
       })
 
       it('returns no records', async () => {
@@ -197,6 +233,12 @@ describe('Fetch Charge Versions service', () => {
         )
       })
 
+      afterEach(async () => {
+        await chargeReference.$query().delete()
+        await chargeVersion.$query().delete()
+        await licence.$query().delete()
+      })
+
       it('returns no records', async () => {
         const results = await FetchChargeVersionsService.go(region.id, billingPeriod)
 
@@ -207,8 +249,6 @@ describe('Fetch Charge Versions service', () => {
 
   describe('when there are applicable charge versions', () => {
     before(async () => {
-      region = RegionHelper.select(REGION_NORTH_EAST_INDEX)
-
       licence = await LicenceHelper.add({ licenceRef: '01/128', regionId: region.id })
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
@@ -255,6 +295,15 @@ describe('Fetch Charge Versions service', () => {
         authorisedAnnualQuantity: 100,
         purposeId: purpose.id
       })
+    })
+
+    after(async () => {
+      await chargeReference.$query().delete()
+      await otherChargeReference.$query().delete()
+      await chargeVersion.$query().delete()
+      await otherChargeVersion.$query().delete()
+      await licence.$query().delete()
+      await otherLicence.$query().delete()
     })
 
     it('returns the charge version with related licence, charge references and charge elements', async () => {
