@@ -176,8 +176,6 @@ describe('Persist licence service', () => {
           externalId: transformedCompany.externalId
         })
 
-        transformedCompanies = [{ ...existingCompany }]
-
         // These properties are only present on a licence if it already exists in WRLS
         transformedLicence.includeInPresrocBilling = 'no'
         transformedLicence.includeInSrocBilling = true
