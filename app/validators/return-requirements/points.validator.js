@@ -23,12 +23,13 @@ function go (points) {
 
   const schema = Joi.object({
     points: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().guid())
       .required()
   }).messages({
     'any.required': errorMessage,
     'array.sparse': errorMessage,
-    'string.base': errorMessage
+    'string.base': errorMessage,
+    'string.guid': errorMessage
   })
 
   return schema.validate({ points }, { abortEarly: false })
