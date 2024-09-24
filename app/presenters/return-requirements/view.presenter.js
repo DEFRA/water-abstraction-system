@@ -110,7 +110,7 @@ function _mapRequirement (requirement) {
     agreementsExceptions: _agreementsExceptions(requirement),
     frequencyCollected: returnRequirementFrequencies[requirement.collectionFrequency],
     frequencyReported: returnRequirementFrequencies[requirement.reportingFrequency],
-    points: _points(requirement.returnRequirementPoints),
+    points: _points(requirement.points),
     purposes: _purposes(requirement.returnRequirementPurposes),
     returnReference: requirement.legacyId,
     returnsCycle: requirement.summer === true ? 'Summer' : 'Winter and all year',
@@ -129,9 +129,9 @@ function _purposes (returnRequirementPurposes) {
   })
 }
 
-function _points (returnRequirementPoints) {
-  return returnRequirementPoints.map((returnRequirementPoint) => {
-    return returnRequirementPoint.$describe()
+function _points (points) {
+  return points.map((point) => {
+    return point.$describe()
   })
 }
 
