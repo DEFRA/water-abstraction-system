@@ -75,19 +75,21 @@ class LicenceVersionPurposeModel extends BaseModel {
    * Modifiers allow us to reuse logic in queries, eg. select the licence version purpose and all related purposes to
    * determine if the purpose is electricity generation.
    *
+   * ```javascript
    * return LicenceVersionPurposeModel.query()
    *   .findById(licenceVersionPurposeId)
    *   .modify('allPurposes')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
    */
   static get modifiers () {
     return {
-      /**
-       * allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
-       * the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
-       * determine what frequency returns should be collected and reported by the licensee.
-       */
+      // allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
+      // the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
+      // determine what frequency returns should be collected and reported by the licensee
       allPurposes (query) {
         query
           .withGraphFetched('purpose')
