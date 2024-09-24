@@ -16,6 +16,14 @@ class ReturnRequirementPointModel extends BasePointModel {
 
   static get relationMappings () {
     return {
+      point: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'point.model',
+        join: {
+          from: 'returnRequirementPoints.pointId',
+          to: 'points.id'
+        }
+      },
       returnRequirement: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'return-requirement.model',

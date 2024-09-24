@@ -6,6 +6,7 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
+const PointHelper = require('./point.helper.js')
 const ReturnRequirementPointModel = require('../../../app/models/return-requirement-point.model.js')
 
 /**
@@ -14,8 +15,7 @@ const ReturnRequirementPointModel = require('../../../app/models/return-requirem
  * If no `data` is provided, default values will be used. These are
  *
  * - `externalId` - [randomly generated - 9:99999:100414]
- * - `naldPointId` - [randomly generated - 100414]
- * - `ngr1` - [randomly generated - TL 5143 7153]
+ * - `pointId - [random UUID]
  * - `returnRequirementId` - [random UUID]
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -41,14 +41,9 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
-  const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
-  const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
-
   const defaults = {
-    description: 'Point description',
-    externalId: `9:${randomInteger(100, 99999)}:${naldPointId}`,
-    naldPointId,
-    ngr1,
+    externalId: generateReturnRequirementPointExternalId(),
+    pointId: generateUUID(),
     returnRequirementId: generateUUID()
   }
 
@@ -58,21 +53,23 @@ function defaults (data = {}) {
   }
 }
 
-function generateNationalGridReference () {
-  // NOTE: These are taken from https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid and are the 100KM
-  // square references that cover the majority of the UK (sorry far North!)
-  const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
+/**
+ * Returns a randomly generated return requirement point external ID (9:100:1)
+ *
+ * Combines IDs found in `NALD_RET_FMT_POINTS` which is the basis for return requirements points.
+ *
+ * - `[region code]:[return requirement ID]:[point ID]` - all values are NALD IDs
+ *
+ * @returns {string} - A randomly generated return requirement point external ID
+ */
+function generateReturnRequirementPointExternalId () {
+  const naldPointId = PointHelper.generateNaldPointId()
 
-  return `${codes[randomInteger(0, 16)]} ${randomInteger(100, 999)} ${randomInteger(100, 999)}`
-}
-
-function generateNaldPointId () {
-  return randomInteger(1, 9999)
+  return `9:${randomInteger(100, 99999)}:${naldPointId}`
 }
 
 module.exports = {
   add,
   defaults,
-  generateNationalGridReference,
-  generateNaldPointId
+  generateReturnRequirementPointExternalId
 }
