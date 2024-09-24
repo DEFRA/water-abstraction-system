@@ -41,6 +41,44 @@ function formatLicences (licenceDetails) {
       threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
     }
   })
+
+  return sortLicences(formattedLicences)
+}
+
+function sortLicences (licences) {
+  const sortedLicences = licences.sort((licenceA, licenceB) => {
+    if (licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
+      if (licenceA.lastUpdatedAt > licenceB.lastUpdatedAt) {
+        return -1
+      }
+
+      if (licenceA.lastUpdatedAt < licenceB.lastUpdatedAt) {
+        return 1
+      }
+    }
+
+    if (licenceA.lastUpdatedAt && !licenceB.lastUpdatedAt) {
+      return -1
+    }
+
+    if (!licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
+      return 1
+    }
+
+    if (licenceA.createdAt > licenceB.createdAt) {
+      return -1
+    }
+
+    if (licenceA.createdAt < licenceB.createdAt) {
+      return 1
+    }
+
+    return 0
+  })
+
+  return groupLicences(sortedLicences)
+}
+
 function checkPermissions (auth, roleType) {
   return auth.credentials.roles.some((role) => {
     return role.role === roleType
