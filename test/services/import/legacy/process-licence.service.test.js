@@ -26,7 +26,7 @@ const TransformContactsService = require('../../../../app/services/import/legacy
 // Thing under test
 const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
 
-describe.only('Import Legacy Process Licence service', () => {
+describe('Import Legacy Process Licence service', () => {
   const naldLicenceId = '2113'
   const regionCode = '6'
 
