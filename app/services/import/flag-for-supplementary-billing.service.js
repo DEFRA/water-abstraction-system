@@ -5,7 +5,10 @@
  * @module FlagForSupplementaryBillingService
  */
 
+const MARCH = 2
 const APRIL = 3
+const MONTH_END = 31
+const SIX_YEARS = 6
 const SROC_START_DATE = new Date('2022-04-01')
 
 const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
@@ -74,7 +77,7 @@ async function _compareLicenceEndDates (dates, chargeVersions, financialYearEnds
 function _currentFinancialYearEnd () {
   const financialYearEnd = _getFinancialYearEnd(new Date())
 
-  return new Date(financialYearEnd, 2, 31)
+  return new Date(financialYearEnd, MARCH, MONTH_END)
 }
 
 async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYearEnd) {
@@ -210,17 +213,17 @@ function _checkEndDate (wrlsLicence, transformedLicence, key, dates) {
   const licenceDate = wrlsLicence[key]
   const transformedDate = transformedLicence[key]
 
-  if (transformedDate !== null &&
-    transformedDate >= _financialYearSixYearsAgo()
+  if (transformedDate === null || transformedDate <= _financialYearSixYearsAgo()) {
+    return
+  }
+
+  if (
+    licenceDate === null ||
+    licenceDate.getFullYear() !== transformedDate.getFullYear() ||
+    licenceDate.getMonth() !== transformedDate.getMonth() ||
+    licenceDate.getDate() !== transformedDate.getDate()
   ) {
-    if (
-      licenceDate === null ||
-      licenceDate.getFullYear() !== transformedDate.getFullYear() ||
-      licenceDate.getMonth() !== transformedDate.getMonth() ||
-      licenceDate.getDate() !== transformedDate.getDate()
-    ) {
-      dates.push(transformedDate)
-    }
+    dates.push(transformedDate)
   }
 }
 
@@ -232,7 +235,7 @@ function _financialYearSixYearsAgo () {
     year++
   }
 
-  const sixYearsAgo = year - 6
+  const sixYearsAgo = year - SIX_YEARS
   const financialYearSixYearsAgo = new Date(sixYearsAgo, APRIL, 1)
 
   return financialYearSixYearsAgo

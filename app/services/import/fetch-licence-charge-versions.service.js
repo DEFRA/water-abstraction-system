@@ -8,6 +8,7 @@
 const LicenceModel = require('../../models/licence.model.js')
 const { ref } = require('objection')
 const APRIL = 3
+const SIX_YEARS = 6
 
 /**
  * Fetches the licence data for the given id
@@ -45,7 +46,7 @@ function _financialYearSixYearsAgo () {
     year++
   }
 
-  const sixYearsAgo = year - 6
+  const sixYearsAgo = year - SIX_YEARS
   const financialYearSixYearsAgo = new Date(sixYearsAgo, APRIL, 1)
 
   return financialYearSixYearsAgo
