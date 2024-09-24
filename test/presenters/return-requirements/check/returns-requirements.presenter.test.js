@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const LicenceVersionPurposePointModel = require('../../../../app/models/licence-version-purpose-point.model.js')
+const PointModel = require('../../../../app/models/point.model.js')
 
 // Thing under test
 const ReturnRequirementsPresenter = require('../../../../app/presenters/return-requirements/check/returns-requirements.presenter.js')
 
-describe('Return Requirements presenter', () => {
+describe('Return Requirements - Return Requirements presenter', () => {
   let journey
   let point
   let requirement
@@ -200,14 +200,13 @@ describe('Return Requirements presenter', () => {
 })
 
 function _point () {
-  return LicenceVersionPurposePointModel.fromJson({
+  return PointModel.fromJson({
     description: 'RIVER MEDWAY AT YALDING INTAKE',
     id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
     ngr1: 'TQ 69212 50394',
     ngr2: null,
     ngr3: null,
-    ngr4: null,
-    naldPointId: 100789
+    ngr4: null
   })
 }
 
@@ -224,9 +223,7 @@ function _requirement () {
     ],
     frequencyCollected: 'day',
     frequencyReported: 'day',
-    points: [
-      '100789'
-    ],
+    points: ['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'],
     purposes: [{
       id: '772136d1-9184-417b-90cd-91053287d1df',
       alias: '',
