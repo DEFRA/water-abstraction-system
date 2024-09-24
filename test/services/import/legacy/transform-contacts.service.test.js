@@ -23,13 +23,12 @@ describe('Import Legacy Transform Contact service', () => {
   const licenceRoleId = generateUUID()
 
   let legacyContact
-  let legacyContactWithCompanyContacts
   let transformedCompanies
 
   beforeEach(() => {
     transformedCompanies = [{ externalId: '1:007' }, { externalId: '1:009' }]
 
-    legacyContact = _legacyContact()
+    legacyContact = _legacyContact(licenceRoleId)
   })
 
   afterEach(() => {
@@ -38,15 +37,18 @@ describe('Import Legacy Transform Contact service', () => {
 
   describe('when matching valid legacy contact is found', () => {
     beforeEach(() => {
-      legacyContactWithCompanyContacts = { ..._legacyContact(), external_id: '1:009', start_date: '2020-01-01', licence_role_id: licenceRoleId }
-
-      Sinon.stub(FetchCompanyContactService, 'go').resolves([legacyContact, legacyContactWithCompanyContacts])
+      Sinon.stub(FetchCompanyContactService, 'go').resolves([legacyContact])
     })
 
     it('attaches the record transformed and validated for WRLS to the transformed company', async () => {
       await TransformCompanyContactsService.go(regionCode, naldLicenceId, transformedCompanies)
 
       expect(transformedCompanies[0]).to.equal({
+        companyContact: {
+          externalId: '1:007',
+          licenceRoleId,
+          startDate: '2020-01-01'
+        },
         contact: {
           dataSource: 'nald',
           externalId: '1:007',
@@ -56,29 +58,6 @@ describe('Import Legacy Transform Contact service', () => {
           salutation: 'Mr'
         },
         externalId: '1:007'
-      })
-    })
-
-    describe('and there is a company contact', () => {
-      it('attaches the company contact transformed for WRLS to the transformed company', async () => {
-        await TransformCompanyContactsService.go(regionCode, naldLicenceId, transformedCompanies)
-
-        expect(transformedCompanies[1]).to.equal({
-          companyContact: {
-            externalId: '1:009',
-            licenceRoleId,
-            startDate: '2020-01-01'
-          },
-          contact: {
-            dataSource: 'nald',
-            externalId: '1:009',
-            firstName: 'James',
-            initials: 'H',
-            lastName: 'Bond',
-            salutation: 'Mr'
-          },
-          externalId: '1:009'
-        })
       })
     })
   })
@@ -96,12 +75,14 @@ describe('Import Legacy Transform Contact service', () => {
   })
 })
 
-function _legacyContact () {
+function _legacyContact (licenceRoleId) {
   return {
-    salutation: 'Mr',
-    initials: 'H',
+    external_id: '1:007',
     first_name: 'James',
+    initials: 'H',
     last_name: 'Bond',
-    external_id: '1:007'
+    licence_role_id: licenceRoleId,
+    salutation: 'Mr',
+    start_date: '2020-01-01'
   }
 }
