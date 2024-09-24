@@ -13,8 +13,8 @@ const PointsValidator = require('../../../app/validators/return-requirements/poi
 describe('Point validator', () => {
   describe('when valid data is provided', () => {
     const points = [
-      'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
-      'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
+      'c083c0cc-42ca-4917-a929-e1fed906ff66',
+      '90764459-d9af-4e13-850b-cf4299fd5e8a'
     ]
 
     it('confirms the data is valid', () => {
@@ -26,7 +26,7 @@ describe('Point validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const points = [12]
+    const points = ['100345']
 
     it('fails validation', () => {
       const result = PointsValidator.go(points)
