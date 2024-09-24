@@ -20,6 +20,8 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
  */
 function go (auth, monitoringStation) {
   return {
+    pageTitle: createPageTitle(monitoringStation.riverName, monitoringStation.label),
+    monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
     gridReference: monitoringStation.gridReference,
     hasPermissionToManageLinks: checkPermissions(auth, 'manage_gauging_station_licence_links'),
@@ -107,6 +109,14 @@ function alertedUpdatedAt (licenceDetails) {
   }
 
   return formatLongDate(licenceDetails.createdAt)
+}
+
+function createPageTitle (riverName, stationName) {
+  if (riverName) {
+    return `${riverName} at ${stationName}`
+  }
+
+  return stationName
 }
 
 function formatLicenceDetailsAbstractionPeriod (licenceDetails) {
