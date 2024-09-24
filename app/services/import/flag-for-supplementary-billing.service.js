@@ -205,20 +205,24 @@ function _twoPartTariffChargeVersion (chargeVersion) {
  */
 function _licenceEndDates (wrlsLicence, transformedLicence) {
   const dates = []
+  const endDateTypes = ['revokedDate', 'lapsedDate', 'expiredDate']
 
-  _checkAndPushEndDate(wrlsLicence, transformedLicence, 'revokedDate', dates)
-  _checkAndPushEndDate(wrlsLicence, transformedLicence, 'lapsedDate', dates)
-  _checkAndPushEndDate(wrlsLicence, transformedLicence, 'expiredDate', dates)
+  endDateTypes.forEach((endDateType) => {
+    _checkEndDate(wrlsLicence, transformedLicence, endDateType, dates)
+  })
 
   return dates
 }
 
-function _checkAndPushEndDate (wrlsLicence, transformedLicence, key, dates) {
-  if (transformedLicence[key] !== null) {
-    const licenceDate = wrlsLicence[key]
-    const transformedDate = transformedLicence[key]
+function _checkEndDate (wrlsLicence, transformedLicence, key, dates) {
+  const licenceDate = wrlsLicence[key]
+  const transformedDate = transformedLicence[key]
 
+  if (transformedDate !== null &&
+    transformedDate >= _financialYearSixYearsAgo()
+  ) {
     if (
+      licenceDate === null ||
       licenceDate.getFullYear() !== transformedDate.getFullYear() ||
       licenceDate.getMonth() !== transformedDate.getMonth() ||
       licenceDate.getDate() !== transformedDate.getDate()
@@ -226,6 +230,20 @@ function _checkAndPushEndDate (wrlsLicence, transformedLicence, key, dates) {
       dates.push(transformedDate)
     }
   }
+}
+
+function _financialYearSixYearsAgo () {
+  const date = new Date()
+  let year = date.getFullYear()
+
+  if (date.getMonth() >= APRIL) {
+    year++
+  }
+
+  const sixYearsAgo = year - 6
+  const financialYearSixYearsAgo = new Date(sixYearsAgo, APRIL, 1)
+
+  return financialYearSixYearsAgo
 }
 
 module.exports = {
