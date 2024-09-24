@@ -29,6 +29,7 @@ async function go (transformedLicence, wrlsLicence) {
     licenceSupplementaryYears: []
   }
 
+  console.log('Result :', result)
   const dates = _updatedLicenceEndDate(wrlsLicence, transformedLicence)
 
   if (dates.length === 0) {
@@ -206,20 +207,69 @@ function _twoPartTariffChargeVersion (chargeVersion) {
 function _updatedLicenceEndDate (wrlsLicence, transformedLicence) {
   const dates = []
 
-  if (wrlsLicence.revokedDate !== transformedLicence.revokedDate) {
-    dates.push(transformedLicence.revokedDate)
+  if (transformedLicence.revokedDate !== null) {
+    const { revokedDate } = wrlsLicence
+
+    if (
+      revokedDate.getFullYear() !== transformedLicence.revokedDate.getFullYear() ||
+      revokedDate.getMonth() !== transformedLicence.revokedDate.getMonth() ||
+      revokedDate.getDate() !== transformedLicence.revokedDate.getDate()
+    ) {
+      dates.push(transformedLicence.revokedDate)
+    }
   }
 
-  if (wrlsLicence.lapsedDate !== transformedLicence.lapsedDate) {
-    dates.push(transformedLicence.lapsedDate)
+  if (transformedLicence.lapsedDate !== null) {
+    const { lapsedDate } = wrlsLicence
+
+    if (
+      lapsedDate.getFullYear() !== transformedLicence.lapsedDate.getFullYear() ||
+      lapsedDate.getMonth() !== transformedLicence.lapsedDate.getMonth() ||
+      lapsedDate.getDate() !== transformedLicence.lapsedDate.getDate()
+    ) {
+      dates.push(transformedLicence.lapsedDate)
+    }
   }
 
-  if (wrlsLicence.expiredDate !== transformedLicence.expiredDate) {
-    dates.push(transformedLicence.expiredDate)
+  if (transformedLicence.expiredDate !== null) {
+    const { expiredDate } = wrlsLicence
+
+    if (
+      expiredDate.getFullYear() !== transformedLicence.expiredDate.getFullYear() ||
+      expiredDate.getMonth() !== transformedLicence.expiredDate.getMonth() ||
+      expiredDate.getDate() !== transformedLicence.expiredDate.getDate()
+    ) {
+      dates.push(transformedLicence.expiredDate)
+    }
   }
 
   return dates
 }
+
+// function _licenceEndDates (wrlsLicence, transformedLicence) {
+//   const dates = []
+
+//   _checkAndPushEndDate(wrlsLicence, transformedLicence, 'revokedDate', dates)
+//   _checkAndPushEndDate(wrlsLicence, transformedLicence, 'lapsedDate', dates)
+//   _checkAndPushEndDate(wrlsLicence, transformedLicence, 'expiredDate', dates)
+
+//   return dates
+// }
+
+// function _checkAndPushEndDate (wrlsLicence, transformedLicence, key, dates) {
+//   if (transformedLicence[key] !== null) {
+//     const licenceDate = wrlsLicence[key]
+//     const transformedDate = transformedLicence[key]
+
+//     if (
+//       licenceDate.getFullYear() !== transformedDate.getFullYear() ||
+//       licenceDate.getMonth() !== transformedDate.getMonth() ||
+//       licenceDate.getDate() !== transformedDate.getDate()
+//     ) {
+//       dates.push(transformedDate)
+//     }
+//   }
+// }
 
 module.exports = {
   go
