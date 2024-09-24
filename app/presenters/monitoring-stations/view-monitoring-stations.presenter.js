@@ -31,11 +31,14 @@ function go (auth, monitoringStation) {
 }
 
 function formatLicences (licenceDetails) {
-  return licenceDetails.map((licenceDetail) => {
+  const formattedLicences = licenceDetails.map((licenceDetail) => {
     return {
       abstractionPeriod: formatLicenceDetailsAbstractionPeriod(licenceDetail),
       alertType: licenceDetail.alertType,
       alertUpdatedAt: alertedUpdatedAt(licenceDetail),
+      createdAt: licenceDetail.createdAt,
+      lastUpdatedAt: licenceDetail.statusUpdatedAt,
+      id: licenceDetail.licence.id,
       licenceRef: licenceDetail.licence.licenceRef,
       restrictionType: licenceDetail.restrictionType,
       threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
