@@ -5,13 +5,13 @@
  * @module FlagForSupplementaryBillingService
  */
 
-const MARCH = 2
+const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
+
 const APRIL = 3
+const MARCH = 2
 const MONTH_END = 31
 const SIX_YEARS = 6
 const SROC_START_DATE = new Date('2022-04-01')
-
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 
 /**
  * Determines if a licence should be flagged for supplementary billing.
@@ -32,28 +32,22 @@ async function go (transformedLicence, wrlsLicence) {
     licenceSupplementaryYears: []
   }
 
-  const dates = _licenceEndDates(wrlsLicence, transformedLicence)
+  const dates = _getLicenceEndDates(wrlsLicence, transformedLicence)
 
   if (dates.length === 0) {
-    _setResult(transformedLicence, result)
+    _updateResult(transformedLicence, result)
   }
 
   const financialYearEnds = []
 
-  await _compareLicenceEndDates(dates, chargeVersions, financialYearEnds, result, licenceId)
+  await _checkLicenceEndDates(dates, chargeVersions, financialYearEnds, result, licenceId)
 
-  _setResult(transformedLicence, result)
+  _updateResult(transformedLicence, result)
 }
 
-function _setResult (transformedLicence, result) {
-  transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
-  transformedLicence.includeInSrocBilling = result.includeInSrocBilling
-  transformedLicence.licenceSupplementaryYears = result.licenceSupplementaryYears
-}
-
-async function _compareChargeVersions (chargeVersions, date, financialYearEnds, result, licenceId) {
+async function _checkChargeVersions (chargeVersions, date, financialYearEnds, result, licenceId) {
   for (const chargeVersion of chargeVersions) {
-    const twoPartTariff = _twoPartTariffChargeVersion(chargeVersion)
+    const twoPartTariff = _isTwoPartTariffChargeVersion(chargeVersion)
 
     _flagForPreSrocSupplementary(chargeVersion, result)
     _flagForSrocSupplementary(chargeVersion, result, twoPartTariff)
@@ -62,20 +56,38 @@ async function _compareChargeVersions (chargeVersions, date, financialYearEnds, 
   }
 }
 
-async function _compareLicenceEndDates (dates, chargeVersions, financialYearEnds, result, licenceId) {
+function _checkEndDate (wrlsLicence, transformedLicence, key, dates) {
+  const licenceDate = wrlsLicence[key]
+  const transformedDate = transformedLicence[key]
+
+  if (transformedDate === null || transformedDate <= _financialYearSixYearsAgo()) {
+    return
+  }
+
+  if (
+    licenceDate === null ||
+    licenceDate.getFullYear() !== transformedDate.getFullYear() ||
+    licenceDate.getMonth() !== transformedDate.getMonth() ||
+    licenceDate.getDate() !== transformedDate.getDate()
+  ) {
+    dates.push(transformedDate)
+  }
+}
+
+async function _checkLicenceEndDates (dates, chargeVersions, financialYearEnds, result, licenceId) {
   for (const date of dates) {
-    if (date > _currentFinancialYearEnd()) {
+    if (date > _currentFinancialYearEndDate()) {
       return
     }
 
-    await _compareChargeVersions(chargeVersions, date, financialYearEnds, result, licenceId)
+    await _checkChargeVersions(chargeVersions, date, financialYearEnds, result, licenceId)
   }
 
-  result.licenceSupplementaryYears = _licenceSupplementaryYearsToPersist(financialYearEnds, licenceId)
+  result.licenceSupplementaryYears = _licenceSupplementaryYears(financialYearEnds, licenceId)
 }
 
-function _currentFinancialYearEnd () {
-  const financialYearEnd = _getFinancialYearEnd(new Date())
+function _currentFinancialYearEndDate () {
+  const financialYearEnd = _getFinancialYear(new Date())
 
   return new Date(financialYearEnd, MARCH, MONTH_END)
 }
@@ -89,6 +101,20 @@ async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYear
     .where('billRunId', null)
     .limit(1)
     .first()
+}
+
+function _financialYearSixYearsAgo () {
+  const date = new Date()
+  let year = date.getFullYear()
+
+  if (date.getMonth() >= APRIL) {
+    year++
+  }
+
+  const sixYearsAgo = year - SIX_YEARS
+  const financialYearSixYearsAgo = new Date(sixYearsAgo, APRIL, 1)
+
+  return financialYearSixYearsAgo
 }
 
 /**
@@ -138,8 +164,8 @@ async function _flagForTwoPartTariffSupplementary (chargeVersion, date, financia
   }
 
   chargeVersion.endDate = chargeVersion.endDate === null ? date : chargeVersion.endDate
-  const chargeVersionStartYear = _getFinancialYearEnd(chargeVersion.startDate)
-  const chargeVersionEndYear = _getFinancialYearEnd(chargeVersion.endDate)
+  const chargeVersionStartYear = _getFinancialYear(chargeVersion.startDate)
+  const chargeVersionEndYear = _getFinancialYear(chargeVersion.endDate)
 
   for (let year = chargeVersionStartYear; year <= chargeVersionEndYear; year++) {
     const match = await _fetchExistingLicenceSupplementaryYears(licenceId, year)
@@ -156,7 +182,7 @@ async function _flagForTwoPartTariffSupplementary (chargeVersion, date, financia
  * This function calculates the financial year end for a given date
  * @private
  */
-function _getFinancialYearEnd (date) {
+function _getFinancialYear (date) {
   let year = date.getFullYear()
 
   if (date.getMonth() >= APRIL) {
@@ -166,19 +192,24 @@ function _getFinancialYearEnd (date) {
   return year
 }
 
-function _licenceSupplementaryYearsToPersist (financialYearEnds, id) {
-  const uniqueYears = [...new Set(financialYearEnds)]
+/**
+ * Compares the end dates for the nald licence being imported and the current records that we hold for that licence in
+ * the WRLS database. If any of the dates are different it means we need to go through the process of flagging the
+ * licence for supplementary billing
+ * @private
+ */
+function _getLicenceEndDates (wrlsLicence, transformedLicence) {
+  const dates = []
+  const endDateTypes = ['revokedDate', 'lapsedDate', 'expiredDate']
 
-  return uniqueYears.map((year) => {
-    return {
-      financialYearEnd: year,
-      twoPartTariff: true,
-      licenceId: id
-    }
+  endDateTypes.forEach((endDateType) => {
+    _checkEndDate(wrlsLicence, transformedLicence, endDateType, dates)
   })
+
+  return dates
 }
 
-function _twoPartTariffChargeVersion (chargeVersion) {
+function _isTwoPartTariffChargeVersion (chargeVersion) {
   const { chargeReferences } = chargeVersion
 
   const twoPartTariffChargeVersion = chargeReferences.some((chargeReference) => {
@@ -192,53 +223,22 @@ function _twoPartTariffChargeVersion (chargeVersion) {
   return twoPartTariffChargeVersion
 }
 
-/**
- * Compares the end dates for the nald licence being imported and the current records that we hold for that licence in
- * the WRLS database. If any of the dates are different it means we need to go through the process of flagging the
- * licence for supplementary billing
- * @private
- */
-function _licenceEndDates (wrlsLicence, transformedLicence) {
-  const dates = []
-  const endDateTypes = ['revokedDate', 'lapsedDate', 'expiredDate']
+function _licenceSupplementaryYears (financialYearEnds, id) {
+  const uniqueYears = [...new Set(financialYearEnds)]
 
-  endDateTypes.forEach((endDateType) => {
-    _checkEndDate(wrlsLicence, transformedLicence, endDateType, dates)
+  return uniqueYears.map((year) => {
+    return {
+      financialYearEnd: year,
+      twoPartTariff: true,
+      licenceId: id
+    }
   })
-
-  return dates
 }
 
-function _checkEndDate (wrlsLicence, transformedLicence, key, dates) {
-  const licenceDate = wrlsLicence[key]
-  const transformedDate = transformedLicence[key]
-
-  if (transformedDate === null || transformedDate <= _financialYearSixYearsAgo()) {
-    return
-  }
-
-  if (
-    licenceDate === null ||
-    licenceDate.getFullYear() !== transformedDate.getFullYear() ||
-    licenceDate.getMonth() !== transformedDate.getMonth() ||
-    licenceDate.getDate() !== transformedDate.getDate()
-  ) {
-    dates.push(transformedDate)
-  }
-}
-
-function _financialYearSixYearsAgo () {
-  const date = new Date()
-  let year = date.getFullYear()
-
-  if (date.getMonth() >= APRIL) {
-    year++
-  }
-
-  const sixYearsAgo = year - SIX_YEARS
-  const financialYearSixYearsAgo = new Date(sixYearsAgo, APRIL, 1)
-
-  return financialYearSixYearsAgo
+function _updateResult (transformedLicence, result) {
+  transformedLicence.includeInPresrocBilling = result.includeInPresrocBilling
+  transformedLicence.includeInSrocBilling = result.includeInSrocBilling
+  transformedLicence.licenceSupplementaryYears = result.licenceSupplementaryYears
 }
 
 module.exports = {
