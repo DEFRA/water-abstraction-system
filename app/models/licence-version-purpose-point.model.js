@@ -7,9 +7,9 @@
 
 const { Model } = require('objection')
 
-const BasePointModel = require('./base-point.model.js')
+const BaseModel = require('./base.model.js')
 
-class LicenceVersionPurposePointModel extends BasePointModel {
+class LicenceVersionPurposePointModel extends BaseModel {
   static get tableName () {
     return 'licenceVersionPurposePoints'
   }
