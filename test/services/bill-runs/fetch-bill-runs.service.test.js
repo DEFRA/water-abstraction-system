@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,12 +17,11 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
 
 describe('Fetch Bill Runs service', () => {
+  const region = RegionHelper.select()
+
   let page
-  let region
 
   beforeEach(async () => {
-    region = RegionHelper.select()
-
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
     Sinon.replace(DatabaseConfig, 'defaultPageSize', 3)
   })
@@ -32,7 +31,7 @@ describe('Fetch Bill Runs service', () => {
   })
 
   describe('when there are bill runs', () => {
-    beforeEach(async () => {
+    before(async () => {
       await Promise.all([
         _addBillRun(1005, new Date('2024-03-01'), 10000, 1, 2, region.id),
         _addBillRun(1002, new Date('2023-01-01'), 20000, 3, 4, region.id),
@@ -47,20 +46,32 @@ describe('Fetch Bill Runs service', () => {
         page = 1
       })
 
-      it('returns a result with the matching "results" and the correct "total"', async () => {
+      it('returns a result with the correct properties', async () => {
+        const { results } = await FetchBillRunsService.go(page)
+
+        // Due to the number of other bill runs created by other tests we can't assert on the exact values.
+        // Instead we just check that the object returned contains the properties we expect
+        expect('id' in results[0]).to.be.true()
+        expect('batchType' in results[0]).to.be.true()
+        expect('billRunNumber' in results[0]).to.be.true()
+        expect('createdAt' in results[0]).to.be.true()
+        expect('netTotal' in results[0]).to.be.true()
+        expect('scheme' in results[0]).to.be.true()
+        expect('status' in results[0]).to.be.true()
+        expect('summer' in results[0]).to.be.true()
+        expect('numberOfBills' in results[0]).to.be.true()
+        expect('region' in results[0]).to.be.true()
+      })
+    })
+
+    describe('for the page selected', () => {
+      beforeEach(async () => {
+        page = 1
+      })
+
+      it('returns a full page of 3 matching "results" and the correct "total"', async () => {
         const result = await FetchBillRunsService.go(page)
 
-        expect(...result.results).to.include({
-          batchType: 'supplementary',
-          billRunNumber: 1005,
-          createdAt: new Date('2024-03-01'),
-          netTotal: 10000,
-          scheme: 'sroc',
-          status: 'sent',
-          summer: false,
-          numberOfBills: 3,
-          region: region.displayName
-        })
         expect(result.results.length).to.equal(3)
         expect(result.total >= 5).to.be.true()
       })
@@ -81,7 +92,7 @@ describe('Fetch Bill Runs service', () => {
 
     describe('but not for the page selected', () => {
       beforeEach(async () => {
-        page = 30
+        page = 500
       })
 
       it('returns a result with no "results" but the correct "total"', async () => {
