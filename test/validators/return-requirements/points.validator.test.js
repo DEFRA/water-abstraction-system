@@ -12,15 +12,13 @@ const PointsValidator = require('../../../app/validators/return-requirements/poi
 
 describe('Point validator', () => {
   describe('when valid data is provided', () => {
-    const payload = {
-      points: [
-        'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
-        'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
-      ]
-    }
+    const points = [
+      'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
+      'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
+    ]
 
     it('confirms the data is valid', () => {
-      const result = PointsValidator.go(payload)
+      const result = PointsValidator.go(points)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -28,18 +26,10 @@ describe('Point validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const payload = {
-      purposes: [
-        'Invalid purpose',
-        'Invalid purpose',
-        'Invalid purpose',
-        'Invalid purpose',
-        'Invalid purpose'
-      ]
-    }
+    const points = [12]
 
     it('fails validation', () => {
-      const result = PointsValidator.go(payload)
+      const result = PointsValidator.go(points)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
@@ -48,10 +38,10 @@ describe('Point validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const payload = {}
+    const points = [undefined]
 
     it('fails validation', () => {
-      const result = PointsValidator.go(payload)
+      const result = PointsValidator.go(points)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()

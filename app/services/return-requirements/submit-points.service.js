@@ -33,7 +33,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = _validate(payload)
+  const validationResult = _validate(payload.points)
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
