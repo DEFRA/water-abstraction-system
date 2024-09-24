@@ -23,6 +23,14 @@ class LicenceVersionPurposePointModel extends BasePointModel {
           from: 'licenceVersionPurposePoints.licenceVersionPurposeId',
           to: 'licenceVersionPurposes.id'
         }
+      },
+      point: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'point.model',
+        join: {
+          from: 'licenceVersionPurposePoints.pointId',
+          to: 'points.id'
+        }
       }
     }
   }
