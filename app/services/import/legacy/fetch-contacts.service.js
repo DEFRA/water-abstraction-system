@@ -7,8 +7,6 @@
 
 const { db } = require('../../../../db/db.js')
 
-const licenceHolderName = 'licenceHolder'
-
 /**
  * Fetches the company data from the import.NALD_PARTIES table for the licence ref
  *
@@ -62,7 +60,7 @@ function _query () {
         ON nalv."ACON_APAR_ID" = np."ID"
         AND nalv."FGAC_REGION_CODE" = np."FGAC_REGION_CODE"
     INNER JOIN public.licence_roles lr
-        ON lr.name = '${licenceHolderName}'
+        ON lr.name = 'licenceHolder'
   WHERE np."APAR_TYPE" != 'ORG'
     AND nalv."FGAC_REGION_CODE" = ?
     AND nalv."AABL_ID" = ?

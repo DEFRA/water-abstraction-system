@@ -30,9 +30,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
 
     matchingCompany.contact = { ...transformedContact, dataSource: 'nald' }
 
-    if (naldContact.licence_role_id && naldContact.start_date) {
-      matchingCompany.companyContact = CompanyContactPresenter.go(naldContact)
-    }
+    matchingCompany.companyContact = CompanyContactPresenter.go(naldContact)
   })
 }
 
