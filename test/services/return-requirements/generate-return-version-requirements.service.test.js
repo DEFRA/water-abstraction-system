@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -15,15 +14,11 @@ const LicenceVersionHelper = require('../../support/helpers/licence-version.help
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
-// Things we need to stub
-const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
-
 // Thing under test
 const GenerateReturnVersionRequirementsService = require('../../../app/services/return-requirements/generate-return-version-requirements.service.js')
 
 describe('Return Requirements - Generate Return Version Requirements service', () => {
   let licenceId
-  let licencePoints
   let naldRegionId
   let requirements
 
@@ -37,10 +32,6 @@ describe('Return Requirements - Generate Return Version Requirements service', (
     licenceId = testLicence.id
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('when called with a single requirement, purpose and point with no exemptions set', () => {
     const purposeId = generateUUID()
 
@@ -48,7 +39,7 @@ describe('Return Requirements - Generate Return Version Requirements service', (
     let secondaryPurposeId
 
     beforeEach(async () => {
-      licencePoints = _generateLicencePoints()
+      // licencePoints = _generateLicencePoints()
 
       requirements = _generateRequirements(purposeId)
 
@@ -57,8 +48,6 @@ describe('Return Requirements - Generate Return Version Requirements service', (
 
       primaryPurposeId = testLicenceVersionPurpose.primaryPurposeId
       secondaryPurposeId = testLicenceVersionPurpose.secondaryPurposeId
-
-      Sinon.stub(FetchPointsService, 'go').resolves(licencePoints)
     })
 
     it('generates the data required to populate the return requirements tables', async () => {
@@ -91,13 +80,8 @@ describe('Return Requirements - Generate Return Version Requirements service', (
       expect(result[0].twoPartTariff).to.be.false()
 
       // The data that will populate the "return_requirement_points" table
-      expect(result[0].returnRequirementPoints).to.have.length(1)
-      expect(result[0].returnRequirementPoints[0].description).to.equal(licencePoints[0].description)
-      expect(result[0].returnRequirementPoints[0].ngr1).to.equal(licencePoints[0].ngr1)
-      expect(result[0].returnRequirementPoints[0].ngr2).to.be.null()
-      expect(result[0].returnRequirementPoints[0].ngr3).to.be.null()
-      expect(result[0].returnRequirementPoints[0].ngr4).to.be.null()
-      expect(result[0].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[0].naldPointId)
+      expect(result[0].points).to.have.length(1)
+      expect(result[0].points[0]).to.equal('796f83bb-d50d-446f-bc47-28daff6bcb78')
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[0].returnRequirementPurposes).to.have.length(1)
@@ -118,7 +102,7 @@ describe('Return Requirements - Generate Return Version Requirements service', (
     let secondaryPurposeTwoId
 
     beforeEach(async () => {
-      licencePoints = _generateLicencePoints('multiple')
+      // licencePoints = _generateLicencePoints('multiple')
 
       requirements = _generateRequirements(purposeOneId, purposeTwoId)
 
@@ -136,8 +120,6 @@ describe('Return Requirements - Generate Return Version Requirements service', (
       primaryPurposeTwoId = testLicenceVersionPurposeTwo.primaryPurposeId
       secondaryPurposeOneId = testLicenceVersionPurposeOne.secondaryPurposeId
       secondaryPurposeTwoId = testLicenceVersionPurposeTwo.secondaryPurposeId
-
-      Sinon.stub(FetchPointsService, 'go').resolves(licencePoints)
     })
 
     it('generates the data required to populate the return requirements tables', async () => {
@@ -170,19 +152,9 @@ describe('Return Requirements - Generate Return Version Requirements service', (
       expect(result[1].twoPartTariff).to.be.true()
 
       // The data that will populate the "return_requirement_points" table
-      expect(result[1].returnRequirementPoints).to.have.length(2)
-      expect(result[1].returnRequirementPoints[0].description).to.equal(licencePoints[1].description)
-      expect(result[1].returnRequirementPoints[1].description).to.equal(licencePoints[2].description)
-      expect(result[1].returnRequirementPoints[0].ngr1).to.equal(licencePoints[1].ngr1)
-      expect(result[1].returnRequirementPoints[1].ngr1).to.equal(licencePoints[2].ngr1)
-      expect(result[1].returnRequirementPoints[0].ngr2).to.equal(licencePoints[1].ngr2)
-      expect(result[1].returnRequirementPoints[1].ngr2).to.equal(licencePoints[2].ngr2)
-      expect(result[1].returnRequirementPoints[0].ngr3).to.be.null()
-      expect(result[1].returnRequirementPoints[1].ngr3).to.equal(licencePoints[2].ngr3)
-      expect(result[1].returnRequirementPoints[0].ngr4).to.be.null()
-      expect(result[1].returnRequirementPoints[1].ngr4).to.equal(licencePoints[2].ngr4)
-      expect(result[1].returnRequirementPoints[0].naldPointId).to.equal(licencePoints[1].naldPointId)
-      expect(result[1].returnRequirementPoints[1].naldPointId).to.equal(licencePoints[2].naldPointId)
+      expect(result[1].points).to.have.length(2)
+      expect(result[1].points[0]).to.equal('30070341-ef94-4df8-87dd-31d51a046b8b')
+      expect(result[1].points[1]).to.equal('916a1320-0f57-43b2-bddc-b609218abf1c')
 
       // The data that will populate the "return_requirement_purposes" table
       expect(result[1].returnRequirementPurposes).to.have.length(2)
@@ -198,52 +170,11 @@ describe('Return Requirements - Generate Return Version Requirements service', (
   })
 })
 
-function _generateLicencePoints (multiplePoints) {
-  const licencePoints = [
-    {
-      description: 'RIVER MEDWAY AT YALDING INTAKE',
-      id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-      ngr1: 'TQ 69212 50394',
-      ngr2: null,
-      ngr3: null,
-      ngr4: null,
-      naldPointId: 100789
-    }
-  ]
-
-  const additionalPoints = [
-    {
-      description: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
-      id: '07820640-c95a-497b-87d6-9e0d3ef322db',
-      ngr1: 'SO 524 692',
-      ngr2: 'SO 531 689',
-      ngr3: null,
-      ngr4: null,
-      naldPointId: 100123
-    },
-    {
-      description: 'AREA D',
-      id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-      ngr1: 'NZ 892 055',
-      ngr2: 'NZ 895 054',
-      ngr3: 'NZ 893 053',
-      ngr4: 'NZ 892 053',
-      naldPointId: 100321
-    }
-  ]
-
-  if (multiplePoints) {
-    licencePoints.push(...additionalPoints)
-  }
-
-  return licencePoints
-}
-
 function _generateRequirements (purposeOneId, purposeTwoId) {
   const requirements = [
     {
       points: [
-        '100789'
+        '796f83bb-d50d-446f-bc47-28daff6bcb78'
       ],
       purposes: [
         {
@@ -269,8 +200,8 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
 
   const additionalRequirements = {
     points: [
-      '100123',
-      '100321'
+      '30070341-ef94-4df8-87dd-31d51a046b8b',
+      '916a1320-0f57-43b2-bddc-b609218abf1c'
     ],
     purposes: [
       {
