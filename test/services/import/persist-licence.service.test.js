@@ -121,7 +121,7 @@ describe('Persist licence service', () => {
       let existingLicenceVersionPurpose
       let existingLicenceVersionPurposeCondition
       let existingCompany
-      let exisitngContact
+      let existingContact
 
       beforeEach(async () => {
         existingLicence = await LicenceHelper.add({
@@ -186,21 +186,21 @@ describe('Persist licence service', () => {
           twoPartTariff: true,
           licenceId: existingLicence.id
         }]
-     
-        exisitngContact = await ContactHelper.add({
+
+        existingContact = await ContactHelper.add({
           externalId: transformedCompany.externalId
         })
 
         await CompanyContactHelper.add({
           companyId: existingCompany.id,
-          contactId: exisitngContact.id,
+          contactId: existingContact.id,
           licenceRoleId: licenceHolderRoleId,
           startDate: companyContactStartDate
         })
 
         transformedCompanies = [{
           ...existingCompany,
-          contact: exisitngContact,
+          contact: existingContact,
           companyContact: {
             externalId: existingCompany.externalId,
             startDate: companyContactStartDate,
@@ -290,7 +290,7 @@ describe('Persist licence service', () => {
         expect(company.externalId).to.equal(existingCompany.externalId)
 
         // Contact
-        const contact = await _fetchPersistedContact(exisitngContact.externalId)
+        const contact = await _fetchPersistedContact(existingContact.externalId)
 
         expect(contact.salutation).to.be.null()
         expect(contact.initials).to.be.null()
@@ -302,7 +302,7 @@ describe('Persist licence service', () => {
         const companyContact = contact.companyContacts[0]
 
         expect(companyContact.companyId).to.equal(existingCompany.id)
-        expect(companyContact.contactId).to.equal(exisitngContact.id)
+        expect(companyContact.contactId).to.equal(existingContact.id)
         expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
         expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
         expect(companyContact.default).to.be.true()
