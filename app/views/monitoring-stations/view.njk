@@ -2,6 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -21,7 +22,7 @@
     </h1>
   </div>
 
-  <div>
+  <div class="govuk-!-margin-bottom-7">
     {{ govukSummaryList({
       classes: 'govuk-summary-list--no-border',
       attributes: {
@@ -30,24 +31,98 @@
       rows: [
         {
           key: { text: "Grid reference", classes: "meta-data__label" },
-          value: { html: '<span data-test="meta-data-created">' + gridReference + '</span>', classes: "meta-data__value" }
+          value: { html: '<span data-test="meta-data-grid-region">' + gridReference + '</span>', classes: "meta-data__value" }
         },
         {
           key: { text: "WISKI ID", classes: "meta-data__label" },
-          value: { html: '<span data-test="meta-data-created">' + wiskiId + '</span>', classes: "meta-data__value" }
+          value: { html: '<span data-test="meta-data-wiski-id">' + wiskiId + '</span>', classes: "meta-data__value" }
         },
         {
           key: { text: "Station reference", classes: "meta-data__label" },
-          value: { html: '<span data-test="meta-data-created">' + stationReference + '</span>', classes: "meta-data__value" }
+          value: { html: '<span data-test="meta-data-station-reference">' + stationReference + '</span>', classes: "meta-data__value" }
         }
       ]
     }) }}
   </div>
 
-  <div>
+  <div class="govuk-!-margin-bottom-7">
     {{ govukButton({
       text: "Create a water abstraction alert",
-      href: ""
+      href: "/monitoring-stations/{ monitoringStationId }/send-alert/alert-type"
+    }) }}
+  </div>
+
+  {# Create rows for lincences linked to the monitoring station #}
+  {% set tableRows = []%}
+
+  {% for licence in licences %}
+    {# Set an easier to use index #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set licenceCell %}
+      <a class="govuk-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+    {% endset %}
+
+    {% set tableRows = tableRows.concat([[
+      {
+        html: licenceCell,
+        attributes: { 'data-test': 'licence-ref-' + rowIndex }
+      },
+      {
+        text: licence.abstractionPeriod,
+        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+      },
+      {
+        text: licence.restrictionType,
+        attributes: { 'data-test': 'restriction-type-' + rowIndex }
+      },
+      {
+        text: licence.threshold,
+        attributes: { 'data-test': 'threshold-' + rowIndex }
+      },
+      {
+        text: licence.alertType,
+        attributes: { 'data-test': 'alert-type-' + rowIndex }
+      },
+      {
+        text: licence.alertUpdatedAt,
+        attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
+      }
+    ]]) %}
+  {% endfor %}
+
+  <div>
+    {{ govukTable({
+      caption: "Licences linked to this monitoring station",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      head: [
+        {
+          text: "Licence",
+          classes: "width-one-tenth"
+        },
+        {
+          text: "Abstraction period",
+          classes: 'width-one-tenth'
+        },
+        {
+          text: "Flow/level restriction type",
+          classes: 'width-one-tenth'
+        },
+        {
+          text: "Threshold",
+          classes: 'width-one-tenth'
+        },
+        {
+          text: "Last alert type",
+          classes: 'width-one-tenth'
+        },
+        {
+          text: "Alert date issued",
+          classes: 'width-one-tenth'
+        }
+      ],
+      rows: tableRows
     }) }}
   </div>
 {% endblock %}
