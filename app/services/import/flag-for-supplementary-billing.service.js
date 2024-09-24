@@ -96,10 +96,6 @@ async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYear
  * @private
  */
 function _flagForPreSrocSupplementary (chargeVersion, result) {
-  if (result.includeInPresrocBilling === 'yes') {
-    return
-  }
-
   if (chargeVersion.startDate < SROC_START_DATE) {
     result.includeInPresrocBilling = 'yes'
   }
@@ -113,10 +109,6 @@ function _flagForPreSrocSupplementary (chargeVersion, result) {
  * @private
  */
 function _flagForSrocSupplementary (chargeVersion, result, twoPartTariff) {
-  if (result.flagForSrocSupplementary === true) {
-    return
-  }
-
   if ((chargeVersion.endDate > SROC_START_DATE || chargeVersion.endDate === null) && !twoPartTariff) {
     result.includeInSrocBilling = true
   }

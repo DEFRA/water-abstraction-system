@@ -163,11 +163,11 @@ describe('Flag For Supplementary Billing service', () => {
       })
 
       describe('that is different to the wrls licence', () => {
-        beforeEach(() => {
-          wrlsLicence = _wrlsSrocTwoPartTariffLicence(licence)
-        })
-
         describe('and the licence is not already flagged for two-part tariff billing', () => {
+          beforeEach(() => {
+            wrlsLicence = _wrlsSrocTwoPartTariffLicence(licence)
+          })
+
           it('sets the nald licence supplementary flags correctly', async () => {
             await FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicence)
 
@@ -195,6 +195,9 @@ describe('Flag For Supplementary Billing service', () => {
 
         describe('and the licence is already flagged for two-part tariff billing', () => {
           beforeEach(async () => {
+            wrlsLicence = _wrlsSrocTwoPartTariffLicence(licence)
+            wrlsLicence.chargeVersions[0].endDate = null
+
             await LicenceSupplementaryYearHelper.add({
               licenceId: licence.id,
               financialYearEnd: 2023,
@@ -345,7 +348,7 @@ function _wrlsSrocTwoPartTariffLicence (licence) {
       {
         id: '3a7b82d7-826c-42de-8f23-a6f5f8624fdc',
         startDate: new Date('2022-04-01'),
-        endDate: null,
+        endDate: new Date('2025-03-31'),
         chargeReferences: [{
           id: '4eac1d61-94e3-4582-94c6-d2fb3f13d348',
           s127: 'true',
