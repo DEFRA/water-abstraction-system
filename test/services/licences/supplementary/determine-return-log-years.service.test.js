@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
@@ -44,6 +45,14 @@ describe('Determine Return Log Years Service', () => {
           expect(result.flagForBilling).to.equal(false)
           expect(result.twoPartTariff).to.equal(false)
         })
+
+        it('does not flag the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('no')
+        })
       })
 
       describe('and two-part tariff is true', () => {
@@ -77,6 +86,14 @@ describe('Determine Return Log Years Service', () => {
           expect(result.flagForBilling).to.equal(false)
           expect(result.twoPartTariff).to.equal(true)
         })
+
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('yes')
+        })
       })
 
       describe('and the end date is after the SROC billing start date', () => {
@@ -94,6 +111,14 @@ describe('Determine Return Log Years Service', () => {
 
           expect(result.flagForBilling).to.equal(true)
           expect(result.twoPartTariff).to.equal(true)
+        })
+
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('yes')
         })
       })
     })
