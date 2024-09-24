@@ -25,8 +25,10 @@ async function _fetch (monitoringStationId) {
   return GaugingStationModel.query()
     .findById(monitoringStationId)
     .select([
+      'id',
       'gridReference',
       'label',
+      'riverName',
       'stationReference',
       'wiskiId'
     ])
