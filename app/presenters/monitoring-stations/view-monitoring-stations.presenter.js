@@ -87,6 +87,18 @@ function checkPermissions (auth, roleType) {
     return role.role === roleType
   })
 }
+
+function groupLicences (licences) {
+  const groupedLicences = Object.values(
+    licences.reduce((acc, current) => {
+      acc[current.id] = acc[current.id] ?? []
+      acc[current.id].push(current)
+
+      return acc
+    }, {})
+  )
+
+  return groupedLicences
 }
 
 function alertedUpdatedAt (licenceDetails) {
