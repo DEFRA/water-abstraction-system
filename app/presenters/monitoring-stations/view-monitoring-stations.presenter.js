@@ -80,8 +80,18 @@ function sortLicences (licences) {
 
     return 0
   })
+}
 
-  return groupLicences(sortedLicences)
+function alertType (licence) {
+  if (licence.alertType === 'stop') {
+    return 'Stop'
+  }
+
+  if (licence.alertType === 'reduce') {
+    return 'Reduce'
+  }
+
+  return 'Stop or reduce'
 }
 
 function checkPermissions (auth, roleType) {
