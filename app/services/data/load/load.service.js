@@ -42,6 +42,7 @@ const LicenceVersionPurposePointHelper = require('../../../../test/support/helpe
 const LicenceVersionHelper = require('../../../../test/support/helpers/licence-version.helper.js')
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const ModLogHelper = require('../../../../test/support/helpers/mod-log.helper.js')
+const PointHelper = require('../../../../test/support/helpers/point.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
 const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
@@ -101,6 +102,7 @@ const LOAD_HELPERS = {
   licenceVersions: { helper: LicenceVersionHelper, test: true, legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' } },
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   modLogs: { helper: ModLogHelper, test: false },
+  points: { helper: PointHelper, test: false },
   permitLicences: { helper: PermitLicenceHelper, test: false },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
   returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
