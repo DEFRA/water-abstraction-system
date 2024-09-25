@@ -45,7 +45,6 @@ describe('Fetch Charge Versions service', () => {
   let otherChargeVersion
   let otherChargeReference
   let otherLicence
-  // let region
   let purpose
 
   before(async () => {
@@ -55,10 +54,6 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are no applicable charge versions', () => {
-    // before(() => {
-    //   region = RegionHelper.select(REGION_NORTH_WEST_INDEX)
-    // })
-
     describe('because the scheme is "presroc"', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
