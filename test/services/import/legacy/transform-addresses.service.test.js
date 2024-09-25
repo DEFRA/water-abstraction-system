@@ -79,11 +79,11 @@ function _legacyAddress () {
     address2: null,
     address3: null,
     address4: null,
+    address5: 'Little Whinging',
+    address6: 'Surrey',
+    company_external_id: '1:007',
     country: 'United Kingdom',
-    county: 'Surrey',
     external_id: '7:777',
-    postcode: 'HP11',
-    town: 'Little Whinging',
-    company_external_id: '1:007'
+    postcode: 'HP11'
   }
 }

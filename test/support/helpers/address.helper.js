@@ -62,7 +62,9 @@ function defaults (data = {}) {
 }
 
 /**
+ * Generate an Upr for an address
  *
+ * @returns {string} - A random upr
  */
 function generateUprn () {
   return randomInteger(100, 999999)

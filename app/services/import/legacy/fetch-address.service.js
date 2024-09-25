@@ -55,13 +55,13 @@ function _query () {
           WHEN 'null' THEN NULL
           ELSE na."TOWN"
           END
-        ) AS town,
+        ) AS address4,
       (
         CASE na."COUNTY"
           WHEN 'null' THEN NULL
           ELSE na."COUNTY"
           END
-        ) AS county,
+        ) AS address5,
       (
         CASE na."POSTCODE"
           WHEN 'null' THEN NULL
@@ -112,9 +112,10 @@ module.exports = {
  * @property {string} [address2] - Second address line (ADDR_LINE2), optional
  * @property {string} [address3] - Third address line (ADDR_LINE3), optional
  * @property {string} [address4] - Fourth address line (ADDR_LINE4), optional
- * @property {string} town - The town (TOWN)
- * @property {string} county - The county (COUNTY)
+ * @property {string} [address5] - The town (TOWN)
+ * @property {string} [address6] - The county (COUNTY)
  * @property {string} postcode - The postcode (POSTCODE)
  * @property {string} country - The country (COUNTRY)
  * @property {string} external_id - The external identifier, combination of FGAC_REGION_CODE and ID
+ * @property {string} company_external_id - The external identifier for a company to link the address to a company
  */

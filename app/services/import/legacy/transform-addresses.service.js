@@ -12,7 +12,7 @@ const ImportAddressValidator = require('../../../validators/import/address.valid
 /**
  * Transforms NALD addresses data into a validated object that matches the WRLS structure
  *
- * Add an address object to a matching company
+ * Adds an addresses array to a company with at least one matching address
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID

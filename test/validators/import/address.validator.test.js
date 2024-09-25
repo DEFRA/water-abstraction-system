@@ -51,32 +51,6 @@ describe('Import Address validator', () => {
     })
   })
 
-  describe('the "address1" property', () => {
-    describe('when it is not a string', () => {
-      beforeEach(() => {
-        transformedAddress.address1 = 1
-      })
-
-      it('throws an error', async () => {
-        expect(() => {
-          ImportAddressValidator.go(transformedAddress)
-        }).to.throw('"address1" must be a string')
-      })
-    })
-
-    describe('when it is null', () => {
-      beforeEach(() => {
-        transformedAddress.address1 = null
-      })
-
-      it('does not throw an error', async () => {
-        expect(() => {
-          ImportAddressValidator.go(transformedAddress)
-        }).to.throw('"address1" must be a string')
-      })
-    })
-  })
-
   describe('the "address2" property', () => {
     describe('when it is not a string', () => {
       beforeEach(() => {

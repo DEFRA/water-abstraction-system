@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AddressPresenter = require('../../../../app/presenters/import/legacy/address.presenter.js')
 
-describe('Import Legacy Contact presenter', () => {
+describe('Import Legacy Address presenter', () => {
   let legacyAddress
 
   const dateSource = 'nald'
@@ -49,8 +49,8 @@ function _legacyAddress () {
     address2: null,
     address3: null,
     address4: null,
-    town: 'Little Whinging',
-    county: 'Surrey',
+    address5: 'Little Whinging',
+    address6: 'Surrey',
     postcode: 'HP11',
     country: 'United Kingdom',
     external_id: '7:7777'
