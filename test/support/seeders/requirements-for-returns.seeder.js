@@ -46,7 +46,6 @@ async function seed () {
     returnVersion.id,
     'week',
     false,
-    1234,
     false,
     'I have an alias'
   )
@@ -58,7 +57,6 @@ async function seed () {
     returnVersion.id,
     'month',
     true,
-    4321,
     true,
     null
   )
@@ -71,7 +69,6 @@ async function _returnRequirement (
   returnVersionId,
   reportingFrequency,
   summer,
-  naldPointId,
   agreements,
   alias
 ) {
@@ -89,7 +86,7 @@ async function _returnRequirement (
 
   const { id: returnRequirementId } = returnRequirement
 
-  const point = await PointHelper.add({ externalId: `9:${naldPointId}` })
+  const point = await PointHelper.add()
 
   await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId })
 
