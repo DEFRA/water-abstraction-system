@@ -20,7 +20,7 @@ const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
  */
 async function seed (licenceRef, name = 'Licence Holder Ltd') {
   // Create a licence role (the default is licenceHolder)
-  const { id: licenceRoleId } = await LicenceRoleHelper.add()
+  const { id: licenceRoleId } = await LicenceRoleHelper.select()
 
   // Create a company record
   const { id: companyId } = await CompanyHelper.add({ name })

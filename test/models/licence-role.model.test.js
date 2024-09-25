@@ -24,7 +24,7 @@ describe('Licence Role model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await LicenceRoleHelper.add()
+      testRecord = await LicenceRoleHelper.select()
     })
 
     it('can successfully run a basic query', async () => {
@@ -40,7 +40,7 @@ describe('Licence Role model', () => {
       let testCompanyAddresses
 
       beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.add()
+        testRecord = await LicenceRoleHelper.select()
 
         const { id: licenceRoleId } = testRecord
 
@@ -78,7 +78,7 @@ describe('Licence Role model', () => {
       let testCompanyContacts
 
       beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.add()
+        testRecord = await LicenceRoleHelper.select()
 
         const { id: licenceRoleId } = testRecord
 
@@ -116,7 +116,7 @@ describe('Licence Role model', () => {
       let testLicenceDocumentRoles
 
       beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.add()
+        testRecord = await LicenceRoleHelper.select()
 
         const { id: licenceRoleId } = testRecord
 

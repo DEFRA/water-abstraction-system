@@ -40,7 +40,7 @@ describe('Fetch Customer Contacts service', () => {
       contactId = contact.id
 
       const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-      const { id: licenceRoleId } = await LicenceRoleHelper.add()
+      const { id: licenceRoleId } = await LicenceRoleHelper.select()
 
       await CompanyContactHelper.add({
         companyId,
