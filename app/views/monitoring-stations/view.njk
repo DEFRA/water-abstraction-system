@@ -51,80 +51,98 @@
     }) }}
   </div>
 
-  <div class="govuk-!-margin-bottom-7">
-    {{ govukButton({
-      text: "Create a water abstraction alert",
-      href: "/monitoring-stations/{ monitoringStationId }/send-alert/alert-type"
-    }) }}
-  </div>
+  {% if licences.length > 0 and hasPermissionToSendAlerts %}
+    <div class="govuk-!-margin-bottom-7">
+      {{ govukButton({
+        text: "Create a water abstraction alert",
+        href: "/monitoring-stations/" + monitoringStationId + "/send-alert/alert-type"
+      }) }}
+    </div>
 
-  {# Create rows for lincences linked to the monitoring station #}
-  {% set tableRows = []%}
+    {# Create rows for lincences linked to the monitoring station #}
+    {% set tableRows = []%}
 
-  {% for licence in licences %}
-    {# Set an easier to use index #}
-    {% set rowIndex = loop.index0 %}
+    {% for licence in licences %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
 
-    {% set licenceCell %}
-      <a class="govuk-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
-    {% endset %}
+      {% set licenceCell %}
+        <a class="govuk-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+      {% endset %}
 
-    {% set tableRows = tableRows.concat([[
-      {
-        html: licenceCell,
-        attributes: { 'data-test': 'licence-ref-' + rowIndex }
-      },
-      {
-        html: formatCell(licence, "abstractionPeriod"),
-        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
-      },
-      {
-        html: formatCell(licence, "restrictionType"),
-        attributes: { 'data-test': 'restriction-type-' + rowIndex }
-      },
-      {
-        html: formatCell(licence, "threshold"),
-        attributes: { 'data-test': 'threshold-' + rowIndex }
-      },
-      {
-        html: formatCell(licence, "alertType"),
-        attributes: { 'data-test': 'alert-type-' + rowIndex }
-      },
-      {
-        html: formatCell(licence, "alertUpdatedAt"),
-        attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
-      }
-    ]]) %}
-  {% endfor %}
-
-  <div>
-    {{ govukTable({
-      caption: "Licences linked to this monitoring station",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      head: [
+      {% set tableRows = tableRows.concat([[
         {
-          text: "Licence"
+          html: licenceCell,
+          attributes: { 'data-test': 'licence-ref-' + rowIndex }
         },
         {
-          text: "Abstraction period"
-
+          html: formatCell(licence, "abstractionPeriod"),
+          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
         },
         {
-          text: "Flow/level restriction type",
-          classes: 'width-one-sixth'
+          html: formatCell(licence, "restrictionType"),
+          attributes: { 'data-test': 'restriction-type-' + rowIndex }
         },
         {
-          text: "Threshold"
+          html: formatCell(licence, "threshold"),
+          attributes: { 'data-test': 'threshold-' + rowIndex }
         },
         {
-          text: "Last alert type"
+          html: formatCell(licence, "alertType"),
+          attributes: { 'data-test': 'alert-type-' + rowIndex }
         },
         {
-          text: "Alert date issued"
+          html: formatCell(licence, "alertUpdatedAt"),
+          attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
         }
-      ],
-      rows: tableRows
-    }) }}
-  </div>
+      ]]) %}
+    {% endfor %}
+
+    <div>
+      {{ govukTable({
+        caption: "Licences linked to this monitoring station",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Licence"
+          },
+          {
+            text: "Abstraction period"
+
+          },
+          {
+            text: "Flow/level restriction type",
+            classes: 'width-one-sixth'
+          },
+          {
+            text: "Threshold"
+          },
+          {
+            text: "Last alert type"
+          },
+          {
+            text: "Alert date issued"
+          }
+        ],
+        rows: tableRows
+      }) }}
+    </div>
+
+    {% if hasPermissionToManageLinks %}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Tag a licence",
+          href: "/monitoring-stations/" + monitoringStationId + "/tagging-licence",
+          classes: "govuk-button--secondary"
+        }) }}
+
+        {{ govukButton({
+          text: "Remove a tag",
+          href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+          classes: "govuk-button--secondary"
+        }) }}
+      </div>
+    {% endif %}
+  {% endif %}
 {% endblock %}
