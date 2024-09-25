@@ -5,7 +5,7 @@ const MonitoringStationsController = require('../controllers/monitoring-stations
 const routes = [
   {
     method: 'GET',
-    path: '/monitoring-stations/{monitoringStationId}/view',
+    path: '/monitoring-stations/{monitoringStationId}',
     options: {
       handler: MonitoringStationsController.view,
       auth: {
