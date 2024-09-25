@@ -19,6 +19,10 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
  * @returns {object} monitoring station and licence data needed by the view template
  */
 function go (auth, monitoringStation) {
+  const formattedLicences = formatLicences(monitoringStation.licenceGaugingStations)
+  const sortedLicences = sortLicences(formattedLicences)
+  const groupedLicences = groupLicences(sortedLicences)
+
   return {
     pageTitle: createPageTitle(monitoringStation.riverName, monitoringStation.label),
     monitoringStationId: monitoringStation.id,
@@ -28,30 +32,28 @@ function go (auth, monitoringStation) {
     hasPermissionToSendAlerts: checkPermissions(auth, 'hof_notifications'),
     wiskiId: monitoringStation.wiskiId,
     stationReference: monitoringStation.stationReference,
-    licences: formatLicences(monitoringStation.licenceGaugingStations)
+    licences: groupedLicences
   }
 }
 
 function formatLicences (licenceDetails) {
-  const formattedLicences = licenceDetails.map((licenceDetail) => {
+  return licenceDetails.map((licenceDetail) => {
     return {
       abstractionPeriod: formatLicenceDetailsAbstractionPeriod(licenceDetail),
-      alertType: licenceDetail.alertType,
+      alertType: alertType(licenceDetail),
       alertUpdatedAt: alertedUpdatedAt(licenceDetail),
       createdAt: licenceDetail.createdAt,
       lastUpdatedAt: licenceDetail.statusUpdatedAt,
       id: licenceDetail.licence.id,
       licenceRef: licenceDetail.licence.licenceRef,
-      restrictionType: licenceDetail.restrictionType,
+      restrictionType: licenceDetail.restrictionType === 'flow' ? 'Flow' : 'Level',
       threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
     }
   })
-
-  return sortLicences(formattedLicences)
 }
 
 function sortLicences (licences) {
-  const sortedLicences = licences.sort((licenceA, licenceB) => {
+  return licences.sort((licenceA, licenceB) => {
     if (licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
       if (licenceA.lastUpdatedAt > licenceB.lastUpdatedAt) {
         return -1
