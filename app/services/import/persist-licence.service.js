@@ -14,7 +14,6 @@ const LicenceVersionPurposeConditionModel = require('../../models/licence-versio
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 const { db } = require('../../../db/db.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
-const Joi = require('joi')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
