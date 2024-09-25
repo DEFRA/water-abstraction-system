@@ -10,14 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../support/helpers/session.helper.js')
-const ExpandedError = require('../../../app/errors/expanded.error.js')
 
 // Things we need to stub
 const GenerateReturnVersionService = require('../../../app/services/return-requirements/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../app/services/return-requirements/persist-return-version.service.js')
 
 // Thing under test
-const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 const SubmitCheckService = require('../../../app/services/return-requirements/submit-check.service.js')
 
 describe('Return Requirements - Submit Check service', () => {
@@ -53,11 +51,7 @@ describe('Return Requirements - Submit Check service', () => {
     Sinon.restore()
   })
 
-  describe('When called with a valid licence', () => {
-    beforeEach(() => {
-      Sinon.stub(CheckLicenceEndedService, 'go').resolves(false)
-    })
-
+  describe('When called with a licence that has not ended', () => {
     it('returns a valid licence', async () => {
       const result = await SubmitCheckService.go(sessionId)
 
@@ -65,16 +59,11 @@ describe('Return Requirements - Submit Check service', () => {
     })
   })
 
-  describe('When called with an invalid licence (expired, lapsed or revoked)', () => {
-    beforeEach(async () => {
-      Sinon.stub(CheckLicenceEndedService, 'go').resolves(true)
-    })
+  describe('When called with an licence that has ended (expired, lapsed or revoked)', () => {
+    it('returns a valid licence', async () => {
+      const result = await SubmitCheckService.go(sessionId)
 
-    it('throws an error', async () => {
-      const response = await expect(SubmitCheckService.go(sessionId)).to.reject()
-
-      expect(response).to.be.an.instanceOf(ExpandedError)
-      expect(response.message).to.equal('Invalid licence for return requirements')
+      expect(result).to.equal(session.data.licence.id)
     })
   })
 })
