@@ -21,9 +21,6 @@ async function go (auth, monitoringStationId) {
 
   const pageData = ViewMonitoringStationPresenter.go(auth, fetchLicences)
 
-  console.log('🚀🚀🚀 ~ pageData after presenter:', pageData)
-  console.log('🚀🚀🚀 ~ licences after presenter:', pageData.licences)
-
   return {
     activeNavBar: 'search',
     ...pageData
