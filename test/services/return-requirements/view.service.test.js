@@ -114,7 +114,7 @@ function _returnVersion () {
       siteDescription: 'Borehole in field',
       summer: false,
       twoPartTariff: false,
-      returnRequirementPoints: [{
+      points: [{
         description: 'Borehole in top field',
         id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
         ngr1: 'SE 4044 7262',

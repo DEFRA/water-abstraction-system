@@ -10,6 +10,7 @@ const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../helpers/licence-version-purpose-point.helper.js')
+const PointHelper = require('../helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const RegionHelper = require('../helpers/region.helper.js')
@@ -57,7 +58,7 @@ async function seed (optionalLicenceRef = undefined) {
   records.licenceFinancialAgreements = await _licenceFinancialAgreement(licenceRef, records.financialAgreements)
   records.licenceVersions = await _licenceVersions(licenceId)
   records.licenceVersionPurposes = await _licenceVersionPurposes(records.licenceVersions.currentId, records.allPurposes)
-  records.licenceVersionPurposePoints = await _licenceVersionPurposePoints(records.licenceVersionPurposes)
+  records.points = await _points(records.licenceVersionPurposes)
 
   return records
 }
@@ -136,27 +137,29 @@ async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   return { electricity, standard, twoPartTariff }
 }
 
-async function _licenceVersionPurposePoints (licenceVersionPurposes) {
+async function _points (licenceVersionPurposes) {
   const {
     electricity: electricityPurpose,
     standard: standardPurpose,
     twoPartTariff: twoPartTariffPurpose
   } = licenceVersionPurposes
 
-  const electricity1 = await LicenceVersionPurposePointHelper.add({
-    description: 'INTAKE POINT', licenceVersionPurposeId: electricityPurpose.id
-  })
+  const electricity1 = await PointHelper.add({ description: 'INTAKE POINT' })
+  const electricity2 = await PointHelper.add({ description: 'OUT TAKE POINT' })
+  const standard = await PointHelper.add({ description: 'SOUTH BOREHOLE' })
+  const twoPartTariff = await PointHelper.add({ description: 'MAIN INTAKE' })
 
-  const electricity2 = await LicenceVersionPurposePointHelper.add({
-    description: 'OUT TAKE POINT', licenceVersionPurposeId: electricityPurpose.id
+  await LicenceVersionPurposePointHelper.add({
+    licenceVersionPurposeId: electricityPurpose.id, pointId: electricity1.id
   })
-
-  const standard = await LicenceVersionPurposePointHelper.add({
-    description: 'SOUTH BOREHOLE', licenceVersionPurposeId: standardPurpose.id
+  await LicenceVersionPurposePointHelper.add({
+    licenceVersionPurposeId: electricityPurpose.id, pointId: electricity2.id
   })
-
-  const twoPartTariff = await LicenceVersionPurposePointHelper.add({
-    description: 'MAIN INTAKE', licenceVersionPurposeId: twoPartTariffPurpose.id
+  await LicenceVersionPurposePointHelper.add({
+    licenceVersionPurposeId: standardPurpose.id, pointId: standard.id
+  })
+  await LicenceVersionPurposePointHelper.add({
+    licenceVersionPurposeId: twoPartTariffPurpose.id, pointId: twoPartTariff.id
   })
 
   return { electricity1, electricity2, standard, twoPartTariff }

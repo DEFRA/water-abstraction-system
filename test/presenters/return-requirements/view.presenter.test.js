@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const PointModel = require('../../../app/models/point.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Thing under test
@@ -309,6 +310,15 @@ function _returnVersion () {
     }
   })
 
+  const point = PointModel.fromJson({
+    description: 'Borehole in top field',
+    id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+    ngr1: 'SE 4044 7262',
+    ngr2: null,
+    ngr3: null,
+    ngr4: null
+  })
+
   const returnVersionData = {
     createdAt: new Date('2022-04-05'),
     id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
@@ -335,14 +345,7 @@ function _returnVersion () {
       siteDescription: 'Borehole in field',
       summer: false,
       twoPartTariff: false,
-      returnRequirementPoints: [{
-        description: 'Borehole in top field',
-        id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-        ngr1: 'SE 4044 7262',
-        ngr2: null,
-        ngr3: null,
-        ngr4: null
-      }],
+      points: [point],
       returnRequirementPurposes: [{
         alias: null,
         id: '7a2e3a5a-b10d-4a0f-b115-42b7551c4e8c',

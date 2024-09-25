@@ -65,13 +65,15 @@ async function _fetchReturnRequirements (licenceReference) {
     .modifyGraph('returnVersion.licence.region', (builder) => {
       builder.select(['id', 'naldRegionId'])
     })
-    .withGraphFetched('returnRequirementPoints')
-    .modifyGraph('returnRequirementPoints', (builder) => {
-      builder.select(['description',
-        'ngr1',
-        'ngr2',
-        'ngr3',
-        'ngr4'])
+    .withGraphFetched('points')
+    .modifyGraph('points', (builder) => {
+      builder.select([
+        'points.description',
+        'points.ngr1',
+        'points.ngr2',
+        'points.ngr3',
+        'points.ngr4'
+      ])
     })
     .withGraphFetched('returnRequirementPurposes.primaryPurpose')
     .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {

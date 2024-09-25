@@ -60,15 +60,15 @@ async function _fetch (returnVersionId) {
         'twoPartTariff'
       ])
     })
-    .withGraphFetched('returnRequirements.returnRequirementPoints')
-    .modifyGraph('returnRequirements.returnRequirementPoints', (builder) => {
+    .withGraphFetched('returnRequirements.points')
+    .modifyGraph('returnRequirements.points', (builder) => {
       builder.select([
-        'description',
-        'id',
-        'ngr1',
-        'ngr2',
-        'ngr3',
-        'ngr4'
+        'points.description',
+        'points.id',
+        'points.ngr1',
+        'points.ngr2',
+        'points.ngr3',
+        'points.ngr4'
       ])
     })
     .withGraphFetched('returnRequirements.returnRequirementPurposes')

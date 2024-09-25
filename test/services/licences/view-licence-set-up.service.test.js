@@ -29,7 +29,7 @@ describe('View Licence Set Up service', () => {
 
   beforeEach(() => {
     Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
-    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+    Sinon.stub(FeatureFlagsConfig, 'enableTwoPartTariffSupplementary').value(false)
 
     Sinon.stub(FetchAgreementsService, 'go').returns([
       {
