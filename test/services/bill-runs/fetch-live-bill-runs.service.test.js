@@ -17,18 +17,14 @@ const FetchLiveBillRunsService = require('../../../app/services/bill-runs/fetch-
 
 describe('Fetch Live Bill Runs service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
+  const { id: regionId } = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
   let billRun
   let financialYearEnding
-  let regionId
 
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -83,10 +79,6 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the previous year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -140,10 +132,6 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the last PRESROC year (PRESROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -197,12 +185,6 @@ describe('Fetch Live Bill Runs service', () => {
   })
 
   describe('when there are no live bill runs', () => {
-    beforeEach(async () => {
-      const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
-
-      regionId = region.id
-    })
-
     it('returns no matches', async () => {
       const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
