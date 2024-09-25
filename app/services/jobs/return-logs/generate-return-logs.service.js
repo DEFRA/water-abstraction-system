@@ -18,10 +18,11 @@ const {
  * Generates the payload for submission to the returns table.
  *
  * @param {Array} returnRequirements - the return requirements to be turned into return logs
+ * @param {string} returnCycleId - the UUID of the return cycle
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (returnRequirements) {
+async function go (returnRequirements, returnCycleId) {
   const returnLogs = returnRequirements.map(async (requirements) => {
     const startDate = _startDate(requirements.summer, requirements.returnVersion)
     const endDate = _endDate(requirements.summer, requirements.returnVersion)
@@ -36,11 +37,12 @@ async function go (returnRequirements) {
       id,
       licenceRef: requirements.returnVersion.licence.licenceRef,
       metadata,
+      returnCycleId,
       returnsFrequency: requirements.reportingFrequency,
+      returnReference: requirements.legacyId.toString(),
       startDate,
       status: 'due',
-      source: 'WRLS',
-      returnReference: requirements.legacyId.toString()
+      source: 'WRLS'
     }
   })
 
@@ -138,6 +140,7 @@ function _metadataPoints (returnRequirementPoints) {
 function _metadataPurposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
+      alias: returnRequirementPurpose.alias,
       primary: {
         code: returnRequirementPurpose.primaryPurpose.legacyId,
         description: returnRequirementPurpose.primaryPurpose.description

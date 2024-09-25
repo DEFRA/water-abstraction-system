@@ -4,6 +4,7 @@
  * @module ReturnLogHelper
  */
 
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { randomInteger } = require('../general.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
@@ -22,6 +23,7 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  * - `metadata` - {}
  * - `receivedDate` - 2023-04-12
  * - `returnReference` - [randomly generated - 10000321]
+ * - `returnCycleId` - UUID
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
  * - `status` - completed
@@ -83,6 +85,7 @@ function defaults (data = {}) {
     },
     receivedDate,
     returnReference,
+    returnCycleId: generateUUID(),
     returnsFrequency: 'month',
     startDate: new Date('2022-04-01'),
     status: 'due',
