@@ -61,12 +61,30 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ *
+ */
 function generateUprn () {
   return randomInteger(100, 999999)
+}
+
+/**
+ * Generate an address external id
+ *
+ * This is build from NALD import data using the region code and address id
+ *
+ * @returns {string} - A random external id
+ */
+function generateExternalId () {
+  const regionCode = randomInteger(1, 9)
+  const addressId = randomInteger(100, 99998)
+
+  return `${regionCode}:${addressId}`
 }
 
 module.exports = {
   add,
   defaults,
-  generateUprn
+  generateUprn,
+  generateExternalId
 }
