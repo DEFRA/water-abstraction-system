@@ -4,6 +4,12 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{% macro formatCell(licence, licenceDetail) %}
+  {% for linkage in licence.linkages %}
+    <p class="govuk-!-margin-bottom-1"> {{ linkage[licenceDetail] }}</p>
+  {% endfor %}
+{% endmacro %}
+
 {% block breadcrumbs %}
   {# Back link #}
   {{
@@ -18,7 +24,7 @@
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      {{ monitoringStationName }}
+      {{ pageTitle }}
     </h1>
   </div>
 
@@ -69,23 +75,23 @@
         attributes: { 'data-test': 'licence-ref-' + rowIndex }
       },
       {
-        text: licence.abstractionPeriod,
+        html: formatCell(licence, "abstractionPeriod"),
         attributes: { 'data-test': 'abstraction-period-' + rowIndex }
       },
       {
-        text: licence.restrictionType,
+        html: formatCell(licence, "restrictionType"),
         attributes: { 'data-test': 'restriction-type-' + rowIndex }
       },
       {
-        text: licence.threshold,
+        html: formatCell(licence, "threshold"),
         attributes: { 'data-test': 'threshold-' + rowIndex }
       },
       {
-        text: licence.alertType,
+        html: formatCell(licence, "alertType"),
         attributes: { 'data-test': 'alert-type-' + rowIndex }
       },
       {
-        text: licence.alertUpdatedAt,
+        html: formatCell(licence, "alertUpdatedAt"),
         attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
       }
     ]]) %}
@@ -98,28 +104,24 @@
       firstCellIsHeader: true,
       head: [
         {
-          text: "Licence",
-          classes: "width-one-tenth"
+          text: "Licence"
         },
         {
-          text: "Abstraction period",
-          classes: 'width-one-tenth'
+          text: "Abstraction period"
+
         },
         {
           text: "Flow/level restriction type",
-          classes: 'width-one-tenth'
+          classes: 'width-one-sixth'
         },
         {
-          text: "Threshold",
-          classes: 'width-one-tenth'
+          text: "Threshold"
         },
         {
-          text: "Last alert type",
-          classes: 'width-one-tenth'
+          text: "Last alert type"
         },
         {
-          text: "Alert date issued",
-          classes: 'width-one-tenth'
+          text: "Alert date issued"
         }
       ],
       rows: tableRows
