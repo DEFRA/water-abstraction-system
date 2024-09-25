@@ -120,7 +120,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
       beforeEach(() => {
         fetchResult = _fetchResult(licenceId)
         // The 3rd licence version purpose is already linked to a two-part tariff purpose. We set the second to be true
-        // was well just to emphasise this is what is driving the logic in the service.
+        // as well just to emphasise this is what is driving the logic in the service.
         fetchResult.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
 
         Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
