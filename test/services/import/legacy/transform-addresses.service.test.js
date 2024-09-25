@@ -47,11 +47,12 @@ describe('Import Legacy Transform Addresses service', () => {
             address2: null,
             address3: null,
             address4: null,
+            address5: 'Little Whinging',
+            address6: 'Surrey',
             country: 'United Kingdom',
-            county: 'Surrey',
             externalId: '7:777',
             postcode: 'HP11',
-            town: 'Little Whinging'
+            dataSource: 'nald'
           }
         ],
         externalId: '1:007'

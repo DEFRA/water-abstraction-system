@@ -12,6 +12,8 @@ const ImportAddressValidator = require('../../../validators/import/address.valid
 /**
  * Transforms NALD addresses data into a validated object that matches the WRLS structure
  *
+ * Add an address object to a matching company
+ *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
  * @param {object[]} transformedCompanies
@@ -23,7 +25,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
   naldAddresses.forEach((naldAddress) => {
     const matchingCompany = _matchingCompany(transformedCompanies, naldAddress)
 
-    const address = AddressPresenter.go(naldAddress)
+    const address = AddressPresenter.go(naldAddress, 'nald')
 
     ImportAddressValidator.go(address)
 

@@ -19,11 +19,12 @@ function go (address) {
     address2: Joi.string().allow(null),
     address3: Joi.string().allow(null),
     address4: Joi.string().allow(null),
-    town: Joi.string().allow(null),
-    county: Joi.string().allow(null),
-    postcode: Joi.string().allow(null),
+    address5: Joi.string().allow(null),
+    address6: Joi.string().allow(null),
     country: Joi.string().allow(null),
-    externalId: Joi.string().required()
+    externalId: Joi.string().required(),
+    postcode: Joi.string().allow(null),
+    dataSource: Joi.string().required()
   })
 
   const result = schema.validate(address, { convert: false })

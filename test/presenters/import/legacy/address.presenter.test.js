@@ -13,24 +13,33 @@ const AddressPresenter = require('../../../../app/presenters/import/legacy/addre
 describe('Import Legacy Contact presenter', () => {
   let legacyAddress
 
+  const dateSource = 'nald'
+
   beforeEach(() => {
     legacyAddress = _legacyAddress()
   })
 
   it('correctly transforms the data', () => {
-    const result = AddressPresenter.go(legacyAddress)
+    const result = AddressPresenter.go(legacyAddress, dateSource)
 
     expect(result).to.equal({
       address1: '4 Privet Drive',
       address2: null,
       address3: null,
       address4: null,
+      address5: 'Little Whinging',
+      address6: 'Surrey',
       country: 'United Kingdom',
-      county: 'Surrey',
       externalId: '7:7777',
       postcode: 'HP11',
-      town: 'Little Whinging'
+      dataSource: 'nald'
     })
+  })
+
+  it('correctly sets the data source provided', () => {
+    const result = AddressPresenter.go(legacyAddress, dateSource)
+
+    expect(result.dataSource).to.equal('nald')
   })
 })
 

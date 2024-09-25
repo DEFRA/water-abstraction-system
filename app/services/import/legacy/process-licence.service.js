@@ -42,9 +42,7 @@ async function go (licenceRef) {
 
     // Pass the transformed companies through each transformation step, building the company as we go
     await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies)
-
-    // Transform the addresses
-    await TransformAddressesService.go(regionCode, naldLicenceId)
+    await TransformAddressesService.go(regionCode, naldLicenceId, transformedCompanies)
 
     // Ensure the built licence has all the valid child records we require
     LicenceStructureValidator.go(transformedLicence)

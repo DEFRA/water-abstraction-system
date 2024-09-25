@@ -75,7 +75,7 @@ function _query () {
           END
         ) AS country,
       (concat_ws(':', na."FGAC_REGION_CODE", na."ID")) AS external_id,
-      (concat_ws(':', np."FGAC_REGION_CODE", np."ID")) AS company_external_id
+      (concat_ws(':', na."FGAC_REGION_CODE", np."ID")) AS company_external_id
     FROM
       "import"."NALD_ADDRESSES" na
         LEFT JOIN
@@ -87,8 +87,10 @@ function _query () {
       ON nlr."ACON_AADD_ID" = na."ID"
         AND nlr."FGAC_REGION_CODE" = na."FGAC_REGION_CODE"
       LEFT JOIN import."NALD_PARTIES" np
-        ON np."FGAC_REGION_CODE" = na."FGAC_REGION_CODE"
-        AND (np."ID" = nalv."ACON_APAR_ID") OR ( np."ID" = nlr."ACON_APAR_ID")
+      ON
+        (np."ID" = nalv."ACON_APAR_ID" and np."FGAC_REGION_CODE" = na."FGAC_REGION_CODE")
+          OR
+        ( np."ID" = nlr."ACON_APAR_ID" and np."FGAC_REGION_CODE" = na."FGAC_REGION_CODE")
     WHERE
       na."FGAC_REGION_CODE" = ?
       AND (

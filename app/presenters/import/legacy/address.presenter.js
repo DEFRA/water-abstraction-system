@@ -9,21 +9,23 @@
  * Maps the legacy NALD address data to the WRLS format
  *
  * @param {ImportLegacyAddressType} address - the legacy NALD address
- *
+ * @param {string} dataSource
+
  * @returns {object} the NALD company data transformed into the WRLS format for an address
  * ready for validation and persisting
  */
-function go (address) {
+function go (address, dataSource) {
   return {
     address1: address.address1,
     address2: address.address2,
     address3: address.address3,
     address4: address.address4,
-    town: address.town,
-    county: address.county,
+    address5: address.town,
+    address6: address.county,
     postcode: address.postcode,
     country: address.country,
-    externalId: address.external_id
+    externalId: address.external_id,
+    dataSource
   }
 }
 
