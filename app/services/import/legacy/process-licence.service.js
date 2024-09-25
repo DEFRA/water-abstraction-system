@@ -41,7 +41,7 @@ async function go (licenceRef) {
     const { transformedCompanies } = await TransformCompaniesService.go(regionCode, naldLicenceId)
 
     // Pass the transformed companies through each transformation step, building the company as we go
-    await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies) /
+    await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies)
 
     // Transform the addresses
     await TransformAddressesService.go(regionCode, naldLicenceId)
