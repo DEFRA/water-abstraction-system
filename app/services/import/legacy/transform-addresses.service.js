@@ -20,19 +20,21 @@ const ImportAddressValidator = require('../../../validators/import/address.valid
 async function go (regionCode, licenceId, transformedCompanies) {
   const naldAddresses = await FetchAddressesService.go(regionCode, licenceId)
 
-  const transformedAddresses = []
-
   naldAddresses.forEach((naldAddress) => {
+    const matchingCompany = _matchingCompany(transformedCompanies, naldAddress)
+
     const address = AddressPresenter.go(naldAddress)
 
     ImportAddressValidator.go(address)
 
-    transformedAddresses.push(address)
+    matchingCompany.addresses = [...(matchingCompany?.addresses || []), address]
   })
+}
 
-  return {
-    transformedAddresses
-  }
+function _matchingCompany (transformedCompanies, naldAddress) {
+  return transformedCompanies.find((company) => {
+    return company.externalId === naldAddress.company_external_id
+  })
 }
 
 module.exports = {

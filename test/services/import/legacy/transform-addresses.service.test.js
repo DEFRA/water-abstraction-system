@@ -37,22 +37,25 @@ describe('Import Legacy Transform Addresses service', () => {
     })
 
     it('attaches the record transformed and validated for WRLS to the transformed company', async () => {
-      const { transformedAddresses } = await TransformAddressesService
+      await TransformAddressesService
         .go(regionCode, naldLicenceId, transformedCompanies)
 
-      expect(transformedAddresses).to.equal([
-        {
-          address1: '4 Privet Drive',
-          address2: null,
-          address3: null,
-          address4: null,
-          country: 'United Kingdom',
-          county: 'Surrey',
-          externalId: '1:007',
-          postcode: 'HP11',
-          town: 'Little Whinging'
-        }
-      ])
+      expect(transformedCompanies[0]).to.equal({
+        addresses: [
+          {
+            address1: '4 Privet Drive',
+            address2: null,
+            address3: null,
+            address4: null,
+            country: 'United Kingdom',
+            county: 'Surrey',
+            externalId: '7:777',
+            postcode: 'HP11',
+            town: 'Little Whinging'
+          }
+        ],
+        externalId: '1:007'
+      })
     })
   })
 
@@ -77,8 +80,9 @@ function _legacyAddress () {
     address4: null,
     country: 'United Kingdom',
     county: 'Surrey',
-    external_id: '1:007',
+    external_id: '7:777',
     postcode: 'HP11',
-    town: 'Little Whinging'
+    town: 'Little Whinging',
+    company_external_id: '1:007'
   }
 }
