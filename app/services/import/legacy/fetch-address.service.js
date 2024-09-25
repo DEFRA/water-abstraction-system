@@ -62,7 +62,6 @@ function _query () {
           ELSE na."COUNTY"
           END
         ) AS county,
-
       (
         CASE na."POSTCODE"
           WHEN 'null' THEN NULL
@@ -90,7 +89,7 @@ function _query () {
       LEFT JOIN import."NALD_PARTIES" np
         ON np."FGAC_REGION_CODE" = na."FGAC_REGION_CODE"
              AND (np."ID" = nalv."ACON_APAR_ID") OR ( np."ID" = nlr."ACON_APAR_ID")
-    WHERE
+   WHERE
       na."FGAC_REGION_CODE" = ?
       AND (
       (nalv."AABL_ID" = ? AND nalv."ACON_AADD_ID" IS NOT NULL)
