@@ -27,10 +27,9 @@ describe('Import Legacy Contact presenter', () => {
       address4: null,
       country: 'United Kingdom',
       county: 'Surrey',
-      externalId: undefined,
+      externalId: '7:7777',
       postcode: 'HP11',
       town: 'Little Whinging'
-
     })
   })
 })
@@ -45,6 +44,6 @@ function _legacyAddress () {
     county: 'Surrey',
     postcode: 'HP11',
     country: 'United Kingdom',
-    external_Id: '7:7777'
+    external_id: '7:7777'
   }
 }

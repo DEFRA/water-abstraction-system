@@ -42,13 +42,15 @@ async function go (licenceRef) {
 
     // Pass the transformed companies through each transformation step, building the company as we go
     await TransformContactsService.go(regionCode, naldLicenceId, transformedCompanies)
-    await TransformAddressessService.go(regionCode, naldLicenceId, transformedCompanies)
+
+    // Transform the addresses
+    const { transformedAddresses } = await TransformAddressessService.go(regionCode, naldLicenceId)
 
     // Ensure the built licence has all the valid child records we require
     LicenceStructureValidator.go(transformedLicence)
 
     // Either insert or update the licence in WRLS
-    const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+    const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies, transformedAddresses)
 
     if (wrlsLicenceId) {
       await ProcessLicenceReturnLogsService.go(wrlsLicenceId)

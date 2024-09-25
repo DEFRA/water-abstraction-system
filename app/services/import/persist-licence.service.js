@@ -19,10 +19,11 @@ const { db } = require('../../../db/db.js')
  *
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  * @param {object[]} transformedCompanies - an array of companies representing a WRLS company
+ * @param {object[]}  transformedAddresses - an array of addresses representing a WRLS address
  *
  * @returns {Promise<object>}
  */
-async function go (transformedLicence, transformedCompanies) {
+async function go (transformedLicence, transformedCompanies, transformedAddresses) {
   return LicenceModel.transaction(async (trx) => {
     const updatedAt = timestampForPostgres()
     const { id } = await _persistLicence(trx, updatedAt, transformedLicence)

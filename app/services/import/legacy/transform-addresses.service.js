@@ -5,8 +5,9 @@
  * @module ImportLegacyTransformAddressesService
  */
 
-const FetchAddressesService = require('./fetch-address.service.js')
 const AddressPresenter = require('../../../presenters/import/legacy/address.presenter.js')
+const FetchAddressesService = require('./fetch-address.service.js')
+const ImportAddressValidator = require('../../../validators/import/address.validator.js')
 
 /**
  * Transforms NALD addresses data into a validated object that matches the WRLS structure
@@ -17,13 +18,21 @@ const AddressPresenter = require('../../../presenters/import/legacy/address.pres
  *
  */
 async function go (regionCode, licenceId, transformedCompanies) {
-  const naldAddressess = await FetchAddressesService.go(regionCode, licenceId)
+  const naldAddresses = await FetchAddressesService.go(regionCode, licenceId)
 
-  naldAddressess.forEach((naldAddress) => {
+  const transformedAddresses = []
+
+  naldAddresses.forEach((naldAddress) => {
     const address = AddressPresenter.go(naldAddress)
 
-    console.log(address)
+    ImportAddressValidator.go(address)
+
+    transformedAddresses.push(address)
   })
+
+  return {
+    transformedAddresses
+  }
 }
 
 module.exports = {
