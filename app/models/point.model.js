@@ -1,15 +1,56 @@
 'use strict'
 
 /**
- * @module BasePointModel
+ * Model for points (water.points)
+ * @module PointModel
  */
+
+const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-/**
- * Base class for all 'point' based models, for example, `ReturnRequirementPointModel`
- */
-class BasePointModel extends BaseModel {
+class PointModel extends BaseModel {
+  static get tableName () {
+    return 'points'
+  }
+
+  static get relationMappings () {
+    return {
+      licenceVersionPurposes: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'licence-version-purpose.model',
+        join: {
+          from: 'points.id',
+          through: {
+            from: 'licenceVersionPurposePoints.pointId',
+            to: 'licenceVersionPurposePoints.licenceVersionPurposeId'
+          },
+          to: 'licenceVersionPurposes.id'
+        }
+      },
+      returnRequirements: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'return-requirement.model',
+        join: {
+          from: 'points.id',
+          through: {
+            from: 'returnRequirementPoints.pointId',
+            to: 'returnRequirementPoints.returnRequirementId'
+          },
+          to: 'returnRequirements.id'
+        }
+      },
+      source: {
+        relation: Model.HasOneRelation,
+        modelClass: 'source.model',
+        join: {
+          from: 'points.sourceId',
+          to: 'sources.id'
+        }
+      }
+    }
+  }
+
   /**
    * Generate a string that describes this abstraction point
    *
@@ -45,4 +86,4 @@ class BasePointModel extends BaseModel {
   }
 }
 
-module.exports = BasePointModel
+module.exports = PointModel

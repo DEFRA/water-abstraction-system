@@ -117,20 +117,20 @@ async function _metadata (summer, endDate, requirements) {
       periodEndDay: requirements.abstractionPeriodEndDay.toString(),
       periodEndMonth: requirements.abstractionPeriodEndMonth.toString()
     },
-    points: _metadataPoints(requirements.returnRequirementPoints),
+    points: _metadataPoints(requirements.points),
     purposes: _metadataPurposes(requirements.returnRequirementPurposes),
     version: 1
   }
 }
 
-function _metadataPoints (returnRequirementPoints) {
-  return returnRequirementPoints.map((returnRequirementPoint) => {
+function _metadataPoints (points) {
+  return points.map((point) => {
     return {
-      name: returnRequirementPoint.description,
-      ngr1: returnRequirementPoint.ngr1,
-      ngr2: returnRequirementPoint.ngr2,
-      ngr3: returnRequirementPoint.ngr3,
-      ngr4: returnRequirementPoint.ngr4
+      name: point.description,
+      ngr1: point.ngr1,
+      ngr2: point.ngr2,
+      ngr3: point.ngr3,
+      ngr4: point.ngr4
     }
   })
 }

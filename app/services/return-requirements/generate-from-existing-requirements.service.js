@@ -80,11 +80,10 @@ async function _fetch (returnVersionId) {
         'twoPartTariff'
       ])
     })
-    .withGraphFetched('returnRequirements.returnRequirementPoints')
-    .modifyGraph('returnRequirements.returnRequirementPoints', (builder) => {
+    .withGraphFetched('returnRequirements.points')
+    .modifyGraph('returnRequirements.points', (builder) => {
       builder.select([
-        'id',
-        'naldPointId'
+        'points.id'
       ])
     })
     .withGraphFetched('returnRequirements.returnRequirementPurposes')
@@ -104,9 +103,9 @@ async function _fetch (returnVersionId) {
     })
 }
 
-function _points (returnRequirementPoints) {
-  return returnRequirementPoints.map((returnRequirementPoint) => {
-    return returnRequirementPoint.naldPointId.toString()
+function _points (points) {
+  return points.map((point) => {
+    return point.id
   })
 }
 
@@ -132,15 +131,15 @@ function _transformForSetup (returnVersion) {
       abstractionPeriodStartDay,
       abstractionPeriodStartMonth,
       collectionFrequency,
+      points,
       reportingFrequency,
-      returnRequirementPoints,
       returnRequirementPurposes,
       siteDescription,
       summer
     } = returnRequirement
 
     return {
-      points: _points(returnRequirementPoints),
+      points: _points(points),
       purposes: _purposes(returnRequirementPurposes),
       returnsCycle: summer ? 'summer' : 'winter-and-all-year',
       siteDescription,

@@ -7,7 +7,7 @@
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
 const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
-const { generateNaldPointId, generateNationalGridReference } = require('./return-requirement-point.helper.js')
+const PointHelper = require('./point.helper.js')
 
 /**
  * Add a new licence version purpose point
@@ -16,8 +16,7 @@ const { generateNaldPointId, generateNationalGridReference } = require('./return
  *
  * - `externalId` - [randomly generated - 9:99999:100414]
  * - `licenceVersionPurposeId` - [random UUID]
- * - `naldPointId` - [randomly generated - 100414]
- * - `ngr1` - [randomly generated - TL 5143 7153]
+ * - `pointId - [random UUID]
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -42,15 +41,10 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
-  const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
-  const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
-
   const defaults = {
-    description: 'Point description',
-    externalId: `9:${randomInteger(100, 99999)}:${naldPointId}`,
+    externalId: generateLicenceVersionPurposePointExternalId(),
     licenceVersionPurposeId: generateUUID(),
-    naldPointId,
-    ngr1
+    pointId: generateUUID()
   }
 
   return {
@@ -59,7 +53,23 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generated licence version purpose point external ID (9:100:1)
+ *
+ * Combines IDs found in `NALD_ABS_PURP_POINTS` which is the basis for licence version purpose points.
+ *
+ * - `[region code]:[licence version purpose ID]:[point ID]` - all values are NALD IDs
+ *
+ * @returns {string} - A randomly generated licence version purpose point external ID
+ */
+function generateLicenceVersionPurposePointExternalId () {
+  const naldPointId = PointHelper.generateNaldPointId()
+
+  return `9:${randomInteger(100, 99999)}:${naldPointId}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLicenceVersionPurposePointExternalId
 }
