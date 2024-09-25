@@ -38,7 +38,7 @@ function _cycleEndDateByDate (date, summer) {
     return `${year}-10-31`
   }
 
-  if (month >= 3) {
+  if (month >= returnCycleDates.allYear.endDate.month) {
     return `${year + 1}-03-31`
   }
 
@@ -57,7 +57,7 @@ function _cycleStartDateByDate (date, summer) {
     return `${year - 1}-04-01`
   }
 
-  if (month <= 3) {
+  if (month <= returnCycleDates.allYear.startDate.month) {
     return `${year - 1}-04-01`
   }
 
