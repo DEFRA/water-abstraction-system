@@ -22,6 +22,7 @@ const PurposesSeeder = require('../../db/seeds/02-purposes.seed.js')
 const RegionsSeeder = require('../../db/seeds/01-regions.seed.js')
 const RolesSeeder = require('../../db/seeds/07-roles.seed.js')
 const SecondaryPurposesSeeder = require('../../db/seeds/04-secondary-purposes.seed.js')
+const SourcesSeeder = require('../../db/seeds/15-sources.js')
 const UserGroupsSeeder = require('../../db/seeds/10-user-groups.seed.js')
 const UsersSeeder = require('../../db/seeds/09-users.seed.js')
 
@@ -101,6 +102,7 @@ async function _seed () {
   await ChangeReasonsSeeder.seed()
   await ChargeCategoriesSeeder.seed()
   await LicenceRoleSeeder.seed()
+  await SourcesSeeder.seed()
 }
 
 async function _tableNames (schema) {

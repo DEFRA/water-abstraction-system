@@ -29,23 +29,22 @@ async function _fetch (licenceId) {
     .findById(licenceId)
     .select(['id'])
     .modify('currentVersion')
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints', (builder) => {
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
       builder.select([
-        'id',
-        'description',
-        'ngr1',
-        'ngr2',
-        'ngr3',
-        'ngr4',
-        'naldPointId'
+        'points.id',
+        'points.description',
+        'points.ngr1',
+        'points.ngr2',
+        'points.ngr3',
+        'points.ngr4'
       ])
     })
 
   const points = []
 
   for (const licenceVersionPurpose of licence.$currentVersion().licenceVersionPurposes) {
-    points.push(...licenceVersionPurpose.licenceVersionPurposePoints)
+    points.push(...licenceVersionPurpose.points)
   }
 
   return points

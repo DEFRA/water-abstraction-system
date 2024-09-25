@@ -16,12 +16,16 @@ class ReturnRequirementModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      returnRequirementPoints: {
-        relation: Model.HasManyRelation,
-        modelClass: 'return-requirement-point.model',
+      points: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'point.model',
         join: {
           from: 'returnRequirements.id',
-          to: 'returnRequirementPoints.returnRequirementId'
+          through: {
+            from: 'returnRequirementPoints.returnRequirementId',
+            to: 'returnRequirementPoints.pointId'
+          },
+          to: 'points.id'
         }
       },
       returnRequirementPurposes: {

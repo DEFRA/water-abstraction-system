@@ -174,13 +174,13 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  * For each point grab the ID and return it as an array of points.
  *
  * Remember, we are transforming the data into what is needed for the session, not what is needed for the UI! Hence, we
- * only need the naldPointId.
+ * only need the ID.
  *
  * @private
  */
-function _points (licenceVersionPurposePoints) {
-  return licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.naldPointId.toString()
+function _points (points) {
+  return points.map((point) => {
+    return point.id
   })
 }
 
@@ -189,14 +189,14 @@ function _points (licenceVersionPurposePoints) {
  *
  * > This is from the abs data the local name on the point
  *
- * The problem is a purpose can have multiple points. So, we grab all the descriptions for each point in the, strip out
- * any nulls or undefined and then select the first one to form the site description.
+ * The problem is a purpose can have multiple points. So, we grab all the descriptions for each point, strip out any
+ * nulls or undefined and then select the first one to form the site description.
  *
  * @private
  */
-function _siteDescription (licenceVersionPurposePoints) {
-  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.description
+function _siteDescription (points) {
+  const descriptions = points.map((point) => {
+    return point.description
   })
 
   // NOTE: This is doing two things at once. It first filters the descriptions by passing each one to Boolean(). It will
@@ -223,15 +223,15 @@ function _transformForSetup (licence) {
       abstractionPeriodEndMonth: endMonth,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth,
-      licenceVersionPurposePoints,
+      points,
       purpose
     } = licenceVersionPurpose
 
     return {
-      points: _points(licenceVersionPurposePoints),
+      points: _points(points),
       purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(startMonth, endMonth),
-      siteDescription: _siteDescription(licenceVersionPurposePoints),
+      siteDescription: _siteDescription(points),
       abstractionPeriod: {
         'end-abstraction-period-day': endDay,
         'end-abstraction-period-month': endMonth,

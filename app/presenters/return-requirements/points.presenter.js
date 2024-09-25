@@ -10,21 +10,21 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {module:LicenceVersionPurposePoint[]} licenceVersionPurposePoints - All licence version purpose points linked
- * to the current licence version
+ * @param {module:PointModel[]} points - All points linked to the licence version purposes linked to the current licence
+ * version
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex, licenceVersionPurposePoints) {
+function go (session, requirementIndex, points) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
   return {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
-    licencePoints: _licencePoints(licenceVersionPurposePoints),
+    licencePoints: _licencePoints(points),
     licenceRef: licence.licenceRef,
-    selectedNaldPointIds: requirement?.points ? requirement.points.join(',') : '',
+    selectedPointIds: requirement?.points ? requirement.points.join(',') : '',
     sessionId
   }
 }
@@ -39,12 +39,12 @@ function _backLink (session, requirementIndex) {
   return `/system/return-requirements/${id}/purpose/${requirementIndex}`
 }
 
-function _licencePoints (licenceVersionPurposePoints) {
+function _licencePoints (points) {
   // First extract our points from the data, including generating the descriptions
-  const licencePoints = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+  const licencePoints = points.map((point) => {
     return {
-      naldPointId: licenceVersionPurposePoint.naldPointId.toString(),
-      description: licenceVersionPurposePoint.$describe()
+      id: point.id,
+      description: point.$describe()
     }
   })
 

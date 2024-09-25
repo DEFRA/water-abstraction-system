@@ -4,13 +4,14 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const PointHelper = require('../support/helpers/point.helper.js')
+const PointModel = require('../../app/models/point.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPointModel = require('../../app/models/return-requirement-point.model.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -20,13 +21,30 @@ const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 
 describe('Return Requirement model', () => {
+  let testPoint
   let testRecord
+  let testReturnRequirementPurposes
+  let testReturnVersion
+
+  before(async () => {
+    testReturnVersion = await ReturnVersionHelper.add()
+
+    testRecord = await ReturnRequirementHelper.add({ returnVersionId: testReturnVersion.id })
+
+    testPoint = await PointHelper.add()
+    await ReturnRequirementPointHelper.add({ pointId: testPoint.id, returnRequirementId: testRecord.id })
+
+    testReturnRequirementPurposes = []
+    for (let i = 0; i < 2; i++) {
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add(
+        { alias: `TEST RET REQ ${i}`, returnRequirementId: testRecord.id }
+      )
+
+      testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReturnRequirementHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementModel.query().findById(testRecord.id)
 
@@ -36,60 +54,30 @@ describe('Return Requirement model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to return requirement points', () => {
-      let testReturnRequirementPoints
-
-      beforeEach(async () => {
-        testRecord = await ReturnRequirementHelper.add()
-
-        testReturnRequirementPoints = []
-        for (let i = 0; i < 2; i++) {
-          const returnRequirementPoint = await ReturnRequirementPointHelper.add(
-            { description: `TEST RET PNT ${i}`, returnRequirementId: testRecord.id }
-          )
-
-          testReturnRequirementPoints.push(returnRequirementPoint)
-        }
-      })
-
+    describe('when linking through return requirement points to points', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query()
-          .innerJoinRelated('returnRequirementPoints')
+          .innerJoinRelated('points')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the return requirement points', async () => {
+      it('can eager load the points', async () => {
         const result = await ReturnRequirementModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('returnRequirementPoints')
+          .withGraphFetched('points')
 
         expect(result).to.be.instanceOf(ReturnRequirementModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.returnRequirementPoints).to.be.an.array()
-        expect(result.returnRequirementPoints[0]).to.be.an.instanceOf(ReturnRequirementPointModel)
-        expect(result.returnRequirementPoints).to.include(testReturnRequirementPoints[0])
-        expect(result.returnRequirementPoints).to.include(testReturnRequirementPoints[1])
+        expect(result.points).to.be.an.array()
+        expect(result.points).to.have.length(1)
+        expect(result.points[0]).to.be.an.instanceOf(PointModel)
+        expect(result.points[0]).to.equal(testPoint, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to return requirement purposes', () => {
-      let testReturnRequirementPurposes
-
-      beforeEach(async () => {
-        testRecord = await ReturnRequirementHelper.add()
-
-        testReturnRequirementPurposes = []
-        for (let i = 0; i < 2; i++) {
-          const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add(
-            { alias: `TEST RET REQ ${i}`, returnRequirementId: testRecord.id }
-          )
-
-          testReturnRequirementPurposes.push(returnRequirementPurpose)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query()
           .innerJoinRelated('returnRequirementPurposes')
@@ -113,13 +101,6 @@ describe('Return Requirement model', () => {
     })
 
     describe('when linking to return version', () => {
-      let testReturnVersion
-
-      beforeEach(async () => {
-        testReturnVersion = await ReturnVersionHelper.add()
-        testRecord = await ReturnRequirementHelper.add({ returnVersionId: testReturnVersion.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query()
           .innerJoinRelated('returnVersion')
