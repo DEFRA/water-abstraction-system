@@ -226,7 +226,7 @@ describe('Licence Version Purpose model', () => {
 
     beforeEach(() => {
       invalidPrimaryPurpose = PrimaryPurposeHelper.select(0)
-      invalidSecondaryPurpose = SecondaryPurposeHelper.select()
+      invalidSecondaryPurpose = SecondaryPurposeHelper.select(0)
       invalidPurpose = PurposeHelper.data.find((purpose) => {
         return purpose.legacyId === '400'
       })
