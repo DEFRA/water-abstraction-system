@@ -6,7 +6,7 @@
 
 {% macro formatCell(licence, licenceDetail) %}
   {% for linkage in licence.linkages %}
-    <p class="govuk-!-margin-bottom-1"> {{ linkage[licenceDetail] }}</p>
+    <p class="govuk-!-margin-bottom-1 govuk-body-m"> {{ linkage[licenceDetail] }}</p>
   {% endfor %}
 {% endmacro %}
 
@@ -15,7 +15,7 @@
   {{
     govukBackLink({
       text: 'Back',
-      href: backLink
+      href: "/licences"
     })
   }}
 {% endblock %}
@@ -67,7 +67,7 @@
       {% set rowIndex = loop.index0 %}
 
       {% set licenceCell %}
-        <a class="govuk-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+        <a class="govuk-link govuk-body-m" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
       {% endset %}
 
       {% set tableRows = tableRows.concat([[
@@ -108,21 +108,23 @@
             text: "Licence"
           },
           {
-            text: "Abstraction period"
-
+            text: "Abstraction period",
+            classes: "width-one-fifth"
           },
           {
-            text: "Flow/level restriction type",
-            classes: 'width-one-sixth'
+            text: "Restriction type"
           },
           {
-            text: "Threshold"
+            text: "Threshold",
+            classes: "width-one-sixth"
           },
           {
-            text: "Last alert type"
+            text: "Last alert type",
+            classes: "width-one-sixth"
           },
           {
-            text: "Alert date issued"
+            text: "Alert date issued",
+            classes: "width-one-fifth"
           }
         ],
         rows: tableRows
