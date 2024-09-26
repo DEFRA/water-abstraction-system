@@ -11,6 +11,7 @@ async function view (request, h) {
   const { auth, params: { monitoringStationId } } = request
 
   const pageData = await ViewService.go(auth, monitoringStationId)
+  console.log('🚀🚀🚀 ~ pageData:', pageData)
 
   return h.view('monitoring-stations/view.njk', {
     ...pageData
