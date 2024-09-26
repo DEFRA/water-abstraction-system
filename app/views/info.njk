@@ -26,55 +26,30 @@
     <p class="govuk-body">{{ chargingModuleData }}</p>
 
     {% for app in appData %}
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <h2 class="govuk-heading-m">{{ app.name }}</h2>
-    {{ govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
-      rows: [
-        {
-          key: {
-            text: "Version"
+      <h2 class="govuk-heading-m">{{ app.name }}</h2>
+      {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+          {
+            key: {
+              text: "Version"
+            },
+            value: {
+              text: app.version
+            }
           },
-          value: {
-            text: app.version
+          {
+            key: {
+              text: "Commit hash"
+            },
+            value: {
+              text: app.commit
+            }
           }
-        },
-        {
-          key: {
-            text: "Commit hash"
-          },
-          value: {
-            text: app.commit
-          }
-        }
-      ]
-    }) }}
-
-    {% if app.jobs.length %}
-      {{ govukTable({
-        firstCellIsHeader: false,
-        head: [
-          {
-            text: "Import task name (data for the last 24 hrs)"
-          },
-          {
-            text: "Completed"
-          },
-          {
-            text: "Failed"
-          },
-          {
-            text: "Active"
-          },
-          {
-            text: "Last job completed"
-          }
-        ],
-        rows: app.jobs
+        ]
       }) }}
-    {% endif %}
-
-  {% endfor %}
+    {% endfor %}
   </div>
 {% endblock %}
