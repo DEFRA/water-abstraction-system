@@ -32,12 +32,16 @@ class LicenceVersionPurposeModel extends BaseModel {
           to: 'licenceVersionPurposeConditions.licenceVersionPurposeId'
         }
       },
-      licenceVersionPurposePoints: {
-        relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose-point.model',
+      points: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'point.model',
         join: {
           from: 'licenceVersionPurposes.id',
-          to: 'licenceVersionPurposePoints.licenceVersionPurposeId'
+          through: {
+            from: 'licenceVersionPurposePoints.licenceVersionPurposeId',
+            to: 'licenceVersionPurposePoints.pointId'
+          },
+          to: 'points.id'
         }
       },
       primaryPurpose: {
@@ -71,19 +75,21 @@ class LicenceVersionPurposeModel extends BaseModel {
    * Modifiers allow us to reuse logic in queries, eg. select the licence version purpose and all related purposes to
    * determine if the purpose is electricity generation.
    *
+   * ```javascript
    * return LicenceVersionPurposeModel.query()
    *   .findById(licenceVersionPurposeId)
    *   .modify('allPurposes')
+   * ```
    *
    * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
    */
   static get modifiers () {
     return {
-      /**
-       * allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
-       * the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
-       * determine what frequency returns should be collected and reported by the licensee.
-       */
+      // allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
+      // the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
+      // determine what frequency returns should be collected and reported by the licensee
       allPurposes (query) {
         query
           .withGraphFetched('purpose')

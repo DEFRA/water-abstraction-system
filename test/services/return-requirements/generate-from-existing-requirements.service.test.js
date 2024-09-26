@@ -28,7 +28,7 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
 
       expect(result).to.equal([
         {
-          points: ['1234'],
+          points: [returnVersion.returnRequirements[0].points[0].id],
           purposes: [{
             alias: returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias,
             description: 'Spray Irrigation - Storage',
@@ -47,7 +47,7 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
           agreementsExceptions: ['none']
         },
         {
-          points: ['4321'],
+          points: [returnVersion.returnRequirements[1].points[0].id],
           purposes: [{
             alias: '',
             description: 'Spray Irrigation - Storage',

@@ -70,11 +70,11 @@ describe('Return Requirements - Fetch Return Version service', () => {
             gravityFill: false,
             id: returnRequirementsOne.id,
             legacyId: returnRequirementsOne.legacyId,
-            returnRequirementPoints: [
+            points: [
               {
-                description: 'Point description',
-                id: returnRequirementsOne.returnRequirementPoints[0].id,
-                ngr1: returnRequirementsOne.returnRequirementPoints[0].ngr1,
+                description: 'WELL AT WELLINGTON',
+                id: returnRequirementsOne.points[0].id,
+                ngr1: returnRequirementsOne.points[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null
@@ -106,11 +106,11 @@ describe('Return Requirements - Fetch Return Version service', () => {
             gravityFill: true,
             id: returnRequirementsTwo.id,
             legacyId: returnRequirementsTwo.legacyId,
-            returnRequirementPoints: [
+            points: [
               {
-                description: 'Point description',
-                id: returnRequirementsTwo.returnRequirementPoints[0].id,
-                ngr1: returnRequirementsTwo.returnRequirementPoints[0].ngr1,
+                description: 'WELL AT WELLINGTON',
+                id: returnRequirementsTwo.points[0].id,
+                ngr1: returnRequirementsTwo.points[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null

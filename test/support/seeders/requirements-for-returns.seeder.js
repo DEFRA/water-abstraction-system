@@ -5,6 +5,7 @@
  */
 
 const LicenceHelper = require('../helpers/licence.helper.js')
+const PointHelper = require('../helpers/point.helper.js')
 const PurposeHelper = require('../helpers/purpose.helper.js')
 const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
@@ -45,7 +46,6 @@ async function seed () {
     returnVersion.id,
     'week',
     false,
-    1234,
     false,
     'I have an alias'
   )
@@ -57,7 +57,6 @@ async function seed () {
     returnVersion.id,
     'month',
     true,
-    4321,
     true,
     null
   )
@@ -70,7 +69,6 @@ async function _returnRequirement (
   returnVersionId,
   reportingFrequency,
   summer,
-  naldPointId,
   agreements,
   alias
 ) {
@@ -88,9 +86,11 @@ async function _returnRequirement (
 
   const { id: returnRequirementId } = returnRequirement
 
-  const point = await ReturnRequirementPointHelper.add({ naldPointId, returnRequirementId })
+  const point = await PointHelper.add()
 
-  returnRequirement.returnRequirementPoints = [point]
+  await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId })
+
+  returnRequirement.points = [point]
 
   const purpose = PurposeHelper.data.find((purpose) => {
     return purpose.legacyId === '420'
