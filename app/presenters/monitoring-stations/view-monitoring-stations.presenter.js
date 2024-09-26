@@ -54,6 +54,14 @@ function formatLicences (licenceDetails) {
 
 function sortLicences (licences) {
   return licences.sort((licenceA, licenceB) => {
+    if (licenceA.licenceRef > licenceB.licenceRef) {
+      return 1
+    }
+
+    if (licenceA.licenceRef < licenceB.licenceRef) {
+      return -1
+    }
+
     if (licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
       if (licenceA.lastUpdatedAt > licenceB.lastUpdatedAt) {
         return -1
