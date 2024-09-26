@@ -5,7 +5,6 @@
  * @module GenerateReturnVersionRequirementsService
  */
 
-// const FetchPointsService = require('./fetch-points.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
@@ -23,7 +22,6 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  */
 async function go (licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)
-  // const points = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   let legacyId = await _nextLegacyId(naldRegionId)
