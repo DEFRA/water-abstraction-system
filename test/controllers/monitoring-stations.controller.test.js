@@ -15,6 +15,7 @@ const ViewService = require('../../app/services/monitoring-stations/view.service
 const { init } = require('../../app/server.js')
 
 describe('Monitoring stations controller', () => {
+  let options
   let server
 
   beforeEach(async () => {
@@ -36,6 +37,15 @@ describe('Monitoring stations controller', () => {
   describe('/monitoring-station/{monitoringStationId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+
         Sinon.stub(ViewService, 'go').resolves({
           activeNavBar: 'search',
           pageTitle: 'Bodney Bridge',
@@ -66,27 +76,15 @@ describe('Monitoring stations controller', () => {
         }
         )
       })
-    })
 
-    describe('when the request succeeds', () => {
-      it('returns the page successfully', async () => {
-        const response = await server.inject(_getOptions('499247a2-bebf-4a94-87dc-b83af2a133f3'))
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Bodney Bridge')
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Bodney Bridge')
+        })
       })
     })
   })
 })
-
-function _getOptions (monitoringStationId) {
-  const url = `/monitoring-stations/${monitoringStationId}/`
-
-  return {
-    method: 'GET',
-    url,
-    auth: {
-      credentials: { scope: ['billing'] }
-    }
-  }
-}
