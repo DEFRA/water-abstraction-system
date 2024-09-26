@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const DatabaseSupport = require('../../../support/database.js')
 
 // Things we need to stub
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
@@ -29,8 +28,6 @@ describe('Two Part Tariff Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     billRun = await BillRunHelper.add()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js

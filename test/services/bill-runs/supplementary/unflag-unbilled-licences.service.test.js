@@ -11,7 +11,6 @@ const { expect } = Code
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
@@ -19,10 +18,6 @@ const UnflagUnbilledLicencesService = require('../../../../app/services/bill-run
 
 describe('Unflag unbilled licences service', () => {
   let billRun
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('when there are licences flagged for SROC supplementary billing', () => {
     let allLicenceIds

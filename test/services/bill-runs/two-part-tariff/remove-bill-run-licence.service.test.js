@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
@@ -18,12 +17,10 @@ const RemoveBillRunLicenceService = require('../../../../app/services/bill-runs/
 
 describe('Remove Bill Run Licence service', () => {
   let billRunId
-  let licenceId
+  let licence
   let region
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     region = RegionHelper.select()
     const billRun = await BillRunHelper.add({
       billRunNumber: 12345,
@@ -35,18 +32,16 @@ describe('Remove Bill Run Licence service', () => {
 
     billRunId = billRun.id
 
-    const licence = await LicenceHelper.add({ licenceRef: '01/123/ABC' })
-
-    licenceId = licence.id
+    licence = await LicenceHelper.add()
   })
 
   describe('when called with a valid billRunId & licenceId', () => {
     it('will fetch the data and format it for use in the Remove bill run licence confirmation page', async () => {
-      const result = await RemoveBillRunLicenceService.go(billRunId, licenceId)
+      const result = await RemoveBillRunLicenceService.go(billRunId, licence.id)
 
       expect(result).to.equal({
-        pageTitle: "You're about to remove 01/123/ABC from the bill run",
-        backLink: `../review/${licenceId}`,
+        pageTitle: `You're about to remove ${licence.licenceRef} from the bill run`,
+        backLink: `../review/${licence.id}`,
         billRunNumber: 12345,
         billRunStatus: 'review',
         dateCreated: '3 May 2024',
