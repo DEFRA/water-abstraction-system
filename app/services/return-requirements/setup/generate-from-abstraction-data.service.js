@@ -39,20 +39,19 @@ async function go (licenceId) {
 }
 
 /**
- * The only agreement recorded against the licence that maps to an option we display in the journey is S127 (two-part
- * tariff). `_fetch()` extracts whether a licence has an S127 financial agreement and returns it as
- * `twoPartTariffAgreement true|false`.
+ * The only agreement that can be derived from abstraction data is whether the purpose the requirement will be linked to
+ * is flagged as two-part tariff or not.
  *
- * Because a user can select multiple agreements or exceptions we return it as an array. If none apply you have to
- * explicitly select it as well. Hence, we return that as an option so that the view can pre-select it should a user
- * return to the page to make changes.
+ * Because a user can select multiple agreements or exceptions when doing the manual journey, we return it as an array.
+ * If none apply you have to explicitly select it in the journey. Hence, we return that as our default option so that
+ * the view can pre-select it should a user return to the page to make changes.
  *
  * @private
  */
-function _agreementExceptions (licence) {
-  const { twoPartTariffAgreement } = licence
+function _agreementExceptions (purpose) {
+  const { twoPartTariff } = purpose
 
-  if (twoPartTariffAgreement) {
+  if (twoPartTariff) {
     return ['two-part-tariff']
   }
 
@@ -240,7 +239,7 @@ function _transformForSetup (licence) {
       },
       frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
       frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
-      agreementsExceptions: _agreementExceptions(licence)
+      agreementsExceptions: _agreementExceptions(purpose)
     }
   })
 }

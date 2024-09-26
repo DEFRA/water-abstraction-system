@@ -90,7 +90,7 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
             },
             frequencyReported: 'month',
             frequencyCollected: 'month',
-            agreementsExceptions: ['none']
+            agreementsExceptions: ['two-part-tariff']
           }
         ])
       })
@@ -104,14 +104,6 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
         Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
       })
 
-      it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId)
-
-        expect(result[0].agreementsExceptions).to.equal(['two-part-tariff'])
-        expect(result[1].agreementsExceptions).to.equal(['two-part-tariff'])
-        expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
-      })
-
       it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId)
 
@@ -121,6 +113,25 @@ describe('Return Requirements - Generate From Abstraction Data service', () => {
 
         // We then assert that the 3rd requirement has changed because of this
         expect(result[2].frequencyCollected).to.equal('day')
+      })
+    })
+
+    describe('and the licence has a "current" purpose that is two-part tariff', () => {
+      beforeEach(() => {
+        fetchResult = _fetchResult(licenceId)
+        // The 3rd licence version purpose is already linked to a two-part tariff purpose. We set the second to be true
+        // as well just to emphasise this is what is driving the logic in the service.
+        fetchResult.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
+
+        Sinon.stub(FetchAbstractionDataService, 'go').resolves(fetchResult)
+      })
+
+      it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
+        const result = await GenerateFromAbstractionDataService.go(licenceId)
+
+        expect(result[0].agreementsExceptions).to.equal(['none'])
+        expect(result[1].agreementsExceptions).to.equal(['two-part-tariff'])
+        expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
       })
     })
 
