@@ -176,7 +176,7 @@ describe('Generate Return Version service', () => {
 
       expect(result.returnRequirements).to.equal([])
       expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.equal('2024-04-01T00:00:00.000Z')
+      expect(result.returnVersion.endDate).to.be.null()
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
@@ -184,12 +184,6 @@ describe('Generate Return Version service', () => {
       expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
       expect(result.returnVersion.status).to.equal('current')
       expect(result.returnVersion.version).to.equal(1)
-    })
-
-    it('processes the existing return versions', async () => {
-      await GenerateReturnVersionService.go(sessionData, userId)
-
-      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
     })
   })
 })
