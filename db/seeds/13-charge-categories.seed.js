@@ -1,8 +1,8 @@
 'use strict'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: chargeCategories } = require('./data/charge-categories.js')
 const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
+const { data: chargeCategories } = require('./data/charge-categories.js')
+const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 
 async function seed () {
   for (const chargeCategory of chargeCategories) {

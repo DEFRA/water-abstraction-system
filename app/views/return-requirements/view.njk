@@ -94,7 +94,7 @@
           <ul>
             {% for requirement in requirements %}
               {% set requirementIndex = loop.index0 %}
-              <li><a href="#requirement-{{ requirementIndex }}">Return reference {{ requirement.returnReference }}</a></li>
+              <li><a href="#requirement-{{ requirementIndex }}">Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription }}</a></li>
             {% endfor %}
           </ul>
         </div>

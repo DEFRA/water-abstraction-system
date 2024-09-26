@@ -42,8 +42,8 @@ async function _exists (region) {
 }
 
 async function _insert (region) {
-  // The Test region is only intended to be seeded in our non-production environments
-  if (region.name === 'Test' && ServerConfig.environment === 'production') {
+  // The Bill Run & Test regions are only intended to be seeded in our non-production environments
+  if ((region.name === 'Bill Run' || region.name === 'Test') && ServerConfig.environment === 'production') {
     return
   }
 

@@ -32,7 +32,7 @@ function go (licence, auth) {
     ends,
     includeInPresrocBilling,
     licenceId: id,
-    licenceName: _licenceName(licence),
+    licenceName: _licenceName(primaryUser, licence),
     licenceRef,
     notification: _notification(licence),
     pageTitle: `Licence ${licenceRef}`,
@@ -43,14 +43,14 @@ function go (licence, auth) {
   }
 }
 
-function _licenceName (licence) {
-  const licenceName = licence.$licenceName()
-
-  if (licenceName) {
-    return licenceName
+function _licenceName (primaryUser, licence) {
+  if (!primaryUser) {
+    return 'Unregistered licence'
   }
 
-  return 'Unregistered licence'
+  const licenceName = licence.$licenceName()
+
+  return licenceName ?? null
 }
 
 function _notification (licence) {

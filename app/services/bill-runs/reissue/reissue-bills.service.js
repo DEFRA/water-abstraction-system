@@ -22,9 +22,8 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @param {module:BillRunModel} reissueBillRun - The bill run that the reissued bills will be created on
  *
- * @returns {boolean} `true` if any bills were reissued; `false` if not
-*/
-
+ * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
+ */
 async function go (reissueBillRun) {
   const sourceBills = await FetchBillsToBeReissuedService.go(reissueBillRun.regionId)
 
@@ -49,9 +48,7 @@ async function go (reissueBillRun) {
   return true
 }
 
-/**
- * Adds the data held in each key of `newData` to the corresponding keys in `dataToPersist`
- */
+// Adds the data held in each key of `newData` to the corresponding keys in `dataToPersist`
 function _addNewDataToDataToPersist (dataToPersist, newData) {
   dataToPersist.bills.push(...newData.bills)
   dataToPersist.billLicences.push(...newData.billLicences)
