@@ -22,7 +22,6 @@ const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service.js')
-const regionHelper = require('../../../support/helpers/region.helper.js')
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
@@ -32,7 +31,7 @@ describe('Fetch Charge Versions service', () => {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')
   }
-  const region = RegionHelper.select(regionHelper.BILL_RUN_REGION_INDEX)
+  const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
   let changeReason
   let chargeCategory
