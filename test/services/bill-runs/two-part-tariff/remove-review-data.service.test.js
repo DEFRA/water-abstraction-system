@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseSupport = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
@@ -26,10 +25,6 @@ const ReviewReturnModel = require('../../../../app/models/review-return.model.js
 const RemoveReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/remove-review-data.service.js')
 
 describe('Remove Review Data service', () => {
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   describe('when called with a valid billRunId & licenceId', () => {
     const billRunId = 'f54005c6-66bc-43d7-a7e8-d162e6ebc317'
     const licenceId = '41f1ad1d-0f25-4b2f-bc0a-4b38131db12a'

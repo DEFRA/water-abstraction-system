@@ -12,30 +12,17 @@ const { expect } = Code
 const { setTimeout } = require('timers/promises')
 
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillModel = require('../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
 const BillRunChargeVersionYearHelper = require('../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunChargeVersionYearModel = require('../../../app/models/bill-run-charge-version-year.model.js')
 const BillRunVolumeHelper = require('../../support/helpers/bill-run-volume.helper.js')
-const BillRunVolumeModel = require('../../../app/models/bill-run-volume.model.js')
-const DatabaseSupport = require('../../support/database.js')
 const ReviewChargeElementHelper = require('../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementModel = require('../../../app/models/review-charge-element.model.js')
 const ReviewChargeElementReturnHelper = require('../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeElementReturnModel = require('../../../app/models/review-charge-element-return.model.js')
 const ReviewChargeReferenceHelper = require('../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeReferenceModel = require('../../../app/models/review-charge-reference.model.js')
 const ReviewChargeVersionHelper = require('../../support/helpers/review-charge-version.helper.js')
-const ReviewChargeVersionModel = require('../../../app/models/review-charge-version.model.js')
 const ReviewLicenceHelper = require('../../support/helpers/review-licence.helper.js')
-const ReviewLicenceModel = require('../../../app/models/review-licence.model.js')
 const ReviewReturnHelper = require('../../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
-const TransactionModel = require('../../../app/models/transaction.model.js')
 
 // Things we need to stub
 const ChargingModuleDeleteBillRunRequest = require('../../../app/requests/charging-module/delete-bill-run.request.js')
@@ -47,9 +34,7 @@ describe('Submit Cancel Bill Run service', () => {
   let chargingModuleDeleteBillRunRequestStub
   let notifierStub
 
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-
+  beforeEach(() => {
     chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
   })
 
@@ -58,7 +43,18 @@ describe('Submit Cancel Bill Run service', () => {
   })
 
   describe('when the bill run exists', () => {
+    let bill
+    let billLicence
     let billRun
+    let billRunChargeVersionYear
+    let billRunVolume
+    let reviewChargeElement
+    let reviewChargeElementReturn
+    let reviewChargeReference
+    let reviewChargeVersion
+    let reviewLicence
+    let reviewReturn
+    let transaction
 
     describe('and can be deleted', () => {
       beforeEach(async () => {
@@ -67,19 +63,22 @@ describe('Submit Cancel Bill Run service', () => {
         const { id: billRunId } = billRun
 
         // Add records to all the tables the service deletes from
-        const { id: reviewLicenceId } = await ReviewLicenceHelper.add({ billRunId })
-        const { id: reviewReturnId } = await ReviewReturnHelper.add({ reviewLicenceId })
-        const { id: reviewChargeVersionId } = await ReviewChargeVersionHelper.add({ reviewLicenceId })
-        const { id: reviewChargeReferenceId } = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId })
-        const { id: reviewChargeElementId } = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
+        reviewLicence = await ReviewLicenceHelper.add({ billRunId })
+        reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId: reviewLicence.id })
+        reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id })
+        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id })
+        reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: reviewChargeReference.id })
+        reviewChargeElementReturn = await ReviewChargeElementReturnHelper.add({
+          reviewChargeElementId: reviewChargeElement.id,
+          reviewReturnId: reviewReturn.id
+        })
 
-        await ReviewChargeElementReturnHelper.add({ reviewChargeElementId, reviewReturnId })
-        await BillRunChargeVersionYearHelper.add({ billRunId })
-        await BillRunVolumeHelper.add({ billRunId })
-        const { id: billId } = await BillHelper.add({ billRunId })
-        const { id: billLicenceId } = await BillLicenceHelper.add({ billId })
+        billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ billRunId })
+        billRunVolume = await BillRunVolumeHelper.add({ billRunId })
+        bill = await BillHelper.add({ billRunId })
 
-        await TransactionHelper.add({ billLicenceId })
+        billLicence = await BillLicenceHelper.add({ billId: bill.id })
+        transaction = await TransactionHelper.add({ billLicenceId: billLicence.id })
 
         chargingModuleDeleteBillRunRequestStub.resolves()
 
@@ -106,12 +105,12 @@ describe('Submit Cancel Bill Run service', () => {
 
         await setTimeout(500)
 
-        const reviewChargeElementCount = await ReviewChargeElementModel.query().select('id').resultSize()
-        const reviewChargeElementReturnCount = await ReviewChargeElementReturnModel.query().select('id').resultSize()
-        const reviewChargeReferenceCount = await ReviewChargeReferenceModel.query().select('id').resultSize()
-        const reviewChargeVersionCount = await ReviewChargeVersionModel.query().select('id').resultSize()
-        const reviewLicenceCount = await ReviewLicenceModel.query().select('id').resultSize()
-        const reviewReturnCount = await ReviewReturnModel.query().select('id').resultSize()
+        const reviewChargeElementCount = await reviewChargeElement.$query().select('id').resultSize()
+        const reviewChargeElementReturnCount = await reviewChargeElementReturn.$query().select('id').resultSize()
+        const reviewChargeReferenceCount = await reviewChargeReference.$query().select('id').resultSize()
+        const reviewChargeVersionCount = await reviewChargeVersion.$query().select('id').resultSize()
+        const reviewLicenceCount = await reviewLicence.$query().select('id').resultSize()
+        const reviewReturnCount = await reviewReturn.$query().select('id').resultSize()
 
         expect(reviewChargeElementCount).to.equal(0)
         expect(reviewChargeElementReturnCount).to.equal(0)
@@ -126,12 +125,12 @@ describe('Submit Cancel Bill Run service', () => {
 
         await setTimeout(500)
 
-        const billRunChargeVersionYearCount = await BillRunChargeVersionYearModel.query().select('id').resultSize()
-        const billRunVolumeCount = await BillRunVolumeModel.query().select('id').resultSize()
-        const transactionCount = await TransactionModel.query().select('id').resultSize()
-        const billLicenceCount = await BillLicenceModel.query().select('id').resultSize()
-        const billCount = await BillModel.query().select('id').resultSize()
-        const billRunCount = await BillRunModel.query().select('id').resultSize()
+        const billRunChargeVersionYearCount = await billRunChargeVersionYear.$query().select('id').resultSize()
+        const billRunVolumeCount = await billRunVolume.$query().select('id').resultSize()
+        const transactionCount = await transaction.$query().select('id').resultSize()
+        const billLicenceCount = await billLicence.$query().select('id').resultSize()
+        const billCount = await bill.$query().select('id').resultSize()
+        const billRunCount = await billRun.$query().select('id').resultSize()
 
         expect(billRunChargeVersionYearCount).to.equal(0)
         expect(billRunVolumeCount).to.equal(0)

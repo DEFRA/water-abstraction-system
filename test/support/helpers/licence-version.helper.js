@@ -64,8 +64,13 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generated externalId for a licence version
+ *
+ * @returns {string} - A randomly generated externalId
+ */
 function generateLicenceVersionExternalId () {
-  return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}:1:0`
+  return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}:${randomInteger(1, 100)}:0`
 }
 
 module.exports = {
