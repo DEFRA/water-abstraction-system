@@ -21,9 +21,9 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @returns {Promise<object>} The new return version and requirement data for a licence
  */
 async function go (sessionData, userId) {
-  const returnVersionsExist = sessionData.licence.returnVersions.length > 0
+  const nextVersionNumber = await _nextVersionNumber(sessionData.licence.id)
 
-  const returnVersion = await _generateReturnVersion(returnVersionsExist, sessionData, userId)
+  const returnVersion = await _generateReturnVersion(nextVersionNumber, sessionData, userId)
   const returnRequirements = await _generateReturnRequirements(sessionData)
 
   return {
@@ -56,12 +56,11 @@ async function _generateReturnRequirements (sessionData) {
   return returnRequirements
 }
 
-async function _generateReturnVersion (returnVersionsExist, sessionData, userId) {
+async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
   const startDate = _calculateStartDate(sessionData)
   let endDate = null
 
-  // If the journey is for 'no-returns-required' `returnVersionsExist` will always be false
-  if (returnVersionsExist || sessionData.journey === 'no-returns-required') {
+  if (nextVersionNumber > 1) {
     endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
   }
 
@@ -74,7 +73,7 @@ async function _generateReturnVersion (returnVersionsExist, sessionData, userId)
     reason: sessionData.reason,
     startDate,
     status: 'current',
-    version: await _nextVersionNumber(sessionData.licence.id)
+    version: nextVersionNumber
   }
 }
 
