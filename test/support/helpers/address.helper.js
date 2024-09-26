@@ -73,7 +73,7 @@ function generateUprn () {
 /**
  * Generate an address external id
  *
- * This is build from NALD import data using the region code and address id
+ * This is built from NALD import data using the region code and address id
  *
  * @returns {string} - A random external id
  */
