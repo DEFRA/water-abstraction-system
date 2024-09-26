@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 
 // Thing under test
 const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
@@ -33,8 +32,6 @@ describe('Calculate Authorised and Billable days service', () => {
   let chargeReference
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     chargeReference = await ChargeReferenceHelper.add()
   })
 

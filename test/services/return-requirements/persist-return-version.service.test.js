@@ -29,6 +29,7 @@ describe('Persist Return Version service', () => {
 
     it('persists the data to the tables required to create a new Return Version', async () => {
       await PersistReturnVersionService.go(returnVersionData)
+
       const returnVersion = await ReturnVersionModel.query()
         .where('licenceId', returnVersionData.returnVersion.licenceId)
 
@@ -66,16 +67,10 @@ describe('Persist Return Version service', () => {
 
       const returnRequirementPoint = await ReturnRequirementPointModel.query()
         .where('returnRequirementId', returnRequirement[0].id)
-      const pointData = returnVersionData.returnRequirements[0].returnRequirementPoints[0]
+      const pointData = returnVersionData.returnRequirements[0].points[0]
 
       expect(returnRequirementPoint).to.have.length(1)
-      expect(returnRequirementPoint[0].description).to.equal(pointData.description)
-      expect(returnRequirementPoint[0].externalId).to.equal(pointData.externalId)
-      expect(returnRequirementPoint[0].naldPointId).to.equal(57380)
-      expect(returnRequirementPoint[0].ngr1).to.equal(pointData.ngr1)
-      expect(returnRequirementPoint[0].ngr2).to.equal(pointData.ngr2)
-      expect(returnRequirementPoint[0].ngr3).to.equal(pointData.ngr3)
-      expect(returnRequirementPoint[0].ngr4).to.equal(pointData.ngr4)
+      expect(returnRequirementPoint[0].pointId).to.equal(pointData)
 
       const returnRequirementPurpose = await ReturnRequirementPurposeModel.query()
         .where('returnRequirementId', returnRequirement[0].id)
@@ -106,17 +101,7 @@ function _generateReturnVersionData () {
         reabstraction: false,
         reportingFrequency: 'month',
         returnsFrequency: 'year',
-        returnRequirementPoints: [
-          {
-            description: 'POINT DESCRIPTION',
-            externalId: '5:10063928:57380',
-            naldPointId: '57380',
-            ngr1: 'AA 110 111',
-            ngr2: 'BB 220 221',
-            ngr3: 'CC 330 331',
-            ngr4: 'DD 440 441'
-          }
-        ],
+        points: [generateUUID()],
         returnRequirementPurposes: [
           {
             alias: 'This is a purpose alias',

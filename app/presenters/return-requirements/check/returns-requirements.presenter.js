@@ -20,16 +20,16 @@ const agreementsExceptionsText = {
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  *
  * @param {object[]} requirements - The existing return requirements in the current session
- * @param {module:LicenceVersionPurposePoint[]} licenceVersionPurposePoints - All licence version purpose points linked
- * to the current licence version
+ * @param {module:PointModel[]} points - All points linked to the licence version purposes linked to the current licence
+ * version
  * @param {string} journey - Whether the setup journey is 'no-returns-required' or 'returns-required'
  *
  * @returns {object} returns requirement data needed by the view template
  */
-function go (requirements, licenceVersionPurposePoints, journey) {
+function go (requirements, points, journey) {
   return {
     returnsRequired: journey === 'returns-required',
-    requirements: _requirements(requirements, licenceVersionPurposePoints)
+    requirements: _requirements(requirements, points)
   }
 }
 
@@ -63,7 +63,7 @@ function _agreementsExceptions (agreementsExceptions) {
     .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
 }
 
-function _requirements (requirements, licenceVersionPurposePoints) {
+function _requirements (requirements, points) {
   const completedRequirements = []
 
   for (const [index, requirement] of requirements.entries()) {
@@ -72,7 +72,7 @@ function _requirements (requirements, licenceVersionPurposePoints) {
     // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
     // the journey
     if (agreementsExceptions) {
-      completedRequirements.push(_mapRequirement(requirement, index, licenceVersionPurposePoints))
+      completedRequirements.push(_mapRequirement(requirement, index, points))
     }
   }
 
@@ -89,24 +89,24 @@ function _mapPurposes (purposes) {
   })
 }
 
-function _mapRequirement (requirement, index, licenceVersionPurposePoints) {
+function _mapRequirement (requirement, index, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
     frequencyCollected: returnRequirementFrequencies[requirement.frequencyCollected],
     frequencyReported: returnRequirementFrequencies[requirement.frequencyReported],
     index,
-    points: _mapPoints(requirement.points, licenceVersionPurposePoints),
+    points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes),
     returnsCycle: requirement.returnsCycle === 'summer' ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription
   }
 }
 
-function _mapPoints (points, licenceVersionPurposePoints) {
-  return points.map((point) => {
-    const matchedPoint = licenceVersionPurposePoints.find((licenceVersionPurposePoint) => {
-      return licenceVersionPurposePoint.naldPointId.toString() === point
+function _mapPoints (selectedPoints, points) {
+  return selectedPoints.map((selectedPoint) => {
+    const matchedPoint = points.find((point) => {
+      return point.id === selectedPoint
     })
 
     return matchedPoint.$describe()

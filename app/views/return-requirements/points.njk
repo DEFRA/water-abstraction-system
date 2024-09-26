@@ -44,9 +44,9 @@
       {% for licencePoint in licencePoints %}
 
         {% set checkBoxItem = {
-          value: licencePoint.naldPointId,
+          value: licencePoint.id,
           text: licencePoint.description,
-          checked: licencePoint.naldPointId in selectedNaldPointIds
+          checked: licencePoint.id in selectedPointIds
         } %}
 
         {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}

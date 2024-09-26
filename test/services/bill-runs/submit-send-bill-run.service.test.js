@@ -13,8 +13,8 @@ const { setTimeout } = require('timers/promises')
 
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const ExpandedError = require('../../../app/errors/expanded.error.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleSendBillRunRequest = require('../../../app/requests/charging-module/send-bill-run.request.js')
@@ -36,8 +36,6 @@ describe('Submit Send Bill Run service', () => {
   let unflagBilledLicencesServiceStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     chargingModuleSendBillRunRequestStub = Sinon.stub(ChargingModuleSendBillRunRequest, 'send').resolves()
     chargingModuleViewBillRunRequestStub = Sinon.stub(ChargingModuleViewBillRunRequest, 'send')
     unflagBilledLicencesServiceStub = Sinon.stub(UnflagBilledLicencesService, 'go').resolves()
@@ -60,13 +58,13 @@ describe('Submit Send Bill Run service', () => {
 
     describe('and its status is "ready"', () => {
       beforeEach(async () => {
-        billRun = await BillRunHelper.add({ externalId: '8212003e-059a-4cf2-94c2-da9dfae90a80', status: 'ready' })
+        billRun = await BillRunHelper.add({ externalId: generateUUID(), status: 'ready' })
       })
 
       describe('and the /send request to the Charging Module API succeeds', () => {
         beforeEach(async () => {
-          firstBill = await BillHelper.add({ externalId: 'fe7b0de1-e8c0-42f0-ba66-42f816e67c62' })
-          secondBill = await BillHelper.add({ externalId: '7b15c45e-9166-40a8-9b3f-1ee394f773dd' })
+          firstBill = await BillHelper.add({ externalId: generateUUID() })
+          secondBill = await BillHelper.add({ externalId: generateUUID() })
 
           chargingModuleViewBillRunRequestStub.resolves({
             succeeded: true,
@@ -178,7 +176,7 @@ describe('Submit Send Bill Run service', () => {
           ).to.be.true()
           expect(errorLogArgs[1].billRunId).to.exist()
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
-          expect(errorLogArgs[2].billRunExternalId).to.equal('8212003e-059a-4cf2-94c2-da9dfae90a80')
+          expect(errorLogArgs[2].billRunExternalId).to.equal(billRun.externalId)
         })
       })
     })

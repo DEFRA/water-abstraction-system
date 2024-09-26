@@ -13,12 +13,13 @@ exports.up = function (knex) {
       // Data
       table.uuid('licence_version_purpose_id').notNullable()
       table.text('description')
-      table.text('ngr_1').notNullable()
+      table.text('ngr_1')
       table.text('ngr_2')
       table.text('ngr_3')
       table.text('ngr_4')
       table.text('external_id')
       table.integer('nald_point_id')
+      table.uuid('point_id')
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())

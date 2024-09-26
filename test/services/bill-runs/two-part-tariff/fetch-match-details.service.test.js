@@ -12,7 +12,6 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
@@ -24,10 +23,6 @@ const ReviewReturnHelper = require('../../../support/helpers/review-return.helpe
 const FetchMatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-match-details.service.js')
 
 describe('Fetch Match Details service', () => {
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
-
   afterEach(() => {
     Sinon.restore()
   })

@@ -25,7 +25,7 @@ describe('Process return logs service', () => {
   const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
   const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
 
-  describe('cycle is "summer" and a licence reference is provided', () => {
+  describe('cycle is "all-year" and a licence reference is provided', () => {
     let licence
     let region
     let returnVersion
@@ -48,7 +48,7 @@ describe('Process return logs service', () => {
       global.GlobalNotifier = notifierStub
     })
 
-    it('can successfully save an return log in the database', async () => {
+    it('can successfully save a return log in the database', async () => {
       await ProcessReturnLogsService.go('all-year', licence.licenceRef)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)

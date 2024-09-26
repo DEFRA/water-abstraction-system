@@ -39,20 +39,19 @@ async function go (licenceId) {
 }
 
 /**
- * The only agreement recorded against the licence that maps to an option we display in the journey is S127 (two-part
- * tariff). `_fetch()` extracts whether a licence has an S127 financial agreement and returns it as
- * `twoPartTariffAgreement true|false`.
+ * The only agreement that can be derived from abstraction data is whether the purpose the requirement will be linked to
+ * is flagged as two-part tariff or not.
  *
- * Because a user can select multiple agreements or exceptions we return it as an array. If none apply you have to
- * explicitly select it as well. Hence, we return that as an option so that the view can pre-select it should a user
- * return to the page to make changes.
+ * Because a user can select multiple agreements or exceptions when doing the manual journey, we return it as an array.
+ * If none apply you have to explicitly select it in the journey. Hence, we return that as our default option so that
+ * the view can pre-select it should a user return to the page to make changes.
  *
  * @private
  */
-function _agreementExceptions (licence) {
-  const { twoPartTariffAgreement } = licence
+function _agreementExceptions (purpose) {
+  const { twoPartTariff } = purpose
 
-  if (twoPartTariffAgreement) {
+  if (twoPartTariff) {
     return ['two-part-tariff']
   }
 
@@ -174,13 +173,13 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  * For each point grab the ID and return it as an array of points.
  *
  * Remember, we are transforming the data into what is needed for the session, not what is needed for the UI! Hence, we
- * only need the naldPointId.
+ * only need the ID.
  *
  * @private
  */
-function _points (licenceVersionPurposePoints) {
-  return licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.naldPointId.toString()
+function _points (points) {
+  return points.map((point) => {
+    return point.id
   })
 }
 
@@ -189,14 +188,14 @@ function _points (licenceVersionPurposePoints) {
  *
  * > This is from the abs data the local name on the point
  *
- * The problem is a purpose can have multiple points. So, we grab all the descriptions for each point in the, strip out
- * any nulls or undefined and then select the first one to form the site description.
+ * The problem is a purpose can have multiple points. So, we grab all the descriptions for each point, strip out any
+ * nulls or undefined and then select the first one to form the site description.
  *
  * @private
  */
-function _siteDescription (licenceVersionPurposePoints) {
-  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.description
+function _siteDescription (points) {
+  const descriptions = points.map((point) => {
+    return point.description
   })
 
   // NOTE: This is doing two things at once. It first filters the descriptions by passing each one to Boolean(). It will
@@ -223,15 +222,15 @@ function _transformForSetup (licence) {
       abstractionPeriodEndMonth: endMonth,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth,
-      licenceVersionPurposePoints,
+      points,
       purpose
     } = licenceVersionPurpose
 
     return {
-      points: _points(licenceVersionPurposePoints),
+      points: _points(points),
       purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(startMonth, endMonth),
-      siteDescription: _siteDescription(licenceVersionPurposePoints),
+      siteDescription: _siteDescription(points),
       abstractionPeriod: {
         'end-abstraction-period-day': endDay,
         'end-abstraction-period-month': endMonth,
@@ -240,7 +239,7 @@ function _transformForSetup (licence) {
       },
       frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
       frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
-      agreementsExceptions: _agreementExceptions(licence)
+      agreementsExceptions: _agreementExceptions(purpose)
     }
   })
 }
