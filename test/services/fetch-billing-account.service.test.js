@@ -18,7 +18,6 @@ const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
-const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const FetchBillingAccountService = require('../../app/services/fetch-billing-account.service.js')
@@ -28,8 +27,6 @@ describe('Fetch Billing Account service', () => {
   let testBillingAccount
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     linkedCompany = await CompanyHelper.add()
 
     testBillingAccount = await BillingAccountHelper.add({ companyId: linkedCompany.id })

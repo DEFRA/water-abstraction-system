@@ -12,7 +12,7 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
@@ -22,15 +22,20 @@ const FetchPreviousTransactionsService = require('../../../../app/services/bill-
 describe('Fetch Previous Transactions service', () => {
   const chargeCategoryCode = '4.3.1'
   const financialYearEnding = 2023
-  const billingAccountId = '4fe996c9-7641-4edc-9f42-0700dcde37b5'
-  const accountNumber = BillingAccountHelper.generateAccountNumber()
-  const licenceId = '4492f1e2-f58c-4d4f-88a1-d4f9eb26fcba'
-  const licenceRef = LicenceHelper.generateLicenceRef()
 
-  const billRunSetupValues = { billingAccountId, accountNumber, licenceId, licenceRef }
+  let accountNumber
+  let billingAccountId
+  let billRunSetupValues
+  let licenceId
+  let licenceRef
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
+    accountNumber = BillingAccountHelper.generateAccountNumber()
+    billingAccountId = generateUUID()
+    licenceId = generateUUID()
+    licenceRef = LicenceHelper.generateLicenceRef()
+
+    billRunSetupValues = { billingAccountId, accountNumber, licenceId, licenceRef }
   })
 
   describe('when there are no transactions', () => {

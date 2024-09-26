@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,18 +17,14 @@ const FetchLiveBillRunsService = require('../../../app/services/bill-runs/fetch-
 
 describe('Fetch Live Bill Runs service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
+  const { id: regionId } = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
   let billRun
   let financialYearEnding
-  let regionId
 
   describe('when there is a live bill run', () => {
     describe('and it is for the current year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(0)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -36,6 +32,10 @@ describe('Fetch Live Bill Runs service', () => {
           toFinancialYearEnding: currentFinancialYear.endDate.getFullYear(),
           scheme: 'sroc'
         })
+      })
+
+      after(async () => {
+        await billRun.$query().delete()
       })
 
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
@@ -79,10 +79,6 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the previous year (SROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(1)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -90,6 +86,10 @@ describe('Fetch Live Bill Runs service', () => {
           toFinancialYearEnding: currentFinancialYear.endDate.getFullYear() - 1,
           scheme: 'sroc'
         })
+      })
+
+      after(async () => {
+        await billRun.$query().delete()
       })
 
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
@@ -132,10 +132,6 @@ describe('Fetch Live Bill Runs service', () => {
 
     describe('and it is for the last PRESROC year (PRESROC)', () => {
       before(async () => {
-        const region = RegionHelper.select(2)
-
-        regionId = region.id
-
         billRun = await BillRunHelper.add({
           regionId,
           batchType: 'supplementary',
@@ -143,6 +139,10 @@ describe('Fetch Live Bill Runs service', () => {
           toFinancialYearEnding: 2022,
           scheme: 'alcs'
         })
+      })
+
+      after(async () => {
+        await billRun.$query().delete()
       })
 
       describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
@@ -185,12 +185,6 @@ describe('Fetch Live Bill Runs service', () => {
   })
 
   describe('when there are no live bill runs', () => {
-    beforeEach(async () => {
-      const region = RegionHelper.select(3)
-
-      regionId = region.id
-    })
-
     it('returns no matches', async () => {
       const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
