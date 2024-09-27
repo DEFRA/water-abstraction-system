@@ -12,6 +12,7 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
@@ -24,6 +25,7 @@ describe('View Licence Summary service', () => {
   let fetchLicenceResult
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStations').value(true)
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
 
@@ -52,6 +54,7 @@ describe('View Licence Summary service', () => {
           abstractionPointsLinkText: 'View details of the abstraction point',
           activeTab: 'summary',
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+          enableMonitoringStations: true,
           endDate: null,
           licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
           licenceHolder: 'Unregistered licence',
