@@ -219,7 +219,7 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
 async function _replacePreviousVersion (previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
-      previousVersion.endDate.getTime() >= newVersionStartDate.getTime()
+      previousVersion.endDate >= newVersionStartDate
   })
 
   if (!matchedReturnVersion) {
