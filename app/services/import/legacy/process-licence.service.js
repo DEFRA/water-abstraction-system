@@ -5,13 +5,13 @@
  * @module ImportLegacyProcessLicenceService
  */
 
+const FlagForSupplementaryBillingService = require('../flag-for-supplementary-billing.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
 const TransformContactsService = require('./transform-contacts.service.js')
 const TransformLicenceService = require('./transform-licence.service.js')
-const TransformLicenceSupplementaryFlagsService = require('../transform-licence-supplementary-flags.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('./transform-licence-version-purpose-conditions.service.js')
 const TransformLicenceVersionPurposesService = require('./transform-licence-version-purposes.service.js')
 const TransformLicenceVersionsService = require('./transform-licence-versions.service.js')
@@ -34,7 +34,7 @@ async function go (licenceRef) {
 
     // Pass the transformed licence through each transformation step, building the licence as we go
     if (wrlsLicenceId) {
-      await TransformLicenceSupplementaryFlagsService.go(transformedLicence, wrlsLicenceId)
+      FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicenceId)
     }
 
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
