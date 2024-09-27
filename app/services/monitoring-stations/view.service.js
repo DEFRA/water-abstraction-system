@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}/view` page
+ * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  * @module ViewService
  */
 
@@ -9,7 +9,7 @@ const FetchMonitoringStationsService = require('../monitoring-stations/fetch-mon
 const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stations/view-monitoring-stations.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}/view` page
+ * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  *
  * @param {string} auth - The auth object taken from `request.auth` containing user details
  * @param {string} monitoringStationId - The UUID for the monitoring station
