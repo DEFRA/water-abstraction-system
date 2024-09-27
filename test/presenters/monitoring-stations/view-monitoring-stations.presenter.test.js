@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewMonitoringStationPresenter = require('../../../app/presenters/monitoring-stations/view-monitoring-stations.presenter.js')
 
-describe.only('View Monitoring Stations presenter', () => {
+describe('View Monitoring Stations presenter', () => {
   let monitoringStationData
   let auth
 
