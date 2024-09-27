@@ -176,15 +176,6 @@ describe('Persist licence service', () => {
           externalId: transformedCompany.externalId
         })
 
-        // These properties are only present on a licence if it already exists in WRLS
-        transformedLicence.includeInPresrocBilling = 'no'
-        transformedLicence.includeInSrocBilling = true
-        transformedLicence.licenceSupplementaryYears = [{
-          financialYearEnd: 2023,
-          twoPartTariff: true,
-          licenceId: existingLicence.id
-        }]
-
         existingContact = await ContactHelper.add({
           externalId: transformedCompany.externalId
         })
@@ -223,18 +214,6 @@ describe('Persist licence service', () => {
         expect(updatedLicence.startDate).to.equal(transformedLicence.startDate)
         expect(updatedLicence.includeInPresrocBilling).to.equal(transformedLicence.includeInPresrocBilling)
         expect(updatedLicence.includeInSrocBilling).to.equal(transformedLicence.includeInSrocBilling)
-
-        // Licence supplementary years comparison
-        const { licenceSupplementaryYears } = updatedLicence
-
-        expect(licenceSupplementaryYears[0].licenceId).to.equal(existingLicence.id)
-        expect(licenceSupplementaryYears[0].billRunId).to.equal(null)
-        expect(licenceSupplementaryYears[0].twoPartTariff).to.equal(
-          transformedLicence.licenceSupplementaryYears[0].twoPartTariff
-        )
-        expect(licenceSupplementaryYears[0].financialYearEnd).to.equal(
-          transformedLicence.licenceSupplementaryYears[0].financialYearEnd
-        )
 
         // Licence version comparison
         const updatedLicVer = updatedLicence.licenceVersions[0]
@@ -329,7 +308,6 @@ async function _fetchPersistedLicence (licenceRef) {
   return LicenceModel
     .query()
     .where('licenceRef', licenceRef)
-    .withGraphFetched('licenceSupplementaryYears')
     .withGraphFetched('licenceVersions')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')

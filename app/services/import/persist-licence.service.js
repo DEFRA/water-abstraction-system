@@ -8,7 +8,6 @@
 const CompanyModel = require('../../models/company.model.js')
 const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
@@ -28,10 +27,6 @@ async function go (transformedLicence, transformedCompanies) {
     const updatedAt = timestampForPostgres()
     const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
 
-    if (transformedLicence.licenceSupplementaryYears) {
-      await _persistSupplementaryBillingYears(trx, transformedLicence.licenceSupplementaryYears)
-    }
-
     await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, id)
 
     await _persistCompanies(trx, updatedAt, transformedCompanies)
@@ -40,17 +35,8 @@ async function go (transformedLicence, transformedCompanies) {
   })
 }
 
-async function _persistSupplementaryBillingYears (trx, licenceSupplementaryYears) {
-  for (const licenceSupplementaryYear of licenceSupplementaryYears) {
-    const { ...propertiesToPersist } = licenceSupplementaryYear
-
-    await LicenceSupplementaryYearModel.query(trx)
-      .insert({ ...propertiesToPersist })
-  }
-}
-
 async function _persistLicence (trx, updatedAt, licence) {
-  const { licenceVersions, licenceSupplementaryYears, ...propertiesToPersist } = licence
+  const { licenceVersions, ...propertiesToPersist } = licence
 
   return LicenceModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
@@ -62,9 +48,7 @@ async function _persistLicence (trx, updatedAt, licence) {
       'revokedDate',
       'startDate',
       'updatedAt',
-      'waterUndertaker',
-      'includeInPresrocBilling',
-      'includeInSrocBilling'
+      'waterUndertaker'
     ])
     .returning('id')
 }
