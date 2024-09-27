@@ -12,21 +12,23 @@ const exec = util.promisify(ChildProcess.exec)
 
 const ChargingModuleRequest = require('../../requests/charging-module.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
-const FetchImportJobsService = require('./fetch-import-jobs.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const BaseRequest = require('../../requests/base.request.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
 
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
+ * Checks status and gathers info for each of the services which make up WRLS
+ *
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service
  * version numbers, etc.
  *
  * Each data set is returned in the format needed to populate the gov.uk table elements ie. an array containing one
  * array per row, where each row array contains multiple `{ text: '...' }` elements, one for each cell in the row.
-*/
+ *
+ * @returns {object} data about each service formatted for the view
+ */
 async function go () {
   const addressFacadeData = await _getAddressFacadeData()
   const chargingModuleData = await _getChargingModuleData()
@@ -83,7 +85,6 @@ async function _getLegacyAppData () {
     if (result.succeeded) {
       service.version = result.response.body.version
       service.commit = result.response.body.commit
-      service.jobs = service.name === 'Import' ? await _getImportJobsData() : []
     } else {
       service.version = _parseFailedRequestResult(result)
       service.commit = ''
@@ -101,16 +102,6 @@ async function _getChargingModuleData () {
   }
 
   return _parseFailedRequestResult(result)
-}
-
-async function _getImportJobsData () {
-  try {
-    const importJobs = await FetchImportJobsService.go()
-
-    return _mapArrayToTextCells(importJobs)
-  } catch (error) {
-    return []
-  }
 }
 
 async function _getRedisConnectivityData () {
@@ -139,18 +130,6 @@ async function _getVirusScannerData () {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-function _mapArrayToTextCells (rows) {
-  return rows.map((row) => {
-    return [
-      ...[{ text: row.name }],
-      ...[{ text: row.completedCount }],
-      ...[{ text: row.failedCount }],
-      ...[{ text: row.activeCount }],
-      ...[{ text: row.maxCompletedonDate ? formatLongDateTime(row.maxCompletedonDate) : '-' }]
-    ]
-  })
 }
 
 function _parseFailedRequestResult (result) {
