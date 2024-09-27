@@ -228,6 +228,102 @@ describe.only('View Monitoring Stations presenter', () => {
             expect(result.licences[0].linkages[0].threshold).to.equal('100 m3/s')
           })
         })
+
+        describe('when a there are multiple licences in the "linkages" property', () => {
+          beforeEach(() => {
+            monitoringStationData.licenceGaugingStations.push({
+              abstractionPeriodStartDay: '02',
+              abstractionPeriodStartMonth: '05',
+              abstractionPeriodEndDay: '30',
+              abstractionPeriodEndMonth: '09',
+              alertType: 'stop_or_reduce',
+              createdAt: new Date('2020-06-03 12:00:04.000'),
+              restrictionType: 'level',
+              statusUpdatedAt: null,
+              thresholdUnit: 'm3/s',
+              thresholdValue: 500,
+              licence: {
+                id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+                licenceRef: 'AT/TEST'
+              }
+            })
+
+            monitoringStationData.licenceGaugingStations.push({
+              abstractionPeriodStartDay: '01',
+              abstractionPeriodStartMonth: '02',
+              abstractionPeriodEndDay: '22',
+              abstractionPeriodEndMonth: '07',
+              alertType: 'reduce',
+              createdAt: new Date('2021-06-03 12:00:04.000'),
+              restrictionType: 'flow',
+              statusUpdatedAt: null,
+              thresholdUnit: 'm3/s',
+              thresholdValue: 250,
+              licence: {
+                id: 'fb46704b-0e8c-488e-9b58-faf87b6d9a01',
+                licenceRef: 'AT/TEST/2'
+              }
+            })
+          })
+
+          it('returns the licences in order of `licenceRef` and groups licences with the same `licence.id` in order of `createdAt` descending', () => {
+            const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+            expect(result).to.equal({
+              pageTitle: 'MEVAGISSEY FIRE STATION',
+              monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
+              monitoringStationName: 'MEVAGISSEY FIRE STATION',
+              gridReference: 'TL2664640047',
+              hasPermissionToManageLinks: true,
+              hasPermissionToSendAlerts: true,
+              wiskiId: null,
+              stationReference: null,
+              licences: [
+                {
+                  licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+                  licenceRef: 'AT/TEST',
+                  linkages: [{
+                    abstractionPeriod: '1 April to 31 August',
+                    alertType: 'Reduce',
+                    alertUpdatedAt: '3 June 2021',
+                    createdAt: new Date('2021-06-03T12:00:04.000Z'),
+                    lastUpdatedAt: null,
+                    id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+                    licenceRef: 'AT/TEST',
+                    restrictionType: 'Flow',
+                    threshold: '100 m3/s'
+                  },
+                  {
+                    abstractionPeriod: '2 May to 30 September',
+                    alertType: 'Stop or reduce',
+                    alertUpdatedAt: '3 June 2020',
+                    createdAt: new Date('2020-06-03T12:00:04.000Z'),
+                    lastUpdatedAt: null,
+                    id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+                    licenceRef: 'AT/TEST',
+                    restrictionType: 'Level',
+                    threshold: '500 m3/s'
+                  }]
+                },
+                {
+                  licenceId: 'fb46704b-0e8c-488e-9b58-faf87b6d9a01',
+                  licenceRef: 'AT/TEST/2',
+                  linkages: [{
+                    abstractionPeriod: '1 February to 22 July',
+                    alertType: 'Reduce',
+                    alertUpdatedAt: '3 June 2021',
+                    createdAt: new Date('2021-06-03T12:00:04.000Z'),
+                    lastUpdatedAt: null,
+                    id: 'fb46704b-0e8c-488e-9b58-faf87b6d9a01',
+                    licenceRef: 'AT/TEST/2',
+                    restrictionType: 'Flow',
+                    threshold: '250 m3/s'
+                  }]
+                }
+              ]
+            })
+          })
+        })
       })
     })
   })
