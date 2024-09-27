@@ -26,6 +26,11 @@ async function go (licenceId, newVersionStartDate) {
 
   let result
 
+  result = await _replacePreviousVersion(previousVersions, newVersionStartDate)
+  if (result) {
+    return result
+  }
+
   result = await _endLatestVersion(previousVersions, newVersionStartDate, previousVersionEndDate)
   if (result) {
     return null
@@ -39,11 +44,6 @@ async function go (licenceId, newVersionStartDate) {
   result = await _replaceLatestVersion(previousVersions, newVersionStartDate)
   if (result) {
     return null
-  }
-
-  result = await _replacePreviousVersion(previousVersions, newVersionStartDate)
-  if (result) {
-    return result
   }
 
   return null
@@ -219,7 +219,7 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
 async function _replacePreviousVersion (previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
-      previousVersion.endDate > newVersionStartDate
+      previousVersion.endDate.getTime() >= newVersionStartDate.getTime()
   })
 
   if (!matchedReturnVersion) {
