@@ -6,7 +6,6 @@
  */
 
 const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
-const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page's summary tab
@@ -21,17 +20,14 @@ function go (licence) {
     id,
     licenceDocumentHeader,
     licenceGaugingStations,
-    permitLicence,
     region,
     startDate
   } = licence
 
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
-  const points = _points(permitLicence)
-
   const purposes = _purposes(licenceVersionPurposes)
   const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
-  const abstractionPoints = _abstractionPoints(points)
+  const abstractionPoints = _abstractionPoints(licenceVersionPurposes)
 
   return {
     abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
@@ -51,7 +47,7 @@ function go (licence) {
     purposes,
     purposesCount: licenceVersionPurposes ? licenceVersionPurposes.length : 0,
     region: region.displayName,
-    sourceOfSupply: points[0]?.point_source?.NAME ?? null,
+    sourceOfSupply: _sourceOfSupply(licenceVersionPurposes),
     startDate: formatLongDate(startDate)
   }
 }
@@ -141,15 +137,21 @@ function _abstractionPeriodsCaption (abstractionPeriods) {
   return abstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction'
 }
 
-function _abstractionPoints (points) {
+function _abstractionPoints (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
+    return []
+  }
+
   const abstractionPoints = []
 
-  points.forEach((point) => {
-    if (point?.point_detail) {
-      abstractionPoints.push(generateAbstractionPointDetail(point.point_detail))
-    }
-  })
+  licenceVersionPurposes.forEach((licenceVersionPurpose) => {
+    const { points } = licenceVersionPurpose
+    const pointDescriptions = points.map((point) => {
+      return point.$describe()
+    })
 
+    abstractionPoints.push(...pointDescriptions)
+  })
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
   return uniqueAbstractionPoints.sort()
@@ -181,6 +183,16 @@ function _licenceHolder (licence) {
   return licenceHolder
 }
 
+function _licenceVersionPurposes (licence) {
+  const currentVersion = licence.$currentVersion()
+
+  if (!currentVersion || currentVersion?.licenceVersionPurposes.length === 0) {
+    return null
+  }
+
+  return currentVersion.licenceVersionPurposes
+}
+
 function _monitoringStations (licenceGaugingStations) {
   const monitoringStations = []
 
@@ -197,22 +209,6 @@ function _monitoringStations (licenceGaugingStations) {
   }
 
   return monitoringStations
-}
-
-function _points (permitLicence) {
-  const points = []
-
-  if (!permitLicence?.purposes?.[0]?.purposePoints) {
-    return points
-  }
-
-  permitLicence.purposes.forEach((purpose) => {
-    purpose.purposePoints.forEach((purposePoint) => {
-      points.push(purposePoint)
-    })
-  })
-
-  return points
 }
 
 function _purposes (licenceVersionPurposes) {
@@ -232,14 +228,12 @@ function _purposes (licenceVersionPurposes) {
   }
 }
 
-function _licenceVersionPurposes (licence) {
-  const currentVersion = licence.$currentVersion()
-
-  if (!currentVersion || currentVersion?.licenceVersionPurposes.length === 0) {
+function _sourceOfSupply (licenceVersionPurposes) {
+  if (!licenceVersionPurposes) {
     return null
   }
 
-  return currentVersion.licenceVersionPurposes
+  return licenceVersionPurposes[0].points[0].source.description
 }
 
 module.exports = {
