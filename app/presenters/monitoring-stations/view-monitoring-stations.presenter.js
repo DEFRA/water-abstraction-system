@@ -121,6 +121,7 @@ function groupLicences (licences) {
 }
 
 function sortLicences (licences) {
+  // NOTE:
   return licences.sort((licenceA, licenceB) => {
     if (licenceA.licenceRef !== licenceB.licenceRef) {
       return licenceA.licenceRef > licenceB.licenceRef ? -1 : 1
