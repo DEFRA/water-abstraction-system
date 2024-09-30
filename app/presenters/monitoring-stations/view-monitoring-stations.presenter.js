@@ -120,27 +120,10 @@ function groupLicences (licences) {
   return Object.values(grouped)
 }
 
-function sortLicences (licences) {
-  // NOTE:
+function _sortLicences (licences) {
   return licences.sort((licenceA, licenceB) => {
     if (licenceA.licenceRef !== licenceB.licenceRef) {
-      return licenceA.licenceRef > licenceB.licenceRef ? -1 : 1
-    }
-
-    if (licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
-      return licenceA.lastUpdatedAt > licenceB.lastUpdatedAt ? -1 : 1
-    }
-
-    if (licenceA.lastUpdatedAt && !licenceB.lastUpdatedAt) {
-      return -1
-    }
-
-    if (!licenceA.lastUpdatedAt && licenceB.lastUpdatedAt) {
-      return 1
-    }
-
-    if (licenceA.createdAt !== licenceB.createdAt) {
-      return licenceA.createdAt > licenceB.createdAt ? -1 : 1
+      return licenceA.licenceRef < licenceB.licenceRef ? -1 : 1
     }
 
     return 0

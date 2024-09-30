@@ -46,6 +46,8 @@ async function _fetch (monitoringStationId) {
         'thresholdUnit',
         'thresholdValue'
       ])
+        .orderBy('createdAt', 'desc')
+        .orderBy('statusUpdatedAt', 'desc')
         .withGraphFetched('licence')
         .modifyGraph('licence', (builder) => {
           builder.select([
