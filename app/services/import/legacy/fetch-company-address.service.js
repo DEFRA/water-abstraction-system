@@ -56,13 +56,13 @@ function _query () {
       lr.id as licence_role_id,
       lr.name as licence_role_name
     FROM import."NALD_ABS_LIC_VERSIONS" AS nalv
-           INNER JOIN public.licence_roles AS lr
-                      ON lr.name = 'licenceHolder'
-           INNER JOIN import."NALD_ABS_LICENCES" AS nal
-                      ON nal."ID" = nalv."AABL_ID"
-                        AND nal."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
-           LEFT JOIN end_date_cte AS ed
-                     ON ed."ACON_AADD_ID" = nalv."ACON_AADD_ID"
+      INNER JOIN public.licence_roles AS lr
+        ON lr.name = 'licenceHolder'
+      INNER JOIN import."NALD_ABS_LICENCES" AS nal
+        ON nal."ID" = nalv."AABL_ID"
+          AND nal."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
+      LEFT JOIN end_date_cte AS ed
+        ON ed."ACON_AADD_ID" = nalv."ACON_AADD_ID"
     WHERE nalv."FGAC_REGION_CODE" = ?
       AND nalv."AABL_ID" = ?
       AND nalv."ACON_AADD_ID" IS NOT NULL;
