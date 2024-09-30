@@ -47,7 +47,7 @@ describe('View Licence Summary service', () => {
           abstractionPeriods: [],
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPeriodsCaption: 'Period of abstraction',
-          abstractionPoints: ['At National Grid Reference TL 23198 88603'],
+          abstractionPoints: [],
           abstractionPointsCaption: 'Point of abstraction',
           abstractionPointsLinkText: 'View details of the abstraction point',
           activeTab: 'summary',
@@ -63,7 +63,7 @@ describe('View Licence Summary service', () => {
           purposes: null,
           purposesCount: 0,
           region: 'Avalon',
-          sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
+          sourceOfSupply: null,
           startDate: '1 April 2019'
         })
       })
@@ -79,24 +79,6 @@ function _testLicence () {
     region: {
       id: '740375f0-5add-4335-8ed5-b21b55b4a228',
       displayName: 'Avalon'
-    },
-    permitLicence: {
-      purposes: [{
-        ANNUAL_QTY: 'null',
-        DAILY_QTY: 'null',
-        HOURLY_QTY: 'null',
-        INST_QTY: 'null',
-        purposePoints: [{
-          point_detail: {
-            NGR1_SHEET: 'TL',
-            NGR1_EAST: '23198',
-            NGR1_NORTH: '88603'
-          },
-          point_source: {
-            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
-          }
-        }]
-      }]
     },
     licenceVersions: [],
     licenceGaugingStations: [{

@@ -15,12 +15,13 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Things to stub
 const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
-const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
-const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
-const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
-const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
+const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
 const TransformContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
+const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
+const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
+const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
+const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 
 // Thing under test
 const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
@@ -49,6 +50,7 @@ describe('Import Legacy Process Licence service', () => {
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformCompaniesService, 'go').resolves({ company: [], transformedCompany: [] })
     Sinon.stub(TransformContactsService, 'go').resolves()
+    Sinon.stub(TransformAddressesService, 'go').resolves()
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
