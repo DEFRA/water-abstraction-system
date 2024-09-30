@@ -1,20 +1,16 @@
 'use strict'
 
 /**
- * Fetches the addresses data from the import.NALD_ADDRESSESS table for the licence ref
+ * Fetches the NALD data for a companu address using the licence ref
  * @module FetchCompanyAddressesService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the addresses data from the import.NALD_ADDRESSESS table for the licence ref
+ * Fetches the NALD data for a company address using the licence ref
  *
- * A company address is the link between a company and an address
- *
- * This requires the company id, licence role id and address id
- *
- * The licence holder is created from the import.NALD_ABS_LIC_VERSIONS table
+ * A Company Address is a WRLS concept. It is used to link an address to a company, with a role.
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
@@ -29,6 +25,11 @@ async function go (regionCode, licenceId) {
   return rows
 }
 
+/**
+ * Fetches the NALD data for a licence version to create a company address for the licence holder
+ *
+ * @private
+ */
 function _query () {
   return `
     WITH end_date_cte AS (
@@ -79,7 +80,7 @@ module.exports = {
  * @property {string} external_id - The address id
  * @property {string} company_external_id - The company id
  * @property {string} licence_role_id - The licence role id from the reference data
- * @property {string} start_date - The licence version earliest start date
+ * @property {string} start_date - The licence version with the earliest start date
  * @property {string} end_date - The licence version latest end date, unless null then always null
  * @property {string} revoked_date - The licence revoked date
  * @property {string} expired_date - The licence expired date

@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Maps the legacy NALD address data to the WRLS format
+ * Maps the legacy NALD data to a company address
  * @module CompanyAddressPresenter
  */
 
 /**
- * Maps the legacy NALD address data to the WRLS format
+ * Maps the legacy NALD data to a company address
  *
- * @param {ImportLegacyCompanyAddressType} address - the legacy NALD address
+ * @param {ImportLegacyCompanyAddressType} address - the legacy NALD data in company address format
  *
- * @returns {object} the NALD company data transformed into the WRLS format for an address
+ * @returns {object} the NALD company address data transformed into the WRLS format for a company address
  * ready for validation and persisting
  */
 function go (address) {
@@ -24,11 +24,13 @@ function go (address) {
 }
 
 /**
- * Calculate the licence holders address end date
+ * Calculate the licence holders company address end date
  *
  * A licence can have multiple versions, when one licence version ends the other should start.
  *
- * We want the earliest end date, expiry date, lapsed date or revoked date
+ * Unless a licence has not ended then the end date can be null to show it has not ended
+ *
+ * A licence can be ended, revoked, lapsed or expired. When this is the case we want to the oldest date of the options.
  *
  * @param {ImportLegacyCompanyAddressType} address - the legacy NALD address
  *
@@ -36,12 +38,15 @@ function go (address) {
  * @private
  */
 function _endDate (address) {
-  const date = [address.end_date, address.lapsed_date, address.expired_date, address.revoked_date]
+  const oldestDate = [address.end_date, address.lapsed_date, address.expired_date, address.revoked_date]
+    // Removes any null values
     .filter((date) => { return date })
+    // Sorts in asc order
     .sort((date1, date2) => { return date1 - date2 })
+    // We only want the oldest date
     .slice(-1)[0]
 
-  return date || null
+  return oldestDate || null
 }
 
 module.exports = {
