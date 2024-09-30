@@ -19,29 +19,29 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
  * @returns {object} monitoring station and licence data needed by the view template
  */
 function go (auth, monitoringStation) {
-  const formattedLicences = formatLicences(monitoringStation.licenceGaugingStations)
-  const sortedLicences = sortLicences(formattedLicences)
-  const groupedLicences = groupLicences(sortedLicences)
+  const formattedLicences = _formatLicences(monitoringStation.licenceGaugingStations)
+  const sortedLicences = _sortLicences(formattedLicences)
+  const groupedLicences = _groupLicences(sortedLicences)
 
   return {
     gridReference: monitoringStation.gridReference,
-    hasPermissionToManageLinks: checkPermissions(auth, 'manage_gauging_station_licence_links'),
-    hasPermissionToSendAlerts: checkPermissions(auth, 'hof_notifications'),
+    hasPermissionToManageLinks: _checkPermissions(auth, 'manage_gauging_station_licence_links'),
+    hasPermissionToSendAlerts: _checkPermissions(auth, 'hof_notifications'),
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
-    pageTitle: createPageTitle(monitoringStation.riverName, monitoringStation.label),
+    pageTitle: _createPageTitle(monitoringStation.riverName, monitoringStation.label),
     stationReference: monitoringStation.stationReference,
     wiskiId: monitoringStation.wiskiId
   }
 }
 
-function formatLicences (licenceDetails) {
+function _formatLicences (licenceDetails) {
   return licenceDetails.map((licenceDetail) => {
     return {
-      abstractionPeriod: formatLicenceDetailsAbstractionPeriod(licenceDetail),
-      alertType: alertType(licenceDetail),
-      alertUpdatedAt: alertedUpdatedAt(licenceDetail),
+      abstractionPeriod: _formatLicenceDetailsAbstractionPeriod(licenceDetail),
+      alertType: _alertType(licenceDetail),
+      alertUpdatedAt: _alertedUpdatedAt(licenceDetail),
       createdAt: licenceDetail.createdAt,
       lastUpdatedAt: licenceDetail.statusUpdatedAt,
       id: licenceDetail.licence.id,
@@ -52,7 +52,7 @@ function formatLicences (licenceDetails) {
   })
 }
 
-function alertType (licence) {
+function _alertType (licence) {
   if (licence.alertType === 'stop') {
     return 'Stop'
   }
@@ -64,7 +64,7 @@ function alertType (licence) {
   return 'Stop or reduce'
 }
 
-function alertedUpdatedAt (licenceDetails) {
+function _alertedUpdatedAt (licenceDetails) {
   if (licenceDetails.statusUpdatedAt) {
     return formatLongDate(licenceDetails.statusUpdatedAt)
   }
@@ -72,13 +72,13 @@ function alertedUpdatedAt (licenceDetails) {
   return formatLongDate(licenceDetails.createdAt)
 }
 
-function checkPermissions (auth, roleType) {
+function _checkPermissions (auth, roleType) {
   return auth.credentials.roles.some((role) => {
     return role.role === roleType
   })
 }
 
-function createPageTitle (riverName, stationName) {
+function _createPageTitle (riverName, stationName) {
   if (riverName) {
     return `${riverName} at ${stationName}`
   }
@@ -86,7 +86,7 @@ function createPageTitle (riverName, stationName) {
   return stationName
 }
 
-function formatLicenceDetailsAbstractionPeriod (licenceDetails) {
+function _formatLicenceDetailsAbstractionPeriod (licenceDetails) {
   return formatAbstractionPeriod(
     licenceDetails.abstractionPeriodStartDay,
     licenceDetails.abstractionPeriodStartMonth,
@@ -95,7 +95,7 @@ function formatLicenceDetailsAbstractionPeriod (licenceDetails) {
   )
 }
 
-function groupLicences (licences) {
+function _groupLicences (licences) {
   // NOTE: This function groups licence objects by their unique `id`. It takes the array of licences and uses the
   // `reduce` method to accumulate an object, where each key is a licence `id`. For each unique `id`, a new object is
   // created with `licenceId`, `licenceRef`, and an empty `linkages` array. The current licence object is then pushed
