@@ -49,8 +49,8 @@ async function _fetch (monitoringStationId) {
         .orderBy('createdAt', 'desc')
         .orderBy('statusUpdatedAt', 'desc')
         .withGraphFetched('licence')
-        .modifyGraph('licence', (builder) => {
-          builder.select([
+        .modifyGraph('licence', (builder2) => {
+          builder2.select([
             'id',
             'licenceRef'
           ])
