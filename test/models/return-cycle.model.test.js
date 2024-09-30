@@ -16,19 +16,11 @@ const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
 describe('Return Cycle model', () => {
-  const today = new Date()
-
-  // use an older date range so as not to conflict with other unit tests testing creating current cycles
-  const fifteenYearsAgo = new Date(`${today.getFullYear() - 15}-01-01`)
   let testRecord
   let testReturnLog
 
   before(async () => {
-    testRecord = await ReturnCycleHelper.add({
-      endDate: `${fifteenYearsAgo.getFullYear() + 1}-03-31`,
-      isSummer: false,
-      startDate: `${fifteenYearsAgo.getFullYear()}-04-01`
-    })
+    testRecord = await ReturnCycleHelper.select()
     testReturnLog = await ReturnLogHelper.add({ returnCycleId: testRecord.id })
   })
 

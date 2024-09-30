@@ -23,7 +23,11 @@ async function go (date, summer) {
   const cycleEndDate = _cycleEndDateByDate(_date, summer)
   const data = await _fetchReturnCycle(cycleStartDate, cycleEndDate, summer)
 
-  return _formatData(data)
+  if (data) {
+    return data.id
+  }
+
+  return undefined
 }
 
 function _cycleEndDateByDate (date, summer) {
@@ -69,15 +73,9 @@ async function _fetchReturnCycle (startDate, endDate, summer) {
     .select(['id'])
     .where('startDate', '>=', startDate)
     .where('endDate', '<=', endDate)
-    .where('isSummer', summer)
-}
-
-function _formatData (returnCycleArray) {
-  if (returnCycleArray.length > 0) {
-    return returnCycleArray[0].id
-  }
-
-  return undefined
+    .where('summer', summer)
+    .limit(1)
+    .first()
 }
 
 module.exports = {

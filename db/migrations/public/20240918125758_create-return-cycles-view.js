@@ -11,8 +11,8 @@ exports.up = function (knex) {
         'start_date',
         'end_date',
         'due_date',
-        'is_summer',
-        'is_submitted_in_wrls',
+        'is_summer AS summer',
+        'is_submitted_in_wrls AS submitted_in_wrls',
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))

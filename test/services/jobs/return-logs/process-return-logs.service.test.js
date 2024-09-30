@@ -5,15 +5,15 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
+const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
+const GenerateReturnCycleService = require('../../../../app/services/jobs/return-logs/generate-return-cycle.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
@@ -33,20 +33,16 @@ describe('Process return logs service', () => {
   describe('cycle is "all-year" and a licence reference is provided and there is already a return cycle', () => {
     let licence
     let region
-    let returnCycle
     let returnVersion
     let returnRequirement
     let notifierStub
 
     before(async () => {
+      Sinon.reset()
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ regionId: region.id })
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
       returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
-      returnCycle = await ReturnCycleHelper.add({
-        endDate: allYearEndDate,
-        startDate: allYearStartDate
-      })
       await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
       await ReturnRequirementPurposeHelper.add({ returnRequirementId: returnRequirement.id })
 
@@ -55,6 +51,8 @@ describe('Process return logs service', () => {
       // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      Sinon.stub(FetchReturnCycleService, 'go').resolves('c095d75e-0e0d-4fe4-b048-150457f3871b')
+      Sinon.stub(GenerateReturnCycleService, 'go').resolves('g095d75e-0e0d-4fe4-b048-150457f3871g')
       global.GlobalNotifier = notifierStub
     })
 
@@ -72,7 +70,11 @@ describe('Process return logs service', () => {
       expect(result[0].startDate).to.equal(new Date(allYearStartDate))
       expect(result[0].status).to.equal('due')
       expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(returnCycle.id)
+      expect(result[0].returnCycleId).to.equal('c095d75e-0e0d-4fe4-b048-150457f3871b')
+    })
+
+    after(() => {
+      Sinon.restore()
     })
   })
 
@@ -84,6 +86,7 @@ describe('Process return logs service', () => {
     let notifierStub
 
     before(async () => {
+      Sinon.reset()
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ regionId: region.id })
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -96,6 +99,8 @@ describe('Process return logs service', () => {
       // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      Sinon.stub(FetchReturnCycleService, 'go').resolves(undefined)
+      Sinon.stub(GenerateReturnCycleService, 'go').resolves('f095d75e-0e0d-4fe4-b048-150457f3871f')
       global.GlobalNotifier = notifierStub
     })
 
@@ -103,7 +108,6 @@ describe('Process return logs service', () => {
       await ProcessReturnLogsService.go('summer', licence.licenceRef)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
-      const returnCycle = await ReturnCycleModel.query().where('isSummer', true)
 
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(new Date(summerDueDate))
@@ -114,7 +118,11 @@ describe('Process return logs service', () => {
       expect(result[0].startDate).to.equal(new Date(summerStartDate))
       expect(result[0].status).to.equal('due')
       expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(returnCycle[0].id)
+      expect(result[0].returnCycleId).to.equal('f095d75e-0e0d-4fe4-b048-150457f3871f')
+    })
+
+    after(() => {
+      Sinon.restore()
     })
   })
 

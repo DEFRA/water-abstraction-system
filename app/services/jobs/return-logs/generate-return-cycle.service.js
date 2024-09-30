@@ -36,8 +36,8 @@ function _generateData (summer) {
     createdAt: new Date(),
     dueDate,
     endDate,
-    isSummer: summer,
-    isSubmittedInWrls: true,
+    summer,
+    submittedInWrls: true,
     startDate,
     updatedAt: new Date()
   }
