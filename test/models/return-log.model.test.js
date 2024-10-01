@@ -129,11 +129,7 @@ describe('Return Log model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.returnCycle).to.be.an.instanceOf(ReturnCycleModel)
-        expect(result.returnCycle.id).to.equal(returnCycle.id)
-        expect(result.returnCycle.startDate).to.equal(new Date(returnCycle.startDate))
-        expect(result.returnCycle.endDate).to.equal(new Date(returnCycle.endDate))
-        expect(result.returnCycle.dueDate).to.equal(new Date(returnCycle.dueDate))
-        expect(result.returnCycle.summer).to.equal(returnCycle.summer)
+        expect(result.returnCycle).to.equal(returnCycle, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })

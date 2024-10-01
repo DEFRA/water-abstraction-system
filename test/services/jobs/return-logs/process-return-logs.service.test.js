@@ -127,6 +127,12 @@ describe('Process return logs service', () => {
   })
 
   describe('cycle is "all-year" and a licence reference is provided but there is no matching return requirements', () => {
+    before(async () => {
+      Sinon.reset()
+      Sinon.stub(FetchReturnCycleService, 'go').resolves(undefined)
+      Sinon.stub(GenerateReturnCycleService, 'go').resolves('f095d75e-0e0d-4fe4-b048-150457f3871f')
+    })
+
     it('will not save anything in the database', async () => {
       await ProcessReturnLogsService.go('all-year', 'testReference')
 
@@ -134,15 +140,29 @@ describe('Process return logs service', () => {
 
       expect(result.length).to.equal(0)
     })
+
+    after(() => {
+      Sinon.restore()
+    })
   })
 
-  describe('when it throws and error', () => {
+  describe('when it throws an error', () => {
+    before(async () => {
+      Sinon.reset()
+      Sinon.stub(FetchReturnCycleService, 'go').resolves(undefined)
+      Sinon.stub(GenerateReturnCycleService, 'go').resolves('f095d75e-0e0d-4fe4-b048-150457f3871f')
+    })
+
     it('will catch it and log it to the console', async () => {
       await ProcessReturnLogsService.go('all-year', 'testReference')
 
       const result = await ReturnLogModel.query().where('licenceRef', 'testReference')
 
       expect(result.length).to.equal(0)
+    })
+
+    after(() => {
+      Sinon.restore()
     })
   })
 })
