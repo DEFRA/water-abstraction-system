@@ -4,12 +4,14 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
+const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
@@ -99,6 +101,35 @@ describe('Return Log model', () => {
         expect(result.returnSubmissions[0]).to.be.an.instanceOf(ReturnSubmissionModel)
         expect(result.returnSubmissions).to.include(returnSubmissions[0])
         expect(result.returnSubmissions).to.include(returnSubmissions[1])
+      })
+    })
+
+    describe('when linking to return cycles', () => {
+      let testRecord
+      let returnCycle
+
+      before(async () => {
+        returnCycle = await ReturnCycleHelper.select()
+        testRecord = await ReturnLogHelper.add({ returnCycleId: returnCycle.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReturnLogModel.query()
+          .innerJoinRelated('returnCycle')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return submissions', async () => {
+        const result = await ReturnLogModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnCycle')
+
+        expect(result).to.be.instanceOf(ReturnLogModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnCycle).to.be.an.instanceOf(ReturnCycleModel)
+        expect(result.returnCycle).to.equal(returnCycle, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })
