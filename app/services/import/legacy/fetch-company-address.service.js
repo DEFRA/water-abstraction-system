@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the NALD data for a companu address using the licence ref
+ * Fetches the NALD data for a company address using the licence ref
  * @module FetchCompanyAddressesService
  */
 
