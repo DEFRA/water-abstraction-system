@@ -2,15 +2,15 @@
 
 /**
  * Fetches the matching monitoring station and associated licences needed for the view
- * `/monitoring-stations/{monitoringStationId}/view` page
- * @module FetchLicenceService
+ * `/monitoring-stations/{monitoringStationId}` page
+ * @module FetchMonitoringStationsService
  */
 
 const GaugingStationModel = require('../../models/gauging-station.model.js')
 
 /**
  * Fetches the matching monitoring station and associated licences needed for the view
- * `/monitoring-stations/{monitoringStationId}/view` page
+ * `/monitoring-stations/{monitoringStationId}` page
  *
  * @param {string} monitoringStationId - The UUID for the monitoring station to fetch
  *
@@ -48,13 +48,13 @@ async function _fetch (monitoringStationId) {
       ])
         .orderBy('createdAt', 'desc')
         .orderBy('statusUpdatedAt', 'desc')
-        .withGraphFetched('licence')
-        .modifyGraph('licence', (builder2) => {
-          builder2.select([
-            'id',
-            'licenceRef'
-          ])
-        })
+    })
+    .withGraphFetched('licenceGaugingStations.licence')
+    .modifyGraph('licenceGaugingStations.licence', (builder) => {
+      builder.select([
+        'id',
+        'licenceRef'
+      ])
     })
 }
 
