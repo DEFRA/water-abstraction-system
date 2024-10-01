@@ -38,6 +38,14 @@ class ReturnLogModel extends BaseModel {
           from: 'returnLogs.id',
           to: 'returnSubmissions.returnLogId'
         }
+      },
+      returnCycle: {
+        relation: Model.HasOneRelation,
+        modelClass: 'return-cycle.model',
+        join: {
+          from: 'returnLogs.returnCycleId',
+          to: 'returnCycles.id'
+        }
       }
     }
   }
