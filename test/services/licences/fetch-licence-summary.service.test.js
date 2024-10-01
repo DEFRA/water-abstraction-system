@@ -19,9 +19,11 @@ const LicenceVersionHelper = require('../../support/helpers/licence-version.help
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
+const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
+const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
+const SourceHelper = require('../../support/helpers/source.helper.js')
 
 // Thing under test
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
@@ -38,9 +40,10 @@ describe('Fetch Licence Summary service', () => {
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
-  let permitLicence
+  let point
   let purpose
   let region
+  let source
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
@@ -70,6 +73,10 @@ describe('Fetch Licence Summary service', () => {
       purposeId: purpose.id
     })
 
+    source = SourceHelper.select()
+    point = await PointHelper.add({ sourceId: source.id })
+    await LicenceVersionPurposePointHelper.add({ licenceVersionPurposeId: licenceVersionPurpose.id, pointId: point.id })
+
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
       licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
@@ -85,19 +92,6 @@ describe('Fetch Licence Summary service', () => {
     const { id: licenceEntityId } = await LicenceEntityHelper.add()
 
     await LicenceEntityRoleHelper.add({ companyEntityId: licenceHolderSeed.companyId, licenceEntityId })
-
-    permitLicence = await PermitLicenceHelper.add({
-      licenceRef: licence.licenceRef,
-      licenceDataValue: {
-        data: {
-          current_version: {
-            purposes: [{
-              purposePoints: [{ point_source: { NAME: 'Ground water' } }]
-            }]
-          }
-        }
-      }
-    })
 
     gaugingStation = await GaugingStationHelper.add()
 
@@ -119,14 +113,6 @@ describe('Fetch Licence Summary service', () => {
           id: region.id,
           displayName: region.displayName
         },
-        permitLicence: {
-          id: permitLicence.id,
-          purposes: [{
-            purposePoints: [{
-              point_source: { NAME: 'Ground water' }
-            }]
-          }]
-        },
         licenceVersions: [
           {
             id: licenceVersion.id,
@@ -146,6 +132,15 @@ describe('Fetch Licence Summary service', () => {
                 id: purpose.id,
                 description: purpose.description
               },
+              points: [{
+                description: point.description,
+                id: point.id,
+                ngr1: point.ngr1,
+                ngr2: point.ngr2,
+                ngr3: point.ngr3,
+                ngr4: point.ngr4,
+                source: { description: source.description, id: source.id }
+              }],
               licenceVersionPurposeConditions: [{
                 id: licenceVersionPurposeCondition.id,
                 licenceVersionPurposeConditionType: {

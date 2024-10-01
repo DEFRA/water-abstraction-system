@@ -5,14 +5,15 @@
  * @module PersistLicenceService
  */
 
+const AddressModel = require('../../models/address.model.js')
 const CompanyModel = require('../../models/company.model.js')
 const ContactModel = require('../../models/contact.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
 const { db } = require('../../../db/db.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
@@ -33,6 +34,29 @@ async function go (transformedLicence, transformedCompanies) {
 
     return id
   })
+}
+
+async function _persistAddress (trx, updatedAt, address) {
+  return AddressModel.query(trx)
+    .insert({ ...address, updatedAt })
+    .onConflict('externalId')
+    .merge([
+      'address1',
+      'address2',
+      'address3',
+      'address4',
+      'address5',
+      'address6',
+      'country',
+      'postcode',
+      'updatedAt'
+    ])
+}
+
+async function _persistAddresses (trx, updatedAt, addresses) {
+  for (const address of addresses) {
+    await _persistAddress(trx, updatedAt, address)
+  }
 }
 
 async function _persistLicence (trx, updatedAt, licence) {
@@ -150,11 +174,13 @@ async function _persistCompanies (trx, updatedAt, companies) {
     if (company.companyContact) {
       await _persistsCompanyContact(trx, updatedAt, company.companyContact)
     }
+
+    await _persistAddresses(trx, updatedAt, company.addresses)
   }
 }
 
 async function _persistCompany (trx, updatedAt, company) {
-  const { contact, companyContact, ...propertiesToPersist } = company
+  const { contact, companyContact, addresses, ...propertiesToPersist } = company
 
   return CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })

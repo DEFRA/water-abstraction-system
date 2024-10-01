@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const AddressHelper = require('../../support/helpers/address.helper.js')
+const AddressModel = require('../../../app/models/address.model.js')
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
@@ -41,6 +43,7 @@ describe('Persist licence service', () => {
   let transformedCompany
   let transformedLicence
   let licenceHolderRoleId
+  let addressExternalId
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
@@ -54,7 +57,9 @@ describe('Persist licence service', () => {
 
     licenceHolderRoleId = LicenceRoleHelper.select().id
 
-    transformedCompany = _transformedCompany(licenceHolderRoleId)
+    addressExternalId = AddressHelper.generateExternalId()
+
+    transformedCompany = _transformedCompany(licenceHolderRoleId, addressExternalId)
 
     transformedCompanies = [{ ...transformedCompany }]
   })
@@ -112,6 +117,19 @@ describe('Persist licence service', () => {
         expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
         expect(companyContact.startDate).to.equal(transformedCompany.companyContact.startDate)
         expect(companyContact.default).to.be.true()
+
+        // Addresses
+        const address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
+
+        expect(address.address1).to.equal('4 Privet Drive')
+        expect(address.address2).to.be.null()
+        expect(address.address5).to.equal('Little Whinging')
+        expect(address.address6).to.equal('Surrey')
+        expect(address.country).to.equal('United Kingdom')
+        expect(address.dataSource).to.equal('nald')
+        expect(address.externalId).to.equal(addressExternalId)
+        expect(address.postcode).to.equal('HP11')
+        expect(address.uprn).to.be.null()
       })
     })
 
@@ -187,6 +205,10 @@ describe('Persist licence service', () => {
           startDate: companyContactStartDate
         })
 
+        await AddressHelper.add({
+          ...transformedCompany.addresses[0]
+        })
+
         transformedCompanies = [{
           ...existingCompany,
           contact: exisitngContact,
@@ -194,9 +216,13 @@ describe('Persist licence service', () => {
             externalId: existingCompany.externalId,
             startDate: companyContactStartDate,
             licenceRoleId: licenceHolderRoleId
-          }
-        }
-        ]
+          },
+          addresses: [{
+            address1: 'ENVIRONMENT AGENCY',
+            externalId: addressExternalId,
+            dataSource: 'nald'
+          }]
+        }]
       })
 
       it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
@@ -281,6 +307,13 @@ describe('Persist licence service', () => {
         expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
         expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
         expect(companyContact.default).to.be.true()
+
+        // Addresses
+        const address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
+
+        expect(address.address1).to.equal('ENVIRONMENT AGENCY')
+        expect(address.dataSource).to.equal('nald')
+        expect(address.externalId).to.equal(addressExternalId)
       })
     })
   })
@@ -389,7 +422,11 @@ async function _fetchPersistedContact (externalId) {
     .first()
 }
 
-function _transformedCompany (licenceRoleId) {
+async function _fetchPersistedAddress (externalId) {
+  return AddressModel.query().where('externalId', externalId).limit(1).first()
+}
+
+function _transformedCompany (licenceRoleId, addressExternalId) {
   const externalId = CompanyHelper.generateExternalId()
 
   return {
@@ -408,6 +445,20 @@ function _transformedCompany (licenceRoleId) {
       externalId,
       startDate: new Date('1999-01-01'),
       licenceRoleId
-    }
+    },
+    addresses: [
+      {
+        address1: '4 Privet Drive',
+        address2: null,
+        address3: null,
+        address4: null,
+        address5: 'Little Whinging',
+        address6: 'Surrey',
+        country: 'United Kingdom',
+        externalId: addressExternalId,
+        postcode: 'HP11',
+        dataSource: 'nald'
+      }
+    ]
   }
 }

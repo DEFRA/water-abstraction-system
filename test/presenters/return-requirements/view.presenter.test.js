@@ -227,7 +227,7 @@ describe('Return Requirements - View presenter', () => {
     })
 
     describe('the requirements "points" property', () => {
-      // Formatting of the points uses GeneralLib.generateAbstractionPointDetail() so testing is 'light' here
+      // Formatting of the points is handled by PointModel.$describe() so testing is light here
       it('formats the points for display', () => {
         const result = ViewPresenter.go(returnVersion)
 
