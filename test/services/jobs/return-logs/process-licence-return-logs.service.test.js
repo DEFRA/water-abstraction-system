@@ -5,10 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const GenerateReturnCycleService = require('../../../../app/services/jobs/return-logs/generate-return-cycle.service.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -45,6 +46,7 @@ describe('Process licence return logs service', () => {
       // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      Sinon.stub(GenerateReturnCycleService, 'go').resolves('g095d75e-0e0d-4fe4-b048-150457f3871g')
       global.GlobalNotifier = notifierStub
     })
 
@@ -62,6 +64,10 @@ describe('Process licence return logs service', () => {
       expect(result[0].startDate).to.equal(new Date(allYearStartDate))
       expect(result[0].status).to.equal('due')
       expect(result[0].source).to.equal('WRLS')
+    })
+
+    after(() => {
+      Sinon.restore()
     })
   })
 })

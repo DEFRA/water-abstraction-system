@@ -46,6 +46,8 @@ describe('Generate return logs service', () => {
   let returnVersion
   let returnRequirement
   let returnRequirement2
+  let returnRequirementPurpose
+  let returnRequirementPurpose2
   let returnRequirements
   let revokedDate
   let secondaryPurpose
@@ -64,7 +66,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -107,6 +109,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -141,7 +144,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -184,6 +187,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -218,7 +222,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -231,7 +235,7 @@ describe('Generate return logs service', () => {
       primaryPurpose2 = PrimaryPurposeHelper.select()
       purpose2 = PurposeHelper.select()
       secondaryPurpose2 = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose2.id,
         purposeId: purpose2.id,
         returnRequirementId: returnRequirement2.id,
@@ -274,6 +278,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -321,6 +326,7 @@ describe('Generate return logs service', () => {
           ngr4: point2.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose2.alias,
           primary: {
             code: primaryPurpose2.legacyId,
             description: primaryPurpose2.description
@@ -355,7 +361,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -368,7 +374,7 @@ describe('Generate return logs service', () => {
       primaryPurpose2 = PrimaryPurposeHelper.select()
       purpose2 = PurposeHelper.select()
       secondaryPurpose2 = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose2.id,
         purposeId: purpose2.id,
         returnRequirementId: returnRequirement2.id,
@@ -412,6 +418,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -459,6 +466,7 @@ describe('Generate return logs service', () => {
           ngr4: point2.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose2.alias,
           primary: {
             code: primaryPurpose2.legacyId,
             description: primaryPurpose2.description
@@ -494,7 +502,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -537,6 +545,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -572,7 +581,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -615,6 +624,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -650,7 +660,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -693,6 +703,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -728,7 +739,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -771,6 +782,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
@@ -806,7 +818,7 @@ describe('Generate return logs service', () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
+      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         primaryPurposeId: primaryPurpose.id,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id,
@@ -849,6 +861,7 @@ describe('Generate return logs service', () => {
           ngr4: point.ngr4
         }],
         purposes: [{
+          alias: returnRequirementPurpose.alias,
           primary: {
             code: primaryPurpose.legacyId,
             description: primaryPurpose.description
