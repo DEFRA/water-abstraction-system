@@ -101,20 +101,20 @@ function _groupLicences (licences) {
   // created with `licenceId`, `licenceRef`, and an empty `linkages` array. The current licence object is then pushed
   // into the `linkages` array of the corresponding group. Finally, the grouped licences are returned as an array of
   // these grouped objects.
-  const grouped = licences.reduce((acc, current) => {
+  const grouped = licences.reduce((grouped, current) => {
     const { id, licenceRef } = current
 
-    if (!acc[id]) {
-      acc[id] = {
+    if (!grouped[id]) {
+      grouped[id] = {
         licenceId: id,
         licenceRef,
         linkages: []
       }
     }
 
-    acc[id].linkages.push(current)
+    grouped[id].linkages.push(current)
 
-    return acc
+    return grouped
   }, {})
 
   return Object.values(grouped)
