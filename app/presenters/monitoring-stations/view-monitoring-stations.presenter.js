@@ -36,20 +36,12 @@ function go (auth, monitoringStation) {
   }
 }
 
-function _formatLicences (licenceDetails) {
-  return licenceDetails.map((licenceDetail) => {
-    return {
-      abstractionPeriod: _formatLicenceDetailsAbstractionPeriod(licenceDetail),
-      alertType: _alertType(licenceDetail),
-      alertUpdatedAt: _alertedUpdatedAt(licenceDetail),
-      createdAt: licenceDetail.createdAt,
-      lastUpdatedAt: licenceDetail.statusUpdatedAt,
-      id: licenceDetail.licence.id,
-      licenceRef: licenceDetail.licence.licenceRef,
-      restrictionType: licenceDetail.restrictionType === 'flow' ? 'Flow' : 'Level',
-      threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
-    }
-  })
+function _alertedUpdatedAt (licenceDetails) {
+  if (licenceDetails.statusUpdatedAt) {
+    return formatLongDate(licenceDetails.statusUpdatedAt)
+  }
+
+  return formatLongDate(licenceDetails.createdAt)
 }
 
 function _alertType (licence) {
@@ -62,14 +54,6 @@ function _alertType (licence) {
   }
 
   return 'Stop or reduce'
-}
-
-function _alertedUpdatedAt (licenceDetails) {
-  if (licenceDetails.statusUpdatedAt) {
-    return formatLongDate(licenceDetails.statusUpdatedAt)
-  }
-
-  return formatLongDate(licenceDetails.createdAt)
 }
 
 function _checkPermissions (auth, roleType) {
@@ -93,6 +77,22 @@ function _formatLicenceDetailsAbstractionPeriod (licenceDetails) {
     licenceDetails.abstractionPeriodEndDay,
     licenceDetails.abstractionPeriodEndMonth
   )
+}
+
+function _formatLicences (licenceDetails) {
+  return licenceDetails.map((licenceDetail) => {
+    return {
+      abstractionPeriod: _formatLicenceDetailsAbstractionPeriod(licenceDetail),
+      alertType: _alertType(licenceDetail),
+      alertUpdatedAt: _alertedUpdatedAt(licenceDetail),
+      createdAt: licenceDetail.createdAt,
+      lastUpdatedAt: licenceDetail.statusUpdatedAt,
+      id: licenceDetail.licence.id,
+      licenceRef: licenceDetail.licence.licenceRef,
+      restrictionType: licenceDetail.restrictionType === 'flow' ? 'Flow' : 'Level',
+      threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
+    }
+  })
 }
 
 function _groupLicences (licences) {
