@@ -15,7 +15,7 @@ const LicenceMonitoringStationHelper = require('../../support/helpers/licence-ga
 // Thing under test
 const FetchMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-monitoring-stations.service.js')
 
-describe.only('Fetch Monitoring Stations service', () => {
+describe('Fetch Monitoring Stations service', () => {
   let monitoringStation
   let monitoringStationId
   let licence
@@ -54,7 +54,6 @@ describe.only('Fetch Monitoring Stations service', () => {
 
     it('returns the matching monitoring station, and linked licences in order of `createdAt` and `statusUpdatedAt`', async () => {
       const result = await FetchMonitoringStationsService.go(monitoringStationId)
-      console.log('🚀🚀🚀 ~ licenceMonitoringStationThree:', licenceMonitoringStationThree)
 
       expect(result).to.equal({
         id: monitoringStationId,
