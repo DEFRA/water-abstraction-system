@@ -34,20 +34,10 @@ async function _fetch (monitoringStationId) {
     ])
     .withGraphFetched('licenceGaugingStations')
     .modifyGraph('licenceGaugingStations', (builder) => {
-      builder.select([
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'alertType',
-        'createdAt',
-        'restrictionType',
-        'statusUpdatedAt',
-        'thresholdUnit',
-        'thresholdValue'
-      ])
-        .orderBy('createdAt', 'desc')
-        .orderBy('statusUpdatedAt', 'desc')
+        .orderBy([
+          { column: 'createdAt', order: 'desc' },
+          { column: 'statusUpdatedAt', order: 'desc', nulls: 'last' }
+        ])
     })
     .withGraphFetched('licenceGaugingStations.licence')
     .modifyGraph('licenceGaugingStations.licence', (builder) => {
