@@ -17,7 +17,7 @@ const { formatLongDate } = require('../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go (returnLogs, hasRequirements, auth) {
-  const canManageReturns = !auth.credentials.scope.includes('returns')
+  const canManageReturns = auth.credentials.scope.includes('returns')
   const returns = _returns(returnLogs, canManageReturns)
 
   const hasReturns = returns.length > 0
@@ -33,7 +33,11 @@ function _link (status, returnLogId, canManageReturns) {
     return `/returns/return?id=${returnLogId}`
   }
 
-  return `/return/internal?returnId=${returnLogId}`
+  if (canManageReturns) {
+    return `/return/internal?returnId=${returnLogId}`
+  }
+
+  return null
 }
 
 function _noReturnsMessage (hasReturns, hasRequirements) {
