@@ -51,7 +51,8 @@ async function _determineSupplementaryFlags (changedDates, chargeVersions, licen
 
   const preSrocFlag = _flagPreSrocSupplementary(earliestDate, includeInPresrocBilling, preSroc)
   const srocFlag = _flagSrocSupplementary(chargeVersions, earliestDate, endDate, includeInSrocBilling)
-  const twoPartTariffFinancialYears = await _flagTwoPartTariffSupplementary(chargeVersions, earliestDate, endDate, wrlsLicenceId)
+  const twoPartTariffFinancialYears = await _flagTwoPartTariffSupplementary(
+    chargeVersions, earliestDate, endDate, wrlsLicenceId)
 
   return { preSrocFlag, srocFlag, twoPartTariffFinancialYears }
 }
