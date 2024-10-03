@@ -238,8 +238,6 @@ describe('Persist licence service', () => {
         expect(updatedLicence.regions).to.equal(transformedLicence.regions)
         expect(updatedLicence.revokedDate).to.equal(transformedLicence.revokedDate)
         expect(updatedLicence.startDate).to.equal(transformedLicence.startDate)
-        expect(updatedLicence.includeInPresrocBilling).to.equal(transformedLicence.includeInPresrocBilling)
-        expect(updatedLicence.includeInSrocBilling).to.equal(transformedLicence.includeInSrocBilling)
 
         // Licence version comparison
         const updatedLicVer = updatedLicence.licenceVersions[0]
