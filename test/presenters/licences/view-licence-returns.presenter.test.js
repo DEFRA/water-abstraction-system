@@ -80,10 +80,24 @@ describe('View Licence returns presenter', () => {
       })
 
       describe('when the return log has a status of "due"', () => {
-        it('returns a link to the edit return log page', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        describe('and the user is permitted to submit and edit returns', () => {
+          it('returns a link to the edit return log page', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+            expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+          })
+        })
+
+        describe('and the user is not permitted to submit and edit returns', () => {
+          beforeEach(() => {
+            auth.credentials.scope = []
+          })
+
+          it('returns null', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+            expect(result.returns[1].link).to.be.null()
+          })
         })
       })
 
@@ -92,10 +106,24 @@ describe('View Licence returns presenter', () => {
           returnLogs[1].status = 'received'
         })
 
-        it('returns a link to the edit return log page', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        describe('and the user is permitted to submit and edit returns', () => {
+          it('returns a link to the edit return log page', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-          expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+            expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+          })
+        })
+
+        describe('and the user is not permitted to submit and edit returns', () => {
+          beforeEach(() => {
+            auth.credentials.scope = []
+          })
+
+          it('returns null', () => {
+            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+            expect(result.returns[1].link).to.be.null()
+          })
         })
       })
 
