@@ -20,6 +20,14 @@ const SIX_YEARS = 6
  * @returns {Promise<object>} an object containing our WRLS licence data and filtered charge versions
  */
 async function go (licenceId) {
+  // First query select 1 or 0 true/false, has the nald licence got a new end date ~ Do this in the import.
+  // Have a service in import that does this and then pings my service in supplementary
+
+  // Step 1 Off the 3 dates that have changed on the licence (NALD Licence) which is the earliest
+  // Step 2 Work out the 'end date' if its outside of this financial year then we don't care. This is before fetching
+  // The charge information
+
+  // Work out the year and pass it through to the query
   const licence = await _fetchLicenceData(licenceId)
   const { chargeVersions } = licence
 

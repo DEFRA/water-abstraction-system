@@ -18,6 +18,9 @@ const LicenceModel = require('../../models/licence.model.js')
  * @param {object} wrlsLicenceId - the WRLS licence data
  */
 async function go (transformedLicence, wrlsLicenceId) {
+  // Temporary Code
+  transformedLicence.revokedDate = new Date('2019-03-31')
+  transformedLicence.expiredDate = new Date('2022-03-31')
   const licenceChanged = await _licenceChanged(transformedLicence, wrlsLicenceId)
 
   if (!licenceChanged) {
