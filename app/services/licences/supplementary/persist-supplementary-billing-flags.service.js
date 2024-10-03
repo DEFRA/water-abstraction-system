@@ -17,7 +17,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  * NOTE: Due to the column data type of the includeInPresrocBilling & includeInSrocBilling, one is a string value and
  * one is a boolean.
  *
- * @param {[]} twoPartTariffFinancialYears - The years that need persisting in the LicenceSupplementaryYears table
+ * @param {object[]} twoPartTariffFinancialYears - The years that need persisting in the LicenceSupplementaryYears table
  * @param {string} preSrocFlag - "yes" or "no" depending on if the licence needs to be flagged for pre sroc billing
  * @param {boolean} srocFlag - `true` or `false` depending on if the licence needs to be flagged for sroc billing
  * @param {string} wrlsLicenceId - The UUID of the licence that needs the flags persisting for
