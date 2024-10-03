@@ -229,7 +229,7 @@ function _purposes (licenceVersionPurposes) {
 }
 
 function _sourceOfSupply (licenceVersionPurposes) {
-  if (!licenceVersionPurposes) {
+  if (!licenceVersionPurposes || licenceVersionPurposes[0].points.length === 0) {
     return null
   }
 

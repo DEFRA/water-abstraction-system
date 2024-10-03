@@ -19,9 +19,21 @@ const ViewLicenceReturnsService = require('../../../app/services/licences/view-l
 describe('View Licence Returns service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   const page = 1
-  const auth = {}
+
+  let auth
 
   beforeEach(async () => {
+    auth = {
+      isValid: true,
+      credentials: {
+        user: { id: 123 },
+        roles: ['returns'],
+        groups: [],
+        scope: ['returns'],
+        permissions: { abstractionReform: false, billRuns: true, manage: true }
+      }
+    }
+
     Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
 
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
