@@ -12,7 +12,7 @@ require('dotenv').config()
 const config = {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
   // converting the env var to a boolean
-  enableMonitoringStations: (String(process.env.ENABLE_MONITORING_STATIONS) === 'true') || false,
+  enableMonitoringStationsView: (String(process.env.ENABLE_MONITORING_STATIONS_VIEW) === 'true') || false,
   enableReissuingBillingBatches: (String(process.env.ENABLE_REISSUING_BILLING_BATCHES) === 'true') || false,
   enableRequirementsForReturns: (String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true') || false,
   enableSystemLicenceView: (String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true') || false,

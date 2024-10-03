@@ -100,7 +100,7 @@
       {% if monitoringStations.length > 0 %}
         <ul class="govuk-list govuk-!-margin-bottom-0">
           {% for monitoringStation in monitoringStations %}
-            {% if enableMonitoringStations %}
+            {% if enableMonitoringStationsView %}
               <li>
                 <a href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a>
               </li>
