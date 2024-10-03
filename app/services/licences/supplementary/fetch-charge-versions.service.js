@@ -5,76 +5,29 @@
  * @module FetchLicenceChargeVersionsService
  */
 
-const { ref } = require('objection')
-
+const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
 const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
 
 const APRIL = 3
 
 /**
- * I am comment
- * @param {*} transformedLicence
- * @param {*} wrlsLicenceId
- * @returns
+ * Fetches and returns the charge versions, changed dates and the licence data.
+ *
+ * It determines which dates have changed by comparing the incoming dates from the
+ * nald import to the dates we currently hold on the wrls licence
+ * @param {*} naldLicence - the legacy NALD licence
+ * @param {string} wrlsLicenceId - The UUID of the licence being fetched
+ *
+ * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go (transformedLicence, wrlsLicenceId) {
-  const changedDates = await _fetchChangedDates(wrlsLicenceId, transformedLicence)
-  const earliestDate = _earliestDate(changedDates)
-
-  console.log('Before fetching the charge version')
-  // const chargeVersions = await _fetchChargeVersions(earliestDate, wrlsLicenceId)
-
+async function go (naldLicence, wrlsLicenceId) {
   const licence = await _fetchLicenceData(wrlsLicenceId)
-  const chargeVersionData = await _fetchChargeVersionsData(wrlsLicenceId)
+  const changedDates = await _fetchChangedDates(licence, naldLicence)
+  const chargeVersions = await _fetchChargeVersionsData(wrlsLicenceId)
 
-  console.log('Licence :', licence)
-  console.log('chargeVersionData :', chargeVersionData)
-
-  return chargeVersions
-}
-
-async function _fetchChargeVersionsData (id) {
-  return ChargeVersionModel.query()
-    .select('id', 'startDate', 'endDate')
-    .where('licenceId', id)
-    .andWhere('start_date', '>=', '2022-04-01')
-    .modify((builder) => {
-      builder.select(
-        ChargeVersionModel.relatedQuery('chargeReferences')
-          .join('charge_elements as ce', 'ce.charge_reference_id', 'charge_references.id')
-          .where('charge_versions.id', ChargeVersionModel.ref('charge_references.charge_version_id'))
-          .andWhere('ce.section127Agreement', true)
-          .andWhere(ChargeReferenceModel.raw("charge_references.adjustments->>'s127' = 'true'"))
-          .first()
-          .select(ChargeReferenceModel.raw('EXISTS(SELECT 1)'))
-          .as('two_part_tariff')
-      )
-    })
-}
-
-async function _fetchLicenceData (id) {
-  return LicenceModel.query()
-    .select([
-      'licences.id',
-      'licences.expiredDate',
-      'licences.lapsedDate',
-      'licences.revokedDate'
-    ])
-    .distinctOn('licences.id')
-    .where('licences.id', id)
-    .leftJoin('charge_versions as cv', 'licences.id', 'cv.licence_id')
-    .modify((builder) => {
-      builder.select(
-        ChargeVersionModel.query()
-          .count()
-          .whereColumn('charge_versions.licence_id', 'licences.id')
-          .andWhere('charge_versions.start_date', '<', '2022-04-01')
-          .as('pre_sroc')
-      )
-    })
+  return { chargeVersions, changedDates, licence }
 }
 
 function _dateToFlag (changedDates, naldDate, wrlsDate) {
@@ -87,56 +40,23 @@ function _dateToFlag (changedDates, naldDate, wrlsDate) {
     return
   }
 
-  // Revoked date is 2030-04-01
-  // New revoked date is null
-  // Years to flag NONE
-  // If the old licence revoked date is greater than the current financial year then don't flag
   if (wrlsDate > endDate) {
     return
   }
 
-  // Revoked date is 2022-04-01
-  // New revoked date is null
-  // Years to flag 2023, 2024, 2025
-  // If the old licence revoked date is between the previous 6 years and the current financial year end then set it to
-  // the old licence revoked date
   if (wrlsDate < endDate && wrlsDate > sixYearsAgo) {
     changedDates.push(wrlsDate)
 
     return
   }
 
-  // Revoked date is 2010-03-31
-  // New revoked date is null
-  // Years to flag 2019, 2020, 2021, 2022, 2023, 2024, 2025
-  // If the old licence revoked date is less than the 6 years before, then set it to be the 6 years before date
   if (wrlsDate < sixYearsAgo) {
     changedDates.push(sixYearsAgo)
   }
 }
 
-function _earliestDate (changedDates) {
-  const datesAsTimeStamps = []
-
-  for (const date of changedDates) {
-    datesAsTimeStamps.push(date.getTime())
-  }
-
-  const minTimeStamp = Math.min(...datesAsTimeStamps)
-
-  return new Date(minTimeStamp)
-}
-
-async function _fetchChangedDates (wrlsLicenceId, transformedLicence) {
-  const { revokedDate, lapsedDate, expiredDate } = transformedLicence
-
-  const licence = await LicenceModel.query()
-    .where('id', wrlsLicenceId)
-    .select([
-      'revokedDate',
-      'expiredDate',
-      'lapsedDate'
-    ])
+async function _fetchChangedDates (licence, naldLicence) {
+  const { revokedDate, lapsedDate, expiredDate } = naldLicence
 
   const changedDates = []
 
@@ -155,85 +75,46 @@ async function _fetchChangedDates (wrlsLicenceId, transformedLicence) {
   return changedDates
 }
 
-/**
- * Dates we have
- * // 2019
- * Earliest day ~ The earliest date the charge versions will be affected by
- *
- * Charge Versions dates
- * // CV1 ~ Don't include, Don't count
- * // startDate: 2010
- * // endDate: 2012
- *
- * // CV2 ~ Don't include, Do count
- * // startDate: 2018
- * // endDate: 2022
- *
- * // CV3 ~ Do Include, Do count
- * // startDate: 2018
- * // endDate: 2024
- *
- * // CV4 ~ Do Include, Do count
- * // startDate: 2018
- * // endDate: null
- *
- * // CV5 ~ Do Include, Don't count
- * // startDate: 2022-04-01
- * // endDate: null
- * @private
- */
-async function _fetchChargeVersions (earliestDate, wrlsLicenceId) {
+async function _fetchChargeVersionsData (id) {
+  return ChargeVersionModel.query()
+    .select('id', 'startDate', 'endDate')
+    .where('licenceId', id)
+    .andWhere('start_date', '>=', '2022-04-01')
+    .modify((builder) => {
+      builder.select(
+        ChargeVersionModel.relatedQuery('chargeReferences')
+          .join('charge_elements as ce', 'ce.charge_reference_id', 'charge_references.id')
+          .where('charge_versions.id', ChargeVersionModel.ref('charge_references.charge_version_id'))
+          .andWhere('ce.section127Agreement', true)
+          .andWhere(ChargeReferenceModel.raw("charge_references.adjustments->>'s127' = 'true'"))
+          .limit(1)
+          .select(ChargeReferenceModel.raw('EXISTS(SELECT 1)'))
+          .as('two_part_tariff')
+      )
+    })
+}
+
+async function _fetchLicenceData (id) {
   return LicenceModel.query()
-    .findById(wrlsLicenceId)
     .select([
-      'id',
-      'licenceRef',
-      'includeInPresrocBilling',
-      'includeInSrocBilling',
-      'revokedDate',
-      'lapsedDate',
-      'expiredDate',
-      LicenceModel.relatedQuery('chargeVersions').count().as('preSrocChargeVersions')
-        .where((builder) => {
-          builder
-            .where('startDate', '')
-        })
-        .where('startDate', '<', '2022-04-01')
-        .where('endDate', '<', '2022-04-01')
-        .where('endDate', '>', earliestDate)
+      'licences.id',
+      'licences.expiredDate',
+      'licences.lapsedDate',
+      'licences.revokedDate',
+      'include_in_sroc_billing',
+      'include_in_presroc_billing'
     ])
-    // .withGraphFetched('chargeVersions')
-    // .modifyGraph('chargeVersions', (builder) => {
-    //   builder
-    //     .count({ preSrocChargeVersions: ChargeVersionModel.raw("CASE WHEN end_date < '2022-04-01' THEN 1 END") })
-    //     .groupBy('chargeVersions.id', 'chargeVersions.startDate', 'chargeVersions.endDate', 'licenceId')
-    // })
-    .withGraphFetched('chargeVersions')
-    .modifyGraph('chargeVersions', (builder) => {
-      builder
-        .select([
-          'id',
-          'startDate',
-          'endDate'
-        ])
-        // .where('endDate', '>', earliestDate)
-        // .orWhere('endDate', null)
-    })
-    .withGraphFetched('chargeVersions.chargeReferences')
-    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
-      builder
-        .select([
-          'id',
-          ref('chargeReferences.adjustments:s127').castText().as('s127')
-        ])
-    })
-    .withGraphFetched('chargeVersions.chargeReferences.chargeElements')
-    .modifyGraph('chargeVersions.chargeReferences.chargeElements', (builder) => {
-      builder
-        .select([
-          'id',
-          'section127Agreement'
-        ])
+    .distinctOn('licences.id')
+    .where('licences.id', id)
+    .leftJoin('charge_versions as cv', 'licences.id', 'cv.licence_id')
+    .modify((builder) => {
+      builder.select(
+        ChargeVersionModel.query()
+          .count()
+          .whereColumn('charge_versions.licence_id', 'licences.id')
+          .andWhere('charge_versions.start_date', '<', '2022-04-01')
+          .as('pre_sroc')
+      )
     })
 }
 
