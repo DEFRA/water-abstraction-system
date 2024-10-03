@@ -5,7 +5,6 @@
  * @module GenerateReturnVersionRequirementsService
  */
 
-const FetchPointsService = require('./fetch-points.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
@@ -23,7 +22,6 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
  */
 async function go (licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)
-  const licenceVersionPurposePoints = await FetchPointsService.go(licenceId)
   const returnRequirements = []
 
   let legacyId = await _nextLegacyId(naldRegionId)
@@ -31,7 +29,6 @@ async function go (licenceId, requirements) {
   for (const requirement of requirements) {
     const externalId = `${naldRegionId}:${legacyId}`
 
-    const returnRequirementPoints = _generateReturnRequirementPoints(licenceVersionPurposePoints, requirement.points)
     const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
@@ -44,10 +41,10 @@ async function go (licenceId, requirements) {
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
       gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
       legacyId,
+      points: requirement.points,
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       reportingFrequency: requirement.frequencyReported,
       returnsFrequency: 'year',
-      returnRequirementPoints,
       returnRequirementPurposes,
       siteDescription: requirement.siteDescription,
       summer: requirement.returnsCycle === 'summer',
@@ -69,29 +66,6 @@ async function _fetchNaldRegionId (licenceId) {
     .innerJoinRelated('region')
 
   return naldRegionId
-}
-
-function _generateReturnRequirementPoints (licenceVersionPurposePoints, points) {
-  const returnRequirementPoints = []
-
-  points.forEach((point) => {
-    const matchedPoint = licenceVersionPurposePoints.find((licenceVersionPurposePoint) => {
-      return licenceVersionPurposePoint.naldPointId.toString() === point
-    })
-
-    const returnRequirementPoint = {
-      description: matchedPoint.description,
-      ngr1: matchedPoint.ngr1,
-      ngr2: matchedPoint.ngr2,
-      ngr3: matchedPoint.ngr3,
-      ngr4: matchedPoint.ngr4,
-      naldPointId: matchedPoint.naldPointId
-    }
-
-    returnRequirementPoints.push(returnRequirementPoint)
-  })
-
-  return returnRequirementPoints
 }
 
 async function _generateReturnRequirementPurposes (licenceId, purposes) {

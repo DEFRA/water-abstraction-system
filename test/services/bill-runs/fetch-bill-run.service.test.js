@@ -16,7 +16,6 @@ const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const RegionModel = require('../../../app/models/region.model.js')
@@ -33,8 +32,6 @@ describe('Fetch Bill Run service', () => {
   let testBillRun
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // Create the initial bill run linked and associated region
     linkedRegion = RegionHelper.select()
     testBillRun = await BillRunHelper.add({ regionId: linkedRegion.id })

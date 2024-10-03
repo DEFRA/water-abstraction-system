@@ -14,7 +14,7 @@ const Groups = require('../../../db/seeds/data/groups.js')
  * when using the service.
  *
  * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
- * select a specific entry, or have it it return one at random.
+ * select a specific entry, or have it return one at random.
  *
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data

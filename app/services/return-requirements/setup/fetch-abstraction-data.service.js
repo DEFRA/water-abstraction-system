@@ -67,12 +67,11 @@ async function _fetch (licenceId) {
         // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary
         // and secondary against a licence version purpose
         .modify('allPurposes')
-        .withGraphFetched('licenceVersionPurposePoints')
-        .modifyGraph('licenceVersionPurposePoints', (pointsBuilder) => {
+        .withGraphFetched('points')
+        .modifyGraph('points', (pointsBuilder) => {
           pointsBuilder.select([
-            'licenceVersionPurposePoints.id',
-            'licenceVersionPurposePoints.description',
-            'licenceVersionPurposePoints.naldPointId'
+            'points.id',
+            'points.description'
           ])
         })
     })

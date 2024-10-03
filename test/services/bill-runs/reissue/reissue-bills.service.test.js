@@ -13,7 +13,6 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../../app/models/transaction.model.js')
@@ -32,8 +31,6 @@ describe('Reissue Bills service', () => {
   let reissueBillServiceStub
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -60,6 +57,10 @@ describe('Reissue Bills service', () => {
     })
 
     describe('and there are bills to reissue', () => {
+      let reissueBillOne
+      let reissueBillTwo
+      let reissueBillThree
+
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
         Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([
@@ -68,16 +69,17 @@ describe('Reissue Bills service', () => {
           { id: generateUUID() }
         ])
 
+        // The three new bills to be persisted
+        reissueBillOne = _reissueBillServiceResponse()
+        reissueBillTwo = _reissueBillServiceResponse()
+        reissueBillThree = _reissueBillServiceResponse()
+
         // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
-        // FetchBillsToBeReissuedService. We have to provide a different bill run id for each else we cause the error
-        // `duplicate key value violates unique constraint "unique_batch_year_invoice"`
+        // FetchBillsToBeReissuedService.
         reissueBillServiceStub = Sinon.stub(ReissueBillService, 'go')
-        reissueBillServiceStub.onFirstCall()
-          .resolves(_reissueBillServiceResponse('94e75ac4-111b-4600-8b2c-e3e39c5a8549'))
-        reissueBillServiceStub.onSecondCall()
-          .resolves(_reissueBillServiceResponse('6f21fce5-2f86-4939-909a-ce4339b5a448'))
-        reissueBillServiceStub.onThirdCall()
-          .resolves(_reissueBillServiceResponse('09aab25a-4fd2-42d5-8c7a-6a3777b01bba'))
+        reissueBillServiceStub.onFirstCall().resolves(reissueBillOne)
+        reissueBillServiceStub.onSecondCall().resolves(reissueBillTwo)
+        reissueBillServiceStub.onThirdCall().resolves(reissueBillThree)
       })
 
       it('returns "true"', async () => {
@@ -90,6 +92,11 @@ describe('Reissue Bills service', () => {
         await ReissueBillsService.go(reissueBillRun)
 
         const result = await BillModel.query()
+          .whereIn('billRunId', [
+            reissueBillOne.bills[0].billRunId,
+            reissueBillTwo.bills[0].billRunId,
+            reissueBillThree.bills[0].billRunId
+          ])
 
         expect(result).to.have.length(3)
       })
@@ -98,6 +105,11 @@ describe('Reissue Bills service', () => {
         await ReissueBillsService.go(reissueBillRun)
 
         const result = await BillLicenceModel.query()
+          .whereIn('billId', [
+            reissueBillOne.billLicences[0].billId,
+            reissueBillTwo.billLicences[0].billId,
+            reissueBillThree.billLicences[0].billId
+          ])
 
         expect(result).to.have.length(3)
       })
@@ -106,6 +118,11 @@ describe('Reissue Bills service', () => {
         await ReissueBillsService.go(reissueBillRun)
 
         const result = await TransactionModel.query()
+          .whereIn('billLicenceId', [
+            reissueBillOne.transactions[0].billLicenceId,
+            reissueBillTwo.transactions[0].billLicenceId,
+            reissueBillThree.transactions[0].billLicenceId
+          ])
 
         expect(result).to.have.length(3)
       })
@@ -113,9 +130,9 @@ describe('Reissue Bills service', () => {
   })
 })
 
-function _reissueBillServiceResponse (billRunId) {
+function _reissueBillServiceResponse () {
   return {
-    bills: [BillModel.fromJson({ ...BillHelper.defaults(), billRunId })],
+    bills: [BillModel.fromJson(BillHelper.defaults())],
     billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
     transactions: [TransactionModel.fromJson({
       ...TransactionHelper.defaults(),

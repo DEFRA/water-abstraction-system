@@ -47,17 +47,31 @@ describe('View Licence presenter', () => {
   })
 
   describe('the "licenceName" property', () => {
-    describe('when the primary user has added a custom name for the licence', () => {
-      it('returns the licence name', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+    describe('when the licence has a primary user (registered user)', () => {
+      describe('and they have added a custom name for the licence', () => {
+        it('returns the licence name', () => {
+          const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.licenceName).to.equal('Between two ferns')
+          expect(result.licenceName).to.equal('Between two ferns')
+        })
+      })
+
+      describe('but they have not added a custom name for the licence', () => {
+        beforeEach(() => {
+          licence.licenceDocumentHeader.licenceName = null
+        })
+
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, auth)
+
+          expect(result.licenceName).to.be.null()
+        })
       })
     })
 
-    describe('when the primary user has not added a custom name for the licence', () => {
+    describe('when the licence does not have a primary user (registered user)', () => {
       beforeEach(() => {
-        licence.licenceDocumentHeader.licenceName = null
+        licence.licenceDocumentHeader.licenceEntityRole = null
       })
 
       it('returns "Unregistered licence"', () => {
