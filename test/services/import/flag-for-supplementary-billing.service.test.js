@@ -20,8 +20,15 @@ const FlagForSupplementaryBillingService = require('../../../app/services/import
 describe('Flag For Supplementary Billing service', () => {
   let transformedLicence
   let licence
+  let notifierStub
 
   beforeEach(async () => {
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+
     Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
   })
 
@@ -178,6 +185,33 @@ describe('Flag For Supplementary Billing service', () => {
 
         expect(DetermineSupplementaryBillingFlagsService.go.called).to.be.false()
       })
+    })
+  })
+
+  describe('when there is an error', () => {
+    let licenceId
+
+    beforeEach(() => {
+      beforeEach(async () => {
+        // To make the service fail we pass it an invalid licence id
+        licenceId = '1234'
+
+        transformedLicence = {
+          lapsedDate: null,
+          revokedDate: null,
+          expiredDate: null
+        }
+      })
+    })
+
+    it('handles the error', async () => {
+      await FlagForSupplementaryBillingService.go(transformedLicence, licenceId)
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Supplementary Billing Flag failed for licence ')
+      expect(args[1]).to.equal(licenceId)
+      expect(args[2]).to.be.an.error()
     })
   })
 })
