@@ -114,8 +114,8 @@ function _mapRequirement (requirement) {
     purposes: _purposes(requirement.returnRequirementPurposes),
     returnReference: requirement.legacyId,
     returnsCycle: requirement.summer === true ? 'Summer' : 'Winter and all year',
-    siteDescription: requirement.siteDescription,
-    title: requirement.siteDescription
+    siteDescription: requirement.siteDescription ?? '',
+    title: requirement.siteDescription ?? ''
   }
 }
 

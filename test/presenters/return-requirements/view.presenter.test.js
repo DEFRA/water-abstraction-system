@@ -288,6 +288,58 @@ describe('Return Requirements - View presenter', () => {
         })
       })
     })
+
+    describe('the requirements "siteDescription" property', () => {
+      describe('when there is a site description', () => {
+        it('returns the site description', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          const { siteDescription } = result.requirements[0]
+
+          expect(siteDescription).to.equal('Borehole in field')
+        })
+      })
+
+      describe('when there is no site description', () => {
+        beforeEach(() => {
+          returnVersion.returnRequirements[0].siteDescription = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          const { siteDescription } = result.requirements[0]
+
+          expect(siteDescription).to.equal('')
+        })
+      })
+    })
+
+    describe('the requirements "title" property', () => {
+      describe('when there is a site description', () => {
+        it('returns the site description as the title', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          const { title } = result.requirements[0]
+
+          expect(title).to.equal('Borehole in field')
+        })
+      })
+
+      describe('when there is no site description', () => {
+        beforeEach(() => {
+          returnVersion.returnRequirements[0].siteDescription = null
+        })
+
+        it('returns an empty string as the title', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          const { title } = result.requirements[0]
+
+          expect(title).to.equal('')
+        })
+      })
+    })
   })
 })
 
