@@ -30,7 +30,7 @@ function go (auth, monitoringStation) {
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
-    pageTitle: _createPageTitle(monitoringStation.riverName, monitoringStation.label),
+    pageTitle: _pageTitle(monitoringStation.riverName, monitoringStation.label),
     stationReference: monitoringStation.stationReference,
     wiskiId: monitoringStation.wiskiId
   }
