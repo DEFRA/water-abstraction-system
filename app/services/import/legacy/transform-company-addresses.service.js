@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Transforms NALD  data into a valid object that matches the WRLS structure for a company address
+ * Transforms NALD data into a valid object that matches the WRLS structure for a company address
  * @module ImportLegacyTransformCompanyAddressesService
  */
 
@@ -9,7 +9,7 @@ const CompanyAddressPresenter = require('../../../presenters/import/legacy/compa
 const FetchCompanyAddressesService = require('./fetch-company-address.service.js')
 
 /**
- * Transforms NALD  data into a valid object that matches the WRLS structure for a company address
+ * Transforms NALD data into a valid object that matches the WRLS structure for a company address
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID
