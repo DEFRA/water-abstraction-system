@@ -20,7 +20,7 @@ const { db } = require('../../../../db/db.js')
 async function go (regionCode, licenceId) {
   const query = _query()
 
-  const { rows } = await db.raw(query, [regionCode, licenceId])
+  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
 
   return rows
 }
@@ -40,8 +40,8 @@ function _query () {
           ELSE MAX(TO_DATE(NULLIF("EFF_END_DATE", 'null'), 'DD/MM/YYYY'))
           END AS end_date
       FROM import."NALD_ABS_LIC_VERSIONS"
-      WHERE "AABL_ID" = '10000003'
-        AND "FGAC_REGION_CODE" = '3'
+      WHERE "FGAC_REGION_CODE" = ?
+        AND "AABL_ID" = ?
       GROUP BY "ACON_AADD_ID"
     )
     SELECT DISTINCT ON (nalv."ACON_AADD_ID")
