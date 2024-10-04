@@ -25,8 +25,8 @@ function go (auth, monitoringStation) {
 
   return {
     gridReference: monitoringStation.gridReference,
-    hasPermissionToManageLinks: _checkPermissions(auth, 'manage_gauging_station_licence_links'),
-    hasPermissionToSendAlerts: _checkPermissions(auth, 'hof_notifications'),
+    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
+    permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
