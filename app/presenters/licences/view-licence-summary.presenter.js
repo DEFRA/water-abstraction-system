@@ -5,8 +5,9 @@
  * @module ViewLicenceSummaryPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
+
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page's summary tab
