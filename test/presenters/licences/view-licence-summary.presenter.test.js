@@ -1000,10 +1000,24 @@ describe('View Licence Summary presenter', () => {
       })
 
       describe('and at least one licence version purpose linked to it', () => {
-        it('returns the source description of the first point', async () => {
-          const result = await ViewLicenceSummaryPresenter.go(licence)
+        describe('but it has no points', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[0].points = []
+          })
 
-          expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+          it('returns null', async () => {
+            const result = await ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.sourceOfSupply).to.equal(null)
+          })
+        })
+
+        describe('and it has at least one point', () => {
+          it('returns the source description of the first point', async () => {
+            const result = await ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+          })
         })
       })
     })

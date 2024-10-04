@@ -88,13 +88,20 @@
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
 
-      {# Bookmarks - only displays when there us more than 1 return requirement #}
+      {# Bookmarks - only displays when there is more than 1 return requirement #}
       {% if requirements.length > 1 %}
         <div class="govuk-body govuk-!-margin-bottom-6">
           <ul>
             {% for requirement in requirements %}
               {% set requirementIndex = loop.index0 %}
-              <li><a href="#requirement-{{ requirementIndex }}">Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription }}</a></li>
+              {% set bookmarkTitle %}
+                {% if requirement.siteDescription == '' %}
+                  Return reference {{ requirement.returnReference }}
+                {% else %}
+                  Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription }}
+                {% endif %}
+              {% endset %}
+              <li><a href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
             {% endfor %}
           </ul>
         </div>

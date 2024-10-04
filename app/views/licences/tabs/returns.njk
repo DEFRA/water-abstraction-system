@@ -4,7 +4,12 @@
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% macro referenceColumn(return) %}
-  <a href="{{ return.link }}" class="govuk-link">{{ return.reference }} </a>
+  {% if return.link %}
+    <a href="{{ return.link }}" class="govuk-link">{{ return.reference }} </a>
+  {% else %}
+    <div>{{ return.reference }}</div>
+  {% endif %}
+
   <p class="govuk-body-s">{{ return.dates }}</p>
 {% endmacro %}
 
