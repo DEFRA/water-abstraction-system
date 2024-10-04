@@ -137,6 +137,10 @@ function _groupLicences (licences) {
 }
 
 function _sortLicences (licences) {
+  // NOTE: Sorting the licences in order of `licenceRef` proved difficult to complete as licences are fetched by those
+  // linked to a licence gauging station, where the licence reference is stored inside the nested licence object.
+  // However, by extracting and comparing `licenceRef` directly within the sort function, we can order the licences
+  // alphabetically. The sort logic below compares the `licenceRef` of each licence and orders them in ascending order.
   return licences.sort((licenceA, licenceB) => {
     if (licenceA.licenceRef !== licenceB.licenceRef) {
       return licenceA.licenceRef < licenceB.licenceRef ? -1 : 1
