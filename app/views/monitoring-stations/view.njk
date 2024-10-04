@@ -51,14 +51,16 @@
     }) }}
   </div>
 
-  {% if licences.length > 0 and hasPermissionToSendAlerts %}
+  {% if licences.length > 0 and permissionToSendAlerts %}
     <div class="govuk-!-margin-bottom-7">
       {{ govukButton({
         text: "Create a water abstraction alert",
         href: "/monitoring-stations/" + monitoringStationId + "/send-alert/alert-type"
       }) }}
     </div>
+  {% endif %}
 
+  {% if licences.length > 0 %}
     {# Create rows for lincences linked to the monitoring station #}
     {% set tableRows = []%}
 
@@ -130,8 +132,11 @@
         rows: tableRows
       }) }}
     </div>
+    {% else %}
+      <p class="govuk-body">There are no licences tagged with restrictions for this monitoring station</p>
+    {% endif %}
 
-    {% if hasPermissionToManageLinks %}
+    {% if permissionToManageLinks %}
       <div class="govuk-button-group">
         {{ govukButton({
           text: "Tag a licence",
@@ -139,11 +144,13 @@
           classes: "govuk-button--secondary"
         }) }}
 
-        {{ govukButton({
-          text: "Remove a tag",
-          href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
-          classes: "govuk-button--secondary"
-        }) }}
+        {% if licences.length > 0 %}
+          {{ govukButton({
+            text: "Remove a tag",
+            href: "/monitoring-stations/" + monitoringStationId + "/untagging-licence/remove-tag",
+            classes: "govuk-button--secondary"
+          }) }}
+        {% endif %}
       </div>
     {% endif %}
   {% endif %}
