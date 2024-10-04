@@ -12,9 +12,9 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
  * Formats the monitoring station details and related licences data for the
  * `/monitoring-stations/{monitoringStationId}` page
  *
- * @param {string} auth - The auth object taken from `request.auth` containing user details
- * @param {GaugingStationModel[]} monitoringStation - The monitoring station and associated licences data returned
- * by FetchMonitoringStations
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {module:GaugingStationModel[]} monitoringStation - The monitoring station and associated licences data
+ * returned by `FetchMonitoringStationService`
  *
  * @returns {object} monitoring station and licence data needed by the view template
  */
