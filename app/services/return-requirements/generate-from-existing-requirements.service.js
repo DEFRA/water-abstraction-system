@@ -83,7 +83,8 @@ async function _fetch (returnVersionId) {
     .withGraphFetched('returnRequirements.points')
     .modifyGraph('returnRequirements.points', (builder) => {
       builder.select([
-        'points.id'
+        'points.id',
+        'points.description'
       ])
     })
     .withGraphFetched('returnRequirements.returnRequirementPurposes')
@@ -121,6 +122,14 @@ function _purposes (returnRequirementPurposes) {
   })
 }
 
+function _siteDescription (siteDescription, points) {
+  if (siteDescription) {
+    return siteDescription
+  }
+
+  return points[0].description
+}
+
 function _transformForSetup (returnVersion) {
   const { returnRequirements } = returnVersion
 
@@ -142,7 +151,7 @@ function _transformForSetup (returnVersion) {
       points: _points(points),
       purposes: _purposes(returnRequirementPurposes),
       returnsCycle: summer ? 'summer' : 'winter-and-all-year',
-      siteDescription,
+      siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
         'end-abstraction-period-day': abstractionPeriodEndDay,
         'end-abstraction-period-month': abstractionPeriodEndMonth,
