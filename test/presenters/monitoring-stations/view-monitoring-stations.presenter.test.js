@@ -79,7 +79,10 @@ describe('View Monitoring Stations presenter', () => {
     describe('the "permissionToManageLinks" property', () => {
       describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
         beforeEach(() => {
-          auth.credentials.roles[2].role = null
+          auth.credentials.scope = [
+            'billing',
+            'hof_notifications'
+          ]
         })
 
         it('returns false for "permissionToManageLinks"', () => {
@@ -101,7 +104,10 @@ describe('View Monitoring Stations presenter', () => {
     describe('the "permissionToSendAlerts" property', () => {
       describe('when a user does not have the "hof_notifications" role', () => {
         beforeEach(() => {
-          auth.credentials.roles[1].role = null
+          auth.credentials.scope = [
+            'billing',
+            'manage_gauging_station_licence_links'
+          ]
         })
 
         it('returns false for "permissionToSendAlerts"', () => {
@@ -332,28 +338,10 @@ describe('View Monitoring Stations presenter', () => {
 function _auth () {
   return {
     credentials: {
-      roles: [
-        {
-          id: 'b62afe79-d599-4101-b374-729011711462',
-          role: 'billing',
-          description: 'Administer billing',
-          createdAt: new Date('2023-12-14'),
-          updatedAt: new Date('2024-08-19')
-        },
-        {
-          id: 'e486f477-6bca-46b2-8af7-ed1046ab50d4',
-          role: 'hof_notifications',
-          description: 'Send HoF notifications',
-          createdAt: new Date('2023-12-14'),
-          updatedAt: new Date('2024-08-19')
-        },
-        {
-          id: '311ab6d0-9c8e-44df-b472-ad8929f0db98',
-          role: 'manage_gauging_station_licence_links',
-          description: 'Manage linkages between gauging stations and licences',
-          createdAt: new Date('2023-12-14'),
-          updatedAt: new Date('2024-08-19')
-        }
+      scope: [
+        'billing',
+        'hof_notifications',
+        'manage_gauging_station_licence_links'
       ]
     }
   }
