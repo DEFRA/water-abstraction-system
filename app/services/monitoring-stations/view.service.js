@@ -11,7 +11,7 @@ const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stat
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  *
- * @param {string} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} monitoringStationId - The UUID for the monitoring station
  *
  * @returns {Promise<object>} page data needed by the view template
