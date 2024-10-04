@@ -97,7 +97,7 @@ describe('Fetch Charge Versions service', () => {
 
         twoPartTariffChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: twoPartTariffChargeVersion.id,
-          adjustments: { s127: 'true' }
+          adjustments: { s127: true }
         })
 
         await ChargeElementHelper.add({
