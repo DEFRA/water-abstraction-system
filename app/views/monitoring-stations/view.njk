@@ -60,78 +60,78 @@
     </div>
   {% endif %}
 
-  {% if licences.length > 0 %}
-    {# Create rows for lincences linked to the monitoring station #}
-    {% set tableRows = []%}
+    {% if licences.length > 0 %}
+      {# Create rows for lincences linked to the monitoring station #}
+      {% set tableRows = []%}
 
-    {% for licence in licences %}
-      {# Set an easier to use index #}
-      {% set rowIndex = loop.index0 %}
+      {% for licence in licences %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
 
-      {% set licenceCell %}
-        <a class="govuk-link govuk-body-m" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
-      {% endset %}
+        {% set licenceCell %}
+          <a class="govuk-link govuk-body-m" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a>
+        {% endset %}
 
-      {% set tableRows = tableRows.concat([[
-        {
-          html: licenceCell,
-          attributes: { 'data-test': 'licence-ref-' + rowIndex }
-        },
-        {
-          html: formatCell(licence, "abstractionPeriod"),
-          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
-        },
-        {
-          html: formatCell(licence, "restrictionType"),
-          attributes: { 'data-test': 'restriction-type-' + rowIndex }
-        },
-        {
-          html: formatCell(licence, "threshold"),
-          attributes: { 'data-test': 'threshold-' + rowIndex }
-        },
-        {
-          html: formatCell(licence, "alertType"),
-          attributes: { 'data-test': 'alert-type-' + rowIndex }
-        },
-        {
-          html: formatCell(licence, "alertUpdatedAt"),
-          attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
-        }
-      ]]) %}
-    {% endfor %}
-
-    <div>
-      {{ govukTable({
-        caption: "Licences linked to this monitoring station",
-        captionClasses: "govuk-table__caption--m",
-        firstCellIsHeader: true,
-        head: [
+        {% set tableRows = tableRows.concat([[
           {
-            text: "Licence"
+            html: licenceCell,
+            attributes: { 'data-test': 'licence-ref-' + rowIndex }
           },
           {
-            text: "Abstraction period",
-            classes: "width-one-fifth"
+            html: formatCell(licence, "abstractionPeriod"),
+            attributes: { 'data-test': 'abstraction-period-' + rowIndex }
           },
           {
-            text: "Restriction type"
+            html: formatCell(licence, "restrictionType"),
+            attributes: { 'data-test': 'restriction-type-' + rowIndex }
           },
           {
-            text: "Threshold",
-            classes: "width-one-sixth"
+            html: formatCell(licence, "threshold"),
+            attributes: { 'data-test': 'threshold-' + rowIndex }
           },
           {
-            text: "Last alert type",
-            classes: "width-one-sixth"
+            html: formatCell(licence, "alertType"),
+            attributes: { 'data-test': 'alert-type-' + rowIndex }
           },
           {
-            text: "Alert date issued",
-            classes: "width-one-fifth"
+            html: formatCell(licence, "alertUpdatedAt"),
+            attributes: { 'data-test': 'alert-updated-at-' + rowIndex }
           }
-        ],
-        rows: tableRows
-      }) }}
-    </div>
+        ]]) %}
+      {% endfor %}
+
+      <div>
+        {{ govukTable({
+          caption: "Licences linked to this monitoring station",
+          captionClasses: "govuk-table__caption--m",
+          firstCellIsHeader: true,
+          head: [
+            {
+              text: "Licence"
+            },
+            {
+              text: "Abstraction period",
+              classes: "width-one-fifth"
+            },
+            {
+              text: "Restriction type"
+            },
+            {
+              text: "Threshold",
+              classes: "width-one-sixth"
+            },
+            {
+              text: "Last alert type",
+              classes: "width-one-sixth"
+            },
+            {
+              text: "Alert date issued",
+              classes: "width-one-fifth"
+            }
+          ],
+          rows: tableRows
+        }) }}
+      </div>
     {% else %}
       <p class="govuk-body">There are no licences tagged with restrictions for this monitoring station</p>
     {% endif %}
@@ -153,5 +153,4 @@
         {% endif %}
       </div>
     {% endif %}
-  {% endif %}
 {% endblock %}
