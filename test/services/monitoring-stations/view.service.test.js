@@ -9,7 +9,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
 
 // Thing under test
 const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
@@ -27,7 +27,7 @@ describe('View service', () => {
 
   describe('when a monitoring station with a matching ID exists', () => {
     beforeEach(() => {
-      Sinon.stub(FetchMonitoringStationsService, 'go').resolves(monitoringStationData)
+      Sinon.stub(FetchMonitoringStationService, 'go').resolves(monitoringStationData)
     })
 
     it('returns the page data for the view', async () => {

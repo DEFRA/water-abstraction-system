@@ -13,7 +13,7 @@ const MonitoringStationHelper = require('../../support/helpers/gauging-station.h
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-gauging-station.helper.js')
 
 // Thing under test
-const FetchMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
 
 describe('Fetch Monitoring Stations service', () => {
   let monitoringStation
@@ -53,7 +53,7 @@ describe('Fetch Monitoring Stations service', () => {
     })
 
     it('returns the matching monitoring station, and linked licences in order of `createdAt` and `statusUpdatedAt`', async () => {
-      const result = await FetchMonitoringStationsService.go(monitoringStationId)
+      const result = await FetchMonitoringStationService.go(monitoringStationId)
 
       expect(result).to.equal({
         id: monitoringStationId,

@@ -5,7 +5,7 @@
  * @module ViewService
  */
 
-const FetchMonitoringStationsService = require('../monitoring-stations/fetch-monitoring-stations.service.js')
+const FetchMonitoringStationService = require('../monitoring-stations/fetch-monitoring-station.service.js')
 const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stations/view-monitoring-stations.presenter.js')
 
 /**
@@ -17,7 +17,7 @@ const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stat
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go (auth, monitoringStationId) {
-  const fetchLicences = await FetchMonitoringStationsService.go(monitoringStationId)
+  const fetchLicences = await FetchMonitoringStationService.go(monitoringStationId)
 
   const pageData = ViewMonitoringStationPresenter.go(auth, fetchLicences)
 
