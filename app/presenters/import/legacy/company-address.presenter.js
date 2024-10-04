@@ -38,15 +38,18 @@ function go (address) {
  * @private
  */
 function _endDate (address) {
-  const oldestDate = [address.end_date, address.lapsed_date, address.expired_date, address.revoked_date]
-    // Removes any null values
-    .filter((date) => { return date })
-    // Sorts in asc order
-    .sort((date1, date2) => { return date1 - date2 })
-    // We only want the oldest date
-    .slice(-1)[0]
+  const endDates = [
+    address.end_date,
+    address.lapsed_date,
+    address.expired_date,
+    address.revoked_date
+  ].filter((endDate) => {
+    return endDate
+  })
 
-  return oldestDate || null
+  const oldestDate = new Date(Math.max(...endDates))
+
+  return !isNaN(oldestDate) ? oldestDate : null
 }
 
 module.exports = {

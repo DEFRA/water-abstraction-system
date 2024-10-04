@@ -203,10 +203,7 @@ async function _persistCompanies (trx, updatedAt, companies) {
 
     await _persistAddresses(trx, updatedAt, company.addresses)
 
-    // TODO: remove this when licence roles are done as every company has an and subsequently a company address
-    if (company.companyAddresses) {
-      await _persistCompanyAddresses(trx, updatedAt, company.companyAddresses)
-    }
+    await _persistCompanyAddresses(trx, updatedAt, company.companyAddresses)
   }
 }
 

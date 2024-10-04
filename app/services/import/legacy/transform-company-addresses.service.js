@@ -24,7 +24,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
 
     const address = CompanyAddressPresenter.go(naldAddress)
 
-    matchingCompany.companyAddresses = [...(matchingCompany?.companyAddresses || []), address]
+    matchingCompany.companyAddresses.push(address)
   })
 }
 

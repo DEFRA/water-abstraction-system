@@ -26,7 +26,7 @@ describe('Import Legacy Transform Company Addresses service', () => {
   let transformedCompanies
 
   beforeEach(() => {
-    transformedCompanies = [{ externalId: '1:007' }]
+    transformedCompanies = [{ externalId: '1:007', companyAddresses: [] }]
 
     legacyLicenceHolderAddress = _legacyLicenceHolderCompanyAddress(licenceRoleId)
   })
@@ -67,7 +67,7 @@ describe('Import Legacy Transform Company Addresses service', () => {
     it('returns no contact object on the company', async () => {
       await TransformCompanyAddressesService.go(regionCode, naldLicenceId, transformedCompanies)
 
-      expect(transformedCompanies[0]).to.equal({ externalId: '1:007' })
+      expect(transformedCompanies[0]).to.equal({ externalId: '1:007', companyAddresses: [] })
     })
   })
 })
