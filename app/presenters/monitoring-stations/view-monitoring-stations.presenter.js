@@ -56,13 +56,7 @@ function _alertType (licence) {
   return 'Stop or reduce'
 }
 
-function _checkPermissions (auth, roleType) {
-  return auth.credentials.roles.some((role) => {
-    return role.role === roleType
-  })
-}
-
-function _createPageTitle (riverName, stationName) {
+function _pageTitle (riverName, stationName) {
   if (riverName) {
     return `${riverName} at ${stationName}`
   }
