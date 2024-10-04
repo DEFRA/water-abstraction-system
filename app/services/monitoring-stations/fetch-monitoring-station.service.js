@@ -3,7 +3,7 @@
 /**
  * Fetches the matching monitoring station and associated licences needed for the view
  * `/monitoring-stations/{monitoringStationId}` page
- * @module FetchMonitoringStationsService
+ * @module FetchMonitoringStationService
  */
 
 const GaugingStationModel = require('../../models/gauging-station.model.js')
