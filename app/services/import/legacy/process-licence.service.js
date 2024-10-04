@@ -6,7 +6,7 @@
  */
 
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
-const PersistLicenceService = require('../persist-licence.service.js')
+const PersistImportService = require('../persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
@@ -48,7 +48,7 @@ async function go (licenceRef) {
     LicenceStructureValidator.go(transformedLicence)
 
     // Either insert or update the licence in WRLS
-    const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+    const licenceId = await PersistImportService.go(transformedLicence, transformedCompanies)
 
     if (wrlsLicenceId) {
       await ProcessLicenceReturnLogsService.go(wrlsLicenceId)

@@ -29,7 +29,7 @@ const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.
 const { randomInteger } = require('../../support/general.js')
 
 // Thing under test
-const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
+const PersistImportService = require('../../../app/services/import/persist-import.service.js')
 
 describe.only('Persist licence service', () => {
   const companyContactStartDate = new Date('1999-01-01')
@@ -73,7 +73,7 @@ describe.only('Persist licence service', () => {
     describe('and that licence does not already exist', () => {
       beforeEach(async () => {
         // Call the thing under test
-        result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+        result = await PersistImportService.go(transformedLicence, transformedCompanies)
 
         // Get the persisted data
         newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
@@ -248,7 +248,7 @@ describe.only('Persist licence service', () => {
         }]
 
         // Call the thing under test
-        result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+        result = await PersistImportService.go(transformedLicence, transformedCompanies)
 
         // Get the persisted data
         updatedLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
@@ -366,7 +366,7 @@ describe.only('Persist licence service', () => {
     })
 
     it('throws an error and persists nothing', async () => {
-      await expect(PersistLicenceService.go(transformedLicence)).to.reject()
+      await expect(PersistImportService.go(transformedLicence)).to.reject()
 
       const newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
 
