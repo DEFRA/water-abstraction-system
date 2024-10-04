@@ -31,7 +31,7 @@ const { randomInteger } = require('../../support/general.js')
 // Thing under test
 const PersistImportService = require('../../../app/services/import/persist-import.service.js')
 
-describe.only('Persist licence service', () => {
+describe('Persist licence service', () => {
   const companyContactStartDate = new Date('1999-01-01')
 
   let address
