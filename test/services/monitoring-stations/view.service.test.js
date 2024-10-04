@@ -39,8 +39,8 @@ describe('View service', () => {
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         monitoringStationName: 'MEVAGISSEY FIRE STATION',
         gridReference: 'TL2664640047',
-        hasPermissionToManageLinks: true,
-        hasPermissionToSendAlerts: true,
+        permissionToManageLinks: true,
+        permissionToSendAlerts: true,
         wiskiId: null,
         stationReference: null,
         licences: [

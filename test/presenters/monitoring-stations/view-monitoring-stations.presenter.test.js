@@ -28,8 +28,8 @@ describe('View Monitoring Stations presenter', () => {
         monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
         monitoringStationName: 'MEVAGISSEY FIRE STATION',
         gridReference: 'TL2664640047',
-        hasPermissionToManageLinks: true,
-        hasPermissionToSendAlerts: true,
+        permissionToManageLinks: true,
+        permissionToSendAlerts: true,
         wiskiId: null,
         stationReference: null,
         licences: [
@@ -76,46 +76,46 @@ describe('View Monitoring Stations presenter', () => {
       })
     })
 
-    describe('the "hasPermissionToManageLinks" property', () => {
+    describe('the "permissionToManageLinks" property', () => {
       describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
         beforeEach(() => {
           auth.credentials.roles[2].role = null
         })
 
-        it('returns false for "hasPermissionToManageLinks"', () => {
+        it('returns false for "permissionToManageLinks"', () => {
           const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
-          expect(result.hasPermissionToManageLinks).to.equal(false)
+          expect(result.permissionToManageLinks).to.equal(false)
         })
       })
 
       describe('when a user has the "manage_gauging_station_licence_links" role', () => {
-        it('returns true for "hasPermissionToManageLinks"', () => {
+        it('returns true for "permissionToManageLinks"', () => {
           const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
-          expect(result.hasPermissionToManageLinks).to.equal(true)
+          expect(result.permissionToManageLinks).to.equal(true)
         })
       })
     })
 
-    describe('the "hasPermissionToSendAlerts" property', () => {
+    describe('the "permissionToSendAlerts" property', () => {
       describe('when a user does not have the "hof_notifications" role', () => {
         beforeEach(() => {
           auth.credentials.roles[1].role = null
         })
 
-        it('returns false for "hasPermissionToSendAlerts"', () => {
+        it('returns false for "permissionToSendAlerts"', () => {
           const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
-          expect(result.hasPermissionToSendAlerts).to.equal(false)
+          expect(result.permissionToSendAlerts).to.equal(false)
         })
       })
 
       describe('when a user has the "hof_notifications" role', () => {
-        it('returns true for "hasPermissionToSendAlerts"', () => {
+        it('returns true for "permissionToSendAlerts"', () => {
           const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
-          expect(result.hasPermissionToSendAlerts).to.equal(true)
+          expect(result.permissionToSendAlerts).to.equal(true)
         })
       })
     })
@@ -274,8 +274,8 @@ describe('View Monitoring Stations presenter', () => {
               monitoringStationId: 'f122d4bb-42bd-4af9-a081-1656f5a30b63',
               monitoringStationName: 'MEVAGISSEY FIRE STATION',
               gridReference: 'TL2664640047',
-              hasPermissionToManageLinks: true,
-              hasPermissionToSendAlerts: true,
+              permissionToManageLinks: true,
+              permissionToSendAlerts: true,
               wiskiId: null,
               stationReference: null,
               licences: [

@@ -52,8 +52,8 @@ describe('Monitoring stations controller', () => {
           monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
           monitoringStationName: 'Bodney Bridge',
           gridReference: 'TL82959885',
-          hasPermissionToManageLinks: true,
-          hasPermissionToSendAlerts: true,
+          permissionToManageLinks: true,
+          permissionToSendAlerts: true,
           wiskiId: 'L33802',
           stationReference: 'E23746',
           licences: [
