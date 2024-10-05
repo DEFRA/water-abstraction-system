@@ -22,7 +22,7 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
   })
 
   describe('when a matching return version exists', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       returnVersion = _returnVersion()
 
       Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
@@ -80,7 +80,7 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
   })
 
   describe('when a matching return version does not exist', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       returnVersion = undefined
 
       Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
