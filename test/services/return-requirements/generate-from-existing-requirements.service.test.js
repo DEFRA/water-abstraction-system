@@ -17,15 +17,15 @@ const GenerateFromExistingRequirementsService = require('../../../app/services/r
 describe('Return Requirements - Generate From Existing Requirements service', () => {
   let returnVersion
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
       returnVersion = _returnVersion()
 
       Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
-    })
-
-    afterEach(() => {
-      Sinon.restore()
     })
 
     it('returns the details of the its return requirements transformed for use in the journey', async () => {
@@ -76,6 +76,18 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
           ]
         }
       ])
+    })
+  })
+
+  describe('when a matching return version does not exist', () => {
+    beforeEach(async () => {
+      returnVersion = undefined
+
+      Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
+    })
+
+    it('throws an error', async () => {
+      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).to.reject()
     })
   })
 })
