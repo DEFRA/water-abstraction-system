@@ -3,12 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const RequirementsForReturnsSeed = require('../../support/seeders/requirements-for-returns.seeder.js')
+// Things we need to stub
+const FetchExistingRequirementsService = require('../../../app/services/return-requirements/fetch-existing-requirements.js')
 
 // Thing under test
 const GenerateFromExistingRequirementsService = require('../../../app/services/return-requirements/generate-from-existing-requirements.service.js')
@@ -18,9 +19,13 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      const seedData = await RequirementsForReturnsSeed.seed()
+      returnVersion = _returnVersion()
 
-      returnVersion = seedData.returnVersion
+      Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
+    })
+
+    afterEach(() => {
+      Sinon.restore()
     })
 
     it('returns the details of the its return requirements transformed for use in the journey', async () => {
@@ -74,3 +79,75 @@ describe('Return Requirements - Generate From Existing Requirements service', ()
     })
   })
 })
+
+function _returnVersion () {
+  return {
+    id: '3a591cdc-7ca0-4252-b159-6994b9319e70',
+    returnRequirements: [
+      {
+        id: 'b8c8e40f-2557-4ce5-8fd9-fd7f6bb71c30',
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        collectionFrequency: 'week',
+        fiftySixException: false,
+        gravityFill: false,
+        reabstraction: false,
+        reportingFrequency: 'week',
+        siteDescription: 'FIRST BOREHOLE AT AVALON',
+        summer: false,
+        twoPartTariff: false,
+        points: [
+          {
+            id: '8be0bf17-ba9b-465f-b660-b732f0a131df',
+            description: 'WELL AT WELLINGTON'
+          }
+        ],
+        returnRequirementPurposes: [
+          {
+            id: 'f0709035-4f2a-4294-b4ac-dbd2c47a955f',
+            alias: 'I have an alias',
+            purposeId: 'da576426-70bc-4f76-b05b-849bba48a8e8',
+            purpose: {
+              id: 'da576426-70bc-4f76-b05b-849bba48a8e8',
+              description: 'Spray Irrigation - Storage'
+            }
+          }
+        ]
+      },
+      {
+        id: '01674d01-f54a-4631-9fe6-76d429e2a823',
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        collectionFrequency: 'week',
+        fiftySixException: true,
+        gravityFill: true,
+        reabstraction: true,
+        reportingFrequency: 'month',
+        siteDescription: 'SECOND BOREHOLE AT AVALON',
+        summer: true,
+        twoPartTariff: true,
+        points: [
+          {
+            id: 'e535dfb8-3720-41aa-824d-6a6942d65650',
+            description: 'WELL AT WELLINGTON'
+          }
+        ],
+        returnRequirementPurposes: [
+          {
+            id: '2a6b8b21-6449-4353-8f6f-93457395f7a6',
+            alias: null,
+            purposeId: 'da576426-70bc-4f76-b05b-849bba48a8e8',
+            purpose: {
+              id: 'da576426-70bc-4f76-b05b-849bba48a8e8',
+              description: 'Spray Irrigation - Storage'
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
