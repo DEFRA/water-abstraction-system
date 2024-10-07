@@ -8,11 +8,11 @@ const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { transaction } = require('objection')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
+const { transaction } = require('objection')
 
 // Thing under test
 const PersistLicenceService = require('../../../../app/services/import/persist/persist-licence.service.js')
@@ -20,8 +20,8 @@ const PersistLicenceService = require('../../../../app/services/import/persist/p
 describe('Persist licence service', () => {
   let newLicence
   let region
-  let updatedAt
   let trx
+  let updatedAt
 
   beforeEach(async () => {
     region = RegionHelper.select()

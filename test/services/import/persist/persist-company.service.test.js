@@ -28,13 +28,16 @@ describe('Persist company service', () => {
   const companyContactStartDate = new Date('1999-01-01')
 
   let addressExternalId
-  let updatedAt
-  let trx
   let licenceHolderRoleId
+  let transformedCompany
+  let trx
+  let updatedAt
 
   beforeEach(async () => {
     addressExternalId = AddressHelper.generateExternalId()
     licenceHolderRoleId = LicenceRoleHelper.select().id
+
+    transformedCompany = _transformedCompany(licenceHolderRoleId, addressExternalId)
 
     updatedAt = timestampForPostgres()
 
@@ -49,12 +52,9 @@ describe('Persist company service', () => {
 
   describe('when given a valid transformed licence', () => {
     describe('and that licence does not already exist', () => {
-      let transformedCompany
       let transformedCompanies
 
       beforeEach(() => {
-        transformedCompany = _transformedCompany(licenceHolderRoleId, addressExternalId)
-
         transformedCompanies = [{ ...transformedCompany }]
       })
 
@@ -116,12 +116,9 @@ describe('Persist company service', () => {
     describe('and that licence already exists', () => {
       let exisitngContact
       let existingCompany
-      let transformedCompany
       let transformedCompanies
 
       beforeEach(async () => {
-        transformedCompany = _transformedCompany(licenceHolderRoleId, addressExternalId)
-
         const existing = await _createExistingRecords(transformedCompany, licenceHolderRoleId, companyContactStartDate)
 
         existingCompany = existing.company
