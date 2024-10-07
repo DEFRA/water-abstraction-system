@@ -18,11 +18,10 @@ const { db } = require('../../../../db/db.js')
  * @returns {Promise<ImportLegacyCompanyAddressType[]>}
  */
 async function go (regionCode, licenceId) {
-  const query = _query()
+  const licenceHolderData = await _getLicenceHolder(regionCode, licenceId)
+  const returnsToData = await _getReturnsTo(regionCode, licenceId)
 
-  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
-
-  return rows
+  return [...licenceHolderData, ...returnsToData]
 }
 
 /**
@@ -30,8 +29,8 @@ async function go (regionCode, licenceId) {
  *
  * @private
  */
-function _query () {
-  return `
+async function _getLicenceHolder (regionCode, licenceId) {
+  const query = `
     WITH end_date_cte AS (
       SELECT
         "ACON_AADD_ID",
@@ -68,6 +67,50 @@ function _query () {
       AND nalv."AABL_ID" = ?
       AND nalv."ACON_AADD_ID" IS NOT NULL;
   `
+
+  const { rows } = await db.raw(query, [regionCode, licenceId, regionCode, licenceId])
+
+  return rows
+}
+
+/**
+ * Fetches the NALD data for a licence role to create a company address for the returns to
+ *
+ * @private
+ */
+async function _getReturnsTo (regionCode, licenceId) {
+  const query = `
+    SELECT
+      CASE
+        WHEN COUNT(nlr."EFF_END_DATE") FILTER (WHERE nlr."EFF_END_DATE" = 'null') > 0 THEN NULL
+        ELSE MAX(TO_DATE(NULLIF(nlr."EFF_END_DATE", 'null'), 'DD/MM/YYYY'))
+        END AS end_date,
+      CASE
+        WHEN COUNT(nlr."EFF_ST_DATE") FILTER (WHERE nlr."EFF_ST_DATE" = 'null') > 0 THEN NULL
+        ELSE MIN(TO_DATE(NULLIF(nlr."EFF_ST_DATE", 'null'), 'DD/MM/YYYY'))
+        END AS start_date,
+      nlr."ACON_AADD_ID" as address_id,
+      nlr."ACON_APAR_ID" as party_id,
+      (concat_ws(':', nlr."FGAC_REGION_CODE", nlr."ACON_AADD_ID")) AS external_id,
+      (concat_ws(':', nlr."FGAC_REGION_CODE", nlr."ACON_APAR_ID")) AS company_external_id,
+      lr.id as licence_role_id,
+      lr.name as licence_role_name
+    FROM import."NALD_LIC_ROLES" nlr
+           INNER JOIN import."NALD_PARTIES" np
+                      ON np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
+                        AND np."ID" = nlr."ACON_APAR_ID"
+           INNER JOIN public.licence_roles AS lr
+                      ON lr.name = 'returnsTo'
+    WHERE nlr."FGAC_REGION_CODE" = ?
+      AND nlr."AABL_ID" = ?
+      AND nlr."ACON_AADD_ID" IS NOT NULL
+      AND nlr."ALRT_CODE" = 'RT'
+    GROUP BY address_id, licence_role_id, party_id,external_id, company_external_id, licence_role_name;
+`
+
+  const { rows } = await db.raw(query, [regionCode, licenceId])
+
+  return rows
 }
 
 module.exports = {
