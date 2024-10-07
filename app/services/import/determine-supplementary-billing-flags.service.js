@@ -5,7 +5,7 @@
  * @module DetermineSupplementaryBillingFlagsService
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../licences/supplementary/determine-supplementary-billing-flags.service.js')
+const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
@@ -25,7 +25,7 @@ async function go (naldLicence, wrlsLicenceId) {
       return
     }
 
-    await DetermineSupplementaryBillingFlagsService.go(naldLicence, wrlsLicenceId)
+    await ProcessImportedLicenceService.go(naldLicence, wrlsLicenceId)
   } catch (error) {
     global.GlobalNotifier.omfg('Supplementary Billing Flag failed for licence ', wrlsLicenceId, error)
   }

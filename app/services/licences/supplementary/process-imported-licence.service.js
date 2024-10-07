@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Determines which flags a licence should have for supplementary billing
- * @module DetermineSupplementaryBillingFlagsService
+ * Processes a licence that has been imported with at least one changed 'end' date (expired, lapsed, or revoked)
+ * @module ProcessImportedLicenceService
  */
 
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
@@ -14,11 +14,7 @@ const APRIL = 3
 const SROC = new Date('2022-04-01')
 
 /**
- * Determines and persists the flags for supplementary billing
- *
- * - Fetches the relevant charge versions and licence data
- * - Determines which dates have changed on the licence and which flags should be applied based on the data.
- * - Persists the flags using the `PersistSupplementaryBillingFlagsService`.
+ * Processes a licence that has been imported with at least one changed 'end' date (expired, lapsed, or revoked)
  *
  * @param {*} naldLicence - The legacy NALD licence
  * @param {string} wrlsLicenceId - The UUID of the licence being flagged for supplementary billing
