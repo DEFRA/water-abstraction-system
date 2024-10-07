@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported company and its child entities that have been transformed and validated
  * @module PersistCompanyService
  */
 
@@ -11,7 +11,7 @@ const ContactModel = require('../../../models/contact.model.js')
 const { db } = require('../../../../db/db.js')
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported company and its child entities that have been transformed and validated
  *
  * @param trx
  * @param updatedAt

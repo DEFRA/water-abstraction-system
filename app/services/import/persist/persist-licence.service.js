@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported licence that have been transformed and validated
  * @module PersistLicenceService
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported licence that have been transformed and validated
  *
  * @param trx
  * @param updatedAt

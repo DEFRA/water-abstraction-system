@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported licence's versions and its child entities that have been transformed and validated
  * @module PersistLicenceVersionsService
  */
 
@@ -10,7 +10,7 @@ const LicenceVersionPurposeModel = require('../../../models/licence-version-purp
 const LicenceVersionModel = require('../../../models/licence-version.model.js')
 
 /**
- * Creates or updates an imported licence and its child entities that have been transformed and validated
+ * Creates or updates an imported licence's versions and its child entities that have been transformed and validated
  *
  * @param trx
  * @param updatedAt

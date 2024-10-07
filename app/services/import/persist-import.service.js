@@ -2,7 +2,7 @@
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
- * @module PersistLicenceService
+ * @module PersistImportService
  */
 
 const PersistImportService = require('./persist/persist-licence.service.js')
