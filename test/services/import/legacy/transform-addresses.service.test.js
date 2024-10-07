@@ -22,7 +22,7 @@ describe('Import Legacy Transform Addresses service', () => {
   let transformedCompanies
 
   beforeEach(() => {
-    transformedCompanies = [{ externalId: '1:007' }]
+    transformedCompanies = [{ externalId: '1:007', addresses: [] }]
 
     legacyAddress = _legacyAddress()
   })
@@ -68,7 +68,10 @@ describe('Import Legacy Transform Addresses service', () => {
     it('returns no contact object on the company', async () => {
       await TransformAddressesService.go(regionCode, naldLicenceId, transformedCompanies)
 
-      expect(transformedCompanies[0]).to.equal({ externalId: '1:007' })
+      expect(transformedCompanies[0]).to.equal({
+        externalId: '1:007',
+        addresses: []
+      })
     })
   })
 })
