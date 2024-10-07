@@ -17,7 +17,9 @@ function go (company) {
   return {
     name: company.name,
     type: company.type,
-    externalId: company.external_id
+    externalId: company.external_id,
+    addresses: [],
+    companyAddresses: []
   }
 }
 
