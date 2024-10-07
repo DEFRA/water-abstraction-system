@@ -23,12 +23,12 @@ function go (auth, monitoringStation) {
 
   return {
     gridReference: monitoringStation.gridReference,
-    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
-    permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
     pageTitle: _pageTitle(monitoringStation.riverName, monitoringStation.label),
+    permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
+    permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     stationReference: monitoringStation.stationReference,
     wiskiId: monitoringStation.wiskiId
   }
