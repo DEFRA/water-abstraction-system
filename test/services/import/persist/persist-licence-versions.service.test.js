@@ -25,7 +25,7 @@ const { transaction } = require('objection')
 // Thing under test
 const PersistLicenceVersionsService = require('../../../../app/services/import/persist/persist-licence-versions.service.js')
 
-describe.only('Persist licence versions service', () => {
+describe('Persist licence versions service', () => {
   let licenceVersionPurposeConditionType
   let primaryPurpose
   let purpose
