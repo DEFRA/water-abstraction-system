@@ -5,9 +5,9 @@
  * @module PersistLicenceVersionsService
  */
 
-const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model')
-const LicenceVersionPurposeModel = require('../../../models/licence-version-purpose.model')
-const LicenceVersionModel = require('../../../models/licence-version.model')
+const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeModel = require('../../../models/licence-version-purpose.model.js')
+const LicenceVersionModel = require('../../../models/licence-version.model.js')
 
 /**
  * Creates or updates an imported licence and its child entities that have been transformed and validated
