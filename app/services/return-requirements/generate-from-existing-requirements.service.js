@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Fetches an existing return version and generates setup return requirements from it
- * @module FetchExistingRequirementsService
+ * Generates returns setup requirements from an existing return version
+ * @module GenerateFromExistingRequirementsService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+const FetchExistingRequirementsService = require('./fetch-existing-requirements.js')
 
 /**
- * Fetches an existing return version and generates setup return requirements from it
+ * Generates returns setup requirements from an existing return version
  *
  * In the returns setup journey we allow users to select the option to create new requirements by copying from them
  * from an existing return version. This service fetches the selected return version and its existing return
- * requirements. For each one found we generate a return requirement setup object.
+ * requirements. For each one found it generates a return requirement setup object.
  *
  * Note, we are not creating a `return_requirement` record but an object that matches what the setup journey expects.
  * This means the requirements will display correctly in the `/check` page, and users can amend the values using the
@@ -24,7 +24,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * be persisted to the setup session
  */
 async function go (returnVersionId) {
-  const returnVersion = await _fetch(returnVersionId)
+  const returnVersion = await FetchExistingRequirementsService.go(returnVersionId)
 
   return _transformForSetup(returnVersion)
 }
@@ -56,53 +56,6 @@ function _agreementExceptions (returnRequirement) {
   return agreementsExceptions
 }
 
-async function _fetch (returnVersionId) {
-  return ReturnVersionModel.query()
-    .findById(returnVersionId)
-    .select([
-      'id'
-    ])
-    .withGraphFetched('returnRequirements')
-    .modifyGraph('returnRequirements', (builder) => {
-      builder.select([
-        'id',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'collectionFrequency',
-        'fiftySixException',
-        'gravityFill',
-        'reabstraction',
-        'reportingFrequency',
-        'siteDescription',
-        'summer',
-        'twoPartTariff'
-      ])
-    })
-    .withGraphFetched('returnRequirements.points')
-    .modifyGraph('returnRequirements.points', (builder) => {
-      builder.select([
-        'points.id'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes')
-    .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
-      builder.select([
-        'alias',
-        'id',
-        'purposeId'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
-      builder.select([
-        'id',
-        'description'
-      ])
-    })
-}
-
 function _points (points) {
   return points.map((point) => {
     return point.id
@@ -119,6 +72,14 @@ function _purposes (returnRequirementPurposes) {
       id
     }
   })
+}
+
+function _siteDescription (siteDescription, points) {
+  if (siteDescription) {
+    return siteDescription
+  }
+
+  return points[0].description
 }
 
 function _transformForSetup (returnVersion) {
@@ -142,7 +103,7 @@ function _transformForSetup (returnVersion) {
       points: _points(points),
       purposes: _purposes(returnRequirementPurposes),
       returnsCycle: summer ? 'summer' : 'winter-and-all-year',
-      siteDescription,
+      siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
         'end-abstraction-period-day': abstractionPeriodEndDay,
         'end-abstraction-period-month': abstractionPeriodEndMonth,

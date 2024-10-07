@@ -29,7 +29,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
 
     ImportAddressValidator.go(address)
 
-    matchingCompany.addresses = [...(matchingCompany?.addresses || []), address]
+    matchingCompany.addresses.push(address)
   })
 }
 

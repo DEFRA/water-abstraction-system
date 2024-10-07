@@ -114,12 +114,64 @@ describe('Import Company validator', () => {
       })
     })
   })
+
+  describe('the "addresses" property', () => {
+    describe('when it is not an array', () => {
+      beforeEach(() => {
+        transformedCompany.addresses = 1
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          ImportCompanyValidator.go(transformedCompany)
+        }).to.throw('"addresses" must be an array')
+      })
+    })
+    describe('when it is not set', () => {
+      beforeEach(() => {
+        delete transformedCompany.addresses
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          ImportCompanyValidator.go(transformedCompany)
+        }).to.throw('"addresses" is required')
+      })
+    })
+  })
+
+  describe('the "companyAddresses" property', () => {
+    describe('when it is not an array', () => {
+      beforeEach(() => {
+        transformedCompany.companyAddresses = 1
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          ImportCompanyValidator.go(transformedCompany)
+        }).to.throw('"companyAddresses" must be an array')
+      })
+    })
+    describe('when it is not set', () => {
+      beforeEach(() => {
+        delete transformedCompany.companyAddresses
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          ImportCompanyValidator.go(transformedCompany)
+        }).to.throw('"companyAddresses" is required')
+      })
+    })
+  })
 })
 
 function _transformedCompany () {
   return {
     name: 'ACME',
     type: 'person',
-    externalId: '1:1940'
+    externalId: '1:1940',
+    addresses: [],
+    companyAddresses: []
   }
 }
