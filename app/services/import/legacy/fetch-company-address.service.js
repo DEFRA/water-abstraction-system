@@ -96,11 +96,11 @@ async function _getReturnsTo (regionCode, licenceId) {
       lr.id as licence_role_id,
       lr.name as licence_role_name
     FROM import."NALD_LIC_ROLES" nlr
-           INNER JOIN import."NALD_PARTIES" np
-                      ON np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
-                        AND np."ID" = nlr."ACON_APAR_ID"
-           INNER JOIN public.licence_roles AS lr
-                      ON lr.name = 'returnsTo'
+      INNER JOIN import."NALD_PARTIES" np
+        ON np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
+        AND np."ID" = nlr."ACON_APAR_ID"
+      INNER JOIN public.licence_roles AS lr
+        ON lr.name = 'returnsTo'
     WHERE nlr."FGAC_REGION_CODE" = ?
       AND nlr."AABL_ID" = ?
       AND nlr."ACON_AADD_ID" IS NOT NULL
