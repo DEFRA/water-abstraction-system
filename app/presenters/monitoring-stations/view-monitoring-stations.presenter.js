@@ -88,31 +88,38 @@ function _formatLicences (licenceDetails) {
 }
 
 /**
- * This function groups licence objects by their unique `id`. It takes the array of licences and uses the
- * `reduce` method to accumulate an object, where each key is a licence `id`. For each unique `id`, a new object is
- * created with `licenceId`, `licenceRef`, and an empty `linkages` array. The current licence object is then pushed
- * into the `linkages` array of the corresponding group. Finally, the grouped licences are returned as an array of
- * these grouped objects.
+ * This function groups licence objects by their unique `id`.
  *
- * Returns:
- * [{
- *  licenceId: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
- *  licenceRef: '01/0157',
- *  linkages: [{
-      alertType: 'Reduce',
-      abstractionPeriod: '1 April to 31 August',
-      alertUpdatedAt: '26 September 2024',
-      createdAt: 2024-09-26T09:34:54.152Z,
-      lastUpdatedAt: null,
-      id: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
-      licenceRef: '01/0157',
-      restrictionType: 'Level',
-      threshold: '700 mAOD'
-      }]
- * }]
+ * It takes the array of licences and uses the `reduce` method to accumulate an object, where each key is a licence
+ * `id`. For each unique `id`, a new object is created with `licenceId`, `licenceRef`, and an empty `linkages` array.
+ * The current licence object is then pushed into the `linkages` array of the corresponding group. Finally, the grouped
+ * licences are returned as an array of these grouped objects.
  *
- * @param {object} licences - The sorted licences returned by the _sortLicences() function
- * @returns {Array} grouped licences array where each item is an object with licence details and linked licences
+ * ```javascript
+ * [
+ *   {
+ *     licenceId: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
+ *     licenceRef: '01/0157',
+ *     linkages: [
+ *       {
+ *         alertType: 'Reduce',
+ *         abstractionPeriod: '1 April to 31 August',
+ *         alertUpdatedAt: '26 September 2024',
+ *         createdAt: 2024-09-26T09:34:54.152Z,
+ *         lastUpdatedAt: null,
+ *         id: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
+ *         licenceRef: '01/0157',
+ *         restrictionType: 'Level',
+ *         threshold: '700 mAOD'
+ *       }
+ *     ]
+ *   }
+ * ]
+ * ```
+ *
+ * @param {object[]} licences - The sorted licences returned by the _sortLicences() function
+ *
+ * @returns {object[]} grouped licences array where each item is an object with licence details and linked licences
  */
 function _groupLicences (licences) {
   const groupedLicences = licences.reduce((grouped, current) => {
