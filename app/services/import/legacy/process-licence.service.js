@@ -6,7 +6,7 @@
  */
 
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
-const PersistLicenceService = require('../persist-licence.service.js')
+const PersistLicenceService = require('../persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformCompanyAddressesService = require('./transform-company-addresses.service.js')

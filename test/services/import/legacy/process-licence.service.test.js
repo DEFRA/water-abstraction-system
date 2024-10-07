@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
-const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
+const PersistLicenceService = require('../../../../app/services/import/persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')

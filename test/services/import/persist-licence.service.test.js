@@ -30,21 +30,26 @@ const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.
 const { randomInteger } = require('../../support/general.js')
 
 // Thing under test
-const PersistLicenceService = require('../../../app/services/import/persist-licence.service.js')
+const PersistImportService = require('../../../app/services/import/persist-import.service.js')
 
-describe('Persist licence service', () => {
+describe.only('Persist licence service', () => {
   const companyContactStartDate = new Date('1999-01-01')
 
+  let address
+  let addressExternalId
+  let company
+  let contact
+  let licenceHolderRoleId
   let licenceVersionPurposeConditionType
+  let newLicence
   let primaryPurpose
   let purpose
   let region
+  let result
   let secondaryPurpose
   let transformedCompanies
   let transformedCompany
   let transformedLicence
-  let licenceHolderRoleId
-  let addressExternalId
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
@@ -67,80 +72,97 @@ describe('Persist licence service', () => {
 
   describe('when given a valid transformed licence', () => {
     describe('and that licence does not already exist', () => {
-      it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
-        const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+      beforeEach(async () => {
+        // Call the thing under test
+        result = await PersistImportService.go(transformedLicence, transformedCompanies)
 
-        const newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
+        // Get the persisted data
+        newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
+        company = await _fetchPersistedCompany(transformedCompany.externalId)
+        contact = await _fetchPersistedContact(transformedCompany.externalId)
+        address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
+      })
 
-        // Licence
-        expect(result).to.equal(newLicence.id)
+      describe('address', () => {
+        it('creates an address', () => {
+          expect(address.address1).to.equal('4 Privet Drive')
+          expect(address.address2).to.be.null()
+          expect(address.address5).to.equal('Little Whinging')
+          expect(address.address6).to.equal('Surrey')
+          expect(address.country).to.equal('United Kingdom')
+          expect(address.dataSource).to.equal('nald')
+          expect(address.externalId).to.equal(addressExternalId)
+          expect(address.postcode).to.equal('HP11')
+          expect(address.uprn).to.be.null()
+        })
+      })
 
-        // Licence version
-        const newLicenceVersion = newLicence.licenceVersions[0]
+      describe('licence', () => {
+        it('creates a new licence record plus child records in WRLS and returns the licence ID', () => {
+          expect(result).to.equal(newLicence.id)
+        })
 
-        expect(newLicenceVersion.externalId).to.equal(transformedLicence.licenceVersions[0].externalId)
+        it('creates a licence version', () => {
+          const newLicenceVersion = newLicence.licenceVersions[0]
 
-        // Licence version purpose
-        const newLicenceVersionPurpose = newLicence.licenceVersions[0].licenceVersionPurposes[0]
+          expect(newLicenceVersion.externalId).to.equal(transformedLicence.licenceVersions[0].externalId)
+        })
 
-        expect(newLicenceVersionPurpose.externalId).to.equal(
-          transformedLicence.licenceVersions[0].licenceVersionPurposes[0].externalId
-        )
+        it('creates a licence version purpose', () => {
+          const newLicenceVersionPurpose = newLicence.licenceVersions[0].licenceVersionPurposes[0]
 
-        // Licence version purpose conditions
-        const newLicenceVersionPurposeCondition = newLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+          expect(newLicenceVersionPurpose.externalId).to.equal(
+            transformedLicence.licenceVersions[0].licenceVersionPurposes[0].externalId
+          )
+        })
 
-        expect(newLicenceVersionPurposeCondition.externalId).to.equal(
-          transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0].externalId)
+        it('creates a licence version purpose conditions', () => {
+          const newLicenceVersionPurposeCondition = newLicence.licenceVersions[0]
+            .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
 
-        //   Companies
-        const company = await _fetchPersistedCompany(transformedCompany.externalId)
+          expect(newLicenceVersionPurposeCondition.externalId).to.equal(
+            transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
+              .licenceVersionPurposeConditions[0].externalId)
+        })
+      })
 
-        expect(company.name).to.equal('ACME')
-        expect(company.type).to.equal('person')
-        expect(company.externalId).to.equal(transformedCompany.externalId)
+      describe('contact', () => {
+        it('creates a contact', () => {
+          expect(contact.salutation).to.equal('Mr')
+          expect(contact.initials).to.equal('H')
+          expect(contact.firstName).to.equal('James')
+          expect(contact.lastName).to.equal('Bond')
+          expect(contact.dataSource).to.equal('nald')
+        })
+      })
 
-        // Contact
-        const contact = await _fetchPersistedContact(transformedCompany.externalId)
+      describe('company, companyContact and companyAddresses', () => {
+        it('creates a company', () => {
+          expect(company.name).to.equal('ACME')
+          expect(company.type).to.equal('person')
+          expect(company.externalId).to.equal(transformedCompany.externalId)
+        })
 
-        expect(contact.salutation).to.equal('Mr')
-        expect(contact.initials).to.equal('H')
-        expect(contact.firstName).to.equal('James')
-        expect(contact.lastName).to.equal('Bond')
-        expect(contact.dataSource).to.equal('nald')
+        it('creates a new company contact - links the company to the contact', () => {
+          const companyContact = contact.companyContacts[0]
 
-        // Company contact - the company and contact id are used to relate the contact to the company
-        const companyContact = contact.companyContacts[0]
+          expect(companyContact.companyId).to.equal(company.id)
+          expect(companyContact.contactId).to.equal(contact.id)
+          expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
+          expect(companyContact.startDate).to.equal(transformedCompany.companyContact.startDate)
+          expect(companyContact.default).to.be.true()
+        })
 
-        expect(companyContact.companyId).to.equal(company.id)
-        expect(companyContact.contactId).to.equal(contact.id)
-        expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
-        expect(companyContact.startDate).to.equal(transformedCompany.companyContact.startDate)
-        expect(companyContact.default).to.be.true()
+        it('creates a new company address - links the company to the contact', () => {
+          const companyAddress = address.companyAddresses[0]
 
-        // Addresses
-        const address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
-
-        expect(address.address1).to.equal('4 Privet Drive')
-        expect(address.address2).to.be.null()
-        expect(address.address5).to.equal('Little Whinging')
-        expect(address.address6).to.equal('Surrey')
-        expect(address.country).to.equal('United Kingdom')
-        expect(address.dataSource).to.equal('nald')
-        expect(address.externalId).to.equal(addressExternalId)
-        expect(address.postcode).to.equal('HP11')
-        expect(address.uprn).to.be.null()
-
-        //  Company Address - should link the company to the saved address
-        const companyAddress = address.companyAddresses[0]
-
-        expect(companyAddress.addressId).to.equal(address.id)
-        expect(companyAddress.companyId).to.equal(company.id)
-        expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
-        expect(companyAddress.default).to.be.true()
-        expect(companyAddress.startDate).to.equal(new Date('2020-01-01'))
-        expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
+          expect(companyAddress.addressId).to.equal(address.id)
+          expect(companyAddress.companyId).to.equal(company.id)
+          expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
+          expect(companyAddress.default).to.be.true()
+          expect(companyAddress.startDate).to.equal(new Date('2020-01-01'))
+          expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
+        })
       })
     })
 
@@ -152,8 +174,15 @@ describe('Persist licence service', () => {
       let existingLicenceVersion
       let existingLicenceVersionPurpose
       let existingLicenceVersionPurposeCondition
+      let updatedLicence
 
       beforeEach(async () => {
+        // Address Data
+        exisitngAddress = await AddressHelper.add({
+          ...transformedCompany.addresses[0]
+        })
+
+        // Licence
         existingLicence = await LicenceHelper.add({
           expiredDate: new Date('2052-06-23'),
           lapsedDate: new Date('2050-07-24'),
@@ -168,6 +197,7 @@ describe('Persist licence service', () => {
           revokedDate: new Date('2049-08-25'),
           startDate: new Date('1992-08-19')
         })
+
         existingLicenceVersion = await LicenceVersionHelper.add({
           endDate: new Date('2052-06-23'),
           externalId: transformedLicence.licenceVersions[0].externalId,
@@ -175,6 +205,7 @@ describe('Persist licence service', () => {
           startDate: new Date('1999-01-01'),
           status: 'current'
         })
+
         existingLicenceVersionPurpose = await LicenceVersionPurposeHelper.add({
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 9,
@@ -202,11 +233,13 @@ describe('Persist licence service', () => {
           source: 'nald'
         })
 
-        existingCompany = await CompanyHelper.add({
+        // Contact Data
+        exisitngContact = await ContactHelper.add({
           externalId: transformedCompany.externalId
         })
 
-        exisitngContact = await ContactHelper.add({
+        // Company Data
+        existingCompany = await CompanyHelper.add({
           externalId: transformedCompany.externalId
         })
 
@@ -215,10 +248,6 @@ describe('Persist licence service', () => {
           contactId: exisitngContact.id,
           licenceRoleId: licenceHolderRoleId,
           startDate: companyContactStartDate
-        })
-
-        exisitngAddress = await AddressHelper.add({
-          ...transformedCompany.addresses[0]
         })
 
         await CompanyAddressHelper.add({
@@ -251,105 +280,123 @@ describe('Persist licence service', () => {
             }
           ]
         }]
+
+        // Call the thing under test
+        result = await PersistImportService.go(transformedLicence, transformedCompanies)
+
+        // Get the persisted data
+        updatedLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
+        newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
+        company = await _fetchPersistedCompany(existingCompany.externalId)
+        contact = await _fetchPersistedContact(exisitngContact.externalId)
+        address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
       })
 
-      it('updates the licence record plus child records in WRLS and returns the licence ID', async () => {
-        const result = await PersistLicenceService.go(transformedLicence, transformedCompanies)
+      describe('address', () => {
+        it('updates an address', () => {
+          expect(address.address1).to.equal('ENVIRONMENT AGENCY')
+          expect(address.dataSource).to.equal('nald')
+          expect(address.externalId).to.equal(addressExternalId)
+        })
+      })
 
-        expect(result).to.equal(existingLicence.id)
+      describe('company, companyContact and companyAddresses', () => {
+        it('updates a company', () => {
+          expect(company.name).to.equal('Example Trading Ltd')
+          expect(company.type).to.equal('organisation')
+          expect(company.externalId).to.equal(existingCompany.externalId)
+        })
 
-        // Licence comparison
-        const updatedLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
+        it('updates a company contact - links the company to the contact', () => {
+          const companyContact = contact.companyContacts[0]
 
-        expect(updatedLicence.expiredDate).to.equal(transformedLicence.expiredDate)
-        expect(updatedLicence.lapsedDate).to.equal(transformedLicence.lapsedDate)
-        expect(updatedLicence.regions).to.equal(transformedLicence.regions)
-        expect(updatedLicence.revokedDate).to.equal(transformedLicence.revokedDate)
-        expect(updatedLicence.startDate).to.equal(transformedLicence.startDate)
+          expect(companyContact.companyId).to.equal(existingCompany.id)
+          expect(companyContact.contactId).to.equal(exisitngContact.id)
+          expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
+          expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
+          expect(companyContact.default).to.be.true()
+        })
 
-        // Licence version comparison
-        const updatedLicVer = updatedLicence.licenceVersions[0]
-        const transformedLicVer = transformedLicence.licenceVersions[0]
+        it('updates a company address - links the company to the address', () => {
+          const companyAddress = address.companyAddresses[0]
 
-        expect(updatedLicVer.id).to.equal(existingLicenceVersion.id)
-        expect(updatedLicVer.endDate).to.equal(transformedLicVer.endDate)
-        expect(updatedLicVer.startDate).to.equal(transformedLicVer.startDate)
-        expect(updatedLicVer.status).to.equal(transformedLicVer.status)
+          expect(companyAddress.addressId).to.equal(address.id)
+          expect(companyAddress.companyId).to.equal(company.id)
+          expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
+          expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
+        })
+      })
 
-        // Licence version purpose comparison
-        const updatedLicVerPur = updatedLicence.licenceVersions[0].licenceVersionPurposes[0]
-        const transformedLicVerPur = transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
+      describe('contact', () => {
+        it('updates a contact', () => {
+          expect(contact.salutation).to.be.null()
+          expect(contact.initials).to.be.null()
+          expect(contact.firstName).to.equal('Amara')
+          expect(contact.lastName).to.equal('Gupta')
+          expect(contact.dataSource).to.equal('wrls')
+        })
+      })
 
-        expect(updatedLicVerPur.id).to.equal(existingLicenceVersionPurpose.id)
-        expect(updatedLicVerPur.abstractionPeriodEndDay).to.equal(transformedLicVerPur.abstractionPeriodEndDay)
-        expect(updatedLicVerPur.abstractionPeriodEndMonth).to.equal(transformedLicVerPur.abstractionPeriodEndMonth)
-        expect(updatedLicVerPur.abstractionPeriodStartDay).to.equal(transformedLicVerPur.abstractionPeriodStartDay)
-        expect(updatedLicVerPur.abstractionPeriodStartMonth).to.equal(transformedLicVerPur.abstractionPeriodStartMonth)
-        expect(updatedLicVerPur.annualQuantity).to.equal(transformedLicVerPur.annualQuantity)
-        expect(updatedLicVerPur.dailyQuantity).to.equal(transformedLicVerPur.dailyQuantity)
-        expect(updatedLicVerPur.hourlyQuantity).to.equal(transformedLicVerPur.hourlyQuantity)
-        expect(updatedLicVerPur.instantQuantity).to.equal(transformedLicVerPur.instantQuantity)
-        expect(updatedLicVerPur.notes).to.equal(transformedLicVerPur.notes)
-        expect(updatedLicVerPur.primaryPurposeId).to.equal(transformedLicVerPur.primaryPurposeId)
-        expect(updatedLicVerPur.purposeId).to.equal(transformedLicVerPur.purposeId)
-        expect(updatedLicVerPur.secondaryPurposeId).to.equal(transformedLicVerPur.secondaryPurposeId)
-        expect(updatedLicVerPur.timeLimitedEndDate).to.equal(transformedLicVerPur.timeLimitedEndDate)
-        expect(updatedLicVerPur.timeLimitedStartDate).to.equal(transformedLicVerPur.timeLimitedStartDate)
+      describe('licence', () => {
+        it('should return the updates licence id', () => {
+          expect(result).to.equal(existingLicence.id)
+        })
 
-        // Licence version purpose conditions comparison
-        const updatedLicVerPurCon = updatedLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
-        const transformedLicVerPurCon = transformedLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+        it('checks the updated licence', async () => {
+          expect(updatedLicence.expiredDate).to.equal(transformedLicence.expiredDate)
+          expect(updatedLicence.lapsedDate).to.equal(transformedLicence.lapsedDate)
+          expect(updatedLicence.regions).to.equal(transformedLicence.regions)
+          expect(updatedLicence.revokedDate).to.equal(transformedLicence.revokedDate)
+          expect(updatedLicence.startDate).to.equal(transformedLicence.startDate)
+        })
 
-        expect(updatedLicVerPurCon.id).to.equal(existingLicenceVersionPurposeCondition.id)
-        expect(updatedLicVerPurCon.externalId).to.equal(transformedLicVerPurCon.externalId)
-        expect(updatedLicVerPurCon.licenceVersionPurposeConditionTypeId)
-          .to.equal(transformedLicVerPurCon.licenceVersionPurposeConditionTypeId)
-        expect(updatedLicVerPurCon.notes).to.equal(transformedLicVerPurCon.notes)
-        expect(updatedLicVerPurCon.param1).to.equal(transformedLicVerPurCon.param1)
-        expect(updatedLicVerPurCon.param2).to.equal(transformedLicVerPurCon.param2)
-        expect(updatedLicVerPurCon.source).to.equal(transformedLicVerPurCon.source)
+        it('updates a licence version', () => {
+          const updatedLicVer = updatedLicence.licenceVersions[0]
+          const transformedLicVer = transformedLicence.licenceVersions[0]
 
-        // Companies
-        const company = await _fetchPersistedCompany(existingCompany.externalId)
+          expect(updatedLicVer.id).to.equal(existingLicenceVersion.id)
+          expect(updatedLicVer.endDate).to.equal(transformedLicVer.endDate)
+          expect(updatedLicVer.startDate).to.equal(transformedLicVer.startDate)
+          expect(updatedLicVer.status).to.equal(transformedLicVer.status)
+        })
 
-        expect(company.name).to.equal('Example Trading Ltd')
-        expect(company.type).to.equal('organisation')
-        expect(company.externalId).to.equal(existingCompany.externalId)
+        it('updates a licence version purpose', () => {
+          const updatedLicVerPur = updatedLicence.licenceVersions[0].licenceVersionPurposes[0]
+          const transformedLicVerPur = transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
 
-        // Contact
-        const contact = await _fetchPersistedContact(exisitngContact.externalId)
+          expect(updatedLicVerPur.id).to.equal(existingLicenceVersionPurpose.id)
+          expect(updatedLicVerPur.abstractionPeriodEndDay).to.equal(transformedLicVerPur.abstractionPeriodEndDay)
+          expect(updatedLicVerPur.abstractionPeriodEndMonth).to.equal(transformedLicVerPur.abstractionPeriodEndMonth)
+          expect(updatedLicVerPur.abstractionPeriodStartDay).to.equal(transformedLicVerPur.abstractionPeriodStartDay)
+          expect(updatedLicVerPur.abstractionPeriodStartMonth).to
+            .equal(transformedLicVerPur.abstractionPeriodStartMonth)
+          expect(updatedLicVerPur.annualQuantity).to.equal(transformedLicVerPur.annualQuantity)
+          expect(updatedLicVerPur.dailyQuantity).to.equal(transformedLicVerPur.dailyQuantity)
+          expect(updatedLicVerPur.hourlyQuantity).to.equal(transformedLicVerPur.hourlyQuantity)
+          expect(updatedLicVerPur.instantQuantity).to.equal(transformedLicVerPur.instantQuantity)
+          expect(updatedLicVerPur.notes).to.equal(transformedLicVerPur.notes)
+          expect(updatedLicVerPur.primaryPurposeId).to.equal(transformedLicVerPur.primaryPurposeId)
+          expect(updatedLicVerPur.purposeId).to.equal(transformedLicVerPur.purposeId)
+          expect(updatedLicVerPur.secondaryPurposeId).to.equal(transformedLicVerPur.secondaryPurposeId)
+          expect(updatedLicVerPur.timeLimitedEndDate).to.equal(transformedLicVerPur.timeLimitedEndDate)
+          expect(updatedLicVerPur.timeLimitedStartDate).to.equal(transformedLicVerPur.timeLimitedStartDate)
+        })
 
-        expect(contact.salutation).to.be.null()
-        expect(contact.initials).to.be.null()
-        expect(contact.firstName).to.equal('Amara')
-        expect(contact.lastName).to.equal('Gupta')
-        expect(contact.dataSource).to.equal('wrls')
+        it('updates a licence version purpose conditions', () => {
+          const updatedLicVerPurCon = updatedLicence.licenceVersions[0]
+            .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+          const transformedLicVerPurCon = transformedLicence.licenceVersions[0]
+            .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
 
-        //  Company contact - the company and contact id are used to relate the contact to the company
-        const companyContact = contact.companyContacts[0]
-
-        expect(companyContact.companyId).to.equal(existingCompany.id)
-        expect(companyContact.contactId).to.equal(exisitngContact.id)
-        expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
-        expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
-        expect(companyContact.default).to.be.true()
-
-        // Addresses
-        const address = await _fetchPersistedAddress(transformedCompany.addresses[0].externalId)
-
-        expect(address.address1).to.equal('ENVIRONMENT AGENCY')
-        expect(address.dataSource).to.equal('nald')
-        expect(address.externalId).to.equal(addressExternalId)
-
-        //  Company Address - should link the company to the saved address
-        const companyAddress = address.companyAddresses[0]
-
-        expect(companyAddress.addressId).to.equal(address.id)
-        expect(companyAddress.companyId).to.equal(company.id)
-        expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
-        expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
+          expect(updatedLicVerPurCon.id).to.equal(existingLicenceVersionPurposeCondition.id)
+          expect(updatedLicVerPurCon.externalId).to.equal(transformedLicVerPurCon.externalId)
+          expect(updatedLicVerPurCon.licenceVersionPurposeConditionTypeId)
+            .to.equal(transformedLicVerPurCon.licenceVersionPurposeConditionTypeId)
+          expect(updatedLicVerPurCon.notes).to.equal(transformedLicVerPurCon.notes)
+          expect(updatedLicVerPurCon.param1).to.equal(transformedLicVerPurCon.param1)
+          expect(updatedLicVerPurCon.param2).to.equal(transformedLicVerPurCon.param2)
+          expect(updatedLicVerPurCon.source).to.equal(transformedLicVerPurCon.source)
+        })
       })
     })
   })
@@ -362,7 +409,7 @@ describe('Persist licence service', () => {
     })
 
     it('throws an error and persists nothing', async () => {
-      await expect(PersistLicenceService.go(transformedLicence)).to.reject()
+      await expect(PersistImportService.go(transformedLicence, transformedCompanies)).to.reject()
 
       const newLicence = await _fetchPersistedLicence(transformedLicence.licenceRef)
 
@@ -370,6 +417,28 @@ describe('Persist licence service', () => {
     })
   })
 })
+
+async function _fetchPersistedAddress (externalId) {
+  return AddressModel.query().where('externalId', externalId).limit(1).first().withGraphFetched('companyAddresses')
+}
+
+async function _fetchPersistedCompany (externalId) {
+  return CompanyModel
+    .query()
+    .where('externalId', externalId)
+    .withGraphFetched('companyContacts')
+    .limit(1)
+    .first()
+}
+
+async function _fetchPersistedContact (externalId) {
+  return ContactModel
+    .query()
+    .where('externalId', externalId)
+    .withGraphFetched('companyContacts')
+    .limit(1)
+    .first()
+}
 
 async function _fetchPersistedLicence (licenceRef) {
   return LicenceModel
@@ -380,6 +449,52 @@ async function _fetchPersistedLicence (licenceRef) {
     .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')
     .limit(1)
     .first()
+}
+
+function _transformedCompany (licenceHolderRoleId, addressExternalId) {
+  const externalId = CompanyHelper.generateExternalId()
+
+  return {
+    externalId,
+    name: 'ACME',
+    type: 'person',
+    contact: {
+      salutation: 'Mr',
+      initials: 'H',
+      firstName: 'James',
+      lastName: 'Bond',
+      externalId,
+      dataSource: 'nald'
+    },
+    companyContact: {
+      externalId,
+      startDate: new Date('1999-01-01'),
+      licenceRoleId: licenceHolderRoleId
+    },
+    addresses: [
+      {
+        address1: '4 Privet Drive',
+        address2: null,
+        address3: null,
+        address4: null,
+        address5: 'Little Whinging',
+        address6: 'Surrey',
+        country: 'United Kingdom',
+        externalId: addressExternalId,
+        postcode: 'HP11',
+        dataSource: 'nald'
+      }
+    ],
+    companyAddresses: [
+      {
+        addressId: addressExternalId,
+        companyId: externalId,
+        startDate: new Date('2020-01-01'),
+        endDate: new Date('2022-02-02'),
+        licenceRoleId: licenceHolderRoleId
+      }
+    ]
+  }
 }
 
 function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPurposeId,
@@ -435,74 +550,6 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
             ]
           }
         ]
-      }
-    ]
-  }
-}
-
-async function _fetchPersistedCompany (externalId) {
-  return CompanyModel
-    .query()
-    .where('externalId', externalId)
-    .withGraphFetched('companyContacts')
-    .limit(1)
-    .first()
-}
-
-async function _fetchPersistedContact (externalId) {
-  return ContactModel
-    .query()
-    .where('externalId', externalId)
-    .withGraphFetched('companyContacts')
-    .limit(1)
-    .first()
-}
-
-async function _fetchPersistedAddress (externalId) {
-  return AddressModel.query().where('externalId', externalId).limit(1).first().withGraphFetched('companyAddresses')
-}
-
-function _transformedCompany (licenceHolderRoleId, addressExternalId) {
-  const externalId = CompanyHelper.generateExternalId()
-
-  return {
-    externalId,
-    name: 'ACME',
-    type: 'person',
-    contact: {
-      salutation: 'Mr',
-      initials: 'H',
-      firstName: 'James',
-      lastName: 'Bond',
-      externalId,
-      dataSource: 'nald'
-    },
-    companyContact: {
-      externalId,
-      startDate: new Date('1999-01-01'),
-      licenceRoleId: licenceHolderRoleId
-    },
-    addresses: [
-      {
-        address1: '4 Privet Drive',
-        address2: null,
-        address3: null,
-        address4: null,
-        address5: 'Little Whinging',
-        address6: 'Surrey',
-        country: 'United Kingdom',
-        externalId: addressExternalId,
-        postcode: 'HP11',
-        dataSource: 'nald'
-      }
-    ],
-    companyAddresses: [
-      {
-        addressId: addressExternalId,
-        companyId: externalId,
-        startDate: new Date('2020-01-01'),
-        endDate: new Date('2022-02-02'),
-        licenceRoleId: licenceHolderRoleId
       }
     ]
   }
