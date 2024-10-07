@@ -145,7 +145,7 @@ describe('Persist licence service', () => {
     })
 
     describe('and that licence already exists', () => {
-      let exisitngAddress
+      let existingAddress
       let existingContact
       let existingCompany
       let existingLicence
@@ -217,12 +217,12 @@ describe('Persist licence service', () => {
           startDate: companyContactStartDate
         })
 
-        exisitngAddress = await AddressHelper.add({
+        existingAddress = await AddressHelper.add({
           ...transformedCompany.addresses[0]
         })
 
         await CompanyAddressHelper.add({
-          addressId: exisitngAddress.id,
+          addressId: existingAddress.id,
           companyId: existingCompany.id,
           licenceRoleId: licenceHolderRoleId,
           endDate: new Date('1999-01-01')
