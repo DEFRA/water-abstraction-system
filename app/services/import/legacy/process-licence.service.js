@@ -37,6 +37,7 @@ async function go (licenceRef) {
     // Pass the transformed licence through each transformation step, building the licence as we go
     if (wrlsLicenceId) {
       FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicenceId)
+      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
     }
 
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
@@ -56,10 +57,6 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
-
-    if (wrlsLicenceId) {
-      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
-    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
