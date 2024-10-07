@@ -20,6 +20,7 @@ exports.up = function (knex) {
       table.text('external_id')
       table.integer('nald_point_id')
       table.uuid('point_id')
+      table.text('abstraction_method')
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
