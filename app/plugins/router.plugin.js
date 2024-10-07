@@ -24,6 +24,7 @@ const HealthRoutes = require('../routes/health.routes.js')
 const ImportRoutes = require('../routes/import.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
+const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
 const ReturnRequirementRoutes = require('../routes/return-requirement.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 
@@ -41,6 +42,7 @@ const routes = [
   ...CheckRoutes,
   ...LicenceRoutes,
   ...JobRoutes,
+  ...MonitoringStationRoutes,
   ...ReturnRequirementRoutes,
   ...DataRoutes,
   ...ImportRoutes
