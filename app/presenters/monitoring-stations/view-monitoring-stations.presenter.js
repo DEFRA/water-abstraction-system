@@ -134,6 +134,14 @@ function _groupLicences (licences) {
   return Object.values(groupedLicences)
 }
 
+function _pageTitle (riverName, stationName) {
+  if (riverName) {
+    return `${riverName} at ${stationName}`
+  }
+
+  return stationName
+}
+
 function _sortLicences (licences) {
   // NOTE: Sorting the licences in order of `licenceRef` proved difficult to complete as licences are fetched by those
   // linked to a licence gauging station, where the licence reference is stored inside the nested licence object.
