@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const AddressModel = require('../../../app/models/address.model.js')
+const CompanyAddressHelper = require('../../support/helpers/company-address.helper.js')
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
@@ -130,16 +131,27 @@ describe('Persist licence service', () => {
         expect(address.externalId).to.equal(addressExternalId)
         expect(address.postcode).to.equal('HP11')
         expect(address.uprn).to.be.null()
+
+        //  Company Address - should link the company to the saved address
+        const companyAddress = address.companyAddresses[0]
+
+        expect(companyAddress.addressId).to.equal(address.id)
+        expect(companyAddress.companyId).to.equal(company.id)
+        expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
+        expect(companyAddress.default).to.be.true()
+        expect(companyAddress.startDate).to.equal(new Date('2020-01-01'))
+        expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
       })
     })
 
     describe('and that licence already exists', () => {
+      let exisitngAddress
+      let existingContact
+      let existingCompany
       let existingLicence
       let existingLicenceVersion
       let existingLicenceVersionPurpose
       let existingLicenceVersionPurposeCondition
-      let existingCompany
-      let existingContact
 
       beforeEach(async () => {
         existingLicence = await LicenceHelper.add({
@@ -205,8 +217,15 @@ describe('Persist licence service', () => {
           startDate: companyContactStartDate
         })
 
-        await AddressHelper.add({
+        exisitngAddress = await AddressHelper.add({
           ...transformedCompany.addresses[0]
+        })
+
+        await CompanyAddressHelper.add({
+          addressId: exisitngAddress.id,
+          companyId: existingCompany.id,
+          licenceRoleId: licenceHolderRoleId,
+          endDate: new Date('1999-01-01')
         })
 
         transformedCompanies = [{
@@ -221,7 +240,16 @@ describe('Persist licence service', () => {
             address1: 'ENVIRONMENT AGENCY',
             externalId: addressExternalId,
             dataSource: 'nald'
-          }]
+          }],
+          companyAddresses: [
+            {
+              addressId: addressExternalId,
+              companyId: existingCompany.externalId,
+              startDate: new Date('2020-03-03'),
+              endDate: new Date('2022-02-02'),
+              licenceRoleId: licenceHolderRoleId
+            }
+          ]
         }]
       })
 
@@ -314,6 +342,14 @@ describe('Persist licence service', () => {
         expect(address.address1).to.equal('ENVIRONMENT AGENCY')
         expect(address.dataSource).to.equal('nald')
         expect(address.externalId).to.equal(addressExternalId)
+
+        //  Company Address - should link the company to the saved address
+        const companyAddress = address.companyAddresses[0]
+
+        expect(companyAddress.addressId).to.equal(address.id)
+        expect(companyAddress.companyId).to.equal(company.id)
+        expect(companyAddress.licenceRoleId).to.equal(licenceHolderRoleId)
+        expect(companyAddress.endDate).to.equal(new Date('2022-02-02'))
       })
     })
   })
@@ -423,10 +459,10 @@ async function _fetchPersistedContact (externalId) {
 }
 
 async function _fetchPersistedAddress (externalId) {
-  return AddressModel.query().where('externalId', externalId).limit(1).first()
+  return AddressModel.query().where('externalId', externalId).limit(1).first().withGraphFetched('companyAddresses')
 }
 
-function _transformedCompany (licenceRoleId, addressExternalId) {
+function _transformedCompany (licenceHolderRoleId, addressExternalId) {
   const externalId = CompanyHelper.generateExternalId()
 
   return {
@@ -444,7 +480,7 @@ function _transformedCompany (licenceRoleId, addressExternalId) {
     companyContact: {
       externalId,
       startDate: new Date('1999-01-01'),
-      licenceRoleId
+      licenceRoleId: licenceHolderRoleId
     },
     addresses: [
       {
@@ -458,6 +494,15 @@ function _transformedCompany (licenceRoleId, addressExternalId) {
         externalId: addressExternalId,
         postcode: 'HP11',
         dataSource: 'nald'
+      }
+    ],
+    companyAddresses: [
+      {
+        addressId: addressExternalId,
+        companyId: externalId,
+        startDate: new Date('2020-01-01'),
+        endDate: new Date('2022-02-02'),
+        licenceRoleId: licenceHolderRoleId
       }
     ]
   }
