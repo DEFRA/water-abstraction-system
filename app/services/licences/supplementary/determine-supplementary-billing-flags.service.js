@@ -36,7 +36,9 @@ async function go (naldLicence, wrlsLicenceId) {
     return
   }
 
-  const { preSrocFlag, srocFlag, twoPartTariffFinancialYears } = await _determineSupplementaryFlags(datesToProcess, chargeVersions, licence)
+  const { preSrocFlag, srocFlag, twoPartTariffFinancialYears } = await _determineSupplementaryFlags(
+    datesToProcess, chargeVersions, licence
+  )
 
   await PersistSupplementaryBillingFlagsService.go(twoPartTariffFinancialYears, preSrocFlag, srocFlag, wrlsLicenceId)
 }
