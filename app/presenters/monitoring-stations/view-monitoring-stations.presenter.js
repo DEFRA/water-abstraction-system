@@ -1,16 +1,14 @@
 'use strict'
 
 /**
- * Formats the monitoring station details and related licences data for the
- * `/monitoring-stations/{monitoringStationId}` page
+ * Formats the monitoring station details and related licences data for the view monitoring-station  page
  * @module ViewMonitoringStationsPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
 
 /**
- * Formats the monitoring station details and related licences data for the
- * `/monitoring-stations/{monitoringStationId}` page
+ * Formats the monitoring station details and related licences data for the view monitoring-station  page
  *
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {module:GaugingStationModel[]} monitoringStation - The monitoring station and associated licences data
