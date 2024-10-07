@@ -1,16 +1,14 @@
 'use strict'
 
 /**
- * Fetches the matching monitoring station and associated licences needed for the view
- * `/monitoring-stations/{monitoringStationId}` page
+ * Fetches the matching monitoring station and associated licences needed for the view monitoring-station page
  * @module FetchMonitoringStationService
  */
 
 const GaugingStationModel = require('../../models/gauging-station.model.js')
 
 /**
- * Fetches the matching monitoring station and associated licences needed for the view
- * `/monitoring-stations/{monitoringStationId}` page
+ * Fetches the matching monitoring station and associated licences needed for the view monitoring-station page
  *
  * @param {string} monitoringStationId - The UUID for the monitoring station to fetch
  *
