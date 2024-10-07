@@ -17,7 +17,9 @@ function go (company) {
   const schema = Joi.object({
     name: Joi.string().required(),
     type: Joi.string().valid('organisation', 'person').required(),
-    externalId: Joi.string().required()
+    externalId: Joi.string().required(),
+    addresses: Joi.array().required(),
+    companyAddresses: Joi.array().required()
   })
 
   const result = schema.validate(company, { convert: false })
