@@ -54,78 +54,6 @@ describe('View Monitoring Stations presenter', () => {
       })
     })
 
-    describe('the "pageTitle" property', () => {
-      describe('when a monitoring station has an associated river', () => {
-        beforeEach(() => {
-          monitoringStationData.riverName = 'Test river'
-        })
-
-        it('returns the river name followed by the monitoring station name', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.pageTitle).to.equal('Test river at MEVAGISSEY FIRE STATION')
-        })
-      })
-
-      describe('when a monitoring station does not have an associated river', () => {
-        it('returns the monitoring station name', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.pageTitle).to.equal('MEVAGISSEY FIRE STATION')
-        })
-      })
-    })
-
-    describe('the "permissionToManageLinks" property', () => {
-      describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
-        beforeEach(() => {
-          auth.credentials.scope = [
-            'billing',
-            'hof_notifications'
-          ]
-        })
-
-        it('returns false for "permissionToManageLinks"', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.permissionToManageLinks).to.equal(false)
-        })
-      })
-
-      describe('when a user has the "manage_gauging_station_licence_links" role', () => {
-        it('returns true for "permissionToManageLinks"', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.permissionToManageLinks).to.equal(true)
-        })
-      })
-    })
-
-    describe('the "permissionToSendAlerts" property', () => {
-      describe('when a user does not have the "hof_notifications" role', () => {
-        beforeEach(() => {
-          auth.credentials.scope = [
-            'billing',
-            'manage_gauging_station_licence_links'
-          ]
-        })
-
-        it('returns false for "permissionToSendAlerts"', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.permissionToSendAlerts).to.equal(false)
-        })
-      })
-
-      describe('when a user has the "hof_notifications" role', () => {
-        it('returns true for "permissionToSendAlerts"', () => {
-          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-          expect(result.permissionToSendAlerts).to.equal(true)
-        })
-      })
-    })
-
     describe('the "licence" property', () => {
       describe('the "linkages" property', () => {
         describe('the "abstractionPeriod" property', () => {
@@ -137,18 +65,6 @@ describe('View Monitoring Stations presenter', () => {
         })
 
         describe('the "alertType" property', () => {
-          describe('when the "alertType" is "stop"', () => {
-            beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'stop'
-            })
-
-            it('returns "Stop" as the "alertType"', () => {
-              const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-              expect(result.licences[0].linkages[0].alertType).to.equal('Stop')
-            })
-          })
-
           describe('when the "alertType" is "reduce"', () => {
             beforeEach(() => {
               monitoringStationData.licenceGaugingStations[0].alertType = 'reduce'
@@ -158,6 +74,18 @@ describe('View Monitoring Stations presenter', () => {
               const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
               expect(result.licences[0].linkages[0].alertType).to.equal('Reduce')
+            })
+          })
+
+          describe('when the "alertType" is "stop"', () => {
+            beforeEach(() => {
+              monitoringStationData.licenceGaugingStations[0].alertType = 'stop'
+            })
+
+            it('returns "Stop" as the "alertType"', () => {
+              const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+              expect(result.licences[0].linkages[0].alertType).to.equal('Stop')
             })
           })
 
@@ -175,18 +103,6 @@ describe('View Monitoring Stations presenter', () => {
         })
 
         describe('the "alertUpdatedAt" property', () => {
-          describe('when the licence has a populated "statusUpdatedAt" property', () => {
-            beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
-            })
-
-            it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
-              const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
-
-              expect(result.licences[0].linkages[0].alertUpdatedAt).to.equal('30 June 2021')
-            })
-          })
-
           describe('when the licence has a populated "createdAt" property', () => {
             beforeEach(() => {
               monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = null
@@ -197,6 +113,18 @@ describe('View Monitoring Stations presenter', () => {
               const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
               expect(result.licences[0].linkages[0].alertUpdatedAt).to.equal('21 July 2021')
+            })
+          })
+
+          describe('when the licence has a populated "statusUpdatedAt" property', () => {
+            beforeEach(() => {
+              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
+            })
+
+            it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
+              const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+              expect(result.licences[0].linkages[0].alertUpdatedAt).to.equal('30 June 2021')
             })
           })
         })
@@ -329,6 +257,78 @@ describe('View Monitoring Stations presenter', () => {
               ]
             })
           })
+        })
+      })
+    })
+
+    describe('the "pageTitle" property', () => {
+      describe('when a monitoring station has an associated river', () => {
+        beforeEach(() => {
+          monitoringStationData.riverName = 'Test river'
+        })
+
+        it('returns the river name followed by the monitoring station name', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.pageTitle).to.equal('Test river at MEVAGISSEY FIRE STATION')
+        })
+      })
+
+      describe('when a monitoring station does not have an associated river', () => {
+        it('returns the monitoring station name', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.pageTitle).to.equal('MEVAGISSEY FIRE STATION')
+        })
+      })
+    })
+
+    describe('the "permissionToManageLinks" property', () => {
+      describe('when a user has the "manage_gauging_station_licence_links" role', () => {
+        it('returns true for "permissionToManageLinks"', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.permissionToManageLinks).to.equal(true)
+        })
+      })
+
+      describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
+        beforeEach(() => {
+          auth.credentials.scope = [
+            'billing',
+            'hof_notifications'
+          ]
+        })
+
+        it('returns false for "permissionToManageLinks"', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.permissionToManageLinks).to.equal(false)
+        })
+      })
+    })
+
+    describe('the "permissionToSendAlerts" property', () => {
+      describe('when a user has the "hof_notifications" role', () => {
+        it('returns true for "permissionToSendAlerts"', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.permissionToSendAlerts).to.equal(true)
+        })
+      })
+
+      describe('when a user does not have the "hof_notifications" role', () => {
+        beforeEach(() => {
+          auth.credentials.scope = [
+            'billing',
+            'manage_gauging_station_licence_links'
+          ]
+        })
+
+        it('returns false for "permissionToSendAlerts"', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.permissionToSendAlerts).to.equal(false)
         })
       })
     })
