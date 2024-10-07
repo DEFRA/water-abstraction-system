@@ -52,7 +52,10 @@ describe('Import Legacy Transform Companies service', () => {
           {
             externalId: '1:1938',
             name: 'ACME',
-            type: 'organisation'
+            type: 'organisation',
+            addresses: [],
+            companyAddresses: []
+
           }
         ]
       })

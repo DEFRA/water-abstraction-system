@@ -23,7 +23,9 @@ describe('Import Legacy Company presenter', () => {
     expect(result).to.equal({
       externalId: '1:1940',
       name: 'ACME',
-      type: 'organisation'
+      type: 'organisation',
+      addresses: [],
+      companyAddresses: []
     })
   })
 })
