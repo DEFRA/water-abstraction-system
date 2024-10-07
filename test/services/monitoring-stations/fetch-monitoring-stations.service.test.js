@@ -115,4 +115,36 @@ describe('Fetch Monitoring Stations service', () => {
       })
     })
   })
+
+  describe('when a monitoring station does not have linked licences', () => {
+    before(async () => {
+      licence = await LicenceHelper.add()
+      licenceId = licence.id
+
+      monitoringStation = await MonitoringStationHelper.add()
+      monitoringStationId = monitoringStation.id
+    })
+
+    it('returns undefined', async () => {
+      const result = await FetchMonitoringStationService.go(monitoringStationId)
+
+      expect(result).to.equal({
+        id: monitoringStationId,
+        gridReference: 'TL2664640047',
+        label: 'MEVAGISSEY FIRE STATION',
+        riverName: null,
+        stationReference: null,
+        wiskiId: null,
+        licenceGaugingStations: []
+      })
+    })
+  })
+
+  describe('when a monitoring station does not exist', () => {
+    it('returns undefined', async () => {
+      const result = await FetchMonitoringStationService.go('35f92949-984c-44ba-96c6-ed4520a4f961')
+
+      expect(result).to.be.undefined()
+    })
+  })
 })
