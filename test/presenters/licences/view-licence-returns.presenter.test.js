@@ -70,6 +70,30 @@ describe('View Licence returns presenter', () => {
       })
     })
 
+    describe('the "description" property', () => {
+      describe('when description in the metadata is set', () => {
+        it('returns an empty string', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+          expect(result.returns[0].description).to.equal('empty description')
+        })
+      })
+
+      describe('when description in the metadata is "null"', () => {
+        beforeEach(() => {
+          // NOTE: water-abstraction-import sets the value to 'null' rather than null when it imports the return log
+          // from NALD
+          returnLogs[0].metadata.description = 'null'
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+          expect(result.returns[0].description).to.equal('')
+        })
+      })
+    })
+
     describe('the "link" property', () => {
       describe('when the return log has a status of "completed"', () => {
         it('returns a link to the view return log page', () => {
