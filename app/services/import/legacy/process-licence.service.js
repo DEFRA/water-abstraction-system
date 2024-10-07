@@ -34,12 +34,14 @@ async function go (licenceRef) {
     const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
       await TransformLicenceService.go(licenceRef)
 
-    // Pass the transformed licence through each transformation step, building the licence as we go
+    // We have other services that need to know when a licence has been imported. However, they only care about changes
+    // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
     if (wrlsLicenceId) {
       FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicenceId)
       await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
     }
 
+    // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposeConditionsService.go(regionCode, naldLicenceId, transformedLicence)
