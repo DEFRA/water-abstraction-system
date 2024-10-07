@@ -7,6 +7,8 @@
 
 const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/licences/{id}/summary` page's summary tab
  *
@@ -29,6 +31,8 @@ function go (licence) {
   const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
   const abstractionPoints = _abstractionPoints(licenceVersionPurposes)
 
+  const enableMonitoringStationsView = FeatureFlagsConfig.enableMonitoringStationsView
+
   return {
     abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
     abstractionConditions: _abstractionConditions(licenceVersionPurposes),
@@ -40,6 +44,7 @@ function go (licence) {
     abstractionPointsLinkText: _abstractionPointsLinkText(abstractionPoints),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
+    enableMonitoringStationsView,
     endDate: _endDate(expiredDate),
     licenceHolder: _licenceHolder(licence),
     licenceId: id,
