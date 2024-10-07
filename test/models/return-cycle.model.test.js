@@ -50,8 +50,12 @@ describe('Return Cycle model', () => {
         expect(result).to.be.instanceOf(ReturnCycleModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs[0]).to.equal(testReturnLog)
+        const expectedReturnLog = result.returnLogs.find((returnLog) => {
+          return returnLog.id === testReturnLog.id
+        })
+
+        expect(expectedReturnLog).to.be.an.instanceOf(ReturnLogModel)
+        expect(expectedReturnLog).to.equal(testReturnLog)
       })
     })
   })
