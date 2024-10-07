@@ -11,22 +11,22 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
 
 const APRIL = 3
-const SROC = new Date('2022-04-01')
+const SROC_START_DATE = new Date('2022-04-01')
 
 /**
  * Processes a licence that has been imported with at least one changed 'end' date (expired, lapsed, or revoked)
  *
- * @param {*} naldLicence - The legacy NALD licence
- * @param {string} wrlsLicenceId - The UUID of the licence being flagged for supplementary billing
+ * @param {object} importedLicence - Object representing the updated licence being imported
+ * @param {string} licenceId - The UUID of the licence being imported
  */
-async function go (naldLicence, wrlsLicenceId) {
-  const { chargeVersions, licence } = await FetchChargeVersionsService.go(wrlsLicenceId)
+async function go (importedLicence, licenceId) {
+  const { chargeVersions, licence } = await FetchChargeVersionsService.go(licenceId)
 
   if (chargeVersions.length === 0) {
     return
   }
 
-  const datesToProcess = _datesToProcess(licence, naldLicence)
+  const datesToProcess = _datesToProcess(licence, importedLicence)
 
   if (datesToProcess.length === 0) {
     return
@@ -36,7 +36,7 @@ async function go (naldLicence, wrlsLicenceId) {
     datesToProcess, chargeVersions, licence
   )
 
-  await PersistSupplementaryBillingFlagsService.go(twoPartTariffFinancialYears, preSrocFlag, srocFlag, wrlsLicenceId)
+  await PersistSupplementaryBillingFlagsService.go(twoPartTariffFinancialYears, preSrocFlag, srocFlag, licenceId)
 }
 
 function _datesToProcess (licence, naldLicence) {
@@ -152,11 +152,11 @@ function _flagSrocSupplementary (chargeVersions, earliestDate, endDate, includeI
     return chargeVersion.twoPartTariff === null
   })
 
-  return earliestDate > SROC && earliestDate < endDate && srocChargeVersions
+  return earliestDate > SROC_START_DATE && earliestDate < endDate && srocChargeVersions
 }
 
 function _flagPreSrocSupplementary (earliestDate, includeInPresrocBilling, preSroc) {
-  const preSrocFlag = includeInPresrocBilling === 'yes' || (earliestDate < SROC && preSroc > 0)
+  const preSrocFlag = includeInPresrocBilling === 'yes' || (earliestDate < SROC_START_DATE && preSroc > 0)
 
   return preSrocFlag ? 'yes' : 'no'
 }
