@@ -54,14 +54,6 @@ function _alertType (licence) {
   return 'Stop or reduce'
 }
 
-function _pageTitle (riverName, stationName) {
-  if (riverName) {
-    return `${riverName} at ${stationName}`
-  }
-
-  return stationName
-}
-
 function _formatLicenceDetailsAbstractionPeriod (licenceDetails) {
   return formatAbstractionPeriod(
     licenceDetails.abstractionPeriodStartDay,
