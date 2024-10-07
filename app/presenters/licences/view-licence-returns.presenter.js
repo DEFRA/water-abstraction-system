@@ -64,7 +64,7 @@ function _returns (returns, canManageReturns) {
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
-      description: metadata.description,
+      description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: formatLongDate(new Date(dueDate)),
       link: _link(status, returnLogId, canManageReturns),
       purpose: _purpose(metadata.purposes),
