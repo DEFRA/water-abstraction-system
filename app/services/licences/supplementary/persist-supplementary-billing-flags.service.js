@@ -23,7 +23,11 @@ const LicenceModel = require('../../../models/licence.model.js')
  * @param {string} wrlsLicenceId - The UUID of the licence that needs the flags persisting for
  */
 async function go (twoPartTariffFinancialYears, preSrocFlag, srocFlag, wrlsLicenceId) {
-  await _updateLicenceFlags(preSrocFlag, srocFlag, wrlsLicenceId)
+  // Due to the data type for `includeInPresrocBilling` on the licence table,
+  // we have to convert this boolean value to a string yes/no
+  const includeInPresrocBilling = preSrocFlag ? 'yes' : 'no'
+
+  await _updateLicenceFlags(includeInPresrocBilling, srocFlag, wrlsLicenceId)
   await _flagForLicenceSupplementaryYears(twoPartTariffFinancialYears, wrlsLicenceId)
 }
 
@@ -39,10 +43,10 @@ async function _flagForLicenceSupplementaryYears (financialYears, wrlsLicenceId)
   }
 }
 
-async function _updateLicenceFlags (preSrocFlag, srocFlag, wrlsLicenceId) {
+async function _updateLicenceFlags (includeInPresrocBilling, includeInSrocBilling, id) {
   return LicenceModel.query()
-    .patch({ includeInPresrocBilling: preSrocFlag, includeInSrocBilling: srocFlag })
-    .where('id', wrlsLicenceId)
+    .patch({ includeInPresrocBilling, includeInSrocBilling })
+    .where('id', id)
 }
 
 module.exports = {

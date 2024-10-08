@@ -38,7 +38,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
     describe('and a pre sroc and sroc flag set to true', () => {
       describe('but no two-part tariff financial years', () => {
         beforeEach(() => {
-          preSrocFlag = 'yes'
+          preSrocFlag = true
           srocFlag = true
           twoPartTariffFinancialYears = []
         })
@@ -68,7 +68,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
     describe('and pre sroc and sroc flag set to false', () => {
       describe('and some two-part tariff financial years', () => {
         beforeEach(() => {
-          preSrocFlag = 'no'
+          preSrocFlag = false
           srocFlag = false
           twoPartTariffFinancialYears = [2022, 2023]
         })
