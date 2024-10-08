@@ -20,7 +20,7 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go (naldLicence, wrlsLicenceId) {
   try {
     // Temporary code
-    naldLicence.expiredDate = new Date('2024-06-07')
+    naldLicence.expiredDate = new Date('2024-08-07')
     const licenceChanged = await _licenceChanged(naldLicence, wrlsLicenceId)
 
     if (!licenceChanged) {

@@ -5,7 +5,7 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const FlagForSupplementaryBillingService = require('../flag-for-supplementary-billing.service.js')
+const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistLicenceService = require('../persist-licence.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
@@ -34,11 +34,14 @@ async function go (licenceRef) {
     const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
       await TransformLicenceService.go(licenceRef)
 
-    // Pass the transformed licence through each transformation step, building the licence as we go
+    // We have other services that need to know when a licence has been imported. However, they only care about changes
+    // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
     if (wrlsLicenceId) {
-      FlagForSupplementaryBillingService.go(transformedLicence, wrlsLicenceId)
+      DetermineSupplementaryBillingFlagsService.go(transformedLicence, wrlsLicenceId)
+      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
     }
 
+    // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposeConditionsService.go(regionCode, naldLicenceId, transformedLicence)
@@ -56,10 +59,6 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistLicenceService.go(transformedLicence, transformedCompanies)
-
-    if (wrlsLicenceId) {
-      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
-    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
