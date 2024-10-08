@@ -66,7 +66,7 @@ describe('Fetch return cycle service', () => {
         })
       })
 
-      it('should create the return cycle and return its id', async () => {
+      it('should return undefined if the return cycle does not exist', async () => {
         const result = await FetchReturnCycleService.go(new Date().toISOString().split('T')[0], summer)
 
         expect(result).to.equal(undefined)
@@ -115,7 +115,7 @@ describe('Fetch return cycle service', () => {
         })
       })
 
-      it('should create the return cycle and return it', async () => {
+      it('should return undefined if the return cycle does not exist', async () => {
         const result = await FetchReturnCycleService.go(new Date().toISOString().split('T')[0], summer)
 
         expect(result).to.equal(undefined)

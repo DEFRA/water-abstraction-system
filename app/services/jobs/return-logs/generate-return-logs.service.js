@@ -24,18 +24,7 @@ const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
 async function go (returnRequirements) {
-  const today = formatDateObjectToISO(new Date())
-
-  let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
-  let summerReturnCycleId = await FetchReturnCycleService.go(today, true)
-
-  if (!allYearReturnCycleId) {
-    allYearReturnCycleId = await GenerateReturnCycleService.go(false)
-  }
-
-  if (!summerReturnCycleId) {
-    summerReturnCycleId = await GenerateReturnCycleService.go(true)
-  }
+  const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleId()
 
   const returnLogs = returnRequirements.map(async (requirements) => {
     const startDate = _startDate(requirements.summer, requirements.returnVersion)
@@ -100,6 +89,26 @@ function _earliestDate (summer, returnVersion) {
   })
 
   return new Date(Math.min(...dates))
+}
+
+async function _fetchReturnCycleId () {
+  const today = formatDateObjectToISO(new Date())
+
+  let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
+  let summerReturnCycleId = await FetchReturnCycleService.go(today, true)
+
+  if (!allYearReturnCycleId) {
+    allYearReturnCycleId = await GenerateReturnCycleService.go(false)
+  }
+
+  if (!summerReturnCycleId) {
+    summerReturnCycleId = await GenerateReturnCycleService.go(true)
+  }
+
+  return {
+    allYearReturnCycleId,
+    summerReturnCycleId
+  }
 }
 
 function _id (requirements, startDate, endDate) {
