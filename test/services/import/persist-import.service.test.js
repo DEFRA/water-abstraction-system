@@ -36,7 +36,7 @@ describe('Persist licence service', () => {
       })
     })
 
-    describe('when a licence has been successfully creates or updated', () => {
+    describe('when a licence has been successfully created or updated', () => {
       beforeEach(() => {
         Sinon.stub(PersistLicenceService, 'go').resolves('1234')
         Sinon.stub(PersistLicenceVersionsService, 'go').resolves()
