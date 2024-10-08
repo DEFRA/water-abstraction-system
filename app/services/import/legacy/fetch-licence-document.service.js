@@ -41,9 +41,9 @@ function _query () {
       (concat_ws(':', nal."FGAC_REGION_CODE", nal."ID" )) as external_id,
       nal."LIC_NO" as document_ref
     FROM import."NALD_ABS_LICENCES" nal
-           INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalv
-                      ON nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
-                        AND nalv."AABL_ID" = nal."ID"
+      INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalv
+        ON nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
+        AND nalv."AABL_ID" = nal."ID"
     WHERE nalv."FGAC_REGION_CODE" = ? AND nalv."AABL_ID" = ?
     GROUP BY nal."FGAC_REGION_CODE", nal."ID", nal."LIC_NO", nal."ORIG_EFF_DATE", nal."EXPIRY_DATE", nal."REV_DATE", nal."LAPSED_DATE";
   `
