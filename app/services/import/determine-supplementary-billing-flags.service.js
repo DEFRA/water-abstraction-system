@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Determines if a licence should be flagged for supplementary billing
- * @module FlagForSupplementaryBillingService
+ * Determines if an imported licence should be flagged for supplementary billing
+ * @module DetermineSupplementaryBillingFlagsService
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../licences/supplementary/determine-supplementary-billing-flags.service.js')
+const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Determines if a licence should be flagged for supplementary billing.
+ * Determines if an imported licence should be flagged for supplementary billing.
  *
  * This service is responsible for determining whether a licence imported from NALD should be flagged for
  * supplementary billing. It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS
@@ -25,7 +25,7 @@ async function go (naldLicence, wrlsLicenceId) {
       return
     }
 
-    await DetermineSupplementaryBillingFlagsService.go(naldLicence, wrlsLicenceId)
+    await ProcessImportedLicenceService.go(naldLicence, wrlsLicenceId)
   } catch (error) {
     global.GlobalNotifier.omfg('Supplementary Billing Flag failed for licence ', wrlsLicenceId, error)
   }
