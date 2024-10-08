@@ -25,6 +25,12 @@ async function go (importedLicence, licenceId) {
 
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails)
 
+  // If not set it means none of the dates changed were before the current financial year end so there is no reason
+  // to change anything on the flags
+  if (!earliestChangedDate) {
+    return
+  }
+
   const flagForPreSrocSupplementary = _flagForPresrocSupplementary(existingLicenceDetails, earliestChangedDate)
   const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
   const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
