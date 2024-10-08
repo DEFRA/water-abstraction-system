@@ -6,11 +6,10 @@
  */
 
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchExistingLicenceDetailsService = require('./fetch-existing-licence-details.service.js')
 const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
 
-const APRIL = 3
 const SROC_START_DATE = new Date('2022-04-01')
 
 /**
@@ -22,145 +21,100 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (importedLicence, licenceId) {
-  const { chargeVersions, licence } = await FetchChargeVersionsService.go(licenceId)
+  const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
 
-  if (chargeVersions.length === 0) {
-    return
-  }
+  const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails)
 
-  const datesToProcess = _datesToProcess(licence, importedLicence)
+  const flagForPreSrocSupplementary = _flagForPresrocSupplementary(existingLicenceDetails, earliestChangedDate)
+  const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
+  const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
 
-  if (datesToProcess.length === 0) {
-    return
-  }
-
-  const { preSrocFlag, srocFlag, twoPartTariffFinancialYears } = await _determineSupplementaryFlags(
-    datesToProcess, chargeVersions, licence
+  return PersistSupplementaryBillingFlagsService.go(
+    twoPartTariffBillingYears,
+    flagForPreSrocSupplementary,
+    flagForSrocSupplementary,
+    licenceId
   )
-
-  await PersistSupplementaryBillingFlagsService.go(twoPartTariffFinancialYears, preSrocFlag, srocFlag, licenceId)
 }
 
-function _datesToProcess (licence, naldLicence) {
-  const changedDates = _determineChangedDates(licence, naldLicence)
-  const { endDate } = determineCurrentFinancialYear()
-
-  return changedDates.filter((changedDate) => {
-    return changedDate < endDate
-  })
-}
-
-function _dateToFlag (changedDates, naldDate, wrlsDate) {
-  const { startDate, endDate } = determineCurrentFinancialYear()
-  const sixYearsAgo = new Date(startDate.getFullYear() - 6, APRIL, 1)
-
-  if (naldDate) {
-    changedDates.push(naldDate)
-
-    return
-  }
-
-  if (wrlsDate > endDate) {
-    return
-  }
-
-  if (wrlsDate < endDate && wrlsDate > sixYearsAgo) {
-    changedDates.push(wrlsDate)
-
-    return
-  }
-
-  if (wrlsDate < sixYearsAgo) {
-    changedDates.push(sixYearsAgo)
-  }
-}
-
-function _determineBillingYears (chargeVersions) {
-  const financialYearEnds = []
-
-  for (const chargeVersion of chargeVersions) {
-    const years = DetermineBillingYearsService.go(chargeVersion.startDate, chargeVersion.endDate)
-
-    financialYearEnds.push(...years)
-  }
-
-  return [...new Set(financialYearEnds)]
-}
-
-function _determineChangedDates (licence, naldLicence) {
-  const { revokedDate, lapsedDate, expiredDate } = naldLicence
-
+function _earliestChangedDate (importedLicence, existingLicenceDetails) {
+  const { endDate: currentFinancialYearEndDate } = determineCurrentFinancialYear()
   const changedDates = []
 
-  if (revokedDate !== licence[0].revokedDate) {
-    _dateToFlag(changedDates, revokedDate, licence[0].revokedDate)
+  let changedDate
+
+  // NOTE: Because checking if dates are equal does not give the expected result in JavaScript (it sees 2 different
+  // objects even if they represent the same date and time) we call getTime() to give us a number we can compare instead
+  if (importedLicence.expiredDate.getTime() !== existingLicenceDetails.expiredDate.getTime()) {
+    changedDate = importedLicence.expiredDate ?? existingLicenceDetails.expiredDate
+    changedDates.push(changedDate)
   }
 
-  if (lapsedDate !== licence[0].lapsedDate) {
-    _dateToFlag(changedDates, lapsedDate, licence[0].lapsedDated)
+  if (importedLicence.lapsedDate.getTime() !== existingLicenceDetails.lapsedDate.getTime()) {
+    changedDate = importedLicence.lapsedDate ?? existingLicenceDetails.lapsedDate
+    changedDates.push(changedDate)
   }
 
-  if (expiredDate !== licence[0].expiredDate) {
-    _dateToFlag(changedDates, expiredDate, licence[0].expiredDate)
+  if (importedLicence.revokedDate.getTime() !== existingLicenceDetails.revokedDate.getTime()) {
+    changedDate = importedLicence.revokedDate ?? existingLicenceDetails.revokedDate
+    changedDates.push(changedDate)
   }
 
-  return changedDates
-}
-
-async function _determineSupplementaryFlags (datesToProcess, chargeVersions, licence) {
-  const { includeInSrocBilling, includeInPresrocBilling, preSroc } = licence
-
-  const earliestDate = _earliestDate(datesToProcess)
-  const { endDate } = determineCurrentFinancialYear()
-
-  const preSrocFlag = _flagPreSrocSupplementary(earliestDate, includeInPresrocBilling, preSroc)
-  const srocFlag = _flagSrocSupplementary(chargeVersions, earliestDate, endDate, includeInSrocBilling)
-  const twoPartTariffFinancialYears = await _flagTwoPartTariffSupplementary(
-    chargeVersions, earliestDate, endDate)
-
-  return { preSrocFlag, srocFlag, twoPartTariffFinancialYears }
-}
-
-function _earliestDate (changedDates) {
-  const datesAsTimeStamps = []
-
-  for (const date of changedDates) {
-    datesAsTimeStamps.push(date.getTime())
-  }
-
-  const minTimeStamp = Math.min(...datesAsTimeStamps)
-
-  return new Date(minTimeStamp)
-}
-
-async function _flagTwoPartTariffSupplementary (chargeVersions, earliestDate, endDate) {
-  const srocTwoPartTariffChargeVersions = chargeVersions.filter((chargeVersion) => {
-    return chargeVersion.twoPartTariff
+  // Filter out nulls and those greater than the current financial year end date
+  const filteredDates = changedDates.filter((changedDate) => {
+    return (changedDate && changedDate < currentFinancialYearEndDate)
   })
 
-  if (earliestDate < endDate && srocTwoPartTariffChargeVersions.length > 0) {
-    return _determineBillingYears(srocTwoPartTariffChargeVersions)
-  }
-
-  return []
+  // Now work out the earliest end date from those that have changed
+  return Math.min(filteredDates)
 }
 
-function _flagSrocSupplementary (chargeVersions, earliestDate, endDate, includeInSrocBilling) {
-  if (includeInSrocBilling === true) {
+function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
+  const { flagged_for_presroc: flagged, pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
+
+  // If the licence has no presroc charge versions return false. We check this before the existing flag, because this
+  // is an opportunity to remove the PRESROC supplementary billing flag from a licence that won't ever be picked up by
+  // the PRESROC billing engine (so the flag will never get removed)
+  if (!chargeVersions) {
+    return false
+  }
+
+  // If it is already flagged then we don't want to change the flag so return true
+  if (flagged) {
     return true
   }
 
-  const srocChargeVersions = chargeVersions.some((chargeVersion) => {
-    return chargeVersion.twoPartTariff === null
-  })
-
-  return earliestDate > SROC_START_DATE && earliestDate < endDate && srocChargeVersions
+  // Else return the result of checking if the earliest changed date was before PRESROC billing regime ended
+  return earliestChangedDate < SROC_START_DATE
 }
 
-function _flagPreSrocSupplementary (earliestDate, includeInPresrocBilling, preSroc) {
-  const preSrocFlag = includeInPresrocBilling === 'yes' || (earliestDate < SROC_START_DATE && preSroc > 0)
+function _flagForSrocSupplementary (existingLicenceDetails) {
+  const { sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
-  return preSrocFlag ? 'yes' : 'no'
+  // If the licence has no sroc charge versions return false. We check this before the existing flag, because this
+  // is an opportunity to remove the SROC supplementary billing flag from a licence that won't ever be picked up by
+  // the SROC billing engine (so the flag will never get removed)
+  if (!chargeVersions) {
+    return false
+  }
+
+  return true
+}
+
+function _flagForTwoPartTariffSupplementary (existingLicenceDetails, earliestChangedDate) {
+  const { two_part_tariff_charge_versions: chargeVersions } = existingLicenceDetails
+  const billingYears = []
+
+  // If the licence has no 2PT charge versions return the empty billing years
+  if (!chargeVersions) {
+    return billingYears
+  }
+
+  // If the earliest date is before the SROC charging scheme started default to the SROC START DATE
+  const startDate = earliestChangedDate < SROC_START_DATE ? SROC_START_DATE : earliestChangedDate
+  const { endDate } = determineCurrentFinancialYear()
+
+  return DetermineBillingYearsService(startDate, endDate)
 }
 
 module.exports = {
