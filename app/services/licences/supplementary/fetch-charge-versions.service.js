@@ -7,29 +7,28 @@
 
 const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const LicenceModel = require('../../../models/licence.model.js')
+
+const SROC = new Date('2022-04-01')
 
 /**
- * Fetches and returns the charge versions, changed dates and the licence data.
- *
- * It determines which dates have changed by comparing the incoming dates from the
- * nald import to the dates we currently hold on the wrls licence
- * @param {string} wrlsLicenceId - The UUID of the licence being fetched
- *
- * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
+ * I am a comment
+ * @param {*} id
+ * @param {*} earliestDate
+ * @returns
  */
-async function go (wrlsLicenceId) {
-  const licence = await _fetchLicenceData(wrlsLicenceId)
-  const chargeVersions = await _fetchChargeVersionsData(wrlsLicenceId)
-
-  return { chargeVersions, licence }
+async function go (id, earliestDate) {
+  return await _fetchChargeVersions(id, earliestDate)
 }
 
-async function _fetchChargeVersionsData (id) {
+async function _fetchChargeVersions (id, earliestDate) {
   return ChargeVersionModel.query()
-    .select('id', 'startDate', 'endDate')
     .where('licenceId', id)
-    .andWhere('startDate', '>=', '2022-04-01')
+    .where('startDate', '>=', SROC)
+    .where((builder) => {
+      builder
+        .whereNull('endDate')
+        .orWhere('endDate', '>=', earliestDate)
+    })
     .modify((builder) => {
       builder.select(
         ChargeVersionModel.relatedQuery('chargeReferences')
@@ -40,30 +39,6 @@ async function _fetchChargeVersionsData (id) {
           .limit(1)
           .select(ChargeReferenceModel.raw('EXISTS(SELECT 1)'))
           .as('twoPartTariff')
-      )
-    })
-}
-
-async function _fetchLicenceData (id) {
-  return LicenceModel.query()
-    .select([
-      'licences.id',
-      'licences.expiredDate',
-      'licences.lapsedDate',
-      'licences.revokedDate',
-      'includeInSrocBilling',
-      'includeInPresrocBilling'
-    ])
-    .distinctOn('licences.id')
-    .where('licences.id', id)
-    .leftJoin('chargeVersions as cv', 'licences.id', 'cv.licenceId')
-    .modify((builder) => {
-      builder.select(
-        ChargeVersionModel.query()
-          .count()
-          .whereColumn('charge_versions.licenceId', 'licences.id')
-          .andWhere('charge_versions.startDate', '<', '2022-04-01')
-          .as('preSroc')
       )
     })
 }
