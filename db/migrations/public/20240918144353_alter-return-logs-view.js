@@ -47,10 +47,10 @@ exports.down = function (knex) {
         'end_date',
         'returns_frequency',
         'status',
-        // 'source', // always 'NALD'
+        'source',
         'metadata',
         'received_date',
-        'return_requirement',
+        'return_requirement as return_reference',
         'due_date',
         'under_query',
         // 'under_query_comment',
