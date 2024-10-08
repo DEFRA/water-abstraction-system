@@ -17,11 +17,17 @@ const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
 describe('Return Cycle model', () => {
   let testRecord
-  let testReturnLog
+  let testReturnLogs
 
   before(async () => {
     testRecord = await ReturnCycleHelper.select()
-    testReturnLog = await ReturnLogHelper.add({ returnCycleId: testRecord.id })
+
+    testReturnLogs = []
+    for (let i = 0; i < 2; i++) {
+      const returnLog = await ReturnLogHelper.add({ returnCycleId: testRecord.id })
+
+      testReturnLogs.push(returnLog)
+    }
   })
 
   describe('Basic query', () => {
@@ -52,7 +58,8 @@ describe('Return Cycle model', () => {
 
         expect(result.returnLogs).to.be.an.array()
         expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(testReturnLog)
+        expect(result.returnLogs).to.include(testReturnLogs[0])
+        expect(result.returnLogs).to.include(testReturnLogs[1])
       })
     })
   })

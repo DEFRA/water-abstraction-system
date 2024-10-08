@@ -24,7 +24,7 @@ const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
 async function go (returnRequirements) {
-  const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleId()
+  const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleIds()
 
   const returnLogs = returnRequirements.map(async (requirements) => {
     const startDate = _startDate(requirements.summer, requirements.returnVersion)
@@ -91,7 +91,7 @@ function _earliestDate (summer, returnVersion) {
   return new Date(Math.min(...dates))
 }
 
-async function _fetchReturnCycleId () {
+async function _fetchReturnCycleIds () {
   const today = formatDateObjectToISO(new Date())
 
   let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
