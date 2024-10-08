@@ -10,17 +10,16 @@ const LicenceVersionPurposeModel = require('../../../models/licence-version-purp
 const LicenceVersionModel = require('../../../models/licence-version.model.js')
 
 /**
- * Creates or updates an imported licence's versions and its child entities that have been transformed and validated
+ * Creates or updates an imported licence's versions and its child entities that have been transformed and validated.
  *
- * @param trx
- * @param updatedAt
- * @param {object} transformedLicence - An object representing a valid WRLS licence
+ * @param {object} trx - An Objection.js transaction object for PostgreSQL.
+ * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
+ * @param {object} transformedLicence - An object representing a valid WRLS licence.
+ * @param {string} licenceId - A licence id from WRLS
  *
- * @param id
- * @returns {Promise<string>} - the licence id from WRLS
  */
-async function go (trx, updatedAt, transformedLicence, id) {
-  await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, id)
+async function go (trx, updatedAt, transformedLicence, licenceId) {
+  await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
 }
 
 async function _persistLicenceVersion (trx, updatedAt, licenceVersion, licenceId) {

@@ -11,13 +11,12 @@ const ContactModel = require('../../../models/contact.model.js')
 const { db } = require('../../../../db/db.js')
 
 /**
- * Creates or updates an imported company and its child entities that have been transformed and validated
+ * Creates or updates an imported company and its child entities that have been transformed and validated.
  *
- * @param trx
- * @param updatedAt
- * @param {object} transformedCompanies - An object representing a valid WRLS licence
+ * @param {object} trx - An Objection.js transaction object for PostgreSQL.
+ * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
+ * @param {object} transformedCompanies - An object representing a valid WRLS Company.
  *
- * @returns {Promise<string>} - the licence id from WRLS
  */
 async function go (trx, updatedAt, transformedCompanies) {
   await _persistCompanies(trx, updatedAt, transformedCompanies)

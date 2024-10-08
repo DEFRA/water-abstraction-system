@@ -8,13 +8,13 @@
 const LicenceModel = require('../../../models/licence.model.js')
 
 /**
- * Creates or updates an imported licence that have been transformed and validated
+ * Creates or updates an imported licence and its child entities that have been transformed and validated.
  *
- * @param trx
- * @param updatedAt
- * @param {object} transformedLicence - An object representing a valid WRLS licence
+ * @param {object} trx - An Objection.js transaction object for PostgreSQL.
+ * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
+ * @param {object} transformedLicence - An object representing a valid WRLS licence.
  *
- * @returns {Promise<string>} - the licence id from WRLS
+ * @returns {Promise<string>} - The licence ID from WRLS.
  */
 async function go (trx, updatedAt, transformedLicence) {
   const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
