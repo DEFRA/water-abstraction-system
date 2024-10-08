@@ -145,8 +145,8 @@ describe('Persist licence service', () => {
     })
 
     describe('and that licence already exists', () => {
-      let exisitngAddress
-      let exisitngContact
+      let existingAddress
+      let existingContact
       let existingCompany
       let existingLicence
       let existingLicenceVersion
@@ -206,23 +206,23 @@ describe('Persist licence service', () => {
           externalId: transformedCompany.externalId
         })
 
-        exisitngContact = await ContactHelper.add({
+        existingContact = await ContactHelper.add({
           externalId: transformedCompany.externalId
         })
 
         await CompanyContactHelper.add({
           companyId: existingCompany.id,
-          contactId: exisitngContact.id,
+          contactId: existingContact.id,
           licenceRoleId: licenceHolderRoleId,
           startDate: companyContactStartDate
         })
 
-        exisitngAddress = await AddressHelper.add({
+        existingAddress = await AddressHelper.add({
           ...transformedCompany.addresses[0]
         })
 
         await CompanyAddressHelper.add({
-          addressId: exisitngAddress.id,
+          addressId: existingAddress.id,
           companyId: existingCompany.id,
           licenceRoleId: licenceHolderRoleId,
           endDate: new Date('1999-01-01')
@@ -230,7 +230,7 @@ describe('Persist licence service', () => {
 
         transformedCompanies = [{
           ...existingCompany,
-          contact: exisitngContact,
+          contact: existingContact,
           companyContact: {
             externalId: existingCompany.externalId,
             startDate: companyContactStartDate,
@@ -319,7 +319,7 @@ describe('Persist licence service', () => {
         expect(company.externalId).to.equal(existingCompany.externalId)
 
         // Contact
-        const contact = await _fetchPersistedContact(exisitngContact.externalId)
+        const contact = await _fetchPersistedContact(existingContact.externalId)
 
         expect(contact.salutation).to.be.null()
         expect(contact.initials).to.be.null()
@@ -331,7 +331,7 @@ describe('Persist licence service', () => {
         const companyContact = contact.companyContacts[0]
 
         expect(companyContact.companyId).to.equal(existingCompany.id)
-        expect(companyContact.contactId).to.equal(exisitngContact.id)
+        expect(companyContact.contactId).to.equal(existingContact.id)
         expect(companyContact.licenceRoleId).to.equal(licenceHolderRoleId)
         expect(companyContact.startDate).to.equal(new Date('1999-01-01'))
         expect(companyContact.default).to.be.true()
