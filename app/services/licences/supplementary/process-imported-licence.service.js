@@ -21,8 +21,10 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (importedLicence, licenceId) {
+  console.log('ImportedLicence :', importedLicence)
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
 
+  console.log('existingLicenceDetails :', existingLicenceDetails)
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails)
 
   // If not set it means none of the dates changed were before the current financial year end so there is no reason
@@ -44,6 +46,9 @@ async function go (importedLicence, licenceId) {
 }
 
 function _earliestChangedDate (importedLicence, existingLicenceDetails) {
+  console.log('importedLicence :', importedLicence)
+  console.log('existingLicenceDetails :', existingLicenceDetails.expiredDate)
+
   const { endDate: currentFinancialYearEndDate } = determineCurrentFinancialYear()
   const changedDates = []
 
@@ -51,20 +56,24 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
 
   // NOTE: Because checking if dates are equal does not give the expected result in JavaScript (it sees 2 different
   // objects even if they represent the same date and time) we call getTime() to give us a number we can compare instead
-  if (importedLicence.expiredDate.getTime() !== existingLicenceDetails.expiredDate.getTime()) {
-    changedDate = importedLicence.expiredDate ?? existingLicenceDetails.expiredDate
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!! You cant do getTime() on an null object which in this case will be more of these
+  if (importedLicence.expiredDate.getTime() !== existingLicenceDetails.expired_date.getTime()) {
+    changedDate = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
     changedDates.push(changedDate)
   }
 
-  if (importedLicence.lapsedDate.getTime() !== existingLicenceDetails.lapsedDate.getTime()) {
-    changedDate = importedLicence.lapsedDate ?? existingLicenceDetails.lapsedDate
+  if (importedLicence.lapsedDate.getTime() !== existingLicenceDetails.lapsed_date.getTime()) {
+    changedDate = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
     changedDates.push(changedDate)
   }
 
-  if (importedLicence.revokedDate.getTime() !== existingLicenceDetails.revokedDate.getTime()) {
-    changedDate = importedLicence.revokedDate ?? existingLicenceDetails.revokedDate
+  if (importedLicence.revokedDate.getTime() !== existingLicenceDetails.revoked_date.getTime()) {
+    changedDate = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
     changedDates.push(changedDate)
   }
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // Ive already filtered out null values by the nullish coalescing operator above
 
   // Filter out nulls and those greater than the current financial year end date
   const filteredDates = changedDates.filter((changedDate) => {
