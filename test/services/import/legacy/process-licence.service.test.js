@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
-const FlagForSupplementaryBillingService = require('../../../../app/services/import/flag-for-supplementary-billing.service.js')
+const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
 const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
@@ -47,7 +47,7 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(FlagForSupplementaryBillingService, 'go').returns()
+    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').returns()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
