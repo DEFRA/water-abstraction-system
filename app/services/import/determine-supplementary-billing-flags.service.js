@@ -14,6 +14,7 @@ const LicenceModel = require('../../models/licence.model.js')
  * This service is responsible for determining whether a licence imported from NALD should be flagged for
  * supplementary billing. It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS
  * and the transformed data, and if there is a change in the dates allows the licence to go on to determining the flags.
+ *
  * @param {object} naldLicence - the legacy NALD licence
  * @param {object} wrlsLicenceId - the WRLS licence data
  */
