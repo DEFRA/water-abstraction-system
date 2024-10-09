@@ -26,7 +26,7 @@ async function go (importedLicence, licenceId) {
 
   // If not set it means none of the dates changed were before the current financial year end so there is no reason
   // to change anything on the flags
-  if (earliestChangedDate.length === 0) {
+  if (!earliestChangedDate) {
     return
   }
 
@@ -34,7 +34,7 @@ async function go (importedLicence, licenceId) {
   const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
   const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
 
-  return await PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
@@ -46,24 +46,24 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
   const { endDate: currentFinancialYearEndDate } = determineCurrentFinancialYear()
   const changedDates = []
 
-  let changedDate
+  let date
 
   // NOTE: Because checking if dates are equal does not give the expected result in JavaScript (it sees 2 different
   // objects even if they represent the same date and time) we convert the date object to strings allowing us to compare
   // the two
   if (String(importedLicence.expiredDate) !== String(existingLicenceDetails.expired_date)) {
-    changedDate = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
-    changedDates.push(changedDate.getTime())
+    date = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
+    changedDates.push(date.getTime())
   }
 
   if (String(importedLicence.lapsedDate) !== String(existingLicenceDetails.lapsed_date)) {
-    changedDate = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
-    changedDates.push(changedDate.getTime())
+    date = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
+    changedDates.push(date.getTime())
   }
 
   if (String(importedLicence.revokedDate) !== String(existingLicenceDetails.revoked_date)) {
-    changedDate = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
-    changedDates.push(changedDate.getTime())
+    date = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
+    changedDates.push(date.getTime())
   }
 
   // Filter out those greater than the current financial year end date
@@ -71,8 +71,12 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
     return (changedDate < currentFinancialYearEndDate.getTime())
   })
 
+  if (filteredDates.length === 0) {
+    return null
+  }
+
   // Now work out the earliest end date from those that have changed
-  return filteredDates.length > 0 ? new Date(Math.min(filteredDates)) : filteredDates
+  return new Date(Math.min(...filteredDates))
 }
 
 function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
@@ -100,11 +104,8 @@ function _flagForSrocSupplementary (existingLicenceDetails) {
   // If the licence has no sroc charge versions return false. We check this before the existing flag, because this
   // is an opportunity to remove the SROC supplementary billing flag from a licence that won't ever be picked up by
   // the SROC billing engine (so the flag will never get removed)
-  if (!chargeVersions) {
-    return false
-  }
 
-  return true
+  return !!chargeVersions
 }
 
 function _flagForTwoPartTariffSupplementary (existingLicenceDetails, earliestChangedDate) {
