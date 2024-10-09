@@ -138,6 +138,32 @@ function cycleStartDate (summer) {
 }
 
 /**
+ * Given an arbitary date and if it is summer or all-year return the start date of that cycle
+ *
+ * @param {Date} date - the date whose start date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {Date} - the start date of the next cycle.
+ */
+function CycleStartDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month <= returnCycleDates.summer.startDate.month) {
+      return `${year - 1}-11-01`
+    }
+
+    return `${year - 1}-04-01`
+  }
+
+  if (month <= returnCycleDates.allYear.startDate.month) {
+    return `${year - 1}-04-01`
+  }
+
+  return `${year}-04-01`
+}
+
+/**
  * Check if a date is valid or not by creating a date and checking it gives the time
  *
  * @param {dateString | undefined } dateString - The date in the iso format 2001-01-01
@@ -213,6 +239,7 @@ module.exports = {
   cycleEndDate,
   cycleEndDateAsISO,
   cycleStartDate,
+  CycleStartDateByDate,
   cycleStartDateAsISO,
   isISODateFormat,
   isValidDate
