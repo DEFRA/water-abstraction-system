@@ -28,6 +28,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 async function go (licenceReference) {
   try {
     const startTime = currentTimeInNanoseconds()
+
     const returnRequirements = await FetchLicenceReturnLogsService.go(licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
