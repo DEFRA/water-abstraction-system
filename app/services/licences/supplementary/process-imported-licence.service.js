@@ -71,12 +71,8 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
     return (changedDate < currentFinancialYearEndDate.getTime())
   })
 
-  if (filteredDates.length === 0) {
-    return null
-  }
-
   // Now work out the earliest end date from those that have changed
-  return new Date(Math.min(...filteredDates))
+  return filteredDates.length > 0 ? new Date(Math.min(...filteredDates)) : null
 }
 
 function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
