@@ -53,22 +53,22 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
   // the two
   if (String(importedLicence.expiredDate) !== String(existingLicenceDetails.expired_date)) {
     date = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
-    changedDates.push(date.getTime())
+    changedDates.push(date)
   }
 
   if (String(importedLicence.lapsedDate) !== String(existingLicenceDetails.lapsed_date)) {
     date = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
-    changedDates.push(date.getTime())
+    changedDates.push(date)
   }
 
   if (String(importedLicence.revokedDate) !== String(existingLicenceDetails.revoked_date)) {
     date = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
-    changedDates.push(date.getTime())
+    changedDates.push(date)
   }
 
   // Filter out those greater than the current financial year end date
   const filteredDates = changedDates.filter((changedDate) => {
-    return (changedDate < currentFinancialYearEndDate.getTime())
+    return (changedDate < currentFinancialYearEndDate)
   })
 
   // Now work out the earliest end date from those that have changed
