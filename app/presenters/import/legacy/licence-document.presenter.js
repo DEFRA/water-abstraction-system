@@ -15,10 +15,13 @@
  */
 function go (licenceDocument) {
   return {
+    dateDeleted: null,
+    documentRef: licenceDocument.document_ref,
+    documentType: 'abstraction_licence',
     endDate: licenceDocument.end_date,
-    startDate: licenceDocument.start_date,
     externalId: licenceDocument.external_id,
-    documentRef: licenceDocument.document_ref
+    regime: 'water',
+    startDate: licenceDocument.start_date
   }
 }
 

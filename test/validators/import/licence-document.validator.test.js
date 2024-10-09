@@ -28,28 +28,28 @@ describe('Import Licence Document validator', () => {
     })
   })
 
-  describe('the "externalId" property', () => {
-    describe('when it is not a date', () => {
+  describe('the "dateDeleted" property', () => {
+    describe('when it is not null', () => {
       beforeEach(() => {
-        transformedLicenceDocument.externalId = 1
+        transformedLicenceDocument.dateDeleted = 'something_else'
       })
 
       it('throws an error', () => {
         expect(() => {
           LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.throw('"externalId" must be a string')
+        }).to.throw('"dateDeleted" must be [null]')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceDocument.externalId = null
+        transformedLicenceDocument.dateDeleted = null
       })
 
-      it('throws an error', () => {
+      it('does not throw an error', () => {
         expect(() => {
           LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.throw('"externalId" must be a string')
+        }).to.not.throw()
       })
     })
   })
@@ -80,28 +80,28 @@ describe('Import Licence Document validator', () => {
     })
   })
 
-  describe('the "startDate" property', () => {
-    describe('when it is not a date', () => {
+  describe('the "documentType" property', () => {
+    describe('when it is not set to "abstraction_licence" ', () => {
       beforeEach(() => {
-        transformedLicenceDocument.startDate = 1
+        transformedLicenceDocument.documentType = 'something_else'
       })
 
       it('throws an error', () => {
         expect(() => {
           LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.throw('"startDate" must be a valid date')
+        }).to.throw('"documentType" must be [abstraction_licence]')
       })
     })
 
     describe('when it is null', () => {
       beforeEach(() => {
-        transformedLicenceDocument.startDate = null
+        transformedLicenceDocument.documentType = null
       })
 
       it('throws an error', () => {
         expect(() => {
           LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.throw('"startDate" must be a valid date')
+        }).to.throw('"documentType" must be [abstraction_licence]')
       })
     })
   })
@@ -131,13 +131,94 @@ describe('Import Licence Document validator', () => {
       })
     })
   })
+
+  describe('the "externalId" property', () => {
+    describe('when it is not a date', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.externalId = 1
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"externalId" must be a string')
+      })
+    })
+
+    describe('when it is null', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.externalId = null
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"externalId" must be a string')
+      })
+    })
+  })
+
+  describe('the "regime" property', () => {
+    describe('when it is not set to "water" ', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.regime = 'hot'
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"regime" must be [water]')
+      })
+    })
+
+    describe('when it is null', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.regime = null
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"regime" must be [water]')
+      })
+    })
+  })
+
+  describe('the "startDate" property', () => {
+    describe('when it is not a date', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.startDate = 1
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"startDate" must be a valid date')
+      })
+    })
+
+    describe('when it is null', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.startDate = null
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"startDate" must be a valid date')
+      })
+    })
+  })
 })
 
 function _transformedLicenceDocument () {
   return {
+    dateDeleted: null,
     documentRef: generateLicenceRef(),
+    documentType: 'abstraction_licence',
     endDate: new Date('2052-06-23'),
     externalId: '0:007',
+    regime: 'water',
     startDate: new Date('1992-08-19')
   }
 }

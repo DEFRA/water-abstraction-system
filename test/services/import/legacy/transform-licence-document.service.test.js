@@ -48,9 +48,12 @@ describe('Import Legacy Transform Licence Document service', () => {
       await TransformLicenceDocumentService.go(regionCode, naldLicenceId, transformedLicence)
 
       expect(transformedLicence.licenceDocument).to.equal({
+        dateDeleted: null,
         documentRef: licenceRef,
+        documentType: 'abstraction_licence',
         endDate: null,
         externalId: '0:007',
+        regime: 'water',
         startDate: new Date('1999-01-01')
       })
     })
