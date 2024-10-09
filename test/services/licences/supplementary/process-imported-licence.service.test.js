@@ -40,193 +40,148 @@ describe('Process Imported Licence Service', () => {
 
     beforeEach(async () => {
       licence = await LicenceHelper.add()
+
+      transformedLicence = {
+        expiredDate: null,
+        lapsedDate: null,
+        revokedDate: null
+      }
     })
 
     describe('and an imported nald licence', () => {
-      describe('with a null expired date thats different to the wrls licence', () => {
-        describe('and the licence has pre sroc charge versions', () => {
-          beforeEach(() => {
-            transformedLicence = {
-              expiredDate: null,
-              lapsedDate: null,
-              revokedDate: null
-            }
-
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_preSrocLicence(licence.id))
-          })
-
-          it('flags the licence for pre sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [],
-              true,
-              false,
-              licence.id
-            )).to.be.true()
-          })
-        })
-      })
-
-      describe('with a pre sroc expired date thats different to the wrls licence', () => {
+      describe('with null expired date and pre sroc charge versions', () => {
         beforeEach(() => {
-          transformedLicence = {
-            expiredDate: new Date('2021-04-01'),
-            lapsedDate: null,
-            revokedDate: null
-          }
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_preSrocLicence(licence.id))
         })
 
-        describe('and the licence has pre sroc charge versions', () => {
-          beforeEach(() => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_flaggedPreSrocLicence(licence.id))
-          })
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
 
-          it('flags the licence for pre sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [],
-              true,
-              false,
-              licence.id
-            )).to.be.true()
-          })
-        })
-
-        describe('and the licence has sroc two-part tariff charge versions', () => {
-          beforeEach(() => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_preSrocTwoPartTariffLicence(licence.id))
-          })
-
-          it('flags the licence for sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [2023, 2024, 2025],
-              false,
-              true,
-              licence.id
-            )).to.be.true()
-          })
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [],
+            true,
+            false,
+            licence.id
+          )).to.be.true()
         })
       })
 
-      describe('with a null lapsed date thats different to the wrls licence', () => {
-        describe('and the licence has sroc charge versions', () => {
-          beforeEach(() => {
-            transformedLicence = {
-              expiredDate: null,
-              lapsedDate: null,
-              revokedDate: null
-            }
+      describe('with pre-sroc expired date and pre-sroc charge versions', () => {
+        beforeEach(() => {
+          transformedLicence.expiredDate = new Date('2020-04-01')
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_flaggedPreSrocLicence(licence.id))
+        })
 
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocLicence(licence.id, '2024-04-01'))
-          })
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
 
-          it('flags the licence for sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [],
-              false,
-              true,
-              licence.id
-            )).to.be.true()
-          })
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [],
+            true,
+            false,
+            licence.id
+          )).to.be.true()
         })
       })
 
-      describe('with a sroc lapsed date thats different to the wrls licence', () => {
-        describe('and the licence has sroc charge versions', () => {
-          beforeEach(() => {
-            transformedLicence = {
-              expiredDate: null,
-              lapsedDate: new Date('2024-04-01'),
-              revokedDate: null
-            }
+      describe('with pre-sroc expired date and two-part tariff charge versions', () => {
+        beforeEach(() => {
+          transformedLicence.expiredDate = new Date('2020-04-01')
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_preSrocTwoPartTariffLicence(licence.id))
+        })
 
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocLicence(licence.id, null))
-          })
+        it('flags the licence for sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
 
-          it('flags the licence for sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [],
-              false,
-              true,
-              licence.id
-            )).to.be.true()
-          })
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [2023, 2024, 2025],
+            false,
+            true,
+            licence.id
+          )).to.be.true()
         })
       })
 
-      describe('with a null revoked date thats different to the wrls licence', () => {
-        describe('and the licence has sroc two-part tariff charge versions', () => {
-          beforeEach(() => {
-            transformedLicence = {
-              expiredDate: null,
-              lapsedDate: null,
-              revokedDate: null
-            }
+      describe('with null lapsed date and sroc charge versions', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocLicence(licence.id, '2024-04-01'))
+        })
 
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocTwoPartTariffLicence(licence.id, '2024-04-01'))
-          })
+        it('flags the licence for sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
 
-          it('flags the licence for sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
-
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [2025],
-              false,
-              true,
-              licence.id
-            )).to.be.true()
-          })
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [],
+            false,
+            true,
+            licence.id
+          )).to.be.true()
         })
       })
 
-      describe('with a sroc revoked date thats different to the wrls licence', () => {
-        describe('and the licence has sroc two-part tariff charge versions', () => {
-          beforeEach(() => {
-            transformedLicence = {
-              expiredDate: null,
-              lapsedDate: null,
-              revokedDate: new Date('2024-04-01')
-            }
+      describe('with sroc lapsed date and sroc charge versions', () => {
+        beforeEach(() => {
+          transformedLicence.lapsedDate = new Date('2024-04-01')
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocLicence(licence.id, null))
+        })
 
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocTwoPartTariffLicence(licence.id, null))
-          })
+        it('flags the licence for sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
 
-          it('flags the licence for sroc supplementary billing', async () => {
-            await ProcessImportedLicenceService.go(transformedLicence, licence.id)
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [],
+            false,
+            true,
+            licence.id
+          )).to.be.true()
+        })
+      })
 
-            expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-            expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-              [2025],
-              false,
-              true,
-              licence.id
-            )).to.be.true()
-          })
+      describe('with null revoked date and two-part tariff charge versions', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocTwoPartTariffLicence(licence.id, '2024-04-01'))
+        })
+
+        it('flags the licence for sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
+
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [2025],
+            false,
+            true,
+            licence.id
+          )).to.be.true()
+        })
+      })
+
+      describe('with sroc revoked date and two-part tariff charge versions', () => {
+        beforeEach(() => {
+          transformedLicence.revokedDate = new Date('2024-04-01')
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocTwoPartTariffLicence(licence.id, null))
+        })
+
+        it('flags the licence for sroc supplementary billing', async () => {
+          await ProcessImportedLicenceService.go(transformedLicence, licence.id)
+
+          expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
+            [2025],
+            false,
+            true,
+            licence.id
+          )).to.be.true()
         })
       })
 
       describe('with a revoked date thats set in the future', () => {
         beforeEach(() => {
-          transformedLicence = {
-            expiredDate: new Date('2025-04-01'),
-            lapsedDate: null,
-            revokedDate: null
-          }
-
+          transformedLicence.revokedDate = new Date('2025-04-01')
           Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_futureRevokedDate())
         })
 
@@ -240,26 +195,48 @@ describe('Process Imported Licence Service', () => {
   })
 })
 
+function _flaggedPreSrocLicence (id) {
+  return {
+    id,
+    expired_date: null,
+    lapsed_date: null,
+    revoked_date: null,
+    flagged_for_presroc: true,
+    flagged_for_sroc: false,
+    pre_sroc_charge_versions: true,
+    sroc_charge_versions: false,
+    two_part_tariff_charge_versions: false
+  }
+}
+
+function _futureRevokedDate () {
+  return {
+    expired_date: null,
+    lapsed_date: null,
+    revoked_date: new Date('2024-04-01')
+  }
+}
+
+function _preSrocLicence (id) {
+  return {
+    id,
+    expired_date: new Date('2021-04-01'),
+    lapsed_date: null,
+    revoked_date: null,
+    flagged_for_presroc: false,
+    flagged_for_sroc: false,
+    pre_sroc_charge_versions: true,
+    sroc_charge_versions: false,
+    two_part_tariff_charge_versions: false
+  }
+}
+
 function _preSrocTwoPartTariffLicence (id) {
   return {
     id,
     expired_date: null,
     lapsed_date: null,
     revoked_date: null,
-    flagged_for_presroc: false,
-    flagged_for_sroc: false,
-    pre_sroc_charge_versions: false,
-    sroc_charge_versions: true,
-    two_part_tariff_charge_versions: true
-  }
-}
-
-function _srocTwoPartTariffLicence (id, date) {
-  return {
-    id,
-    expired_date: null,
-    lapsed_date: null,
-    revoked_date: date ? new Date(date) : null,
     flagged_for_presroc: false,
     flagged_for_sroc: false,
     pre_sroc_charge_versions: false,
@@ -282,38 +259,16 @@ function _srocLicence (id, date) {
   }
 }
 
-function _preSrocLicence (id) {
-  return {
-    id,
-    expired_date: new Date('2021-04-01'),
-    lapsed_date: null,
-    revoked_date: null,
-    flagged_for_presroc: false,
-    flagged_for_sroc: false,
-    pre_sroc_charge_versions: true,
-    sroc_charge_versions: false,
-    two_part_tariff_charge_versions: false
-  }
-}
-
-function _flaggedPreSrocLicence (id) {
+function _srocTwoPartTariffLicence (id, date) {
   return {
     id,
     expired_date: null,
     lapsed_date: null,
-    revoked_date: null,
-    flagged_for_presroc: true,
+    revoked_date: date ? new Date(date) : null,
+    flagged_for_presroc: false,
     flagged_for_sroc: false,
-    pre_sroc_charge_versions: true,
-    sroc_charge_versions: false,
-    two_part_tariff_charge_versions: false
-  }
-}
-
-function _futureRevokedDate () {
-  return {
-    expired_date: new Date('2024-04-01'),
-    lapsed_date: null,
-    revoked_date: null
+    pre_sroc_charge_versions: false,
+    sroc_charge_versions: true,
+    two_part_tariff_charge_versions: true
   }
 }
