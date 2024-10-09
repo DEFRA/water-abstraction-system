@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, after } = exports.lab = Lab.script()
+const { describe, it, before, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -143,10 +143,6 @@ describe('Process return logs service', () => {
         expect(result[0].source).to.equal('WRLS')
         expect(result[0].returnCycleId).to.equal(allYearReturnCycleId)
       })
-
-      after(() => {
-        Sinon.restore()
-      })
     })
 
     describe('and a licence reference is provided but there is no matching return requirements', () => {
@@ -160,10 +156,6 @@ describe('Process return logs service', () => {
         const result = await ReturnLogModel.query().where('licenceRef', 'testReference')
 
         expect(result.length).to.equal(0)
-      })
-
-      after(() => {
-        Sinon.restore()
       })
     })
 
@@ -179,10 +171,10 @@ describe('Process return logs service', () => {
 
         expect(result.length).to.equal(0)
       })
-
-      after(() => {
-        Sinon.restore()
-      })
     })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 })
