@@ -13,16 +13,19 @@ const {
   cycleStartDate,
   formatDateObjectToISO
 } = require('../../../lib/dates.lib.js')
+const FetchReturnCycleService = require('./fetch-return-cycle.service.js')
+const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
 
 /**
  * Generates the payload for submission to the returns table.
  *
  * @param {Array} returnRequirements - the return requirements to be turned into return logs
- * @param {string} returnCycleId - the UUID of the return cycle
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (returnRequirements, returnCycleId) {
+async function go (returnRequirements) {
+  const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleIds()
+
   const returnLogs = returnRequirements.map(async (requirements) => {
     const startDate = _startDate(requirements.summer, requirements.returnVersion)
     const endDate = _endDate(requirements.summer, requirements.returnVersion)
@@ -37,7 +40,7 @@ async function go (returnRequirements, returnCycleId) {
       id,
       licenceRef: requirements.returnVersion.licence.licenceRef,
       metadata,
-      returnCycleId,
+      returnCycleId: requirements.summer ? summerReturnCycleId : allYearReturnCycleId,
       returnsFrequency: requirements.reportingFrequency,
       returnReference: requirements.legacyId.toString(),
       startDate,
@@ -86,6 +89,26 @@ function _earliestDate (summer, returnVersion) {
   })
 
   return new Date(Math.min(...dates))
+}
+
+async function _fetchReturnCycleIds () {
+  const today = formatDateObjectToISO(new Date())
+
+  let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
+  let summerReturnCycleId = await FetchReturnCycleService.go(today, true)
+
+  if (!allYearReturnCycleId) {
+    allYearReturnCycleId = await GenerateReturnCycleService.go(false)
+  }
+
+  if (!summerReturnCycleId) {
+    summerReturnCycleId = await GenerateReturnCycleService.go(true)
+  }
+
+  return {
+    allYearReturnCycleId,
+    summerReturnCycleId
+  }
 }
 
 function _id (requirements, startDate, endDate) {
@@ -140,7 +163,7 @@ function _metadataPoints (points) {
 function _metadataPurposes (returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
-      alias: returnRequirementPurpose.alias,
+      ...(returnRequirementPurpose.alias !== null && { alias: returnRequirementPurpose.alias }),
       primary: {
         code: returnRequirementPurpose.primaryPurpose.legacyId,
         description: returnRequirementPurpose.primaryPurpose.description
