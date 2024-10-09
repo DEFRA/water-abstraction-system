@@ -21,15 +21,12 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (importedLicence, licenceId) {
-  console.log('ImportedLicence :', importedLicence)
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
-
-  console.log('existingLicenceDetails :', existingLicenceDetails)
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails)
 
   // If not set it means none of the dates changed were before the current financial year end so there is no reason
   // to change anything on the flags
-  if (!earliestChangedDate) {
+  if (earliestChangedDate.length === 0) {
     return
   }
 
@@ -37,7 +34,7 @@ async function go (importedLicence, licenceId) {
   const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
   const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
 
-  return PersistSupplementaryBillingFlagsService.go(
+  return await PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
@@ -46,42 +43,36 @@ async function go (importedLicence, licenceId) {
 }
 
 function _earliestChangedDate (importedLicence, existingLicenceDetails) {
-  console.log('importedLicence :', importedLicence)
-  console.log('existingLicenceDetails :', existingLicenceDetails.expiredDate)
-
   const { endDate: currentFinancialYearEndDate } = determineCurrentFinancialYear()
   const changedDates = []
 
   let changedDate
 
   // NOTE: Because checking if dates are equal does not give the expected result in JavaScript (it sees 2 different
-  // objects even if they represent the same date and time) we call getTime() to give us a number we can compare instead
-
-  // !!!!!!!!!!!!!!!!!!!!!!!!! You cant do getTime() on an null object which in this case will be more of these
-  if (importedLicence.expiredDate.getTime() !== existingLicenceDetails.expired_date.getTime()) {
+  // objects even if they represent the same date and time) we convert the date object to strings allowing us to compare
+  // the two
+  if (String(importedLicence.expiredDate) !== String(existingLicenceDetails.expired_date)) {
     changedDate = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
-    changedDates.push(changedDate)
+    changedDates.push(changedDate.getTime())
   }
 
-  if (importedLicence.lapsedDate.getTime() !== existingLicenceDetails.lapsed_date.getTime()) {
+  if (String(importedLicence.lapsedDate) !== String(existingLicenceDetails.lapsed_date)) {
     changedDate = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
-    changedDates.push(changedDate)
+    changedDates.push(changedDate.getTime())
   }
 
-  if (importedLicence.revokedDate.getTime() !== existingLicenceDetails.revoked_date.getTime()) {
+  if (String(importedLicence.revokedDate) !== String(existingLicenceDetails.revoked_date)) {
     changedDate = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
-    changedDates.push(changedDate)
+    changedDates.push(changedDate.getTime())
   }
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // Ive already filtered out null values by the nullish coalescing operator above
 
-  // Filter out nulls and those greater than the current financial year end date
+  // Filter out those greater than the current financial year end date
   const filteredDates = changedDates.filter((changedDate) => {
-    return (changedDate && changedDate < currentFinancialYearEndDate)
+    return (changedDate < currentFinancialYearEndDate.getTime())
   })
 
   // Now work out the earliest end date from those that have changed
-  return Math.min(filteredDates)
+  return filteredDates.length > 0 ? new Date(Math.min(filteredDates)) : filteredDates
 }
 
 function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
@@ -129,7 +120,7 @@ function _flagForTwoPartTariffSupplementary (existingLicenceDetails, earliestCha
   const startDate = earliestChangedDate < SROC_START_DATE ? SROC_START_DATE : earliestChangedDate
   const { endDate } = determineCurrentFinancialYear()
 
-  return DetermineBillingYearsService(startDate, endDate)
+  return DetermineBillingYearsService.go(startDate, endDate)
 }
 
 module.exports = {
