@@ -31,6 +31,10 @@ describe('Process return logs service', () => {
 
   let cycle
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('cycle is "all-year', () => {
     before(() => {
       cycle = 'all-year'
@@ -172,9 +176,5 @@ describe('Process return logs service', () => {
         expect(result.length).to.equal(0)
       })
     })
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 })

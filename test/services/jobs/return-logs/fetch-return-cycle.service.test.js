@@ -29,6 +29,10 @@ describe('Fetch return cycle service', () => {
     previousSummerReturnCycle = await ReturnCycleHelper.select(4)
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when summer is false', () => {
     before(() => {
       summer = false
@@ -117,9 +121,5 @@ describe('Fetch return cycle service', () => {
         expect(result).to.equal(undefined)
       })
     })
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 })
