@@ -82,8 +82,6 @@ describe('Fetch Existing Licence Details Service', () => {
         it('returns "two_part_tariff_charge_versions" as true', async () => {
           const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-          // NOTE: If the charge versions are SROC and two-part tariff the sroc charge versions flag still returns true
-          // Check if this is correct?
           expect(result).to.equal({
             id: licence.id,
             expired_date: null,
