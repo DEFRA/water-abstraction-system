@@ -23,7 +23,7 @@ async function go (transformedLicence, transformedCompanies) {
   return LicenceModel.transaction(async (trx) => {
     const updatedAt = timestampForPostgres()
 
-    const id = await PersistImportService.go(trx, updatedAt, transformedLicence)
+    const id = await PersistLicenceService.go(trx, updatedAt, transformedLicence)
 
     await PersistLicenceVersionsService.go(trx, updatedAt, transformedLicence, id)
 
