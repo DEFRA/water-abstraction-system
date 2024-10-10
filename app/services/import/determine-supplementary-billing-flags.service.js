@@ -5,8 +5,8 @@
  * @module DetermineSupplementaryBillingFlagsService
  */
 
-const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 const LicenceModel = require('../../models/licence.model.js')
+const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 
 /**
  * Determines if an imported licence should be flagged for supplementary billing.
