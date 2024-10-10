@@ -39,11 +39,13 @@ async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagF
  * @private
  */
 async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, licenceId) {
-  if (twoPartTariffBillingYears.length > 0) {
-    const twoPartTariff = true
-
-    return CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
+  if (twoPartTariffBillingYears.length === 0) {
+    return
   }
+
+  const twoPartTariff = true
+
+  return CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
 }
 
 async function _updateLicenceFlags (includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
