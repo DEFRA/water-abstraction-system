@@ -87,8 +87,6 @@ describe('Generate return logs service', () => {
   const summerReturnCycleId = 'd095d75e-0e0d-4fe4-b048-150457f3871f'
   const todayAsIso = formatDateObjectToISO(new Date())
 
-
-
   describe('when return cycle exists', () => {
     before(async () => {
       Sinon.stub(FetchReturnCycleService, 'go')
