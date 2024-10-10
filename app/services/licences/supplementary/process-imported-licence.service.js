@@ -34,7 +34,7 @@ async function go (importedLicence, licenceId) {
   const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
   const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
 
-  await PersistSupplementaryBillingFlagsService.go(
+  return PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
