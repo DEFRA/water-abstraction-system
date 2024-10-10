@@ -98,7 +98,7 @@
                 {% if requirement.siteDescription == '' %}
                   Return reference {{ requirement.returnReference }}
                 {% else %}
-                  Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription }}
+                  Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription | safe }}
                 {% endif %}
               {% endset %}
               <li><a href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
