@@ -23,7 +23,7 @@ async function seed () {
     if (exists) {
       await _update(user, password)
     } else {
-      await _insert(user)
+      await _insert(user, password)
     }
   }
 }
