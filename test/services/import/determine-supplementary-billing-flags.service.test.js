@@ -20,7 +20,7 @@ const DetermineSupplementaryBillingFlagsService = require('../../../app/services
 describe('Determine Supplementary Billing Flags Service', () => {
   let licence
   let notifierStub
-  let transformedLicence
+  let importedLicence
 
   beforeEach(async () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
@@ -43,7 +43,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
@@ -51,7 +51,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.false()
       })
@@ -59,7 +59,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: new Date('2030-01-01'),
           lapsedDate: null,
           revokedDate: new Date('2023-01-01')
@@ -67,7 +67,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.true()
       })
@@ -81,7 +81,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
@@ -89,7 +89,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.true()
       })
@@ -97,7 +97,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: null,
           revokedDate: new Date('2023-01-01')
@@ -105,7 +105,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.false()
       })
@@ -119,7 +119,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
@@ -127,7 +127,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.true()
       })
@@ -135,7 +135,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: new Date('2023-01-01'),
           revokedDate: null
@@ -143,7 +143,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.false()
       })
@@ -157,7 +157,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
@@ -165,7 +165,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.true()
       })
@@ -173,7 +173,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
     describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
-        transformedLicence = {
+        importedLicence = {
           expiredDate: new Date('2023-01-01'),
           lapsedDate: null,
           revokedDate: null
@@ -181,7 +181,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
 
       it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licence.id)
+        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
 
         expect(ProcessImportedLicenceService.go.called).to.be.false()
       })
@@ -195,7 +195,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       // To make the service fail we pass it an invalid licence id
       licenceId = '1234'
 
-      transformedLicence = {
+      importedLicence = {
         expiredDate: null,
         lapsedDate: null,
         revokedDate: null
@@ -203,7 +203,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
     })
 
     it('handles the error', async () => {
-      await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+      await DetermineSupplementaryBillingFlagsService.go(importedLicence, licenceId)
 
       const args = notifierStub.omfg.firstCall.args
 
