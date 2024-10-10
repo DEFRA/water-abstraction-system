@@ -18,8 +18,27 @@ async function seed () {
   const password = _generateHashedPassword()
 
   for (const user of users) {
-    await _upsert(user, password)
+    const exists = await _exists(user)
+
+    if (exists) {
+      await _update(user, password)
+    } else {
+      await _insert(user)
+    }
   }
+}
+
+async function _exists (user) {
+  const { application, username } = user
+
+  const result = await UserModel.query()
+    .select('id')
+    .where('application', application)
+    .andWhere('username', username)
+    .limit(1)
+    .first()
+
+  return !!result
 }
 
 function _generateHashedPassword () {
@@ -31,20 +50,35 @@ function _generateHashedPassword () {
   return bcrypt.hashSync(DatabaseConfig.defaultUserPassword, 10)
 }
 
-async function _upsert (user, password) {
+async function _insert (user, password) {
+  return UserModel.query().insert({ ...user, password })
+}
+
+async function _update (user, password) {
+  const {
+    application,
+    badLogins,
+    enabled,
+    lastLogin,
+    resetGuid,
+    resetGuidCreatedAt,
+    resetRequired,
+    username
+  } = user
+
   return UserModel.query()
-    .insert({ ...user, password, updatedAt: timestampForPostgres() })
-    .onConflict(['application', 'username'])
-    .merge([
-      'badLogins',
-      'enabled',
-      'lastLogin',
-      'password',
-      'resetGuid',
-      'resetGuidCreatedAt',
-      'resetRequired',
-      'updatedAt'
-    ])
+    .patch({
+      badLogins,
+      enabled,
+      lastLogin,
+      password,
+      resetGuid,
+      resetGuidCreatedAt,
+      resetRequired,
+      updatedAt: timestampForPostgres()
+    })
+    .where('application', application)
+    .andWhere('username', username)
 }
 
 module.exports = {
