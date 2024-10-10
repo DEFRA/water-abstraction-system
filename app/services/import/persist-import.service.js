@@ -5,7 +5,7 @@
  * @module PersistImportService
  */
 
-const PersistImportService = require('./persist/persist-licence.service.js')
+const PersistLicenceService = require('./persist/persist-licence.service.js')
 const PersistLicenceVersionsService = require('./persist/persist-licence-versions.service.js')
 const PersistCompanyService = require('./persist/persist-company.service.js')
 const LicenceModel = require('../../models/licence.model.js')
