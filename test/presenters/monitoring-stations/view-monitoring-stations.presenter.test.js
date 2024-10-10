@@ -34,7 +34,7 @@ describe('View Monitoring Stations presenter', () => {
         stationReference: null,
         licences: [
           {
-            licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+            id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             licenceRef: 'AT/TEST',
             linkages: [
               {
@@ -214,7 +214,7 @@ describe('View Monitoring Stations presenter', () => {
               stationReference: null,
               licences: [
                 {
-                  licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+                  id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
                   licenceRef: 'AT/TEST',
                   linkages: [{
                     abstractionPeriod: '1 April to 31 August',
@@ -240,7 +240,7 @@ describe('View Monitoring Stations presenter', () => {
                   }]
                 },
                 {
-                  licenceId: 'fb46704b-0e8c-488e-9b58-faf87b6d9a01',
+                  id: 'fb46704b-0e8c-488e-9b58-faf87b6d9a01',
                   licenceRef: 'AT/TEST/2',
                   linkages: [{
                     abstractionPeriod: '1 February to 22 July',
