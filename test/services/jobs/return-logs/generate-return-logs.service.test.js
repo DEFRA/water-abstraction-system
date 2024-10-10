@@ -9,6 +9,7 @@ const { describe, it, before, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { returnCycleDates } = require('../../../../app/lib/static-lookups.lib.js')
 const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
 const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
@@ -28,20 +29,15 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
 
 describe('Generate return logs service', () => {
-  const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
-  const summerDueDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
-  const allYearEndDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
-  const summerEndDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
-  const allYearStartDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
-  const summerStartDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
-  const summerReturns = []
-  const allYearReturns = []
-  const allYearReturnCycleId = 'c095d75e-0e0d-4fe4-b048-150457f3871b'
-  const summerReturnCycleId = 'd095d75e-0e0d-4fe4-b048-150457f3871f'
-  const today = formatDateObjectToISO(new Date())
+  const today = new Date()
+  const month = today.getMonth()
+  const year = today.getFullYear()
 
+  let allYearDueDate = formatDateObjectToISO(new Date(year, 3, 28))
+  let allYearEndDate = formatDateObjectToISO(new Date(year, 2, 31))
+  let allYearStartDate = formatDateObjectToISO(new Date(year, 3, 1))
   let expiredDate
-  let lapsedDate
+  let lapsedDate = formatDateObjectToISO(new Date(year, 8, 30))
   let licence
   let point
   let point2
@@ -59,14 +55,45 @@ describe('Generate return logs service', () => {
   let revokedDate
   let secondaryPurpose
   let secondaryPurpose2
-  let startDate
+  let startDate = formatDateObjectToISO(new Date(year, 11, 1))
   let summer
+  let summerDueDate = formatDateObjectToISO(new Date(year, 10, 28))
+  let summerEndDate = formatDateObjectToISO(new Date(year, 9, 31))
+  let summerStartDate = formatDateObjectToISO(new Date(year, 10, 1))
+
+  if (month > returnCycleDates.allYear.endDate.month) {
+    allYearDueDate = formatDateObjectToISO(new Date(year + 1, 3, 28))
+    allYearEndDate = formatDateObjectToISO(new Date(year + 1, 2, 31))
+  }
+
+  if (month > returnCycleDates.summer.endDate.month) {
+    summerDueDate = formatDateObjectToISO(new Date(year + 1, 10, 28))
+    summerEndDate = formatDateObjectToISO(new Date(year + 1, 9, 31))
+    lapsedDate = formatDateObjectToISO(new Date(year + 1, 8, 30))
+  }
+
+  if (month < returnCycleDates.summer.startDate.month) {
+    summerStartDate = formatDateObjectToISO(new Date(year - 1, 10, 1))
+    startDate = formatDateObjectToISO(new Date(year - 1, 11, 1))
+  }
+
+  if (month < returnCycleDates.allYear.startDate.month) {
+    allYearStartDate = formatDateObjectToISO(new Date(year - 1, 3, 1))
+  }
+
+  const summerReturns = []
+  const allYearReturns = []
+  const allYearReturnCycleId = 'c095d75e-0e0d-4fe4-b048-150457f3871b'
+  const summerReturnCycleId = 'd095d75e-0e0d-4fe4-b048-150457f3871f'
+  const todayAsIso = formatDateObjectToISO(new Date())
+
+
 
   describe('when return cycle exists', () => {
     before(async () => {
       Sinon.stub(FetchReturnCycleService, 'go')
-        .withArgs(today, false).returns(allYearReturnCycleId)
-        .withArgs(today, true).returns(summerReturnCycleId)
+        .withArgs(todayAsIso, false).returns(allYearReturnCycleId)
+        .withArgs(todayAsIso, true).returns(summerReturnCycleId)
     })
 
     describe('when summer is false', () => {
@@ -296,7 +323,7 @@ describe('Generate return logs service', () => {
 
       describe('there is an expired date, one return requirement and a licenceRef provided', () => {
         before(async () => {
-          expiredDate = new Date(new Date().getFullYear() + 1, 1, 31).toISOString().split('T')[0]
+          expiredDate = new Date(year + 1, 1, 31).toISOString().split('T')[0]
           region = RegionHelper.select()
           licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -376,7 +403,7 @@ describe('Generate return logs service', () => {
 
       describe('there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
         before(async () => {
-          expiredDate = new Date(new Date().getFullYear() + 1, 3, 31).toISOString().split('T')[0]
+          expiredDate = new Date(year + 1, 3, 31).toISOString().split('T')[0]
           region = RegionHelper.select()
           licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -698,7 +725,6 @@ describe('Generate return logs service', () => {
 
       describe('there is a lapsed date, one return requirement and a licenceRef provided', () => {
         before(async () => {
-          lapsedDate = new Date(new Date().getFullYear() + 1, 8, 31).toISOString().split('T')[0]
           region = RegionHelper.select()
           licence = await LicenceHelper.add({ lapsedDate, regionId: region.id })
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -778,7 +804,7 @@ describe('Generate return logs service', () => {
 
       describe('there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
         before(async () => {
-          revokedDate = new Date(new Date().getFullYear() + 1, 10, 31).toISOString().split('T')[0]
+          revokedDate = new Date(year + 1, 10, 31).toISOString().split('T')[0]
           region = RegionHelper.select()
           licence = await LicenceHelper.add({ revokedDate, regionId: region.id })
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -858,7 +884,6 @@ describe('Generate return logs service', () => {
 
       describe('the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
         before(async () => {
-          startDate = new Date(new Date().getFullYear(), 11, 1).toISOString().split('T')[0]
           region = RegionHelper.select()
           licence = await LicenceHelper.add({ regionId: region.id })
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, startDate })
@@ -960,8 +985,8 @@ describe('Generate return logs service', () => {
   describe('when return cycle does not exist', () => {
     before(async () => {
       Sinon.stub(FetchReturnCycleService, 'go')
-        .withArgs(today, false).returns(undefined)
-        .withArgs(today, true).returns(undefined)
+        .withArgs(todayAsIso, false).returns(undefined)
+        .withArgs(todayAsIso, true).returns(undefined)
       Sinon.stub(GenerateReturnCycleService, 'go')
         .withArgs(false).returns(allYearReturnCycleId)
         .withArgs(true).returns(summerReturnCycleId)
