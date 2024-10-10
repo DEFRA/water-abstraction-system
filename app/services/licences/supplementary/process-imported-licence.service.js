@@ -48,9 +48,10 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
 
   let date
 
-  // NOTE: Because checking if dates are equal does not give the expected result in JavaScript (it sees 2 different
-  // objects even if they represent the same date and time) we convert the date object to strings allowing us to compare
-  // the two
+  // NOTE: In JavaScript, comparing date objects directly can lead to incorrect results, as two date objects, even with
+  // the same date and time, are treated as different objects. To avoid this, we convert the dates to strings for
+  // comparison. Normally, you might use getTime() to compare dates, but since any of these values can be null, calling
+  // getTime() on a null value would result in an error. Using strings safely handles null values.
   if (String(importedLicence.expiredDate) !== String(existingLicenceDetails.expired_date)) {
     date = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
     changedDates.push(date)
