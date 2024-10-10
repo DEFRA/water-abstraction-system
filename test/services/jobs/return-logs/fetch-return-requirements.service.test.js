@@ -8,6 +8,8 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { returnCycleDates } = require('../../../../app/lib/static-lookups.lib.js')
+const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PointHelper = require('../../../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
@@ -23,6 +25,9 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
 describe('Fetch return logs service', () => {
+  const today = new Date()
+  const month = today.getMonth()
+  const year = today.getFullYear()
   const summerReturns = []
   const allYearReturns = []
 
@@ -44,7 +49,11 @@ describe('Fetch return logs service', () => {
   let revokedDate
   let secondaryPurpose
   let secondaryPurpose2
-  let startDate
+  let startDate = formatDateObjectToISO(new Date(year, 11, 1))
+
+  if (month < returnCycleDates.summer.startDate.month) {
+    startDate = formatDateObjectToISO(new Date(year - 1, 11, 1))
+  }
 
   describe('when summer is false, one return requirement and a licenceRef provided', () => {
     before(async () => {
@@ -774,7 +783,6 @@ describe('Fetch return logs service', () => {
 
   describe('when summer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
     before(async () => {
-      startDate = new Date(new Date().getFullYear(), 11, 1).toISOString().split('T')[0]
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()

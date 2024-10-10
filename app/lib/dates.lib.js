@@ -64,17 +64,23 @@ function cycleDueDateAsISO (summer) {
  * @returns {Date} - the due date of the next cycle.
  */
 function cycleDueDate (summer) {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth()
+
   if (summer) {
-    return new Date(new Date().getFullYear() + 1,
-      returnCycleDates.summer.dueDate.month,
-      returnCycleDates.summer.dueDate.day
-    )
+    if (month > returnCycleDates.summer.endDate.month) {
+      return new Date(year + 1, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
+    }
+
+    return new Date(year, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
   }
 
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.allYear.dueDate.month,
-    returnCycleDates.allYear.dueDate.day
-  )
+  if (month > returnCycleDates.allYear.endDate.month) {
+    return new Date(year + 1, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
+  }
+
+  return new Date(year, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
 }
 
 /**
@@ -94,17 +100,23 @@ function cycleEndDateAsISO (summer) {
  * @returns {Date} - the end date of the next cycle.
  */
 function cycleEndDate (summer) {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth()
+
   if (summer) {
-    return new Date(new Date().getFullYear() + 1,
-      returnCycleDates.summer.endDate.month,
-      returnCycleDates.summer.endDate.day
-    )
+    if (month > returnCycleDates.summer.endDate.month) {
+      return new Date(year + 1, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
+    }
+
+    return new Date(year, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
   }
 
-  return new Date(new Date().getFullYear() + 1,
-    returnCycleDates.allYear.endDate.month,
-    returnCycleDates.allYear.endDate.day
-  )
+  if (month > returnCycleDates.allYear.endDate.month) {
+    return new Date(year + 1, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
+  }
+
+  return new Date(year, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
 }
 
 /**
@@ -124,17 +136,23 @@ function cycleStartDateAsISO (summer) {
  * @returns {Date} - the start date of the next cycle.
  */
 function cycleStartDate (summer) {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth()
+
   if (summer) {
-    return new Date(new Date().getFullYear(),
-      returnCycleDates.summer.startDate.month,
-      returnCycleDates.summer.startDate.day
-    )
+    if (month < returnCycleDates.summer.startDate.month) {
+      return new Date(year - 1, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
+    }
+
+    return new Date(year, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
   }
 
-  return new Date(new Date().getFullYear(),
-    returnCycleDates.allYear.startDate.month,
-    returnCycleDates.allYear.startDate.day
-  )
+  if (month < returnCycleDates.allYear.startDate.month) {
+    return new Date(year - 1, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
+  }
+
+  return new Date(year, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
 }
 
 /**
