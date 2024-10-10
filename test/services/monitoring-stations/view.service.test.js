@@ -45,7 +45,7 @@ describe('View service', () => {
         stationReference: null,
         licences: [
           {
-            licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+            id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             licenceRef: 'AT/TEST',
             linkages: [
               {
