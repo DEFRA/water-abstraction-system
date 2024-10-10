@@ -19,7 +19,7 @@ const LicenceVersionModel = require('../../../models/licence-version.model.js')
  *
  */
 async function go (trx, updatedAt, transformedLicence, licenceId) {
-  await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
+  return _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
 }
 
 async function _persistLicenceVersion (trx, updatedAt, licenceVersion, licenceId) {
