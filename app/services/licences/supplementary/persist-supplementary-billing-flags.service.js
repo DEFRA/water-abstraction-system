@@ -17,34 +17,36 @@ const LicenceModel = require('../../../models/licence.model.js')
  * NOTE: Due to the column data type of the includeInPresrocBilling & includeInSrocBilling, one is a string value and
  * one is a boolean.
  *
- * @param {object[]} twoPartTariffFinancialYears - The years that need persisting in the LicenceSupplementaryYears table
- * @param {boolean} preSrocFlag - `true` or `false` depending on if the licence needs to be flagged for pre sroc billing
- * @param {boolean} srocFlag - `true` or `false` depending on if the licence needs to be flagged for sroc billing
- * @param {string} wrlsLicenceId - The UUID of the licence that needs the flags persisting for
+ * @param {object[]} twoPartTariffBillingYears - The years that need persisting in the LicenceSupplementaryYears table
+ * @param {boolean} flagForPreSrocSupplementary - `true` or `false` depending on if the licence needs to be flagged
+ * for pre sroc billing
+ * @param {boolean} flagForSrocSupplementary - `true` or `false` depending on if the licence needs to be flagged for
+ * sroc billing
+ * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
  */
-async function go (twoPartTariffFinancialYears, preSrocFlag, srocFlag, wrlsLicenceId) {
-  const includeInPresrocBilling = preSrocFlag ? 'yes' : 'no'
+async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
+  const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
-  await _updateLicenceFlags(includeInPresrocBilling, srocFlag, wrlsLicenceId)
-  await _flagForLicenceSupplementaryYears(twoPartTariffFinancialYears, wrlsLicenceId)
+  await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
+  await _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, licenceId)
 }
 
 /**
  * Persists two-part tariff financial years in the LicenceSupplementaryYears table.
  * @private
  */
-async function _flagForLicenceSupplementaryYears (financialYears, wrlsLicenceId) {
-  if (financialYears.length > 0) {
+async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, licenceId) {
+  if (twoPartTariffBillingYears.length > 0) {
     const twoPartTariff = true
 
-    await CreateLicenceSupplementaryYearService.go(wrlsLicenceId, financialYears, twoPartTariff)
+    return CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
   }
 }
 
-async function _updateLicenceFlags (includeInPresrocBilling, includeInSrocBilling, id) {
+async function _updateLicenceFlags (includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
   return LicenceModel.query()
-    .patch({ includeInPresrocBilling, includeInSrocBilling })
-    .where('id', id)
+    .patch({ includeInPresrocBilling, includeInSrocBilling: flagForSrocSupplementary })
+    .where('id', licenceId)
 }
 
 module.exports = {
