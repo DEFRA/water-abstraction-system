@@ -23,12 +23,15 @@ const LicenceModel = require('../../../models/licence.model.js')
  * @param {boolean} flagForSrocSupplementary - `true` or `false` depending on if the licence needs to be flagged for
  * sroc billing
  * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
+ *
+ * @returns {Promise<object>} - Resolves with the result of persisting two-part tariff billing years,
  */
 async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
   const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
   await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
-  await _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, licenceId)
+
+  return _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, licenceId)
 }
 
 /**
