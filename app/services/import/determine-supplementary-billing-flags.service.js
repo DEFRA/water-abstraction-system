@@ -44,6 +44,22 @@ async function _licenceChanged (importedLicence, wrlsLicenceId) {
   return result.length === 0
 }
 
+/**
+ * Adds where clauses to compare the end dates (expired, revoked, lapsed) of the imported licence with those stored
+ * in the database. It handles where the end dates can be null.
+ *
+ * In SQL, comparing `null` values using a regular `where` clause does not work as expected because
+ * `null` represents the absence of a value and `null = null` returns false. To address this, we use
+ * `whereNull` to explicitly check for null values in the database.
+ *
+ * If an end date is present on the imported licence, the query uses a standard `where` clause to check
+ * for a match. If the end date is null, the query uses `whereNull` to compare against the null values.
+ *
+ * This ensures that value types (dates and null) can be correctly compared, allowing us to detect changes
+ * between the imported licence and the existing WRLS licence data.
+ *
+ * @private
+ */
 function _whereClauses (query, importedLicence) {
   const { expiredDate, lapsedDate, revokedDate } = importedLicence
 
