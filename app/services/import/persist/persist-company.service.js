@@ -19,7 +19,7 @@ const { db } = require('../../../../db/db.js')
  *
  */
 async function go (trx, updatedAt, transformedCompanies) {
-  await _persistCompanies(trx, updatedAt, transformedCompanies)
+  return _persistCompanies(trx, updatedAt, transformedCompanies)
 }
 
 async function _persistAddress (trx, updatedAt, address) {
