@@ -119,7 +119,7 @@ function _groupLicences (licences) {
 
     if (!grouped[id]) {
       grouped[id] = {
-        licenceId: id,
+        id,
         licenceRef,
         linkages: []
       }
