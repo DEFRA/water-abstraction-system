@@ -48,7 +48,7 @@ describe('Process Imported Licence Service', () => {
       }
     })
 
-    describe('and an imported nald licence', () => {
+    describe('and an imported licence', () => {
       describe('with null expired date and pre sroc charge versions', () => {
         beforeEach(() => {
           Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_preSrocLicence(licence.id))
