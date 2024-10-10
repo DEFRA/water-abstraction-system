@@ -41,7 +41,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       licence = await LicenceHelper.add()
     })
 
-    describe('and a nald licence with no end dates', () => {
+    describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -57,7 +57,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
     })
 
-    describe('and a nald licence with end dates', () => {
+    describe('and a imported licence with end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: new Date('2030-01-01'),
@@ -79,7 +79,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       licence = await LicenceHelper.add({ revokedDate: new Date('2023-01-01') })
     })
 
-    describe('and a nald licence with no end dates', () => {
+    describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -95,7 +95,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
     })
 
-    describe('and a nald licence with the same end dates', () => {
+    describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -117,7 +117,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       licence = await LicenceHelper.add({ lapsedDate: new Date('2023-01-01') })
     })
 
-    describe('and a nald licence with no end dates', () => {
+    describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -133,7 +133,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
     })
 
-    describe('and a nald licence with the same end dates', () => {
+    describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -155,7 +155,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       licence = await LicenceHelper.add({ expiredDate: new Date('2023-01-01') })
     })
 
-    describe('and a nald licence with no end dates', () => {
+    describe('and a imported licence with no end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: null,
@@ -171,7 +171,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       })
     })
 
-    describe('and a nald licence with the same end dates', () => {
+    describe('and a imported licence with the same end dates', () => {
       beforeEach(() => {
         transformedLicence = {
           expiredDate: new Date('2023-01-01'),
@@ -192,16 +192,14 @@ describe('Determine Supplementary Billing Flags Service', () => {
     let licenceId
 
     beforeEach(() => {
-      beforeEach(async () => {
-        // To make the service fail we pass it an invalid licence id
-        licenceId = '1234'
+      // To make the service fail we pass it an invalid licence id
+      licenceId = '1234'
 
-        transformedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
-      })
+      transformedLicence = {
+        expiredDate: null,
+        lapsedDate: null,
+        revokedDate: null
+      }
     })
 
     it('handles the error', async () => {
@@ -209,8 +207,8 @@ describe('Determine Supplementary Billing Flags Service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Supplementary Billing Flag failed for licence ')
-      expect(args[1]).to.equal(licenceId)
+      expect(args[0]).to.equal('Determine supplementary billing flags on import failed ')
+      expect(args[1].wrlsLicenceId).to.equal(licenceId)
       expect(args[2]).to.be.an.error()
     })
   })
