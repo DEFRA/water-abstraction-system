@@ -5,14 +5,9 @@
  * @module DetermineWorkflowYearsService
  */
 
-const { ref } = require('objection')
-
-const { db } = require('../../../../db/db.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
+const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
-const WorkflowModel = require('../../../models/workflow.model.js')
-
-const SROC_START_DATE = new Date('2022-04-01')
 
 /**
  * Determines if a licence being removed from workflow should be flagged for supplementary billing.
@@ -27,105 +22,35 @@ const SROC_START_DATE = new Date('2022-04-01')
  * licence should be flagged for two-part tariff supplementary billing
  */
 async function go (chargeVersionWorkflowId) {
-  // const { licence } = await _fetchLicence(chargeVersionWorkflowId)
+  const licence = await FetchLicenceService.go(chargeVersionWorkflowId)
+  const { endDate } = determineCurrentFinancialYear()
 
-  // console.log('Licence :', licence)
-  const licence1 = await _fetchLicenceData(chargeVersionWorkflowId)
-
-  console.log('Licence :', licence1)
-
+  // Due to the fact the database gives us the licence back in snake case, I need to convert the reference to camel case
+  // so the rest of the flagging service can use it
   const result = {
-    licence,
-    startDate,
+    licence: {
+      id: licence.id,
+      regionId: licence.region_id
+    },
+    startDate: licence.created_at,
     endDate,
-    twoPartTariff: false,
+    twoPartTariff: licence.two_part_tariff_charge_versions,
     flagForBilling: false
   }
 
-  // If licence doesn't exist it means it doesn't have any sroc charge versions
-  // If licence is already flagged for supplementary billing the we don't want to flag it again
-  if (!licence || licence.includeInSrocBilling) {
-    console.log('Returning as there are no records')
-
-    return
+  // If a licence is already flagged for supplementary billing then we don't need to flag it again
+  // We only want to flag licences that have sroc charge versions
+  if (!licence.include_in_sroc_billing && licence.sroc_charge_versions) {
+    await _flagForSrocSupplementary(licence.id)
   }
 
-  console.log('Flagging for supp billing')
-  await _flagForSupplementaryBilling(workflowRecord.licence.id)
+  result.flagForBilling = result.twoPartTariff
+
+  return result
 }
 
-async function _flagForSupplementaryBilling (id) {
+async function _flagForSrocSupplementary (id) {
   return LicenceModel.query().patch({ includeInSrocBilling: true }).where('id', id)
-}
-
-async function _fetchLicence (chargeVersionWorkflowId) {
-  return WorkflowModel.query()
-    .findById(chargeVersionWorkflowId)
-    .select([
-      'licenceId'
-    ])
-    .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'regionId',
-        'includeInSrocBilling'
-      ])
-    })
-    .withGraphFetched('licence.chargeVersions')
-    .modifyGraph('licence.chargeVersions', (builder) => {
-      builder
-        .count('id AS flagForSroc')
-        .where('startDate', '>', '2024-03-31')
-        .groupBy('licenceId')
-    })
-    // .whereExists(
-    //   LicenceModel.query()
-    //     .joinRelated('chargeVersions')
-    //     .where('licences.id', WorkflowModel.ref('licenceId'))
-    //     .andWhere('chargeVersions.startDate', '>', '2022-04-01')
-    // )
-}
-
-async function _fetchLicenceData (chargeVersionWorkflowId) {
-  const query = _query()
-
-  const { rows: [row] } = await db.raw(query, [chargeVersionWorkflowId])
-
-  return row
-}
-
-function _query () {
-  return `
-    SELECT
-    l.include_in_sroc_billing,
-    EXISTS (
-      SELECT 1
-      FROM public.charge_versions cv
-      WHERE cv.licence_id = l.id
-        AND cv.start_date > '2022-04-01'
-    ) AS srocChargeVersions,
-    EXISTS (
-      SELECT 1
-      FROM public.charge_references cr
-      INNER JOIN public.charge_elements ce
-        ON ce.charge_reference_id = cr.id
-      WHERE cr.charge_version_id = (
-        SELECT cv.id
-        FROM public.charge_versions cv
-        WHERE cv.licence_id = l.id
-        LIMIT 1
-      )
-      AND ce.section_127_Agreement = TRUE
-      AND cr.adjustments->>'s127' = 'true'
-    ) AS two_part_tariff
-    FROM licences l
-    WHERE id = (
-      SELECT w.licence_id
-      FROM workflows w
-      WHERE w.id = ?
-    );
-`
 }
 
 module.exports = {

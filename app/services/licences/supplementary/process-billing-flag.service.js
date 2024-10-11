@@ -44,13 +44,10 @@ async function go (payload) {
     } else if (payload.returnId) {
       result = await DetermineReturnLogYearsService.go(payload.returnId)
     } else if (payload.chargeVersionWorkflowId) {
-      await DetermineWorkflowYearsService.go(payload.chargeVersionWorkflowId)
-
-      return
+      result = await DetermineWorkflowYearsService.go(payload.chargeVersionWorkflowId)
     } else {
       return
     }
-
     const { licence, startDate, endDate, twoPartTariff, flagForBilling } = result
 
     if (!flagForBilling) {
