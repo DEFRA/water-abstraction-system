@@ -13,6 +13,12 @@ async function seed () {
 async function _upsert (cycle) {
   return ReturnCycleModel.query()
     .insert({ ...cycle, createdAt: timestampForPostgres(), updatedAt: timestampForPostgres() })
+    .onConflict(['startDate', 'endDate', 'summer'])
+    .merge([
+      'dueDate',
+      'submittedInWrls',
+      'updatedAt'
+    ])
 }
 
 module.exports = {
