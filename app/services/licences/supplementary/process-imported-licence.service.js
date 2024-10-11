@@ -98,9 +98,9 @@ function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDa
 function _flagForSrocSupplementary (existingLicenceDetails) {
   const { sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
-  // If the licence has no SROC charge versions, return false. We check this first because it's an opportunity
+  // If the licence has no SROC charge versions, return false. We check because it's an opportunity
   // to remove the SROC supplementary billing flag from a licence that won't be picked up by the SROC billing engine
-  // (so the flag will never get removed). If charge versions exist, return true to keep the flag.
+  // (so the flag will never get removed). If charge versions exist, we return true to flag for SROC billing.
 
   return !!chargeVersions
 }

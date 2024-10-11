@@ -47,7 +47,7 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').returns()
+    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)

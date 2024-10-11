@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-
 // Things we need to stub
 const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
 const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
@@ -39,7 +36,7 @@ describe('Process Imported Licence Service', () => {
     let importedLicence
 
     beforeEach(async () => {
-      licence = await LicenceHelper.add()
+      licence = '16b9f590-a231-4a38-b69b-7dde3ff907f2'
 
       importedLicence = {
         expiredDate: null,

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determines if an imported licence should be flagged for supplementary billing
+ * Determines if an imported licence has a new end date
  * @module DetermineSupplementaryBillingFlagsService
  */
 
@@ -9,33 +9,37 @@ const LicenceModel = require('../../models/licence.model.js')
 const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 
 /**
- * Determines if an imported licence should be flagged for supplementary billing.
+ * Determines if an imported licence has a new end date.
  *
- * This service is responsible for determining whether a licence imported should be flagged for
- * supplementary billing. It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS
- * and the transformed data, and if there is a change in the dates allows the licence to go on to determining the flags.
+ * This service is responsible for determining whether a licence imported has a new end day and therefore should be
+ * flagged for supplementary billing.
+ *
+ * It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS licence and the imported
+ * data, and if there is a change in the dates allows the licence to go on to determining the flags.
  *
  * @param {object} importedLicence - the imported licence
- * @param {object} wrlsLicenceId - the WRLS licence data
+ * @param {object} licenceId - the WRLS licence data
+ *
+ * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (importedLicence, wrlsLicenceId) {
+async function go (importedLicence, licenceId) {
   try {
-    const licenceChanged = await _licenceChanged(importedLicence, wrlsLicenceId)
+    const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
     if (!licenceChanged) {
       return
     }
 
-    await ProcessImportedLicenceService.go(importedLicence, wrlsLicenceId)
+    return ProcessImportedLicenceService.go(importedLicence, licenceId)
   } catch (error) {
-    global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { wrlsLicenceId }, error)
+    global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }
 }
 
-async function _licenceChanged (importedLicence, wrlsLicenceId) {
+async function _licenceChanged (importedLicence, licenceId) {
   const query = LicenceModel.query()
     .select(['id'])
-    .where('id', wrlsLicenceId)
+    .where('id', licenceId)
 
   _whereClauses(query, importedLicence)
 
