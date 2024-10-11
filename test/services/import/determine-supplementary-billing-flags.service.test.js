@@ -208,7 +208,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
       const args = notifierStub.omfg.firstCall.args
 
       expect(args[0]).to.equal('Determine supplementary billing flags on import failed ')
-      expect(args[1].wrlsLicenceId).to.equal(licenceId)
+      expect(args[1].licenceId).to.equal(licenceId)
       expect(args[2]).to.be.an.error()
     })
   })
