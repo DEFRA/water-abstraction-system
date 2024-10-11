@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -30,14 +30,13 @@ describe('Persist Supplementary Billing Flags Service', () => {
     let twoPartTariffFinancialYears
 
     beforeEach(async () => {
-      testLicence = await LicenceHelper.add()
-
       Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
     })
 
     describe('and a pre sroc and sroc flag set to true', () => {
       describe('but no two-part tariff financial years', () => {
-        beforeEach(() => {
+        before(async () => {
+          testLicence = await LicenceHelper.add()
           preSrocFlag = true
           srocFlag = true
           twoPartTariffFinancialYears = []
@@ -67,7 +66,8 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
     describe('and pre sroc and sroc flag set to false', () => {
       describe('and some two-part tariff financial years', () => {
-        beforeEach(() => {
+        before(async () => {
+          testLicence = await LicenceHelper.add()
           preSrocFlag = false
           srocFlag = false
           twoPartTariffFinancialYears = [2022, 2023]
