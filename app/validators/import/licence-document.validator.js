@@ -15,12 +15,9 @@ const Joi = require('joi')
  */
 function go (licenceDocument) {
   const schema = Joi.object({
-    dateDeleted: Joi.valid(null),
-    documentRef: Joi.string().required(),
-    documentType: Joi.string().valid('abstraction_licence'),
+    deletedAt: Joi.valid(null),
+    licenceRef: Joi.string().required(),
     endDate: Joi.date().required().allow(null),
-    externalId: Joi.string().required(),
-    regime: Joi.string().valid('water'),
     startDate: Joi.date().required()
   })
 
