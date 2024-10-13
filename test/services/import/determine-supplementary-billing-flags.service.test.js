@@ -46,106 +46,68 @@ describe('Determine Supplementary Billing Flags Service', () => {
     Sinon.restore()
   })
 
-  describe('when given a licence id that has no end dates', () => {
-    describe('and a imported licence with no end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+  describe('when the existing version of the licence', () => {
+    describe('matches the imported version of the licence', () => {
+      describe('because all the dates are null', () => {
+        before(() => {
+          importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+        })
+
+        it('does not call ProcessImportedLicenceService', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+
+          expect(ProcessImportedLicenceService.go.called).to.be.false()
+        })
       })
 
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+      describe('because all the dates match', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate, revokedDate }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
+        it('does not call ProcessImportedLicenceService', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-    describe('and a imported licence with end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate, lapsedDate, revokedDate }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
-  })
-
-  describe('when given a licence id that has a revoked date', () => {
-    describe('and a imported licence with no end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
+          expect(ProcessImportedLicenceService.go.called).to.be.false()
+        })
       })
     })
 
-    describe('and a imported licence with the same end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate, lapsedDate, revokedDate }
+    describe('does not match the imported version of the licence', () => {
+      describe('because the imported version has an end date where the existing version has null', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate: null, revokedDate: null }
+        })
+
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
 
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
+      describe('because the imported version has a null end date where the existing version has one', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate: null, revokedDate }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
-  })
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-  describe('when given a licence id that has a lapsed date', () => {
-    describe('and a imported licence with no end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
 
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
+      describe('because the imported version has a different end date to the existing version', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate, revokedDate: new Date('2023-02-02') }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-    describe('and a imported licence with the same end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate, lapsedDate, revokedDate }
-      })
-
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
-  })
-
-  describe('when given a licence id that has an expired date', () => {
-    describe('and a imported licence with no end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
-
-    describe('and a imported licence with the same end dates', () => {
-      before(() => {
-        importedLicence = { expiredDate, lapsedDate, revokedDate }
-      })
-
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
     })
   })
