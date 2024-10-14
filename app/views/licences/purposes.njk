@@ -1,0 +1,88 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + id + '/summary'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    {{ pageTitle }}
+  </h1>
+
+  {% for licencePurpose in licencePurposes %}
+    {# Set an easier to use index. #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set classes = 'table__cell--include govuk-!-margin-bottom-0 govuk-!-padding-bottom-0' %}
+
+    {% set tableRows = [] %}
+
+    {# Abstraction points cell #}
+    {% if licencePurpose.abstractionPoints.length > 1 %}
+      {% set abstractionPointRowTitle = 'Abstraction points' %}
+    {% else %}
+      {% set abstractionPointRowTitle = 'Abstraction point' %}
+    {% endif %}
+
+    {% set abstractionPointsRow = [
+      {
+        text: abstractionPointRowTitle,
+        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
+      },
+      {
+        text: newLine(licencePurpose.abstractionPoints),
+        attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
+
+    {# Period of abstraction cell #}
+    {% set abstractionPeriodRow = [
+      {
+        text: 'Period of abstraction',
+        attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
+      },
+      {
+        text: licencePurpose.abstractionPeriod,
+        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
+
+    {# Abstraction amount cell #}
+    {% for abstractionAmount in licencePurpose.abstractionAmounts %}
+      {% set abstractionPeriodRow = [
+        {
+          text: 'Abstraction amount',
+          attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
+        },
+        {
+          text: abstractionAmount,
+          attributes: { 'data-test': 'abstraction-amount-' + rowIndex }
+        }
+      ] %}
+
+    {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      caption: licencePurpose.purposeDescription,
+      captionClasses: "govuk-table__caption--m",
+      rows: tableRows
+    }) }}
+  {% endfor %}
+{% endblock %}
