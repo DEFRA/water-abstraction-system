@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,12 +17,22 @@ const ProcessImportedLicenceService = require('../../../app/services/licences/su
 // Thing under test
 const DetermineSupplementaryBillingFlagsService = require('../../../app/services/import/determine-supplementary-billing-flags.service.js')
 
-describe('Determine Supplementary Billing Flags Service', () => {
-  let licence
+describe.only('Determine Supplementary Billing Flags Service', () => {
+  const lapsedDate = new Date('2023-01-01')
+  const revokedDate = new Date('2023-01-01')
+  const expiredDate = new Date('2023-01-01')
+
+  let existingLicenceNullDates
+  let existingLicencePopulatedDates
   let notifierStub
   let importedLicence
 
-  beforeEach(async () => {
+  before(async () => {
+    existingLicenceNullDates = await LicenceHelper.add()
+    existingLicencePopulatedDates = await LicenceHelper.add({ expiredDate, lapsedDate, revokedDate })
+  })
+
+  beforeEach(() => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -36,154 +46,68 @@ describe('Determine Supplementary Billing Flags Service', () => {
     Sinon.restore()
   })
 
-  describe('when given a licence id that has no end dates', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add()
-    })
+  describe('when the existing version of the licence', () => {
+    describe('matches the imported version of the licence', () => {
+      describe('because all the dates are null', () => {
+        before(() => {
+          importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+        })
 
-    describe('and a imported licence with no end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
+        it('does not call ProcessImportedLicenceService', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+
+          expect(ProcessImportedLicenceService.go.called).to.be.false()
+        })
       })
 
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
+      describe('because all the dates match', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate, revokedDate }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
+        it('does not call ProcessImportedLicenceService', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-    describe('and a imported licence with end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: new Date('2030-01-01'),
-          lapsedDate: null,
-          revokedDate: new Date('2023-01-01')
-        }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
-  })
-
-  describe('when given a licence id that has a revoked date', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add({ revokedDate: new Date('2023-01-01') })
-    })
-
-    describe('and a imported licence with no end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
+          expect(ProcessImportedLicenceService.go.called).to.be.false()
+        })
       })
     })
 
-    describe('and a imported licence with the same end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: new Date('2023-01-01')
-        }
+    describe('does not match the imported version of the licence', () => {
+      describe('because the imported version has an end date where the existing version has null', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate: null, revokedDate: null }
+        })
+
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
 
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
+      describe('because the imported version has a null end date where the existing version has one', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate: null, revokedDate }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
-  })
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-  describe('when given a licence id that has a lapsed date', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add({ lapsedDate: new Date('2023-01-01') })
-    })
-
-    describe('and a imported licence with no end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
 
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
+      describe('because the imported version has a different end date to the existing version', () => {
+        before(() => {
+          importedLicence = { expiredDate, lapsedDate, revokedDate: new Date('2023-02-02') }
+        })
 
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
+        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
+          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-    describe('and a imported licence with the same end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: new Date('2023-01-01'),
-          revokedDate: null
-        }
-      })
-
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
-      })
-    })
-  })
-
-  describe('when given a licence id that has an expired date', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add({ expiredDate: new Date('2023-01-01') })
-    })
-
-    describe('and a imported licence with no end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
-      })
-
-      it('passes the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.true()
-      })
-    })
-
-    describe('and a imported licence with the same end dates', () => {
-      beforeEach(() => {
-        importedLicence = {
-          expiredDate: new Date('2023-01-01'),
-          lapsedDate: null,
-          revokedDate: null
-        }
-      })
-
-      it('does not pass the licence on to be flagged', async () => {
-        await DetermineSupplementaryBillingFlagsService.go(importedLicence, licence.id)
-
-        expect(ProcessImportedLicenceService.go.called).to.be.false()
+          expect(ProcessImportedLicenceService.go.called).to.be.true()
+        })
       })
     })
   })
@@ -191,15 +115,11 @@ describe('Determine Supplementary Billing Flags Service', () => {
   describe('when there is an error', () => {
     let licenceId
 
-    beforeEach(() => {
+    before(() => {
       // To make the service fail we pass it an invalid licence id
       licenceId = '1234'
 
-      importedLicence = {
-        expiredDate: null,
-        lapsedDate: null,
-        revokedDate: null
-      }
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
     })
 
     it('handles the error', async () => {
