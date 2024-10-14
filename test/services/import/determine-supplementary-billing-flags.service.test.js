@@ -17,7 +17,7 @@ const ProcessImportedLicenceService = require('../../../app/services/licences/su
 // Thing under test
 const DetermineSupplementaryBillingFlagsService = require('../../../app/services/import/determine-supplementary-billing-flags.service.js')
 
-describe.only('Determine Supplementary Billing Flags Service', () => {
+describe('Determine Supplementary Billing Flags Service', () => {
   const lapsedDate = new Date('2023-01-01')
   const revokedDate = new Date('2023-01-01')
   const expiredDate = new Date('2023-01-01')
