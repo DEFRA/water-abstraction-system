@@ -22,15 +22,15 @@ function go (auth, monitoringStation) {
   const groupedLicences = _groupLicences(sortedLicences)
 
   return {
-    gridReference: monitoringStation.gridReference,
+    gridReference: monitoringStation.gridReference ?? '',
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
     pageTitle: _pageTitle(monitoringStation.riverName, monitoringStation.label),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
-    stationReference: monitoringStation.stationReference,
-    wiskiId: monitoringStation.wiskiId
+    stationReference: monitoringStation.stationReference ?? '',
+    wiskiId: monitoringStation.wiskiId ?? ''
   }
 }
 
