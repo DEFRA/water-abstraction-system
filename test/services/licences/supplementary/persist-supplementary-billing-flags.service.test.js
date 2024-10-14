@@ -19,80 +19,73 @@ const CreateLicenceSupplementaryYearService = require('../../../../app/services/
 const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
 
 describe('Persist Supplementary Billing Flags Service', () => {
+  let preSrocFlag
+  let srocFlag
+  let testLicence
+  let twoPartTariffFinancialYears
+
+  beforeEach(async () => {
+    Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
+    testLicence = await LicenceHelper.add()
+  })
+
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when given a valid licence id', () => {
-    let testLicence
-    let preSrocFlag
-    let srocFlag
-    let twoPartTariffFinancialYears
-
-    beforeEach(async () => {
-      Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
+  describe('when the imported licence should be flagged for pre sroc supplementary billing', () => {
+    before(() => {
+      preSrocFlag = true
+      srocFlag = false
+      twoPartTariffFinancialYears = []
     })
 
-    describe('and a pre sroc and sroc flag set to true', () => {
-      describe('but no two-part tariff financial years', () => {
-        before(async () => {
-          testLicence = await LicenceHelper.add()
-          preSrocFlag = true
-          srocFlag = true
-          twoPartTariffFinancialYears = []
-        })
+    it('persists the pre sroc supplementary billing flag on the licence', async () => {
+      await PersistSupplementaryBillingFlagsService.go(
+        twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+      )
 
-        it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
-          )
+      const licence = await LicenceModel.query().findById(testLicence.id)
 
-          const licence = await LicenceModel.query().findById(testLicence.id)
+      expect(licence.id).to.equal(testLicence.id)
+      expect(licence.includeInPresrocBilling).to.equal('yes')
+      expect(licence.includeInSrocBilling).to.equal(false)
+    })
+  })
 
-          expect(licence.id).to.equal(testLicence.id)
-          expect(licence.includeInPresrocBilling).to.equal('yes')
-          expect(licence.includeInSrocBilling).to.equal(true)
-        })
-
-        it('returns without calling CreateLicenceSupplementaryYearsService', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
-          )
-
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
-        })
-      })
+  describe('when the imported licence should be flagged for sroc supplementary billing', () => {
+    before(() => {
+      preSrocFlag = false
+      srocFlag = true
+      twoPartTariffFinancialYears = []
     })
 
-    describe('and pre sroc and sroc flag set to false', () => {
-      describe('and some two-part tariff financial years', () => {
-        before(async () => {
-          testLicence = await LicenceHelper.add()
-          preSrocFlag = false
-          srocFlag = false
-          twoPartTariffFinancialYears = [2022, 2023]
-        })
+    it('persists the sroc supplementary billing flag on the licence', async () => {
+      await PersistSupplementaryBillingFlagsService.go(
+        twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+      )
 
-        it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
-          )
+      const licence = await LicenceModel.query().findById(testLicence.id)
 
-          const licence = await LicenceModel.query().findById(testLicence.id)
+      expect(licence.id).to.equal(testLicence.id)
+      expect(licence.includeInPresrocBilling).to.equal('no')
+      expect(licence.includeInSrocBilling).to.equal(true)
+    })
+  })
 
-          expect(licence.id).to.equal(testLicence.id)
-          expect(licence.includeInPresrocBilling).to.equal('no')
-          expect(licence.includeInSrocBilling).to.equal(false)
-        })
+  describe('when the imported licence should be flagged for two-part tariff sroc supplementary billing', () => {
+    before(() => {
+      preSrocFlag = false
+      srocFlag = false
+      twoPartTariffFinancialYears = [2022, 2023]
+    })
 
-        it('calls the CreateLicenceSupplementaryYearsService to persist the financial years', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
-          )
+    it('calls CreateLicenceSupplementaryYearsService to handle persisting the two-part tariff years', async () => {
+      await PersistSupplementaryBillingFlagsService.go(
+        twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+      )
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
-        })
-      })
+      expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
     })
   })
 })
