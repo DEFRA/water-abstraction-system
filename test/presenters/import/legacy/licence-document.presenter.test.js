@@ -27,12 +27,9 @@ describe('Import Legacy Licence Document presenter', () => {
     const result = LicenceDocumentPresenter.go(legacyLicenceDocument)
 
     expect(result).to.equal({
-      dateDeleted: null,
-      documentRef: licenceRef,
-      documentType: 'abstraction_licence',
+      deletedAt: null,
+      licenceRef,
       endDate: null,
-      externalId: '0:007',
-      regime: 'water',
       startDate: new Date('1999-01-01')
     })
   })
@@ -40,9 +37,7 @@ describe('Import Legacy Licence Document presenter', () => {
   it('correctly sets the default data', () => {
     const result = LicenceDocumentPresenter.go(legacyLicenceDocument)
 
-    expect(result.dateDeleted).to.be.null()
-    expect(result.documentType).to.equal('abstraction_licence')
-    expect(result.regime).to.equal('water')
+    expect(result.deletedAt).to.be.null()
   })
 })
 
@@ -50,7 +45,6 @@ function _legacyLicenceDocument (licenceRef) {
   return {
     end_date: null,
     start_date: new Date('1999-01-01'),
-    external_id: '0:007',
     document_ref: licenceRef
   }
 }
