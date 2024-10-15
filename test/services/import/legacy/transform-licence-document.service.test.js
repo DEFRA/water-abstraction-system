@@ -71,6 +71,6 @@ function _legacyLicenceDocument (licenceRef) {
   return {
     end_date: null,
     start_date: new Date('1999-01-01'),
-    document_ref: licenceRef
+    licence_ref: licenceRef
   }
 }

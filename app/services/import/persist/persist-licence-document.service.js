@@ -27,7 +27,8 @@ async function _persistLicenceDocument (trx, updatedAt, licenceDocument) {
     .merge([
       'endDate',
       'startDate',
-      'updatedAt'
+      'updatedAt',
+      'deletedAt'
     ])
 }
 

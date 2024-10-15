@@ -38,7 +38,7 @@ function _query () {
         TO_DATE(NULLIF(nal."REV_DATE", 'null'), 'DD/MM/YYYY'),
         TO_DATE(NULLIF(nal."EXPIRY_DATE", 'null'), 'DD/MM/YYYY')
       ) as end_date,
-      nal."LIC_NO" as document_ref
+      nal."LIC_NO" as licence_ref
     FROM import."NALD_ABS_LICENCES" nal
       INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalv
         ON nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
@@ -60,5 +60,5 @@ module.exports = {
  * @property {Date} start_date - The effective start date of the license.
  * @property {Date | null} end_date - The earliest of the lapsed, revision, or expiry dates.
  * @property {string} external_id - A combination of the region code and licence ID.
- * @property {string} document_ref - The licence number.
+ * @property {string} licence_ref - The licence number.
  */
