@@ -41,8 +41,8 @@ describe('View service', () => {
         gridReference: 'TL2664640047',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
-        wiskiId: null,
-        stationReference: null,
+        wiskiId: '',
+        stationReference: '',
         licences: [
           {
             id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',

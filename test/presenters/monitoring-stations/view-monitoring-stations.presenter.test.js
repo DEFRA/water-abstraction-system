@@ -30,8 +30,8 @@ describe('View Monitoring Stations presenter', () => {
         gridReference: 'TL2664640047',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
-        wiskiId: null,
-        stationReference: null,
+        wiskiId: '',
+        stationReference: '',
         licences: [
           {
             id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
@@ -51,6 +51,28 @@ describe('View Monitoring Stations presenter', () => {
             ]
           }
         ]
+      })
+    })
+
+    describe('the "gridReference" property', () => {
+      describe('when the grid reference is not null', () => {
+        it('returns the grid reference', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.gridReference).to.equal('TL2664640047')
+        })
+      })
+
+      describe('when the grid reference is null', () => {
+        beforeEach(() => {
+          monitoringStationData.gridReference = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.gridReference).to.equal('')
+        })
       })
     })
 
@@ -210,8 +232,8 @@ describe('View Monitoring Stations presenter', () => {
               gridReference: 'TL2664640047',
               permissionToManageLinks: true,
               permissionToSendAlerts: true,
-              wiskiId: null,
-              stationReference: null,
+              wiskiId: '',
+              stationReference: '',
               licences: [
                 {
                   id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
@@ -329,6 +351,50 @@ describe('View Monitoring Stations presenter', () => {
           const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
 
           expect(result.permissionToSendAlerts).to.equal(false)
+        })
+      })
+    })
+
+    describe('the "stationReference" property', () => {
+      describe('when the station reference is not null', () => {
+        beforeEach(() => {
+          monitoringStationData.stationReference = 'Crabble Mill GS'
+        })
+
+        it('returns the station reference', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.stationReference).to.equal('Crabble Mill GS')
+        })
+      })
+
+      describe('when the station reference is null', () => {
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.stationReference).to.equal('')
+        })
+      })
+    })
+
+    describe('the "wiskiId" property', () => {
+      describe('when the WISKI ID is not null', () => {
+        beforeEach(() => {
+          monitoringStationData.wiskiId = 'E5082'
+        })
+
+        it('returns the WISKI ID', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.wiskiId).to.equal('E5082')
+        })
+      })
+
+      describe('when the WISKI ID is null', () => {
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.wiskiId).to.equal('')
         })
       })
     })

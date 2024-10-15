@@ -21,6 +21,7 @@
     "lint": "eslint .",
     "pretest": "NODE_ENV=test node db/clean.js",
     "test": "lab --silent-skips --shuffle",
+    "test:skip": "lab --silent-skips --shuffle",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },
