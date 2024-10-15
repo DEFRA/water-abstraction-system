@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -17,95 +17,74 @@ const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
 
 describe('Fetch Existing Licence Details Service', () => {
-  describe('when given a licence ID for a licence that exists', () => {
+  describe('when passed a licence ID for a licence that exists', () => {
     let licence
 
-    describe('and that has pre sroc charge versions', () => {
-      describe('and the licence already has end dates', () => {
-        beforeEach(async () => {
-          licence = await LicenceHelper.add({
-            revokedDate: new Date('2024-08-01'),
-            lapsedDate: new Date('2024-06-01'),
-            expiredDate: new Date('2024-04-01')
-          })
-
-          await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2018-04-01') })
+    describe('and the licence has no charge versions', () => {
+      before(async () => {
+        licence = await LicenceHelper.add({
+          revokedDate: new Date('2024-08-01'),
+          lapsedDate: new Date('2024-06-01'),
+          expiredDate: new Date('2024-04-01'),
+          includeInSrocBilling: true,
+          includeInPresrocBilling: 'yes'
         })
+      })
 
-        it('returns the licence correctly', async () => {
-          const result = await FetchExistingLicenceDetailsService.go(licence.id)
+      it('fetches the licence data', async () => {
+        const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-          expect(result).to.equal({
-            id: licence.id,
-            expired_date: new Date('2024-04-01'),
-            lapsed_date: new Date('2024-06-01'),
-            revoked_date: new Date('2024-08-01'),
-            flagged_for_presroc: false,
-            flagged_for_sroc: false,
-            pre_sroc_charge_versions: true,
-            sroc_charge_versions: false,
-            two_part_tariff_charge_versions: false
-          })
-        })
+        expect(result.id).to.equal(licence.id)
+        expect(result.revoked_date).to.equal(new Date('2024-08-01'))
+        expect(result.lapsed_date).to.equal(new Date('2024-06-01'))
+        expect(result.expired_date).to.equal(new Date('2024-04-01'))
+        expect(result.flagged_for_presroc).to.equal(true)
+        expect(result.flagged_for_sroc).to.equal(true)
+      })
+
+      it('outlines which charge versions the licence does not have', async () => {
+        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+
+        expect(result.pre_sroc_charge_versions).to.equal(false)
+        expect(result.sroc_charge_versions).to.equal(false)
+        expect(result.two_part_tariff_charge_versions).to.equal(false)
       })
     })
 
-    describe('and that has sroc charge versions', () => {
-      describe('and the licence is already flagged for pre sroc billing', () => {
-        beforeEach(async () => {
-          licence = await LicenceHelper.add({
-            includeInSrocBilling: true,
-            includeInPresrocBilling: 'yes'
-          })
+    describe('and the licence has charge versions', () => {
+      before(async () => {
+        licence = await LicenceHelper.add()
+        // pre sroc charge versions
+        await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2018-04-01') })
 
-          await ChargeVersionHelper.add({ licenceId: licence.id })
-        })
+        // sroc charge version
+        const chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
 
-        it('returns the licence correctly', async () => {
-          const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        // two-part tariff indicators
+        const chargeReference = await ChargeReferenceHelper.add(
+          { chargeVersionId: chargeVersion.id, adjustments: { s127: true } }
+        )
 
-          expect(result).to.equal({
-            id: licence.id,
-            expired_date: null,
-            lapsed_date: null,
-            revoked_date: null,
-            flagged_for_presroc: true,
-            flagged_for_sroc: true,
-            pre_sroc_charge_versions: false,
-            sroc_charge_versions: true,
-            two_part_tariff_charge_versions: false
-          })
-        })
+        await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
       })
-    })
 
-    describe('and that has sroc charge versions with two-part tariff indicators', () => {
-      describe('and the licence is already flagged for sroc billing', () => {
-        beforeEach(async () => {
-          licence = await LicenceHelper.add()
-          const chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
-          const chargeReference = await ChargeReferenceHelper.add(
-            { chargeVersionId: chargeVersion.id, adjustments: { s127: true } }
-          )
+      it('fetches the licence data', async () => {
+        const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-          await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
-        })
+        expect(result.id).to.equal(licence.id)
+        expect(result.revoked_date).to.equal(null)
+        expect(result.lapsed_date).to.equal(null)
+        expect(result.expired_date).to.equal(null)
+        expect(result.flagged_for_presroc).to.equal(false)
+        expect(result.flagged_for_sroc).to.equal(false)
+      })
 
-        it('returns the licence correctly', async () => {
-          const result = await FetchExistingLicenceDetailsService.go(licence.id)
+      it('outlines which charge versions the licence has', async () => {
+        const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-          expect(result).to.equal({
-            id: licence.id,
-            expired_date: null,
-            lapsed_date: null,
-            revoked_date: null,
-            flagged_for_presroc: false,
-            flagged_for_sroc: false,
-            pre_sroc_charge_versions: false,
-            sroc_charge_versions: true,
-            two_part_tariff_charge_versions: true
-          })
-        })
+        expect(result.pre_sroc_charge_versions).to.equal(true)
+        expect(result.sroc_charge_versions).to.equal(true)
+        expect(result.two_part_tariff_charge_versions).to.equal(true)
       })
     })
   })
