@@ -108,7 +108,7 @@ describe('Match And Allocate Service', () => {
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
           await MatchAndAllocateService.go(billRun, billingPeriods)
 
-          const { chargeVersions } = determineLicenceIssuesServiceStub.getCall(0).args[0]
+          const { chargeVersions } = determineLicenceIssuesServiceStub.firstCall.args[0]
           const chargeReference = chargeVersions[0].chargeReferences[0]
 
           expect(chargeReference.allocatedQuantity).to.equal(32)
