@@ -32,13 +32,12 @@ function _query () {
           THEN MIN(TO_DATE(nalv."EFF_ST_DATE", 'DD/MM/YYYY' ))
         ELSE TO_DATE(nal."ORIG_EFF_DATE", 'DD/MM/YYYY')
         END
-                                                          as start_date,
+        as start_date,
       LEAST(
         TO_DATE(NULLIF(nal."LAPSED_DATE", 'null'), 'DD/MM/YYYY'),
         TO_DATE(NULLIF(nal."REV_DATE", 'null'), 'DD/MM/YYYY'),
         TO_DATE(NULLIF(nal."EXPIRY_DATE", 'null'), 'DD/MM/YYYY')
       ) as end_date,
-      (concat_ws(':', nal."FGAC_REGION_CODE", nal."ID" )) as external_id,
       nal."LIC_NO" as document_ref
     FROM import."NALD_ABS_LICENCES" nal
       INNER JOIN import."NALD_ABS_LIC_VERSIONS" nalv
