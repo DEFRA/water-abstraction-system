@@ -56,7 +56,7 @@ describe('Import Legacy Transform Licence Document service', () => {
     })
   })
 
-  describe('when no matching legacy licence version is found', () => {
+  describe('when no matching legacy licence is found', () => {
     beforeEach(() => {
       Sinon.stub(FetchLicenceDocumentService, 'go').resolves(null)
     })
