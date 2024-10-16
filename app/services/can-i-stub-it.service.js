@@ -2,7 +2,7 @@
 
 /**
  * Fetches stuff
- * @module FetchStuff
+ * @module CanIStubItService
  */
 
 const RegionModel = require('../models/region.model.js')
@@ -13,12 +13,6 @@ const RegionModel = require('../models/region.model.js')
  * @returns {Promise<object>} Contains an array of stuff
  */
 async function go () {
-  const allTheStuff = await _fetch()
-
-  return allTheStuff
-}
-
-async function _fetch () {
   const allTheStuff = await RegionModel.query()
     .select('*')
     .where('naldRegionId', 2)
