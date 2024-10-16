@@ -42,7 +42,7 @@ describe('Monitoring stations controller', () => {
           url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: [] }
           }
         }
 

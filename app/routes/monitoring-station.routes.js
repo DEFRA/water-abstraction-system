@@ -7,12 +7,7 @@ const routes = [
     method: 'GET',
     path: '/monitoring-stations/{monitoringStationId}',
     options: {
-      handler: MonitoringStationsController.view,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
+      handler: MonitoringStationsController.view
     }
   }
 ]
