@@ -26,8 +26,6 @@ async function go (regionCode, naldLicenceId, transformedLicence, licenceRef) {
 
     transformedLicence.licenceDocumentRoles = transformedLicenceDocumentRole
   }
-
-  console.log('jere - ', transformedLicence.licenceDocumentRoles)
 }
 
 module.exports = {
