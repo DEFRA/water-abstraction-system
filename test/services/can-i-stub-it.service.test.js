@@ -14,7 +14,7 @@ const RegionModel = require('../../app/models/region.model.js')
 // Thing under test
 const CanIStubItService = require('../../app/services/can-i-stub-it.service.js')
 
-describe('Can I Stub It (yes we can) service', () => {
+describe.only('Can I Stub It (yes we can) service', () => {
   beforeEach(() => {
     const queryStub = Sinon.stub(RegionModel, 'query')
     const whereStub = Sinon.stub()
