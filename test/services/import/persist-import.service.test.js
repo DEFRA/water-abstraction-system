@@ -13,11 +13,12 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 const PersistCompanyService = require('../../../app/services/import/persist/persist-company.service.js')
 const PersistLicenceService = require('../../../app/services/import/persist/persist-licence.service.js')
 const PersistLicenceVersionsService = require('../../../app/services/import/persist/persist-licence-versions.service.js')
+const PersistLicenceDocumentService = require('../../../app/services/import/persist/persist-licence-document.service.js')
 
 // Thing under test
 const PersistImportService = require('../../../app/services/import/persist-import.service.js')
 
-describe('Persist licence service', () => {
+describe('Persist import service', () => {
   const transformedCompanies = []
   const transformedLicence = []
 
@@ -41,6 +42,7 @@ describe('Persist licence service', () => {
         Sinon.stub(PersistLicenceService, 'go').resolves('1234')
         Sinon.stub(PersistLicenceVersionsService, 'go').resolves()
         Sinon.stub(PersistCompanyService, 'go').resolves()
+        Sinon.stub(PersistLicenceDocumentService, 'go').resolves()
       })
 
       it('should return the licence id', async () => {
@@ -55,6 +57,7 @@ describe('Persist licence service', () => {
         Sinon.stub(PersistLicenceService, 'go').resolves('1234')
         Sinon.stub(PersistLicenceVersionsService, 'go').resolves()
         Sinon.stub(PersistCompanyService, 'go').rejects(new Error('boom'))
+        Sinon.stub(PersistLicenceDocumentService, 'go').resolves()
       })
 
       it('should throw an error', async () => {
@@ -68,6 +71,7 @@ describe('Persist licence service', () => {
       Sinon.stub(PersistLicenceService, 'go').resolves('1234')
       Sinon.stub(PersistLicenceVersionsService, 'go').resolves()
       Sinon.stub(PersistCompanyService, 'go').resolves()
+      Sinon.stub(PersistLicenceDocumentService, 'go').resolves()
 
       Sinon.stub(LicenceModel, 'transaction').rejects(new Error('boom'))
     })
