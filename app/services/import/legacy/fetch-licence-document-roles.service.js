@@ -39,11 +39,11 @@ function _query () {
           END
         ) as contact_id
     FROM import."NALD_LIC_ROLES" nlr
-           INNER JOIN public.licence_roles lr
-                      ON lr.name = 'returnsTo'
-           Inner JOIN import."NALD_PARTIES" np
-                      ON np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
-                        AND np."ID" = nlr."ACON_APAR_ID"
+      INNER JOIN public.licence_roles lr
+        ON lr.name = 'returnsTo'
+      Inner JOIN import."NALD_PARTIES" np
+        ON np."FGAC_REGION_CODE" = nlr."FGAC_REGION_CODE"
+        AND np."ID" = nlr."ACON_APAR_ID"
     WHERE
       nlr."ALRT_CODE" = 'RT'
       AND nlr."FGAC_REGION_CODE" = ?
