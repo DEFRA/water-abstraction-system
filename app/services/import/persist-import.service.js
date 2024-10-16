@@ -8,6 +8,7 @@
 const PersistLicenceService = require('./persist/persist-licence.service.js')
 const PersistLicenceVersionsService = require('./persist/persist-licence-versions.service.js')
 const PersistCompanyService = require('./persist/persist-company.service.js')
+const PersistLicenceDocumentService = require('./persist/persist-licence-document.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 
@@ -26,6 +27,8 @@ async function go (transformedLicence, transformedCompanies) {
     const id = await PersistLicenceService.go(trx, updatedAt, transformedLicence)
 
     await PersistLicenceVersionsService.go(trx, updatedAt, transformedLicence, id)
+
+    await PersistLicenceDocumentService.go(trx, updatedAt, transformedLicence)
 
     await PersistCompanyService.go(trx, updatedAt, transformedCompanies)
 
