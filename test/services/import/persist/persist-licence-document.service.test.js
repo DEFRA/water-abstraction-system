@@ -47,7 +47,7 @@ describe('Persist licence document service', () => {
         transformedLicence.licenceDocument = licenceDocument
       })
 
-      it('creates a new licence record plus child records in WRLS and returns the licence ID', async () => {
+      it('creates a new licence document record', async () => {
         await PersistLicenceDocumentService.go(trx, updatedAt, transformedLicence)
 
         // Commit the transaction so the data is saved to the database
