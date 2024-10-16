@@ -10,6 +10,7 @@ const PersistImportService = require('../persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformLicenceDocumentService = require('./transform-licence-document.service.js')
+const ImportLegacyTransformLicenceDocumentRolesService = require('./transform-licence-document-roles.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
 const TransformCompanyAddressesService = require('./transform-company-addresses.service.js')
 const TransformContactsService = require('./transform-contacts.service.js')
@@ -41,6 +42,7 @@ async function go (licenceRef) {
 
     // Document
     await TransformLicenceDocumentService.go(regionCode, naldLicenceId, transformedLicence)
+    await ImportLegacyTransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef)
 
     // Transform the company data
     const { transformedCompanies } = await TransformCompaniesService.go(regionCode, naldLicenceId)
