@@ -28,32 +28,6 @@ describe('Import Licence Document validator', () => {
     })
   })
 
-  describe('the "deletedAt" property', () => {
-    describe('when it is not null', () => {
-      beforeEach(() => {
-        transformedLicenceDocument.deletedAt = 'something_else'
-      })
-
-      it('throws an error', () => {
-        expect(() => {
-          LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.throw('"deletedAt" must be [null]')
-      })
-    })
-
-    describe('when it is null', () => {
-      beforeEach(() => {
-        transformedLicenceDocument.deletedAt = null
-      })
-
-      it('does not throw an error', () => {
-        expect(() => {
-          LicenceDocumentValidator.go(transformedLicenceDocument)
-        }).to.not.throw()
-      })
-    })
-  })
-
   describe('the "licenceRef" property', () => {
     describe('when it is not a date', () => {
       beforeEach(() => {
@@ -135,7 +109,6 @@ describe('Import Licence Document validator', () => {
 
 function _transformedLicenceDocument () {
   return {
-    deletedAt: null,
     licenceRef: generateLicenceRef(),
     endDate: new Date('2052-06-23'),
     startDate: new Date('1992-08-19')

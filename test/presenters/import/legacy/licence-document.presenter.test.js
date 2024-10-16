@@ -27,17 +27,10 @@ describe('Import Legacy Licence Document presenter', () => {
     const result = LicenceDocumentPresenter.go(legacyLicenceDocument)
 
     expect(result).to.equal({
-      deletedAt: null,
       licenceRef,
       endDate: null,
       startDate: new Date('1999-01-01')
     })
-  })
-
-  it('correctly sets the default data', () => {
-    const result = LicenceDocumentPresenter.go(legacyLicenceDocument)
-
-    expect(result.deletedAt).to.be.null()
   })
 })
 

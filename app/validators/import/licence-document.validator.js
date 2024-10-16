@@ -15,7 +15,6 @@ const Joi = require('joi')
  */
 function go (licenceDocument) {
   const schema = Joi.object({
-    deletedAt: Joi.valid(null),
     licenceRef: Joi.string().required(),
     endDate: Joi.date().required().allow(null),
     startDate: Joi.date().required()

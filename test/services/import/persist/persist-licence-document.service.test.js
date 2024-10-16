@@ -69,7 +69,10 @@ describe('Persist licence document service', () => {
 
         existingLicence.licenceDocument = existing.licenceDocument
 
-        transformedLicence.licenceDocument = _transformedLicenceDocument(licenceRef)
+        transformedLicence.licenceDocument = {
+          ..._transformedLicenceDocument(licenceRef),
+          endDate: null
+        }
       })
 
       it('should update the existing licence document record', async () => {
@@ -80,11 +83,12 @@ describe('Persist licence document service', () => {
         await trx.commit()
 
         // Get the persisted data
-        const updatedLicenceDocument = await _fetchPersistedLicenceDocument(licenceDocument.licenceRef)
+        const updatedLicenceDocument = await
+        _fetchPersistedLicenceDocument(transformedLicence.licenceDocument.licenceRef)
 
         // Check the updated licence
-        expect(updatedLicenceDocument.licenceRef).to.equal(licenceDocument.licenceRef)
-        expect(updatedLicenceDocument.deletedAt).to.be.null()
+        expect(updatedLicenceDocument.licenceRef).to.equal(transformedLicence.licenceDocument.licenceRef)
+        expect(updatedLicenceDocument.endDate).to.be.null()
       })
     })
   })
@@ -101,7 +105,6 @@ async function _fetchPersistedLicenceDocument (licenceRef) {
 
 function _transformedLicenceDocument (licenceRef) {
   return {
-    deletedAt: null,
     licenceRef,
     startDate: new Date('1992-08-19'),
     endDate: new Date('2001-01-01')
@@ -111,7 +114,7 @@ function _transformedLicenceDocument (licenceRef) {
 async function _createExistingRecords (licenceRef) {
   const licenceDocument = await LicenceDocumentHelper.add({
     licenceRef,
-    deletedAt: new Date('2001-01-01')
+    endDate: new Date('2001-01-01')
   })
 
   return {

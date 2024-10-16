@@ -15,7 +15,6 @@
  */
 function go (licenceDocument) {
   return {
-    deletedAt: null,
     licenceRef: licenceDocument.licence_ref,
     endDate: licenceDocument.end_date,
     startDate: licenceDocument.start_date
