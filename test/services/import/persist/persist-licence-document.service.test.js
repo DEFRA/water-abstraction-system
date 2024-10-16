@@ -72,7 +72,7 @@ describe('Persist licence document service', () => {
         transformedLicence.licenceDocument = _transformedLicenceDocument(licenceRef)
       })
 
-      it('should return the updated licence', async () => {
+      it('should update the existing licence document record', async () => {
         // Call the thing under test
         await PersistLicenceDocumentService.go(trx, updatedAt, transformedLicence)
 
