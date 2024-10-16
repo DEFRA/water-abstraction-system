@@ -46,12 +46,7 @@ const routes = [
     method: 'GET',
     path: '/licences/{id}/purposes',
     options: {
-      handler: LicencesController.viewLicencePurposes,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
+      handler: LicencesController.viewLicencePurposes
     }
   },
   {
