@@ -80,6 +80,32 @@ describe('Import Licence validator', () => {
     })
   })
 
+  describe('the "licenceDocumentRoles" property', () => {
+    describe('when it is not an array', () => {
+      beforeEach(() => {
+        transformedLicence.licenceDocumentRoles = 1
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          LicenceValidator.go(transformedLicence)
+        }).to.throw('"licenceDocumentRoles" must be an array')
+      })
+    })
+
+    describe('when it is null', () => {
+      beforeEach(() => {
+        transformedLicence.licenceDocumentRoles = null
+      })
+
+      it('throws an error', async () => {
+        expect(() => {
+          LicenceValidator.go(transformedLicence)
+        }).to.throw('"licenceDocumentRoles" must be an array')
+      })
+    })
+  })
+
   describe('the "licenceRef" property', () => {
     describe('when it is not a string', () => {
       beforeEach(() => {
@@ -391,6 +417,7 @@ function _transformedLicence () {
   return {
     expiredDate: new Date('2052-06-23'),
     lapsedDate: new Date('2050-07-24'),
+    licenceDocumentRoles: [],
     licenceRef: generateLicenceRef(),
     licenceVersions: [],
     regionId: '82d8c1b7-0eed-43a7-a5f9-4e397c08e17e',

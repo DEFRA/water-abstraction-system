@@ -26,6 +26,7 @@ describe('Import Legacy Licence presenter', () => {
     expect(result).to.equal({
       expiredDate: null,
       lapsedDate: null,
+      licenceDocumentRoles: [],
       licenceRef: legacyLicence.licence_ref,
       licenceVersions: [],
       regionId: '82d8c1b7-0eed-43a7-a5f9-4e397c08e17e',

@@ -6,6 +6,7 @@
  */
 
 const FetchLicenceDocumentRolesService = require('./fetch-licence-document-roles.service.js')
+const ImportLicenceDocumentRoleValidator = require('../../../validators/import/licence-document-role.validator.js')
 const LicenceDocumentRolePresenter = require('../../../presenters/import/legacy/licence-document-role.presenter.js')
 
 /**
@@ -24,7 +25,9 @@ async function go (regionCode, naldLicenceId, transformedLicence, licenceRef) {
   for (const licenceDocumentRole of naldLicenceDocumentRoles) {
     const transformedLicenceDocumentRole = LicenceDocumentRolePresenter.go(licenceDocumentRole, licenceRef)
 
-    transformedLicence.licenceDocumentRoles = transformedLicenceDocumentRole
+    ImportLicenceDocumentRoleValidator.go(transformedLicenceDocumentRole)
+
+    transformedLicence.licenceDocumentRoles.push(transformedLicenceDocumentRole)
   }
 }
 
