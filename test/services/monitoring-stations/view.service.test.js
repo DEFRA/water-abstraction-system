@@ -87,7 +87,7 @@ function _testFetchMonitoringStationData () {
     riverName: null,
     stationReference: null,
     wiskiId: null,
-    licenceGaugingStations: [
+    licenceMonitoringStations: [
       {
         abstractionPeriodStartDay: '01',
         abstractionPeriodStartMonth: '04',
