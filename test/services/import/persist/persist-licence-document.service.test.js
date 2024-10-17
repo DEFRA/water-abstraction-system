@@ -135,6 +135,11 @@ describe.only('Persist licence document service', () => {
         const [updatedLicenceDocumentRole] = updatedLicenceDocument.licenceDocumentRoles
 
         console.log('Licence ref = ', licenceRef)
+
+        console.log('transformedLicence = ', transformedLicence)
+        console.log('licenceDocument = ', transformedLicence.licenceDocument)
+        console.log('licenceDocumentRoles = ', transformedLicence.licenceDocument.licenceDocumentRoles)
+
         console.log('updatedLicenceDocumentRole = ', updatedLicenceDocumentRole)
 
         expect(updatedLicenceDocumentRole.endDate).to.equal(new Date('2010-01-01'))
