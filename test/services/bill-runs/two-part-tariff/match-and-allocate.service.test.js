@@ -21,6 +21,7 @@ const PersistAllocatedLicenceToResultsService = require('../../../../app/service
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/two-part-tariff/match-and-allocate.service.js')
 
 describe('Match And Allocate Service', () => {
+  let determineLicenceIssuesServiceStub
   let notifierStub
   let licences
 
@@ -48,16 +49,16 @@ describe('Match And Allocate Service', () => {
     describe('when there are licences to be processed', () => {
       beforeEach(() => {
         licences = _generateLicencesData()
+        determineLicenceIssuesServiceStub = Sinon.stub(DetermineLicenceIssuesService, 'go')
 
-        Sinon.stub(FetchLicencesService, 'go').returns(licences)
-        Sinon.stub(PrepareReturnLogsService, 'go')
-        Sinon.stub(PrepareChargeVersionService, 'go')
         Sinon.stub(AllocateReturnsToChargeElementService, 'go')
-        Sinon.stub(DetermineLicenceIssuesService, 'go')
+        Sinon.stub(FetchLicencesService, 'go').returns(licences)
         Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
+        Sinon.stub(PrepareChargeVersionService, 'go')
+        Sinon.stub(PrepareReturnLogsService, 'go')
       })
 
-      describe('and the charge element has matching returns', () => {
+      describe('and a charge element has a matching return', () => {
         beforeEach(() => {
           const matchingReturns = _generateMatchingReturnsData()
 
@@ -85,12 +86,12 @@ describe('Match And Allocate Service', () => {
         })
       })
 
-      describe('and the charge element does not have matching returns', () => {
+      describe('and the charge elements do not have matching returns', () => {
         beforeEach(() => {
           Sinon.stub(MatchReturnsToChargeElementService, 'go').returns([])
         })
 
-        it('processes the licence for matching but does not allocate', async () => {
+        it('processes the licence for matching but does not call the allocate returns service', async () => {
           await MatchAndAllocateService.go(billRun, billingPeriods)
 
           expect(FetchLicencesService.go.called).to.be.true()
@@ -102,6 +103,17 @@ describe('Match And Allocate Service', () => {
 
           expect(DetermineLicenceIssuesService.go.called).to.be.true()
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
+        })
+
+        it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
+          await MatchAndAllocateService.go(billRun, billingPeriods)
+
+          const { chargeVersions } = determineLicenceIssuesServiceStub.firstCall.args[0]
+          const chargeReference = chargeVersions[0].chargeReferences[0]
+
+          expect(chargeReference.allocatedQuantity).to.equal(32)
+          expect(chargeReference.chargeElements[0].allocatedQuantity).to.equal(30)
+          expect(chargeReference.chargeElements[1].allocatedQuantity).to.equal(2)
         })
 
         it('returns "true" as there are licences to process', async () => {
@@ -254,11 +266,25 @@ function _generateLicencesData () {
                   abstractionPeriodStartMonth: 3,
                   abstractionPeriodEndDay: 31,
                   abstractionPeriodEndMonth: 10,
-                  authorisedAnnualQuantity: 32,
+                  authorisedAnnualQuantity: 30,
                   purpose: {
                     id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
                     legacyId: '400',
                     description: 'Spray Irrigation - Direct'
+                  }
+                },
+                {
+                  id: '5713d337-0d52-4d7f-8ecc-0e77d8d63444',
+                  description: 'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 3,
+                  abstractionPeriodEndDay: 31,
+                  abstractionPeriodEndMonth: 10,
+                  authorisedAnnualQuantity: 30,
+                  purpose: {
+                    id: '4c1ecee4-a1a3-41fe-8004-ae6a27ef2207',
+                    legacyId: '420',
+                    description: 'Spray Irrigation - Storage'
                   }
                 }
               ]

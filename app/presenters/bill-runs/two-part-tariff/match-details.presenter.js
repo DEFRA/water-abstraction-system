@@ -119,7 +119,7 @@ function _prepareDate (startDate, endDate) {
 function _returnLinkAndTotal (returnLog) {
   const { returnStatus, allocated, quantity } = returnLog
 
-  if (['due', 'received', 'void'].includes(returnStatus)) {
+  if (['due', 'received'].includes(returnStatus)) {
     return { returnTotal: '/', returnLink: `/return/internal?returnId=${returnLog.returnId}` }
   }
 

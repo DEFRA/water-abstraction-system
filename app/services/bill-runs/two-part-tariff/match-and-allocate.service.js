@@ -50,6 +50,8 @@ async function _process (licences, billingPeriod, billRun) {
       const { chargeReferences } = chargeVersion
 
       chargeReferences.forEach((chargeReference) => {
+        let chargeReferenceMatched = false
+
         chargeReference.allocatedQuantity = 0
 
         const { chargeElements } = chargeReference
@@ -58,6 +60,8 @@ async function _process (licences, billingPeriod, billRun) {
           const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
+            chargeReferenceMatched = true
+
             AllocateReturnsToChargeElementService.go(
               chargeElement,
               matchingReturns,
@@ -66,12 +70,39 @@ async function _process (licences, billingPeriod, billRun) {
             )
           }
         })
+
+        if (!chargeReferenceMatched) {
+          _useAuthorisedVolume(chargeReference)
+        }
       })
     })
 
     DetermineLicenceIssuesService.go(licence)
     await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
   }
+}
+
+function _useAuthorisedVolume (chargeReference) {
+  const { chargeElements } = chargeReference
+
+  let availableQuantity = chargeReference.volume
+  let totalAllocatedQuantity = 0
+
+  chargeElements.forEach((chargeElement) => {
+    let qtyToAllocate
+
+    if (chargeElement.authorisedAnnualQuantity <= availableQuantity) {
+      qtyToAllocate = chargeElement.authorisedAnnualQuantity
+    } else {
+      qtyToAllocate = availableQuantity
+    }
+
+    chargeElement.allocatedQuantity = qtyToAllocate
+    availableQuantity -= qtyToAllocate
+    totalAllocatedQuantity += qtyToAllocate
+  })
+
+  chargeReference.allocatedQuantity = totalAllocatedQuantity
 }
 
 module.exports = {
