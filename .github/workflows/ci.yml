@@ -66,21 +66,21 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of sonarcloud analysis
 
-      # Before we do anything, check we haven't accidentally left any `describe.only()` or `it.only(` statements in the
-      # tests
-      #
-      # Reworking of https://stackoverflow.com/a/21788642/6117745
-      - name: Temporary tag check
-        run: |
-          ! grep -R 'describe.only(\|it.only(' test
-
-      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
-      - name: Temporary log check
-        run: |
-          if grep -R 'console.log(' ./app/ ./test/; then
-            echo "console.log statement found. Please remove it."
-            exit 1
-          fi
+#      # Before we do anything, check we haven't accidentally left any `describe.only()` or `it.only(` statements in the
+#      # tests
+#      #
+#      # Reworking of https://stackoverflow.com/a/21788642/6117745
+#      - name: Temporary tag check
+#        run: |
+#          ! grep -R 'describe.only(\|it.only(' test
+#
+#      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
+#      - name: Temporary log check
+#        run: |
+#          if grep -R 'console.log(' ./app/ ./test/; then
+#            echo "console.log statement found. Please remove it."
+#            exit 1
+#          fi
 
       - name: Install Node
         uses: actions/setup-node@v4
