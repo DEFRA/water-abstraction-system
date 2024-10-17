@@ -132,6 +132,9 @@ describe('Persist licence document service', () => {
         expect(updatedLicenceDocument.endDate).to.be.null()
 
         // Licence Document Role
+        // Check the update has worked and not an insert
+        expect(updatedLicenceDocument.licenceDocumentRoles.length).to.equal(1)
+
         const [updatedLicenceDocumentRole] = updatedLicenceDocument.licenceDocumentRoles
 
         expect(updatedLicenceDocumentRole.endDate).to.equal(new Date('2010-01-01'))
