@@ -6,9 +6,9 @@
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchLicenceReturnLogsService = require('./fetch-licence-return-requirements.service.js')
 const GenerateReturnLogsService = require('./generate-return-logs.service.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
  * Creates the return logs for the given licence
@@ -32,18 +32,11 @@ async function go (licenceReference) {
     const returnRequirements = await FetchLicenceReturnLogsService.go(licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
-    await _createReturnLogs(returnLogs)
+    await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
   } catch (error) {
     global.GlobalNotifier.omfg('Create licence return logs job failed', { error })
-  }
-}
-
-async function _createReturnLogs (returnLogs) {
-  for (const returnLog of returnLogs) {
-    await ReturnLogModel.query()
-      .insert(returnLog)
   }
 }
 

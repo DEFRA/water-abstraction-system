@@ -6,7 +6,7 @@
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const { CycleStartDateByDate } = require('../../../lib/dates.lib.js')
+const { cycleStartDateByDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Given a licence reference and a date this service voids the return logs from that date forward.
@@ -22,7 +22,7 @@ async function go (licenceReference, date) {
 }
 
 async function _fetchReturnLogs (licenceReference, date) {
-  const cycleStartDate = CycleStartDateByDate(date, false)
+  const cycleStartDate = cycleStartDateByDate(date, false)
 
   return ReturnLogModel.query()
     .select(['id'])
