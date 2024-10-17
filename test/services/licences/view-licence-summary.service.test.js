@@ -84,9 +84,9 @@ function _testLicence () {
       displayName: 'Avalon'
     },
     licenceVersions: [],
-    licenceGaugingStations: [{
+    licenceMonitoringStations: [{
       id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
-      gaugingStation: {
+      monitoringStation: {
         id: 'ac075651-4781-4e24-a684-b943b98607ca',
         label: 'MEVAGISSEY FIRE STATION'
       }
