@@ -17,7 +17,7 @@ const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 // Thing under test
 const FetchLicenceService = require('../../../../app/services/licences/supplementary/fetch-licence.service.js')
 
-describe.only('Fetch Licence Service', () => {
+describe('Fetch Licence Service', () => {
   let workflow
 
   describe('when passed a valid workflow id', () => {
@@ -42,7 +42,6 @@ describe.only('Fetch Licence Service', () => {
     it('fetches the licence data related to that workflow record', async () => {
       const result = await FetchLicenceService.go(workflow.id)
 
-      console.log('Result :', result)
       expect(result.id).to.equal(licence.id)
       expect(result.region_id).to.equal(licence.regionId)
       expect(result.include_in_sroc_billing).to.equal(licence.includeInSrocBilling)
@@ -56,16 +55,4 @@ describe.only('Fetch Licence Service', () => {
       expect(result.two_part_tariff_charge_versions).to.equal(true)
     })
   })
-
-  // describe('when passed an invalid workflow id', () => {
-  //   before(() => {
-  //     workflow = '1234'
-  //   })
-
-  //   it('does not return anything', async () => {
-  //     const result = await FetchLicenceService.go(workflow.id)
-
-  //     expect(result).to.equal([])
-  //   })
-  // })
 })

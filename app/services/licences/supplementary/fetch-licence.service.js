@@ -42,7 +42,7 @@ function _query () {
       SELECT 1
       FROM public.charge_versions cv
       WHERE cv.licence_id = l.id
-        AND cv.start_date > '2022-04-01'
+        AND cv.start_date > '2022-03-31'
     ) AS sroc_charge_versions,
     EXISTS (
       SELECT 1
