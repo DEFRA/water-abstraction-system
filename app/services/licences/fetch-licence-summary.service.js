@@ -95,15 +95,15 @@ async function _fetch (licenceId) {
         'displayTitle'
       ])
     })
-    .withGraphFetched('licenceGaugingStations')
-    .modifyGraph('licenceGaugingStations', (builder) => {
+    .withGraphFetched('licenceMonitoringStations')
+    .modifyGraph('licenceMonitoringStations', (builder) => {
       builder.select([
         'id'
       ])
         .whereNull('deletedAt')
     })
-    .withGraphFetched('licenceGaugingStations.gaugingStation')
-    .modifyGraph('licenceGaugingStations.gaugingStation', (builder) => {
+    .withGraphFetched('licenceMonitoringStations.monitoringStation')
+    .modifyGraph('licenceMonitoringStations.monitoringStation', (builder) => {
       builder.select([
         'id',
         'label'

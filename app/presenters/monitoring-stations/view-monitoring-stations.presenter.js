@@ -11,26 +11,26 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
  * Formats the monitoring station details and related licences data for the view monitoring-station  page
  *
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {module:GaugingStationModel[]} monitoringStation - The monitoring station and associated licences data
+ * @param {module:MonitoringStationModel[]} monitoringStation - The monitoring station and associated licences data
  * returned by `FetchMonitoringStationService`
  *
  * @returns {object} monitoring station and licence data needed by the view template
  */
 function go (auth, monitoringStation) {
-  const formattedLicences = _formatLicences(monitoringStation.licenceGaugingStations)
+  const formattedLicences = _formatLicences(monitoringStation.licenceMonitoringStations)
   const sortedLicences = _sortLicences(formattedLicences)
   const groupedLicences = _groupLicences(sortedLicences)
 
   return {
-    gridReference: monitoringStation.gridReference,
+    gridReference: monitoringStation.gridReference ?? '',
     licences: groupedLicences,
     monitoringStationId: monitoringStation.id,
     monitoringStationName: monitoringStation.label,
     pageTitle: _pageTitle(monitoringStation.riverName, monitoringStation.label),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
-    stationReference: monitoringStation.stationReference,
-    wiskiId: monitoringStation.wiskiId
+    stationReference: monitoringStation.stationReference ?? '',
+    wiskiId: monitoringStation.wiskiId ?? ''
   }
 }
 
@@ -119,7 +119,7 @@ function _groupLicences (licences) {
 
     if (!grouped[id]) {
       grouped[id] = {
-        licenceId: id,
+        id,
         licenceRef,
         linkages: []
       }
@@ -143,7 +143,7 @@ function _pageTitle (riverName, stationName) {
 
 function _sortLicences (licences) {
   // NOTE: Sorting the licences in order of `licenceRef` proved difficult to complete as licences are fetched by those
-  // linked to a licence gauging station, where the licence reference is stored inside the nested licence object.
+  // linked to a licence monitoring station, where the licence reference is stored inside the nested licence object.
   // However, by extracting and comparing `licenceRef` directly within the sort function, we can order the licences
   // alphabetically. The sort logic below compares the `licenceRef` of each licence and orders them in ascending order.
   return licences.sort((licenceA, licenceB) => {

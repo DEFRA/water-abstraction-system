@@ -26,7 +26,6 @@ const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-pa
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
-const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedAuthorisedVolumeService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
@@ -112,73 +111,6 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('Bill runs (page 2 of 30)')
           expect(response.payload).to.contain('Previous')
           expect(response.payload).to.contain('Next')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        options = postRequestOptions(
-          '/bill-runs',
-          {
-            type: 'supplementary',
-            scheme: 'sroc',
-            region: '07ae7f3a-2677-4102-b352-cc006828948c',
-            user: 'test.user@defra.gov.uk'
-          }
-        )
-      })
-
-      describe('when a request is valid', () => {
-        const validResponse = {
-          id: 'f561990b-b29a-42f4-b71a-398c52339f78',
-          region: '07ae7f3a-2677-4102-b352-cc006828948c',
-          scheme: 'sroc',
-          batchType: 'supplementary',
-          status: 'processing'
-        }
-
-        beforeEach(async () => {
-          Sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
-        })
-
-        it('returns a 200 response including details of the new bill run', async () => {
-          const response = await server.inject(options)
-          const payload = JSON.parse(response.payload)
-
-          expect(response.statusCode).to.equal(200)
-          expect(payload).to.equal(validResponse)
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the request is invalid', () => {
-          beforeEach(() => {
-            options.payload.scheme = 'INVALID'
-          })
-
-          it('returns an error response', async () => {
-            const response = await server.inject(options)
-            const payload = JSON.parse(response.payload)
-
-            expect(response.statusCode).to.equal(400)
-            expect(payload.message).to.startWith('"scheme" must be')
-          })
-        })
-
-        describe('because the bill run could not be initiated', () => {
-          beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(StartBillRunProcessService, 'go').rejects()
-          })
-
-          it('returns an error response', async () => {
-            const response = await server.inject(options)
-            const payload = JSON.parse(response.payload)
-
-            expect(response.statusCode).to.equal(500)
-            expect(payload.message).to.equal('An internal server error occurred')
-          })
         })
       })
     })

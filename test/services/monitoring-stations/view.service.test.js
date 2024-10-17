@@ -41,11 +41,11 @@ describe('View service', () => {
         gridReference: 'TL2664640047',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
-        wiskiId: null,
-        stationReference: null,
+        wiskiId: '',
+        stationReference: '',
         licences: [
           {
-            licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
+            id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             licenceRef: 'AT/TEST',
             linkages: [
               {
@@ -87,7 +87,7 @@ function _testFetchMonitoringStationData () {
     riverName: null,
     stationReference: null,
     wiskiId: null,
-    licenceGaugingStations: [
+    licenceMonitoringStations: [
       {
         abstractionPeriodStartDay: '01',
         abstractionPeriodStartMonth: '04',

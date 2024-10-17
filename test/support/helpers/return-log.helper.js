@@ -4,7 +4,6 @@
  * @module ReturnLogHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { randomInteger } = require('../general.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
@@ -23,7 +22,6 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  * - `metadata` - {}
  * - `receivedDate` - 2023-04-12
  * - `returnReference` - [randomly generated - 10000321]
- * - `returnCycleId` - UUID
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
  * - `status` - completed
@@ -85,7 +83,6 @@ function defaults (data = {}) {
     },
     receivedDate,
     returnReference,
-    returnCycleId: generateUUID(),
     returnsFrequency: 'month',
     startDate: new Date('2022-04-01'),
     status: 'due',
@@ -98,12 +95,32 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generated return log Id
+ *
+ * Unlike other tables, the previous team opted to generate a unique ID based on properties of the return log including
+ * start and end dates, version and references.
+ *
+ * So, in order to replicate that we have this helper method, that defaults some of those values, and randomises others
+ * in order to generate a unique return log ID.
+ *
+ * If you have known values, for example, the licence reference they can be passed to this helper and it will
+ * incorporate them into the ID.
+ *
+ * @param {string} [startDate] - the start date as a string, for example '2022-04-01'
+ * @param {string} [endDate] - the end date as a string, for example '2023-03-31'
+ * @param {number} [version] - the version number to use, for example 1
+ * @param {string} [licenceRef] - the licence reference to use
+ * @param {string} [returnReference] - the return requirement reference to use
+ *
+ * @returns {string} the generated return log ID
+ */
 function generateReturnLogId (
   startDate = '2022-04-01',
   endDate = '2023-03-31',
   version = 1,
-  licenceRef,
-  returnReference
+  licenceRef = null,
+  returnReference = null
 ) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()

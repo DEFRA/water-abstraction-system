@@ -44,6 +44,7 @@ async function _fetch (licenceRef, billingPeriod) {
     // water-abstraction-service filters out old return logs in this way: see
     // `src/lib/services/returns/api-connector.js`
     .where('startDate', '>=', '2008-04-01')
+    .whereNot('status', 'void')
     .where('endDate', '>=', billingPeriod.startDate)
     .where('endDate', '<=', billingPeriod.endDate)
     .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
