@@ -36,10 +36,9 @@ describe('Persist licence document service', () => {
   let licenceRoleId
 
   beforeEach(async () => {
-    // A company and address is will be the same external id
+    // A company and address is/will be the same external id
     const externalId = CompanyHelper.generateExternalId()
 
-    // Set up the data to exists for the test
     company = await CompanyHelper.add({
       externalId
     })

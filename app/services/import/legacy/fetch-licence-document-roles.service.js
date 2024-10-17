@@ -1,14 +1,18 @@
 'use strict'
 
 /**
- * Fetches the licence document roles data from the import.NALD_ABS_LICENCES table for the licence being imported
+ * Fetches the licence document roles data from the import data
  * @module FetchLicenceDocumentRolesService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the licence document roles data from the import.NALD_ABS_LICENCES table for the licence being imported
+ * Fetches the licence document roles data from the import data
+ *
+ * This will come from the licence versions and the licence roles.
+ *
+ * We are only interest in the returnsTo licence role from the import.NALD_LIC_ROLES
  *
  * @param {string} regionCode - The NALD region code
  * @param {string} licenceId - The NALD licence ID

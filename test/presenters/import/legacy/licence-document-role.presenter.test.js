@@ -39,6 +39,12 @@ describe('Import Legacy Licence Document role presenter', () => {
       startDate: new Date('1999-01-01')
     })
   })
+
+  it('correctly sets the "documentId" as the licence ref', () => {
+    const result = LicenceDocumentRolePresenter.go(legacyLicenceDocumentRole, licenceRef)
+
+    expect(result.documentId).to.equal(licenceRef)
+  })
 })
 
 function _legacyLicenceDocumentRole (licenceRef, licenceRoleId) {

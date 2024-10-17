@@ -42,12 +42,12 @@ describe('Import Legacy Transform Licence Document Role service', () => {
     Sinon.restore()
   })
 
-  describe('when a matching valid legacy licence document role is found', () => {
+  describe('when a licence has licence document roles', () => {
     beforeEach(() => {
       Sinon.stub(FetchLicenceDocumentRolesService, 'go').resolves([legacyLicenceDocument])
     })
 
-    it('attaches the record transformed and validated for WRLS to the transformed licence', async () => {
+    it('attaches the record transformed and validated for WRLS to the transformed licence document roles', async () => {
       await TransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef)
 
       expect(transformedLicence.licenceDocument.licenceDocumentRoles).to.equal([
@@ -64,7 +64,7 @@ describe('Import Legacy Transform Licence Document Role service', () => {
     })
   })
 
-  describe('when no matching legacy licence document role is found', () => {
+  describe('when the fetch for a licence document role fails', () => {
     beforeEach(() => {
       Sinon.stub(FetchLicenceDocumentRolesService, 'go').resolves(null)
     })

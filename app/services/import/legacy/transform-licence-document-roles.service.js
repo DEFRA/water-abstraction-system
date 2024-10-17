@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Transforms all NALD licence document role data into an object that matches the WRLS structure
+ * Transforms all NALD data into an object that matches the WRLS licence document role structure
  * @module ImportLegacyTransformLicenceDocumentRolesService
  */
 
@@ -10,9 +10,9 @@ const ImportLicenceDocumentRoleValidator = require('../../../validators/import/l
 const LicenceDocumentRolePresenter = require('../../../presenters/import/legacy/licence-document-role.presenter.js')
 
 /**
- * Transforms all NALD licence document roles data into an object that matches the WRLS structure
+ * Transforms all NALD data into an object that matches the WRLS licence document role structure
  *
- * NALD does not have a concept of a document it is a legacy WRLS construct
+ * NALD does not have a concept of a licence document or licence document role it is a legacy WRLS construct
  *
  * @param {string} regionCode - The NALD region code for the licence being imported
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
