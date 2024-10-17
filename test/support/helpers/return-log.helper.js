@@ -133,8 +133,39 @@ function generateReturnLogId (
   return `v${version}:1:${licenceRef}:${returnReference}:${startDate}:${endDate}`
 }
 
+async function hasContinousReturnLogs (licenceReference) {
+  const returnLogs = await ReturnLogModel.query()
+    .select(['endDate', 'startDate'])
+    .where('licenceRef', licenceReference)
+    .whereNot('status', 'void')
+    .orderBy('startDate', 'ASC')
+
+  if (returnLogs.length === 1) {
+    return true
+  }
+
+  let isSequential = true
+
+  for (let i = 0; i < returnLogs.length - 1; i++) {
+    isSequential = _areDatesSequential(returnLogs[i].endDate, returnLogs[i + 1].startDate)
+  }
+
+  return isSequential
+}
+
+function _areDatesSequential (endDate, startDate) {
+  const _endDate = new Date(endDate)
+  const _startDate = new Date(startDate)
+
+  const differenceInMs = Math.abs(_endDate - _startDate)
+  const differenceInDays = differenceInMs / (24 * 60 * 60 * 1000)
+
+  return differenceInDays <= 1
+}
+
 module.exports = {
   add,
   defaults,
-  generateReturnLogId
+  generateReturnLogId,
+  hasContinousReturnLogs
 }

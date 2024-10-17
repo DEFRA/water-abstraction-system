@@ -131,14 +131,14 @@ function cycleEndDateByDate (date, summer) {
   const month = date.getMonth()
 
   if (summer) {
-    if (month >= returnCycleDates.summer.endDate.month) {
+    if (month > returnCycleDates.summer.endDate.month) {
       return `${year + 1}-10-31`
     }
 
     return `${year}-10-31`
   }
 
-  if (month >= returnCycleDates.allYear.endDate.month) {
+  if (month > returnCycleDates.allYear.endDate.month) {
     return `${year + 1}-03-31`
   }
 
@@ -193,14 +193,14 @@ function cycleStartDateByDate (date, summer) {
   const month = date.getMonth()
 
   if (summer) {
-    if (month <= returnCycleDates.summer.startDate.month) {
+    if (month < returnCycleDates.summer.startDate.month) {
       return `${year - 1}-11-01`
     }
 
     return `${year - 1}-04-01`
   }
 
-  if (month <= returnCycleDates.allYear.startDate.month) {
+  if (month < returnCycleDates.allYear.startDate.month) {
     return `${year - 1}-04-01`
   }
 
