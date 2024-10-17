@@ -18,8 +18,6 @@ function go (licence) {
   return {
     expiredDate: licence.expiry_date,
     lapsedDate: licence.lapsed_date,
-    // Add an empty array property ready for when transforming and attaching licence document roles
-    licenceDocumentRoles: [],
     licenceRef: licence.licence_ref,
     // Add an empty array property ready for when transforming and attaching licence versions
     licenceVersions: [],

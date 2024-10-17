@@ -105,6 +105,7 @@ async function _fetchPersistedLicenceDocument (licenceRef) {
 
 function _transformedLicenceDocument (licenceRef) {
   return {
+    licenceDocumentRoles: [],
     licenceRef,
     startDate: new Date('1992-08-19'),
     endDate: new Date('2001-01-01')

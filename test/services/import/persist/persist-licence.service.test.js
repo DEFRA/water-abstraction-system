@@ -104,7 +104,6 @@ function _transformedLicence (regionId) {
   return {
     expiredDate: null,
     lapsedDate: null,
-    licenceDocumentRoles: [],
     licenceRef: LicenceHelper.generateLicenceRef(),
     regionId,
     regions: {

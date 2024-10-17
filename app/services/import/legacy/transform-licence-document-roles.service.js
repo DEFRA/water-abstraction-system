@@ -18,6 +18,7 @@ const LicenceDocumentRolePresenter = require('../../../presenters/import/legacy/
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  * @param licenceRef
+ *
  */
 async function go (regionCode, naldLicenceId, transformedLicence, licenceRef) {
   const naldLicenceDocumentRoles = await FetchLicenceDocumentRolesService.go(regionCode, naldLicenceId)
@@ -27,7 +28,7 @@ async function go (regionCode, naldLicenceId, transformedLicence, licenceRef) {
 
     ImportLicenceDocumentRoleValidator.go(transformedLicenceDocumentRole)
 
-    transformedLicence.licenceDocumentRoles.push(transformedLicenceDocumentRole)
+    transformedLicence.licenceDocument.licenceDocumentRoles.push(transformedLicenceDocumentRole)
   }
 }
 

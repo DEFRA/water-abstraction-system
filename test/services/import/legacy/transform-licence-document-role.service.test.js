@@ -22,7 +22,7 @@ const TransformLicenceDocumentRolesService =
 describe('Import Legacy Transform Licence Document Role service', () => {
   // NOTE: Clearly this is an incomplete representation of the licence returned from TransformedLicenceService. But for
   // the purposes of this service it is all that is needed
-  const transformedLicence = { licenceDocumentRoles: [] }
+  const transformedLicence = { licenceDocument: { licenceDocumentRoles: [] } }
 
   const naldLicenceId = '2113'
   const regionCode = '6'
@@ -35,7 +35,7 @@ describe('Import Legacy Transform Licence Document Role service', () => {
     licenceRef = generateLicenceRef()
     licenceRoleId = generateUUID()
 
-    legacyLicenceDocument = _legacyLicenceDocumentRole(licenceRef, licenceRoleId)
+    legacyLicenceDocument = _legacyLicenceDocumentRole(licenceRoleId)
   })
 
   afterEach(() => {
@@ -50,7 +50,7 @@ describe('Import Legacy Transform Licence Document Role service', () => {
     it('attaches the record transformed and validated for WRLS to the transformed licence', async () => {
       await TransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef)
 
-      expect(transformedLicence.licenceDocumentRoles).to.equal([
+      expect(transformedLicence.licenceDocument.licenceDocumentRoles).to.equal([
         {
           addressId: '1:007',
           companyId: '1:007',
@@ -76,7 +76,7 @@ describe('Import Legacy Transform Licence Document Role service', () => {
   })
 })
 
-function _legacyLicenceDocumentRole (licenceRef, licenceRoleId) {
+function _legacyLicenceDocumentRole (licenceRoleId) {
   return {
     address_id: '1:007',
     company_id: '1:007',

@@ -44,7 +44,6 @@ describe('Import Legacy Transform Licence service', () => {
       expect(result.transformedLicence).to.equal({
         expiredDate: null,
         lapsedDate: null,
-        licenceDocumentRoles: [],
         licenceRef,
         licenceVersions: [],
         regionId: '82d8c1b7-0eed-43a7-a5f9-4e397c08e17e',

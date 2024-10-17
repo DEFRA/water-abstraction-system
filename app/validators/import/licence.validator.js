@@ -17,7 +17,6 @@ function go (licence) {
   const schema = Joi.object({
     expiredDate: Joi.date().allow(null),
     lapsedDate: Joi.date().allow(null),
-    licenceDocumentRoles: Joi.array().required(),
     // NOTE: With the combination of trim() and `convert: false` passed to validate() we ensure that the licence ref
     // does not contain any leading or trailing whitespace. It is common for users to accidentally add whitespace in
     // NALD.Because of this when the legacy import runs it sees the licence as distinct and so creates a new record.

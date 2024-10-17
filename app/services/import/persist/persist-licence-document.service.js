@@ -21,8 +21,10 @@ async function go (trx, updatedAt, transformedLicence) {
 }
 
 async function _persistLicenceDocument (trx, updatedAt, licenceDocument) {
+  const { licenceDocumentRoles, ...propertiesToPersist } = licenceDocument
+
   return LicenceDocumentModel.query(trx)
-    .insert({ ...licenceDocument, updatedAt })
+    .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('licenceRef')
     .merge([
       'endDate',
