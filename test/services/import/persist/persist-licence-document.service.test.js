@@ -8,8 +8,12 @@ const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const AddressHelper = require('../../../support/helpers/address.helper.js')
+const CompanyHelper = require('../../../support/helpers/company.helper.js')
+const ContactHelper = require('../../../support/helpers/contact.helper.js')
 const LicenceDocumentHelper = require('../../../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../../../app/models/licence-document.model.js')
+const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const { transaction } = require('objection')
@@ -21,11 +25,34 @@ describe('Persist licence document service', () => {
   const transformedLicence = {}
 
   let licenceDocument
+  let licenceDocumentRole
   let licenceRef
   let trx
   let updatedAt
+  let company
+  let contact
+  let address
+  let licenceRoleId
 
   beforeEach(async () => {
+    // A company and address is will be the same external id
+    const externalId = CompanyHelper.generateExternalId()
+
+    // Set up the data to exists for the test
+    company = await CompanyHelper.add({
+      externalId
+    })
+
+    contact = await ContactHelper.add({
+      externalId: CompanyHelper.generateExternalId()
+    })
+
+    address = await AddressHelper.add({
+      externalId
+    })
+
+    licenceRoleId = LicenceRoleHelper.select('returnsTo').id
+
     updatedAt = timestampForPostgres()
 
     licenceRef = generateLicenceRef()
@@ -42,9 +69,12 @@ describe('Persist licence document service', () => {
   describe('when given a valid transformed licence document', () => {
     describe('and that licence does not already exist', () => {
       beforeEach(() => {
+        licenceDocumentRole = _transformedLicenceDocumentRole(
+          licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
+
         licenceDocument = _transformedLicenceDocument(licenceRef)
 
-        transformedLicence.licenceDocument = licenceDocument
+        transformedLicence.licenceDocument = { ...licenceDocument, licenceDocumentRoles: [licenceDocumentRole] }
       })
 
       it('creates a new licence document record', async () => {
@@ -55,9 +85,17 @@ describe('Persist licence document service', () => {
 
         const newLicenceDocument = await _fetchPersistedLicenceDocument(licenceDocument.licenceRef)
 
+        // Licence Document
         expect(licenceDocument.licenceRef).to.equal(newLicenceDocument.licenceRef)
         expect(licenceDocument.startDate).to.equal(newLicenceDocument.startDate)
         expect(licenceDocument.endDate).to.equal(newLicenceDocument.endDate)
+
+        // Licence Document Role
+        const [newLicenceDocumentRole] = newLicenceDocument.licenceDocumentRoles
+
+        expect(licenceDocumentRole.startDate).to.equal(newLicenceDocumentRole.startDate)
+        expect(licenceDocumentRole.endDate).to.equal(newLicenceDocumentRole.endDate)
+        expect(licenceRoleId).to.equal(newLicenceDocumentRole.licenceRoleId)
       })
     })
 
@@ -65,13 +103,17 @@ describe('Persist licence document service', () => {
       const existingLicence = {}
 
       beforeEach(async () => {
+        licenceDocumentRole = _transformedLicenceDocumentRole(
+          licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
+
         const existing = await _createExistingRecords(licenceRef)
 
         existingLicence.licenceDocument = existing.licenceDocument
 
         transformedLicence.licenceDocument = {
           ..._transformedLicenceDocument(licenceRef),
-          endDate: null
+          endDate: null,
+          licenceDocumentRoles: [licenceDocumentRole]
         }
       })
 
@@ -98,6 +140,7 @@ async function _fetchPersistedLicenceDocument (licenceRef) {
   return LicenceDocumentModel
     .query()
     .where('licenceRef', licenceRef)
+    .withGraphFetched('licenceDocumentRoles')
     .select('*')
     .limit(1)
     .first()
@@ -105,10 +148,21 @@ async function _fetchPersistedLicenceDocument (licenceRef) {
 
 function _transformedLicenceDocument (licenceRef) {
   return {
-    licenceDocumentRoles: [],
     licenceRef,
     startDate: new Date('1992-08-19'),
     endDate: new Date('2001-01-01')
+  }
+}
+
+function _transformedLicenceDocumentRole (licenceRef, licenceRoleId, companyId, addressId, contactId) {
+  return {
+    addressId,
+    companyId,
+    contactId,
+    documentId: licenceRef,
+    endDate: null,
+    licenceRoleId,
+    startDate: new Date('1999-01-01')
   }
 }
 
