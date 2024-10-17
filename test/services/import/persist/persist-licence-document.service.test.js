@@ -191,7 +191,8 @@ async function _createExistingRecords (licenceRef, licenceRoleId, company, addre
     companyId: company.id,
     addressId: address.id,
     contactId: contact.id,
-    endDate: new Date('1999-01-01')
+    startDate: new Date('1999-01-01'),
+    endDate: new Date('1999-01-02')
   })
 
   return {
