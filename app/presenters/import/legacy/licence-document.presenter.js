@@ -15,6 +15,8 @@
  */
 function go (licenceDocument) {
   return {
+    // Add an empty array property ready for when transforming and attaching licence document roles
+    licenceDocumentRoles: [],
     licenceRef: licenceDocument.licence_ref,
     endDate: licenceDocument.end_date,
     startDate: licenceDocument.start_date

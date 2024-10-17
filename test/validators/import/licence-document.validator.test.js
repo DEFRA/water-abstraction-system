@@ -105,12 +105,39 @@ describe('Import Licence Document validator', () => {
       })
     })
   })
+
+  describe('the "licenceDocumentRoles" property', () => {
+    describe('when it is not an array', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.licenceDocumentRoles = 1
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"licenceDocumentRoles" must be an array')
+      })
+    })
+
+    describe('when it is null', () => {
+      beforeEach(() => {
+        transformedLicenceDocument.licenceDocumentRoles = null
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          LicenceDocumentValidator.go(transformedLicenceDocument)
+        }).to.throw('"licenceDocumentRoles" must be an array')
+      })
+    })
+  })
 })
 
 function _transformedLicenceDocument () {
   return {
     licenceRef: generateLicenceRef(),
     endDate: new Date('2052-06-23'),
-    startDate: new Date('1992-08-19')
+    startDate: new Date('1992-08-19'),
+    licenceDocumentRoles: []
   }
 }

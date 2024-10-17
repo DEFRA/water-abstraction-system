@@ -50,6 +50,7 @@ describe('Import Legacy Transform Licence Document service', () => {
       expect(transformedLicence.licenceDocument).to.equal({
         licenceRef,
         endDate: null,
+        licenceDocumentRoles: [],
         startDate: new Date('1999-01-01')
       })
     })
@@ -70,6 +71,7 @@ function _legacyLicenceDocument (licenceRef) {
   return {
     end_date: null,
     start_date: new Date('1999-01-01'),
-    licence_ref: licenceRef
+    licence_ref: licenceRef,
+    licenceDocumentRoles: []
   }
 }
