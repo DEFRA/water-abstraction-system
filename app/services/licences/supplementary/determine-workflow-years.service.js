@@ -16,17 +16,17 @@ const LicenceModel = require('../../../models/licence.model.js')
  * billing. This is worked out based on the licences charge information data. If the licence has any charge versions
  * that are sroc and two-part tariff then flagForBilling is set to true.
  *
- * @param {string} chargeVersionWorkflowId - The UUID for the workflow record to fetch
+ * @param {string} workflowId - The UUID for the workflow record to fetch
  *
  * @returns {object} - An object containing the related licence, charge information start and end date and if the
  * licence should be flagged for two-part tariff supplementary billing
  */
-async function go (chargeVersionWorkflowId) {
-  const licence = await FetchLicenceService.go(chargeVersionWorkflowId)
+async function go (workflowId) {
+  const licence = await FetchLicenceService.go(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 
-  // Due to the fact the database gives us the licence back in snake case, I need to convert the reference to camel case
-  // so the rest of the flagging service can use it
+  // Due to the fact the database gives us the licence back in snake case, we need to convert the references to camel
+  // case so the rest of the flagging service can use it
   const result = {
     licence: {
       id: licence.id,

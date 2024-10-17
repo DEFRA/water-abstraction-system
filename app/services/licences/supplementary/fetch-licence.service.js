@@ -53,6 +53,7 @@ function _query () {
         SELECT cv.id
         FROM public.charge_versions cv
         WHERE cv.licence_id = l.id
+          AND cv.start_date > '2022-03-31'
         LIMIT 1
       )
       AND ce.section_127_Agreement = TRUE
