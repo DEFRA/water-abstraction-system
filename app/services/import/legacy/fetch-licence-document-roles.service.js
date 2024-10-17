@@ -39,7 +39,7 @@ function _query () {
         CASE
           WHEN np."APAR_TYPE" = 'ORG'
             THEN NULL
-          ELSE concat_ws(':', nlr."FGAC_REGION_CODE", np."ID")
+          ELSE concat_ws(':', nlr."FGAC_REGION_CODE", nlr."ACON_APAR_ID")
           END
         ) as contact_id
     FROM import."NALD_LIC_ROLES" nlr
