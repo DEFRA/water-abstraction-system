@@ -12,6 +12,7 @@ const AddressHelper = require('../../../support/helpers/address.helper.js')
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 const LicenceDocumentHelper = require('../../../support/helpers/licence-document.helper.js')
+const LicenceDocumentRoleHelper = require('../../../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentModel = require('../../../../app/models/licence-document.model.js')
 const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -100,20 +101,17 @@ describe('Persist licence document service', () => {
     })
 
     describe('and that licence document already exists', () => {
-      const existingLicence = {}
-
       beforeEach(async () => {
         licenceDocumentRole = _transformedLicenceDocumentRole(
           licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
 
-        const existing = await _createExistingRecords(licenceRef)
-
-        existingLicence.licenceDocument = existing.licenceDocument
+        const existing = await _createExistingRecords(
+          licenceRef, licenceRoleId, company, address, contact)
 
         transformedLicence.licenceDocument = {
           ..._transformedLicenceDocument(licenceRef),
           endDate: null,
-          licenceDocumentRoles: [licenceDocumentRole]
+          licenceDocumentRoles: [{ ...licenceDocumentRole, endDate: new Date('2010-01-01') }]
         }
       })
 
@@ -131,6 +129,12 @@ describe('Persist licence document service', () => {
         // Check the updated licence
         expect(updatedLicenceDocument.licenceRef).to.equal(transformedLicence.licenceDocument.licenceRef)
         expect(updatedLicenceDocument.endDate).to.be.null()
+
+        // Licence Document Role
+        const [updatedLicenceDocumentRole] = updatedLicenceDocument.licenceDocumentRoles
+
+        expect(updatedLicenceDocumentRole.endDate).to.equal(new Date('2010-01-01'))
+        expect(updatedLicenceDocumentRole.licenceRoleId).to.equal(licenceRoleId)
       })
     })
   })
@@ -166,13 +170,22 @@ function _transformedLicenceDocumentRole (licenceRef, licenceRoleId, companyId, 
   }
 }
 
-async function _createExistingRecords (licenceRef) {
+async function _createExistingRecords (licenceRef, licenceRoleId, company, address, contact) {
   const licenceDocument = await LicenceDocumentHelper.add({
     licenceRef,
     endDate: new Date('2001-01-01')
   })
 
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId: licenceDocument.id,
+    licenceRoleId,
+    companyId: company.id,
+    addressId: address.id,
+    contactId: contact.id
+  })
+
   return {
-    licenceDocument
+    licenceDocument,
+    licenceDocumentRole
   }
 }
