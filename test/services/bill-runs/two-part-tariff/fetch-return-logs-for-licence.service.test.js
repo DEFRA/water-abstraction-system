@@ -21,26 +21,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
   describe('when there are valid return logs that should be considered', () => {
     beforeEach(async () => {
-      const metadata = {
-        nald: {
-          periodEndDay: '31',
-          periodEndMonth: '3',
-          periodStartDay: '1',
-          periodStartMonth: '4'
-        },
-        purposes: [
-          {
-            tertiary: {
-              code: '400',
-              description: 'Spray Irrigation - Direct'
-            }
-          }
-        ],
-        description: 'The Description',
-        isTwoPartTariff: true
-      }
-
-      returnLogRecord = await ReturnLogHelper.add({ metadata })
+      returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true) })
     })
 
     describe('which have return submission lines within the billing period', () => {
@@ -205,26 +186,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('because the return log is not two-part-tariff', () => {
       beforeEach(async () => {
-        const metadata = {
-          nald: {
-            periodEndDay: '31',
-            periodEndMonth: '3',
-            periodStartDay: '1',
-            periodStartMonth: '4'
-          },
-          purposes: [
-            {
-              tertiary: {
-                code: '400',
-                description: 'Spray Irrigation - Direct'
-              }
-            }
-          ],
-          description: 'The Description',
-          isTwoPartTariff: false
-        }
-
-        returnLogRecord = await ReturnLogHelper.add({ metadata })
+        returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(false) })
         const { id } = returnLogRecord
 
         await ReturnSubmissionHelper.add({ returnLogId: id })
@@ -245,5 +207,42 @@ describe('Fetch Return Logs for Licence service', () => {
         expect(result).to.have.length(0)
       })
     })
+
+    describe('because the return is void', () => {
+      beforeEach(async () => {
+        returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), status: 'void' })
+        const { id } = returnLogRecord
+
+        await ReturnSubmissionHelper.add({ returnLogId: id })
+      })
+
+      it('returns no records', async () => {
+        const { licenceRef } = returnLogRecord
+        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+
+        expect(result).to.have.length(0)
+      })
+    })
   })
 })
+
+function _metadata (isTwoPartTariff) {
+  return {
+    nald: {
+      periodEndDay: '31',
+      periodEndMonth: '3',
+      periodStartDay: '1',
+      periodStartMonth: '4'
+    },
+    purposes: [
+      {
+        tertiary: {
+          code: '400',
+          description: 'Spray Irrigation - Direct'
+        }
+      }
+    ],
+    description: 'The Description',
+    isTwoPartTariff
+  }
+}
