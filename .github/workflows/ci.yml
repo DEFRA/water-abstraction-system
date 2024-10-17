@@ -66,21 +66,21 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of sonarcloud analysis
 
-#      # Before we do anything, check we haven't accidentally left any `describe.only()` or `it.only(` statements in the
-#      # tests
-#      #
-#      # Reworking of https://stackoverflow.com/a/21788642/6117745
-#      - name: Temporary tag check
-#        run: |
-#          ! grep -R 'describe.only(\|it.only(' test
-#
-#      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
-#      - name: Temporary log check
-#        run: |
-#          if grep -R 'console.log(' ./app/ ./test/; then
-#            echo "console.log statement found. Please remove it."
-#            exit 1
-#          fi
+      # Before we do anything, check we haven't accidentally left any `describe.only()` or `it.only(` statements in the
+      # tests
+      #
+      # Reworking of https://stackoverflow.com/a/21788642/6117745
+      - name: Temporary tag check
+        run: |
+          ! grep -R 'describe.only(\|it.only(' test
+
+      # Alongside this, check we haven't accidentally left any `console.log()` while checking results in app and tests
+      - name: Temporary log check
+        run: |
+          if grep -R 'console.log(' ./app/ ./test/; then
+            echo "console.log statement found. Please remove it."
+            exit 1
+          fi
 
       - name: Install Node
         uses: actions/setup-node@v4
@@ -104,21 +104,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-#      # Run editorconfig check first. No point running the tests if there are issues with the format of the files
-#      - name: Run editorconfig check
-#        uses: editorconfig-checker/action-editorconfig-checker@main
-#
-#      - run: editorconfig-checker
-#
-#      # Next run linting. No point running the tests if there is a linting issue
-#      - name: Run lint check
-#        run: |
-#          npm run lint
+      # Run editorconfig check first. No point running the tests if there are issues with the format of the files
+      - name: Run editorconfig check
+        uses: editorconfig-checker/action-editorconfig-checker@main
 
-#      # Next generate docs. This checks any JSDoc changes are valid
-#      - name: Run docs check
-#        run: |
-#          npm run docs
+      - run: editorconfig-checker
+
+      # Next run linting. No point running the tests if there is a linting issue
+      - name: Run lint check
+        run: |
+          npm run lint
+
+      # Next generate docs. This checks any JSDoc changes are valid
+      - name: Run docs check
+        run: |
+          npm run docs
 
       - name: Database migrations
         run: |
