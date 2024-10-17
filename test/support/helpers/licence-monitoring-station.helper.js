@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * @module LicenceGaugingStationHelper
+ * @module LicenceMonitoringStationHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceGaugingStationModel = require('../../../app/models/licence-gauging-station.model.js')
+const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
 
 /**
- * Add a new licence-gauging-station entity
+ * Add a new licence-monitoring-station entity
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `gaugingStationId` - [random UUID]
+ * - `monitoringStationId` - [random UUID]
  * - `licenceId` - [random UUID]
  * - `restrictionType` - flow
  * - `source` - wrls
@@ -23,12 +23,12 @@ const LicenceGaugingStationModel = require('../../../app/models/licence-gauging-
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:LicenceGaugingStationModel>} The instance of the newly created record
+ * @returns {Promise<module:LicenceMonitoringStationModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return LicenceGaugingStationModel.query()
+  return LicenceMonitoringStationModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -44,20 +44,17 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const timestamp = timestampForPostgres()
+
   const defaults = {
-    gaugingStationId: generateUUID(),
+    monitoringStationId: generateUUID(),
     licenceId: generateUUID(),
     restrictionType: 'flow',
     source: 'wrls',
     thresholdUnit: 'm3/s',
     thresholdValue: 100,
-    // INFO: The table does not have a default for the createAt and updatedAt columns. But they are set as 'not
-    // nullable'! So, we need to ensure we set them when creating a new record. Also, we can't use Date.now() because
-    // Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold
-    // the seconds since the epoch. Pass it an ISO string though ('2023-01-05T08:37:05.575Z') and PostgreSQL can do the
-    // conversion https://stackoverflow.com/a/61912776/6117745
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {
