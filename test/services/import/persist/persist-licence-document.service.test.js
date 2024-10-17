@@ -22,7 +22,7 @@ const { transaction } = require('objection')
 // Thing under test
 const PersistLicenceDocumentService = require('../../../../app/services/import/persist/persist-licence-document.service.js')
 
-describe.only('Persist licence document service', () => {
+describe('Persist licence document service', () => {
   const transformedLicence = {}
 
   let address
