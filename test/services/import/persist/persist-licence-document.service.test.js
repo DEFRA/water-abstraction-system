@@ -105,7 +105,7 @@ describe('Persist licence document service', () => {
         licenceDocumentRole = _transformedLicenceDocumentRole(
           licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
 
-        const existing = await _createExistingRecords(
+        await _createExistingRecords(
           licenceRef, licenceRoleId, company, address, contact)
 
         transformedLicence.licenceDocument = {
