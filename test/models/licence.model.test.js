@@ -25,8 +25,8 @@ const LicenceDocumentHeaderModel = require('../../app/models/licence-document-he
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
-const LicenceGaugingStationHelper = require('../support/helpers/licence-gauging-station.helper.js')
-const LicenceGaugingStationModel = require('../../app/models/licence-gauging-station.model.js')
+const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
+const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
 const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
@@ -241,39 +241,39 @@ describe('Licence model', () => {
       })
     })
 
-    describe('when linking to licence gauging stations', () => {
-      let testLicenceGaugingStations
+    describe('when linking to licence monitoring stations', () => {
+      let testLicenceMonitoringStations
 
       beforeEach(async () => {
         testRecord = await LicenceHelper.add()
 
-        testLicenceGaugingStations = []
+        testLicenceMonitoringStations = []
         for (let i = 0; i < 2; i++) {
-          const licenceGaugingStation = await LicenceGaugingStationHelper.add({ licenceId: testRecord.id })
+          const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ licenceId: testRecord.id })
 
-          testLicenceGaugingStations.push(licenceGaugingStation)
+          testLicenceMonitoringStations.push(licenceMonitoringStation)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query()
-          .innerJoinRelated('licenceGaugingStations')
+          .innerJoinRelated('licenceMonitoringStations')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the licence gauging stations', async () => {
+      it('can eager load the licence monitoring stations', async () => {
         const result = await LicenceModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('licenceGaugingStations')
+          .withGraphFetched('licenceMonitoringStations')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.licenceGaugingStations).to.be.an.array()
-        expect(result.licenceGaugingStations[0]).to.be.an.instanceOf(LicenceGaugingStationModel)
-        expect(result.licenceGaugingStations).to.include(testLicenceGaugingStations[0])
-        expect(result.licenceGaugingStations).to.include(testLicenceGaugingStations[1])
+        expect(result.licenceMonitoringStations).to.be.an.array()
+        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
       })
     })
 
