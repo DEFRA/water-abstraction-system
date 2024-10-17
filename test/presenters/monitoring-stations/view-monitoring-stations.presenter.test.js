@@ -30,8 +30,8 @@ describe('View Monitoring Stations presenter', () => {
         gridReference: 'TL2664640047',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
-        wiskiId: null,
-        stationReference: null,
+        wiskiId: '',
+        stationReference: '',
         licences: [
           {
             id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
@@ -54,6 +54,28 @@ describe('View Monitoring Stations presenter', () => {
       })
     })
 
+    describe('the "gridReference" property', () => {
+      describe('when the grid reference is not null', () => {
+        it('returns the grid reference', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.gridReference).to.equal('TL2664640047')
+        })
+      })
+
+      describe('when the grid reference is null', () => {
+        beforeEach(() => {
+          monitoringStationData.gridReference = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.gridReference).to.equal('')
+        })
+      })
+    })
+
     describe('the "licence" property', () => {
       describe('the "linkages" property', () => {
         describe('the "abstractionPeriod" property', () => {
@@ -67,7 +89,7 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "alertType" property', () => {
           describe('when the "alertType" is "reduce"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'reduce'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'reduce'
             })
 
             it('returns "Reduce" as the "alertType"', () => {
@@ -79,7 +101,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the "alertType" is "stop"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'stop'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'stop'
             })
 
             it('returns "Stop" as the "alertType"', () => {
@@ -91,7 +113,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the "alertType" is "stop_or_reduce"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'stop_or_reduce'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'stop_or_reduce'
             })
 
             it('returns "Stop or reduce" as the "alertType"', () => {
@@ -105,8 +127,8 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "alertUpdatedAt" property', () => {
           describe('when the licence has a populated "createdAt" property', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = null
-              monitoringStationData.licenceGaugingStations[0].createdAt = new Date('2021-07-21 09:03:56.848')
+              monitoringStationData.licenceMonitoringStations[0].statusUpdatedAt = null
+              monitoringStationData.licenceMonitoringStations[0].createdAt = new Date('2021-07-21 09:03:56.848')
             })
 
             it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
@@ -118,7 +140,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the licence has a populated "statusUpdatedAt" property', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
+              monitoringStationData.licenceMonitoringStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
             })
 
             it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
@@ -132,7 +154,7 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "restrictionType" property', () => {
           describe('when the licence "restrictionType" property is "flow"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].restrictionType = 'flow'
+              monitoringStationData.licenceMonitoringStations[0].restrictionType = 'flow'
             })
 
             it('returns "Flow" as the "restrictionType" property', () => {
@@ -144,7 +166,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the licence "restrictionType" property is "level"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].restrictionType = 'level'
+              monitoringStationData.licenceMonitoringStations[0].restrictionType = 'level'
             })
 
             it('returns "Level" as the "restrictionType" property', () => {
@@ -165,7 +187,7 @@ describe('View Monitoring Stations presenter', () => {
 
         describe('when a there are multiple licences in the "linkages" property', () => {
           beforeEach(() => {
-            monitoringStationData.licenceGaugingStations.push({
+            monitoringStationData.licenceMonitoringStations.push({
               abstractionPeriodStartDay: '02',
               abstractionPeriodStartMonth: '05',
               abstractionPeriodEndDay: '30',
@@ -182,7 +204,7 @@ describe('View Monitoring Stations presenter', () => {
               }
             })
 
-            monitoringStationData.licenceGaugingStations.push({
+            monitoringStationData.licenceMonitoringStations.push({
               abstractionPeriodStartDay: '01',
               abstractionPeriodStartMonth: '02',
               abstractionPeriodEndDay: '22',
@@ -210,8 +232,8 @@ describe('View Monitoring Stations presenter', () => {
               gridReference: 'TL2664640047',
               permissionToManageLinks: true,
               permissionToSendAlerts: true,
-              wiskiId: null,
-              stationReference: null,
+              wiskiId: '',
+              stationReference: '',
               licences: [
                 {
                   id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
@@ -332,6 +354,50 @@ describe('View Monitoring Stations presenter', () => {
         })
       })
     })
+
+    describe('the "stationReference" property', () => {
+      describe('when the station reference is not null', () => {
+        beforeEach(() => {
+          monitoringStationData.stationReference = 'Crabble Mill GS'
+        })
+
+        it('returns the station reference', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.stationReference).to.equal('Crabble Mill GS')
+        })
+      })
+
+      describe('when the station reference is null', () => {
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.stationReference).to.equal('')
+        })
+      })
+    })
+
+    describe('the "wiskiId" property', () => {
+      describe('when the WISKI ID is not null', () => {
+        beforeEach(() => {
+          monitoringStationData.wiskiId = 'E5082'
+        })
+
+        it('returns the WISKI ID', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.wiskiId).to.equal('E5082')
+        })
+      })
+
+      describe('when the WISKI ID is null', () => {
+        it('returns an empty string', () => {
+          const result = ViewMonitoringStationPresenter.go(auth, monitoringStationData)
+
+          expect(result.wiskiId).to.equal('')
+        })
+      })
+    })
   })
 })
 
@@ -355,7 +421,7 @@ function _testFetchMonitoringStationData () {
     riverName: null,
     stationReference: null,
     wiskiId: null,
-    licenceGaugingStations: [
+    licenceMonitoringStations: [
       {
         abstractionPeriodStartDay: '01',
         abstractionPeriodStartMonth: '04',

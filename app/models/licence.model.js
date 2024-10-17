@@ -56,12 +56,12 @@ class LicenceModel extends BaseModel {
           to: 'licenceDocumentHeaders.licenceRef'
         }
       },
-      licenceGaugingStations: {
+      licenceMonitoringStations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-gauging-station.model',
+        modelClass: 'licence-monitoring-station.model',
         join: {
           from: 'licences.id',
-          to: 'licenceGaugingStations.licenceId'
+          to: 'licenceMonitoringStations.licenceId'
         }
       },
       licenceSupplementaryYears: {
