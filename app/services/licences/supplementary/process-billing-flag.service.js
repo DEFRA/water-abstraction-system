@@ -10,6 +10,7 @@ const DetermineBillingYearsService = require('./determine-billing-years.service.
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineChargeVersionYearsService = require('./determine-charge-version-years.service.js')
 const DetermineReturnLogYearsService = require('./determine-return-log-years.service.js')
+const DetermineWorkflowYearsService = require('./determine-workflow-years.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
@@ -42,10 +43,11 @@ async function go (payload) {
       result = await DetermineChargeVersionYearsService.go(payload.chargeVersionId)
     } else if (payload.returnId) {
       result = await DetermineReturnLogYearsService.go(payload.returnId)
+    } else if (payload.chargeVersionWorkflowId) {
+      result = await DetermineWorkflowYearsService.go(payload.chargeVersionWorkflowId)
     } else {
       return
     }
-
     const { licence, startDate, endDate, twoPartTariff, flagForBilling } = result
 
     if (!flagForBilling) {
