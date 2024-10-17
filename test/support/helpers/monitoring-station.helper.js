@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * @module GaugingStationHelper
+ * @module MonitoringStationHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const GaugingStationModel = require('../../../app/models/gauging-station.model.js')
+const MonitoringStationModel = require('../../../app/models/monitoring-station.model.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 
 /**
- * Add a new gauging-station entity
+ * Add a new monitoring-station entity
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -22,12 +22,12 @@ const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:GaugingStationModel>} The instance of the newly created record
+ * @returns {Promise<module:MonitoringStationModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return GaugingStationModel.query()
+  return MonitoringStationModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
