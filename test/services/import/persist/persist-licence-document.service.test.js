@@ -25,15 +25,15 @@ const PersistLicenceDocumentService = require('../../../../app/services/import/p
 describe('Persist licence document service', () => {
   const transformedLicence = {}
 
+  let address
+  let company
+  let contact
   let licenceDocument
   let licenceDocumentRole
   let licenceRef
+  let licenceRoleId
   let trx
   let updatedAt
-  let company
-  let contact
-  let address
-  let licenceRoleId
 
   beforeEach(async () => {
     // A company and address is/will be the same external id
@@ -55,8 +55,6 @@ describe('Persist licence document service', () => {
 
     updatedAt = timestampForPostgres()
 
-    licenceRef = generateLicenceRef()
-
     trx = await transaction.start(LicenceDocumentModel.knex())
   })
 
@@ -69,6 +67,8 @@ describe('Persist licence document service', () => {
   describe('when given a valid transformed licence document', () => {
     describe('and that licence does not already exist', () => {
       beforeEach(() => {
+        licenceRef = generateLicenceRef()
+
         licenceDocumentRole = _transformedLicenceDocumentRole(
           licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
 
@@ -101,6 +101,8 @@ describe('Persist licence document service', () => {
 
     describe('and that licence document already exists', () => {
       beforeEach(async () => {
+        licenceRef = generateLicenceRef()
+
         licenceDocumentRole = _transformedLicenceDocumentRole(
           licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
 
@@ -180,7 +182,8 @@ async function _createExistingRecords (licenceRef, licenceRoleId, company, addre
     licenceRoleId,
     companyId: company.id,
     addressId: address.id,
-    contactId: contact.id
+    contactId: contact.id,
+    endDate: new Date('1999-01-01')
   })
 
   return {
