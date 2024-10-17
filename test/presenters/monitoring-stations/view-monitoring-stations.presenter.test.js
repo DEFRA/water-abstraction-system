@@ -89,7 +89,7 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "alertType" property', () => {
           describe('when the "alertType" is "reduce"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'reduce'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'reduce'
             })
 
             it('returns "Reduce" as the "alertType"', () => {
@@ -101,7 +101,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the "alertType" is "stop"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'stop'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'stop'
             })
 
             it('returns "Stop" as the "alertType"', () => {
@@ -113,7 +113,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the "alertType" is "stop_or_reduce"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].alertType = 'stop_or_reduce'
+              monitoringStationData.licenceMonitoringStations[0].alertType = 'stop_or_reduce'
             })
 
             it('returns "Stop or reduce" as the "alertType"', () => {
@@ -127,8 +127,8 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "alertUpdatedAt" property', () => {
           describe('when the licence has a populated "createdAt" property', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = null
-              monitoringStationData.licenceGaugingStations[0].createdAt = new Date('2021-07-21 09:03:56.848')
+              monitoringStationData.licenceMonitoringStations[0].statusUpdatedAt = null
+              monitoringStationData.licenceMonitoringStations[0].createdAt = new Date('2021-07-21 09:03:56.848')
             })
 
             it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
@@ -140,7 +140,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the licence has a populated "statusUpdatedAt" property', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
+              monitoringStationData.licenceMonitoringStations[0].statusUpdatedAt = new Date('2021-06-30 09:03:56.848')
             })
 
             it('returns "alertUpdatedAt" as the same value as the "statusUpdatedAt" property', () => {
@@ -154,7 +154,7 @@ describe('View Monitoring Stations presenter', () => {
         describe('the "restrictionType" property', () => {
           describe('when the licence "restrictionType" property is "flow"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].restrictionType = 'flow'
+              monitoringStationData.licenceMonitoringStations[0].restrictionType = 'flow'
             })
 
             it('returns "Flow" as the "restrictionType" property', () => {
@@ -166,7 +166,7 @@ describe('View Monitoring Stations presenter', () => {
 
           describe('when the licence "restrictionType" property is "level"', () => {
             beforeEach(() => {
-              monitoringStationData.licenceGaugingStations[0].restrictionType = 'level'
+              monitoringStationData.licenceMonitoringStations[0].restrictionType = 'level'
             })
 
             it('returns "Level" as the "restrictionType" property', () => {
@@ -187,7 +187,7 @@ describe('View Monitoring Stations presenter', () => {
 
         describe('when a there are multiple licences in the "linkages" property', () => {
           beforeEach(() => {
-            monitoringStationData.licenceGaugingStations.push({
+            monitoringStationData.licenceMonitoringStations.push({
               abstractionPeriodStartDay: '02',
               abstractionPeriodStartMonth: '05',
               abstractionPeriodEndDay: '30',
@@ -204,7 +204,7 @@ describe('View Monitoring Stations presenter', () => {
               }
             })
 
-            monitoringStationData.licenceGaugingStations.push({
+            monitoringStationData.licenceMonitoringStations.push({
               abstractionPeriodStartDay: '01',
               abstractionPeriodStartMonth: '02',
               abstractionPeriodEndDay: '22',
@@ -421,7 +421,7 @@ function _testFetchMonitoringStationData () {
     riverName: null,
     stationReference: null,
     wiskiId: null,
-    licenceGaugingStations: [
+    licenceMonitoringStations: [
       {
         abstractionPeriodStartDay: '01',
         abstractionPeriodStartMonth: '04',

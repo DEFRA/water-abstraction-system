@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/gauging-station.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-gauging-station.helper.js')
+const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 
 // Thing under test
 const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
@@ -34,19 +34,19 @@ describe('Fetch Monitoring Stations service', () => {
 
       licenceMonitoringStationOne = await LicenceMonitoringStationHelper.add({
         licenceId,
-        gaugingStationId: monitoringStationId,
+        monitoringStationId,
         createdAt: '2020-09-24 15:13:07.228'
       })
 
       licenceMonitoringStationTwo = await LicenceMonitoringStationHelper.add({
         licenceId,
-        gaugingStationId: monitoringStationId,
+        monitoringStationId,
         createdAt: '2022-09-24 15:13:07.228'
       })
 
       licenceMonitoringStationThree = await LicenceMonitoringStationHelper.add({
         licenceId,
-        gaugingStationId: monitoringStationId,
+        monitoringStationId,
         createdAt: '2022-09-24 15:13:07.228',
         statusUpdatedAt: '2024-09-24 15:13:07.228'
       })
@@ -62,7 +62,7 @@ describe('Fetch Monitoring Stations service', () => {
         riverName: null,
         stationReference: null,
         wiskiId: null,
-        licenceGaugingStations: [
+        licenceMonitoringStations: [
           {
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
@@ -135,7 +135,7 @@ describe('Fetch Monitoring Stations service', () => {
         riverName: null,
         stationReference: null,
         wiskiId: null,
-        licenceGaugingStations: []
+        licenceMonitoringStations: []
       })
     })
   })
