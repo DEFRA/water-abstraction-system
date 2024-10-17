@@ -21,7 +21,7 @@ function go (licence) {
     expiredDate,
     id,
     licenceDocumentHeader,
-    licenceGaugingStations,
+    licenceMonitoringStations,
     region,
     startDate
   } = licence
@@ -48,7 +48,7 @@ function go (licence) {
     endDate: _endDate(expiredDate),
     licenceHolder: _licenceHolder(licence),
     licenceId: id,
-    monitoringStations: _monitoringStations(licenceGaugingStations),
+    monitoringStations: _monitoringStations(licenceMonitoringStations),
     purposes,
     purposesCount: licenceVersionPurposes ? licenceVersionPurposes.length : 0,
     region: region.displayName,
@@ -198,19 +198,19 @@ function _licenceVersionPurposes (licence) {
   return currentVersion.licenceVersionPurposes
 }
 
-function _monitoringStations (licenceGaugingStations) {
+function _monitoringStations (licenceMonitoringStations) {
   const monitoringStations = []
 
-  for (const licenceGaugingStation of licenceGaugingStations) {
+  for (const licenceMonitoringStation of licenceMonitoringStations) {
     const alreadySeen = monitoringStations.some((monitoringStation) => {
-      return monitoringStation.id === licenceGaugingStation.gaugingStation.id
+      return monitoringStation.id === licenceMonitoringStation.monitoringStation.id
     })
 
     if (alreadySeen) {
       continue
     }
 
-    monitoringStations.push(licenceGaugingStation.gaugingStation)
+    monitoringStations.push(licenceMonitoringStation.monitoringStation)
   }
 
   return monitoringStations
