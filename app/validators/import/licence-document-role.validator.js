@@ -16,9 +16,9 @@ const Joi = require('joi')
  */
 function go (licenceDocumentRole) {
   const schema = Joi.object({
-    addressId: Joi.string(),
-    companyId: Joi.string(),
-    contactId: Joi.string(),
+    addressId: Joi.string().required(),
+    companyId: Joi.string().required(),
+    contactId: Joi.string().allow(null),
     documentId: Joi.string().required(),
     endDate: Joi.date().required().allow(null),
     licenceRoleId: Joi.string().guid().required(),

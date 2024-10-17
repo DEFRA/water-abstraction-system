@@ -59,10 +59,10 @@ describe('Import Licence Document role validator', () => {
         delete transformedLicenceDocumentRole.addressId
       })
 
-      it('does not throw an error', () => {
+      it('throws an error', () => {
         expect(() => {
           LicenceDocumentRoleValidator.go(transformedLicenceDocumentRole)
-        }).to.not.throw()
+        }).to.throw('"addressId" is required')
       })
     })
   })
@@ -97,10 +97,10 @@ describe('Import Licence Document role validator', () => {
         delete transformedLicenceDocumentRole.companyId
       })
 
-      it('does not throw an error', () => {
+      it('throws an error', () => {
         expect(() => {
           LicenceDocumentRoleValidator.go(transformedLicenceDocumentRole)
-        }).to.not.throw()
+        }).to.throw('"companyId" is required')
       })
     })
   })
@@ -123,10 +123,10 @@ describe('Import Licence Document role validator', () => {
         transformedLicenceDocumentRole.contactId = null
       })
 
-      it('throws an error', () => {
+      it('does not throw an error', () => {
         expect(() => {
           LicenceDocumentRoleValidator.go(transformedLicenceDocumentRole)
-        }).to.throw('"contactId" must be a string')
+        }).to.not.throw()
       })
     })
 
