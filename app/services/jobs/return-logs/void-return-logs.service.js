@@ -6,7 +6,7 @@
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const { cycleStartDateByDate } = require('../../../lib/dates.lib.js')
+const { cycleEndDate, cycleStartDateByDate } = require('../../../lib/dates.lib.js')
 
 /**
  * Given a licence reference and a date this service voids the return logs from that date forward.
@@ -16,18 +16,45 @@ const { cycleStartDateByDate } = require('../../../lib/dates.lib.js')
  */
 async function go (licenceReference, date) {
   const _date = new Date(date)
-  const returnLogs = await _fetchReturnLogs(licenceReference, _date)
+  let allYearReturnLogs = []
+  let summerReturnLogs = []
+  console.log('here')
+  console.log('cycleEndDate(true) ' + cycleEndDate(true))
+  console.log('cycleEndDate(false) ' + cycleEndDate(false))
+  console.log('_date ' + _date)
 
-  await _voidReturnLogs(returnLogs)
+
+  if (_date <= cycleEndDate(true)) {
+    console.log(_date <= cycleEndDate(true))
+    try {
+      summerReturnLogs = await _fetchReturnLogs(licenceReference, _date, true)
+    } catch (err) {
+      console.log(err)
+    }
+    console.log(summerReturnLogs)
+  }
+
+  if (_date <= cycleEndDate(false)) {
+    allYearReturnLogs = await _fetchReturnLogs(licenceReference, _date, false)
+  }
+  console.log(allYearReturnLogs)
+  console.log(summerReturnLogs)
+  console.log([...allYearReturnLogs, ...summerReturnLogs])
+
+
+  await _voidReturnLogs([...allYearReturnLogs, ...summerReturnLogs])
 }
 
-async function _fetchReturnLogs (licenceReference, date) {
-  const cycleStartDate = cycleStartDateByDate(date, false)
+async function _fetchReturnLogs (licenceReference, date, summer) {
+  const cycleStartDate = cycleStartDateByDate(date, summer)
+  console.log('cycleStartDate ' + cycleStartDate)
 
   return ReturnLogModel.query()
-    .select(['id'])
-    .where('licenceRef', licenceReference)
-    .where('startDate', '>=', cycleStartDate)
+    .select(['returnLogs.id'])
+    .innerJoinRelated('returnCycle')
+    .where('returnLogs.licenceRef', licenceReference)
+    .where('returnLogs.startDate', '>=', cycleStartDate)
+    .where('returnCycle.summer', summer)
 }
 
 async function _voidReturnLogs (returnLogs) {

@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for generating return logs
- * @module FetchReturnLogsService
+ * @module FetchLicenceReturnRequirementsService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
@@ -60,6 +60,7 @@ async function _fetchReturnRequirements (licenceReference) {
         'lapsedDate',
         'licenceRef',
         'revokedDate',
+        'startDate',
         db.raw('regions->>\'historicalAreaCode\' as areacode')])
     })
     .withGraphFetched('returnVersion.licence.region')

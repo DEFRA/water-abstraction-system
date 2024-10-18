@@ -58,5 +58,6 @@ async function returnLogsForLicence (_request, h) {
 }
 
 module.exports = {
-  returnLogsForLicence
+  returnLogsForLicence,
+  returnLogsForEndedLicence
 }

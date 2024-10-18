@@ -7,7 +7,7 @@
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
-const FetchLicenceReturnLogsService = require('./fetch-licence-return-requirements.service.js')
+const FetchLicenceReturnRequirementsService = require('./fetch-licence-return-requirements.service.js')
 const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 
 /**
@@ -29,7 +29,7 @@ async function go (licenceReference) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const returnRequirements = await FetchLicenceReturnLogsService.go(licenceReference)
+    const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 
     await CreateReturnLogsService.go(returnLogs)

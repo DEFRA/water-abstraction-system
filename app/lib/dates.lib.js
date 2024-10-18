@@ -197,7 +197,7 @@ function cycleStartDateByDate (date, summer) {
       return `${year - 1}-11-01`
     }
 
-    return `${year - 1}-04-01`
+    return `${year}-11-01`
   }
 
   if (month < returnCycleDates.allYear.startDate.month) {
