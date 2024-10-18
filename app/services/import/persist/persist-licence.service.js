@@ -23,7 +23,7 @@ async function go (trx, updatedAt, transformedLicence) {
 }
 
 async function _persistLicence (trx, updatedAt, licence) {
-  const { licenceVersions, ...propertiesToPersist } = licence
+  const { licenceVersions, licenceDocument, ...propertiesToPersist } = licence
 
   return LicenceModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
