@@ -20,14 +20,14 @@ const { db } = require('../../../../db/db.js')
  * using the old billing engine that then generates £0 bill runs. Only our new sroc billing engines can handle £0 bill
  * runs.
  *
- * @param {string} chargeVersionWorkflowId - The UUID for the workflow record related to the licence
+ * @param {string} workflowId - The UUID for the workflow record related to the licence
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go (chargeVersionWorkflowId) {
+async function go (workflowId) {
   const query = _query()
 
-  const { rows: [row] } = await db.raw(query, [chargeVersionWorkflowId])
+  const { rows: [row] } = await db.raw(query, [workflowId])
 
   return row
 }

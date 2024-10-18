@@ -17,7 +17,8 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
  * Orchestrates flagging a licence for supplementary billing
  *
  * This service orchestrates the process of flagging a licence for supplementary billing.
- * It retrieves details of the charge version, including the licence information, start and end dates, whether the
+ * Based on the ID the service receives (chargeVersionId, returnId, workflowId) it retrieves details of the related
+ * charge version, including the licence information, start and end dates, whether the
  * charge version has two-part tariff indicators, and if it should be flagged for supplementary billing.
  *
  * If the licence qualifies for flagging, the relevant dates are passed to the `DetermineBillingYearsService`, which
@@ -43,11 +44,12 @@ async function go (payload) {
       result = await DetermineChargeVersionYearsService.go(payload.chargeVersionId)
     } else if (payload.returnId) {
       result = await DetermineReturnLogYearsService.go(payload.returnId)
-    } else if (payload.chargeVersionWorkflowId) {
-      result = await DetermineWorkflowYearsService.go(payload.chargeVersionWorkflowId)
+    } else if (payload.workflowId) {
+      result = await DetermineWorkflowYearsService.go(payload.workflowId)
     } else {
       return
     }
+
     const { licence, startDate, endDate, twoPartTariff, flagForBilling } = result
 
     if (!flagForBilling) {
