@@ -72,7 +72,7 @@ function _formatAbstractionAmounts (licenceVersionPurpose) {
   }
 
   if (instantQuantity) {
-    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per second`)
+    details.push(`${parseFloat(instantQuantity).toFixed(2)} cubic metres per second (Instantaneous Quantity)`)
   }
 
   return details
