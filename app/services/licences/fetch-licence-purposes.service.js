@@ -29,18 +29,17 @@ async function _fetchLicencePurposes (licenceId) {
     .modify('currentVersion')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
-      builder
-        .select([
-          'abstractionPeriodStartDay',
-          'abstractionPeriodStartMonth',
-          'abstractionPeriodEndDay',
-          'abstractionPeriodEndMonth',
-          'annualQuantity',
-          'dailyQuantity',
-          'hourlyQuantity',
-          'instantQuantity'
-        ])
-        .orderBy('createdAt', 'desc')
+      builder.select([
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth',
+        'annualQuantity',
+        'dailyQuantity',
+        'hourlyQuantity',
+        'instantQuantity'
+      ])
+        .orderBy('licenceVersionPurposes.createdAt', 'asc')
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
     .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
@@ -52,6 +51,7 @@ async function _fetchLicencePurposes (licenceId) {
         'points.ngr3',
         'points.ngr4'
       ])
+        .orderBy('points.externalId', 'asc')
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes.points.source')
     .modifyGraph('licenceVersions.licenceVersionPurposes.points.source', (builder) => {
