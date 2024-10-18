@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
+const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceGaugingStationHelper = require('../../support/helpers/licence-gauging-station.helper.js')
+const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -31,10 +31,10 @@ const FetchLicenceSummaryService = require('../../../app/services/licences/fetch
 const REGION_SOUTHERN_INDEX = 5
 
 describe('Fetch Licence Summary service', () => {
-  let gaugingStation
+  let monitoringStation
   let licence
   let licenceDocumentHeader
-  let licenceGaugingStation
+  let licenceMonitoringStation
   let licenceHolderSeed
   let licenceVersion
   let licenceVersionPurpose
@@ -93,10 +93,10 @@ describe('Fetch Licence Summary service', () => {
 
     await LicenceEntityRoleHelper.add({ companyEntityId: licenceHolderSeed.companyId, licenceEntityId })
 
-    gaugingStation = await GaugingStationHelper.add()
+    monitoringStation = await MonitoringStationHelper.add()
 
-    licenceGaugingStation = await LicenceGaugingStationHelper.add({
-      gaugingStationId: gaugingStation.id,
+    licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
+      monitoringStationId: monitoringStation.id,
       licenceId: licence.id
     })
   })
@@ -151,10 +151,10 @@ describe('Fetch Licence Summary service', () => {
             }]
           }
         ],
-        licenceGaugingStations: [{
-          id: licenceGaugingStation.id,
-          gaugingStation: {
-            id: gaugingStation.id,
+        licenceMonitoringStations: [{
+          id: licenceMonitoringStation.id,
+          monitoringStation: {
+            id: monitoringStation.id,
             label: 'MEVAGISSEY FIRE STATION'
           }
         }],

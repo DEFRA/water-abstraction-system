@@ -1,31 +1,33 @@
 'use strict'
 
 /**
- * @module LicenceDocumentRoleHelper
+ * @module MonitoringStationHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceDocumentRoleModel = require('../../../app/models/licence-document-role.model.js')
+const MonitoringStationModel = require('../../../app/models/monitoring-station.model.js')
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 
 /**
- * Add a new licence document role
+ * Add a new monitoring-station entity
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceDocumentId` - [random UUID]
- * - `companyId` - [random UUID]
- * - `addressId` - [random UUID]
- * - `licenceRoleId` - [random UUID]
- * - `startDate` - new Date('2022-01-01')
+ * - `hydrologyStationId` - [random UUID]
+ * - `lat` - 52.04436
+ * - `long` - -0.15477
+ * - `gridReference` - TL2664640047
+ * - `label` - MEVAGISSEY FIRE STATION
+ * - `createdAt` - new Date()
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:LicenceDocumentRoleModel>} The instance of the newly created record
+ * @returns {Promise<module:MonitoringStationModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return LicenceDocumentRoleModel.query()
+  return MonitoringStationModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -41,12 +43,15 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const timestamp = timestampForPostgres()
+
   const defaults = {
-    licenceDocumentId: generateUUID(),
-    companyId: generateUUID(),
-    addressId: generateUUID(),
-    licenceRoleId: generateUUID(),
-    startDate: new Date('2022-01-01')
+    hydrologyStationId: generateUUID(),
+    lat: 52.04436,
+    long: -0.15477,
+    gridReference: 'TL2664640047',
+    label: 'MEVAGISSEY FIRE STATION',
+    createdAt: timestamp
   }
 
   return {

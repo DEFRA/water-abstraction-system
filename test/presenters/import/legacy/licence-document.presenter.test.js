@@ -29,6 +29,7 @@ describe('Import Legacy Licence Document presenter', () => {
     expect(result).to.equal({
       licenceRef,
       endDate: null,
+      licenceDocumentRoles: [],
       startDate: new Date('1999-01-01')
     })
   })
