@@ -250,8 +250,6 @@ function _prepareReturnVolume (reviewChargeElement) {
     reviewReturns.forEach((reviewReturn) => {
       if (reviewReturn.returnStatus === 'due') {
         returnVolumes.push(`overdue (${reviewReturn.returnReference})`)
-      } else if (reviewReturn.returnStatus === 'void') {
-        returnVolumes.push(`void (${reviewReturn.returnReference})`)
       } else {
         returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
       }
@@ -262,7 +260,7 @@ function _prepareReturnVolume (reviewChargeElement) {
 }
 
 function _returnLink (returnLog) {
-  if (['due', 'received', 'void'].includes(returnLog.returnStatus)) {
+  if (['due', 'received'].includes(returnLog.returnStatus)) {
     return `/return/internal?returnId=${returnLog.returnId}`
   }
 
@@ -284,7 +282,7 @@ function _returnStatus (returnLog) {
 function _returnTotal (returnLog) {
   const { returnStatus, allocated, quantity } = returnLog
 
-  if (['due', 'received', 'void'].includes(returnStatus)) {
+  if (['due', 'received'].includes(returnStatus)) {
     return '/'
   }
 

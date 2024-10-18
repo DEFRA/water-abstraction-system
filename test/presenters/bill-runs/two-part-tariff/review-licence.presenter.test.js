@@ -178,37 +178,6 @@ describe('Review Licence presenter', () => {
           expect(result.matchedReturns[0].returnLink).to.equal('/return/internal?returnId=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
         })
       })
-
-      describe('when a return has a status of "void"', () => {
-        beforeEach(() => {
-          licence[0].reviewReturns[0].returnStatus = 'void'
-          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns[0].returnStatus = 'void'
-        })
-
-        it('changes the status text to "void"', () => {
-          const result = ReviewLicencePresenter.go(billRun, licence)
-
-          expect(result.matchedReturns[0].returnStatus).to.equal('void')
-        })
-
-        it('formats the returns total correctly', () => {
-          const result = ReviewLicencePresenter.go(billRun, licence)
-
-          expect(result.matchedReturns[0].returnTotal).to.equal('/')
-        })
-
-        it('formats the charge elements return total correctly', () => {
-          const result = ReviewLicencePresenter.go(billRun, licence)
-
-          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].returnVolume).to.equal(['void (10031343)'])
-        })
-
-        it('formats the returns link correctly', () => {
-          const result = ReviewLicencePresenter.go(billRun, licence)
-
-          expect(result.matchedReturns[0].returnLink).to.equal('/return/internal?returnId=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
-        })
-      })
     })
 
     describe('the "underQuery" property', () => {
