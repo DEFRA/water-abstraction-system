@@ -135,9 +135,9 @@ describe('Process Billing Flag Service', () => {
     })
 
     describe('with a workflow id', () => {
-      before(async () => {
+      before(() => {
         payload = {
-          chargeVersionWorkflowId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+          workflowId: 'a9e62338-8053-4bde-9344-def69f5ca416'
         }
       })
 
