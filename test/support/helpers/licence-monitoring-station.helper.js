@@ -1,33 +1,34 @@
 'use strict'
 
 /**
- * @module GaugingStationHelper
+ * @module LicenceMonitoringStationHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const GaugingStationModel = require('../../../app/models/gauging-station.model.js')
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
 
 /**
- * Add a new gauging-station entity
+ * Add a new licence-monitoring-station entity
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `hydrologyStationId` - [random UUID]
- * - `lat` - 52.04436
- * - `long` - -0.15477
- * - `gridReference` - TL2664640047
- * - `label` - MEVAGISSEY FIRE STATION
- * - `createdAt` - new Date()
+ * - `monitoringStationId` - [random UUID]
+ * - `licenceId` - [random UUID]
+ * - `restrictionType` - flow
+ * - `source` - wrls
+ * - `thresholdUnit` - m3/s
+ * - `thresholdValue` - 100
+ * - `createdAt` - Date.now()
+ * - `updatedAt` - Date.now()
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:GaugingStationModel>} The instance of the newly created record
+ * @returns {Promise<module:LicenceMonitoringStationModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return GaugingStationModel.query()
+  return LicenceMonitoringStationModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -46,12 +47,14 @@ function defaults (data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
-    hydrologyStationId: generateUUID(),
-    lat: 52.04436,
-    long: -0.15477,
-    gridReference: 'TL2664640047',
-    label: 'MEVAGISSEY FIRE STATION',
-    createdAt: timestamp
+    monitoringStationId: generateUUID(),
+    licenceId: generateUUID(),
+    restrictionType: 'flow',
+    source: 'wrls',
+    thresholdUnit: 'm3/s',
+    thresholdValue: 100,
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {

@@ -26,14 +26,13 @@ const CompanyContactHelper = require('../../../../test/support/helpers/company-c
 const CompanyHelper = require('../../../../test/support/helpers/company.helper.js')
 const ContactHelper = require('../../../../test/support/helpers/contact.helper.js')
 const EventHelper = require('../../../../test/support/helpers/event.helper.js')
-const GaugingStationHelper = require('../../../../test/support/helpers/gauging-station.helper.js')
 const LicenceAgreementHelper = require('../../../../test/support/helpers/licence-agreement.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
 const LicenceDocumentRoleHelper = require('../../../../test/support/helpers/licence-document-role.helper.js')
 const LicenceDocumentHelper = require('../../../../test/support/helpers/licence-document.helper.js')
 const LicenceEntityRoleHelper = require('../../../../test/support/helpers/licence-entity-role.helper.js')
 const LicenceEntityHelper = require('../../../../test/support/helpers/licence-entity.helper.js')
-const LicenceGaugingStationHelper = require('../../../../test/support/helpers/licence-gauging-station.helper.js')
+const LicenceMonitoringStationHelper = require('../../../../test/support/helpers/licence-monitoring-station.helper.js')
 const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role.helper.js')
 const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
@@ -42,6 +41,7 @@ const LicenceVersionPurposePointHelper = require('../../../../test/support/helpe
 const LicenceVersionHelper = require('../../../../test/support/helpers/licence-version.helper.js')
 const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
 const ModLogHelper = require('../../../../test/support/helpers/mod-log.helper.js')
+const MonitoringStationHelper = require('../../../../test/support/helpers/monitoring-station.helper.js')
 const PointHelper = require('../../../../test/support/helpers/point.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
@@ -86,14 +86,13 @@ const LOAD_HELPERS = {
   companies: { helper: CompanyHelper, test: true, legacy: { schema: 'crm_v2', table: 'companies', id: 'company_id' } },
   contacts: { helper: ContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'contacts', id: 'contact_id' } },
   events: { helper: EventHelper, test: false },
-  gaugingStations: { helper: GaugingStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
   licenceAgreements: { helper: LicenceAgreementHelper, test: true, legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' } },
   licenceDocumentHeaders: { helper: LicenceDocumentHeaderHelper, test: false },
   licenceDocumentRoles: { helper: LicenceDocumentRoleHelper, test: true, legacy: { schema: 'crm_v2', table: 'document_roles', id: 'document_role_id' } },
   licenceDocuments: { helper: LicenceDocumentHelper, test: true, legacy: { schema: 'crm_v2', table: 'documents', id: 'document_id' } },
   licenceEntityRoles: { helper: LicenceEntityRoleHelper, test: false },
   licenceEntities: { helper: LicenceEntityHelper, test: false },
-  licenceGaugingStations: { helper: LicenceGaugingStationHelper, test: true, legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' } },
+  licenceMonitoringStations: { helper: LicenceMonitoringStationHelper, test: true, legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' } },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
   LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
@@ -102,6 +101,7 @@ const LOAD_HELPERS = {
   licenceVersions: { helper: LicenceVersionHelper, test: true, legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' } },
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   modLogs: { helper: ModLogHelper, test: false },
+  monitoringStations: { helper: MonitoringStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
   points: { helper: PointHelper, test: false },
   permitLicences: { helper: PermitLicenceHelper, test: false },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },

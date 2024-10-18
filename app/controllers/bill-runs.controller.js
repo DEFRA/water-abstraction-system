@@ -13,7 +13,6 @@ const AmendBillableReturnsService = require('../services/bill-runs/two-part-tari
 const CalculateChargeService = require('../services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
-const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
@@ -21,7 +20,6 @@ const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tari
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
-const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
@@ -90,23 +88,6 @@ async function chargeReferenceDetails (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
-}
-
-async function create (request, h) {
-  const validatedData = CreateBillRunValidator.go(request.payload)
-
-  if (validatedData.error) {
-    return Boom.badRequest(validatedData.error.details[0].message)
-  }
-
-  try {
-    const { region, type, user, financialYearEnding } = validatedData.value
-    const result = await StartBillRunProcessService.go(region, type, user, financialYearEnding)
-
-    return h.response(result).code(200)
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
 }
 
 async function index (request, h) {
@@ -328,7 +309,6 @@ module.exports = {
   amendBillableReturns,
   cancel,
   chargeReferenceDetails,
-  create,
   index,
   matchDetails,
   previewCharge,

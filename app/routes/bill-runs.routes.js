@@ -19,21 +19,6 @@ const routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/bill-runs',
-    options: {
-      handler: BillRunsController.create,
-      app: {
-        plainOutput: true
-      },
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
     method: 'GET',
     path: '/bill-runs/{id}',
     options: {

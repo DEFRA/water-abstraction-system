@@ -3,28 +3,34 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
+const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 
 // Thing under test
 const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
 
 describe('Fetch return cycle service', () => {
-  let currentAllYearReturnCycle
-  let currentSummerReturnCycle
+  let allYearReturnCycle
+  let summerReturnCycle
   let previousAllYearReturnCycle
   let previousSummerReturnCycle
   let summer
 
   before(async () => {
-    currentAllYearReturnCycle = await ReturnCycleHelper.select(3)
+    allYearReturnCycle = await ReturnCycleHelper.select(3)
     previousAllYearReturnCycle = await ReturnCycleHelper.select(5)
-    currentSummerReturnCycle = await ReturnCycleHelper.select(2)
+    summerReturnCycle = await ReturnCycleHelper.select(2)
     previousSummerReturnCycle = await ReturnCycleHelper.select(4)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when summer is false', () => {
@@ -36,7 +42,7 @@ describe('Fetch return cycle service', () => {
       it('should return the correct all year log cycle UUID', async () => {
         const result = await FetchReturnCycleService.go('2021-05-01', summer)
 
-        expect(result).to.equal(currentAllYearReturnCycle.id)
+        expect(result).to.equal(allYearReturnCycle.id)
       })
     })
 
@@ -48,11 +54,26 @@ describe('Fetch return cycle service', () => {
       })
     })
 
-    describe('and the date is after the current cycle', () => {
-      it('should return an empty array', async () => {
-        const result = await FetchReturnCycleService.go('3031-01-01', summer)
+    describe('and the date is for the current return cycle and it has not been created yet', () => {
+      before(() => {
+        const stub = Sinon.stub(ReturnCycleModel, 'query')
+        const selectStub = Sinon.stub().returnsThis()
+        const whereStub = Sinon.stub().returnsThis()
+        const limitStub = Sinon.stub().returnsThis()
+        const firstStub = Sinon.stub().resolves(undefined)
 
-        expect(result).to.be.undefined()
+        stub.returns({
+          select: selectStub,
+          where: whereStub,
+          limit: limitStub,
+          first: firstStub
+        })
+      })
+
+      it('should return undefined if the return cycle does not exist', async () => {
+        const result = await FetchReturnCycleService.go(new Date().toISOString().split('T')[0], summer)
+
+        expect(result).to.equal(undefined)
       })
     })
   })
@@ -66,7 +87,7 @@ describe('Fetch return cycle service', () => {
       it('should return the correct summer log cycle UUID', async () => {
         const result = await FetchReturnCycleService.go('2021-12-01', summer)
 
-        expect(result).to.equal(currentSummerReturnCycle.id)
+        expect(result).to.equal(summerReturnCycle.id)
       })
     })
 
@@ -78,11 +99,26 @@ describe('Fetch return cycle service', () => {
       })
     })
 
-    describe('and the date is after the current cycle', () => {
-      it('should return an empty array', async () => {
-        const result = await FetchReturnCycleService.go('3021-09-01', summer)
+    describe('and the date is for the current return cycle and it has not been created yet', () => {
+      before(() => {
+        const stub = Sinon.stub(ReturnCycleModel, 'query')
+        const selectStub = Sinon.stub().returnsThis()
+        const whereStub = Sinon.stub().returnsThis()
+        const limitStub = Sinon.stub().returnsThis()
+        const firstStub = Sinon.stub().resolves(undefined)
 
-        expect(result).to.be.undefined()
+        stub.returns({
+          select: selectStub,
+          where: whereStub,
+          limit: limitStub,
+          first: firstStub
+        })
+      })
+
+      it('should return undefined if the return cycle does not exist', async () => {
+        const result = await FetchReturnCycleService.go(new Date().toISOString().split('T')[0], summer)
+
+        expect(result).to.equal(undefined)
       })
     })
   })
