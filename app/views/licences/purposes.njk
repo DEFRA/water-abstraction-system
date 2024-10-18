@@ -3,22 +3,26 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro abstractionPointNewLine(array) %}
-  {% if array.length > 5%}
-    {{ govukDetails({
-      summaryText: "Help with nationality",
-      text: "We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post."
-    }) }}
-
-  {% else %}
+{% macro abstractionPointCell(array, purposeDescription) %}
+  {% set abstractionPoints %}
     {% for item in array %}
       {% if loop.last %}
-        <div class="summary-list--nested-list govuk-!-padding-top-1"> {{ item }}</div>
+        <div class="govuk-!-padding-top-1">{{ item }}</div>
       {% else %}
-        <div class="govuk-!-padding-bottom-1">{{ item }}</div>
-        <div class="govuk-!-margin-bottom-1 govuk-section-break govuk-section-break--visible"> </div>
-      {% endif%}
+        <div class="govuk-!-padding-top-1 govuk-!-padding-bottom-1">{{ item }}</div>
+        <div class="govuk-!-margin-bottom-1 govuk-section-break govuk-section-break--visible"></div>
+      {% endif %}
     {% endfor %}
+  {% endset %}
+
+  {% if array.length > 5 %}
+    {{ govukDetails({
+      summaryText: "View your " + array.length + " abstraction points for " + purposeDescription | lower,
+      html: abstractionPoints | safe,
+      classes: "govuk-!-margin-bottom-0"
+    }) }}
+  {% else %}
+    {{ abstractionPoints | safe }}
   {% endif %}
 {% endmacro %}
 
@@ -55,7 +59,7 @@
         classes: "govuk-!-width-one-third"
       },
       {
-        html: abstractionPointNewLine(licencePurpose.abstractionPoints),
+        html: abstractionPointCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
         attributes: { 'data-test': 'abstraction-points-' + rowIndex }
       }
     ] %}
