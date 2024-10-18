@@ -17,6 +17,20 @@ const routes = [
         crumb: false
       }
     }
+  }, {
+    method: 'POST',
+    path: '/check/licence-ended-return-logs',
+    options: {
+      handler: CheckController.returnLogsForEndedLicence,
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 
