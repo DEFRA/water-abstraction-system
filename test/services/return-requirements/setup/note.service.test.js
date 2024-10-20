@@ -55,7 +55,7 @@ describe('Return Requirements Setup - Note service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Add a note',
-        backLink: `/system/return-requirements/${session.id}/check`,
+        backLink: `/system/return-requirements/setup/${session.id}/check`,
         licenceRef: '01/ABC',
         note: null
       }, { skip: ['sessionId'] })

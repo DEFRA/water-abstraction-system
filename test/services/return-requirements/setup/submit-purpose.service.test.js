@@ -132,7 +132,7 @@ describe('Return Requirements Setup - Submit Purpose service', () => {
               text: 'Select any purpose for the requirements for returns'
             },
             pageTitle: 'Select the purpose for the requirements for returns',
-            backLink: `/system/return-requirements/${session.id}/method`,
+            backLink: `/system/return-requirements/setup/${session.id}/method`,
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             purposes: [
@@ -161,7 +161,7 @@ describe('Return Requirements Setup - Submit Purpose service', () => {
               text: 'Purpose description must be 100 characters or less'
             },
             pageTitle: 'Select the purpose for the requirements for returns',
-            backLink: `/system/return-requirements/${session.id}/method`,
+            backLink: `/system/return-requirements/setup/${session.id}/method`,
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             purposes: [

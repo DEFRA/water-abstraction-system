@@ -57,7 +57,7 @@ describe('Return Requirements Setup - Returns Cycle service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Select the returns cycle for the requirements for returns',
-        backLink: `/system/return-requirements/${session.id}/abstraction-period/0`,
+        backLink: `/system/return-requirements/setup/${session.id}/abstraction-period/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         returnsCycle: null

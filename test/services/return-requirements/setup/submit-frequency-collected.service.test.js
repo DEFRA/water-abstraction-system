@@ -113,7 +113,7 @@ describe('Return Requirements Setup - Submit Frequency Collected service', () =>
         expect(result).to.equal({
           activeNavBar: 'search',
           pageTitle: 'Select how often readings or volumes are collected',
-          backLink: `/system/return-requirements/${session.id}/site-description/0`,
+          backLink: `/system/return-requirements/setup/${session.id}/site-description/0`,
           frequencyCollected: null,
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC'

@@ -97,7 +97,7 @@
     <div class="govuk-!-margin-bottom-9">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
 
-      {# Bookmarks - only displays when there us more than 1 return requirement #}
+      {# Bookmarks - only displays when there is more than 1 return requirement #}
       {% if requirements.length > 1 %}
         <div class="govuk-body govuk-!-margin-bottom-6">
           <ul>
@@ -110,7 +110,7 @@
       {% endif %}
 
       {# Add another requirement button #}
-      <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
+      <form method="post" action="/system/return-requirements/setup/{{ sessionId }}/add">
         <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
         {{ govukButton({
@@ -309,7 +309,7 @@
                     classes: "govuk-button--secondary" ,
                     attributes: { 'data-test': 'remove-' + rowIndex },
                     preventDoubleClick: true,
-                    href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
+                    href: "/system/return-requirements/setup/" + sessionId + "/remove/" + requirement.index
                   }) if requirements.length >= 2
                 }
                 }

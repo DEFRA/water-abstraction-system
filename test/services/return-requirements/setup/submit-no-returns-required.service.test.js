@@ -111,7 +111,7 @@ describe('Return Requirements Setup - Submit No Returns Required service', () =>
         expect(result).to.equal({
           activeNavBar: 'search',
           pageTitle: 'Why are no returns required?',
-          backLink: `/system/return-requirements/${session.id}/start-date`,
+          backLink: `/system/return-requirements/setup/${session.id}/start-date`,
           licenceRef: '01/ABC',
           reason: null
         }, { skip: ['sessionId', 'error'] })

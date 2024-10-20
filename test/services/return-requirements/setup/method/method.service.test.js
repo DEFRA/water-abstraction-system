@@ -54,7 +54,7 @@ describe('Return Requirements - Method service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'How do you want to set up the requirements for returns?',
-        backLink: `/system/return-requirements/${session.id}/reason`,
+        backLink: `/system/return-requirements/setup/${session.id}/reason`,
         displayCopyExisting: true,
         licenceRef: '01/ABC',
         method: null

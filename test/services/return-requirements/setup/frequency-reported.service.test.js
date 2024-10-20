@@ -57,7 +57,7 @@ describe('Return Requirements Setup - Frequency Reported service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Select how often readings or volumes are reported',
-        backLink: `/system/return-requirements/${session.id}/frequency-collected/0`,
+        backLink: `/system/return-requirements/setup/${session.id}/frequency-collected/0`,
         frequencyReported: null,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC'

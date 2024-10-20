@@ -49,7 +49,7 @@ describe('Return Requirements Setup - Additional Submission Options service', ()
       expect(result).to.equal({
         activeNavBar: 'search',
         additionalSubmissionOptions: [],
-        backLink: `/system/return-requirements/${session.id}/check`,
+        backLink: `/system/return-requirements/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         pageTitle: 'Select any additional submission options for the return requirements'

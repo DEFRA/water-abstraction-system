@@ -77,7 +77,7 @@ describe('Return Requirements Setup - Points service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Select the points for the requirements for returns',
-        backLink: `/system/return-requirements/${session.id}/purpose/0`,
+        backLink: `/system/return-requirements/setup/${session.id}/purpose/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
           {

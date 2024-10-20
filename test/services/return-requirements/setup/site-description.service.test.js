@@ -57,7 +57,7 @@ describe('Return Requirements Setup - Site Description service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Enter a site description for the requirements for returns',
-        backLink: `/system/return-requirements/${session.id}/returns-cycle/0`,
+        backLink: `/system/return-requirements/setup/${session.id}/returns-cycle/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         siteDescription: null

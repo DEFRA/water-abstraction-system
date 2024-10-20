@@ -132,7 +132,7 @@ describe('Return Requirements Setup - Submit Agreements and Exceptions service',
         activeNavBar: 'search',
         pageTitle: 'Select agreements and exceptions for the requirements for returns',
         agreementsExceptions: null,
-        backLink: `/system/return-requirements/${session.id}/frequency-reported/0`,
+        backLink: `/system/return-requirements/setup/${session.id}/frequency-reported/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC'
       }, { skip: ['sessionId', 'error'] })

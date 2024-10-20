@@ -114,7 +114,7 @@ describe('Return Requirements Setup - Submit Reason service', () => {
         expect(result).to.equal({
           activeNavBar: 'search',
           pageTitle: 'Select the reason for the requirements for returns',
-          backLink: `/system/return-requirements/${session.id}/start-date`,
+          backLink: `/system/return-requirements/setup/${session.id}/start-date`,
           licenceRef: '01/ABC',
           reason: null
         }, { skip: ['sessionId', 'error'] })
