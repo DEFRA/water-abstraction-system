@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CommunicationsPresenter = require('../../../app/presenters/licences/communications.presenter.js')
+const ViewLicenceCommunicationsPresenter = require('../../../app/presenters/licences/view-licence-communications.presenter.js')
 
-describe('Communications presenter', () => {
+describe('View Licence Communications presenter', () => {
   let communications
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Communications presenter', () => {
 
   describe('when provided with populated communications data', () => {
     it('correctly presents the data', () => {
-      const result = CommunicationsPresenter.go(communications)
+      const result = ViewLicenceCommunicationsPresenter.go(communications)
 
       expect(result).to.equal({
         communications: [{
@@ -60,7 +60,7 @@ describe('Communications presenter', () => {
         })
 
         it('returns that communication type', () => {
-          const result = CommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
             label: 'Returns: invitation',
@@ -72,7 +72,7 @@ describe('Communications presenter', () => {
 
       describe('when the message ref does not contain pdf', () => {
         it('returns that communication type', () => {
-          const result = CommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
             label: 'Returns: invitation',
@@ -90,7 +90,7 @@ describe('Communications presenter', () => {
 
       describe('when the message type is present', () => {
         it('returns the method key in sentence case', () => {
-          const result = CommunicationsPresenter.go(communications)
+          const result = ViewLicenceCommunicationsPresenter.go(communications)
 
           expect(result.communications[0].method).to.equal('I am in sentence case')
         })
@@ -104,7 +104,7 @@ describe('Communications presenter', () => {
       })
 
       it('returns the type object with an alert text', () => {
-        const result = CommunicationsPresenter.go(communications)
+        const result = ViewLicenceCommunicationsPresenter.go(communications)
 
         expect(result.communications[0].type).to.equal({
           label: 'Test - Water abstraction alert',

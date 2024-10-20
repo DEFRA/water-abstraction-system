@@ -2,13 +2,15 @@
 
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
- * @module CommunicationsPresenter
+ * @module ViewLicenceCommunicationsPresenter
  */
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
+ *
+ * @param {module:WorkflowModel[]} communications - All in-progress workflow records for the licence
  *
  * @returns {object} The data formatted for the view template
  */
