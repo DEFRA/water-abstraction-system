@@ -219,7 +219,7 @@ function _returnVersions (returnVersions = [{}]) {
     return {
       action: [{
         text: 'View',
-        link: `/system/return-requirements/${returnVersion.id}/view`
+        link: `/system/return-requirements/${returnVersion.id}`
       }],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: _reason(returnVersion),

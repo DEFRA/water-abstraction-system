@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
+ * Formats return version data ready for presenting in the view return version page
  * @module ViewPresenter
  */
 
@@ -10,12 +10,12 @@ const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Formats requirements for returns data for the `/return-requirements/{sessionId}/view` page
+ * Formats return version data ready for presenting in the view return version page
  *
- * @param {ReturnVersionModel[]} returnVersion - The return version and associated, licence, and return requirements
- * (requirement, points, purposes) returned by FetchRequirementsForReturns
+ * @param {ReturnVersionModel} returnVersion - The return version and associated, licence, and return requirements
+ * (requirement, points, purposes)
  *
- * @returns {object} requirements for returns data needed by the view template
+ * @returns {object} page data needed by the view template
  */
 function go (returnVersion) {
   const { licence, multipleUpload, returnRequirements, startDate, status } =
