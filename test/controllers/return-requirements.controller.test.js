@@ -41,7 +41,7 @@ const SubmitPointsService = require('../../app/services/return-requirements/subm
 const SubmitPurposeService = require('../../app/services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../../app/services/return-requirements/submit-reason.service.js')
 const SubmitReturnsCycleService = require('../../app/services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../../app/services/return-requirements/setup/submit-setup.service.js')
+const SubmitMethodService = require('../../app/services/return-requirements/setup/submit-method.service.js')
 const SubmitSiteDescriptionService = require('../../app/services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../../app/services/return-requirements/submit-start-date.service.js')
 const ViewService = require('../../app/services/return-requirements/view.service.js')
@@ -513,7 +513,7 @@ describe('Return requirements controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ error: {} })
+            Sinon.stub(SubmitMethodService, 'go').resolves({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -526,7 +526,7 @@ describe('Return requirements controller', () => {
 
         describe('and the validation passes', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ redirect: 'page-data-redirect' })
+            Sinon.stub(SubmitMethodService, 'go').resolves({ redirect: 'page-data-redirect' })
           })
 
           it('redirects to /system/return-requirements/{sessionId}/{pageData.redirect}', async () => {

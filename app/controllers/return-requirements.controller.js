@@ -34,6 +34,7 @@ const SubmitCheckService = require('../services/return-requirements/submit-check
 const SubmitExistingService = require('../services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
+const SubmitMethodService = require('../services/return-requirements/setup/submit-method.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitNoteService = require('../services/return-requirements/submit-note.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
@@ -41,7 +42,6 @@ const SubmitPurposeService = require('../services/return-requirements/submit-pur
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitRemoveService = require('../services/return-requirements/submit-remove.service.js')
 const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 const ViewService = require('../services/return-requirements/view.service.js')
@@ -359,7 +359,7 @@ async function submitFrequencyReported (request, h) {
 async function submitMethod (request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitSetupService.go(sessionId, request.payload)
+  const pageData = await SubmitMethodService.go(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/setup.njk', pageData)
