@@ -3,7 +3,7 @@
 /**
  * Formats data for the `/return-requirements/{sessionId}/purpose` page
  * @module PurposePresenter
-*/
+ */
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/purpose` page
@@ -31,7 +31,7 @@ function _backLink (session) {
   const { checkPageVisited, id, requirements } = session
 
   // NOTE: Purpose is the first page in the manual setup journey. So, when a user first comes through, we want to allow
-  // them to go back to `/setup`. Once they've got to the `/check` page they may return because they clicked the
+  // them to go back to `/method`. Once they've got to the `/check` page they may return because they clicked the
   // 'Change' link for the purpose. When this happens, `checkPageVisited` will be true and 'Back' needs to take them
   // back there.
   //
@@ -43,7 +43,7 @@ function _backLink (session) {
     return `/system/return-requirements/${id}/check`
   }
 
-  return `/system/return-requirements/${id}/setup`
+  return `/system/return-requirements/${id}/method`
 }
 
 function _purposes (licencePurposes, requirementPurposes) {

@@ -150,6 +150,16 @@ async function frequencyReported (request, h) {
   })
 }
 
+async function method (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SetupService.go(sessionId)
+
+  return h.view('return-requirements/setup.njk', {
+    ...pageData
+  })
+}
+
 async function noReturnsRequired (request, h) {
   const { sessionId } = request.params
 
@@ -216,16 +226,6 @@ async function returnsCycle (request, h) {
   const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/returns-cycle.njk', {
-    ...pageData
-  })
-}
-
-async function setup (request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SetupService.go(sessionId)
-
-  return h.view('return-requirements/setup.njk', {
     ...pageData
   })
 }
@@ -356,6 +356,18 @@ async function submitFrequencyReported (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions/${requirementIndex}`)
 }
 
+async function submitMethod (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitSetupService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/setup.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
+}
+
 async function submitNoReturnsRequired (request, h) {
   const { params: { sessionId }, payload, yar } = request
 
@@ -426,7 +438,7 @@ async function submitReason (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/setup`)
+  return h.redirect(`/system/return-requirements/${sessionId}/method`)
 }
 
 async function submitRemove (request, h) {
@@ -451,18 +463,6 @@ async function submitReturnsCycle (request, h) {
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/site-description/${requirementIndex}`)
-}
-
-async function submitSetup (request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SubmitSetupService.go(sessionId, request.payload)
-
-  if (pageData.error) {
-    return h.view('return-requirements/setup.njk', pageData)
-  }
-
-  return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitSiteDescription (request, h) {
@@ -522,6 +522,7 @@ module.exports = {
   existing,
   frequencyCollected,
   frequencyReported,
+  method,
   noReturnsRequired,
   note,
   points,
@@ -529,7 +530,6 @@ module.exports = {
   reason,
   remove,
   returnsCycle,
-  setup,
   siteDescription,
   startDate,
   submitAbstractionPeriod,
@@ -540,6 +540,7 @@ module.exports = {
   submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,
+  submitMethod,
   submitNoReturnsRequired,
   submitNote,
   submitPoints,
@@ -547,7 +548,6 @@ module.exports = {
   submitReason,
   submitRemove,
   submitReturnsCycle,
-  submitSetup,
   submitSiteDescription,
   submitStartDate,
   view

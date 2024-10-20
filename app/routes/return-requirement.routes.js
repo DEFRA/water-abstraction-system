@@ -234,6 +234,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/method',
+    options: {
+      handler: ReturnRequirementsController.method,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/method',
+    options: {
+      handler: ReturnRequirementsController.submitMethod,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/no-returns-required',
     options: {
       handler: ReturnRequirementsController.noReturnsRequired,
@@ -393,30 +417,6 @@ const routes = [
     path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
     options: {
       handler: ReturnRequirementsController.submitReturnsCycle,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/setup',
-    options: {
-      handler: ReturnRequirementsController.setup,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/setup',
-    options: {
-      handler: ReturnRequirementsController.submitSetup,
       auth: {
         access: {
           scope: ['billing']

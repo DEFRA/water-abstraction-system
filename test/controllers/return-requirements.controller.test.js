@@ -489,6 +489,57 @@ describe('Return requirements controller', () => {
     })
   })
 
+  describe('/return-requirements/{sessionId}/method', () => {
+    const path = 'method'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(SetupService, 'go').resolves({
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSetupService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation passes', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitSetupService, 'go').resolves({ redirect: 'page-data-redirect' })
+          })
+
+          it('redirects to /system/return-requirements/{sessionId}/{pageData.redirect}', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/page-data-redirect')
+          })
+        })
+      })
+    })
+  })
+
   describe('/return-requirements/{sessionId}/no-returns-required', () => {
     const path = 'no-returns-required'
 
@@ -708,11 +759,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReasonService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/setup', async () => {
+          it('redirects to /system/return-requirements/{sessionId}/method', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/setup')
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/method')
           })
         })
 
@@ -811,57 +862,6 @@ describe('Return requirements controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
-          })
-        })
-      })
-    })
-  })
-
-  describe('/return-requirements/{sessionId}/setup', () => {
-    const path = 'setup'
-
-    describe('GET', () => {
-      beforeEach(async () => {
-        Sinon.stub(SetupService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
-        })
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions(path))
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        describe('and the validation fails', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ error: {} })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-
-        describe('and the validation passes', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ redirect: 'page-data-redirect' })
-          })
-
-          it('redirects to /system/return-requirements/{sessionId}/{pageData.redirect}', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/page-data-redirect')
           })
         })
       })
