@@ -19,7 +19,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Promise<object>} The view data for the purpose page
-*/
+ */
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
   const purposesData = await FetchPurposesService.go(session.licence.id)

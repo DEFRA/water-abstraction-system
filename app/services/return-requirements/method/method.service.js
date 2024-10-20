@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
- * @module SetupService
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/method` page
+ * @module MethodService
  */
 
-const SetupPresenter = require('../../../presenters/return-requirements/setup.presenter.js')
+const MethodPresenter = require('../../../presenters/return-requirements/method.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/method` page
  *
  * Supports generating the data needed for the select reason page in the return requirements setup journey. It
  * fetches the current session record and combines it with the radio buttons and other information needed for the form.
@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = SetupPresenter.go(session)
+  const formattedData = MethodPresenter.go(session)
 
   return {
     activeNavBar: 'search',

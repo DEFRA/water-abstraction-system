@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/return-requirements/{sessionId}/setup` page
+ * Validates data submitted for the `/return-requirements/{sessionId}/method` page
  * @module SetupValidator
  */
 
@@ -14,9 +14,9 @@ const VALID_VALUES = [
 ]
 
 /**
- * Validates data submitted for the `/return-requirements/{sessionId}/setup` page
+ * Validates data submitted for the `/return-requirements/{sessionId}/method` page
  *
- * @param {object} payload - The payload from the request to be validated
+ * @param {object} data - The payload from the request to be validated
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
@@ -24,7 +24,7 @@ const VALID_VALUES = [
 function go (data) {
   const errorMessage = 'Select how you want to set up the requirements for returns'
   const schema = Joi.object({
-    setup: Joi.string()
+    method: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({

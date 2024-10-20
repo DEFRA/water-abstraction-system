@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/method` page
  * @module SubmitSetupService
  */
 
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const SetupPresenter = require('../../../presenters/return-requirements/setup.presenter.js')
-const SetupValidator = require('../../../validators/return-requirements/setup.validator.js')
+const MethodPresenter = require('../../../presenters/return-requirements/method.presenter.js')
+const MethodValidator = require('../../../validators/return-requirements/method.validator.js')
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/method` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
@@ -34,11 +34,11 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirect: _redirect(payload.setup)
+      redirect: _redirect(payload.method)
     }
   }
 
-  const formattedData = SetupPresenter.go(session, payload)
+  const formattedData = MethodPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
@@ -48,12 +48,12 @@ async function go (sessionId, payload) {
   }
 }
 
-function _redirect (setup) {
-  if (setup === 'use-abstraction-data') {
+function _redirect (method) {
+  if (method === 'use-abstraction-data') {
     return 'check'
   }
 
-  if (setup === 'use-existing-requirements') {
+  if (method === 'use-existing-requirements') {
     return 'existing'
   }
 
@@ -61,12 +61,12 @@ function _redirect (setup) {
 }
 
 async function _save (session, payload) {
-  session.setup = payload.setup
+  session.method = payload.method
 
-  // If the user selected the option to use abstraction data to setup the return requirements we use
-  // GenerateFromAbstractionDataService to fetch the licence's abstraction data and transform it into return
+  // If the user selected the method 'Start by using abstraction data' to setup the return requirements we use
+  // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
-  if (payload.setup === 'use-abstraction-data') {
+  if (payload.method === 'use-abstraction-data') {
     session.requirements = await GenerateFromAbstractionDataService.go(session.licence.id)
   }
 
@@ -74,7 +74,7 @@ async function _save (session, payload) {
 }
 
 function _validate (payload) {
-  const validation = SetupValidator.go(payload)
+  const validation = MethodValidator.go(payload)
 
   if (!validation.error) {
     return null

@@ -18,9 +18,10 @@ const AgreementsExceptionService = require('../../app/services/return-requiremen
 const CancelService = require('../../app/services/return-requirements/cancel.service.js')
 const CheckService = require('../../app/services/return-requirements/check.service.js')
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
+const ExistingService = require('../../app/services/return-requirements/existing.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
-const ExistingService = require('../../app/services/return-requirements/existing.service.js')
+const MethodService = require('../../app/services/return-requirements/method/method.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
@@ -28,7 +29,6 @@ const RemoveService = require('../../app/services/return-requirements/remove.ser
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
-const SetupService = require('../../app/services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../../app/services/return-requirements/site-description.service.js')
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-requirements/submit-abstraction-period.service.js')
@@ -36,12 +36,12 @@ const SubmitAgreementsExceptions = require('../../app/services/return-requiremen
 const SubmitExistingService = require('../../app/services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-requirements/submit-frequency-reported.service.js')
+const SubmitMethodService = require('../../app/services/return-requirements/method/submit-method.service.js')
 const SubmitNoReturnsRequiredService = require('../../app/services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../../app/services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../../app/services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../../app/services/return-requirements/submit-reason.service.js')
 const SubmitReturnsCycleService = require('../../app/services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../../app/services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../../app/services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../../app/services/return-requirements/submit-start-date.service.js')
 const ViewService = require('../../app/services/return-requirements/view.service.js')
@@ -489,6 +489,57 @@ describe('Return requirements controller', () => {
     })
   })
 
+  describe('/return-requirements/{sessionId}/method', () => {
+    const path = 'method'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(MethodService, 'go').resolves({
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitMethodService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation passes', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitMethodService, 'go').resolves({ redirect: 'page-data-redirect' })
+          })
+
+          it('redirects to /system/return-requirements/{sessionId}/{pageData.redirect}', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/page-data-redirect')
+          })
+        })
+      })
+    })
+  })
+
   describe('/return-requirements/{sessionId}/no-returns-required', () => {
     const path = 'no-returns-required'
 
@@ -708,11 +759,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReasonService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/setup', async () => {
+          it('redirects to /system/return-requirements/{sessionId}/method', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/setup')
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/method')
           })
         })
 
@@ -811,57 +862,6 @@ describe('Return requirements controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
-          })
-        })
-      })
-    })
-  })
-
-  describe('/return-requirements/{sessionId}/setup', () => {
-    const path = 'setup'
-
-    describe('GET', () => {
-      beforeEach(async () => {
-        Sinon.stub(SetupService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
-        })
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions(path))
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        describe('and the validation fails', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ error: {} })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-
-        describe('and the validation passes', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitSetupService, 'go').resolves({ redirect: 'page-data-redirect' })
-          })
-
-          it('redirects to /system/return-requirements/{sessionId}/{pageData.redirect}', async () => {
-            const response = await server.inject(_postOptions(path))
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/page-data-redirect')
           })
         })
       })

@@ -32,7 +32,7 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {{ govukRadios({
-        name: "setup",
+        name: "method",
         errorMessage: error,
         fieldset: {
           legend: {
@@ -45,12 +45,12 @@
           {
             value: "use-abstraction-data",
             text: "Start by using abstraction data",
-            checked: "use-abstraction-data" === setup
+            checked: "use-abstraction-data" === method
           },
           {
             value: "use-existing-requirements",
             text: "Copy existing requirements",
-            checked: "use-existing-requirements" === setup
+            checked: "use-existing-requirements" === method
           } if displayCopyExisting,
           {
             divider: "or"
@@ -58,7 +58,7 @@
           {
             value: "set-up-manually",
             text: "Set up manually",
-            checked: "set-up-manually" === setup
+            checked: "set-up-manually" === method
           }
         ]
       }) }}

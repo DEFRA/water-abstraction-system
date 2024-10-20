@@ -16,6 +16,7 @@ const ExistingService = require('../services/return-requirements/existing.servic
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
+const MethodService = require('../services/return-requirements/method/method.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../services/return-requirements/note.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
@@ -23,7 +24,6 @@ const RemoveService = require('../services/return-requirements/remove.service.js
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
-const SetupService = require('../services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
@@ -34,6 +34,7 @@ const SubmitCheckService = require('../services/return-requirements/submit-check
 const SubmitExistingService = require('../services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
+const SubmitMethodService = require('../services/return-requirements/method/submit-method.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitNoteService = require('../services/return-requirements/submit-note.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
@@ -41,7 +42,6 @@ const SubmitPurposeService = require('../services/return-requirements/submit-pur
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitRemoveService = require('../services/return-requirements/submit-remove.service.js')
 const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
-const SubmitSetupService = require('../services/return-requirements/setup/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 const ViewService = require('../services/return-requirements/view.service.js')
@@ -150,6 +150,16 @@ async function frequencyReported (request, h) {
   })
 }
 
+async function method (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await MethodService.go(sessionId)
+
+  return h.view('return-requirements/method.njk', {
+    ...pageData
+  })
+}
+
 async function noReturnsRequired (request, h) {
   const { sessionId } = request.params
 
@@ -216,16 +226,6 @@ async function returnsCycle (request, h) {
   const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/returns-cycle.njk', {
-    ...pageData
-  })
-}
-
-async function setup (request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SetupService.go(sessionId)
-
-  return h.view('return-requirements/setup.njk', {
     ...pageData
   })
 }
@@ -356,6 +356,18 @@ async function submitFrequencyReported (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions/${requirementIndex}`)
 }
 
+async function submitMethod (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitMethodService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/method.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
+}
+
 async function submitNoReturnsRequired (request, h) {
   const { params: { sessionId }, payload, yar } = request
 
@@ -426,7 +438,7 @@ async function submitReason (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/setup`)
+  return h.redirect(`/system/return-requirements/${sessionId}/method`)
 }
 
 async function submitRemove (request, h) {
@@ -451,18 +463,6 @@ async function submitReturnsCycle (request, h) {
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/site-description/${requirementIndex}`)
-}
-
-async function submitSetup (request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SubmitSetupService.go(sessionId, request.payload)
-
-  if (pageData.error) {
-    return h.view('return-requirements/setup.njk', pageData)
-  }
-
-  return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitSiteDescription (request, h) {
@@ -522,6 +522,7 @@ module.exports = {
   existing,
   frequencyCollected,
   frequencyReported,
+  method,
   noReturnsRequired,
   note,
   points,
@@ -529,7 +530,6 @@ module.exports = {
   reason,
   remove,
   returnsCycle,
-  setup,
   siteDescription,
   startDate,
   submitAbstractionPeriod,
@@ -540,6 +540,7 @@ module.exports = {
   submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,
+  submitMethod,
   submitNoReturnsRequired,
   submitNote,
   submitPoints,
@@ -547,7 +548,6 @@ module.exports = {
   submitReason,
   submitRemove,
   submitReturnsCycle,
-  submitSetup,
   submitSiteDescription,
   submitStartDate,
   view

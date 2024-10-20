@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SetupPresenter = require('../../../app/presenters/return-requirements/setup.presenter.js')
+const MethodPresenter = require('../../../app/presenters/return-requirements/method.presenter.js')
 
-describe('Return Requirements - Setup presenter', () => {
+describe('Return Requirements - Method presenter', () => {
   let session
 
   beforeEach(() => {
@@ -39,21 +39,21 @@ describe('Return Requirements - Setup presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = SetupPresenter.go(session)
+      const result = MethodPresenter.go(session)
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
         displayCopyExisting: true,
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        setup: null
+        method: null
       })
     })
   })
 
   describe('the "backLink" property', () => {
     it('returns a link back to the "start-date" page', () => {
-      const result = SetupPresenter.go(session)
+      const result = MethodPresenter.go(session)
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
     })
@@ -62,7 +62,7 @@ describe('Return Requirements - Setup presenter', () => {
   describe('the "displayCopyExisting" property', () => {
     describe('when the licence has return versions (something to copy from)', () => {
       it('returns true', () => {
-        const result = SetupPresenter.go(session)
+        const result = MethodPresenter.go(session)
 
         expect(result.displayCopyExisting).to.be.true()
       })
@@ -74,31 +74,31 @@ describe('Return Requirements - Setup presenter', () => {
       })
 
       it('returns false', () => {
-        const result = SetupPresenter.go(session)
+        const result = MethodPresenter.go(session)
 
         expect(result.displayCopyExisting).to.be.false()
       })
     })
   })
 
-  describe('the "setup" property', () => {
-    describe('when the user has previously submitted a setup option', () => {
+  describe('the "method" property', () => {
+    describe('when the user has previously submitted a setup method', () => {
       beforeEach(() => {
-        session.setup = 'set-up-manually'
+        session.method = 'set-up-manually'
       })
 
-      it('returns a populated setup', () => {
-        const result = SetupPresenter.go(session)
+      it('returns a populated method', () => {
+        const result = MethodPresenter.go(session)
 
-        expect(result.setup).to.equal('set-up-manually')
+        expect(result.method).to.equal('set-up-manually')
       })
     })
 
-    describe('when the user has not previously submitted a setup option', () => {
-      it('returns an empty setup', () => {
-        const result = SetupPresenter.go(session)
+    describe('when the user has not previously submitted a setup method', () => {
+      it('returns an empty method', () => {
+        const result = MethodPresenter.go(session)
 
-        expect(result.setup).to.be.null()
+        expect(result.method).to.be.null()
       })
     })
   })

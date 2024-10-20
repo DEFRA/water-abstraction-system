@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SetupService = require('../../../../app/services/return-requirements/setup/setup.service.js')
+const MethodService = require('../../../../app/services/return-requirements/method/method.service.js')
 
-describe('Return Requirements - Setup service', () => {
+describe('Return Requirements - Method service', () => {
   let session
 
   beforeEach(async () => {
@@ -43,13 +43,13 @@ describe('Return Requirements - Setup service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SetupService.go(session.id)
+      const result = await MethodService.go(session.id)
 
       expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SetupService.go(session.id)
+      const result = await MethodService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -57,7 +57,7 @@ describe('Return Requirements - Setup service', () => {
         backLink: `/system/return-requirements/${session.id}/reason`,
         displayCopyExisting: true,
         licenceRef: '01/ABC',
-        setup: null
+        method: null
       }, { skip: ['sessionId'] })
     })
   })

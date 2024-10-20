@@ -12,12 +12,12 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/setup/generate-from-abstraction-data.service.js')
+const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/method/generate-from-abstraction-data.service.js')
 
 // Thing under test
-const SubmitSetupService = require('../../../../app/services/return-requirements/setup/submit-setup.service.js')
+const SubmitMethodService = require('../../../../app/services/return-requirements/method/submit-method.service.js')
 
-describe('Return Requirements - Submit Setup service', () => {
+describe('Return Requirements - Submit Method service', () => {
   let payload
   let session
 
@@ -54,29 +54,29 @@ describe('Return Requirements - Submit Setup service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          setup: 'use-abstraction-data'
+          method: 'use-abstraction-data'
         }
 
         Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSetupService.go(session.id, payload)
+        await SubmitMethodService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.setup).to.equal('use-abstraction-data')
+        expect(refreshedSession.method).to.equal('use-abstraction-data')
       })
 
       describe('and the user has selected to use abstraction data', () => {
         it('returns the route to check page', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
+          const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.redirect).to.equal('check')
         })
 
         it('returns the route to check page', async () => {
-          await SubmitSetupService.go(session.id, payload)
+          await SubmitMethodService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
@@ -87,12 +87,12 @@ describe('Return Requirements - Submit Setup service', () => {
       describe('and the user has selected to copy an existing requirement', () => {
         beforeEach(() => {
           payload = {
-            setup: 'use-existing-requirements'
+            method: 'use-existing-requirements'
           }
         })
 
         it('returns the route for the select an existing requirement page', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
+          const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.redirect).to.equal('existing')
         })
@@ -101,12 +101,12 @@ describe('Return Requirements - Submit Setup service', () => {
       describe('and the user has selected to setup the requirement manually', () => {
         beforeEach(() => {
           payload = {
-            setup: 'set-up-manually'
+            method: 'set-up-manually'
           }
         })
 
         it('returns the route for the select purpose page', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
+          const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.redirect).to.equal('purpose/0')
         })
@@ -119,7 +119,7 @@ describe('Return Requirements - Submit Setup service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitSetupService.go(session.id, payload)
+        const result = await SubmitMethodService.go(session.id, payload)
 
         expect(result).to.equal({
           activeNavBar: 'search',
@@ -127,13 +127,13 @@ describe('Return Requirements - Submit Setup service', () => {
           backLink: `/system/return-requirements/${session.id}/reason`,
           displayCopyExisting: true,
           licenceRef: '01/ABC',
-          setup: null
+          method: null
         }, { skip: ['sessionId', 'error'] })
       })
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
+          const result = await SubmitMethodService.go(session.id, payload)
 
           expect(result.error).to.equal({
             text: 'Select how you want to set up the requirements for returns'

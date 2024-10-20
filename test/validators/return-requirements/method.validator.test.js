@@ -8,22 +8,22 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SetupValidator = require('../../../app/validators/return-requirements/setup.validator.js')
+const MethodValidator = require('../../../app/validators/return-requirements/method.validator.js')
 
-describe('Setup validator', () => {
+describe('Method validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SetupValidator.go({ setup: 'use-abstraction-data' })
+      const result = MethodValidator.go({ method: 'use-abstraction-data' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
     })
   })
 
-  describe('when valid data is provided', () => {
-    describe('because no "setup" is given', () => {
+  describe('when invalid data is provided', () => {
+    describe('because no "method" is given', () => {
       it('fails validation', () => {
-        const result = SetupValidator.go({ setup: '' })
+        const result = MethodValidator.go({ method: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -31,9 +31,9 @@ describe('Setup validator', () => {
       })
     })
 
-    describe('because an unknown "setup" is given', () => {
+    describe('because an unknown "method" is given', () => {
       it('fails validation', () => {
-        const result = SetupValidator.go({ setup: 'just-because' })
+        const result = MethodValidator.go({ method: 'just-because' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

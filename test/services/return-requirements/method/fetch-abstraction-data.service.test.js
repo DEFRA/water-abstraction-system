@@ -12,7 +12,7 @@ const LicenceAbstractionDataSeeder = require('../../../support/seeders/licence-a
 const LicenceAgreementModel = require('../../../../app/models/licence-agreement.model.js')
 
 // Thing under test
-const FetchAbstractionDataService = require('../../../../app/services/return-requirements/setup/fetch-abstraction-data.service.js')
+const FetchAbstractionDataService = require('../../../../app/services/return-requirements/method/fetch-abstraction-data.service.js')
 
 describe('Return Requirements - Fetch Abstraction Data service', () => {
   let seedData

@@ -38,7 +38,7 @@ describe('Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        setup: 'use-existing-requirements',
+        method: 'use-existing-requirements',
         reason: 'minor-change',
         journey: 'returns-required',
         licence: {
@@ -102,7 +102,7 @@ describe('Generate Return Version service', () => {
           content: 'This is a test note',
           userEmail: 'admin-internal@wrls.gov.uk'
         },
-        setup: 'set-up-manually',
+        method: 'set-up-manually',
         reason: 'change-to-special-agreement',
         journey: 'returns-required',
         licence: {
