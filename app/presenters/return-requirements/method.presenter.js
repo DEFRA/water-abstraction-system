@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/setup` page
- * @module SetupPresenter
+ * Formats data for the `/return-requirements/{sessionId}/method` page
+ * @module MethodPresenter
  */
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/setup` page
+ * Formats data for the `/return-requirements/{sessionId}/method` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  *

@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/method` page
  * @module SubmitSetupService
  */
 
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const SetupPresenter = require('../../../presenters/return-requirements/setup.presenter.js')
+const MethodPresenter = require('../../../presenters/return-requirements/method.presenter.js')
 const SetupValidator = require('../../../validators/return-requirements/setup.validator.js')
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/method` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
@@ -38,7 +38,7 @@ async function go (sessionId, payload) {
     }
   }
 
-  const formattedData = SetupPresenter.go(session, payload)
+  const formattedData = MethodPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
