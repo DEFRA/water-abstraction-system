@@ -12,10 +12,10 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/setup/generate-from-abstraction-data.service.js')
+const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/method/generate-from-abstraction-data.service.js')
 
 // Thing under test
-const SubmitMethodService = require('../../../../app/services/return-requirements/setup/submit-method.service.js')
+const SubmitMethodService = require('../../../../app/services/return-requirements/method/submit-method.service.js')
 
 describe('Return Requirements - Submit Method service', () => {
   let payload

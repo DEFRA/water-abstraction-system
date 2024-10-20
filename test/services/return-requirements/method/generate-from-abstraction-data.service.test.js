@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FetchAbstractionDataService = require('../../../../app/services/return-requirements/setup/fetch-abstraction-data.service.js')
+const FetchAbstractionDataService = require('../../../../app/services/return-requirements/method/fetch-abstraction-data.service.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
 const LicenceVersionPurposeModel = require('../../../../app/models/licence-version-purpose.model.js')
 
 // Thing under test
-const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/setup/generate-from-abstraction-data.service.js')
+const GenerateFromAbstractionDataService = require('../../../../app/services/return-requirements/method/generate-from-abstraction-data.service.js')
 
 describe('Return Requirements - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'

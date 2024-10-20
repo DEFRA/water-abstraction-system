@@ -11,7 +11,7 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const MethodService = require('../../../../app/services/return-requirements/setup/method.service.js')
+const MethodService = require('../../../../app/services/return-requirements/method/method.service.js')
 
 describe('Return Requirements - Method service', () => {
   let session
