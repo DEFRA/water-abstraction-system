@@ -36,7 +36,7 @@ describe('Return Requirements Setup - No Returns Required presenter', () => {
       const result = NoReturnsRequiredPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/start-date',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
         licenceRef: '01/ABC',
         reason: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -53,7 +53,7 @@ describe('Return Requirements Setup - No Returns Required presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = NoReturnsRequiredPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -61,7 +61,7 @@ describe('Return Requirements Setup - No Returns Required presenter', () => {
       it('returns a link back to the "start-date" page', () => {
         const result = NoReturnsRequiredPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/start-date')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/start-date')
       })
     })
   })

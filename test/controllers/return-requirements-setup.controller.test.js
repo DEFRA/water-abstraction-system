@@ -111,7 +111,7 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/returns-cycle/{requirementIndex}', async () => {
+          it('redirects to /system/return-requirements/setup/{sessionId}/returns-cycle/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
@@ -349,7 +349,7 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitExistingService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
@@ -413,7 +413,7 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)

@@ -39,7 +39,7 @@ describe('Return Requirements Setup - Frequency Reported presenter', () => {
       const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
       expect(result).to.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0',
         frequencyReported: null,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
@@ -57,7 +57,7 @@ describe('Return Requirements Setup - Frequency Reported presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -65,7 +65,7 @@ describe('Return Requirements Setup - Frequency Reported presenter', () => {
       it('returns a link back to the "frequency-collected" page', () => {
         const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0')
       })
     })
   })

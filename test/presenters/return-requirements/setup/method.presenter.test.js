@@ -42,7 +42,7 @@ describe('Return Requirements Setup - Method presenter', () => {
       const result = MethodPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         displayCopyExisting: true,
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
@@ -55,7 +55,7 @@ describe('Return Requirements Setup - Method presenter', () => {
     it('returns a link back to the "start-date" page', () => {
       const result = MethodPresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
+      expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/reason')
     })
   })
 

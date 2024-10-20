@@ -61,7 +61,7 @@ describe('View Licence History presenter', () => {
             dateCreated: '5 April 2021',
             displayNote: true,
             notes: ['Test note'],
-            link: '/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view',
+            link: '/system/return-requirements/setup/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view',
             reason: 'New licence',
             type: { index: 2, name: 'Return version' }
           }
@@ -131,7 +131,7 @@ describe('View Licence History presenter', () => {
         it('returns the return version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
-          expect(result.entries[2].link).to.equal('/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view')
+          expect(result.entries[2].link).to.equal('/system/return-requirements/setup/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view')
         })
       })
     })

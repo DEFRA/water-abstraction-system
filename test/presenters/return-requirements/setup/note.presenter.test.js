@@ -37,7 +37,7 @@ describe('Return Requirements Setup - Note presenter', () => {
       const result = NotePresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceRef: '01/ABC',
         note: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -49,7 +49,7 @@ describe('Return Requirements Setup - Note presenter', () => {
     it('returns a link back to the "check" page', () => {
       const result = NotePresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+      expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
     })
   })
 

@@ -37,7 +37,7 @@ describe('Return Requirements Setup - Additional Submission Options presenter', 
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: `/system/return-requirements/${session.id}/check`,
+        backLink: `/system/return-requirements/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
@@ -50,7 +50,7 @@ describe('Return Requirements Setup - Additional Submission Options presenter', 
     it('returns a link back to the "check" page', () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-      expect(result.backLink).to.equal(`/system/return-requirements/${session.id}/check`)
+      expect(result.backLink).to.equal(`/system/return-requirements/setup/${session.id}/check`)
     })
   })
 

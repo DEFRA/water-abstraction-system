@@ -575,7 +575,7 @@ describe('Licences - Set Up presenter', () => {
             {
               action: [
                 {
-                  link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+                  link: '/system/return-requirements/setup/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                   text: 'View'
                 }
               ],
@@ -601,7 +601,7 @@ describe('Licences - Set Up presenter', () => {
               {
                 action: [
                   {
-                    link: '/system/return-requirements/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+                    link: '/system/return-requirements/setup/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
                     text: 'View'
                   }
                 ],

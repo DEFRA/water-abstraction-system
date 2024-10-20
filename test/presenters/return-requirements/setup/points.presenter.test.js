@@ -45,7 +45,7 @@ describe('Return Requirements Setup - Points presenter', () => {
       const result = PointsPresenter.go(session, requirementIndex, points)
 
       expect(result).to.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [{
           id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
@@ -73,7 +73,7 @@ describe('Return Requirements Setup - Points presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -81,7 +81,7 @@ describe('Return Requirements Setup - Points presenter', () => {
       it('returns a link back to the "purpose" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0')
       })
     })
   })

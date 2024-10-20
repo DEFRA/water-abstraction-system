@@ -40,7 +40,7 @@ describe('Return Requirements Setup - Abstraction Period presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: null,
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/points/0',
+        backLink: '/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -89,7 +89,7 @@ describe('Return Requirements Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -97,7 +97,7 @@ describe('Return Requirements Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "points" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/points/0')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/points/0')
       })
     })
   })

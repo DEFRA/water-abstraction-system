@@ -61,7 +61,7 @@ describe('Return Requirements Setup - Start Date presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal('/system/return-requirements/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
