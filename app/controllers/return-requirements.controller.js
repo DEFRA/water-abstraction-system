@@ -155,7 +155,7 @@ async function method (request, h) {
 
   const pageData = await MethodService.go(sessionId)
 
-  return h.view('return-requirements/setup.njk', {
+  return h.view('return-requirements/method.njk', {
     ...pageData
   })
 }
@@ -362,7 +362,7 @@ async function submitMethod (request, h) {
   const pageData = await SubmitMethodService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('return-requirements/setup.njk', pageData)
+    return h.view('return-requirements/method.njk', pageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
