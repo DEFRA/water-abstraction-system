@@ -5,9 +5,9 @@
  * @module GenerateReturnVersionRequirementsService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
-const LicenceVersionModel = require('../../../models/licence-version.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const LicenceModel = require('../../../../models/licence.model.js')
+const LicenceVersionModel = require('../../../../models/licence-version.model.js')
+const ReturnRequirementModel = require('../../../../models/return-requirement.model.js')
 
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence

@@ -7,7 +7,7 @@
 
 const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
 const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence

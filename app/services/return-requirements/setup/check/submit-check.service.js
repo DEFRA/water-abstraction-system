@@ -7,7 +7,7 @@
 
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const PersistReturnVersionService = require('./persist-return-version.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed

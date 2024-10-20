@@ -9,14 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const GenerateReturnVersionService = require('../../../../app/services/return-requirements/setup/generate-return-version.service.js')
-const PersistReturnVersionService = require('../../../../app/services/return-requirements/setup/persist-return-version.service.js')
+const GenerateReturnVersionService = require('../../../../../app/services/return-requirements/setup/check/generate-return-version.service.js')
+const PersistReturnVersionService = require('../../../../../app/services/return-requirements/setup/check/persist-return-version.service.js')
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/return-requirements/setup/submit-check.service.js')
+const SubmitCheckService = require('../../../../../app/services/return-requirements/setup/check/submit-check.service.js')
 
 describe('Return Requirements Setup - Submit Check service', () => {
   let session

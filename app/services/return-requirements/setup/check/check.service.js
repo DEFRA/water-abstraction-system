@@ -5,10 +5,10 @@
  * @module CheckService
  */
 
-const CheckPresenter = require('../../../presenters/return-requirements/setup/check/check.presenter.js')
-const FetchPointsService = require('./fetch-points.service.js')
-const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/setup/check/returns-requirements.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const CheckPresenter = require('../../../../presenters/return-requirements/setup/check/check.presenter.js')
+const FetchPointsService = require('../fetch-points.service.js')
+const ReturnRequirementsPresenter = require('../../../../presenters/return-requirements/setup/check/returns-requirements.presenter.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/setup/{sessionId}/check` page

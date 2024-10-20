@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const ReturnVersionModel = require('../../../../app/models/return-version.model.js')
-const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../../../app/models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../../../app/models/return-requirement-purpose.model.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
+const ReturnRequirementModel = require('../../../../../app/models/return-requirement.model.js')
+const ReturnRequirementPointModel = require('../../../../../app/models/return-requirement-point.model.js')
+const ReturnRequirementPurposeModel = require('../../../../../app/models/return-requirement-purpose.model.js')
 
 // Thing under test
-const PersistReturnVersionService = require('../../../../app/services/return-requirements/setup/persist-return-version.service.js')
+const PersistReturnVersionService = require('../../../../../app/services/return-requirements/setup/check/persist-return-version.service.js')
 
 describe('Return Requirements Setup - Persist Return Version service', () => {
   describe('when called with data to persist', () => {

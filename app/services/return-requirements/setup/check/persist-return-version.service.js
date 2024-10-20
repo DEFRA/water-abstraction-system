@@ -5,10 +5,10 @@
  * @module PersistReturnVersionService
  */
 
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../../models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../../models/return-requirement-purpose.model.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const ReturnRequirementModel = require('../../../../models/return-requirement.model.js')
+const ReturnRequirementPointModel = require('../../../../models/return-requirement-point.model.js')
+const ReturnRequirementPurposeModel = require('../../../../models/return-requirement-purpose.model.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
  * Persists the data required to create a new return version

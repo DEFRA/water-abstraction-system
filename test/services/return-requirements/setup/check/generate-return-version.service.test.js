@@ -9,15 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const ReturnVersionHelper = require('../../../../support/helpers/return-version.helper.js')
 
 // Things we need to stub
-const GenerateReturnVersionRequirementsService = require('../../../../app/services/return-requirements/setup/generate-return-version-requirements.service.js')
-const ProcessExistingReturnVersionsService = require('../../../../app/services/return-requirements/setup/process-existing-return-versions.service.js')
+const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-requirements/setup/check/generate-return-version-requirements.service.js')
+const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-requirements/setup/check/process-existing-return-versions.service.js')
 
 // Thing under test
-const GenerateReturnVersionService = require('../../../../app/services/return-requirements/setup/generate-return-version.service.js')
+const GenerateReturnVersionService = require('../../../../../app/services/return-requirements/setup/check/generate-return-version.service.js')
 
 describe('Return Requirements Setup - Generate Return Version service', () => {
   const userId = 12345

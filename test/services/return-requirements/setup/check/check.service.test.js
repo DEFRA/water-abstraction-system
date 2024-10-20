@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const FetchPointsService = require('../../../../app/services/return-requirements/setup/fetch-points.service.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const FetchPointsService = require('../../../../../app/services/return-requirements/setup/fetch-points.service.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckService = require('../../../../app/services/return-requirements/setup/check.service.js')
+const CheckService = require('../../../../../app/services/return-requirements/setup/check/check.service.js')
 
 describe('Return Requirements Setup - Check service', () => {
   let session

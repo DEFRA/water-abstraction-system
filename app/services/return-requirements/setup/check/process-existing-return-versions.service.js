@@ -5,7 +5,7 @@
  * @module ProcessExistingReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created

@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const LicenceHelper = require('../../../../support/helpers/licence.helper.js')
+const LicenceVersionHelper = require('../../../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../../../support/helpers/licence-version-purpose.helper.js')
+const RegionHelper = require('../../../../support/helpers/region.helper.js')
 
 // Thing under test
-const GenerateReturnVersionRequirementsService = require('../../../../app/services/return-requirements/setup/generate-return-version-requirements.service.js')
+const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-requirements/setup/check/generate-return-version-requirements.service.js')
 
 describe('Return Requirements Setup - Generate Return Version Requirements service', () => {
   let licenceId

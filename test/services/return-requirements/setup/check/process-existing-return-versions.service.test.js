@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../../app/models/return-version.model.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const ReturnVersionHelper = require('../../../../support/helpers/return-version.helper.js')
+const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
 
 // Thing under test
-const ProcessExistingReturnVersionsService = require('../../../../app/services/return-requirements/setup/process-existing-return-versions.service.js')
+const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-requirements/setup/check/process-existing-return-versions.service.js')
 
 describe('Return Requirements Setup - Process Existing Return Versions service', () => {
   let existingReturnVersionId
