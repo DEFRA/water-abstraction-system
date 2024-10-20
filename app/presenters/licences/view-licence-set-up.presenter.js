@@ -2,14 +2,15 @@
 
 /**
  * Formats data for the `/licences/{id}/set-up` view licence set up page
- * @module SetUpPresenter
+ * @module ViewLicenceSetUpPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
-const roles = {
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
+const ROLES = {
   billing: 'billing',
   deleteAgreements: 'delete_agreements',
   manageAgreements: 'manage_agreements',
@@ -17,7 +18,7 @@ const roles = {
   workflowReviewer: 'charge_version_workflow_reviewer'
 }
 
-const agreementDescriptions = {
+const AGREEMENTS = {
   S127: 'Two-part tariff',
   S130S: 'Canal and Rivers Trust, supported source (S130S)',
   S130U: 'Canal and Rivers Trust, unsupported source (S130U)',
@@ -58,7 +59,7 @@ function _agreements (commonData, agreements, auth, enableTwoPartSupplementary) 
     return {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
-      description: agreementDescriptions[_financialAgreementCode(agreement)],
+      description: AGREEMENTS[_financialAgreementCode(agreement)],
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
       action: _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary)
     }
@@ -66,7 +67,7 @@ function _agreements (commonData, agreements, auth, enableTwoPartSupplementary) 
 }
 
 function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupplementary) {
-  if (!auth.credentials.scope.includes(roles.manageAgreements)) {
+  if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
     return []
   }
 
@@ -77,7 +78,7 @@ function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupple
   const actionLinks = []
   const hasNotEnded = agreement.endDate === null
 
-  if (auth.credentials.scope.includes(roles.deleteAgreements)) {
+  if (auth.credentials.scope.includes(ROLES.deleteAgreements)) {
     actionLinks.push({
       text: 'Delete',
       link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/delete`
@@ -97,7 +98,7 @@ function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupple
     const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
 
     if (hasNotEnded && is2PTAgreement && isNotMarkedForSupplementaryBilling &&
-      auth.credentials.scope.includes(roles.billing)) {
+      auth.credentials.scope.includes(ROLES.billing)) {
       actionLinks.push({
         text: 'Recalculate bills',
         link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
@@ -109,7 +110,7 @@ function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupple
 }
 
 function _agreementLinks (auth, commonData) {
-  if (auth.credentials.scope.includes(roles.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
+  if (auth.credentials.scope.includes(ROLES.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
     }
@@ -119,7 +120,7 @@ function _agreementLinks (auth, commonData) {
 }
 
 function _chargeInformationLinks (auth, commonData) {
-  if (auth.credentials.scope.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
+  if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
       makeLicenceNonChargeable: `/licences/${commonData.licenceId}/charge-information/non-chargeable-reason?start=1`
@@ -204,7 +205,7 @@ function _reason (returnVersion) {
 }
 
 function _recalculateBills (agreements, auth, commonData, enableTwoPartSupplementary) {
-  if (auth.credentials.scope.includes(roles.billing) &&
+  if (auth.credentials.scope.includes(ROLES.billing) &&
     _hasTwoPartTariffAgreement(agreements) &&
     enableTwoPartSupplementary
   ) {
@@ -254,11 +255,11 @@ function _workflows (workflows, auth) {
 }
 
 function _workflowAction (workflow, auth) {
-  if (workflow.status === 'to_setup' && auth.credentials.scope.includes(roles.workflowEditor)) {
+  if (workflow.status === 'to_setup' && auth.credentials.scope.includes(ROLES.workflowEditor)) {
     return _workflowActionEditor(workflow)
   }
 
-  if (auth.credentials.scope.includes(roles.workflowReviewer)) {
+  if (auth.credentials.scope.includes(ROLES.workflowReviewer)) {
     return _workflowActionReviewer(workflow)
   }
 
