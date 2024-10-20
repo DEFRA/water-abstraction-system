@@ -33,10 +33,10 @@ function _backLink (session, requirementIndex) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
-    return `/system/return-requirements/${id}/check`
+    return `/system/return-requirements/setup/${id}/check`
   }
 
-  return `/system/return-requirements/${id}/purpose/${requirementIndex}`
+  return `/system/return-requirements/setup/${id}/purpose/${requirementIndex}`
 }
 
 function _licencePoints (points) {

@@ -16,7 +16,7 @@ function go (session) {
   const { id: sessionId, licence: { id: licenceId, licenceRef }, additionalSubmissionOptions } = session
   const data = {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
-    backLink: `/system/return-requirements/${sessionId}/check`,
+    backLink: `/system/return-requirements/setup/${sessionId}/check`,
     licenceId,
     licenceRef,
     sessionId

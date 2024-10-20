@@ -40,10 +40,10 @@ function _backLink (session) {
   // scenario 'Back' also needs to take them back to `/check`. Hence, the logic is different in this presenter when
   // compared with the other setup pages.
   if (checkPageVisited || requirements.length > 1) {
-    return `/system/return-requirements/${id}/check`
+    return `/system/return-requirements/setup/${id}/check`
   }
 
-  return `/system/return-requirements/${id}/method`
+  return `/system/return-requirements/setup/${id}/method`
 }
 
 function _purposes (licencePurposes, requirementPurposes) {

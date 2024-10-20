@@ -30,10 +30,10 @@ function _backLink (session, requirementIndex) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
-    return `/system/return-requirements/${id}/check`
+    return `/system/return-requirements/setup/${id}/check`
   }
 
-  return `/system/return-requirements/${id}/frequency-collected/${requirementIndex}`
+  return `/system/return-requirements/setup/${id}/frequency-collected/${requirementIndex}`
 }
 
 module.exports = {

@@ -33,7 +33,7 @@ function go (session, requirementIndex) {
 function _backLink (session) {
   const { id } = session
 
-  return `/system/return-requirements/${id}/check`
+  return `/system/return-requirements/setup/${id}/check`
 }
 
 function _formattedReturnRequirement (requirement) {

@@ -42,7 +42,7 @@ function _backLink (session) {
   const { checkPageVisited, id, licence } = session
 
   if (checkPageVisited) {
-    return `/system/return-requirements/${id}/check`
+    return `/system/return-requirements/setup/${id}/check`
   }
 
   if (FeatureFlagsConfig.enableSystemLicenceView) {
