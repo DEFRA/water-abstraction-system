@@ -18,9 +18,10 @@ const AgreementsExceptionService = require('../../app/services/return-requiremen
 const CancelService = require('../../app/services/return-requirements/cancel.service.js')
 const CheckService = require('../../app/services/return-requirements/check.service.js')
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
+const ExistingService = require('../../app/services/return-requirements/existing.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
-const ExistingService = require('../../app/services/return-requirements/existing.service.js')
+const MethodService = require('../../app/services/return-requirements/setup/method.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
@@ -28,7 +29,6 @@ const RemoveService = require('../../app/services/return-requirements/remove.ser
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
-const SetupService = require('../../app/services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../../app/services/return-requirements/site-description.service.js')
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-requirements/submit-abstraction-period.service.js')
@@ -494,7 +494,7 @@ describe('Return requirements controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(SetupService, 'go').resolves({
+        Sinon.stub(MethodService, 'go').resolves({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
         })
       })

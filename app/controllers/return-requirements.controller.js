@@ -16,6 +16,7 @@ const ExistingService = require('../services/return-requirements/existing.servic
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
+const MethodService = require('../services/return-requirements/setup/method.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../services/return-requirements/note.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
@@ -23,7 +24,6 @@ const RemoveService = require('../services/return-requirements/remove.service.js
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
-const SetupService = require('../services/return-requirements/setup/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
@@ -153,7 +153,7 @@ async function frequencyReported (request, h) {
 async function method (request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SetupService.go(sessionId)
+  const pageData = await MethodService.go(sessionId)
 
   return h.view('return-requirements/setup.njk', {
     ...pageData

@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/method` page
- * @module SetupService
+ * @module MethodService
  */
 
 const MethodPresenter = require('../../../presenters/return-requirements/method.presenter.js')
