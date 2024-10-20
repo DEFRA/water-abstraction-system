@@ -57,7 +57,7 @@ describe('Return Requirements - Method service', () => {
         backLink: `/system/return-requirements/${session.id}/reason`,
         displayCopyExisting: true,
         licenceRef: '01/ABC',
-        setup: null
+        method: null
       }, { skip: ['sessionId'] })
     })
   })

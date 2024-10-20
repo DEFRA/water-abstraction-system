@@ -54,7 +54,7 @@ describe('Return Requirements - Submit Method service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          setup: 'use-abstraction-data'
+          method: 'use-abstraction-data'
         }
 
         Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
@@ -65,7 +65,7 @@ describe('Return Requirements - Submit Method service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.setup).to.equal('use-abstraction-data')
+        expect(refreshedSession.method).to.equal('use-abstraction-data')
       })
 
       describe('and the user has selected to use abstraction data', () => {
@@ -87,7 +87,7 @@ describe('Return Requirements - Submit Method service', () => {
       describe('and the user has selected to copy an existing requirement', () => {
         beforeEach(() => {
           payload = {
-            setup: 'use-existing-requirements'
+            method: 'use-existing-requirements'
           }
         })
 
@@ -101,7 +101,7 @@ describe('Return Requirements - Submit Method service', () => {
       describe('and the user has selected to setup the requirement manually', () => {
         beforeEach(() => {
           payload = {
-            setup: 'set-up-manually'
+            method: 'set-up-manually'
           }
         })
 
@@ -127,7 +127,7 @@ describe('Return Requirements - Submit Method service', () => {
           backLink: `/system/return-requirements/${session.id}/reason`,
           displayCopyExisting: true,
           licenceRef: '01/ABC',
-          setup: null
+          method: null
         }, { skip: ['sessionId', 'error'] })
       })
 

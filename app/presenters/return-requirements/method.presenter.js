@@ -13,14 +13,14 @@
  * @returns {object} - The data formatted for the view template
  */
 function go (session) {
-  const { id: sessionId, licence, setup } = session
+  const { id: sessionId, licence, method } = session
 
   return {
     backLink: `/system/return-requirements/${sessionId}/reason`,
     displayCopyExisting: licence.returnVersions.length > 0,
     licenceRef: licence.licenceRef,
-    sessionId,
-    setup: setup ?? null
+    method: method ?? null,
+    sessionId
   }
 }
 

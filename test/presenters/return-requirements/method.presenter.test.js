@@ -46,7 +46,7 @@ describe('Return Requirements - Method presenter', () => {
         displayCopyExisting: true,
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        setup: null
+        method: null
       })
     })
   })
@@ -81,24 +81,24 @@ describe('Return Requirements - Method presenter', () => {
     })
   })
 
-  describe('the "setup" property', () => {
-    describe('when the user has previously submitted a setup option', () => {
+  describe('the "method" property', () => {
+    describe('when the user has previously submitted a setup method', () => {
       beforeEach(() => {
-        session.setup = 'set-up-manually'
+        session.method = 'set-up-manually'
       })
 
-      it('returns a populated setup', () => {
+      it('returns a populated method', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.setup).to.equal('set-up-manually')
+        expect(result.method).to.equal('set-up-manually')
       })
     })
 
-    describe('when the user has not previously submitted a setup option', () => {
-      it('returns an empty setup', () => {
+    describe('when the user has not previously submitted a setup method', () => {
+      it('returns an empty method', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.setup).to.be.null()
+        expect(result.method).to.be.null()
       })
     })
   })

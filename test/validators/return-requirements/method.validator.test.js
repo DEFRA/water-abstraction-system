@@ -13,17 +13,17 @@ const MethodValidator = require('../../../app/validators/return-requirements/met
 describe('Method validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = MethodValidator.go({ setup: 'use-abstraction-data' })
+      const result = MethodValidator.go({ method: 'use-abstraction-data' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
     })
   })
 
-  describe('when valid data is provided', () => {
-    describe('because no "setup" is given', () => {
+  describe('when invalid data is provided', () => {
+    describe('because no "method" is given', () => {
       it('fails validation', () => {
-        const result = MethodValidator.go({ setup: '' })
+        const result = MethodValidator.go({ method: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -31,9 +31,9 @@ describe('Method validator', () => {
       })
     })
 
-    describe('because an unknown "setup" is given', () => {
+    describe('because an unknown "method" is given', () => {
       it('fails validation', () => {
-        const result = MethodValidator.go({ setup: 'just-because' })
+        const result = MethodValidator.go({ method: 'just-because' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
