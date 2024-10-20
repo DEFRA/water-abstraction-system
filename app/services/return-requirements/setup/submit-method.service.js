@@ -8,7 +8,7 @@
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const MethodPresenter = require('../../../presenters/return-requirements/method.presenter.js')
-const SetupValidator = require('../../../validators/return-requirements/setup.validator.js')
+const MethodValidator = require('../../../validators/return-requirements/method.validator.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/method` page
@@ -74,7 +74,7 @@ async function _save (session, payload) {
 }
 
 function _validate (payload) {
-  const validation = SetupValidator.go(payload)
+  const validation = MethodValidator.go(payload)
 
   if (!validation.error) {
     return null
