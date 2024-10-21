@@ -10,9 +10,9 @@ const {
   cycleEndDate,
   cycleEndDateAsISO,
   cycleStartDateAsISO,
-  cycleStartDate,
-  formatDateObjectToISO
-} = require('../../../lib/dates.lib.js')
+  cycleStartDate
+} = require('../../../lib/return-cycle-dates.lib.js')
+const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const FetchReturnCycleService = require('./fetch-return-cycle.service.js')
 const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
 

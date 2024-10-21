@@ -10,7 +10,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { cycleEndDateAsISO, cycleStartDateAsISO, cycleStartDate } = require('../../../lib/dates.lib.js')
+const { cycleEndDateAsISO, cycleStartDateAsISO, cycleStartDate } = require('../../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given the licence reference this service returns the return requirements to be turned into return logs.
