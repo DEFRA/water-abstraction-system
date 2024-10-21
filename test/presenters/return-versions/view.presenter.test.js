@@ -14,9 +14,9 @@ const PointModel = require('../../../app/models/point.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/return-requirements/view.presenter.js')
+const ViewPresenter = require('../../../app/presenters/return-versions/view.presenter.js')
 
-describe('Return Requirements - View presenter', () => {
+describe('Return Versions - View presenter', () => {
   let returnVersion
 
   beforeEach(() => {

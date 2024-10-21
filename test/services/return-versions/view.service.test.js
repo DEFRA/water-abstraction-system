@@ -14,12 +14,12 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Things we want to stub
-const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
+const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
 
 // Thing under test
-const ViewService = require('../../../app/services/return-requirements/view.service.js')
+const ViewService = require('../../../app/services/return-versions/view.service.js')
 
-describe('Return Requirements - View service', () => {
+describe('Return Versions - View service', () => {
   const returnVersionId = '0c6ed18f-39fb-4d70-93bb-cf24453dbb70'
 
   beforeEach(async () => {

@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/view` page
+ * Orchestrates fetching and presenting the data for `/return-versions/{sessionId}/view` page
  * @module ViewService
  */
 
 const FetchReturnVersionService = require('./fetch-return-version.service.js')
-const ViewPresenter = require('../../presenters/return-requirements/view.presenter.js')
+const ViewPresenter = require('../../presenters/return-versions/view.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/view` page
+ * Orchestrates fetching and presenting the data for `/return-versions/{sessionId}/view` page
  *
- * @param {string} returnVersionId - The UUID for return requirement version
+ * @param {string} returnVersionId - The UUID for the return version
  *
  * @returns {Promise<object>} page data needed by the view template
  */

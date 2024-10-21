@@ -97,7 +97,7 @@ function _returnVersionEntries (licence) {
       dateCreated: formatLongDate(createdAt),
       displayNote: notes.length > 0,
       notes,
-      link: `/system/return-requirements/${returnVersion.id}`,
+      link: `/system/return-versions/${returnVersion.id}`,
       reason: mappedReason ?? reason,
       type: { index: 2, name: 'Return version' }
     }
