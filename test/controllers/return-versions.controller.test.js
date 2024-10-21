@@ -14,7 +14,7 @@ const ViewService = require('../../app/services/return-requirements/view.service
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Return requirements controller', () => {
+describe('Return Versions controller', () => {
   let server
 
   beforeEach(async () => {
@@ -33,7 +33,7 @@ describe('Return requirements controller', () => {
     Sinon.restore()
   })
 
-  describe('/return-requirements/{id}', () => {
+  describe('/return-versions/{id}', () => {
     const id = '2a075724-b66c-410e-9fc8-b964077204f2'
 
     describe('GET', () => {
@@ -47,7 +47,7 @@ describe('Return requirements controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject({
             method: 'GET',
-            url: `/return-requirements/${id}/`,
+            url: `/return-versions/${id}/`,
             auth: {
               strategy: 'session',
               credentials: { scope: ['billing'] }

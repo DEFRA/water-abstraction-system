@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Controller for /return-requirement endpoints
- * @module ReturnRequirementsController
+ * Controller for /return-versions endpoints
+ * @module ReturnVersionsController
  */
 
 const ViewService = require('../services/return-requirements/view.service.js')

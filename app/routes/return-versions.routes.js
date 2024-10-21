@@ -1,13 +1,13 @@
 'use strict'
 
-const ReturnRequirementsController = require('../controllers/return-requirements.controller.js')
+const ReturnVersionsController = require('../controllers/return-versions.controller.js')
 
 const routes = [
   {
     method: 'GET',
-    path: '/return-requirements/{id}',
+    path: '/return-versions/{id}',
     options: {
-      handler: ReturnRequirementsController.view,
+      handler: ReturnVersionsController.view,
       auth: {
         access: {
           scope: ['billing']
