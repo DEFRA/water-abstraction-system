@@ -16,7 +16,7 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {object} page - The current page for the pagination service
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
