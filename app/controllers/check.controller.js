@@ -13,7 +13,7 @@ const redirectStatusCode = 204
 /**
  * A test end point for the licence supplementary billing flags process
  *
- * This endpoint takes a licenceId and licence expired, lapsed and revoked date. It passes this onto the
+ * This endpoint takes a licenceId and an expired, lapsed and revoked date. It passes this onto the
  * `DetermineSupplementaryBillingFlagsService` to test if it correctly flags the licence for supplementary billing. This
  * normally happens during the licence import process.
  *
