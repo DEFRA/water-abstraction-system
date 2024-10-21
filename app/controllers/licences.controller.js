@@ -5,7 +5,7 @@
  * @module LicencesController
  */
 
-const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
+const InitiateSessionService = require('../services/return-requirements/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const MarkedForSupplementaryBillingService = require('../services/licences/supplementary/marked-for-supplementary-billing.service.js')
 const MarkForSupplementaryBillingService = require('../services/licences/supplementary/mark-for-supplementary-billing.service.js')
@@ -50,7 +50,7 @@ async function noReturnsRequired (request, h) {
 
   const session = await InitiateSessionService.go(id, 'no-returns-required')
 
-  return h.redirect(`/system/return-requirements/${session.id}/start-date`)
+  return h.redirect(`/system/return-requirements/setup/${session.id}/start-date`)
 }
 
 async function returnsRequired (request, h) {
@@ -58,7 +58,7 @@ async function returnsRequired (request, h) {
 
   const session = await InitiateSessionService.go(id, 'returns-required')
 
-  return h.redirect(`/system/return-requirements/${session.id}/start-date`)
+  return h.redirect(`/system/return-requirements/setup/${session.id}/start-date`)
 }
 
 async function submitMarkForSupplementaryBilling (request, h) {
