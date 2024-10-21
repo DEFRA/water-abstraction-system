@@ -12,7 +12,7 @@ const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
 // Thing under test
 const ReturnCycleDatesLib = require('../../app/lib/return-cycle-dates.lib.js')
 
-describe.only('Return Cycle Dates lib', () => {
+describe('Return Cycle Dates lib', () => {
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
