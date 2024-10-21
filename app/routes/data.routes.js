@@ -29,6 +29,21 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/data/flag-for-billing',
+    options: {
+      handler: DataController.flagForBilling,
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
     path: '/data/load',
     options: {
       handler: DataController.load,

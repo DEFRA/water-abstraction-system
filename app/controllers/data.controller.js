@@ -5,6 +5,7 @@
  * @module DataController
  */
 
+const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
 const LoadService = require('../services/data/load/load.service.js')
 const SeedService = require('../services/data/seed/seed.service.js')
 const SubmitDeduplicateService = require('../services/data/deduplicate/submit-deduplicate.service.js')
@@ -15,6 +16,20 @@ async function deduplicate (_request, h) {
     pageTitle: 'De-duplicate a licence',
     activeNavBar: 'search'
   })
+}
+
+async function flagForBilling (request, h) {
+  const { licenceId, expiredDate, lapsedDate, revokedDate } = request.payload
+
+  const transformedLicence = {
+    expiredDate,
+    lapsedDate,
+    revokedDate
+  }
+
+  DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+
+  return h.response().code(204)
 }
 
 async function load (request, h) {
@@ -51,6 +66,7 @@ async function tearDown (_request, h) {
 
 module.exports = {
   deduplicate,
+  flagForBilling,
   load,
   seed,
   submitDeduplicate,
