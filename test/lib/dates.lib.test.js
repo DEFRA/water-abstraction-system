@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
@@ -15,6 +15,7 @@ const DateLib = require('../../app/lib/dates.lib.js')
 describe('Dates lib', () => {
   const today = new Date()
   const month = today.getMonth()
+  const year = today.getFullYear()
 
   let expectedDate
   let summer
@@ -95,232 +96,508 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('cycleDueDate', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+  describe('Return cycle dates', () => {
+    describe('when summer is true', () => {
+      before(() => {
         summer = true
-
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 10, 28)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 10, 28)
-        }
       })
 
-      it('should return the due date for the current summer cycle', () => {
-        const result = DateLib.cycleDueDate(summer)
+      describe('cycleDueDate', () => {
+        before(() => {
+          if (month > returnCycleDates.summer.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.summer.dueDate.month,
+              returnCycleDates.summer.dueDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.dueDate.month,
+              returnCycleDates.summer.dueDate.day
+            )
+          }
+        })
 
-        expect(result).to.equal(expectedDate)
+        it('should return the due date for the current summer cycle', () => {
+          const result = DateLib.cycleDueDate(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleDueDateAsISO', () => {
+        before(() => {
+          if (month > returnCycleDates.summer.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.summer.dueDate.month,
+              returnCycleDates.summer.dueDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.dueDate.month,
+              returnCycleDates.summer.dueDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
+
+        it('should return the due date for the current summer cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleDueDateAsISO(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleDueDateByDate when given a date in december last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear(),
+            returnCycleDates.summer.dueDate.month,
+            returnCycleDates.summer.dueDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct due date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-12-01`)
+          const result = DateLib.cycleDueDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleDueDateByDate when given a date in september last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.summer.dueDate.month,
+            returnCycleDates.summer.dueDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct due date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-09-01`)
+          const result = DateLib.cycleDueDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleEndDate', () => {
+        before(() => {
+          if (month > returnCycleDates.summer.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.summer.endDate.month,
+              returnCycleDates.summer.endDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.endDate.month,
+              returnCycleDates.summer.endDate.day
+            )
+          }
+        })
+
+        it('should return the end date for the current summer cycle', () => {
+          const result = DateLib.cycleEndDate(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleEndDateAsISO', () => {
+        before(() => {
+          if (month > returnCycleDates.summer.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.summer.endDate.month,
+              returnCycleDates.summer.endDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.endDate.month,
+              returnCycleDates.summer.endDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
+
+        it('should return the end date for the current summer cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleEndDateAsISO(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleEndDateByDate when given a date in december last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear(),
+            returnCycleDates.summer.endDate.month,
+            returnCycleDates.summer.endDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct end date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-12-01`)
+          const result = DateLib.cycleEndDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleEndDateByDate when given a date in september last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.summer.endDate.month,
+            returnCycleDates.summer.endDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct end date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-09-01`)
+          const result = DateLib.cycleEndDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDate', () => {
+        before(() => {
+          if (month < returnCycleDates.summer.startDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() - 1,
+              returnCycleDates.summer.startDate.month,
+              returnCycleDates.summer.startDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.startDate.month,
+              returnCycleDates.summer.startDate.day
+            )
+          }
+        })
+
+        it('should return the start date for the current summer cycle', () => {
+          const result = DateLib.cycleStartDate(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateAsISO', () => {
+        before(() => {
+          if (month < returnCycleDates.summer.startDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() - 1,
+              returnCycleDates.summer.startDate.month,
+              returnCycleDates.summer.startDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.summer.startDate.month,
+              returnCycleDates.summer.startDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
+
+        it('should return the start date for the current summer cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleStartDateAsISO(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateByDate when given a date in december last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.summer.startDate.month,
+            returnCycleDates.summer.startDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct start date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-12-01`)
+          const result = DateLib.cycleStartDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateByDate when given a date in september last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 2,
+            returnCycleDates.summer.startDate.month,
+            returnCycleDates.summer.startDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct start date for the summer cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-09-01`)
+          const result = DateLib.cycleStartDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
+    describe('when summer is false', () => {
+      before(() => {
         summer = false
-
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 3, 28)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 3, 28)
-        }
       })
 
-      it('should return the due date of the current winter and all year cycle', () => {
-        const result = DateLib.cycleDueDate(summer)
+      describe('cycleDueDate', () => {
+        before(() => {
+          if (month > returnCycleDates.allYear.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.allYear.dueDate.month,
+              returnCycleDates.allYear.dueDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.dueDate.month,
+              returnCycleDates.allYear.dueDate.day
+            )
+          }
+        })
 
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
+        it('should return the due date for the current all year cycle', () => {
+          const result = DateLib.cycleDueDate(summer)
 
-  describe('cycleDueDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
-        summer = true
-
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 10, 28).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 10, 28).toISOString().split('T')[0]
-        }
-      })
-
-      it('should return the due date for the current summer cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleDueDateAsISO(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
-
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 3, 28).toISOString().split('T')[0]
-        }
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleDueDateAsISO(summer)
+      describe('cycleDueDateAsISO', () => {
+        before(() => {
+          if (month > returnCycleDates.allYear.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.allYear.dueDate.month,
+              returnCycleDates.allYear.dueDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.dueDate.month,
+              returnCycleDates.allYear.dueDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
 
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
+        it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleDueDateAsISO(summer)
 
-  describe('cycleEndDate', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
-        summer = true
-
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 9, 31)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 9, 31)
-        }
-      })
-
-      it('should return the due date for the current summer cycle', () => {
-        const result = DateLib.cycleEndDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
-
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 2, 31)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 2, 31)
-        }
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the due date of the current winter and all year cycle', () => {
-        const result = DateLib.cycleEndDate(summer)
+      describe('cycleDueDateByDate when given a date in may last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear(),
+            returnCycleDates.allYear.dueDate.month,
+            returnCycleDates.allYear.dueDate.day
+          ).toISOString().split('T')[0]
+        })
 
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
+        it('should return the correct due date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-05-01`)
+          const result = DateLib.cycleDueDateByDate(testDate, summer)
 
-  describe('cycleEndDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
-        summer = true
-
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 9, 31).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 9, 31).toISOString().split('T')[0]
-        }
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the due date for the current summer cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleEndDateAsISO(summer)
+      describe('cycleDueDateByDate when given a date in march last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.allYear.dueDate.month,
+            returnCycleDates.allYear.dueDate.day
+          ).toISOString().split('T')[0]
+        })
 
-        expect(result).to.equal(expectedDate)
-      })
-    })
+        it('should return the correct due date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-03-01`)
+          const result = DateLib.cycleDueDateByDate(testDate, summer)
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
-
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(new Date().getFullYear() + 1, 2, 31).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 2, 31).toISOString().split('T')[0]
-        }
-      })
-
-      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleEndDateAsISO(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
-
-  describe('cycleStartDate', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
-        summer = true
-
-        if (month < returnCycleDates.summer.startDate.month) {
-          expectedDate = new Date(new Date().getFullYear() - 1, 10, 1)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 10, 1)
-        }
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the start date for the current summer cycle', () => {
-        const result = DateLib.cycleStartDate(summer)
+      describe('cycleEndDate', () => {
+        before(() => {
+          if (month > returnCycleDates.allYear.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.allYear.endDate.month,
+              returnCycleDates.allYear.endDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.endDate.month,
+              returnCycleDates.allYear.endDate.day
+            )
+          }
+        })
 
-        expect(result).to.equal(expectedDate)
-      })
-    })
+        it('should return the due date for the current all year cycle', () => {
+          const result = DateLib.cycleEndDate(summer)
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
-
-        if (month < returnCycleDates.allYear.startDate.month) {
-          expectedDate = new Date(new Date().getFullYear() - 1, 3, 1)
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 3, 1)
-        }
-      })
-
-      it('should return the due date of the current winter and all year cycle', () => {
-        const result = DateLib.cycleStartDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
-
-  describe('cycleStartDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
-        summer = true
-
-        if (month < returnCycleDates.summer.startDate.month) {
-          expectedDate = new Date(new Date().getFullYear() - 1, 10, 1).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 10, 1).toISOString().split('T')[0]
-        }
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the start date for the current summer cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleStartDateAsISO(summer)
+      describe('cycleEndDateAsISO', () => {
+        before(() => {
+          if (month > returnCycleDates.allYear.endDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() + 1,
+              returnCycleDates.allYear.endDate.month,
+              returnCycleDates.allYear.endDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.endDate.month,
+              returnCycleDates.allYear.endDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
 
-        expect(result).to.equal(expectedDate)
+        it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleEndDateAsISO(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
-    })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
+      describe('cycleEndDateByDate when given a date in may last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear(),
+            returnCycleDates.allYear.endDate.month,
+            returnCycleDates.allYear.endDate.day
+          ).toISOString().split('T')[0]
+        })
 
-        if (month < returnCycleDates.allYear.startDate.month) {
-          expectedDate = new Date(new Date().getFullYear() - 1, 3, 1).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
-        }
+        it('should return the correct end date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-05-01`)
+          const result = DateLib.cycleEndDateByDate(testDate, summer)
 
-        expectedDate = new Date(new Date().getFullYear(), 3, 1).toISOString().split('T')[0]
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
-        const result = DateLib.cycleStartDateAsISO(summer)
+      describe('cycleEndDateByDate when given a date in march last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.allYear.endDate.month,
+            returnCycleDates.allYear.endDate.day
+          ).toISOString().split('T')[0]
+        })
 
-        expect(result).to.equal(expectedDate)
+        it('should return the correct end date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-03-01`)
+          const result = DateLib.cycleEndDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDate', () => {
+        before(() => {
+          if (month < returnCycleDates.allYear.startDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() - 1,
+              returnCycleDates.allYear.startDate.month,
+              returnCycleDates.allYear.startDate.day
+            )
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.startDate.month,
+              returnCycleDates.allYear.startDate.day
+            )
+          }
+        })
+
+        it('should return the start date for the current winter and all year cycle', () => {
+          const result = DateLib.cycleStartDate(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateAsISO', () => {
+        before(() => {
+          if (month < returnCycleDates.allYear.startDate.month) {
+            expectedDate = new Date(
+              new Date().getFullYear() - 1,
+              returnCycleDates.allYear.startDate.month,
+              returnCycleDates.allYear.startDate.day
+            ).toISOString().split('T')[0]
+          } else {
+            expectedDate = new Date(
+              new Date().getFullYear(),
+              returnCycleDates.allYear.startDate.month,
+              returnCycleDates.allYear.startDate.day
+            ).toISOString().split('T')[0]
+          }
+        })
+
+        it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+          const result = DateLib.cycleStartDateAsISO(summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateByDate when given a date in may last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 1,
+            returnCycleDates.allYear.startDate.month,
+            returnCycleDates.allYear.startDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct start date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-05-01`)
+          const result = DateLib.cycleStartDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('cycleStartDateByDate when given a date in march last year', () => {
+        before(() => {
+          expectedDate = new Date(
+            new Date().getFullYear() - 2,
+            returnCycleDates.allYear.startDate.month,
+            returnCycleDates.allYear.startDate.day
+          ).toISOString().split('T')[0]
+        })
+
+        it('should return the correct start date for the all year cycle formatted as YYYY-MM-DD', () => {
+          const testDate = new Date(`${year - 1}-03-01`)
+          const result = DateLib.cycleStartDateByDate(testDate, summer)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
     })
   })

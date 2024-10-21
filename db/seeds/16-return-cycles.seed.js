@@ -1,12 +1,35 @@
 'use strict'
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: returnCycles } = require('./data/return-cycles.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
+const { cycleDueDateByDate, cycleEndDateByDate, cycleStartDateByDate } = require('../../app/lib/dates.lib.js')
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
 async function seed () {
-  for (const cycle of returnCycles) {
-    await _upsert(cycle)
+  const today = new Date()
+  const day = today.getDay()
+  const month = today.getMonth()
+  const year = today.getFullYear()
+
+  for (let i = 0; i < 5; i++) {
+    const date = new Date(year - i, month, day)
+
+    const summerReturnCycle = _generateReturnCycle(date, true)
+    const allYearReturnCycle = _generateReturnCycle(date, false)
+
+    await _upsert(summerReturnCycle)
+    await _upsert(allYearReturnCycle)
+  }
+}
+
+function _generateReturnCycle (date, summer) {
+  return {
+    id: generateUUID(),
+    startDate: cycleStartDateByDate(date, summer),
+    endDate: cycleEndDateByDate(date, summer),
+    dueDate: cycleDueDateByDate(date, summer),
+    summer,
+    submittedInWrls: true
   }
 }
 

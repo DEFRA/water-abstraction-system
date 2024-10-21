@@ -25,6 +25,12 @@ async function go (summer) {
 function _createReturnCycle (returnCycle) {
   return ReturnCycleModel.query()
     .insert(returnCycle)
+    .onConflict(['startDate', 'endDate', 'summer'])
+    .merge([
+      'dueDate',
+      'submittedInWrls',
+      'updatedAt'
+    ])
 }
 
 function _generateData (summer) {
