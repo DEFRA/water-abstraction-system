@@ -5,13 +5,13 @@
  * @module ReturnVersionsController
  */
 
-const ViewService = require('../services/return-requirements/view.service.js')
+const ViewService = require('../services/return-versions/view.service.js')
 
 async function view (request, h) {
   const { id } = request.params
   const pageData = await ViewService.go(id)
 
-  return h.view('return-requirements/view.njk', {
+  return h.view('return-versions/view.njk', {
     ...pageData
   })
 }

@@ -12,9 +12,9 @@ const RequirementsForReturnsSeeder = require('../../support/seeders/requirements
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 
 // Thing under test
-const FetchReturnVersionService = require('../../../app/services/return-requirements/fetch-return-version.service.js')
+const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
 
-describe('Return Requirements - Fetch Return Version service', () => {
+describe('Return Versions - Fetch Return Version service', () => {
   let licence
   let modLog
   let returnVersion
@@ -30,7 +30,7 @@ describe('Return Requirements - Fetch Return Version service', () => {
       user = seedData.user
     })
 
-    it('returns the details of the requirements for returns', async () => {
+    it('returns the details of the return version', async () => {
       const result = await FetchReturnVersionService.go(returnVersion.id)
 
       const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements

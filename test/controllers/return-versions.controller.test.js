@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ViewService = require('../../app/services/return-requirements/view.service.js')
+const ViewService = require('../../app/services/return-versions/view.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
