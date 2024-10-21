@@ -25,7 +25,8 @@ const ImportRoutes = require('../routes/import.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
-const ReturnRequirementRoutes = require('../routes/return-requirement.routes.js')
+const ReturnRequirementsRoutes = require('../routes/return-requirements.routes.js')
+const ReturnRequirementsSetupRoutes = require('../routes/return-requirements-setup.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
@@ -43,7 +44,8 @@ const routes = [
   ...LicenceRoutes,
   ...JobRoutes,
   ...MonitoringStationRoutes,
-  ...ReturnRequirementRoutes,
+  ...ReturnRequirementsRoutes,
+  ...ReturnRequirementsSetupRoutes,
   ...DataRoutes,
   ...ImportRoutes
 ]
