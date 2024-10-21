@@ -17,8 +17,8 @@ const ProcessImportedLicenceService = require('../licences/supplementary/process
  * It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS licence and the imported
  * data, and if there is a change in the dates allows the licence to go on to determining the flags.
  *
- * @param {object} importedLicence - the imported licence
- * @param {object} licenceId - the WRLS licence data
+ * @param {object} importedLicence - The imported licence
+ * @param {string} licenceId - The UUID of the licence being updated by the import
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
