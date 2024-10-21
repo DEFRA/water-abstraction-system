@@ -32,7 +32,7 @@ describe('Determine Workflow Years Service', () => {
       include_in_sroc_billing: false,
       id: licence.id,
       region_id: licence.regionId,
-      sroc_charge_versions: true,
+      sroc_charge_versions: false,
       two_part_tariff_charge_versions: false,
       created_at: new Date('2024-04-01')
     }
@@ -43,9 +43,32 @@ describe('Determine Workflow Years Service', () => {
   })
 
   describe('when passed a workflowId', () => {
+    describe('that relates to a licence with no sroc charge versions', () => {
+      beforeEach(async () => {
+        Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+      })
+
+      it('returns flagForBilling and twoPartTariff as false', async () => {
+        const result = await DetermineWorkflowYearsService.go(workflowId)
+
+        expect(result.twoPartTariff).to.equal(false)
+        expect(result.flagForBilling).to.equal(false)
+      })
+
+      it('does not flag the licence for sroc supplementary billing', async () => {
+        await DetermineWorkflowYearsService.go(workflowId)
+
+        const result = await LicenceModel.query().findById(licence.id)
+
+        expect(result.includeInSrocBilling).to.equal(false)
+      })
+    })
+
     describe('that relates to a licence with sroc charge versions', () => {
       describe('but has no two-part tariff indicators', () => {
         beforeEach(async () => {
+          licenceData.sroc_charge_versions = true
+
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
 
@@ -76,17 +99,20 @@ describe('Determine Workflow Years Service', () => {
     })
 
     describe('that relates to a licence with sroc two-part tariff charge versions', () => {
-      before(async () => {
-        licenceData.two_part_tariff_charge_versions = true
+      describe('and the licence is already flagged for sroc supplementary billing', () => {
+        before(async () => {
+          licenceData.two_part_tariff_charge_versions = true
+          licenceData.include_in_sroc_billing = true
 
-        Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
-      })
+          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+        })
 
-      it('returns flagForBilling and twoPartTariff as true', async () => {
-        const result = await DetermineWorkflowYearsService.go(workflowId)
+        it('returns flagForBilling and twoPartTariff as true', async () => {
+          const result = await DetermineWorkflowYearsService.go(workflowId)
 
-        expect(result.twoPartTariff).to.equal(true)
-        expect(result.flagForBilling).to.equal(true)
+          expect(result.twoPartTariff).to.equal(true)
+          expect(result.flagForBilling).to.equal(true)
+        })
       })
     })
   })
