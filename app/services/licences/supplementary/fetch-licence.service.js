@@ -61,12 +61,9 @@ function _query () {
     ) AS two_part_tariff_charge_versions,
     w.created_at
     FROM licences l
-    CROSS JOIN (
-    SELECT w.licence_id, w.created_at
-    FROM workflows w
+    INNER JOIN workflows w
+      ON l.id = w.licence_id
     WHERE w.id = ?
-    ) w
-    WHERE l.id = w.licence_id
 `
 }
 
