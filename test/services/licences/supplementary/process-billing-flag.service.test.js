@@ -38,7 +38,7 @@ describe('Process Billing Flag Service', () => {
   })
 
   describe('when given a valid payload', () => {
-    before(async () => {
+    before(() => {
       licenceData = {
         licence: {
           id: '216c3981-2e8d-4158-96de-0c8174d54077',
@@ -71,7 +71,7 @@ describe('Process Billing Flag Service', () => {
       })
 
       describe('that should be flagged for supplementary billing', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           licenceData.twoPartTariff = true
           licenceData.flagForBilling = true
 
@@ -99,7 +99,7 @@ describe('Process Billing Flag Service', () => {
     })
 
     describe('with a return id', () => {
-      before(async () => {
+      before(() => {
         payload = {
           returnId: 'a9e62338-8053-4bde-9344-def69f5ca416'
         }
@@ -118,7 +118,7 @@ describe('Process Billing Flag Service', () => {
       })
 
       describe('that should be flagged for supplementary billing', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           licenceData.twoPartTariff = true
           licenceData.flagForBilling = true
 
@@ -154,7 +154,7 @@ describe('Process Billing Flag Service', () => {
       })
 
       describe('that should be flagged for supplementary billing', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           licenceData.twoPartTariff = true
           licenceData.flagForBilling = true
 
