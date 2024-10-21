@@ -120,6 +120,32 @@ function cycleEndDate (summer) {
 }
 
 /**
+ * Given an arbitary date and if it is summer or all-year return the end date of that cycle
+ *
+ * @param {Date} date - the date whose start date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {Date} - the start date of the next cycle.
+ */
+function cycleEndDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month > returnCycleDates.summer.endDate.month) {
+      return `${year + 1}-10-31`
+    }
+
+    return `${year}-10-31`
+  }
+
+  if (month > returnCycleDates.allYear.endDate.month) {
+    return `${year + 1}-03-31`
+  }
+
+  return `${year}-03-31`
+}
+
+/**
  * Get the start date of next provided cycle, either summer and winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
@@ -153,6 +179,32 @@ function cycleStartDate (summer) {
   }
 
   return new Date(year, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
+}
+
+/**
+ * Given an arbitary date and if it is summer or all-year return the start date of that cycle
+ *
+ * @param {Date} date - the date whose start date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {Date} - the start date of the next cycle.
+ */
+function cycleStartDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month < returnCycleDates.summer.startDate.month) {
+      return `${year - 1}-11-01`
+    }
+
+    return `${year}-11-01`
+  }
+
+  if (month < returnCycleDates.allYear.startDate.month) {
+    return `${year - 1}-04-01`
+  }
+
+  return `${year}-04-01`
 }
 
 /**
@@ -229,8 +281,10 @@ module.exports = {
   cycleDueDate,
   cycleDueDateAsISO,
   cycleEndDate,
+  cycleEndDateByDate,
   cycleEndDateAsISO,
   cycleStartDate,
+  cycleStartDateByDate,
   cycleStartDateAsISO,
   isISODateFormat,
   isValidDate

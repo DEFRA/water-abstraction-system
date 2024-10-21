@@ -1,34 +1,27 @@
 'use strict'
 
 /**
- * Process the return logs for the given licence reference
- * @module ProcessLicenceReturnLogsService
+ * Process voiding and reissuing return logs when a licence ends
+ * @module ProcessLicenceEndingService
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchLicenceReturnRequirementsService = require('./fetch-licence-return-requirements.service.js')
+const VoidReturnLogsService = require('./void-return-logs.service.js')
 const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 
 /**
- * Creates the return logs for the given licence
- * The return requirement is the information held against the licence that defines how and when an abstractor needs to
- * submit their returns.
- *
- * The return log is the 'header' record generated each return cycle from the requirement that an abstractor submits
- * their returns against.
- *
- * When users make changes to return requirements, the service will determine if any new return logs need to be
- * created depending on the current cycle.
- *
- * This service is for use when a new licence version is detected
+ * Voids and reiusses the return logs for the given licence from the date provided
  *
  * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
+ * @param {Date} [endDate] - The end date of the licence
  */
-async function go (licenceReference) {
+async function go (licenceReference, endDate) {
   try {
     const startTime = currentTimeInNanoseconds()
 
+    await VoidReturnLogsService.go(licenceReference, endDate)
     const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceReference)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
 

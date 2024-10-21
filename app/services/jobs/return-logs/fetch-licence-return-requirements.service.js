@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for generating return logs
- * @module FetchReturnLogsService
+ * @module FetchLicenceReturnRequirementsService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
@@ -27,6 +27,7 @@ async function _fetchExternalIds (licenceReference) {
   const externalIds = await ReturnLogModel.query()
     .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
     .where('startDate', '>=', cycleStartDate(false))
+    .whereNot('status', 'void')
     .where('licenceRef', licenceReference)
 
   const externalIdsArray = externalIds.map((item) => {
@@ -59,6 +60,7 @@ async function _fetchReturnRequirements (licenceReference) {
         'lapsedDate',
         'licenceRef',
         'revokedDate',
+        'startDate',
         db.raw('regions->>\'historicalAreaCode\' as areacode')])
     })
     .withGraphFetched('returnVersion.licence.region')
@@ -102,21 +104,21 @@ function _whereExistsClause (licenceReference, cycleStartDate, cycleEndDate) {
         .whereNull('returnVersions.endDate')
         .orWhere('returnVersions.endDate', '>=', cycleStartDate)
     })
-    .where((builder) => {
-      builder
-        .whereNull('licence.expiredDate')
-        .orWhere('licence.expiredDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder
-        .whereNull('licence.lapsedDate')
-        .orWhere('licence.lapsedDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder
-        .whereNull('licence.revokedDate')
-        .orWhere('licence.revokedDate', '>=', cycleStartDate)
-    })
+    // .where((builder) => {
+    //   builder
+    //     .whereNull('licence.expiredDate')
+    //     .orWhere('licence.expiredDate', '>=', cycleStartDate)
+    // })
+    // .where((builder) => {
+    //   builder
+    //     .whereNull('licence.lapsedDate')
+    //     .orWhere('licence.lapsedDate', '>=', cycleStartDate)
+    // })
+    // .where((builder) => {
+    //   builder
+    //     .whereNull('licence.revokedDate')
+    //     .orWhere('licence.revokedDate', '>=', cycleStartDate)
+    // })
 
   query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
 
