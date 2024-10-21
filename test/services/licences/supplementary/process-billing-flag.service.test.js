@@ -23,7 +23,7 @@ describe('Process Billing Flag Service', () => {
   let notifierStub
   let payload
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -52,7 +52,7 @@ describe('Process Billing Flag Service', () => {
     })
 
     describe('with a charge version id', () => {
-      before(async () => {
+      before(() => {
         payload = {
           chargeVersionId: 'a9e62338-8053-4bde-9344-def69f5ca416'
         }
