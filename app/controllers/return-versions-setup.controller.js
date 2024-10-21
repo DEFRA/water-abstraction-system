@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Controller for /return-requirement/setup endpoints
- * @module ReturnRequirementsSetupController
+ * Controller for /return-versions/setup endpoints
+ * @module ReturnVersionsSetupController
  */
 
 const AbstractionPeriodService = require('../services/return-requirements/setup/abstraction-period.service.js')
@@ -60,7 +60,7 @@ async function add (request, h) {
 
   const requirementIndex = await AddService.go(sessionId)
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/purpose/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/purpose/${requirementIndex}`)
 }
 
 async function additionalSubmissionOptions (request, h) {
@@ -116,7 +116,7 @@ async function deleteNote (request, h) {
 
   await DeleteNoteService.go(sessionId, request.yar)
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function existing (request, h) {
@@ -259,10 +259,10 @@ async function submitAbstractionPeriod (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/returns-cycle/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/returns-cycle/${requirementIndex}`)
 }
 
 async function submitAgreementsExceptions (request, h) {
@@ -274,7 +274,7 @@ async function submitAgreementsExceptions (request, h) {
     return h.view('return-requirements/setup/agreements-exceptions.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitAdditionalSubmissionOptions (request, h) {
@@ -286,7 +286,7 @@ async function submitAdditionalSubmissionOptions (request, h) {
     return h.view('return-requirements/setup/additional-submission-options.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitCancel (request, h) {
@@ -308,7 +308,7 @@ async function submitCheck (request, h) {
 
   const licenceId = await SubmitCheckService.go(sessionId, userId)
 
-  return h.redirect(`/system/return-requirements/setup/${licenceId}/approved`)
+  return h.redirect(`/system/return-versions/setup/${licenceId}/approved`)
 }
 
 async function submitExisting (request, h) {
@@ -320,7 +320,7 @@ async function submitExisting (request, h) {
     return h.view('return-requirements/setup/existing.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitFrequencyCollected (request, h) {
@@ -333,10 +333,10 @@ async function submitFrequencyCollected (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/frequency-reported/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/frequency-reported/${requirementIndex}`)
 }
 
 async function submitFrequencyReported (request, h) {
@@ -349,10 +349,10 @@ async function submitFrequencyReported (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/agreements-exceptions/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/agreements-exceptions/${requirementIndex}`)
 }
 
 async function submitMethod (request, h) {
@@ -364,7 +364,7 @@ async function submitMethod (request, h) {
     return h.view('return-requirements/setup/method.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/${pageData.redirect}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitNoReturnsRequired (request, h) {
@@ -376,7 +376,7 @@ async function submitNoReturnsRequired (request, h) {
     return h.view('return-requirements/setup/no-returns-required.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitNote (request, h) {
@@ -389,7 +389,7 @@ async function submitNote (request, h) {
     return h.view('return-requirements/setup/note.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitPoints (request, h) {
@@ -402,10 +402,10 @@ async function submitPoints (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/abstraction-period/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/abstraction-period/${requirementIndex}`)
 }
 
 async function submitPurpose (request, h) {
@@ -418,10 +418,10 @@ async function submitPurpose (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/points/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/points/${requirementIndex}`)
 }
 
 async function submitReason (request, h) {
@@ -434,10 +434,10 @@ async function submitReason (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/method`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/method`)
 }
 
 async function submitRemove (request, h) {
@@ -445,7 +445,7 @@ async function submitRemove (request, h) {
 
   await SubmitRemoveService.go(sessionId, requirementIndex, request.yar)
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
 async function submitReturnsCycle (request, h) {
@@ -458,10 +458,10 @@ async function submitReturnsCycle (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/site-description/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/site-description/${requirementIndex}`)
 }
 
 async function submitSiteDescription (request, h) {
@@ -474,10 +474,10 @@ async function submitSiteDescription (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/frequency-collected/${requirementIndex}`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/frequency-collected/${requirementIndex}`)
 }
 
 async function submitStartDate (request, h) {
@@ -490,14 +490,14 @@ async function submitStartDate (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/check`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
   }
 
   if (pageData.journey === 'returns-required') {
-    return h.redirect(`/system/return-requirements/setup/${sessionId}/reason`)
+    return h.redirect(`/system/return-versions/setup/${sessionId}/reason`)
   }
 
-  return h.redirect(`/system/return-requirements/setup/${sessionId}/no-returns-required`)
+  return h.redirect(`/system/return-versions/setup/${sessionId}/no-returns-required`)
 }
 
 module.exports = {

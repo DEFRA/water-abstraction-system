@@ -51,7 +51,7 @@ const { init } = require('../../app/server.js')
 const sessionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 const requirementIndex = 0
 
-describe('Return requirements controller', () => {
+describe.only('Return Versions controller', () => {
   let server
 
   beforeEach(async () => {
@@ -70,7 +70,7 @@ describe('Return requirements controller', () => {
     Sinon.restore()
   })
 
-  describe('/return-requirements/setup/{sessionId}/abstraction-period', () => {
+  describe('/return-versions/setup/{sessionId}/abstraction-period', () => {
     const path = 'abstraction-period'
 
     describe('GET', () => {
@@ -111,11 +111,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/returns-cycle/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/returns-cycle/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/returns-cycle/0')
           })
         })
 
@@ -124,18 +124,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/additional-submission-options', () => {
+  describe('/return-versions/setup/{sessionId}/additional-submission-options', () => {
     const path = 'additional-submission-options'
 
     describe('GET', () => {
@@ -158,7 +158,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/note', () => {
+  describe('/return-versions/setup/{sessionId}/note', () => {
     const path = 'note'
 
     describe('GET', () => {
@@ -179,7 +179,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/agreements-exceptions', () => {
+  describe('/return-versions/setup/{sessionId}/agreements-exceptions', () => {
     const path = 'agreements-exceptions'
 
     describe('GET', () => {
@@ -220,18 +220,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitAgreementsExceptions, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{licenceId}/approved', () => {
+  describe('/return-versions/setup/{licenceId}/approved', () => {
     const path = 'approved'
 
     describe('GET', () => {
@@ -246,7 +246,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/cancel', () => {
+  describe('/return-versions/setup/{sessionId}/cancel', () => {
     const path = 'cancel'
 
     describe('GET', () => {
@@ -268,7 +268,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/check', () => {
+  describe('/return-versions/setup/{sessionId}/check', () => {
     const path = 'check'
 
     describe('GET', () => {
@@ -289,7 +289,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/delete-note', () => {
+  describe('/return-versions/setup/{sessionId}/delete-note', () => {
     const path = 'delete-note'
 
     describe('GET', () => {
@@ -304,12 +304,12 @@ describe('Return requirements controller', () => {
         const result = await server.inject(_getOptions(path))
 
         expect(result.statusCode).to.equal(302)
-        expect(result.headers.location).to.equal(`/system/return-requirements/setup/${sessionId}/check`)
+        expect(result.headers.location).to.equal(`/system/return-versions/setup/${sessionId}/check`)
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/existing', () => {
+  describe('/return-versions/setup/{sessionId}/existing', () => {
     const path = 'existing'
 
     describe('GET', () => {
@@ -349,18 +349,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitExistingService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/frequency-collected', () => {
+  describe('/return-versions/setup/{sessionId}/frequency-collected', () => {
     const path = 'frequency-collected'
 
     describe('GET ', () => {
@@ -400,11 +400,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/frequency-reported/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/frequency-reported/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/frequency-reported/0')
           })
         })
 
@@ -413,18 +413,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/frequency-reported', () => {
+  describe('/return-versions/setup/{sessionId}/frequency-reported', () => {
     const path = 'frequency-reported'
 
     describe('GET', () => {
@@ -464,11 +464,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitFrequencyReportedService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/agreements-exceptions/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/agreements-exceptions/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/agreements-exceptions/0')
           })
         })
 
@@ -477,18 +477,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitFrequencyReportedService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/method', () => {
+  describe('/return-versions/setup/{sessionId}/method', () => {
     const path = 'method'
 
     describe('GET', () => {
@@ -528,18 +528,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitMethodService, 'go').resolves({ redirect: 'page-data-redirect' })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/{pageData.redirect}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/{pageData.redirect}', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/page-data-redirect')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/page-data-redirect')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/no-returns-required', () => {
+  describe('/return-versions/setup/{sessionId}/no-returns-required', () => {
     const path = 'no-returns-required'
 
     describe('GET', () => {
@@ -566,11 +566,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ })
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
 
@@ -590,7 +590,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/points', () => {
+  describe('/return-versions/setup/{sessionId}/points', () => {
     const path = 'points'
 
     describe('GET', () => {
@@ -630,11 +630,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitPointsService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/abstraction-period/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/abstraction-period/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/abstraction-period/0')
           })
         })
 
@@ -643,18 +643,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitPointsService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/purpose', () => {
+  describe('/return-versions/setup/{sessionId}/purpose', () => {
     const path = 'purpose'
 
     describe('GET', () => {
@@ -694,11 +694,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitPurposeService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/points/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/points/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/points/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/points/0')
           })
         })
 
@@ -707,18 +707,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitPurposeService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/reason', () => {
+  describe('/return-versions/setup/{sessionId}/reason', () => {
     const path = 'reason'
 
     describe('GET', () => {
@@ -758,11 +758,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReasonService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/method', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/method', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/method')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/method')
           })
         })
 
@@ -771,18 +771,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReasonService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/remove', () => {
+  describe('/return-versions/setup/{sessionId}/remove', () => {
     const path = 'remove'
 
     describe('GET', () => {
@@ -803,7 +803,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/returns-cycle', () => {
+  describe('/return-versions/setup/{sessionId}/returns-cycle', () => {
     const path = 'returns-cycle'
 
     describe('GET', () => {
@@ -843,11 +843,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReturnsCycleService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/site-description/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/site-description/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/site-description/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/site-description/0')
           })
         })
 
@@ -856,18 +856,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitReturnsCycleService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/site-description', () => {
+  describe('/return-versions/setup/{sessionId}/site-description', () => {
     const path = 'site-description'
 
     describe('GET', () => {
@@ -908,11 +908,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitSiteDescriptionService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/frequency-collected/{requirementIndex}', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/frequency-collected/0')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/frequency-collected/0')
           })
         })
 
@@ -921,18 +921,18 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitSiteDescriptionService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
     })
   })
 
-  describe('/return-requirements/setup/{sessionId}/start-date', () => {
+  describe('/return-versions/setup/{sessionId}/start-date', () => {
     const path = 'start-date'
 
     describe('GET', () => {
@@ -960,7 +960,7 @@ describe('Return requirements controller', () => {
           })
 
           it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(postRequestOptions(`/return-requirements/setup/${sessionId}/${path}`))
+            const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('There is a problem')
@@ -972,11 +972,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitStartDateService, 'go').resolves({ journey: 'returns-required' })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/reason', async () => {
-            const response = await server.inject(postRequestOptions(`/return-requirements/setup/${sessionId}/${path}`))
+          it('redirects to /system/return-versions/setup/{sessionId}/reason', async () => {
+            const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/reason')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/reason')
           })
         })
 
@@ -985,11 +985,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitStartDateService, 'go').resolves({})
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/no-returns-required', async () => {
-            const response = await server.inject(postRequestOptions(`/return-requirements/setup/${sessionId}/${path}`))
+          it('redirects to /system/return-versions/setup/{sessionId}/no-returns-required', async () => {
+            const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/no-returns-required')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/no-returns-required')
           })
         })
 
@@ -998,11 +998,11 @@ describe('Return requirements controller', () => {
             Sinon.stub(SubmitStartDateService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to /system/return-requirements/setup/{sessionId}/check', async () => {
-            const response = await server.inject(postRequestOptions(`/return-requirements/setup/${sessionId}/${path}`))
+          it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
+            const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-requirements/setup/' + sessionId + '/check')
+            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
       })
@@ -1011,7 +1011,7 @@ describe('Return requirements controller', () => {
 })
 
 function _getOptions (path, index = -1) {
-  let url = `/return-requirements/setup/${sessionId}/${path}`
+  let url = `/return-versions/setup/${sessionId}/${path}`
 
   if (index > -1) {
     url = `${url}/${index}`
@@ -1028,7 +1028,7 @@ function _getOptions (path, index = -1) {
 }
 
 function _postOptions (path, index = -1, payload) {
-  let url = `/return-requirements/setup/${sessionId}/${path}`
+  let url = `/return-versions/setup/${sessionId}/${path}`
 
   if (index > -1) {
     url = `${url}/${index}`
