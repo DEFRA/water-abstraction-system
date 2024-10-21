@@ -1,29 +1,27 @@
 'use strict'
 
 /**
- * Fetches requirements for returns by the return version id
- * @module FetchRequirementsForReturnsService
+ * Fetches the matching return version and associated licence, return requirements, points and purposes data
+ * @module FetchReturnVersionService
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Fetches requirements for returns by the return version id
+ * Fetches the matching return version and associated licence, return requirements, points and purposes data
  *
- * Includes the licence, return requirements (requirement, points, purposes)
- *
- * @param {string} returnVersionId - The UUID of the selected return version to get requirements for
+ * @param {string} id - The UUID for the bill run to fetch
  *
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go (returnVersionId) {
-  return _fetch(returnVersionId)
+async function go (id) {
+  return _fetch(id)
 }
 
-async function _fetch (returnVersionId) {
+async function _fetch (id) {
   return ReturnVersionModel.query()
-    .findById(returnVersionId)
+    .findById(id)
     .select([
       'createdAt',
       'id',

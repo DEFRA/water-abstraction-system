@@ -13,6 +13,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
