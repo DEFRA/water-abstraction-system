@@ -84,6 +84,32 @@ function cycleDueDate (summer) {
 }
 
 /**
+ * Given an arbitary date and if it is summer or all-year return the due date of that cycle
+ *
+ * @param {Date} date - the date whose due date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {string} - the due date of the next cycle.
+ */
+function cycleDueDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month > returnCycleDates.summer.endDate.month) {
+      return formatDateObjectToISO(new Date(`${year + 1}-${returnCycleDates.summer.dueDate.month + 1}-${returnCycleDates.summer.dueDate.day}`))
+    }
+
+    return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.summer.dueDate.month + 1}-${returnCycleDates.summer.dueDate.day}`))
+  }
+
+  if (month > returnCycleDates.allYear.endDate.month) {
+    return formatDateObjectToISO(new Date(`${year + 1}-${returnCycleDates.allYear.dueDate.month + 1}-${returnCycleDates.allYear.dueDate.day}`))
+  }
+
+  return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.allYear.dueDate.month + 1}-${returnCycleDates.allYear.dueDate.day}`))
+}
+
+/**
  * Get the end date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
@@ -120,6 +146,32 @@ function cycleEndDate (summer) {
 }
 
 /**
+ * Given an arbitary date and if it is summer or all-year return the end date of that cycle
+ *
+ * @param {Date} date - the date whose start date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {Date} - the start date of the next cycle.
+ */
+function cycleEndDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month > returnCycleDates.summer.endDate.month) {
+      return formatDateObjectToISO(new Date(`${year + 1}-${returnCycleDates.summer.endDate.month + 1}-${returnCycleDates.summer.endDate.day}`))
+    }
+
+    return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.summer.endDate.month + 1}-${returnCycleDates.summer.endDate.day}`))
+  }
+
+  if (month > returnCycleDates.allYear.endDate.month) {
+    return formatDateObjectToISO(new Date(`${year + 1}-${returnCycleDates.allYear.endDate.month + 1}-${returnCycleDates.allYear.endDate.day}`))
+  }
+
+  return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.allYear.endDate.month + 1}-${returnCycleDates.allYear.endDate.day}`))
+}
+
+/**
  * Get the start date of next provided cycle, either summer and winter and all year, formatted as YYYY-MM-DD
  *
  * @param {boolean} summer - true for summer, false for winter and all year.
@@ -153,6 +205,32 @@ function cycleStartDate (summer) {
   }
 
   return new Date(year, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
+}
+
+/**
+ * Given an arbitary date and if it is summer or all-year return the start date of that cycle
+ *
+ * @param {Date} date - the date whose start date you want to find.
+ * @param {boolean} summer - true for summer, false for winter and all year.
+ * @returns {Date} - the start date of the next cycle.
+ */
+function cycleStartDateByDate (date, summer) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  if (summer) {
+    if (month < returnCycleDates.summer.startDate.month) {
+      return formatDateObjectToISO(new Date(`${year - 1}-${returnCycleDates.summer.startDate.month + 1}-${returnCycleDates.summer.startDate.day}`))
+    }
+
+    return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.summer.startDate.month + 1}-${returnCycleDates.summer.startDate.day}`))
+  }
+
+  if (month < returnCycleDates.allYear.startDate.month) {
+    return formatDateObjectToISO(new Date(`${year - 1}-${returnCycleDates.allYear.startDate.month + 1}-${returnCycleDates.allYear.startDate.day}`))
+  }
+
+  return formatDateObjectToISO(new Date(`${year}-${returnCycleDates.allYear.startDate.month + 1}-${returnCycleDates.allYear.startDate.day}`))
 }
 
 /**
@@ -227,10 +305,13 @@ module.exports = {
   formatDateObjectToISO,
   formatStandardDateToISO,
   cycleDueDate,
+  cycleDueDateByDate,
   cycleDueDateAsISO,
   cycleEndDate,
+  cycleEndDateByDate,
   cycleEndDateAsISO,
   cycleStartDate,
+  cycleStartDateByDate,
   cycleStartDateAsISO,
   isISODateFormat,
   isValidDate
