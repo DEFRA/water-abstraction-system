@@ -86,6 +86,6 @@ async function returnLogsForLicence (_request, h) {
 
 module.exports = {
   flagForBilling,
-  returnLogsForLicence,
-  returnLogsForEndedLicence
+  returnLogsForEndedLicence,
+  returnLogsForLicence
 }

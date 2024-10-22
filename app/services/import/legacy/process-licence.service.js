@@ -5,11 +5,13 @@
  * @module ImportLegacyProcessLicenceService
  */
 
+const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistImportService = require('../persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformLicenceDocumentService = require('./transform-licence-document.service.js')
+const TransformLicenceDocumentRolesService = require('./transform-licence-document-roles.service.js')
 const TransformCompaniesService = require('./transform-companies.service.js')
 const TransformCompanyAddressesService = require('./transform-company-addresses.service.js')
 const TransformContactsService = require('./transform-contacts.service.js')
@@ -34,6 +36,13 @@ async function go (licenceRef) {
     const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
       await TransformLicenceService.go(licenceRef)
 
+    // We have other services that need to know when a licence has been imported. However, they only care about changes
+    // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
+    if (wrlsLicenceId) {
+      DetermineSupplementaryBillingFlagsService.go(transformedLicence, wrlsLicenceId)
+      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
+    }
+
     // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
@@ -41,6 +50,7 @@ async function go (licenceRef) {
 
     // Document
     await TransformLicenceDocumentService.go(regionCode, naldLicenceId, transformedLicence)
+    await TransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef)
 
     // Transform the company data
     const { transformedCompanies } = await TransformCompaniesService.go(regionCode, naldLicenceId)
@@ -55,10 +65,6 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistImportService.go(transformedLicence, transformedCompanies)
-
-    if (wrlsLicenceId) {
-      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
-    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {

@@ -13,6 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
+const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
 const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
@@ -20,6 +21,7 @@ const TransformCompaniesService = require('../../../../app/services/import/legac
 const TransformCompanyAddressesService = require('../../../../app/services/import/legacy/transform-company-addresses.service.js')
 const TransformContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
 const TransformLicenceDocumentService = require('../../../../app/services/import/legacy/transform-licence-document.service.js')
+const TransformLicenceDocumentRolesService = require('../../../../app/services/import/legacy/transform-licence-document-roles.service.js')
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
@@ -47,10 +49,12 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
+    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceDocumentService, 'go').resolves()
+    Sinon.stub(TransformLicenceDocumentRolesService, 'go').resolves()
     Sinon.stub(TransformCompaniesService, 'go').resolves({ company: [], transformedCompany: [] })
     Sinon.stub(TransformContactsService, 'go').resolves()
     Sinon.stub(TransformAddressesService, 'go').resolves()

@@ -10,7 +10,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 const { db } = require('../../../../db/db.js')
-const { cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/dates.lib.js')
+const { cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/return-cycle-dates.lib.js')
 
 /**
  * Fetch all return requirements that need return logs created.
