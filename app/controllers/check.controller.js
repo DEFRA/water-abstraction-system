@@ -8,7 +8,7 @@
 const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
 const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
 
-const redirectStatusCode = 204
+const NO_CONTENT_STATUS_CODE = 204
 
 /**
  * A test end point for the licence supplementary billing flags process
@@ -31,9 +31,9 @@ async function flagForBilling (request, h) {
     revokedDate
   }
 
-  DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+  await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
 
-  return h.response().code(redirectStatusCode)
+  return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
 /**
@@ -55,7 +55,7 @@ async function returnLogsForLicence (_request, h) {
 
   ProcessLicenceReturnLogsService.go(licenceReference)
 
-  return h.response().code(redirectStatusCode)
+  return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
 module.exports = {
