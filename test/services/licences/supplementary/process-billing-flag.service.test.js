@@ -5,33 +5,32 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
-
 // Things we need to stub
+const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
 const DetermineChargeVersionYearsService = require('../../../../app/services/licences/supplementary/determine-charge-version-years.service.js')
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+const DetermineReturnLogYearsService = require('../../../../app/services/licences/supplementary/determine-return-log-years.service.js')
+const DetermineWorkflowYearsService = require('../../../../app/services/licences/supplementary/determine-workflow-years.service.js')
 
 // Thing under test
 const ProcessSupplementaryBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 describe('Process Billing Flag Service', () => {
-  let chargeVersion
-  let licence
+  let licenceData
   let notifierStub
   let payload
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
+
+    Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -39,41 +38,51 @@ describe('Process Billing Flag Service', () => {
   })
 
   describe('when given a valid payload', () => {
-    describe('with a charge version id', () => {
-      beforeEach(async () => {
-        // region = RegionHelper.select()
-        licence = await LicenceHelper.add()
-        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, endDate: '2023-03-31' })
+    before(() => {
+      licenceData = {
+        licence: {
+          id: '216c3981-2e8d-4158-96de-0c8174d54077',
+          regionId: '0b962987-a338-4bc2-843f-c11a7ffa6c7c'
+        },
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2023-03-31'),
+        twoPartTariff: false,
+        flagForBilling: false
+      }
+    })
 
+    describe('with a charge version id', () => {
+      before(() => {
         payload = {
-          chargeVersionId: chargeVersion.id
+          chargeVersionId: 'a9e62338-8053-4bde-9344-def69f5ca416'
         }
       })
 
-      describe('that should be flagged for supplementary billing', () => {
-        beforeEach(async () => {
-          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves({
-            licence: {
-              id: licence.id,
-              regionId: licence.regionId
-            },
-            startDate: chargeVersion.startDate,
-            endDate: chargeVersion.endDate,
-            twoPartTariff: true,
-            flagForBilling: true
-          })
+      describe('that should not be flagged for supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves(licenceData)
+        })
 
+        it('does not call CreateLicenceSupplementaryYearService', async () => {
+          await ProcessSupplementaryBillingFlagService.go(payload)
+
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
+        })
+      })
+
+      describe('that should be flagged for supplementary billing', () => {
+        beforeEach(() => {
+          licenceData.twoPartTariff = true
+          licenceData.flagForBilling = true
+
+          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves(licenceData)
           Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
-        it('flags the licence for supplementary billing', async () => {
+        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
           await ProcessSupplementaryBillingFlagService.go(payload)
 
-          const result = await _fetchLicenceSupplementaryYears(licence.id)
-
-          expect(result[0].licenceId).to.equal(licence.id)
-          expect(result[0].twoPartTariff).to.equal(true)
-          expect(result[0].billRunId).to.equal(null)
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -87,28 +96,91 @@ describe('Process Billing Flag Service', () => {
           expect(logDataArg.licenceId).to.exist()
         })
       })
+    })
+
+    describe('with a return id', () => {
+      before(() => {
+        payload = {
+          returnId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+        }
+      })
 
       describe('that should not be flagged for supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves({
-            licence: {
-              id: licence.id,
-              regionId: licence.regionId
-            },
-            startDate: chargeVersion.startDate,
-            endDate: chargeVersion.endDate,
-            twoPartTariff: false,
-            flagForBilling: false
-          })
+          Sinon.stub(DetermineReturnLogYearsService, 'go').resolves(licenceData)
         })
 
-        it('does not flag the licence for supplementary billing', async () => {
+        it('does not call CreateLicenceSupplementaryYearService', async () => {
           await ProcessSupplementaryBillingFlagService.go(payload)
 
-          const result = await _fetchLicenceSupplementaryYears(licence.id)
-
-          expect(result).to.equal([])
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
         })
+      })
+
+      describe('that should be flagged for supplementary billing', () => {
+        beforeEach(() => {
+          licenceData.twoPartTariff = true
+          licenceData.flagForBilling = true
+
+          Sinon.stub(DetermineReturnLogYearsService, 'go').resolves(licenceData)
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+        })
+
+        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
+          await ProcessSupplementaryBillingFlagService.go(payload)
+
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+        })
+      })
+    })
+
+    describe('with a workflow id', () => {
+      before(() => {
+        payload = {
+          workflowId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+        }
+      })
+
+      describe('that should not be flagged for supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineWorkflowYearsService, 'go').resolves(licenceData)
+        })
+
+        it('does not call CreateLicenceSupplementaryYearService', async () => {
+          await ProcessSupplementaryBillingFlagService.go(payload)
+
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
+        })
+      })
+
+      describe('that should be flagged for supplementary billing', () => {
+        beforeEach(() => {
+          licenceData.twoPartTariff = true
+          licenceData.flagForBilling = true
+
+          Sinon.stub(DetermineWorkflowYearsService, 'go').resolves(licenceData)
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+        })
+
+        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
+          await ProcessSupplementaryBillingFlagService.go(payload)
+
+          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+        })
+      })
+    })
+  })
+
+  describe('when given an invalid payload', () => {
+    describe('with no ids', () => {
+      before(() => {
+        payload = {}
+      })
+
+      it('returns without throwing an error', async () => {
+        await ProcessSupplementaryBillingFlagService.go(payload)
+
+        expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
       })
     })
   })
@@ -132,13 +204,3 @@ describe('Process Billing Flag Service', () => {
     })
   })
 })
-
-async function _fetchLicenceSupplementaryYears (licenceId) {
-  return LicenceSupplementaryYearModel.query()
-    .select([
-      'id',
-      'licenceId',
-      'twoPartTariff',
-      'billRunId'])
-    .where('licenceId', licenceId)
-}
