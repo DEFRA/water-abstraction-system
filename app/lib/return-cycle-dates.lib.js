@@ -45,9 +45,9 @@ function cycleDueDate (summer) {
     cycleDueYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
   }
 
-  const cycleDueDate = new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
+  const dueDate = new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
 
-  return cycleDueDate
+  return dueDate
 }
 
 /**
@@ -77,9 +77,9 @@ function cycleDueDateByDate (date, summer) {
     cycleDueYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
   }
 
-  const cycleDueDate = new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
+  const dueDate = new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
 
-  return formatDateObjectToISO(cycleDueDate)
+  return formatDateObjectToISO(dueDate)
 }
 
 /**
@@ -119,9 +119,9 @@ function cycleEndDate (summer) {
     cycleEndYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
   }
 
-  const cycleEndDate = new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
+  const endDate = new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
 
-  return cycleEndDate
+  return endDate
 }
 
 /**
@@ -151,9 +151,9 @@ function cycleEndDateByDate (date, summer) {
     cycleEndYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
   }
 
-  const cycleEndDate = new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
+  const endDate = new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
 
-  return formatDateObjectToISO(cycleEndDate)
+  return formatDateObjectToISO(endDate)
 }
 
 /**
@@ -193,9 +193,9 @@ function cycleStartDate (summer) {
     cycleStartYear = month < returnCycleDates.allYear.startDate.month ? year - 1 : year
   }
 
-  const cycleEndDate = new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
+  const startDate = new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
 
-  return cycleEndDate
+  return startDate
 }
 
 /**
@@ -225,9 +225,9 @@ function cycleStartDateByDate (date, summer) {
     cycleStartYear = month < returnCycleDates.allYear.startDate.month ? year - 1 : year
   }
 
-  const cycleEndDate = new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
+  const startDate = new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
 
-  return formatDateObjectToISO(cycleEndDate)
+  return formatDateObjectToISO(startDate)
 }
 
 module.exports = {
