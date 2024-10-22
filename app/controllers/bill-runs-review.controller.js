@@ -5,8 +5,8 @@
  * @module BillRunsReviewController
  */
 
-const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
-const SubmitReviewBillRunService = require('../services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
+const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
+const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
 
 async function review (request, h) {
   const { id } = request.params
@@ -25,7 +25,7 @@ async function submitReview (request, h) {
 
   await SubmitReviewBillRunService.go(id, request.payload, request.yar)
 
-  return h.redirect(`/system/bill-runs/${id}/review`)
+  return h.redirect(`/system/bill-runs/review/${id}`)
 }
 
 module.exports = {

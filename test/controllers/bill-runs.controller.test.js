@@ -23,7 +23,6 @@ const GenerateBillRunService = require('../../app/services/bill-runs/two-part-ta
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
-const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
@@ -31,7 +30,6 @@ const SubmitAmendedAuthorisedVolumeService = require('../../app/services/bill-ru
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
-const SubmitReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -284,71 +282,6 @@ describe('Bill Runs controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal('/system/bill-runs')
-        })
-      })
-    })
-  })
-
-  describe('/bill-runs/{id}/review', () => {
-    describe('GET', () => {
-      let ReviewBillRunServiceStub
-
-      describe('when a request is valid with no pagination', () => {
-        beforeEach(() => {
-          options = _getRequestOptions('review')
-          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
-        })
-
-        it('returns a 200 response', async () => {
-          const response = await server.inject(options)
-          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
-
-          expect(response.statusCode).to.equal(200)
-          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
-          expect(ReviewBillRunServiceArgs[1]).to.equal(undefined)
-          expect(response.payload).to.contain('two-part tariff')
-          expect(response.payload).to.contain('Southern (Test replica)')
-          expect(response.payload).to.contain('Showing all 2 licences')
-        })
-      })
-
-      describe('when a request is valid with pagination', () => {
-        beforeEach(() => {
-          options = _getRequestOptions('review?page=2')
-          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
-        })
-
-        it('returns a 200 response', async () => {
-          const response = await server.inject(options)
-          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
-
-          expect(response.statusCode).to.equal(200)
-          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
-          expect(ReviewBillRunServiceArgs[1]).to.equal('2')
-          expect(response.payload).to.contain('two-part tariff')
-          expect(response.payload).to.contain('Southern (Test replica)')
-          expect(response.payload).to.contain('Showing all 2 licences')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      beforeEach(async () => {
-        options = _postRequestOptions('review')
-      })
-
-      describe('when a request is valid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitReviewBillRunService, 'go').resolves()
-        })
-
-        it('redirects to the review licences page', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(
-            '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review'
-          )
         })
       })
     })
@@ -1011,41 +944,6 @@ function _multiGroupBillRun () {
       }
     ],
     view: 'bill-runs/view.njk'
-  }
-}
-
-function _reviewBillRunData () {
-  return {
-    region: 'Southern (Test replica)',
-    status: 'review',
-    dateCreated: '6 November 2023',
-    financialYear: '2021 to 2022',
-    billRunType: 'two-part tariff',
-    numberOfLicencesDisplayed: 2,
-    numberOfLicencesToReview: 1,
-    totalNumberOfLicences: 2,
-    preparedLicences: [
-      {
-        licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-        licenceRef: '1/11/11/*1/1111',
-        licenceHolder: 'Big Farm Ltd',
-        status: 'review',
-        issue: 'Multiple Issues'
-      },
-      {
-        licenceId: '9442527a-64f3-471a-a3e4-fa0683a3d505',
-        licenceRef: '2/22/22/*2/2222',
-        licenceHolder: 'Small Farm Ltd',
-        status: 'ready',
-        issue: 'Multiple Issues'
-      }
-    ],
-    filter: {
-      issues: undefined,
-      licenceHolder: undefined,
-      licenceStatus: undefined,
-      openFilter: false
-    }
   }
 }
 
