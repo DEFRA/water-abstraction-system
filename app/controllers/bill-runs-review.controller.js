@@ -14,7 +14,7 @@ async function review (request, h) {
 
   const pageData = await ReviewBillRunService.go(id, page, request.yar)
 
-  return h.view('bill-runs/review.njk', {
+  return h.view('bill-runs/review/review.njk', {
     activeNavBar: 'bill-runs',
     ...pageData
   })
