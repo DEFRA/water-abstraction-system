@@ -2,7 +2,7 @@
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
-const { cycleDueDateByDate, cycleEndDateByDate, cycleStartDateByDate } = require('../../app/lib/dates.lib.js')
+const { cycleDueDateByDate, cycleEndDateByDate, cycleStartDateByDate } = require('../../app/lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
 async function seed () {
