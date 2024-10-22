@@ -14,13 +14,13 @@ const ReviewChargeReferenceModel = require('../../app/models/review-charge-refer
 // Thing under test
 const CanIStubThisOneService = require('../../app/services/can-i-stub-this-one.service.js')
 
-describe.only('Can I Stub It (yes we can) service', () => {
+describe('Can I Stub It (yes we can) service', () => {
   beforeEach(() => {
     const queryStub = Sinon.stub(ReviewChargeReferenceModel, 'query')
     const modifyGraphStub = Sinon.stub()
 
     modifyGraphStub.returnsThis()
-    // The `onCall` numbers work like array indexes so 2 is the third call
+    // The `onCall` numbers work like array indexes so 3 is the fourth call
     modifyGraphStub.onCall(3).resolves('Here is my mock data')
 
     queryStub.returns({

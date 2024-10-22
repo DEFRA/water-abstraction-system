@@ -10,11 +10,12 @@ const ReviewChargeReferenceModel = require('../models/review-charge-reference.mo
 /**
  * Fetches stuff
  *
+ * @param chargeReferenceId It is what it is
  * @returns {Promise<object>} Contains an array of stuff
  */
-async function go () {
-  const allTheStuff = await ReviewChargeReferenceModel.query()
-    .findById('ba4943d5-2ac3-4f7f-b8a1-b1b72da6d096')
+async function go (chargeReferenceId) {
+  const results = await ReviewChargeReferenceModel.query()
+    .findById(chargeReferenceId)
     .select('id', 'amendedAuthorisedVolume')
     .withGraphFetched('chargeReference')
     .modifyGraph('chargeReference', (builder) => {
@@ -44,7 +45,7 @@ async function go () {
       ])
     })
 
-  return allTheStuff
+  return results
 }
 
 module.exports = {
