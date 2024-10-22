@@ -33,7 +33,7 @@ async function flagForBilling (request, h) {
 
   DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
 
-  return h.response().code(204)
+  return h.response().code(redirectStatusCode)
 }
 
 /**
