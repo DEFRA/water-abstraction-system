@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test Helpers
-const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../../app/lib/dates.lib.js')
+const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../../app/lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 
 // Thing under test
