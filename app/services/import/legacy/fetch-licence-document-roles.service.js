@@ -20,15 +20,14 @@ const { db } = require('../../../../db/db.js')
  * @returns {Promise<ImportLegacyLicenceDocumentRoleType[]>}
  */
 async function go (regionCode, licenceId) {
-  const query = _query()
+  const returnsToData = await _getReturnsTo(regionCode, licenceId)
+  const licenceHolderData = await _getLicenceHolder(regionCode, licenceId)
 
-  const { rows } = await db.raw(query, [regionCode, licenceId])
-
-  return rows
+  return [...returnsToData, ...licenceHolderData]
 }
 
-function _query () {
-  return `
+async function _getReturnsTo (regionCode, licenceId) {
+  const query = `
     SELECT
       lr.id as licence_role_id,
       TO_DATE(nlr."EFF_ST_DATE", 'DD/MM/YYY' ) as start_date,
@@ -51,8 +50,52 @@ function _query () {
     WHERE
       nlr."ALRT_CODE" = 'RT'
       AND nlr."FGAC_REGION_CODE" = ?
-      AND nlr."AABL_ID" = ?;
-  `
+      AND nlr."AABL_ID" = ?;`
+
+  const { rows } = await db.raw(query, [regionCode, licenceId])
+
+  return rows
+}
+
+async function _getLicenceHolder (regionCode, licenceId) {
+  const query = `
+    SELECT
+      lr.id as licence_role_id,
+      concat_ws(':', nalv."FGAC_REGION_CODE", nalv."ACON_AADD_ID") as address_id,
+      concat_ws(':', nalv."FGAC_REGION_CODE", nalv."ACON_APAR_ID") as company_id,
+      GREATEST(
+        TO_DATE(NULLIF(nalv."EFF_ST_DATE", 'null'), 'DD/MM/YYYY'),
+        TO_DATE(NULLIF(nal."ORIG_EFF_DATE", 'null'), 'DD/MM/YYYY')
+      ) as start_date,
+      LEAST(
+        TO_DATE(NULLIF(nal."LAPSED_DATE", 'null'), 'DD/MM/YYYY'),
+        TO_DATE(NULLIF(nal."REV_DATE", 'null'), 'DD/MM/YYYY'),
+        TO_DATE(NULLIF(nal."EXPIRY_DATE", 'null'), 'DD/MM/YYYY'),
+        TO_DATE(NULLIF(nalv."EFF_END_DATE", 'null'), 'DD/MM/YYYY')
+      ) as end_date,
+      (
+        CASE
+          WHEN np."APAR_TYPE" = 'ORG'
+            THEN NULL
+          ELSE concat_ws(':', nalv."FGAC_REGION_CODE", nalv."ACON_APAR_ID")
+          END
+        ) as contact_id
+    FROM import."NALD_ABS_LIC_VERSIONS" nalv
+      INNER JOIN import."NALD_ABS_LICENCES" nal
+        ON nal."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
+        AND nal."ID" = nalv."AABL_ID"
+      INNER JOIN import."NALD_PARTIES" np
+        ON np."ID" = nalv."ACON_APAR_ID"
+        AND np."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
+      INNER JOIN public.licence_roles lr
+        ON lr.name = 'licenceHolder'
+    WHERE nalv."FGAC_REGION_CODE"=?
+      AND nalv."AABL_ID"=?
+      AND nalv."STATUS"<>'DRAFT'`
+
+  const { rows } = await db.raw(query, [regionCode, licenceId])
+
+  return rows
 }
 
 module.exports = {
