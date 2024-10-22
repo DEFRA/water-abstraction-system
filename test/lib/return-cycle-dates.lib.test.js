@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { afterEach, describe, it, before, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
@@ -15,55 +16,88 @@ const ReturnCycleDatesLib = require('../../app/lib/return-cycle-dates.lib.js')
 describe('Return Cycle Dates lib', () => {
   const today = new Date()
   const year = today.getFullYear()
-  const month = today.getMonth()
 
+  let clock
   let expectedDate
   let summer
+  let testDate
+
+  afterEach(() => {
+    clock.restore()
+  })
 
   describe('cycleDueDate', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle end', () => {
+      before(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.summer.dueDate.month,
-            returnCycleDates.summer.dueDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.dueDate.month,
-            returnCycleDates.summer.dueDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.summer.dueDate.month,
+          returnCycleDates.summer.dueDate.day
+        )
       })
 
-      it('should return the due date for the current summer cycle', () => {
+      it('should return the due date for next years summer cycle', () => {
         const result = ReturnCycleDatesLib.cycleDueDate(summer)
 
         expect(result).to.equal(expectedDate)
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
+    describe('when the requested cycle is "summer" and the current date is before the cycle end', () => {
+      before(() => {
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.allYear.dueDate.month,
-            returnCycleDates.allYear.dueDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.allYear.dueDate.month,
-            returnCycleDates.allYear.dueDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.dueDate.month,
+          returnCycleDates.summer.dueDate.day
+        )
+      })
+
+      it('should return the due date for this years summer cycle', () => {
+        const result = ReturnCycleDatesLib.cycleDueDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.allYear.dueDate.month,
+          returnCycleDates.allYear.dueDate.day
+        )
+      })
+
+      it('should return the due date of the next winter and all year cycle', () => {
+        const result = ReturnCycleDatesLib.cycleDueDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-03-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.dueDate.month,
+          returnCycleDates.allYear.dueDate.day
+        )
       })
 
       it('should return the due date of the current winter and all year cycle', () => {
@@ -75,100 +109,162 @@ describe('Return Cycle Dates lib', () => {
   })
 
   describe('cycleDueDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle end', () => {
+      before(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.summer.dueDate.month,
-            returnCycleDates.summer.dueDate.day
-          ).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.dueDate.month,
-            returnCycleDates.summer.dueDate.day
-          ).toISOString().split('T')[0]
-        }
-      })
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.summer.dueDate.month,
+          returnCycleDates.summer.dueDate.day
+        ).toISOString().split('T')[0]
 
-      describe('when the requested cycle is "winter and all year"', () => {
-        beforeEach(() => {
-          summer = false
-
-          if (month > returnCycleDates.allYear.endDate.month) {
-            expectedDate = new Date(
-              new Date().getFullYear() + 1,
-              returnCycleDates.allYear.dueDate.month,
-              returnCycleDates.allYear.dueDate.day
-            ).toISOString().split('T')[0]
-          } else {
-            expectedDate = new Date(
-              new Date().getFullYear(),
-              returnCycleDates.allYear.dueDate.month,
-              returnCycleDates.allYear.dueDate.day
-            ).toISOString().split('T')[0]
-          }
-        })
-
-        it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+        it('should return the due date of next years summer cycle formatted as YYYY-MM-DD', () => {
           const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
 
           expect(result).to.equal(expectedDate)
         })
       })
     })
+
+    describe('when the requested cycle is "summer" and the current date is before the cycle end', () => {
+      before(() => {
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.dueDate.month,
+          returnCycleDates.summer.dueDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the due date for this years summer cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.allYear.dueDate.month,
+          returnCycleDates.allYear.dueDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the due date of the next winter and all year cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-03-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.dueDate.month,
+          returnCycleDates.allYear.dueDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
   })
 
   describe('cycleEndDate', () => {
-    describe('when the requested cycle is "summer"', () => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle end', () => {
       beforeEach(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.summer.endDate.month,
-            returnCycleDates.summer.endDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.endDate.month,
-            returnCycleDates.summer.endDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.summer.endDate.month,
+          returnCycleDates.summer.endDate.day
+        )
       })
 
-      it('should return the due date for the current summer cycle', () => {
+      it('should return the end date for the next summer cycle', () => {
         const result = ReturnCycleDatesLib.cycleEndDate(summer)
 
         expect(result).to.equal(expectedDate)
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
+    describe('when the requested cycle is "summer" and the current date is before the cycle end', () => {
       beforeEach(() => {
-        summer = false
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.allYear.endDate.month,
-            returnCycleDates.allYear.endDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.allYear.endDate.month,
-            returnCycleDates.allYear.endDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.endDate.month,
+          returnCycleDates.summer.endDate.day
+        )
       })
 
-      it('should return the due date of the current winter and all year cycle', () => {
+      it('should return the end date for the current summer cycle', () => {
+        const result = ReturnCycleDatesLib.cycleEndDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      beforeEach(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.allYear.endDate.month,
+          returnCycleDates.allYear.endDate.day
+        )
+      })
+
+      it('should return the end date of the next winter and all year cycle', () => {
+        const result = ReturnCycleDatesLib.cycleEndDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is before the cycle end', () => {
+      beforeEach(() => {
+        summer = false
+        testDate = new Date(`${year}-02-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.endDate.month,
+          returnCycleDates.allYear.endDate.day
+        )
+      })
+
+      it('should return the end date of the current winter and all year cycle', () => {
         const result = ReturnCycleDatesLib.cycleEndDate(summer)
 
         expect(result).to.equal(expectedDate)
@@ -177,52 +273,80 @@ describe('Return Cycle Dates lib', () => {
   })
 
   describe('cycleEndDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle end', () => {
+      before(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.summer.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.summer.endDate.month,
-            returnCycleDates.summer.endDate.day
-          ).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.endDate.month,
-            returnCycleDates.summer.endDate.day
-          ).toISOString().split('T')[0]
-        }
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.summer.endDate.month,
+          returnCycleDates.summer.endDate.day
+        ).toISOString().split('T')[0]
       })
 
-      it('should return the due date for the current summer cycle formatted as YYYY-MM-DD', () => {
+      it('should return the end date for the next summer cycle formatted as YYYY-MM-DD', () => {
         const result = ReturnCycleDatesLib.cycleEndDateAsISO(summer)
 
         expect(result).to.equal(expectedDate)
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
+    describe('when the requested cycle is "summer" and the current date is before the cycle end', () => {
+      before(() => {
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month > returnCycleDates.allYear.endDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() + 1,
-            returnCycleDates.allYear.endDate.month,
-            returnCycleDates.allYear.endDate.day
-          ).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.allYear.endDate.month,
-            returnCycleDates.allYear.endDate.day
-          ).toISOString().split('T')[0]
-        }
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.endDate.month,
+          returnCycleDates.summer.endDate.day
+        ).toISOString().split('T')[0]
       })
 
-      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+      it('should return the end date for the current summer cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleEndDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() + 1,
+          returnCycleDates.allYear.endDate.month,
+          returnCycleDates.allYear.endDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the end date of the next winter and all year cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleEndDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is before the cycle end', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-02-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.endDate.month,
+          returnCycleDates.allYear.endDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the end date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
         const result = ReturnCycleDatesLib.cycleEndDateAsISO(summer)
 
         expect(result).to.equal(expectedDate)
@@ -231,23 +355,17 @@ describe('Return Cycle Dates lib', () => {
   })
 
   describe('cycleStartDate', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle start', () => {
+      before(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month < returnCycleDates.summer.startDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() - 1,
-            returnCycleDates.summer.startDate.month,
-            returnCycleDates.summer.startDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.startDate.month,
-            returnCycleDates.summer.startDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.startDate.month,
+          returnCycleDates.summer.startDate.day
+        )
       })
 
       it('should return the start date for the current summer cycle', () => {
@@ -257,26 +375,60 @@ describe('Return Cycle Dates lib', () => {
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
+    describe('when the requested cycle is "summer" and the current date is before the cycle start', () => {
+      before(() => {
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month < returnCycleDates.allYear.startDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() - 1,
-            returnCycleDates.allYear.startDate.month,
-            returnCycleDates.allYear.startDate.day
-          )
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.allYear.startDate.month,
-            returnCycleDates.allYear.startDate.day
-          )
-        }
+        expectedDate = new Date(
+          new Date().getFullYear() - 1,
+          returnCycleDates.summer.startDate.month,
+          returnCycleDates.summer.startDate.day
+        )
       })
 
-      it('should return the due date of the current winter and all year cycle', () => {
+      it('should return the start date for the previous summer cycle', () => {
+        const result = ReturnCycleDatesLib.cycleStartDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle start', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.startDate.month,
+          returnCycleDates.allYear.startDate.day
+        )
+      })
+
+      it('should return the start date of the current winter and all year cycle', () => {
+        const result = ReturnCycleDatesLib.cycleStartDate(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is before the cycle start', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-02-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() - 1,
+          returnCycleDates.allYear.startDate.month,
+          returnCycleDates.allYear.startDate.day
+        )
+      })
+
+      it('should return the start date of the previous winter and all year cycle', () => {
         const result = ReturnCycleDatesLib.cycleStartDate(summer)
 
         expect(result).to.equal(expectedDate)
@@ -285,23 +437,17 @@ describe('Return Cycle Dates lib', () => {
   })
 
   describe('cycleStartDateAsISO', () => {
-    describe('when the requested cycle is "summer"', () => {
-      beforeEach(() => {
+    describe('when the requested cycle is "summer" and the current date is after the cycle start', () => {
+      before(() => {
         summer = true
+        testDate = new Date(`${year}-12-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month < returnCycleDates.summer.startDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() - 1,
-            returnCycleDates.summer.startDate.month,
-            returnCycleDates.summer.startDate.day
-          ).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.summer.startDate.month,
-            returnCycleDates.summer.startDate.day
-          ).toISOString().split('T')[0]
-        }
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.summer.startDate.month,
+          returnCycleDates.summer.startDate.day
+        ).toISOString().split('T')[0]
       })
 
       it('should return the start date for the current summer cycle formatted as YYYY-MM-DD', () => {
@@ -311,26 +457,60 @@ describe('Return Cycle Dates lib', () => {
       })
     })
 
-    describe('when the requested cycle is "winter and all year"', () => {
-      beforeEach(() => {
-        summer = false
+    describe('when the requested cycle is "summer" and the current date is before the cycle start', () => {
+      before(() => {
+        summer = true
+        testDate = new Date(`${year}-09-01`)
+        clock = Sinon.useFakeTimers(testDate)
 
-        if (month < returnCycleDates.allYear.startDate.month) {
-          expectedDate = new Date(
-            new Date().getFullYear() - 1,
-            returnCycleDates.allYear.startDate.month,
-            returnCycleDates.allYear.startDate.day
-          ).toISOString().split('T')[0]
-        } else {
-          expectedDate = new Date(
-            new Date().getFullYear(),
-            returnCycleDates.allYear.startDate.month,
-            returnCycleDates.allYear.startDate.day
-          ).toISOString().split('T')[0]
-        }
+        expectedDate = new Date(
+          new Date().getFullYear() - 1,
+          returnCycleDates.summer.startDate.month,
+          returnCycleDates.summer.startDate.day
+        ).toISOString().split('T')[0]
       })
 
-      it('should return the due date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+      it('should return the start date for the previous summer cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleStartDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is after the cycle start', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-05-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear(),
+          returnCycleDates.allYear.startDate.month,
+          returnCycleDates.allYear.startDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the start date of the current winter and all year cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleStartDateAsISO(summer)
+
+        expect(result).to.equal(expectedDate)
+      })
+    })
+
+    describe('when the requested cycle is "winter and all year" and the current date is before the cycle start', () => {
+      before(() => {
+        summer = false
+        testDate = new Date(`${year}-02-01`)
+        clock = Sinon.useFakeTimers(testDate)
+
+        expectedDate = new Date(
+          new Date().getFullYear() - 1,
+          returnCycleDates.allYear.startDate.month,
+          returnCycleDates.allYear.startDate.day
+        ).toISOString().split('T')[0]
+      })
+
+      it('should return the start date of the previous winter and all year cycle formatted as YYYY-MM-DD', () => {
         const result = ReturnCycleDatesLib.cycleStartDateAsISO(summer)
 
         expect(result).to.equal(expectedDate)
