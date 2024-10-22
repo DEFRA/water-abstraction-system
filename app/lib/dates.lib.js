@@ -5,8 +5,6 @@
  * @module DatesLib
  */
 
-const { returnCycleDates } = require('./static-lookups.lib.js')
-
 const february = 2
 const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
@@ -45,166 +43,6 @@ function formatStandardDateToISO (date) {
  */
 function formatDateObjectToISO (date) {
   return date.toISOString().split('T')[0]
-}
-
-/**
- * Get the due date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the due date of the next cycle as an ISO string.
- */
-function cycleDueDateAsISO (summer) {
-  return formatDateObjectToISO(cycleDueDate(summer))
-}
-
-/**
- * Get the due date of next provided cycle, either summer or winter and all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the due date of the next cycle.
- */
-function cycleDueDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month > returnCycleDates.summer.endDate.month) {
-      return new Date(year + 1, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
-  }
-
-  if (month > returnCycleDates.allYear.endDate.month) {
-    return new Date(year + 1, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
-}
-
-/**
- * Get the end date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the end date of the next cycle as an ISO string.
- */
-function cycleEndDateAsISO (summer) {
-  return formatDateObjectToISO(cycleEndDate(summer))
-}
-
-/**
- * Get the end date of next provided cycle, either summer and winter or all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the end date of the next cycle.
- */
-function cycleEndDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month > returnCycleDates.summer.endDate.month) {
-      return new Date(year + 1, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
-  }
-
-  if (month > returnCycleDates.allYear.endDate.month) {
-    return new Date(year + 1, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
-}
-
-/**
- * Given an arbitary date and if it is summer or all-year return the end date of that cycle
- *
- * @param {Date} date - the date whose start date you want to find.
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the start date of the next cycle.
- */
-function cycleEndDateByDate (date, summer) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  if (summer) {
-    if (month > returnCycleDates.summer.endDate.month) {
-      return `${year + 1}-10-31`
-    }
-
-    return `${year}-10-31`
-  }
-
-  if (month > returnCycleDates.allYear.endDate.month) {
-    return `${year + 1}-03-31`
-  }
-
-  return `${year}-03-31`
-}
-
-/**
- * Get the start date of next provided cycle, either summer and winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the start date of the next cycle as an ISO string.
- */
-function cycleStartDateAsISO (summer) {
-  return formatDateObjectToISO(cycleStartDate(summer))
-}
-
-/**
- * Get the start date of next provided cycle, either summer or winter and all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the start date of the next cycle.
- */
-function cycleStartDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month < returnCycleDates.summer.startDate.month) {
-      return new Date(year - 1, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
-  }
-
-  if (month < returnCycleDates.allYear.startDate.month) {
-    return new Date(year - 1, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
-}
-
-/**
- * Given an arbitary date and if it is summer or all-year return the start date of that cycle
- *
- * @param {Date} date - the date whose start date you want to find.
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the start date of the next cycle.
- */
-function cycleStartDateByDate (date, summer) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  if (summer) {
-    if (month < returnCycleDates.summer.startDate.month) {
-      return `${year - 1}-11-01`
-    }
-
-    return `${year}-11-01`
-  }
-
-  if (month < returnCycleDates.allYear.startDate.month) {
-    return `${year - 1}-04-01`
-  }
-
-  return `${year}-04-01`
 }
 
 /**
@@ -278,14 +116,6 @@ function _isLeapYear (year) {
 module.exports = {
   formatDateObjectToISO,
   formatStandardDateToISO,
-  cycleDueDate,
-  cycleDueDateAsISO,
-  cycleEndDate,
-  cycleEndDateByDate,
-  cycleEndDateAsISO,
-  cycleStartDate,
-  cycleStartDateByDate,
-  cycleStartDateAsISO,
   isISODateFormat,
   isValidDate
 }
