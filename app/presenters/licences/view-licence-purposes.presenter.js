@@ -44,7 +44,7 @@ function _formatLicencePurposes (licenceVersionPurposes) {
       abstractionAmounts: _formatAbstractionAmounts(licenceVersionPurpose),
       abstractionPeriod: _abstractionPeriod(licenceVersionPurpose),
       abstractionPoints: _formatAbstractionPoints(licenceVersionPurpose.points),
-      purposeDescription: licenceVersionPurpose.purpose.description
+      purposeDescription: licenceVersionPurpose.purpose.description ? licenceVersionPurpose.purpose.description : ''
     }
   }).filter((item) => {
     return item !== null
