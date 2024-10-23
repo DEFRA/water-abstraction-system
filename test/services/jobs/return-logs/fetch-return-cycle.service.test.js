@@ -16,6 +16,9 @@ const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
 
 describe('Fetch return cycle service', () => {
+  const today = new Date()
+  const year = today.getFullYear()
+
   let allYearReturnCycle
   let summerReturnCycle
   let previousAllYearReturnCycle
@@ -23,10 +26,10 @@ describe('Fetch return cycle service', () => {
   let summer
 
   before(async () => {
-    allYearReturnCycle = await ReturnCycleHelper.select(3)
-    previousAllYearReturnCycle = await ReturnCycleHelper.select(5)
-    summerReturnCycle = await ReturnCycleHelper.select(2)
-    previousSummerReturnCycle = await ReturnCycleHelper.select(4)
+    allYearReturnCycle = await ReturnCycleHelper.select(3, false)
+    previousAllYearReturnCycle = await ReturnCycleHelper.select(4, false)
+    summerReturnCycle = await ReturnCycleHelper.select(2, true)
+    previousSummerReturnCycle = await ReturnCycleHelper.select(3, true)
   })
 
   afterEach(() => {
@@ -39,16 +42,16 @@ describe('Fetch return cycle service', () => {
     })
 
     describe('and the date is after the end of april', () => {
-      it('should return the correct all year log cycle UUID', async () => {
-        const result = await FetchReturnCycleService.go('2021-05-01', summer)
+      it('should return the correct all year return cycle UUID', async () => {
+        const result = await FetchReturnCycleService.go(`${year - 3}-05-01`, summer)
 
         expect(result).to.equal(allYearReturnCycle.id)
       })
     })
 
     describe('and the date is before the end of april', () => {
-      it('should return the correct all year log cycle UUID', async () => {
-        const result = await FetchReturnCycleService.go('2021-01-01', summer)
+      it('should return the correct all year return cycle UUID', async () => {
+        const result = await FetchReturnCycleService.go(`${year - 3}-01-01`, summer)
 
         expect(result).to.equal(previousAllYearReturnCycle.id)
       })
@@ -70,7 +73,7 @@ describe('Fetch return cycle service', () => {
         })
       })
 
-      it('should return undefined if the return cycle does not exist', async () => {
+      it('should return undefined', async () => {
         const result = await FetchReturnCycleService.go(new Date().toISOString().split('T')[0], summer)
 
         expect(result).to.equal(undefined)
@@ -84,8 +87,8 @@ describe('Fetch return cycle service', () => {
     })
 
     describe('and the date is after the end of october', () => {
-      it('should return the correct summer log cycle UUID', async () => {
-        const result = await FetchReturnCycleService.go('2021-12-01', summer)
+      it('should return the correct summer return cycle UUID', async () => {
+        const result = await FetchReturnCycleService.go(`${year - 3}-12-01`, summer)
 
         expect(result).to.equal(summerReturnCycle.id)
       })
@@ -93,7 +96,7 @@ describe('Fetch return cycle service', () => {
 
     describe('and the date is before the end of october', () => {
       it('should return the correct summer log cycle UUID', async () => {
-        const result = await FetchReturnCycleService.go('2021-09-01', summer)
+        const result = await FetchReturnCycleService.go(`${year - 3}-09-01`, summer)
 
         expect(result).to.equal(previousSummerReturnCycle.id)
       })
