@@ -18,8 +18,8 @@ const { formatAbstractionPeriod } = require('../base.presenter.js')
 function go (licence) {
   return {
     id: licence.id,
-    licenceRef: licence.licenceRef,
     licencePurposes: _formatLicencePurposes(licence.licenceVersions[0].licenceVersionPurposes),
+    licenceRef: licence.licenceRef,
     pageTitle: 'Licence purpose details'
   }
 }
