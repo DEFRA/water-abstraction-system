@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the licence purposes needed for the view monitoring-station page
+ * Fetches the licence purposes needed for the licence purposes page
  * @module FetchLicencePurposesService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetches the licence purposes needed for the view monitoring-station page
+ * Fetches the licence purposes needed for the licence purposes page
  *
  * @param {string} licenceId - The UUID of the licence
  *
