@@ -29,6 +29,8 @@ function go (licence) {
 // "stringify-ing" each object. If a duplicate is found, it returns null for that entry. After mapping, it filters out
 // any null values.
 function _formatLicencePurposes (licenceVersionPurposes) {
+  console.log('🚀🚀🚀 ~ licenceVersionPurposes:', licenceVersionPurposes)
+
   const uniquePurposeDetails = new Set()
 
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
