@@ -24,14 +24,30 @@ function go (licence) {
   }
 }
 
+// NOTE: Maps over the `licenceVersionPurposes` array, formatting each `licenceVersionPurpose` object to extract
+// relevant information while ensuring uniqueness. A Set is used to track already processed licence details by
+// "stringify-ing" each object. If a duplicate is found, it returns null for that entry. After mapping, it filters out
+// any null values.
 function _formatLicencePurposes (licenceVersionPurposes) {
+  const uniquePurposeDetails = new Set()
+
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
+    const licenceString = JSON.stringify(licenceVersionPurpose)
+
+    if (uniquePurposeDetails.has(licenceString)) {
+      return null
+    } else {
+      uniquePurposeDetails.add(licenceString)
+    }
+
     return {
       abstractionAmounts: _formatAbstractionAmounts(licenceVersionPurpose),
       abstractionPeriod: _abstractionPeriod(licenceVersionPurpose),
       abstractionPoints: _formatAbstractionPoints(licenceVersionPurpose.points),
       purposeDescription: licenceVersionPurpose.purpose.description ? licenceVersionPurpose.purpose.description : ''
     }
+  }).filter((item) => {
+    return item !== null
   })
 }
 
