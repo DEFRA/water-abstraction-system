@@ -8,6 +8,7 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const AddressHelper = require('../support/helpers/address.helper.js')
 const BillHelper = require('../support/helpers/bill.helper.js')
 const BillModel = require('../../app/models/bill.model.js')
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
@@ -164,7 +165,9 @@ describe('Billing Account model', () => {
   })
 
   describe('Instance methods', () => {
+    let testAddress
     let alternateBillingAccount
+    let fetchedRecord
 
     before(async () => {
       // Link the alternate billing account we'll use in instance method testing to the same company as the test record.
@@ -179,12 +182,14 @@ describe('Billing Account model', () => {
       })
 
       // Add the second billing account address record, which will be linked to a contact and different company to the
-      // main billing account record
+      // main billing account record. It will also have an address
+      testAddress = await AddressHelper.add()
       const contact = await ContactHelper.add({ firstName: 'Bugs', lastName: 'Bunny' })
       const alternateCompany = await CompanyHelper.add({ name: 'Acme Ltd (UK)' })
 
       // Add two billing account address records so we can ensure the 'current' logic in the modifier is being exercised
       await BillingAccountAddressHelper.add({
+        addressId: testAddress.id,
         billingAccountId: alternateBillingAccount.id,
         companyId: alternateCompany.id,
         contactId: contact.id,
@@ -193,8 +198,6 @@ describe('Billing Account model', () => {
     })
 
     describe('$accountName', () => {
-      let fetchedRecord
-
       describe("when the 'current' billing account address is not linked to a company", () => {
         it('uses the name of the company linked directly to the billing account', async () => {
           fetchedRecord = await BillingAccountModel.query().findById(testRecord.id).modify('contactDetails')
@@ -230,6 +233,50 @@ describe('Billing Account model', () => {
 
             expect(result).to.equal('Example Trading Ltd')
           })
+        })
+      })
+    })
+
+    describe('$addressLines', () => {
+      describe("when their is a 'current' billing account address", () => {
+        describe('but it is not linked to an address', () => {
+          it('returns an empty array', async () => {
+            fetchedRecord = await BillingAccountModel.query().findById(testRecord.id).modify('contactDetails')
+
+            const result = fetchedRecord.$addressLines()
+
+            expect(result).to.be.an.array()
+            expect(result).to.be.empty()
+          })
+        })
+
+        describe('and it is linked to an address', () => {
+          it('returns an array of just the populated address lines', async () => {
+            fetchedRecord = await BillingAccountModel
+              .query()
+              .findById(alternateBillingAccount.id)
+              .modify('contactDetails')
+
+            const result = fetchedRecord.$addressLines()
+
+            expect(result).to.equal([
+              'ENVIRONMENT AGENCY',
+              'HORIZON HOUSE',
+              'DEANERY ROAD',
+              'BRISTOL',
+              'BS1 5AH',
+              'United Kingdom'
+            ])
+          })
+        })
+      })
+
+      describe('when there are no billing account addresses (modifier not used but method called)', () => {
+        it('returns an empty array', () => {
+          const result = BillingAccountModel.fromJson(testRecord).$addressLines()
+
+          expect(result).to.be.an.array()
+          expect(result).to.be.empty()
         })
       })
     })

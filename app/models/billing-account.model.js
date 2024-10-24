@@ -173,7 +173,7 @@ class BillingAccountModel extends BaseModel {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     // Guard clause in case modifier has not been used
-    if (!currentBillingAccountAddress || currentBillingAccountAddress.address) {
+    if (!currentBillingAccountAddress || !currentBillingAccountAddress.address) {
       return []
     }
 
