@@ -52,18 +52,14 @@ function _formatLicencePurposes (licenceVersionPurposes) {
 }
 
 function _abstractionPeriod (licenceVersionPurpose) {
-  const startDay = licenceVersionPurpose.abstractionPeriodStartDay
-  const startMonth = licenceVersionPurpose.abstractionPeriodStartMonth
-  const endDay = licenceVersionPurpose.abstractionPeriodEndDay
-  const endMonth = licenceVersionPurpose.abstractionPeriodEndMonth
+  const {
+    abstractionPeriodStartDay: startDay,
+    abstractionPeriodStartMonth: startMonth,
+    abstractionPeriodEndDay: endDay,
+    abstractionPeriodEndMonth: endMonth
+  } = licenceVersionPurpose
 
   return formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
-}
-
-function _formatAbstractionPoints (points) {
-  return points.map((point) => {
-    return point.$describe()
-  })
 }
 
 function _formatAbstractionAmounts (licenceVersionPurpose) {
