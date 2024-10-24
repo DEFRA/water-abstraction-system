@@ -23,6 +23,7 @@ const ViewLicenceCommunicationsService = require('../../app/services/licences/vi
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
+const ViewLicencePurposesService = require('../../app/services/licences/view-licence-purposes.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
@@ -243,6 +244,34 @@ describe('Licences controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/purposes', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/purposes',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicencePurposesService, 'go').resolves(_viewLicencePurposes())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence purpose details')
         })
       })
     })
@@ -587,6 +616,28 @@ function _viewLicenceContactDetails () {
       }
     ],
     pageTitle: 'Licence contact details'
+  }
+}
+
+function _viewLicencePurposes () {
+  return {
+    id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
+    licenceRef: '01/140/R01',
+    licencePurposes: [
+      {
+        abstractionAmounts: [
+          '165000.00 cubic metres per year',
+          '10920.00 cubic metres per day',
+          '455.00 cubic metres per hour'
+        ],
+        abstractionPeriod: '1 November to 31 March',
+        abstractionPoints: [
+          'At National Grid Reference TQ 78392 78004 (LIPWELL STREAM POINT A)'
+        ],
+        purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
+      }
+    ],
+    pageTitle: 'Licence purpose details'
   }
 }
 
