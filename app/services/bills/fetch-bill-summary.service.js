@@ -2,7 +2,7 @@
 
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
- * @module FetchBillService
+ * @module FetchBillSummaryService
  */
 
 const BillModel = require('../../models/bill.model.js')
@@ -34,50 +34,7 @@ async function _fetch (billId) {
     ])
     .withGraphFetched('billingAccount')
     .modifyGraph('billingAccount', (builder) => {
-      builder.select([
-        'id',
-        'accountNumber'
-      ])
-    })
-    .withGraphFetched('billingAccount.company')
-    .modifyGraph('billingAccount.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
-    })
-    .withGraphFetched('billingAccount.billingAccountAddresses')
-    // The current billing account address is denoted by the fact it is the only one with a null end date
-    .modifyGraph('billingAccount.billingAccountAddresses', (builder) => {
-      builder
-        .select([
-          'id'
-        ])
-        .whereNull('endDate')
-    })
-    .withGraphFetched('billingAccount.billingAccountAddresses.company')
-    .modifyGraph('billingAccount.billingAccountAddresses.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
-    })
-    .withGraphFetched('billingAccount.billingAccountAddresses.contact')
-    .modifyGraph('billingAccount.billingAccountAddresses.contact', (builder) => {
-      builder.select([
-        'id',
-        'contactType',
-        'dataSource',
-        'department',
-        'firstName',
-        'initials',
-        'lastName',
-        'middleInitials',
-        'salutation',
-        'suffix'
-      ])
+      builder.modify('contactDetails')
     })
     .withGraphFetched('billLicences')
     .modifyGraph('billLicences', (builder) => {
