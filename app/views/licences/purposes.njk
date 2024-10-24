@@ -1,7 +1,14 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <div class="govuk-!-margin-bottom-1"> {{ item }}</div>
+  {% endfor %}
+{% endmacro %}
 
 {% macro abstractionPointCell(array, purposeDescription) %}
   {% set abstractionPoints %}
@@ -10,7 +17,6 @@
         <div class="govuk-!-padding-top-1">{{ item }}</div>
       {% else %}
         <div class="govuk-!-padding-top-1 govuk-!-padding-bottom-1">{{ item }}</div>
-        <div class="govuk-!-margin-bottom-1 govuk-section-break govuk-section-break--visible"></div>
       {% endif %}
     {% endfor %}
   {% endset %}
@@ -46,60 +52,64 @@
     {% set tableRows = [] %}
 
     {# Abstraction points cell #}
-    {% if licencePurpose.abstractionPoints.length > 1 %}
-      {% set abstractionPointRowTitle = 'Abstraction points' %}
-    {% else %}
-      {% set abstractionPointRowTitle = 'Abstraction point' %}
-    {% endif %}
-
-    {% set abstractionPointsRow = [
+    {% set abstractionPointsRow =
       {
-        text: abstractionPointRowTitle,
-        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex },
-        classes: "govuk-!-width-one-third"
-      },
-      {
-        html: abstractionPointCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
-        attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+        key: {
+          text: licencePurpose.abstractionPointsTitle,
+          attributes: { 'data-test': 'abstraction-point-title-' + rowIndex },
+          classes: "govuk-!-width-one-third"
+        },
+        value: {
+          html: abstractionPointCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
+          attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+        }
       }
-    ] %}
+    %}
 
     {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
 
     {# Period of abstraction cell #}
-    {% set abstractionPeriodRow = [
+    {% set abstractionPeriodRow =
       {
-        text: 'Period of abstraction',
-        attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
-      },
-      {
-        text: licencePurpose.abstractionPeriod,
-        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+        key: {
+          text: 'Period of abstraction',
+          attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
+        },
+        value: {
+          text: licencePurpose.abstractionPeriod,
+          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+        }
       }
-    ] %}
+    %}
 
     {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
 
     {# Abstraction amount cell #}
-    {% for abstractionAmount in licencePurpose.abstractionAmounts %}
-      {% set abstractionPeriodRow = [
-        {
-          text: 'Abstraction amount',
+    {% if licencePurpose.abstractionAmounts.length > 0 %}
+      {% set abstractionAmountsRow = {
+        key: {
+          text: licencePurpose.abstractionAmountsTitle,
           attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
         },
-        {
-          text: abstractionAmount,
+        value: {
+          text: newLine(licencePurpose.abstractionAmounts),
           attributes: { 'data-test': 'abstraction-amount-' + rowIndex }
         }
-      ] %}
+      } %}
 
-    {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
-    {% endfor %}
+      {% set tableRows = (tableRows.push(abstractionAmountsRow), tableRows) %}
+    {% endif %}
 
-    {{ govukTable({
-      caption: licencePurpose.purposeDescription,
-      captionClasses: "govuk-table__caption--m govuk-!-padding-bottom-3 govuk-!-margin-bottom-0 govuk-section-break govuk-section-break--visible",
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: licencePurpose.purposeDescription,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+        }
+      },
       rows: tableRows
     }) }}
+
   {% endfor %}
 {% endblock %}
