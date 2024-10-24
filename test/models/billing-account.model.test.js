@@ -280,5 +280,35 @@ describe('Billing Account model', () => {
         })
       })
     })
+
+    describe('$contactName', () => {
+      describe("when the 'current' billing account address is not linked to a contact", () => {
+        it('returns null', async () => {
+          fetchedRecord = await BillingAccountModel.query().findById(testRecord.id).modify('contactDetails')
+
+          const result = fetchedRecord.$contactName()
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe("when the 'current' billing account address is linked to a contact", () => {
+        it('returns the contact name', async () => {
+          fetchedRecord = await BillingAccountModel.query().findById(alternateBillingAccount.id).modify('contactDetails')
+
+          const result = fetchedRecord.$contactName()
+
+          expect(result).to.equal('Bugs Bunny')
+        })
+      })
+
+      describe('when there are no billing account addresses (modifier not used but method called)', () => {
+        it('returns null', async () => {
+          const result = BillingAccountModel.fromJson(testRecord).$contactName()
+
+          expect(result).to.be.null()
+        })
+      })
+    })
   })
 })
