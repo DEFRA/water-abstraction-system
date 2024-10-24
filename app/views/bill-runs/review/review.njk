@@ -322,7 +322,7 @@
         {% endset %}
 
         {% set action %}
-          <a class="govuk-link" href="review/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
+          <a class="govuk-link" href="/system/bill-runs/review/licence/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
         {% endset %}
 
       {% set tableRow = [

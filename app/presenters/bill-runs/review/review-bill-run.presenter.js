@@ -73,7 +73,7 @@ function _prepareLicences (licences) {
 
   for (const licence of licences) {
     preparedLicences.push({
-      id: licence.licenceId,
+      id: licence.id,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
       issue: _getIssueOnLicence(licence.issues),
