@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats the licence purposes data for the view licence purposes page
+ * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
  * @module ViewLicencePurposesPresenter
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')
 
 /**
- * Formats the licence purposes data for the view licence purposes page
+ * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
  *
  * @param {module:LicenceModel} licence - The licence and related licenceVersionPurposes data returned by
  * `FetchLicencePurposesService`
