@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const BillingAccountHelper = require('../../../app/models/billing-account.model.js')
+
 // Thing under test
 const RemoveBillPresenter = require('../../../app/presenters/bills/remove-bill.presenter.js')
 
@@ -148,34 +151,36 @@ describe('Remove Bill presenter', () => {
 })
 
 function _billSummary () {
+  const billingAccount = BillingAccountHelper.fromJson({
+    id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
+    accountNumber: 'T65757520A',
+    company: {
+      id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
+      name: 'Example Trading Ltd',
+      type: 'organisation'
+    },
+    billingAccountAddresses: [{
+      id: '1d440029-745a-47ec-a43e-9f4a36014126',
+      company: null,
+      contact: {
+        id: '95ba53be-543f-415b-90b1-08f58f63ff74',
+        contactType: 'person',
+        dataSource: 'wrls',
+        department: null,
+        firstName: 'Amara',
+        initials: null,
+        lastName: 'Gupta',
+        middleInitials: null,
+        salutation: null,
+        suffix: null
+      }
+    }]
+  })
+
   return {
     id: '71d03336-f683-42fe-b67c-c861f25f1fbd',
     netAmount: 1045,
-    billingAccount: {
-      id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
-      accountNumber: 'T65757520A',
-      company: {
-        id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
-        name: 'Example Trading Ltd',
-        type: 'organisation'
-      },
-      billingAccountAddresses: [{
-        id: '1d440029-745a-47ec-a43e-9f4a36014126',
-        company: null,
-        contact: {
-          id: '95ba53be-543f-415b-90b1-08f58f63ff74',
-          contactType: 'person',
-          dataSource: 'wrls',
-          department: null,
-          firstName: 'Amara',
-          initials: null,
-          lastName: 'Gupta',
-          middleInitials: null,
-          salutation: null,
-          suffix: null
-        }
-      }]
-    },
+    billingAccount,
     billLicences: [
       {
         id: '9304f6b8-0664-4fec-98e1-8fd16144315c',

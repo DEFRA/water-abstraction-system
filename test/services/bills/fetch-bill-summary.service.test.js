@@ -93,6 +93,7 @@ describe('Fetch Bill Summary service', () => {
           },
           billingAccountAddresses: [{
             id: billingAccountAddressId,
+            address: null,
             company: {
               id: agentCompanyId,
               name: 'Agent Company Ltd',
