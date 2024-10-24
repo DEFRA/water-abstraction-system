@@ -89,6 +89,11 @@ function _formatAbstractionAmounts (licenceVersionPurpose) {
 
   return details
 }
+    const abstractionPoints = _formatAbstractionPoints(licenceVersionPurpose.points)
+    const abstractionAmounts = _formatAbstractionAmounts(licenceVersionPurpose)
+
+      abstractionAmountsTitle: abstractionAmounts.length > 1 ? 'Abstraction amounts' : 'Abstraction amount',
+      abstractionPointsTitle: abstractionPoints.length > 1 ? 'Abstraction points' : 'Abstraction point',
 
 module.exports = {
   go
