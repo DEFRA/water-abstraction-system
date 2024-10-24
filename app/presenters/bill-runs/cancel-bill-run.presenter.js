@@ -52,7 +52,7 @@ function _backLink (id, scheme, status) {
       return `/billing/batch/${id}/two-part-tariff-review`
     }
 
-    return `/system/bill-runs/${id}/review`
+    return `/system/bill-runs/review/${id}`
   }
 
   return `/system/bill-runs/${id}`

@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
+const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/review/submit-review-bill-run.service.js')
 
-describe('Submit Review Bill Run Service', () => {
+describe.only('Submit Review Bill Run Service', () => {
   const billRunId = '27dad88a-6b3c-438b-a25f-f1483e7e12a0'
   let yarStub
 

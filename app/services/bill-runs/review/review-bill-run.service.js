@@ -7,7 +7,7 @@
 
 const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
+const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/review-bill-run.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the review bill run page
@@ -44,7 +44,7 @@ async function go (id, page, yar) {
     licences.results
   )
 
-  const pagination = PaginatorPresenter.go(licences.total, selectedPageNumber, `/system/bill-runs/${id}/review`)
+  const pagination = PaginatorPresenter.go(licences.total, selectedPageNumber, `/system/bill-runs/review/${id}`)
 
   const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
 

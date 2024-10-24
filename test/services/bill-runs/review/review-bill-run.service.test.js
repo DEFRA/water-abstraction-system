@@ -12,11 +12,12 @@ const { expect } = Code
 const DatabaseConfig = require('../../../../config/database.config.js')
 
 // Things we need to stub
-const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
-const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
+const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
+// TODO: Stop stubbing the presenter
+const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
 // Thing under test
-const ReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
+const ReviewBillRunService = require('../../../../app/services/bill-runs/review/review-bill-run.service.js')
 
 describe('Review Bill Run Service', () => {
   const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'

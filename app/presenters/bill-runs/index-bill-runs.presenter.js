@@ -68,7 +68,7 @@ function _link (billRunId, status, scheme) {
       return `/billing/batch/${billRunId}/two-part-tariff-review`
     }
 
-    return `/system/bill-runs/${billRunId}/review`
+    return `/system/bill-runs/review/${billRunId}`
   }
 
   return `/system/bill-runs/${billRunId}`

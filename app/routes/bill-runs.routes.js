@@ -80,30 +80,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review',
-    options: {
-      handler: BillRunsController.review,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/review',
-    options: {
-      handler: BillRunsController.submitReview,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}',
     options: {
       handler: BillRunsController.reviewLicence,
