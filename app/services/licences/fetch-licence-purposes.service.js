@@ -16,10 +16,10 @@ const LicenceModel = require('../../models/licence.model.js')
  * purposes page
  */
 async function go (licenceId) {
-  return _fetchLicencePurposes(licenceId)
+  return _fetch(licenceId)
 }
 
-async function _fetchLicencePurposes (licenceId) {
+async function _fetch (licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
