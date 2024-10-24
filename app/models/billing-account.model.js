@@ -149,12 +149,7 @@ class BillingAccountModel extends BaseModel {
    * @returns {string|null} the account name to use for the billing account or null if it cannot be determined
    */
   $accountName () {
-    const currentBillingAccountAddress = this?.billingAccountAddresses[0]
-
-    // // Guard clause in case modifier has not been used
-    // if (!currentBillingAccountAddress) {
-    //   return null
-    // }
+    const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     if (currentBillingAccountAddress?.company) {
       return currentBillingAccountAddress.company.name
@@ -175,7 +170,7 @@ class BillingAccountModel extends BaseModel {
    * @returns {string[]} the address lines to use for the billing account
    */
   $addressLines () {
-    const currentBillingAccountAddress = this?.billingAccountAddresses[0]
+    const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     // Guard clause in case modifier has not been used
     if (!currentBillingAccountAddress || currentBillingAccountAddress.address) {
@@ -211,12 +206,7 @@ class BillingAccountModel extends BaseModel {
    * @returns {string|null} the contact name to use for the billing account or null if it cannot be determined
    */
   $contactName () {
-    const currentBillingAccountAddress = this?.billingAccountAddresses[0]
-
-    // // Guard clause in case modifier has not been used
-    // if (!currentBillingAccountAddress) {
-    //   return null
-    // }
+    const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     if (currentBillingAccountAddress?.contact) {
       return currentBillingAccountAddress.contact.$name()

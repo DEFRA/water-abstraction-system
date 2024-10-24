@@ -214,6 +214,24 @@ describe('Billing Account model', () => {
           expect(result).to.equal('Acme Ltd (UK)')
         })
       })
+
+      describe('when there are no billing account addresses (modifier not used but method called)', () => {
+        describe("and not even the 'company' property has been set", () => {
+          it('returns undefined', () => {
+            const result = BillingAccountModel.fromJson(testRecord).$accountName()
+
+            expect(result).to.be.undefined()
+          })
+        })
+
+        describe("but the 'company' property has been set", () => {
+          it('returns the company name', () => {
+            const result = BillingAccountModel.fromJson({ ...testRecord, company: testCompany }).$accountName()
+
+            expect(result).to.equal('Example Trading Ltd')
+          })
+        })
+      })
     })
   })
 })
