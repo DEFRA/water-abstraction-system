@@ -29,6 +29,7 @@ async function _fetchExternalIds (cycleStartDate) {
     .select(['licenceRef',
       db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")
     ])
+    .whereNot('status', 'void')
     .where('startDate', '>=', cycleStartDate)
 
   const externalIdsArray = externalIds.map((item) => {
