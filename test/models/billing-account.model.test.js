@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,46 @@ const CompanyModel = require('../../app/models/company.model.js')
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
 
 describe('Billing Account model', () => {
+  let testBillingAccountAddresses
+  let testBills
+  let testChargeVersions
+  let testCompany
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillingAccountHelper.add()
-    })
+  before(async () => {
+    testCompany = await CompanyHelper.add()
 
+    testRecord = await BillingAccountHelper.add({ companyId: testCompany.id })
+
+    testBillingAccountAddresses = []
+    for (let i = 0; i < 2; i++) {
+      // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
+      // billingAccountId and start date
+      const startDate = i === 0 ? new Date(2023, 8, 1) : new Date(2023, 9, 1)
+      const endDate = i === 0 ? new Date(2023, 8, 31) : null
+      const billingAccountAddress = await BillingAccountAddressHelper.add({
+        billingAccountId: testRecord.id, endDate, startDate
+      })
+
+      testBillingAccountAddresses.push(billingAccountAddress)
+    }
+
+    testBills = []
+    for (let i = 0; i < 2; i++) {
+      const bill = await BillHelper.add({ billingAccountId: testRecord.id })
+
+      testBills.push(bill)
+    }
+
+    testChargeVersions = []
+    for (let i = 0; i < 2; i++) {
+      const chargeVersion = await ChargeVersionHelper.add({ billingAccountId: testRecord.id })
+
+      testChargeVersions.push(chargeVersion)
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillingAccountModel.query().findById(testRecord.id)
 
@@ -39,23 +72,6 @@ describe('Billing Account model', () => {
 
   describe('Relationships', () => {
     describe('when linking to billing account addresses', () => {
-      let testBillingAccountAddresses
-
-      beforeEach(async () => {
-        testRecord = await BillingAccountHelper.add()
-        const { id: billingAccountId } = testRecord
-
-        testBillingAccountAddresses = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
-          // billingAccountId and start date
-          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-          const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, billingAccountId })
-
-          testBillingAccountAddresses.push(billingAccountAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query()
           .innerJoinRelated('billingAccountAddresses')
@@ -79,20 +95,6 @@ describe('Billing Account model', () => {
     })
 
     describe('when linking to bills', () => {
-      let testBills
-
-      beforeEach(async () => {
-        testRecord = await BillingAccountHelper.add()
-        const { id: billingAccountId } = testRecord
-
-        testBills = []
-        for (let i = 0; i < 2; i++) {
-          const bill = await BillHelper.add({ billingAccountId })
-
-          testBills.push(bill)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query()
           .innerJoinRelated('bills')
@@ -116,20 +118,6 @@ describe('Billing Account model', () => {
     })
 
     describe('when linking to charge versions', () => {
-      let testChargeVersions
-
-      beforeEach(async () => {
-        testRecord = await BillingAccountHelper.add()
-        const { id: billingAccountId } = testRecord
-
-        testChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({ billingAccountId })
-
-          testChargeVersions.push(chargeVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query()
           .innerJoinRelated('chargeVersions')
@@ -153,13 +141,6 @@ describe('Billing Account model', () => {
     })
 
     describe('when linking to company', () => {
-      let testCompany
-
-      beforeEach(async () => {
-        testCompany = await CompanyHelper.add()
-        testRecord = await BillingAccountHelper.add({ companyId: testCompany.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query()
           .innerJoinRelated('company')
