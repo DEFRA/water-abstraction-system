@@ -39,7 +39,7 @@ function go (bill) {
   const licencesText = licences.includes(',') ? 'Licences' : 'Licence'
 
   return {
-    accountName: _accountName(billingAccount),
+    accountName: billingAccount.$accountName(),
     accountNumber,
     billId,
     billRunNumber,
@@ -55,16 +55,6 @@ function go (bill) {
     supplementaryMessage: _supplementaryMessage(licencesText),
     total: formatMoney(bill.netAmount, true)
   }
-}
-
-function _accountName (billingAccount) {
-  const accountAddress = billingAccount.billingAccountAddresses[0]
-
-  if (accountAddress.company) {
-    return accountAddress.company.name
-  }
-
-  return billingAccount.company.name
 }
 
 function _billRunSummary (billRun) {
