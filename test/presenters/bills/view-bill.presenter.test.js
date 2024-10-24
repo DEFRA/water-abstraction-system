@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
 
 // Thing under test
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
@@ -51,42 +50,6 @@ describe('View Bill presenter', () => {
         flaggedForReissue: false,
         region: 'South West',
         transactionFile: 'nalei50002t'
-      })
-    })
-
-    describe('the "accountName" property', () => {
-      describe('when the billing account is not linked to an agent', () => {
-        it('returns the name of the company linked to the billing account', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.accountName).to.equal('Wessex Water Services Ltd')
-        })
-      })
-
-      describe('when the billing account is linked to an agent', () => {
-        beforeEach(() => {
-          billingAccount.billingAccountAddresses[0].company = {
-            companyId: 'b0d35412-f76c-44ca-9d63-c6350337e03d',
-            type: 'person',
-            name: 'Alan Broke'
-          }
-        })
-
-        it('returns the name of the agent company', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.accountName).to.equal('Alan Broke')
-        })
-      })
-    })
-
-    describe('the "addressLines" property', () => {
-      describe('when the billing account address contains blank elements', () => {
-        it('returns an array of only the set elements', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.addressLines).to.equal(['86 Oxford Road', 'WOOTTON', 'COURTENAY', 'TA24 8NX'])
-        })
       })
     })
 
@@ -192,41 +155,6 @@ describe('View Bill presenter', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.chargeScheme).to.equal('Old')
-        })
-      })
-    })
-
-    describe('the "contactName" property', () => {
-      describe('when the billing account is linked not linked to a contact', () => {
-        it('returns null', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.contactName).to.be.null()
-        })
-      })
-
-      // NOTE: The actual formulation of the contact name happens in ContactModel.$name(). We are interested in if set
-      // we contactName is populated which the view will use to determine if an FAO should be shown with the address
-      describe('where the billing account is linked to a contact (FAO)', () => {
-        beforeEach(() => {
-          billingAccount.billingAccountAddresses[0].contact = ContactModel.fromJson({
-            contactId: '2b00981d-9388-4f0d-8271-8e216b66c971',
-            contactType: 'person',
-            dataSource: 'wrls',
-            department: 'Humanoid Risk Assessment',
-            firstName: 'Margherita',
-            initials: '',
-            lastName: 'Villar',
-            middleInitials: 'J',
-            salutation: 'Mrs',
-            suffix: 'MBE'
-          })
-        })
-
-        it('returns the properly formatted contact name', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.contactName).to.equal('Mrs M J Villar MBE')
         })
       })
     })
