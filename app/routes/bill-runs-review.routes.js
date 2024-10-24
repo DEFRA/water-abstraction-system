@@ -26,6 +26,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/review/licence/{reviewLicenceId}',
+    options: {
+      handler: BillRunsReviewController.reviewLicence,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/review/licence/{reviewLicenceId}',
+    options: {
+      handler: BillRunsReviewController.submitReviewLicence,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 

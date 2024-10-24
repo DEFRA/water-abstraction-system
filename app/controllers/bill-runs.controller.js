@@ -17,14 +17,12 @@ const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/ge
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
-const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
-const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
@@ -130,18 +128,6 @@ async function removeLicence (request, h) {
   })
 }
 
-async function reviewLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId, request.yar)
-
-  return h.view('bill-runs/review-licence.njk', {
-    pageTitle: `Licence ${pageData.licence.licenceRef}`,
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
 async function send (request, h) {
   const { id } = request.params
 
@@ -232,14 +218,6 @@ async function submitRemoveLicence (request, h) {
   return h.redirect(`/system/bill-runs/${billRunId}/review`)
 }
 
-async function submitReviewLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  await SubmitReviewLicenceService.go(billRunId, licenceId, request.payload, request.yar)
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}`)
-}
-
 async function submitSend (request, h) {
   const { id } = request.params
 
@@ -291,14 +269,12 @@ module.exports = {
   matchDetails,
   previewCharge,
   removeLicence,
-  reviewLicence,
   send,
   submitAmendedAdjustmentFactor,
   submitAmendedAuthorisedVolume,
   submitAmendedBillableReturns,
   submitCancel,
   submitRemoveLicence,
-  submitReviewLicence,
   submitSend,
   twoPartTariff,
   view
