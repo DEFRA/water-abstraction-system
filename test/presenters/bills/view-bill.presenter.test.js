@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 const ContactModel = require('../../../app/models/contact.model.js')
 
 // Thing under test
@@ -399,7 +400,7 @@ function _testBill () {
 }
 
 function _testBillingAccount () {
-  return {
+  const data = {
     id: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     accountNumber: 'E88888888A',
     company: {
@@ -433,4 +434,6 @@ function _testBillingAccount () {
       }
     ]
   }
+
+  return BillingAccountModel.fromJson(data)
 }
