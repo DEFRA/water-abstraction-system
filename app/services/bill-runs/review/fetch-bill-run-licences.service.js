@@ -90,7 +90,7 @@ async function _fetchBillRunLicences (
   id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1
 ) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
-    .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
+    .select('id', 'licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)
     .orderBy([
       { column: 'status', order: 'desc' },
