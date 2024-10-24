@@ -7,7 +7,7 @@
 
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
-const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/dates.lib.js')
+const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given a date this service returns the return cycle for that date.

@@ -90,8 +90,31 @@ async function select (index = -1, summer = false) {
   return selectRandomEntry(returnCycles)
 }
 
+/**
+ * Select an entry from the reference data entries seeded at the start of testing
+ *
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
+ *
+ * So, they are seeded automatically when tests are run. Tests that need to link to a specific record can use this
+ * method to provide a date and if it's summer or all year and then get the return cycle back.
+ *
+ * @param {Date} [date] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * random from the reference data
+ * @param {boolean} summer - select either a summer or all year one
+ *
+ * @returns {object} The selected reference entry or one picked at random
+ */
+async function selectByDate (date, summer = false) {
+  return ReturnCycleModel.query()
+    .where('summer', summer)
+    .where('startDate', '<=', date)
+    .first()
+}
+
 module.exports = {
   add,
   defaults,
-  select
+  select,
+  selectByDate
 }
