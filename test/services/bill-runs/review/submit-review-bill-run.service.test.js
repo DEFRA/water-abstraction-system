@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/review/submit-review-bill-run.service.js')
 
-describe.only('Submit Review Bill Run Service', () => {
+describe('Submit Review Bill Run Service', () => {
   const billRunId = '27dad88a-6b3c-438b-a25f-f1483e7e12a0'
   let yarStub
 
