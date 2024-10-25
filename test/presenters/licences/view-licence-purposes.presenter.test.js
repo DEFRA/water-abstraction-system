@@ -39,6 +39,7 @@ describe('View Licence Purpose presenter', () => {
             abstractionPoints: [
               'At National Grid Reference TL 23198 88603'
             ],
+            abstractionPointsTitle: 'Abstraction point',
             purposeDescription: 'Spray Irrigation - Storage'
           }
         ],
@@ -135,101 +136,86 @@ describe('View Licence Purpose presenter', () => {
       })
     })
 
-    describe('the "purposeDescription"', () => {
-      describe('when the licence does not have a related purpose description', () => {
-        beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].purpose.description = null
-        })
-
-        it('returns the an empty array', () => {
+    describe('the "abstractionPointsTitle" property', () => {
+      describe('when the licence has one or less values in the abstractionPoints array', () => {
+        it('returns the `abstractionPointsTitle` of "Abstraction point"', () => {
           const result = ViewLicencePurposePresenter.go(licence)
 
-          expect(result.licencePurposes[0].purposeDescription).equal('')
+          expect(result.licencePurposes[0].abstractionPointsTitle).to.equal('Abstraction point')
         })
       })
 
+      describe('when the licence has more than one value in the abstractionPoints array', () => {
+        beforeEach(() => {
+          licence = LicenceModel.fromJson({
+            id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+            licenceRef: '01/123',
+            licenceVersions: [{
+              createdAt: new Date('2022-06-05'),
+              id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+              reason: 'new-licence',
+              status: 'current',
+              startDate: new Date('2022-04-01'),
+              licenceVersionPurposes: [{
+                id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 10,
+                annualQuantity: 180000,
+                dailyQuantity: 720,
+                hourlyQuantity: 144,
+                instantQuantity: 40,
+                purpose: {
+                  id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+                  description: 'Spray Irrigation - Storage'
+                },
+                points: [
+                  {
+                    id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                    description: null,
+                    ngr1: 'TL 23198 88603',
+                    ngr2: null,
+                    ngr3: null,
+                    ngr4: null,
+                    source: {
+                      id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
+                      description: 'SURFACE WATER SOURCE OF SUPPLY'
+                    }
+                  },
+                  {
+                    id: '21d8e899-68de-4a63-9ee7-f1ee56e4b58c',
+                    description: null,
+                    ngr1: 'TL 22198 84603',
+                    ngr2: null,
+                    ngr3: null,
+                    ngr4: null,
+                    source: {
+                      id: 'd5fdb3ca-3f03-43ef-96ca-5c3e97e7f112',
+                      description: 'Tidal Water Midlands Region'
+                    }
+                  }
+                ]
+              }]
+            }]
+          })
+        })
+
+        it('returns the `abstractionPointsTitle` of "Abstraction points"', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionPointsTitle).to.equal('Abstraction points')
+        })
+      })
+    })
+
+    describe('the "purposeDescription"', () => {
       describe('when the licence has a related purpose with a populated description field', () => {
         it('returns the purpose description', () => {
           const result = ViewLicencePurposePresenter.go(licence)
 
           expect(result.licencePurposes[0].purposeDescription).equal('Spray Irrigation - Storage')
         })
-      })
-    })
-
-    describe('when there are multiple licences with identical `licenceVersionPurposes` details', () => {
-      beforeEach(() => {
-        licence = LicenceModel.fromJson({
-          id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-          licenceRef: '01/123',
-          licenceVersions: [{
-            createdAt: new Date('2022-06-05'),
-            id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
-            reason: 'new-licence',
-            status: 'current',
-            startDate: new Date('2022-04-01'),
-            licenceVersionPurposes: [{
-              id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 10,
-              annualQuantity: 180000,
-              dailyQuantity: 720,
-              hourlyQuantity: 144,
-              instantQuantity: 40,
-              purpose: {
-                id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
-                description: 'Spray Irrigation - Storage'
-              },
-              points: [{
-                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
-                description: null,
-                ngr1: 'TL 23198 88603',
-                ngr2: null,
-                ngr3: null,
-                ngr4: null,
-                source: {
-                  id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
-                  description: 'SURFACE WATER SOURCE OF SUPPLY'
-                }
-              }]
-            },
-            {
-              id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 10,
-              annualQuantity: 180000,
-              dailyQuantity: 720,
-              hourlyQuantity: 144,
-              instantQuantity: 40,
-              purpose: {
-                id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
-                description: 'Spray Irrigation - Storage'
-              },
-              points: [{
-                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
-                description: null,
-                ngr1: 'TL 23198 88603',
-                ngr2: null,
-                ngr3: null,
-                ngr4: null,
-                source: {
-                  id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
-                  description: 'SURFACE WATER SOURCE OF SUPPLY'
-                }
-              }]
-            }]
-          }]
-        })
-      })
-
-      it('returns the first occurrence of the `licenceVersionPurposes` and discards duplicates', () => {
-        const result = ViewLicencePurposePresenter.go(licence)
-
-        expect(result.licencePurposes).to.have.length(1)
       })
     })
   })
