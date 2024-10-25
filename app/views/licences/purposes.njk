@@ -10,7 +10,7 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro abstractionPointCell(abstractionPoints, purposeDescription) %}
+{% macro abstractionPointsCell(abstractionPoints, purposeDescription) %}
   {% if abstractionPoints.length > 5 %}
     {{ govukDetails({
       summaryText: "View your " + abstractionPoints.length + " abstraction points for " + purposeDescription | lower,
@@ -42,34 +42,30 @@
     {% set tableRows = [] %}
 
     {# Abstraction points cell #}
-    {% set abstractionPointsRow =
-      {
-        key: {
-          text: licencePurpose.abstractionPointsTitle,
-          attributes: { 'data-test': 'abstraction-point-title-' + rowIndex },
-          classes: "govuk-!-width-one-third"
-        },
-        value: {
+    {% set abstractionPointsRow = {
+      key: {
+        text: licencePurpose.abstractionPointsTitle,
+        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
+      },
+      value: {
         html: abstractionPointsCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
-          attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+        attributes: { 'data-test': 'abstraction-points-' + rowIndex }
       }
-    %}
+    } %}
 
     {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
 
     {# Period of abstraction cell #}
-    {% set abstractionPeriodRow =
-      {
-        key: {
-          text: 'Period of abstraction',
-          attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
-        },
-        value: {
-          text: licencePurpose.abstractionPeriod,
-          attributes: { 'data-test': 'abstraction-period-' + rowIndex }
-        }
+    {% set abstractionPeriodRow = {
+      key: {
+        text: 'Period of abstraction',
+        attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
+      },
+      value: {
+        text: licencePurpose.abstractionPeriod,
+        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
       }
-    %}
+    } %}
 
     {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
 
@@ -82,7 +78,8 @@
         },
         value: {
           text: newLine(licencePurpose.abstractionAmounts),
-          attributes: { 'data-test': 'abstraction-amount-' + rowIndex }
+          attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
+          classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
         }
       } %}
 
@@ -99,6 +96,5 @@
       },
       rows: tableRows
     }) }}
-
   {% endfor %}
 {% endblock %}
