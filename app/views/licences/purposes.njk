@@ -10,25 +10,15 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro abstractionPointCell(array, purposeDescription) %}
-  {% set abstractionPoints %}
-    {% for item in array %}
-      {% if loop.last %}
-        <div class="govuk-!-padding-top-1">{{ item }}</div>
-      {% else %}
-        <div class="govuk-!-padding-top-1 govuk-!-padding-bottom-1">{{ item }}</div>
-      {% endif %}
-    {% endfor %}
-  {% endset %}
-
-  {% if array.length > 5 %}
+{% macro abstractionPointCell(abstractionPoints, purposeDescription) %}
+  {% if abstractionPoints.length > 5 %}
     {{ govukDetails({
-      summaryText: "View your " + array.length + " abstraction points for " + purposeDescription | lower,
-      html: abstractionPoints | safe,
-      classes: "govuk-!-margin-bottom-0"
+      summaryText: "View your " + abstractionPoints.length + " abstraction points for " + purposeDescription | lower,
+      html: newLine(abstractionPoints) | safe,
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
     }) }}
   {% else %}
-    {{ abstractionPoints | safe }}
+    {{ newLine(abstractionPoints) | safe }}
   {% endif %}
 {% endmacro %}
 
@@ -60,9 +50,8 @@
           classes: "govuk-!-width-one-third"
         },
         value: {
-          html: abstractionPointCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
+        html: abstractionPointsCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
           attributes: { 'data-test': 'abstraction-points-' + rowIndex }
-        }
       }
     %}
 
