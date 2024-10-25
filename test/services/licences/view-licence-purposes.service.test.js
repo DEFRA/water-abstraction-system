@@ -27,6 +27,7 @@ describe('View Licence Purposes service', () => {
       const result = await ViewLicencePurposesService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licencePurposes: [
           {
@@ -34,12 +35,14 @@ describe('View Licence Purposes service', () => {
               '180000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
-              '40.00 cubic metres per second (Instantaneous Quantity)'
+              '40.00 cubic metres per second'
             ],
+            abstractionAmountsTitle: 'Abstraction amounts',
             abstractionPeriod: '1 April to 31 October',
             abstractionPoints: [
               'At National Grid Reference TL 23198 88603'
             ],
+            abstractionPointsTitle: 'Abstraction point',
             purposeDescription: 'Spray Irrigation - Storage'
           }
         ],
