@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../app/models/billing-account.model.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 
 // Thing under test
 const RemoveBillPresenter = require('../../../app/presenters/bills/remove-bill.presenter.js')
@@ -151,7 +151,7 @@ describe('Remove Bill presenter', () => {
 })
 
 function _billSummary () {
-  const billingAccount = BillingAccountHelper.fromJson({
+  const billingAccount = BillingAccountModel.fromJson({
     id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
     accountNumber: 'T65757520A',
     company: {
