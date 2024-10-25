@@ -32,7 +32,7 @@ describe('View Licence Purpose presenter', () => {
               '180000.00 cubic metres per year',
               '720.00 cubic metres per day',
               '144.00 cubic metres per hour',
-              '40.00 cubic metres per second (Instantaneous Quantity)'
+              '40.00 cubic metres per second'
             ],
             abstractionPeriod: '1 April to 31 October',
             abstractionPoints: [
@@ -72,7 +72,7 @@ describe('View Licence Purpose presenter', () => {
             '180000.00 cubic metres per year',
             '720.00 cubic metres per day',
             '144.00 cubic metres per hour',
-            '40.00 cubic metres per second (Instantaneous Quantity)'
+            '40.00 cubic metres per second'
           ])
         })
       })
