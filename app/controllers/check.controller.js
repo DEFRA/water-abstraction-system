@@ -27,9 +27,9 @@ async function flagForBilling (request, h) {
   const { licenceId, expiredDate, lapsedDate, revokedDate } = request.payload
 
   const transformedLicence = {
-    expiredDate,
-    lapsedDate,
-    revokedDate
+    expiredDate: expiredDate ? new Date(expiredDate) : null,
+    lapsedDate: lapsedDate ? new Date(lapsedDate) : null,
+    revokedDate: revokedDate ? new Date(revokedDate) : null
   }
 
   await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
