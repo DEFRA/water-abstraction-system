@@ -26,7 +26,6 @@ describe('Fetch return cycle service', () => {
   let summer
 
   before(async () => {
-    Sinon.restore()
     allYearReturnCycle = await ReturnCycleHelper.select(3, false)
     previousAllYearReturnCycle = await ReturnCycleHelper.select(4, false)
     summerReturnCycle = await ReturnCycleHelper.select(2, true)
