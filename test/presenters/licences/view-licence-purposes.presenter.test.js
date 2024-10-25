@@ -34,6 +34,7 @@ describe('View Licence Purpose presenter', () => {
               '144.00 cubic metres per hour',
               '40.00 cubic metres per second'
             ],
+            abstractionAmountsTitle: 'Abstraction amounts',
             abstractionPeriod: '1 April to 31 October',
             abstractionPoints: [
               'At National Grid Reference TL 23198 88603'
@@ -74,6 +75,30 @@ describe('View Licence Purpose presenter', () => {
             '144.00 cubic metres per hour',
             '40.00 cubic metres per second'
           ])
+        })
+      })
+    })
+
+    describe('the "abstractionAmountsTitle" property', () => {
+      describe('when the licence has one or less values in the abstractionAmounts array', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].annualQuantity = null
+          licence.licenceVersions[0].licenceVersionPurposes[0].dailyQuantity = null
+          licence.licenceVersions[0].licenceVersionPurposes[0].hourlyQuantity = null
+        })
+
+        it('returns the `abstractionAmountsTitle` of "Abstraction amount"', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionAmountsTitle).to.equal('Abstraction amount')
+        })
+      })
+
+      describe('when the licence has more than one value in the abstractionAmounts array', () => {
+        it('returns the `abstractionAmountsTitle` of "Abstraction amounts"', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionAmountsTitle).to.equal('Abstraction amounts')
         })
       })
     })
