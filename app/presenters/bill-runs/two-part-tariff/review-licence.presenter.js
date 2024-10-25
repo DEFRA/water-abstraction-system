@@ -36,42 +36,13 @@ function go (billRun, licence) {
   }
 }
 
-function _accountName (billingAccount) {
-  const accountAddress = billingAccount.billingAccountAddresses[0]
-
-  if (accountAddress.company) {
-    return accountAddress.company.name
-  }
-
-  return billingAccount.company.name
-}
-
-function _addressLines (billingAccount) {
-  const { address } = billingAccount.billingAccountAddresses[0]
-
-  const addressParts = [
-    address.address1,
-    address.address2,
-    address.address3,
-    address.address4,
-    address.address5,
-    address.address6,
-    address.postcode,
-    address.country
-  ]
-
-  return addressParts.filter((part) => {
-    return part
-  })
-}
-
 function _billingAccountDetails (billingAccount) {
   return {
     billingAccountId: billingAccount.id,
     accountNumber: billingAccount.accountNumber,
-    accountName: _accountName(billingAccount),
-    contactName: _contactName(billingAccount),
-    addressLines: _addressLines(billingAccount)
+    accountName: billingAccount.$accountName(),
+    contactName: billingAccount.$contactName(),
+    addressLines: billingAccount.$addressLines()
   }
 }
 
@@ -135,16 +106,6 @@ function _chargeReferenceLink (reviewChargeReference) {
   }
 
   return { linkName: 'View details' }
-}
-
-function _contactName (billingAccount) {
-  const contact = billingAccount.billingAccountAddresses[0].contact
-
-  if (contact) {
-    return contact.$name()
-  }
-
-  return null
 }
 
 function _financialYear (financialYearEnding) {

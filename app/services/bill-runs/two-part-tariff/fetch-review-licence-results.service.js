@@ -7,8 +7,8 @@
 
 const { ref } = require('objection')
 
+const BillingAccountModel = require('../../../models/billing-account.model.js')
 const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchBillingAccountService = require('../../fetch-billing-account.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
 /**
@@ -28,9 +28,13 @@ async function go (billRunId, licenceId) {
   return { billRun, licence }
 }
 
+async function _fetchBillingAccount (billingAccountId) {
+  return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
+}
+
 async function _fetchBillingAccountDetails (reviewChargeVersions) {
   for (const reviewChargeVersion of reviewChargeVersions) {
-    reviewChargeVersion.billingAccountDetails = await FetchBillingAccountService.go(
+    reviewChargeVersion.billingAccountDetails = await _fetchBillingAccount(
       reviewChargeVersion.chargeVersion.billingAccountId
     )
   }
