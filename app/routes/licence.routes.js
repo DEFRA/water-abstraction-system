@@ -44,6 +44,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/purposes',
+    options: {
+      handler: LicencesController.viewLicencePurposes
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/set-up',
     options: {
       handler: LicencesController.viewSetUp,
