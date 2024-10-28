@@ -7,7 +7,7 @@
 
 const ReviewChargeReferenceService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
-const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
+const ReviewLicenceService = require('../services/bill-runs/review/review-licence.service.js')
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 
