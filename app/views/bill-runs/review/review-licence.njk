@@ -1,0 +1,424 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "macros/review-status-tag.njk" import statusTag %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{# Helper for generating both the matched and unmatched returns tables #}
+{% macro returnsTable(matchType, returns) %}
+  {% set caption %}
+    {% if matchType == 'matched' %}
+      Matched returns
+    {% else %}
+      Unmatched returns
+    {% endif %}
+  {% endset %}
+
+  {% set tableRows = [] %}
+  {% for return in returns %}
+    {% set returnIndex = loop.index0 %}
+
+    {% set action %}
+      <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+      <div>{{return.returnPeriod}}</div>
+      <div>{{return.abstractionPeriod}}</div>
+    {% endset %}
+
+    {% set returnSummary %}
+      <div>
+        {{ return.purpose }}
+      </div>
+        {{ return.description }}
+    {% endset %}
+
+    {% set tag %}
+      {{ statusTag(return.returnStatus) }}
+    {% endset %}
+
+    {% set issues = '' %}
+    {% for issue in return.issues %}
+      {% set issues = issues + '<div>' + issue + '</div>' %}
+    {% endfor %}
+
+    {% set tableRow = [
+      {
+        html: action,
+        classes: 'govuk-body-s',
+        attributes: { 'data-test': matchType + '-return-action-' + matchedReturnIndex }
+      },
+      {
+        html: returnSummary,
+        classes: 'govuk-body-s',
+        attributes: { 'data-test': matchType + '-return-summary-' + matchedReturnIndex }
+        },
+      {
+        html: tag,
+        classes: 'govuk-body-s',
+        attributes: { 'data-test': matchType + '-return-status-' + matchedReturnIndex }
+      },
+      {
+        html: "<div>" + return.returnTotal + "</div>" + issues,
+        classes: "govuk-body-s govuk-!-text-align-right",
+        attributes: { 'data-test': matchType + '-return-total-' + matchedReturnIndex}
+      }]
+    %}
+
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+  {% endfor %}
+
+  {# Table displaying details of the returns #}
+  {{ govukTable({
+    caption: caption,
+    captionClasses: "govuk-table__caption--m",
+    attributes: { 'data-test': matchType + '-returns' },
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: 'Return reference and periods'
+      },
+      {
+        text: 'Purpose and description'
+      },
+      {
+        text: 'Status'
+      },
+      {
+        text: 'Return totals Allocated/Total',
+        format: 'numeric',
+        classes: 'width-one-tenth'
+      }
+    ],
+      rows: tableRows
+    }) }}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to review licences',
+      href: '/system/bill-runs/review/' + billRunId
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Licence updated banner #}
+  {% if bannerMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Licence updated',
+      text: bannerMessage
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{pageTitle}}</h1>
+
+      <p class="govuk-body">
+        <span data-test='licence-holder'>Licence holder {{ licence.licenceHolder }} </span>
+        <div>{{ statusTag(licence.status) }}</div>
+      </p>
+    </div>
+  </div>
+
+  {# Licence nav bars #}
+  <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
+    <li class="govuk-summary-list__actions-list-item">
+      <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+        href="/system/licences/{{ licence.licenceId  }}/summary"
+        data-test="summary-link">
+        Summary
+      </a>
+    </li>
+    <li class="govuk-summary-list__actions-list-item">
+      <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+        href="/system/licences/{{ licence.licenceId  }}/returns"
+        data-test="returns-link">
+        Returns
+      </a>
+    </li>
+    <li class="govuk-summary-list__actions-list-item">
+      <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+        href="/system/licences/{{ licence.licenceId  }}/set-up"
+        data-test="charge-information-link">
+        Charge information
+      </a>
+    </li>
+  </ul>
+
+  {# Licence in review text #}
+  {% if elementsInReview === true %}
+    {{ govukInsetText({
+      text: "There are elements in review"
+    }) }}
+  {% endif %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    <div class="govuk-button-group">
+      {# Change status button #}
+      {% if licence.status === 'ready' %}
+        {% set statusButtonText = 'Put licence into review' %}
+        {% set statusButtonValue = 'review' %}
+        {% set statusButtonClass = "govuk-button--secondary" %}
+      {% else %}
+        {% set statusButtonText = 'Confirm licence is ready' %}
+        {% set statusButtonValue = 'ready' %}
+        {% set statusButtonClass = "govuk-button--primary" %}
+      {% endif %}
+
+      {{ govukButton({
+        text: statusButtonText,
+        classes: statusButtonClass,
+        name: "licence-status",
+        value: statusButtonValue,
+        preventDoubleClick: true
+      }) }}
+
+      {# Mark progress button #}
+      {% if licence.progress %}
+        {% set progressButtonText = 'Remove progress mark' %}
+        {% set progressButtonValue = 'unmark' %}
+      {% else %}
+        {% set progressButtonText = 'Mark progress' %}
+        {% set progressButtonValue = 'mark' %}
+      {% endif %}
+
+      {{ govukButton({
+        text: progressButtonText,
+        classes: "govuk-button--secondary",
+        name: "mark-progress",
+        value: progressButtonValue,
+        preventDoubleClick: true
+      }) }}
+
+      {# Remove from bill run button #}
+      {{ govukButton({
+        text: 'Remove from bill run',
+        classes: "govuk-button--secondary",
+        href: "../remove/" + licence.licenceId,
+        preventDoubleClick: true
+      }) }}
+    </div>
+  </form>
+
+  {# Charge Periods (bookmarks) #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
+        <ul class="govuk-list">
+        {% for chargeVersion in chargeVersions %}
+          {% set chargeDateIndex = loop.index0 %}
+            <li>
+              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}" data-test="charge-period-{{ chargeDateIndex }}">{{chargeVersion.chargePeriod}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+  </div>
+
+  <div class="divider govuk-!-margin-bottom-6"></div>
+
+  {# Returns #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
+    </div>
+  </div>
+
+  {% if matchedReturns == 0 and unmatchedReturns == 0 %}
+    {# No Returns #}
+    <h2 class="govuk-heading-m">No two-part tariff returns</h2>
+  {% else %}
+    {# Matched Returns #}
+    {% if matchedReturns.length > 0 %}
+      {{ returnsTable('matched', matchedReturns) }}
+    {% endif %}
+
+    {# Unmatched Returns #}
+    {% if unmatchedReturns.length > 0 %}
+      {{ returnsTable('unmatched', matchedReturns) }}
+    {% endif %}
+  {% endif %}
+
+  <div class="divider govuk-!-margin-bottom-6"></div>
+
+  {# Charge Periods (proper) #}
+  <div class="govuk-grid-row ">
+    <div class="govuk-grid-column-full">
+      {% for chargeVersion in chargeVersions %}
+        {% set chargeVersionIndex = loop.index0 %}
+
+        <div class ="govuk-caption-l" data-test="financial-year">Financial year {{chargeVersion.financialPeriod}}</div>
+        <section id="charge-version-{{chargeVersionIndex}}">
+          <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriod}}</h2>
+        </section>
+
+        <div class="govuk-heading-m govuk-!-margin-bottom-1" data-test="charge-version-{{ chargeVersionIndex }}-details">{{ chargeVersion.description }}</div>
+
+        {# Billing account details #}
+        {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
+        {% set billingAccountText %}
+          <div class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" data-test="billing-account" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></div>
+          <div data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</div>
+
+          {# billing account contact name #}
+          {% if chargeVersion.billingAccountDetails.contactName %}
+            <div data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</div>
+          {% endif %}
+
+          {# billing account address #}
+          <div>
+            {% for addressLine in chargeVersion.billingAccountDetails.addressLines %}
+              {% set addressLineIndex = loop.index0 %}
+              <div data-test="address-line" + addressLineIndex>{{addressLine}}</div>
+            {% endfor %}
+          </div>
+        {% endset%}
+
+        {{ govukDetails({
+          attributes: { 'data-test': 'billing-account-details' },
+          summaryText: chargeVersion.billingAccountDetails.accountName + " billing account details",
+          html: billingAccountText
+        }) }}
+
+        {# Loop through Charge References #}
+        {% for chargeReference in chargeVersion.chargeReferences %}
+          {% set chargeReferenceIndex = loop.index0 %}
+          <div class="govuk-grid-row govuk-!-margin-bottom-3">
+            <div class="govuk-grid-column-full">
+              <div class="govuk-summary-card ">
+                <div class="govuk-summary-card__title-wrapper ">
+                  <h3 class="govuk-summary-card__title">
+                    <span class="govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-reference-{{ chargeReferenceIndex }}">{{chargeReference.chargeCategory}}</span>
+                    <div data-test="charge-version-{{ chargeVersionIndex }}-charge-description-{{ chargeReferenceIndex }}">{{chargeReference.chargeDescription}}</div>
+                  </h3>
+                </div>
+
+                <div class="govuk-summary-card__content govuk-!-padding-top-0">
+                  {% if chargeReference.billableReturnsWarning %}
+                    {{ govukWarningText({
+                      text: "The total billable return volume exceeds the total authorised volume",
+                      iconFallbackText: "Warning"
+                    }) }}
+                  {% endif %}
+
+                  {% set rows = [] %}
+                  {% set row = {
+                    classes: "border-bottom",
+                    key: {
+                      text: "Total billable returns"
+                    },
+                    value: {
+                      html: '<div data-test="charge-version-' + chargeVersionIndex + '-total-billable-returns-' + chargeReferenceIndex + '">' + chargeReference.totalBillableReturns + '</div>'
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: '/system/bill-runs/review/charge-reference/' + chargeReference.id,
+                          text: chargeReference.chargeReferenceLinkTitle,
+                          attributes: { 'data-test': 'charge-version-' + chargeVersionIndex + '-charge-reference-link-' + chargeReferenceIndex }
+                        }
+                      ]
+                    }
+                    }
+                  %}
+
+                  {% set rows = (rows.push(row), rows) %}
+
+                  <div class="govuk-!-margin-top-0">
+                    {{ govukSummaryList({
+                      attributes: { 'data-test': 'charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex },
+                      classes: "govuk-!-margin-bottom-9 govuk-section-break govuk-section-break--visible",
+                      rows: rows
+                    }) }}
+                  </div>
+
+                  {# Loop through charge elements #}
+                  {% for chargeElement in chargeReference.chargeElements %}
+                    {% set chargeElementIndex = loop.index0 %}
+                    {% set elementRows = [] %}
+
+                    <div class="govuk-!-margin-top-6">
+                      <span class="govuk-body govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-count-{{ chargeElementIndex }}">{{chargeElement.elementNumber}}</span>
+                      <span class="float-right" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-status-{{ chargeElementIndex }}">
+                        {{ statusTag(chargeElement.status) }}
+                      </span>
+                      <h3 class="govuk-heading-s govuk-!-margin-bottom-1" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-description-{{ chargeElementIndex }}">{{chargeElement.description}}
+                        <div>
+                          {% for chargePeriod in chargeElement.chargePeriods %}
+                            <div data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-dates-{{ chargeElementIndex }}">{{ chargePeriod }}</div>
+                          {% endfor %}
+                        </div>
+                        {{ chargeElement.purpose }}
+                      </h3>
+
+                      {% set issues = '' %}
+                      {% for issue in chargeElement.issues %}
+                        {% set issues = issues + '<div>' + issue + '</div>' %}
+                      {% endfor %}
+
+                      {% set returnVolumes  = '' %}
+                      {% for returnVolume  in chargeElement.returnVolumes  %}
+                        {% set returnVolumes = returnVolumes + '<div>' + returnVolume  + '</div>' %}
+                      {% endfor %}
+
+                      {# set the element rows in the summary list #}
+                      {% set elementRow = [{
+                          key: {
+                            text: 'Issues'
+                          },
+                          value: {
+                            html: '<div data-test="charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-issues-' + chargeElementIndex + '">' + issues + '</div>'
+                          }
+                        },
+                        {
+                          key: {
+                            text: 'Billable returns'
+                          },
+                          value: {
+                            html: '<div data-test="charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-billable-returns-' + chargeElementIndex + '">' + chargeElement.billableReturns + '</div>'
+                          },
+                          actions: {
+                            items: [
+                            {
+                              href: '/system/bill-runs/review/charge-element/' + chargeElement.id,
+                              html: '<div data-test="charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-match-details-' + chargeElementIndex + '">View match details</div>'
+                            }
+                          ]}
+                        },
+                        {
+                          key: {
+                            text: 'Return volume'
+                          },
+                          value: {
+                            html: '<div data-test="charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-return-volumes-' + chargeElementIndex + '">' + returnVolumes + '</div>'
+                          }
+                        }]
+                      %}
+
+                      {{ govukSummaryList({
+                        attributes: { 'data-test': 'charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-' + chargeElementIndex },
+                        classes: "govuk-!-margin-bottom-9",
+                        rows: elementRow
+                      }) }}
+                    </div>
+                  {% endfor%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor%}
+    </div>
+  </div>
+{% endblock%}
