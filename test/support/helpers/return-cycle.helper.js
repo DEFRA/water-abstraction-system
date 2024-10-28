@@ -81,7 +81,7 @@ function defaults (data = {}) {
  * @returns {object} The selected reference entry or one picked at random
  */
 async function select (index = -1, summer = false) {
-  const returnCycles = await ReturnCycleModel.query().where('summer', summer)
+  const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
 
   if (index > -1) {
     return returnCycles[index]

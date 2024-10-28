@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
+
 // Things we need to stub
 const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
 
@@ -51,6 +54,40 @@ describe('Review Licence Service', () => {
 })
 
 function _fetchReviewLicenceResults () {
+  const billingAccountDetails = BillingAccountModel.fromJson({
+    id: 'a17ae69b-8074-4d27-80bf-074f4c79a05a',
+    accountNumber: 'E88896464A',
+    company: {
+      id: 'e44491db-2b33-4473-9c3a-b57aceabb6e8',
+      name: 'Furland Farm',
+      type: 'organisation'
+    },
+    billingAccountAddresses: [
+      {
+        id: 'eb5cb54a-0b51-4e4a-8472-dab993eb6157',
+        billingAccountId: 'a17ae69b-8074-4d27-80bf-074f4c79a05a',
+        addressId: 'cc32fefd-7f3e-4581-b437-78a3fae66d4b',
+        startDate: new Date('2016-05-20'),
+        endDate: null,
+        companyId: null,
+        contactId: null,
+        company: null,
+        contact: null,
+        address: {
+          id: 'cc32fefd-7f3e-4581-b437-78a3fae66d4b',
+          address1: 'Furland Farm',
+          address2: 'Furland',
+          address3: null,
+          address4: null,
+          address5: 'Crewkerne',
+          address6: 'Somerset',
+          postcode: 'TA18 7TT',
+          country: 'England'
+        }
+      }
+    ]
+  })
+
   return {
     billRun: {
       id: '6620135b-0ecf-4fd4-924e-371f950c0526',
@@ -204,39 +241,7 @@ function _fetchReviewLicenceResults () {
         chargeVersion: {
           billingAccountId: '67d7cacb-5d10-4a08-b7f8-e6ce98cbf4c8'
         },
-        billingAccountDetails: {
-          id: 'a17ae69b-8074-4d27-80bf-074f4c79a05a',
-          accountNumber: 'E88896464A',
-          company: {
-            id: 'e44491db-2b33-4473-9c3a-b57aceabb6e8',
-            name: 'Furland Farm',
-            type: 'organisation'
-          },
-          billingAccountAddresses: [
-            {
-              id: 'eb5cb54a-0b51-4e4a-8472-dab993eb6157',
-              billingAccountId: 'a17ae69b-8074-4d27-80bf-074f4c79a05a',
-              addressId: 'cc32fefd-7f3e-4581-b437-78a3fae66d4b',
-              startDate: new Date('2016-05-20'),
-              endDate: null,
-              companyId: null,
-              contactId: null,
-              company: null,
-              contact: null,
-              address: {
-                id: 'cc32fefd-7f3e-4581-b437-78a3fae66d4b',
-                address1: 'Furland Farm',
-                address2: 'Furland',
-                address3: null,
-                address4: null,
-                address5: 'Crewkerne',
-                address6: 'Somerset',
-                postcode: 'TA18 7TT',
-                country: 'England'
-              }
-            }
-          ]
-        }
+        billingAccountDetails
       }]
     }]
   }
