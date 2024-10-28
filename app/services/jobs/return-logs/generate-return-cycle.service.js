@@ -5,7 +5,7 @@
  * @module GenerateReturnCycleService
  */
 
-const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/dates.lib.js')
+const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
@@ -25,6 +25,12 @@ async function go (summer) {
 function _createReturnCycle (returnCycle) {
   return ReturnCycleModel.query()
     .insert(returnCycle)
+    .onConflict(['startDate', 'endDate', 'summer'])
+    .merge([
+      'dueDate',
+      'submittedInWrls',
+      'updatedAt'
+    ])
 }
 
 function _generateData (summer) {

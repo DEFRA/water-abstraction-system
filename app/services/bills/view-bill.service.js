@@ -5,7 +5,7 @@
  * @module ViewBillService
  */
 
-const FetchBillingAccountService = require('../fetch-billing-account.service.js')
+const BillingAccountModel = require('../../models/billing-account.model.js')
 const FetchBillLicence = require('../bill-licences/fetch-bill-licence.service.js')
 const FetchBillService = require('./fetch-bill-service.js')
 const ViewBillPresenter = require('../../presenters/bills/view-bill.presenter.js')
@@ -31,7 +31,7 @@ const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licen
  */
 async function go (id) {
   const { bill, licenceSummaries } = await FetchBillService.go(id)
-  const billingAccount = await FetchBillingAccountService.go(bill.billingAccountId)
+  const billingAccount = await _fetchBillingAccount(bill.billingAccountId)
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
   // account data
@@ -54,6 +54,10 @@ async function go (id) {
     ...billAndBillingAccountData,
     ...additionalData
   }
+}
+
+async function _fetchBillingAccount (billingAccountId) {
+  return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
 }
 
 module.exports = {

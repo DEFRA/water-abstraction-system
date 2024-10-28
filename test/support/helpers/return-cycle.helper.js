@@ -8,7 +8,6 @@ const { selectRandomEntry } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
-const { data: returnCycles } = require('../../../db/seeds/data/return-cycles.js')
 
 /**
  * Add a new return cycle
@@ -77,10 +76,13 @@ function defaults (data = {}) {
  *
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
+ * @param {boolean} summer - select either a summer or all year one
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+async function select (index = -1, summer = false) {
+  const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
+
   if (index > -1) {
     return returnCycles[index]
   }

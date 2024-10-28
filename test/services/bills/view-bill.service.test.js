@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchBillingAccountService = require('../../../app/services/fetch-billing-account.service.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
 const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
@@ -40,6 +40,11 @@ describe('View Bill service', () => {
             ]
           }
         )
+
+        Sinon.stub(BillingAccountModel, 'query').returns({
+          findById: Sinon.stub().returnsThis(),
+          modify: Sinon.stub().resolves()
+        })
 
         Sinon.stub(ViewBillPresenter, 'go').returns({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -139,7 +144,10 @@ describe('View Bill service', () => {
         }
       )
 
-      Sinon.stub(FetchBillingAccountService, 'go').resolves(undefined)
+      Sinon.stub(BillingAccountModel, 'query').returns({
+        findById: Sinon.stub().returnsThis(),
+        modify: Sinon.stub().resolves(undefined)
+      })
     })
 
     it('throws an exception', async () => {

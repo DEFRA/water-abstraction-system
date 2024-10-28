@@ -13,7 +13,7 @@ const Boom = require('@hapi/boom')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
+const InitiateSessionService = require('../../app/services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const MarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/marked-for-supplementary-billing.service.js')
 const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
@@ -214,7 +214,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
+          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
@@ -272,7 +272,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
+          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
