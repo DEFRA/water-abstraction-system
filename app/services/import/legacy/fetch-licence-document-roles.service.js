@@ -59,7 +59,7 @@ async function _getReturnsTo (regionCode, licenceId) {
 
 async function _getLicenceHolder (regionCode, licenceId) {
   const query = `
-    SELECT
+    SELECT DISTINCT ON (start_date, nalv."ISSUE_NO")
       lr.id as licence_role_id,
       concat_ws(':', nalv."FGAC_REGION_CODE", nalv."ACON_AADD_ID") as address_id,
       concat_ws(':', nalv."FGAC_REGION_CODE", nalv."ACON_APAR_ID") as company_id,
@@ -91,7 +91,8 @@ async function _getLicenceHolder (regionCode, licenceId) {
         ON lr.name = 'licenceHolder'
     WHERE nalv."FGAC_REGION_CODE"=?
       AND nalv."AABL_ID"=?
-      AND nalv."STATUS"<>'DRAFT'`
+      AND nalv."STATUS"<>'DRAFT'
+    ORDER BY nalv."ISSUE_NO", start_date, nalv."INCR_NO" DESC`
 
   const { rows } = await db.raw(query, [regionCode, licenceId])
 
