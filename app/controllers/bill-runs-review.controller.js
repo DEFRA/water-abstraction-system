@@ -5,6 +5,7 @@
  * @module BillRunsReviewController
  */
 
+const ReviewChargeReferenceService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
@@ -17,6 +18,18 @@ async function review (request, h) {
   const pageData = await ReviewBillRunService.go(id, page, request.yar)
 
   return h.view('bill-runs/review/review.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function reviewChargeReference (request, h) {
+  const { reviewChargeReferenceId } = request.params
+
+  const pageData = await ReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
+
+  return h.view('bill-runs/charge-reference-details.njk', {
+    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -51,6 +64,7 @@ async function submitReviewLicence (request, h) {
 
 module.exports = {
   review,
+  reviewChargeReference,
   reviewLicence,
   submitReview,
   submitReviewLicence

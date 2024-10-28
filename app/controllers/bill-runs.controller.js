@@ -12,7 +12,6 @@ const AmendAuthorisedVolumeService = require('../services/bill-runs/two-part-tar
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CalculateChargeService = require('../services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
-const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
@@ -69,18 +68,6 @@ async function cancel (request, h) {
 
   return h.view('bill-runs/cancel.njk', {
     pageTitle: "You're about to cancel this bill run",
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
-async function chargeReferenceDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
-
-  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId, request.yar)
-
-  return h.view('bill-runs/charge-reference-details.njk', {
-    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -264,7 +251,6 @@ module.exports = {
   amendAuthorisedVolume,
   amendBillableReturns,
   cancel,
-  chargeReferenceDetails,
   index,
   matchDetails,
   previewCharge,
