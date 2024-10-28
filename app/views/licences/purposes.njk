@@ -70,21 +70,19 @@
     {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
 
     {# Abstraction amount cell #}
-    {% if licencePurpose.abstractionAmounts.length > 0 %}
-      {% set abstractionAmountsRow = {
-        key: {
-          text: licencePurpose.abstractionAmountsTitle,
-          attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
-        },
-        value: {
-          text: newLine(licencePurpose.abstractionAmounts),
-          attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
-          classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
-        }
-      } %}
+    {% set abstractionAmountsRow = {
+      key: {
+        text: licencePurpose.abstractionAmountsTitle,
+        attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
+      },
+      value: {
+        text: newLine(licencePurpose.abstractionAmounts),
+        attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
+        classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
+      }
+    } %}
 
-      {% set tableRows = (tableRows.push(abstractionAmountsRow), tableRows) %}
-    {% endif %}
+    {% set tableRows = (tableRows.push(abstractionAmountsRow), tableRows) %}
 
     {# Summary card #}
     {{ govukSummaryList({
