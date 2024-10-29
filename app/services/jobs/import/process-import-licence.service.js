@@ -9,7 +9,7 @@ const ProcessLicenceService = require('../../import/legacy/process-licence.servi
 /**
  * Batches all the licences to be imported
  *
- * @param {[String]} licenceRefs - an array of licence ref
+ * @param {string[]} licenceRefs - an array of licence ref
  */
 async function go (licenceRefs) {
   for (const licenceRef of licenceRefs) {
