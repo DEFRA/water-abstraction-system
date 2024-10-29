@@ -10,16 +10,20 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchNaldLicenceRefs = require('../../../../app/services/jobs/import/fetch-nald-licence-ref.service.js')
+const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')
 
 // Thing under test
 const ImportLicence = require('../../../../app/services/jobs/import/import-licence.service.js')
 
 describe('Import Licence Service', () => {
-  let notifierStub
   let stubFetchNaldLicenceIds
+  let stubProcessImportLicence
+  let notifierStub
 
   beforeEach(async () => {
     stubFetchNaldLicenceIds = Sinon.stub(FetchNaldLicenceRefs, 'go').resolves(['12/34/56'])
+    stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').resolves()
+
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
   })
@@ -33,6 +37,7 @@ describe('Import Licence Service', () => {
     await ImportLicence.go()
 
     expect(stubFetchNaldLicenceIds.calledOnce).to.be.true()
+    expect(stubProcessImportLicence.calledOnce).to.be.true()
   })
 
   it('logs the time taken to export the db', async () => {
