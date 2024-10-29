@@ -7,7 +7,9 @@
 const ProcessLicenceService = require('../../import/legacy/process-licence.service.js')
 
 /**
- * Batches all the licences to be imported
+ * Process import licence
+ *
+ * Batches the licences process into small chunks to reduce strain on the system
  *
  * @param {string[]} licenceRefs - an array of licence ref
  */

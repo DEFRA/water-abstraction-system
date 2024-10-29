@@ -49,10 +49,10 @@ describe('Process Import Licence Service', () => {
       expect(stubProcessLicenceService.calledWith((lastLicenceRef))).to.be.true()
     })
 
-    it('should call the process licence service as many times the length of the licence refs array', async () => {
+    it('should process all the licence refs', async () => {
       await ProcessImportLicence.go(licenceRefs)
 
-      expect(stubProcessLicenceService.callCount).to.equal(100)
+      expect(stubProcessLicenceService.callCount).to.equal(licenceRefs.length)
     })
 
     it('should process the expected number of batches', async () => {
@@ -61,7 +61,6 @@ describe('Process Import Licence Service', () => {
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licenceRefs.length / batchSize)
 
-      expect(stubProcessLicenceService.callCount).to.equal(licenceRefs.length)
       expect(stubProcessLicenceService.getCalls().length / batchSize).to.equal(expectedBatches)
     })
   })

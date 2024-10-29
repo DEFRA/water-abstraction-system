@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Fetches all licence refs with at least one licence version not in draft
+ * Fetches all licence refs if at least one licence version is not in draft
  * @module FetchNaldLicenceRefs
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches all licence refs with at least one licence version not in draft
+ * Fetches all licence refs if at least one licence version is not in draft
  *
- * @returns {Promise<string[]>} A list licence refs
+ * @returns {Promise<string[]>} - A list of licence refs
  */
 async function go () {
   const query = `

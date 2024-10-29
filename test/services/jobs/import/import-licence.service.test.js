@@ -33,14 +33,14 @@ describe('Import Licence Service', () => {
     delete global.GlobalNotifier
   })
 
-  it('calls the fetch nald licence refs service', async () => {
+  it('fetches the nald licence data and starts the process to import the licences', async () => {
     await ImportLicence.go()
 
     expect(stubFetchNaldLicenceIds.calledOnce).to.be.true()
     expect(stubProcessImportLicence.calledOnce).to.be.true()
   })
 
-  it('logs the time taken to export the db', async () => {
+  it('logs to highlight the amount of licences being imported', async () => {
     await ImportLicence.go()
 
     const args = notifierStub.omg.firstCall.args
