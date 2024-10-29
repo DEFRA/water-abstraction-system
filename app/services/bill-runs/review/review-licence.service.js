@@ -5,7 +5,7 @@
  * @module ReviewLicenceService
  */
 
-const FetchReviewLicenceService = require('../review/fetch-review-licence.service.js')
+const FetchReviewLicenceService = require('./fetch-review-licence.service.js')
 const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/review-licence.presenter.js')
 
 /**
