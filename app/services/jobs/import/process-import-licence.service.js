@@ -24,9 +24,12 @@ async function go (licenceRefs) {
 }
 
 async function _processBatch (batch) {
-  const boss = batch.map((licenceRef) => { return ProcessLicenceService.go(licenceRef) })
-
-  await Promise.all(boss)
+  await Promise.all(
+    batch.map((
+      licenceRef) => {
+      return ProcessLicenceService.go(licenceRef)
+    })
+  )
 }
 
 module.exports = {
