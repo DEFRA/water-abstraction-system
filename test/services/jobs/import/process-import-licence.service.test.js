@@ -32,12 +32,6 @@ describe('Process Import Licence Service', () => {
     Sinon.restore()
   })
 
-  it('returns complete', async () => {
-    const result = await ProcessImportLicence.go(licenceRefs)
-
-    expect(result).to.equal(true)
-  })
-
   describe('when iterating the licence refs', () => {
     it('should call the process licence service with the first element in the array', async () => {
       await ProcessImportLicence.go(licenceRefs)

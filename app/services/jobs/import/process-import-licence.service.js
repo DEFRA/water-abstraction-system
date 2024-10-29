@@ -19,8 +19,6 @@ async function go (licenceRefs) {
 
     await _processBatch(batch)
   }
-
-  return true
 }
 
 async function _processBatch (batch) {
