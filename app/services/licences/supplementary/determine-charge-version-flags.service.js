@@ -18,8 +18,8 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  *
  * If the scheme is `alcs`, the licence is flagged for pre-sroc supplementary billing
  * If the scheme is `sroc`:
- * - With no two-part tariff indicators: The licence is flagged for Sroc supplementary billing.
- * - With two-part tariff indicators: The licence is flagged for two-part tariff supplementary billing.
+ * - with no two-part tariff indicators: The licence is flagged for Sroc supplementary billing.
+ * - with two-part tariff indicators: The licence is flagged for two-part tariff supplementary billing.
  *
  * NOTE: Unlike pre-sroc and sroc flags (which apply at the licence level), two-part tariff flags are year specific.
  * They are stored in the `LicenceSupplementaryYears` table for each affected year of the charge version
