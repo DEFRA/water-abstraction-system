@@ -16,9 +16,9 @@ const { db } = require('../../../../db/db.js')
  * When processing the flags we have to work out whether to include the licence in sroc supplementary billing or in
  * two-part tariff supplementary billing.
  *
- * NOTE: We do not care about pre sroc charge versions. We are not setting the `include_in_pre_sroc_billing` flag due to
- * using the old billing engine that then generates £0 bill runs. Only our new sroc billing engines can handle £0 bill
- * runs.
+ * NOTE: We do not care about pre sroc charge versions. We are not updating the `include_in_pre_sroc_billing` flag due
+ * to using the old billing engine that then generates £0 bill runs. Only our new sroc billing engines can handle £0
+ * bill runs. We fetch the column so we can persist the flag that is already there.
  *
  * @param {string} workflowId - The UUID for the workflow record related to the licence
  *
@@ -36,8 +36,12 @@ function _query () {
   return `
     SELECT
     l.include_in_sroc_billing,
+    l.include_in_presroc_billing,
     l.id,
     l.region_id,
+    l.expired_date,
+    l.revoked_date,
+    l.lapsed_date,
     EXISTS (
       SELECT 1
       FROM public.charge_versions cv
@@ -59,7 +63,12 @@ function _query () {
       AND ce.section_127_Agreement = TRUE
       AND cr.adjustments->>'s127' = 'true'
     ) AS two_part_tariff_charge_versions,
-    w.created_at
+    w.created_at,
+    CASE
+      WHEN l.lapsed_date <= CURRENT_DATE OR l.revoked_date <= CURRENT_DATE OR l.expired_date <= CURRENT_DATE
+      THEN TRUE
+      ELSE FALSE
+    END AS ended
     FROM licences l
     INNER JOIN workflows w
       ON l.id = w.licence_id
