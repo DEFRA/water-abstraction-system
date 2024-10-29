@@ -21,7 +21,6 @@ const CheckRoutes = require('../routes/check.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
-const ImportRoutes = require('../routes/import.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
@@ -46,8 +45,7 @@ const routes = [
   ...MonitoringStationRoutes,
   ...ReturnVersionsRoutes,
   ...ReturnVersionsSetupRoutes,
-  ...DataRoutes,
-  ...ImportRoutes
+  ...DataRoutes
 ]
 
 const RouterPlugin = {
