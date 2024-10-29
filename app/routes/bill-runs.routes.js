@@ -104,30 +104,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
-    options: {
-      handler: BillRunsController.amendAdjustmentFactor,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
-    options: {
-      handler: BillRunsController.submitAmendedAdjustmentFactor,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     options: {
       handler: BillRunsController.matchDetails,
