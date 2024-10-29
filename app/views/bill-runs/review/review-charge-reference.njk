@@ -33,9 +33,9 @@
 {# Title area #}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l" data-test="charge-reference">Charge reference {{chargeCategory}}</span><span data-test="charge-reference-description">{{chargeDescription}}</span>
-      </h1>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l" data-test="charge-reference">Charge reference {{chargeCategory}}</span><span data-test="charge-reference-description">{{chargeDescription}}</span>
+    </h1>
     <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialPeriod}}</span>
     <h2 class="govuk-heading-m" data-test="charge-period">
       Charge period {{chargePeriod}}
@@ -79,7 +79,7 @@
           text: "Change the authorised volume",
           classes: "govuk-button--secondary",
           preventDoubleClick: true,
-          href: "/system/bill-runs/charge-reference/" + reviewChargeReferenceId + "/authorised"
+          href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/authorised"
         }) }}
       </span>
     {% endif %}
@@ -89,7 +89,7 @@
         text: "Preview the charge",
         classes: "govuk-button--secondary",
         preventDoubleClick: true,
-        href: "/system/bill-runs/charge-reference/" + reviewChargeReferenceId + "/preview"
+        href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/preview"
       }) }}
     </span>
   </div>
@@ -111,7 +111,7 @@
       {% if canAmend %}
         {% set showLink = {
           items: [{
-              href: "/system/bill-runs/charge-reference/" + reviewChargeReferenceId + "/factors",
+              href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/factors",
               text: "Change factors"
             }]
           }
