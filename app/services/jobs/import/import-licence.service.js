@@ -20,11 +20,11 @@ async function go () {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licenceRefs = await FetchNaldLicenceRefs.go()
+    const licences = await FetchNaldLicenceRefs.go()
 
-    ProcessImportLicence.go(licenceRefs)
+    ProcessImportLicence.go(licences)
 
-    calculateAndLogTimeTaken(startTime, `Importing ${licenceRefs.length} licences from NALD`)
+    calculateAndLogTimeTaken(startTime, `Importing ${licences.length} licences from NALD`)
   } catch (error) {
     global.GlobalNotifier.omfg('Importing Licence job failed', null, error)
   }

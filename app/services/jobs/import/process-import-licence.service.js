@@ -4,7 +4,9 @@
  * Process import licence
  * @module ProcessImportLicence
  */
+
 const ProcessLicenceService = require('../../import/legacy/process-licence.service.js')
+const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
  * Process import licence
@@ -16,11 +18,15 @@ const ProcessLicenceService = require('../../import/legacy/process-licence.servi
 async function go (licences) {
   const batchSize = 10
 
+  const startTime = currentTimeInNanoseconds()
+
   for (let i = 0; i < licences.length; i += batchSize) {
     const batch = licences.slice(i, i + batchSize)
 
     await _processBatch(batch)
   }
+
+  calculateAndLogTimeTaken(startTime, `Finished importing ${licences.length} licences from NALD`)
 }
 
 async function _processBatch (batch) {
