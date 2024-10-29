@@ -24,8 +24,8 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  *
  * @param {string} chargeVersionId - The UUID for the charge version to fetch
  *
- * @returns {object} - An object containing the related licence, charge version start and end date and if the licence
- * should be flagged for two-part tariff supplementary billing
+ * @returns {object} - An object containing the related licenceId, regionId, charge version start and end date and
+ * licence supplementary billing flags
  */
 async function go (chargeVersionId) {
   const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
