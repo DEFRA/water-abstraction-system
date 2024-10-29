@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches all licence refs with at least one licence version not in draft
  *
- * @returns {Promise<[String]>} A list licence refs
+ * @returns {Promise<string[]>} A list licence refs
  */
 async function go () {
   const query = `
