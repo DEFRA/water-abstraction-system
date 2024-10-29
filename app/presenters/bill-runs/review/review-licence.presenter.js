@@ -7,7 +7,7 @@
 
 const Big = require('big.js')
 
-const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 
 /**
@@ -163,7 +163,7 @@ function _chargeVersions (reviewChargeVersions, toFinancialYearEnding) {
       chargePeriod: `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`,
       chargeReferences: _chargeReferences(reviewChargeReferences, chargePeriod),
       description: _chargeVersionDescription(reviewChargeReferences),
-      financialPeriod: _financialYear(toFinancialYearEnding)
+      financialPeriod: formatFinancialYear(toFinancialYearEnding)
     }
   })
 }
@@ -182,13 +182,6 @@ function _elementsInReview (reviewChargeVersions) {
       })
     })
   })
-}
-
-function _financialYear (financialYearEnding) {
-  const startYear = financialYearEnding - 1
-  const endYear = financialYearEnding
-
-  return `${startYear} to ${endYear}`
 }
 
 function _formatReviewReturns (reviewReturns) {
