@@ -220,7 +220,7 @@ describe('Fetch Charge Versions service', () => {
 
       // We test that related data is returned in the results. So, we create and link it to the srocChargeVersion
       // ready for testing
-      chargeCategory = await ChargeCategoryHelper.add()
+      chargeCategory = ChargeCategoryHelper.select()
 
       chargeReference2024 = await ChargeReferenceHelper.add({
         chargeVersionId: sroc2024ChargeVersion.id,

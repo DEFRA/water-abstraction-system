@@ -28,6 +28,8 @@ describe('View Licence presenter', () => {
 
       expect(result).to.equal({
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+        ends: null,
+        includeInPresrocBilling: 'no',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceName: 'Between two ferns',
         licenceRef: '01/123',
@@ -45,17 +47,31 @@ describe('View Licence presenter', () => {
   })
 
   describe('the "licenceName" property', () => {
-    describe('when the primary user has added a custom name for the licence', () => {
-      it('returns the licence name', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+    describe('when the licence has a primary user (registered user)', () => {
+      describe('and they have added a custom name for the licence', () => {
+        it('returns the licence name', () => {
+          const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.licenceName).to.equal('Between two ferns')
+          expect(result.licenceName).to.equal('Between two ferns')
+        })
+      })
+
+      describe('but they have not added a custom name for the licence', () => {
+        beforeEach(() => {
+          licence.licenceDocumentHeader.licenceName = null
+        })
+
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence, auth)
+
+          expect(result.licenceName).to.be.null()
+        })
       })
     })
 
-    describe('when the primary user has not added a custom name for the licence', () => {
+    describe('when the licence does not have a primary user (registered user)', () => {
       beforeEach(() => {
-        licence.licenceDocumentHeader.licenceName = null
+        licence.licenceDocumentHeader.licenceEntityRole = null
       })
 
       it('returns "Unregistered licence"', () => {
@@ -67,7 +83,7 @@ describe('View Licence presenter', () => {
   })
 
   describe('the "notification" property', () => {
-    describe('when the licence has NOT been flagged for either supplementary bill run', () => {
+    describe('when the licence has NOT been flagged for any supplementary bill runs', () => {
       it('returns "null"', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
@@ -109,6 +125,58 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
         expect(result.notification).to.equal('This licence has been marked for the next supplementary bill runs for the current and old charge schemes.')
+      })
+    })
+
+    describe('when the licence has been flagged just for the next TPT supplementary bill run', () => {
+      beforeEach(() => {
+        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+      })
+
+      it('returns a notification just for TPT supplementary', () => {
+        const result = ViewLicencePresenter.go(licence, auth)
+
+        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run.')
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT & PRESROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns a notification for TPT & PRESROC supplementary', () => {
+        const result = ViewLicencePresenter.go(licence, auth)
+
+        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.')
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT & SROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification for TPT & SROC supplementary', () => {
+        const result = ViewLicencePresenter.go(licence, auth)
+
+        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.')
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT, PRESROC & SROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeInPresrocBilling = 'yes'
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
+        const result = ViewLicencePresenter.go(licence, auth)
+
+        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.')
       })
     })
   })
@@ -278,6 +346,7 @@ function _licence () {
         }
       }
     },
+    licenceSupplementaryYears: [],
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
 

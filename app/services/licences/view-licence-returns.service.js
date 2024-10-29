@@ -16,7 +16,7 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {object} page - The current page for the pagination service
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
@@ -26,7 +26,7 @@ async function go (licenceId, auth, page) {
   const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
 
   const returnsData = await FetchLicenceReturnsService.go(licenceId, page)
-  const pageData = ViewLicenceReturnsPresenter.go(returnsData.returns, hasRequirements)
+  const pageData = ViewLicenceReturnsPresenter.go(returnsData.returns, hasRequirements, auth)
 
   const pagination = PaginatorPresenter.go(returnsData.pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 

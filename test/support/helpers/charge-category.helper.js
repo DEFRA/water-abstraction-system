@@ -4,85 +4,32 @@
  * @module ChargeCategoryHelper
  */
 
-const ChargeCategoryModel = require('../../../app/models/charge-category.model.js')
-const { randomInteger } = require('../general.js')
+const { data: chargeCategories } = require('../../../db/seeds/data/charge-categories.js')
+const { selectRandomEntry } = require('../general.js')
 
 /**
- * Add a new charge category
+ * Select an entry from the reference data entries seeded at the start of testing
  *
- * If no `data` is provided, default values will be used. These are
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
  *
- * - `reference` - [randomly generated - 4.4.5]
- * - `subsistenceCharge` - 12000
- * - `description` - Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year,
- *    where a Tier 1 model applies.
- * - `shortDescription` - Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model
- * - `tidal` - false
- * - `lossFactor` - low
- * - `modelTier` - tier 1
- * - `restrictedSource` - true
- * - `minVolume` - 0
- * - `maxVolume` - 5000,
- * - `dateCreated` - Date.now()
+ * So, they are seeded automatically when tests are run. Tests that need to link to a record can use this method to
+ * select a specific entry, or have it return one at random.
  *
- * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
+ * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
+ * random from the reference data
  *
- * @returns {Promise<module:ChargeCategoryModel>} The instance of the newly created record
+ * @returns {object} The selected reference entry or one picked at random
  */
-function add (data = {}) {
-  const insertData = defaults(data)
-
-  return ChargeCategoryModel.query()
-    .insert({ ...insertData })
-    .returning('*')
-}
-
-/**
- * Returns the defaults used
- *
- * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
- * for use in tests to avoid having to duplicate values.
- *
- * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
- *
- * @returns {object} - Returns the set defaults with the override data spread
- */
-function defaults (data = {}) {
-  const defaults = {
-    reference: generateChargeReference(),
-    subsistenceCharge: 12000,
-    description: 'Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year, where a Tier 1 model applies.',
-    shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-    tidal: false,
-    lossFactor: 'low',
-    modelTier: 'tier 1',
-    restrictedSource: true,
-    minVolume: 0,
-    maxVolume: 5000,
-    // INFO: The billing_charge_categories table does not have a default for the date_created column. But it is set as
-    // 'not nullable'! So, we need to ensure we set it when creating a new record, something we'll never actually need
-    // to do because it's a static table. Also, we can't use Date.now() because Javascript returns the time since the
-    // epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold the seconds since the epoch. Pass it
-    // an ISO string though ('2023-01-05T08:37:05.575Z') and PostgreSQL can do the conversion
-    // https://stackoverflow.com/a/61912776/6117745
-    createdAt: new Date().toISOString()
+function select (index = -1) {
+  if (index > -1) {
+    return chargeCategories[index]
   }
 
-  return {
-    ...defaults,
-    ...data
-  }
-}
-
-function generateChargeReference () {
-  const secondPart = randomInteger(1, 6)
-  const thirdPart = randomInteger(1, 42)
-
-  return `4.${secondPart}.${thirdPart}`
+  return selectRandomEntry(chargeCategories)
 }
 
 module.exports = {
-  add,
-  defaults,
-  generateChargeReference
+  data: chargeCategories,
+  select
 }

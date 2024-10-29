@@ -36,6 +36,16 @@ function formatStandardDateToISO (date) {
 }
 
 /**
+ * Formate the provided date in ISO format.
+ *
+ * @param {Date} date - a date object to be formatted
+ * @returns {Date} - the date formatted in YYYY-MM-DD.
+ */
+function formatDateObjectToISO (date) {
+  return date.toISOString().split('T')[0]
+}
+
+/**
  * Check if a date is valid or not by creating a date and checking it gives the time
  *
  * @param {dateString | undefined } dateString - The date in the iso format 2001-01-01
@@ -104,6 +114,7 @@ function _isLeapYear (year) {
 }
 
 module.exports = {
+  formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
   isValidDate

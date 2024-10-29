@@ -12,11 +12,13 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
  * @param {boolean} hasRequirements - True if the licence has return requirements else false
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
  */
-function go (returnLogs, hasRequirements) {
-  const returns = _returns(returnLogs)
+function go (returnLogs, hasRequirements, auth) {
+  const canManageReturns = auth.credentials.scope.includes('returns')
+  const returns = _returns(returnLogs, canManageReturns)
 
   const hasReturns = returns.length > 0
 
@@ -26,12 +28,16 @@ function go (returnLogs, hasRequirements) {
   }
 }
 
-function _link (status, returnLogId) {
-  if (status === 'completed') {
+function _link (status, returnLogId, canManageReturns) {
+  if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }
 
-  return `/return/internal?returnId=${returnLogId}`
+  if (canManageReturns) {
+    return `/return/internal?returnId=${returnLogId}`
+  }
+
+  return null
 }
 
 function _noReturnsMessage (hasReturns, hasRequirements) {
@@ -52,15 +58,15 @@ function _purpose (purpose) {
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
 }
 
-function _returns (returns) {
+function _returns (returns, canManageReturns) {
   return returns.map((returnLog) => {
     const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate, status } = returnLog
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
-      description: metadata.description,
+      description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: formatLongDate(new Date(dueDate)),
-      link: _link(status, returnLogId),
+      link: _link(status, returnLogId, canManageReturns),
       purpose: _purpose(metadata.purposes),
       reference: returnReference,
       returnLogId,
@@ -80,6 +86,10 @@ function _status (returnLog) {
 
   // Work out if the return is overdue (status is still 'due' and it is past the due date)
   const today = new Date()
+
+  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
+  // 'today' would be flagged as overdue when it is still due (just!)
+  today.setHours(0, 0, 0, 0)
 
   if (status === 'due' && dueDate < today) {
     return 'overdue'

@@ -6,7 +6,10 @@
 
 const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const LicenceVersionPurposeModel = require('../../../app/models/licence-version-purpose.model.js')
+const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
+const PurposeHelper = require('./purpose.helper.js')
 const { randomInteger } = require('../general.js')
+const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
 
 /**
  * Add a new licence version purpose
@@ -19,9 +22,9 @@ const { randomInteger } = require('../general.js')
  * - `abstractionPeriodEndMonth` - [3]
  * - `externalId` - [randomly generated - 9:99999]
  * - `licenceVersionId` - [random UUID]
- * - `primaryPurposeId` - [random UUID]
- * - `purposeId` - [random UUID]
- * - `secondaryPurposeId` - [random UUID]
+ * - `primaryPurposeId` - [randomly selected UUID from primary purposes]
+ * - `purposeId` - [randomly selected UUID from purposes]
+ * - `secondaryPurposeId` - [randomly selected UUID from secondary purposes]
  * - `created` - new Date()
  * - `updated` - new Date()
  *
@@ -48,6 +51,9 @@ async function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
+  const { id: primaryPurposeId } = PrimaryPurposeHelper.select()
+  const { id: purposeId } = PurposeHelper.select()
+  const { id: secondaryPurposeId } = SecondaryPurposeHelper.select()
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -57,9 +63,9 @@ function defaults (data = {}) {
     abstractionPeriodEndMonth: 3,
     externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId: generateUUID(),
-    primaryPurposeId: generateUUID(),
-    purposeId: generateUUID(),
-    secondaryPurposeId: generateUUID(),
+    primaryPurposeId,
+    purposeId,
+    secondaryPurposeId,
     // INFO: The table does not have a default for the date columns
     createdAt: timestamp,
     updatedAt: timestamp
@@ -71,6 +77,11 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Returns a randomly generated licence version purpose external id
+ *
+ * @returns {string} - A randomly generated external id
+ */
 function generateLicenceVersionPurposeExternalId () {
   return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}`
 }

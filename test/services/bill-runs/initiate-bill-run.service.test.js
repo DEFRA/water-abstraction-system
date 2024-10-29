@@ -10,14 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const DatabaseSupport = require('../../support/database.js')
-const EventModel = require('../../../app/models/event.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleCreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
+const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
 const DetermineBlockingBillRunService = require('../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
-const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 
 // Thing under test
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
@@ -30,15 +28,11 @@ describe('Initiate Bill Run service', () => {
   let regionId
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     const region = RegionHelper.select()
 
     regionId = region.id
 
-    // The InitiateBillRun service does not await the call to the ProcessBillRunService. It is intended to
-    // kick of the process and then move on. This is why we simply stub it in the tests.
-    Sinon.stub(SupplementaryProcessBillRunService, 'go')
+    Sinon.stub(CreateBillRunEventService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -72,28 +66,25 @@ describe('Initiate Bill Run service', () => {
     })
 
     it('creates a new bill run record', async () => {
-      await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
+      const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const result = await BillRunModel.query().limit(1).first()
+      const billRun = await BillRunModel.query().findById(result.id)
 
-      expect(result.externalId).to.equal(responseBody.billRun.id)
-      expect(result.billRunNumber).to.equal(responseBody.billRun.billRunNumber)
+      expect(billRun.externalId).to.equal(responseBody.billRun.id)
+      expect(billRun.billRunNumber).to.equal(responseBody.billRun.billRunNumber)
     })
 
     it('creates a new event record', async () => {
       await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const count = await EventModel.query().resultSize()
-
-      expect(count).to.equal(1)
+      expect(CreateBillRunEventService.go.called).to.be.true()
     })
 
     it('returns the new bill run', async () => {
       const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const billRun = await BillRunModel.query().limit(1).first()
+      const billRun = await BillRunModel.query().findById(result.id)
 
-      expect(result.id).to.equal(billRun.id)
       expect(result.regionId).to.equal(billRun.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
@@ -127,9 +118,8 @@ describe('Initiate Bill Run service', () => {
       it('creates a bill run with "error" status and error code 50', async () => {
         const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-        const billRun = await BillRunModel.query().limit(1).first()
+        const billRun = await BillRunModel.query().findById(result.id)
 
-        expect(result.id).to.equal(billRun.id)
         expect(result.regionId).to.equal(billRun.regionId)
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')

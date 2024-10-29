@@ -11,7 +11,6 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
@@ -90,8 +89,6 @@ describe('Reissue Bill service', () => {
   let sourceBill
 
   beforeEach(async () => {
-    await DatabaseSupport.clean()
-
     reissueBillRun = { externalId: generateUUID() }
 
     Sinon.stub(ChargingModuleReissueBillRequest, 'send')
@@ -156,7 +153,9 @@ describe('Reissue Bill service', () => {
     sourceBill = await sourceBill.$query().withGraphFetched('billLicences.transactions')
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await sourceBill.$query().delete()
+
     Sinon.restore()
   })
 

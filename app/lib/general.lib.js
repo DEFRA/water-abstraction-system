@@ -116,43 +116,6 @@ function flashNotification (yar, title = 'Updated', text = 'Changes made') {
 }
 
 /**
- * Generate a string that represents an abstraction point
- *
- * When abstracting water the point at which this is done can be described in several ways depending on the number of
- * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
- * a string that defines the details of the abstraction point.
- *
- * @param {object} pointDetail - Object containing all the details for the point
- *
- * @returns {string} a description of the abstraction point
- */
-function generateAbstractionPointDetail (pointDetail) {
-  let abstractionPoint = null
-
-  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
-    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
-
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-
-    abstractionPoint = `At National Grid Reference ${point1}`
-  }
-
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
-
-  return abstractionPoint
-}
-
-/**
  * Generate a Universally Unique Identifier (UUID)
  *
  * The service uses these as the IDs for most records in the DB. Most tables will automatically generate them when
@@ -294,7 +257,6 @@ module.exports = {
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
   flashNotification,
-  generateAbstractionPointDetail,
   generateUUID,
   periodsOverlap,
   timestampForPostgres,

@@ -80,12 +80,10 @@ describe('Load service', () => {
       })
 
       describe('that includes an entity instance with a lookup', () => {
-        let chargeCategoryId
+        let chargeCategory
 
-        beforeEach(async () => {
-          const { id } = await ChargeCategoryHelper.add({ reference: '4.2.1' })
-
-          chargeCategoryId = id
+        beforeEach(() => {
+          chargeCategory = ChargeCategoryHelper.select()
 
           payload = {
             chargeReferences: [
@@ -93,7 +91,13 @@ describe('Load service', () => {
                 id: 'fa3c73d0-0459-41f0-b6cf-0e0758775ca4',
                 chargeVersionId: '8e5626ee-5e4c-48f6-a668-471d35997e2c',
                 description: 'SROC Charge Reference 01',
-                chargeCategoryId: { schema: 'public', table: 'chargeCategories', lookup: 'reference', value: '4.2.1', select: 'id' }
+                chargeCategoryId: {
+                  schema: 'public',
+                  table: 'chargeCategories',
+                  lookup: 'reference',
+                  value: chargeCategory.reference,
+                  select: 'id'
+                }
               }
             ]
           }
@@ -104,7 +108,7 @@ describe('Load service', () => {
 
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
-          expect(chargeReference.chargeCategoryId).to.equal(chargeCategoryId)
+          expect(chargeReference.chargeCategoryId).to.equal(chargeCategory.id)
         })
       })
 

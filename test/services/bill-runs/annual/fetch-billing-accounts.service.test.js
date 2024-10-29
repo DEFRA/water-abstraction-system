@@ -40,7 +40,7 @@ describe('Fetch Billing Accounts service', () => {
     minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
   })
 
-  describe('when there are no billing accounts that should be considered for the annual bill run', () => {
+  describe('when the billing account should NOT be considered for the annual bill run', () => {
     before(() => {
       region = RegionHelper.select(REGION_MIDLANDS_INDEX)
     })
@@ -59,10 +59,14 @@ describe('Fetch Billing Accounts service', () => {
         })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -75,10 +79,14 @@ describe('Fetch Billing Accounts service', () => {
         })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -94,10 +102,14 @@ describe('Fetch Billing Accounts service', () => {
         })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -113,10 +125,14 @@ describe('Fetch Billing Accounts service', () => {
         })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -128,10 +144,14 @@ describe('Fetch Billing Accounts service', () => {
         await ChargeVersionHelper.add({ billingAccountId: billingAccount.id, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -143,10 +163,14 @@ describe('Fetch Billing Accounts service', () => {
         await ChargeVersionHelper.add({ billingAccountId: billingAccount.id, licenceId })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
 
@@ -156,10 +180,14 @@ describe('Fetch Billing Accounts service', () => {
         await WorkflowHelper.add({ licenceId: licence.id })
       })
 
-      it('returns empty results', async () => {
+      it('does not return the billing account', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        expect(results).to.be.empty()
+        const hasBillingAccountId = results.some((result) => {
+          return result.id === billingAccount.id
+        })
+
+        expect(hasBillingAccountId).to.be.false()
       })
     })
   })
@@ -185,28 +213,33 @@ describe('Fetch Billing Accounts service', () => {
         }
       )
 
-      chargeCategory = await ChargeCategoryHelper.add()
+      chargeCategory = ChargeCategoryHelper.select()
       chargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: chargeVersion.id, chargeCategoryId: chargeCategory.id
       })
       chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
     })
 
-    it('returns the applicable billing accounts', async () => {
+    it('returns the applicable billing account', async () => {
       const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-      expect(results).to.have.length(1)
+      const billingAccountRecord = results.find((result) => {
+        return result.id === billingAccount.id
+      })
 
-      expect(results[0]).to.be.instanceOf(BillingAccountModel)
-      expect(results[0].id).to.equal(billingAccount.id)
-      expect(results[0].accountNumber).to.equal(billingAccount.accountNumber)
+      expect(billingAccountRecord).to.be.instanceOf(BillingAccountModel)
+      expect(billingAccountRecord.accountNumber).to.equal(billingAccount.accountNumber)
     })
 
     describe('that have applicable related charge versions', () => {
       it('includes the charge versions in each result', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        const { chargeVersions } = results[0]
+        const billingAccountRecord = results.find((result) => {
+          return result.id === billingAccount.id
+        })
+
+        const { chargeVersions } = billingAccountRecord
 
         expect(chargeVersions[0].id).to.equal(chargeVersion.id)
         expect(chargeVersions[0].scheme).to.equal('sroc')
@@ -219,7 +252,11 @@ describe('Fetch Billing Accounts service', () => {
       it('includes the licence and region in each result', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        const { licence } = results[0].chargeVersions[0]
+        const billingAccountRecord = results.find((result) => {
+          return result.id === billingAccount.id
+        })
+
+        const { licence } = billingAccountRecord.chargeVersions[0]
 
         expect(licence.id).to.equal(licence.id)
         expect(licence.licenceRef).to.equal(licence.licenceRef)
@@ -233,7 +270,11 @@ describe('Fetch Billing Accounts service', () => {
       it('includes the change reason in each result', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        const { changeReason } = results[0].chargeVersions[0]
+        const billingAccountRecord = results.find((result) => {
+          return result.id === billingAccount.id
+        })
+
+        const { changeReason } = billingAccountRecord.chargeVersions[0]
 
         expect(changeReason.id).to.equal(changeReason.id)
         expect(changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
@@ -242,7 +283,11 @@ describe('Fetch Billing Accounts service', () => {
       it('includes the charge references, charge category and charge elements in each result', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        const { chargeReferences } = results[0].chargeVersions[0]
+        const billingAccountRecord = results.find((result) => {
+          return result.id === billingAccount.id
+        })
+
+        const { chargeReferences } = billingAccountRecord.chargeVersions[0]
 
         expect(chargeReferences).to.have.length(1)
 
@@ -259,7 +304,7 @@ describe('Fetch Billing Accounts service', () => {
           chargeCategory: {
             id: chargeCategory.id,
             reference: chargeCategory.reference,
-            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
+            shortDescription: chargeCategory.shortDescription
           },
           chargeElements: [{
             id: chargeElement.id,
@@ -288,7 +333,11 @@ describe('Fetch Billing Accounts service', () => {
       it('excludes the charge versions in each result', async () => {
         const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
 
-        const { chargeVersions } = results[0]
+        const billingAccountRecord = results.find((result) => {
+          return result.id === billingAccount.id
+        })
+
+        const { chargeVersions } = billingAccountRecord
 
         expect(chargeVersions.length).to.equal(1)
         expect(chargeVersions[0].id).to.equal(chargeVersion.id)

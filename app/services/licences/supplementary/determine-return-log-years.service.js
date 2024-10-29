@@ -8,6 +8,7 @@
 const { ref } = require('objection')
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
+const LicenceModel = require('../../../models/licence.model.js')
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -35,6 +36,13 @@ async function go (returnLogId) {
   }
 
   if (startDate < SROC_START_DATE) {
+    // As the returns start date is before the SROC start date, we need to flag the return for pre sroc billing
+    await _flagLicenceForPreSrocSupplementary(licence.id)
+  }
+
+  if (endDate < SROC_START_DATE) {
+    // If the end date of the return is before the start of SROC then we do not need to flag the licence for sroc
+    // supplementary billing
     return result
   }
 
@@ -61,6 +69,12 @@ async function _fetchReturnLog (returnLogId) {
         'regionId'
       ])
     })
+}
+
+async function _flagLicenceForPreSrocSupplementary (licenceId) {
+  return LicenceModel.query()
+    .patch({ includeInPresrocBilling: 'yes' })
+    .where('id', licenceId)
 }
 
 module.exports = {

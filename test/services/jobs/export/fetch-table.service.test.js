@@ -4,47 +4,35 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Test helpers
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 
 // Thing under test
 const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
 
-const billingChargeCategoriesColumnInfo = [
-  'billingChargeCategoryId',
-  'reference',
-  'subsistenceCharge',
-  'description',
-  'shortDescription',
-  'isTidal',
-  'lossFactor',
-  'modelTier',
-  'isRestrictedSource',
-  'minVolume',
-  'maxVolume',
+const regionsColumnInfo = [
+  'regionId',
+  'chargeRegionId',
+  'naldRegionId',
+  'name',
+  'displayName',
+  'isTest',
   'dateCreated',
   'dateUpdated'
 ]
 
 describe('Fetch table service', () => {
-  beforeEach(async () => {
-    await ChargeCategoryHelper.add()
-  })
-
   describe('when we connect to the db', () => {
-    const tableName = 'billing_charge_categories'
+    const tableName = 'regions'
     const schemaName = 'water'
 
     it('returns the table column names', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
-      expect(result.headers).to.equal(billingChargeCategoriesColumnInfo)
+      expect(result.headers).to.equal(regionsColumnInfo)
     })
 
-    it('returns the query to fetch the billing-charge-categories table', async () => {
+    it('returns the query to fetch the regions table', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
       expect(result.rows).to.be.an.instanceof(Promise)

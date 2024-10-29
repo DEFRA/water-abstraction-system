@@ -18,50 +18,58 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (licence, auth) {
   const {
     id,
+    includeInPresrocBilling,
     licenceDocumentHeader,
     licenceRef,
     workflows
   } = licence
 
   const primaryUser = licence.$primaryUser()
+  const ends = licence.$ends()
 
   return {
     documentId: licenceDocumentHeader.id,
+    ends,
+    includeInPresrocBilling,
     licenceId: id,
-    licenceName: _licenceName(licence),
+    licenceName: _licenceName(primaryUser, licence),
     licenceRef,
     notification: _notification(licence),
     pageTitle: `Licence ${licenceRef}`,
     primaryUser,
     roles: _roles(auth),
-    warning: _warning(licence),
+    warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
 }
 
-function _licenceName (licence) {
-  const licenceName = licence.$licenceName()
-
-  if (licenceName) {
-    return licenceName
+function _licenceName (primaryUser, licence) {
+  if (!primaryUser) {
+    return 'Unregistered licence'
   }
 
-  return 'Unregistered licence'
+  const licenceName = licence.$licenceName()
+
+  return licenceName ?? null
 }
 
 function _notification (licence) {
-  const { includeInPresrocBilling, includeInSrocBilling } = licence
-  const baseMessage = 'This licence has been marked for the next supplementary bill run'
+  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
+  const baseMessage = 'This licence has been marked for the next '
+
+  if (licenceSupplementaryYears.length > 0) {
+    return _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling)
+  }
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return baseMessage + 's for the current and old charge schemes.'
+    return baseMessage + 'supplementary bill runs for the current and old charge schemes.'
   }
   if (includeInPresrocBilling === 'yes') {
-    return baseMessage + ' for the old charge scheme.'
+    return baseMessage + 'supplementary bill run for the old charge scheme.'
   }
 
   if (includeInSrocBilling === true) {
-    return baseMessage + '.'
+    return baseMessage + 'supplementary bill run.'
   }
 
   return null
@@ -73,9 +81,23 @@ function _roles (auth) {
   })
 }
 
-function _warning (licence) {
+function _tptNotification (baseMessage, includeInPresrocBilling, includeInSrocBilling) {
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
+  }
+
+  return baseMessage + 'two-part tariff supplementary bill run.'
+}
+
+function _warning (ends) {
   const today = new Date()
-  const ends = licence.$ends()
 
   if (!ends || ends.date > today) {
     return null

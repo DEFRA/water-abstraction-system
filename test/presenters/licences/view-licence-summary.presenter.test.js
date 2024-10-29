@@ -3,12 +3,15 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const PointModel = require('../../../app/models/point.model.js')
 
 // Thing under test
 const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
@@ -18,6 +21,8 @@ describe('View Licence Summary presenter', () => {
 
   beforeEach(() => {
     licence = _licence()
+    Sinon.stub(FeatureFlagsConfig, 'enableLicencePurposesView').value(true)
+    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
   })
 
   describe('when provided with a populated licence', () => {
@@ -35,6 +40,8 @@ describe('View Licence Summary presenter', () => {
         abstractionPointsLinkText: 'View details of the abstraction point',
         activeTab: 'summary',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+        enableLicencePurposesView: true,
+        enableMonitoringStationsView: true,
         endDate: null,
         licenceHolder: 'Unregistered licence',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
@@ -80,6 +87,15 @@ describe('View Licence Summary presenter', () => {
           hourlyQuantity: null,
           instantQuantity: null,
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          points: [PointModel.fromJson({
+            id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+            description: null,
+            ngr1: 'TL 23198 88603',
+            ngr2: null,
+            ngr3: null,
+            ngr4: null,
+            source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+          })],
           licenceVersionPurposeConditions: [
             {
               id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
@@ -149,7 +165,7 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the there are multiple licence version purposes', () => {
+    describe('when there are multiple licence version purposes', () => {
       it('returns an empty array', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
@@ -161,12 +177,23 @@ describe('View Licence Summary presenter', () => {
   describe('the "abstractionConditions" property', () => {
     describe('when there are multiple licence version purposes', () => {
       beforeEach(() => {
+        const point = PointModel.fromJson({
+          id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+          description: null,
+          ngr1: 'TL 23198 88603',
+          ngr2: null,
+          ngr3: null,
+          ngr4: null,
+          source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+        })
+
         licence.licenceVersions[0].licenceVersionPurposes = [{
           id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 10,
+          points: [point],
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
           licenceVersionPurposeConditions: []
         },
@@ -176,6 +203,7 @@ describe('View Licence Summary presenter', () => {
           abstractionPeriodStartMonth: 11,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
+          points: [point],
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
           licenceVersionPurposeConditions: []
         }]
@@ -242,6 +270,15 @@ describe('View Licence Summary presenter', () => {
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 10,
+          points: [PointModel.fromJson({
+            id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+            description: null,
+            ngr1: 'TL 23198 88603',
+            ngr2: null,
+            ngr3: null,
+            ngr4: null,
+            source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+          })],
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
           licenceVersionPurposeConditions: []
         }]
@@ -297,74 +334,6 @@ describe('View Licence Summary presenter', () => {
         })
       })
     })
-
-    // describe('when there are multiple abstraction conditions', () => {
-    //   beforeEach(() => {
-    //     licenceAbstractionConditions.conditions = ['Derogation clause', 'General conditions']
-    //     licenceAbstractionConditions.numberOfConditions = 2
-    //   })
-
-    //   describe('and they have different display titles', () => {
-    //     it('returns the details with plural text and a populated conditions array', () => {
-    //       const result = ViewLicenceSummaryPresenter.go(licence)
-
-    //       expect(result.abstractionConditionDetails).to.equal({
-    //         conditions: ['Derogation clause', 'General conditions'],
-    //         numberOfConditions: 2
-    //       })
-    //     })
-    //   })
-
-    //   describe('but they have the same title', () => {
-    //     beforeEach(() => {
-    //       licenceAbstractionConditions.conditions = ['Derogation clause']
-    //       licenceAbstractionConditions.numberOfConditions = 2
-    //     })
-
-    //     it('returns the details with plural text and a populated conditions array', () => {
-    //       const result = ViewLicenceSummaryPresenter.go(licence)
-
-    //       expect(result.abstractionConditionDetails).to.equal({
-    //         conditions: ['Derogation clause'],
-    //         numberOfConditions: 2
-    //       })
-    //     })
-    //   })
-    // })
-
-    // describe('when there is one abstraction condition', () => {
-    //   beforeEach(() => {
-    //     licenceAbstractionConditions.conditions = ['Derogation clause']
-    //     licenceAbstractionConditions.numberOfConditions = 1
-    //   })
-
-    //   it('returns the details with singular text and a populated conditions array', () => {
-    //     const result = ViewLicenceSummaryPresenter.go(licence)
-
-    //     expect(result.abstractionConditionDetails).to.equal({
-    //       conditions: ['Derogation clause'],
-    //       numberOfConditions: 1
-    //     })
-    //   })
-    // })
-
-    // describe('when there are no abstraction conditions', () => {
-    //   beforeEach(() => {
-    //     licence.licenceVersions[0].licenceVersionPurposes
-    //     licenceAbstractionConditions.conditions = []
-    //     licenceAbstractionConditions.purposeIds = []
-    //     licenceAbstractionConditions.numberOfConditions = 0
-    //   })
-
-    //   it('returns the details with plural text and an empty conditions array', () => {
-    //     const result = ViewLicenceSummaryPresenter.go(licence)
-
-    //     expect(result.abstractionConditionDetails).to.equal({
-    //       conditions: [],
-    //       numberOfConditions: 0
-    //     })
-    //   })
-    // })
   })
 
   describe('the "abstractionPeriods" property', () => {
@@ -579,9 +548,9 @@ describe('View Licence Summary presenter', () => {
   })
 
   describe('the "abstractionPoints" property', () => {
-    describe('when no abstraction points have been extracted from the licence data', () => {
+    describe('when there is no "current" licence version', () => {
       beforeEach(() => {
-        delete licence.permitLicence.purposes
+        licence.licenceVersions = []
       })
 
       it('returns an empty array', () => {
@@ -591,59 +560,96 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when one unique abstraction point has been extracted from the licence data', () => {
-      it('returns the abstraction point formatted for display', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
-
-        expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
-      })
-    })
-
-    describe('when multiple abstraction points have been extracted from the licence data', () => {
-      describe('that are all different', () => {
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
         beforeEach(() => {
-          licence.permitLicence.purposes[0].purposePoints.push({
-            point_detail: {
-              NGR1_SHEET: 'TQ',
-              NGR1_EAST: '652',
-              NGR1_NORTH: '593'
-            }
-          })
+          licence.licenceVersions[0].licenceVersionPurposes = []
         })
 
-        it('returns the abstraction points formatted for display', () => {
+        it('returns an empty array', () => {
           const result = ViewLicenceSummaryPresenter.go(licence)
 
-          expect(result.abstractionPoints).to.equal(
-            ['At National Grid Reference TL 23198 88603', 'At National Grid Reference TQ 652 593']
-          )
+          expect(result.abstractionPoints).to.be.empty()
         })
       })
 
-      describe('that have the same abstraction point', () => {
+      describe('and a single licence version purpose linked to it', () => {
         beforeEach(() => {
-          licence.permitLicence.purposes[0].purposePoints.push({
-            point_detail: {
-              NGR1_SHEET: 'TL',
-              NGR1_EAST: '23198',
-              NGR1_NORTH: '88603'
-            }
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+          licence.licenceVersions[0].licenceVersionPurposes.pop()
+        })
+
+        describe('that has a single point', () => {
+          it('returns the abstraction point formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
           })
         })
 
-        it('returns the abstraction point formatted for display', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+        describe('that has multiple points', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[0].points.push(PointModel.fromJson({
+              description: 'RIVER MEDWAY AT YALDING INTAKE',
+              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              ngr1: 'TQ 69212 50394',
+              ngr2: null,
+              ngr3: null,
+              ngr4: null,
+              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+            }))
+          })
 
-          expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
+          it('returns the abstraction points formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPoints).to.equal([
+              'At National Grid Reference TL 23198 88603',
+              'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+            ])
+          })
+        })
+      })
+
+      describe('and multiple licence version purposes linked to it', () => {
+        describe('that have the same point', () => {
+          it('returns the abstraction point formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
+          })
+        })
+
+        describe('some of which have different points', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[1].points[0] = PointModel.fromJson({
+              description: 'RIVER MEDWAY AT YALDING INTAKE',
+              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              ngr1: 'TQ 69212 50394',
+              ngr2: null,
+              ngr3: null,
+              ngr4: null,
+              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+            })
+          })
+
+          it('returns the abstraction points formatted for display', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPoints).to.equal([
+              'At National Grid Reference TL 23198 88603',
+              'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+            ])
+          })
         })
       })
     })
   })
 
   describe('the "abstractionPointsCaption" property', () => {
-    describe('when no abstraction points have been extracted from the licence data', () => {
+    describe('when there is no "current" licence version', () => {
       beforeEach(() => {
-        licence.permitLicence.purposes = []
+        licence.licenceVersions = []
       })
 
       it('returns the singular caption', () => {
@@ -653,69 +659,105 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when one unique abstraction point has been extracted from the licence data', () => {
-      it('returns the singular caption', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
 
-        expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
-      })
-    })
+        it('returns the singular caption', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
-    describe('when multiple abstraction points have been extracted from the licence data', () => {
-      beforeEach(() => {
-        licence.permitLicence.purposes[0].purposePoints.push({
-          point_detail: {
-            NGR1_SHEET: 'TQ',
-            NGR1_EAST: '652',
-            NGR1_NORTH: '593'
-          }
+          expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         })
       })
 
-      it('returns the plural caption', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+      describe('and at least one licence version purpose linked to it', () => {
+        describe('but the points are all the same', () => {
+          it('returns the singular caption', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.abstractionPointsCaption).to.equal('Points of abstraction')
+            expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
+          })
+        })
+
+        describe('and the points are not all the same', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[1].points[0] = PointModel.fromJson({
+              description: 'RIVER MEDWAY AT YALDING INTAKE',
+              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              ngr1: 'TQ 69212 50394',
+              ngr2: null,
+              ngr3: null,
+              ngr4: null,
+              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+            })
+          })
+
+          it('returns the plural caption', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPointsCaption).to.equal('Points of abstraction')
+          })
+        })
       })
     })
   })
 
   describe('the "abstractionPointsLinkText" property', () => {
-    describe('when no abstraction points have been extracted from the licence data', () => {
+    describe('when there is no "current" licence version', () => {
       beforeEach(() => {
-        licence.permitLicence.purposes = []
+        licence.licenceVersions = []
       })
 
-      it('returns the singular caption', () => {
+      it('returns the singular link text', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
         expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction point')
       })
     })
 
-    describe('when one unique abstraction point has been extracted from the licence data', () => {
-      it('returns the singular caption', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
 
-        expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction point')
-      })
-    })
+        it('returns the singular link text', () => {
+          const result = ViewLicenceSummaryPresenter.go(licence)
 
-    describe('when multiple abstraction points have been extracted from the licence data', () => {
-      beforeEach(() => {
-        licence.permitLicence.purposes[0].purposePoints.push({
-          point_detail: {
-            NGR1_SHEET: 'TQ',
-            NGR1_EAST: '652',
-            NGR1_NORTH: '593'
-          }
+          expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction point')
         })
       })
 
-      it('returns the plural caption', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+      describe('and at least one licence version purpose linked to it', () => {
+        describe('but the points are all the same', () => {
+          it('returns the singular link text', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction points')
+            expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction point')
+          })
+        })
+
+        describe('and the points are not all the same', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[1].points[0] = PointModel.fromJson({
+              description: 'RIVER MEDWAY AT YALDING INTAKE',
+              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              ngr1: 'TQ 69212 50394',
+              ngr2: null,
+              ngr3: null,
+              ngr4: null,
+              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+            })
+          })
+
+          it('returns the plural link text', () => {
+            const result = ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.abstractionPointsLinkText).to.equal('View details of the abstraction points')
+          })
+        })
       })
     })
   })
@@ -795,7 +837,7 @@ describe('View Licence Summary presenter', () => {
   describe('the "monitoringStations" property', () => {
     describe('when the licence is linked to no monitoring stations', () => {
       beforeEach(() => {
-        licence.licenceGaugingStations = []
+        licence.licenceMonitoringStations = []
       })
 
       it('will return an empty array', async () => {
@@ -819,9 +861,9 @@ describe('View Licence Summary presenter', () => {
     describe('when the licence is linked to multiple monitoring stations', () => {
       describe('that are all different', () => {
         beforeEach(() => {
-          licence.licenceGaugingStations.push({
+          licence.licenceMonitoringStations.push({
             id: '13f7504d-2750-4dd9-94dd-929e99e900a0',
-            gaugingStation: {
+            monitoringStation: {
               id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
               label: 'AVALON FIRE STATION'
             }
@@ -840,9 +882,9 @@ describe('View Licence Summary presenter', () => {
 
       describe('that are all the same station', () => {
         beforeEach(() => {
-          licence.licenceGaugingStations.push({
+          licence.licenceMonitoringStations.push({
             id: 'e813542c-50a0-4497-be1a-00af3a810cac',
-            gaugingStation: {
+            monitoringStation: {
               id: 'ac075651-4781-4e24-a684-b943b98607ca',
               label: 'MEVAGISSEY FIRE STATION'
             }
@@ -934,9 +976,9 @@ describe('View Licence Summary presenter', () => {
   })
 
   describe('the "sourceOfSupply" property', () => {
-    describe('when the permit licence first purpose, purpose point, and point source is not populated', () => {
+    describe('when there is no "current" licence version', () => {
       beforeEach(() => {
-        licence.permitLicence.purposes = []
+        licence.licenceVersions = []
       })
 
       it('returns null', async () => {
@@ -946,17 +988,55 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the permit licence first purpose, purpose point, and point source is populated', () => {
-      it('returns the point source name', async () => {
-        const result = await ViewLicenceSummaryPresenter.go(licence)
+    describe('when there is a "current" licence version', () => {
+      describe('but no licence version purposes linked to it', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes = []
+        })
 
-        expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+        it('returns null', async () => {
+          const result = await ViewLicenceSummaryPresenter.go(licence)
+
+          expect(result.sourceOfSupply).to.equal(null)
+        })
+      })
+
+      describe('and at least one licence version purpose linked to it', () => {
+        describe('but it has no points', () => {
+          beforeEach(() => {
+            licence.licenceVersions[0].licenceVersionPurposes[0].points = []
+          })
+
+          it('returns null', async () => {
+            const result = await ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.sourceOfSupply).to.equal(null)
+          })
+        })
+
+        describe('and it has at least one point', () => {
+          it('returns the source description of the first point', async () => {
+            const result = await ViewLicenceSummaryPresenter.go(licence)
+
+            expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+          })
+        })
       })
     })
   })
 })
 
 function _licence () {
+  const point = PointModel.fromJson({
+    id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+    description: null,
+    ngr1: 'TL 23198 88603',
+    ngr2: null,
+    ngr3: null,
+    ngr4: null,
+    source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+  })
+
   return LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
@@ -964,24 +1044,6 @@ function _licence () {
     region: {
       id: '740375f0-5add-4335-8ed5-b21b55b4a228',
       displayName: 'Avalon'
-    },
-    permitLicence: {
-      purposes: [{
-        ANNUAL_QTY: 'null',
-        DAILY_QTY: 'null',
-        HOURLY_QTY: 'null',
-        INST_QTY: 'null',
-        purposePoints: [{
-          point_detail: {
-            NGR1_SHEET: 'TL',
-            NGR1_EAST: '23198',
-            NGR1_NORTH: '88603'
-          },
-          point_source: {
-            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
-          }
-        }]
-      }]
     },
     licenceVersions: [{
       id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
@@ -999,6 +1061,7 @@ function _licence () {
           hourlyQuantity: 144,
           instantQuantity: 40,
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          points: [point],
           licenceVersionPurposeConditions: [
             {
               id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
@@ -1027,6 +1090,7 @@ function _licence () {
           hourlyQuantity: null,
           instantQuantity: null,
           purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+          points: [point],
           licenceVersionPurposeConditions: [
             {
               id: '999d98b0-ba6a-4a82-8cb6-03253a6722aa',
@@ -1048,6 +1112,7 @@ function _licence () {
           hourlyQuantity: null,
           instantQuantity: null,
           purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' },
+          points: [point],
           licenceVersionPurposeConditions: [
             {
               id: 'd5f30ba6-8170-4596-9276-362efb2175fa',
@@ -1060,9 +1125,9 @@ function _licence () {
         }
       ]
     }],
-    licenceGaugingStations: [{
+    licenceMonitoringStations: [{
       id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
-      gaugingStation: {
+      monitoringStation: {
         id: 'ac075651-4781-4e24-a684-b943b98607ca',
         label: 'MEVAGISSEY FIRE STATION'
       }

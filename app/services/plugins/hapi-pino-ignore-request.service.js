@@ -48,15 +48,13 @@
  *
  * So, we also do not log any requests to `/assets/*`.
  *
- *
- *
- * @param {Object} _options - The options passed to the HapiPino plugin
+ * @param {object} options - The options passed to the HapiPino plugin
  * @param {request} request  - Hapi request object created internally for each incoming request
  *
  * @returns {boolean} true if the request should be ignored, else false
  */
 function go (options, request) {
-  const staticPaths = ['/', '/import/licence', '/status', '/favicon.ico']
+  const staticPaths = ['/', '/import/licence/legacy', '/status', '/favicon.ico']
 
   // If request is a known path ignore it
   if (staticPaths.includes(request.path)) {

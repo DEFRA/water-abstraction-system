@@ -14,8 +14,6 @@ const { randomInteger } = require('../general.js')
  *
  * - `name` - Example Trading Ltd
  * - `type` - organisation
- * - `companyNumber` - [randomly generated - 24296934]
- * - `organisationType` - limitedCompany
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -42,9 +40,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     name: 'Example Trading Ltd',
-    type: 'organisation',
-    companyNumber: generateCompanyNumber(),
-    organisationType: 'limitedCompany'
+    type: 'organisation'
   }
 
   return {
@@ -53,12 +49,32 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generate a company number
+ *
+ * @returns {int} - A random company number
+ */
 function generateCompanyNumber () {
   return randomInteger(1000000, 9999999).toString()
+}
+
+/**
+ * Generate a company external id
+ *
+ * This is built from NALD import data using the region code and party id
+ *
+ * @returns {string} - A random external id
+ */
+function generateExternalId () {
+  const regionCode = randomInteger(1, 9)
+  const partyId = randomInteger(100, 9999998)
+
+  return `${regionCode}:${partyId}`
 }
 
 module.exports = {
   add,
   defaults,
-  generateCompanyNumber
+  generateCompanyNumber,
+  generateExternalId
 }

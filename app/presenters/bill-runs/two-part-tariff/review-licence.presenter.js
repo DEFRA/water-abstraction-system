@@ -36,42 +36,13 @@ function go (billRun, licence) {
   }
 }
 
-function _accountName (billingAccount) {
-  const accountAddress = billingAccount.billingAccountAddresses[0]
-
-  if (accountAddress.company) {
-    return accountAddress.company.name
-  }
-
-  return billingAccount.company.name
-}
-
-function _addressLines (billingAccount) {
-  const { address } = billingAccount.billingAccountAddresses[0]
-
-  const addressParts = [
-    address.address1,
-    address.address2,
-    address.address3,
-    address.address4,
-    address.address5,
-    address.address6,
-    address.postcode,
-    address.country
-  ]
-
-  return addressParts.filter((part) => {
-    return part
-  })
-}
-
 function _billingAccountDetails (billingAccount) {
   return {
     billingAccountId: billingAccount.id,
     accountNumber: billingAccount.accountNumber,
-    accountName: _accountName(billingAccount),
-    contactName: _contactName(billingAccount),
-    addressLines: _addressLines(billingAccount)
+    accountName: billingAccount.$accountName(),
+    contactName: billingAccount.$contactName(),
+    addressLines: billingAccount.$addressLines()
   }
 }
 
@@ -135,16 +106,6 @@ function _chargeReferenceLink (reviewChargeReference) {
   }
 
   return { linkName: 'View details' }
-}
-
-function _contactName (billingAccount) {
-  const contact = billingAccount.billingAccountAddresses[0].contact
-
-  if (contact) {
-    return contact.$name()
-  }
-
-  return null
 }
 
 function _financialYear (financialYearEnding) {
@@ -250,8 +211,6 @@ function _prepareReturnVolume (reviewChargeElement) {
     reviewReturns.forEach((reviewReturn) => {
       if (reviewReturn.returnStatus === 'due') {
         returnVolumes.push(`overdue (${reviewReturn.returnReference})`)
-      } else if (reviewReturn.returnStatus === 'void') {
-        returnVolumes.push(`void (${reviewReturn.returnReference})`)
       } else {
         returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
       }
@@ -262,7 +221,7 @@ function _prepareReturnVolume (reviewChargeElement) {
 }
 
 function _returnLink (returnLog) {
-  if (['due', 'received', 'void'].includes(returnLog.returnStatus)) {
+  if (['due', 'received'].includes(returnLog.returnStatus)) {
     return `/return/internal?returnId=${returnLog.returnId}`
   }
 
@@ -284,7 +243,7 @@ function _returnStatus (returnLog) {
 function _returnTotal (returnLog) {
   const { returnStatus, allocated, quantity } = returnLog
 
-  if (['due', 'received', 'void'].includes(returnStatus)) {
+  if (['due', 'received'].includes(returnStatus)) {
     return '/'
   }
 

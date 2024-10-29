@@ -22,8 +22,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/licence-contact',
+    handler: LicencesController.viewLicenceContactDetails
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/contact-details',
-    handler: LicencesController.viewContacts
+    handler: LicencesController.viewLicenceContacts
   },
   {
     method: 'GET',
@@ -35,6 +40,13 @@ const routes = [
           scope: ['billing']
         }
       }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/purposes',
+    options: {
+      handler: LicencesController.viewLicencePurposes
     }
   },
   {
@@ -94,6 +106,42 @@ const routes = [
       auth: false,
       plugins: {
         crumb: false
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/mark-for-supplementary-billing',
+    options: {
+      handler: LicencesController.markForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/licences/{id}/mark-for-supplementary-billing',
+    options: {
+      handler: LicencesController.submitMarkForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/marked-for-supplementary-billing',
+    options: {
+      handler: LicencesController.markedForSupplementaryBilling,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
       }
     }
   }

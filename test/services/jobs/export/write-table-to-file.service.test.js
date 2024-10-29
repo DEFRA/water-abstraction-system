@@ -9,8 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
+const { data: chargeCategories } = require('../../../../db/seeds/data/charge-categories.js')
 const { db } = require('../../../../db/db.js')
 const fs = require('fs')
 const path = require('path')
@@ -21,8 +20,6 @@ const WriteTableToFileService = require('../../../../app/services/jobs/export/wr
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'
 const schemaFolderPath = '/tmp/water'
-const chargeCategoryId = '20146cdc-9b40-4769-aa78-b51c17080d56'
-const date = new Date('2022-12-14').toISOString()
 
 const headers = [
   'billingChargeCategoryId',
@@ -30,8 +27,6 @@ const headers = [
   'subsistenceCharge',
   'description',
   'shortDescription',
-  'dateCreated',
-  'dateUpdated',
   'isTidal',
   'lossFactor',
   'modelTier',
@@ -40,26 +35,23 @@ const headers = [
   'maxVolume'
 ]
 
-const csvValues = '"20146cdc-9b40-4769-aa78-b51c17080d56",' +
-'"4.4.5",' +
-'12000,' +
-'"Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year, where a Tier 1 model applies.",' +
-'"Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model",' +
-'false,' +
-'"low",' +
-'"tier 1",' +
+const csvValues = '"b13a469a-aa38-48c8-b899-da7536b44e37",' +
+'"4.1.1",' +
+'9700,' +
+'"Low loss tidal abstraction of water up to and including 25,002 megalitres a year where no model applies",' +
+'"Low loss, tidal, up to and including 25,002 ML/yr",' +
 'true,' +
+'"low",' +
+'"no model",' +
+'false,' +
 ',' +
-'5000,' +
-'2022-12-14T00:00:00.000Z,\n'
+'25002\n'
 
 const csvHeaders = '"billingChargeCategoryId",' +
 '"reference",' +
 '"subsistenceCharge",' +
 '"description",' +
 '"shortDescription",' +
-'"dateCreated",' +
-'"dateUpdated",' +
 '"isTidal",' +
 '"lossFactor",' +
 '"modelTier",' +
@@ -72,10 +64,6 @@ describe('Write table to file service', () => {
 
   describe('when successful', () => {
     beforeEach(async () => {
-      await DatabaseSupport.clean()
-
-      await ChargeCategoryHelper.add({ id: chargeCategoryId, createdAt: date, reference: '4.4.5' })
-
       const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/water'
 
@@ -91,8 +79,9 @@ describe('Write table to file service', () => {
     it('should write the data to the correct file path', async () => {
       const inputStreamTest = db
         .withSchema(schemaName)
-        .select('*')
+        .select([headers])
         .from(tableName)
+        .where('billingChargeCategoryId', chargeCategories[0].id)
         .stream()
 
       const dataTest = {
@@ -108,8 +97,9 @@ describe('Write table to file service', () => {
     it('should write the correct data to the file', async () => {
       const inputStreamTest = db
         .withSchema(schemaName)
-        .select('*')
+        .select([headers])
         .from(tableName)
+        .where('billingChargeCategoryId', chargeCategories[0].id)
         .stream()
 
       const dataTest = {

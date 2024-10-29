@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
@@ -44,6 +45,14 @@ describe('Determine Return Log Years Service', () => {
           expect(result.flagForBilling).to.equal(false)
           expect(result.twoPartTariff).to.equal(false)
         })
+
+        it('does not flag the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('no')
+        })
       })
 
       describe('and two-part tariff is true', () => {
@@ -61,15 +70,56 @@ describe('Determine Return Log Years Service', () => {
     })
 
     describe('that has a start date before the SROC billing start date', () => {
-      beforeEach(async () => {
-        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, startDate: new Date('2022-03-01') })
+      describe('and the end date is before the SROC billing start date', () => {
+        beforeEach(async () => {
+          returnLog = await ReturnLogHelper.add({
+            licenceRef: licence.licenceRef,
+            startDate: new Date('2021-04-01'),
+            endDate: new Date('2022-03-31'),
+            metadata: { isTwoPartTariff: true }
+          })
+        })
+
+        it('returns flagForBilling as false and twoPartTariff as true', async () => {
+          const result = await DetermineReturnLogYearsService.go(returnLog.id)
+
+          expect(result.flagForBilling).to.equal(false)
+          expect(result.twoPartTariff).to.equal(true)
+        })
+
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('yes')
+        })
       })
 
-      it('returns flagForBilling and twoPartTariff as false', async () => {
-        const result = await DetermineReturnLogYearsService.go(returnLog.id)
+      describe('and the end date is after the SROC billing start date', () => {
+        beforeEach(async () => {
+          returnLog = await ReturnLogHelper.add({
+            licenceRef: licence.licenceRef,
+            startDate: new Date('2022-03-01'),
+            endDate: new Date('2023-03-01'),
+            metadata: { isTwoPartTariff: true }
+          })
+        })
 
-        expect(result.flagForBilling).to.equal(false)
-        expect(result.twoPartTariff).to.equal(false)
+        it('returns flagForBilling and twoPartTariff as false', async () => {
+          const result = await DetermineReturnLogYearsService.go(returnLog.id)
+
+          expect(result.flagForBilling).to.equal(true)
+          expect(result.twoPartTariff).to.equal(true)
+        })
+
+        it('flags the licence for pre sroc supplementary billing', async () => {
+          await DetermineReturnLogYearsService.go(returnLog.id)
+
+          const result = await LicenceModel.query().select(['includeInPresrocBilling']).where('id', licence.id)
+
+          expect(result[0].includeInPresrocBilling).to.equal('yes')
+        })
       })
     })
   })

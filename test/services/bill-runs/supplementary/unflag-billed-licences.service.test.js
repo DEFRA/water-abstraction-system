@@ -11,20 +11,16 @@ const { expect } = Code
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const UnflagBilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
 
 describe('Unflag Billed Licences service', () => {
-  const regionId = 'bef4204f-c9af-47e1-aa57-9632ec4634af'
+  const { id: regionId } = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   let billRun
-
-  beforeEach(async () => {
-    await DatabaseSupport.clean()
-  })
 
   describe('when there are licences flagged for PRESROC supplementary billing', () => {
     let licenceNotInRegion
@@ -33,10 +29,11 @@ describe('Unflag Billed Licences service', () => {
     let licenceFlaggedBeforeBillRunCreated
 
     beforeEach(async () => {
+      const { id: otherRegionId } = RegionHelper.select(1)
       const updatedAt = new Date('2024-02-02')
 
       licenceNotInRegion = await LicenceHelper.add({
-        includeInPresrocBilling: 'yes', regionId: 'aa1504ba-211a-4851-ac2b-fd0e1e882067', updatedAt
+        includeInPresrocBilling: 'yes', regionId: otherRegionId, updatedAt
       })
       licenceInWorkflow = await LicenceHelper.add({
         includeInPresrocBilling: 'yes', regionId, updatedAt

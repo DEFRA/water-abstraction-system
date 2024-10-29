@@ -7,6 +7,11 @@
 
 const { db } = require('../../../../db/db.js')
 
+/**
+ * Removes all data created for acceptance tests from the water schema
+ *
+ * @returns {Promise<object>}
+ */
 async function go () {
   return _deleteAllTestData()
 }
@@ -24,6 +29,10 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
+  ALTER TABLE water.licences DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purpose_conditions DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_points DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
@@ -178,6 +187,20 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."points" AS p
+      USING "water"."return_requirement_points" AS "rrpt",
+    "water"."return_requirements" AS "rr",
+    "water"."return_versions" AS "rv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "p"."id" = "rrpt"."point_id"
+    AND "rrpt"."return_requirement_id" = "rr"."return_requirement_id"
+    AND "rr"."return_version_id" = "rv"."return_version_id"
+    AND "rv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."return_requirement_points" AS "rrpt"
       USING "water"."return_requirements" AS "rr",
     "water"."return_versions" AS "rv",
@@ -196,6 +219,16 @@ async function _deleteAllTestData () {
   WHERE
     "l"."is_test" = TRUE
     AND "rr"."return_version_id" = "rv"."return_version_id"
+    AND "rv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."mod_logs" AS "ml"
+      USING "water"."return_versions" AS "rv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."return_version_id" = "rv"."return_version_id"
     AND "rv"."licence_id" = "l"."licence_id";
 
   DELETE
@@ -228,9 +261,53 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."points" AS "p"
+      USING"water"."licence_version_purpose_points" AS "lvpp",
+    "water"."licence_version_purposes" AS "lvp",
+    "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "p"."id" = "lvpp"."point_id"
+    AND "lvpp"."licence_version_purpose_id" = "lvp"."licence_version_purpose_id"
+    AND "lvp"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."licence_version_purpose_points" AS "lvpp"
+      USING "water"."licence_version_purposes" AS "lvp",
+    "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "lvpp"."licence_version_purpose_id" = "lvp"."licence_version_purpose_id"
+    AND "lvp"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."licence_version_purposes"
   WHERE
     "is_test" = TRUE;
+
+  DELETE
+  FROM
+    "water"."mod_logs" AS "ml"
+      USING "water"."licence_versions" AS "lv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."licence_version_id" = "lv"."licence_version_id"
+    AND "lv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."mod_logs" AS "ml"
+    USING "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "ml"."licence_id" = "l"."licence_id";
 
   DELETE
   FROM
@@ -299,6 +376,10 @@ async function _deleteAllTestData () {
   ALTER TABLE water.charge_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
+  ALTER TABLE water.licences ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purpose_conditions ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_points ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements ENABLE TRIGGER ALL;

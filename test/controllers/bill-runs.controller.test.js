@@ -26,7 +26,6 @@ const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-pa
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
-const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedAuthorisedVolumeService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
@@ -112,73 +111,6 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('Bill runs (page 2 of 30)')
           expect(response.payload).to.contain('Previous')
           expect(response.payload).to.contain('Next')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        options = postRequestOptions(
-          '/bill-runs',
-          {
-            type: 'supplementary',
-            scheme: 'sroc',
-            region: '07ae7f3a-2677-4102-b352-cc006828948c',
-            user: 'test.user@defra.gov.uk'
-          }
-        )
-      })
-
-      describe('when a request is valid', () => {
-        const validResponse = {
-          id: 'f561990b-b29a-42f4-b71a-398c52339f78',
-          region: '07ae7f3a-2677-4102-b352-cc006828948c',
-          scheme: 'sroc',
-          batchType: 'supplementary',
-          status: 'processing'
-        }
-
-        beforeEach(async () => {
-          Sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
-        })
-
-        it('returns a 200 response including details of the new bill run', async () => {
-          const response = await server.inject(options)
-          const payload = JSON.parse(response.payload)
-
-          expect(response.statusCode).to.equal(200)
-          expect(payload).to.equal(validResponse)
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the request is invalid', () => {
-          beforeEach(() => {
-            options.payload.scheme = 'INVALID'
-          })
-
-          it('returns an error response', async () => {
-            const response = await server.inject(options)
-            const payload = JSON.parse(response.payload)
-
-            expect(response.statusCode).to.equal(400)
-            expect(payload.message).to.startWith('"scheme" must be')
-          })
-        })
-
-        describe('because the bill run could not be initiated', () => {
-          beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(StartBillRunProcessService, 'go').rejects()
-          })
-
-          it('returns an error response', async () => {
-            const response = await server.inject(options)
-            const payload = JSON.parse(response.payload)
-
-            expect(response.statusCode).to.equal(500)
-            expect(payload.message).to.equal('An internal server error occurred')
-          })
         })
       })
     })
@@ -533,6 +465,20 @@ describe('Bill Runs controller', () => {
         })
       })
 
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedAdjustmentFactorService, 'go').resolves(_chargeReferenceData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('The aggregate factor must be a number')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
           beforeEach(async () => {
@@ -596,6 +542,20 @@ describe('Bill Runs controller', () => {
         })
       })
 
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedAuthorisedVolumeService, 'go').resolves(_authorisedVolumeData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('The authorised volume must be a number')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
           beforeEach(async () => {
@@ -649,19 +609,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(AmendBillableReturnsService, 'go').resolves({
-            chargeElement: {
-              description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
-              dates: '25 July 2022 to 29 December 2022'
-            },
-            billRun: {
-              financialYear: '2022 to 2023'
-            },
-            chargeVersion: {
-              chargePeriod: '1 April 2022 to 31 March 2023'
-            },
-            authorisedQuantity: 40
-          })
+          Sinon.stub(AmendBillableReturnsService, 'go').resolves(_billableReturnData())
         })
 
         it('returns a 200 response', async () => {
@@ -694,6 +642,20 @@ describe('Bill Runs controller', () => {
           expect(response.headers.location).to.equal(
             '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
           )
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves(_billableReturnData(true))
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the billable quantity')
+          expect(response.payload).to.contain('There is a problem')
         })
       })
 
@@ -840,8 +802,8 @@ describe('Bill Runs controller', () => {
   })
 })
 
-function _authorisedVolumeData () {
-  return {
+function _authorisedVolumeData (error = false) {
+  const pageData = {
     billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
     financialYear: '2022 to 2023',
     chargePeriod: '1 April 2022 to 31 March 2023',
@@ -856,6 +818,34 @@ function _authorisedVolumeData () {
       maxVolume: 170
     }
   }
+
+  if (error) {
+    pageData.error = { authorisedVolume: 'The authorised volume must be a number' }
+  }
+
+  return pageData
+}
+
+function _billableReturnData (error = false) {
+  const pageDate = {
+    chargeElement: {
+      description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
+      dates: '25 July 2022 to 29 December 2022'
+    },
+    billRun: {
+      financialYear: '2022 to 2023'
+    },
+    chargeVersion: {
+      chargePeriod: '1 April 2022 to 31 March 2023'
+    },
+    authorisedQuantity: 40
+  }
+
+  if (error) {
+    pageDate.error = { message: 'Select the billable quantity' }
+  }
+
+  return pageDate
 }
 
 function _chargeElementDetails () {
@@ -876,8 +866,8 @@ function _chargeElementDetails () {
   }
 }
 
-function _chargeReferenceData () {
-  return {
+function _chargeReferenceData (error = false) {
+  const pageData = {
     billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
     financialYear: '2022 to 2023',
     chargePeriod: '1 April 2022 to 31 March 2023',
@@ -889,6 +879,18 @@ function _chargeReferenceData () {
       adjustments: ['Aggregate factor (0.5)']
     }
   }
+
+  if (error) {
+    pageData.error = {
+      aggregateFactorElement: {
+        text: 'The aggregate factor must be a number'
+      },
+      chargeAdjustmentElement: null
+    }
+    pageData.inputtedAggregateValue = '10'
+  }
+
+  return pageData
 }
 
 function _getRequestOptions (path) {

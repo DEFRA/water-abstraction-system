@@ -42,6 +42,8 @@ describe('View Licence service', () => {
         activeNavBar: 'search',
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+        ends: null,
+        includeInPresrocBilling: 'no',
         licenceName: 'Between two ferns',
         licenceRef: '01/123',
         notification: null,
@@ -112,6 +114,7 @@ function _licence () {
         }
       }
     },
+    licenceSupplementaryYears: [],
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
 

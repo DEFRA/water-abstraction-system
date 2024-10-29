@@ -1,0 +1,250 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/return-version-status-tag.njk" import statusTag %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: '/system/licences/' + licenceId + '/set-up'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+      {{ pageTitle }}
+    </h1>
+    {{ statusTag(status) }}
+  </div>
+
+  <div class="govuk-!-margin-bottom-9">
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Start date"
+          },
+          value: {
+            html: '<span data-test="start-date">' + startDate + '</span>'
+          }
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+          text: "Reason"
+        },
+          value: {
+          html: '<span data-test="reason">' + reason + '</span>'
+        }
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+          text: "Created date"
+        },
+          value: {
+          html: '<span data-test="created-date">' + createdDate + '</span>'
+        }
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+          text: "Created by"
+        },
+          value: {
+          html: '<span data-test="created-by">' + createdBy + '</span>'
+        }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+
+{% if notes %}
+  <div class="govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    <p>
+      {{ newLine(notes) }}
+    </p>
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+{% endif %}
+
+{% if requirements.length > 0 %}
+    <div class="govuk-!-margin-bottom-9">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+
+      {# Bookmarks - only displays when there is more than 1 return requirement #}
+      {% if requirements.length > 1 %}
+        <div class="govuk-body govuk-!-margin-bottom-6">
+          <ul>
+            {% for requirement in requirements %}
+              {% set requirementIndex = loop.index0 %}
+              {% set bookmarkTitle %}
+                {% if requirement.siteDescription == '' %}
+                  Return reference {{ requirement.returnReference }}
+                {% else %}
+                  Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription | safe }}
+                {% endif %}
+              {% endset %}
+              <li><a href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% for requirement in requirements %}
+        {# Generate the points cell #}
+        {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
+        {# of points as the summary. Users must expand the block to get the full list. #}
+        {% set pointCell %}
+          {% set pointsList %}
+            {% set count = requirement.points | length %}
+            {{ newLine(requirement.points) }}
+          {% endset %}
+
+          {% if count > 5 %}
+            {{
+              govukDetails({
+                classes: 'govuk-!-margin-bottom-0',
+                summaryText: count + ' points',
+                html: pointsList
+              })
+            }}
+          {% else %}
+            {{ pointsList | safe }}
+          {% endif %}
+        {% endset %}
+
+        {% set rowIndex = loop.index0 %}
+        <div>
+            {{ govukSummaryList({
+              card: {
+                title: {
+                  html: "<p> Return reference " + requirement.returnReference + "</p>" + requirement.title
+                },
+                attributes: {
+                  id: 'requirement-' + rowIndex
+                }
+              },
+              attributes: {
+                'data-test': 'requirement-' + rowIndex
+              },
+              classes: "govuk-summary-list--no-border",
+              rows: [
+                {
+                  key: {
+                    text: "Purpose"
+                  },
+                  value: {
+                    html: '<span data-test="purposes-' + rowIndex + '">' + newLine(requirement.purposes) + '</span>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Points"
+                  },
+                  value: {
+                    html: '<span data-test="points-' + rowIndex + '">' + pointCell + '</span>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Abstraction period"
+                  },
+                  value: {
+                    html: '<p data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</p>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Returns cycle"
+                  },
+                  value: {
+                    html: '<p data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</p>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Site description"
+                  },
+                  value: {
+                    html: '<p data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</p>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Collection"
+                  },
+                  value: {
+                    html: '<p data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</p>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Reporting"
+                  },
+                  value: {
+                    html: '<p data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</p>'
+                  }
+                },
+                {
+                  key: {
+                    text: "Agreements exceptions"
+                  },
+                  value: {
+                    html: '<p data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</p>'
+                  }
+                }
+              ]
+            }) }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="govuk-body">
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-2',
+          rows: [
+            {
+              classes: 'govuk-summary-list',
+              key: {
+                text: 'Additional submission options',
+                classes: "govuk-heading-m govuk-!-width-one-half"
+              },
+              value: {
+                text: ''
+              }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+                text: 'Multiple upload',
+                classes: "govuk-body "
+              },
+              value: {
+                text: additionalSubmissionOptions.multipleUpload
+            }
+            }
+          ]
+        }) }}
+    </div>
+  {% else %}
+    <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endif %}
+{% endblock %}

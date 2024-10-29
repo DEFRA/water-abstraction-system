@@ -13,11 +13,19 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
-const PersistLicenceService = require('../../../../app/services/import/persist-licence.service.js')
+const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
+const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
+const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
+const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
+const TransformCompanyAddressesService = require('../../../../app/services/import/legacy/transform-company-addresses.service.js')
+const TransformContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
+const TransformLicenceDocumentService = require('../../../../app/services/import/legacy/transform-licence-document.service.js')
+const TransformLicenceDocumentRolesService = require('../../../../app/services/import/legacy/transform-licence-document-roles.service.js')
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
-const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
-const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
+const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
+const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 
 // Thing under test
 const ProcessLicenceService = require('../../../../app/services/import/legacy/process-licence.service.js')
@@ -29,19 +37,28 @@ describe('Import Legacy Process Licence service', () => {
   let licenceId
   let licenceRef
   let notifierStub
-  let persistLicenceServiceStub
+  let PersistImportServiceStub
+  let processLicenceReturnLogsServiceStub
   let transformedLicence
+  let wrlsLicenceId
 
   beforeEach(() => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
+    wrlsLicenceId = licenceId
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
+    Sinon.stub(TransformLicenceDocumentService, 'go').resolves()
+    Sinon.stub(TransformLicenceDocumentRolesService, 'go').resolves()
+    Sinon.stub(TransformCompaniesService, 'go').resolves({ company: [], transformedCompany: [] })
+    Sinon.stub(TransformContactsService, 'go').resolves()
+    Sinon.stub(TransformAddressesService, 'go').resolves()
+    Sinon.stub(TransformCompanyAddressesService, 'go').resolves()
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -55,15 +72,18 @@ describe('Import Legacy Process Licence service', () => {
     delete global.GlobalNotifier
   })
 
-  describe('when there is a valid NALD licence to import', () => {
+  describe('when there is a valid NALD licence to import with an existing licence', () => {
     beforeEach(() => {
-      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').resolves(licenceId)
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
+      PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
+      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
-    it('saves the imported licence', async () => {
+    it('saves the imported licence and creates the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
-      expect(persistLicenceServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.true()
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -81,9 +101,24 @@ describe('Import Legacy Process Licence service', () => {
     })
   })
 
+  describe('when there is a valid NALD licence to import without an existing licence', () => {
+    beforeEach(() => {
+      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
+      PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
+      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+    })
+
+    it('saves the imported licence but does not process the return logs', async () => {
+      await ProcessLicenceService.go(licenceRef)
+
+      expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
+      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.false()
+    })
+  })
+
   describe('when the service errors', () => {
     beforeEach(() => {
-      persistLicenceServiceStub = Sinon.stub(PersistLicenceService, 'go').rejects()
+      PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').rejects()
     })
 
     it('handles the error', async () => {

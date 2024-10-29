@@ -5,8 +5,6 @@
  * @module FetchLicenceSummaryService
  */
 
-const { ref } = require('objection')
-
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
@@ -45,13 +43,6 @@ async function _fetch (licenceId) {
         'id'
       ])
     })
-    .withGraphFetched('permitLicence')
-    .modifyGraph('permitLicence', (builder) => {
-      builder.select([
-        'id',
-        ref('licenceDataValue:data.current_version.purposes').as('purposes')
-      ])
-    })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
       builder.select([
@@ -64,6 +55,24 @@ async function _fetch (licenceId) {
         'dailyQuantity',
         'hourlyQuantity',
         'instantQuantity'
+      ])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
+      builder.select([
+        'points.description',
+        'points.id',
+        'points.ngr1',
+        'points.ngr2',
+        'points.ngr3',
+        'points.ngr4'
+      ])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.points.source')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.points.source', (builder) => {
+      builder.select([
+        'sources.description',
+        'sources.id'
       ])
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes.purpose')
@@ -86,15 +95,15 @@ async function _fetch (licenceId) {
         'displayTitle'
       ])
     })
-    .withGraphFetched('licenceGaugingStations')
-    .modifyGraph('licenceGaugingStations', (builder) => {
+    .withGraphFetched('licenceMonitoringStations')
+    .modifyGraph('licenceMonitoringStations', (builder) => {
       builder.select([
         'id'
       ])
         .whereNull('deletedAt')
     })
-    .withGraphFetched('licenceGaugingStations.gaugingStation')
-    .modifyGraph('licenceGaugingStations.gaugingStation', (builder) => {
+    .withGraphFetched('licenceMonitoringStations.monitoringStation')
+    .modifyGraph('licenceMonitoringStations.monitoringStation', (builder) => {
       builder.select([
         'id',
         'label'
