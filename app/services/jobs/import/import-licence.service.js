@@ -26,7 +26,7 @@ async function go () {
 
     calculateAndLogTimeTaken(startTime, `Importing ${licenceRefs.length} licences from NALD`)
   } catch (error) {
-    global.GlobalNotifier.omfg('Licence updates job failed', null, error)
+    global.GlobalNotifier.omfg('Importing Licence job failed', null, error)
   }
 }
 
