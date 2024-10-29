@@ -5,6 +5,8 @@
  * @module DetermineChargeVersionFlagsService
  */
 
+const { ref } = require('objection')
+
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
 
 /**
@@ -29,6 +31,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  */
 async function go (chargeVersionId) {
   const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
+
   const twoPartTariff = _twoPartTariffIndicators(chargeReferences)
 
   const result = {
@@ -64,7 +67,7 @@ async function _fetchChargeVersion (chargeVersionId) {
     .modifyGraph('chargeReferences', (builder) => {
       builder.select([
         'id',
-        'adjustments'
+        ref('adjustments:s127').castBool().as('twoPartTariff')
       ])
     })
     .withGraphFetched('licence')
@@ -80,7 +83,7 @@ async function _fetchChargeVersion (chargeVersionId) {
 
 function _twoPartTariffIndicators (chargeReferences) {
   return chargeReferences.some((chargeReference) => {
-    return chargeReference.adjustments?.s127
+    return chargeReference.twoPartTariff
   })
 }
 
