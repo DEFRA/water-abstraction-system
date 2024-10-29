@@ -32,11 +32,11 @@ describe('Process Import Licence Service', () => {
     Sinon.restore()
   })
 
-  describe('when iterating the licence refs', () => {
+  describe('when iterating the licences', () => {
     it('should call the process licence service with the first element in the array', async () => {
       await ProcessImportLicence.go(licenceRefs)
 
-      const firstLicenceRef = licenceRefs[0]
+      const firstLicenceRef = licenceRefs[0].licence_ref
 
       expect(stubProcessLicenceService.calledWith((firstLicenceRef))).to.be.true()
     })
@@ -44,7 +44,7 @@ describe('Process Import Licence Service', () => {
     it('should call the process licence service with the last element in the array', async () => {
       await ProcessImportLicence.go(licenceRefs)
 
-      const lastLicenceRef = licenceRefs[licenceRefs.length - 1]
+      const lastLicenceRef = licenceRefs[licenceRefs.length - 1].licence_ref
 
       expect(stubProcessLicenceService.calledWith((lastLicenceRef))).to.be.true()
     })
@@ -70,7 +70,7 @@ function _licenceRefs () {
   const licenceRefs = []
 
   for (let i = 0; i < 100; i++) {
-    licenceRefs.push(generateLicenceRef())
+    licenceRefs.push({ licence_ref: generateLicenceRef() })
   }
 
   return licenceRefs

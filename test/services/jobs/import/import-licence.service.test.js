@@ -21,7 +21,7 @@ describe('Import Licence Service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    stubFetchNaldLicenceIds = Sinon.stub(FetchNaldLicenceRefs, 'go').resolves(['12/34/56'])
+    stubFetchNaldLicenceIds = Sinon.stub(FetchNaldLicenceRefs, 'go').resolves([{ licence_ref: '12/34/56' }])
     stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').resolves()
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
@@ -37,7 +37,7 @@ describe('Import Licence Service', () => {
     await ImportLicence.go()
 
     expect(stubFetchNaldLicenceIds.calledOnce).to.be.true()
-    expect(stubProcessImportLicence.calledOnce).to.be.true()
+    expect(stubProcessImportLicence.calledWith([{ licence_ref: '12/34/56' }])).to.be.true()
   })
 
   it('logs to highlight the amount of licences being imported', async () => {
