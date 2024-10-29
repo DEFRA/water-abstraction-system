@@ -42,6 +42,8 @@ describe('Process licence ending service', () => {
   const year = today.getFullYear()
 
   let clock
+  let currentCycle
+  let currentCycleDate
   let endDate
   let lastYearsCycleStartDate
   let lastYearsCycleEndDate
@@ -49,6 +51,7 @@ describe('Process licence ending service', () => {
   let notifierStub
   let primaryPurpose
   let previousCycle
+  let previousCycleDate
   let purpose
   let region
   let returnCycle
@@ -58,6 +61,7 @@ describe('Process licence ending service', () => {
   let summer
   let testDate
   let twoCyclesAgo
+  let twoCyclesAgoDate
   let twoYearsAgoCycleEndDate
   let twoYearsAgoCycleStartDate
 
@@ -68,12 +72,12 @@ describe('Process licence ending service', () => {
   describe('when summer is true and the licence has an endDate that ends in the current cycle', () => {
     before(async () => {
       summer = true
-      testDate = new Date(`${year - 1}-12-01`)
-      previousCycle = new Date(`${year - 2}-12-01`)
-      twoCyclesAgo = new Date(`${year - 3}-12-01`)
+      currentCycleDate = new Date(`${year - 1}-12-01`)
+      previousCycleDate = new Date(`${year - 2}-12-01`)
+      twoCyclesAgoDate = new Date(`${year - 3}-12-01`)
 
       clock = Sinon.useFakeTimers(testDate)
-      endDate = testDate.toISOString().split('T')[0]
+      endDate = currentCycleDate.toISOString().split('T')[0]
 
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
@@ -91,26 +95,29 @@ describe('Process licence ending service', () => {
         secondaryPurposeId: secondaryPurpose.id
       })
 
-      returnCycle = await ReturnCycleHelper.selectByDate(testDate, summer)
-      previousCycle = await ReturnCycleHelper.selectByDate(previousCycle, summer)
-      twoCyclesAgo = await ReturnCycleHelper.selectByDate(twoCyclesAgo, summer)
+      returnCycle = await ReturnCycleHelper.selectByDate(currentCycleDate, summer)
+      previousCycle = await ReturnCycleHelper.selectByDate(previousCycleDate, summer)
+      twoCyclesAgo = await ReturnCycleHelper.selectByDate(twoCyclesAgoDate, summer)
 
       await ReturnLogHelper.add({
         endDate: formatDateObjectToISO(returnCycle.endDate),
         licenceRef: licence.licenceRef,
         returnCycleId: returnCycle.id,
+        returnReference: returnRequirement.legacyId,
         startDate: formatDateObjectToISO(returnCycle.startDate)
       })
       await ReturnLogHelper.add({
         endDate: formatDateObjectToISO(previousCycle.endDate),
         licenceRef: licence.licenceRef,
         returnCycleId: previousCycle.id,
+        returnReference: returnRequirement.legacyId,
         startDate: formatDateObjectToISO(previousCycle.startDate)
       })
       await ReturnLogHelper.add({
         endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
         licenceRef: licence.licenceRef,
         returnCycleId: twoCyclesAgo.id,
+        returnReference: returnRequirement.legacyId,
         startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
       })
 
@@ -138,13 +145,16 @@ describe('Process licence ending service', () => {
     })
   })
 
-  describe('when a licence has an endDate that ends in the next cycle', () => {
+  describe('when summer is true and a licence has an endDate that ends in a future cycle', () => {
     before(async () => {
-      if (month > returnCycleDates.summer.endDate.month) {
-        endDate = new Date(year + 1, 10, 29).toISOString().split('T')[0]
-      } else {
-        endDate = new Date(year, 10, 29).toISOString().split('T')[0]
-      }
+      summer = true
+      testDate = new Date(`${year + 1}-12-01`)
+      currentCycleDate = new Date(`${year}-05-01`)
+      previousCycleDate = new Date(`${year - 1}-05-01`)
+      twoCyclesAgoDate = new Date(`${year - 2}-05-01`)
+
+      clock = Sinon.useFakeTimers(currentCycle)
+      endDate = testDate.toISOString().split('T')[0]
 
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
@@ -162,25 +172,30 @@ describe('Process licence ending service', () => {
         secondaryPurposeId: secondaryPurpose.id
       })
 
-      lastYearsCycleStartDate = formatDateObjectToISO(new Date(cycleStartDateByDate(lastYear, summer)))
-      twoYearsAgoCycleStartDate = formatDateObjectToISO(new Date(cycleStartDateByDate(twoYearsAgo, summer)))
-      lastYearsCycleEndDate = formatDateObjectToISO(new Date(cycleEndDateByDate(lastYear, summer)))
-      twoYearsAgoCycleEndDate = formatDateObjectToISO(new Date(cycleEndDateByDate(twoYearsAgo, summer)))
+      returnCycle = await ReturnCycleHelper.selectByDate(currentCycleDate, summer)
+      previousCycle = await ReturnCycleHelper.selectByDate(previousCycleDate, summer)
+      twoCyclesAgo = await ReturnCycleHelper.selectByDate(twoCyclesAgoDate, summer)
 
       await ReturnLogHelper.add({
-        endDate: cycleEndDateAsISO(summer),
+        endDate: formatDateObjectToISO(returnCycle.endDate),
         licenceRef: licence.licenceRef,
-        startDate: cycleStartDateAsISO(summer)
+        returnCycleId: returnCycle.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(returnCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: lastYearsCycleEndDate,
+        endDate: formatDateObjectToISO(previousCycle.endDate),
         licenceRef: licence.licenceRef,
-        startDate: lastYearsCycleStartDate
+        returnCycleId: previousCycle.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(previousCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: twoYearsAgoCycleEndDate,
+        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
         licenceRef: licence.licenceRef,
-        startDate: twoYearsAgoCycleStartDate
+        returnCycleId: twoCyclesAgo.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
       })
 
       // BaseRequest depends on the GlobalNotifier to have been set.
@@ -196,82 +211,89 @@ describe('Process licence ending service', () => {
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
 
-      expect(result.length).to.equal(0)
+      expect(result.length).to.equal(3)
+      expect(result[0].status).to.equal('due')
+      expect(result[1].status).to.equal('due')
+      expect(result[2].status).to.equal('due')
     })
   })
 
-  // describe('and summer is false', () => {
-  //   before(() => {
-  //     summer = false
-  //   })
+  describe('when summer is true and the licence has an endDate that ends two cycles ago', () => {
+    before(async () => {
+      summer = true
+      currentCycleDate = new Date(`${year - 1}-12-01`)
+      previousCycleDate = new Date(`${year - 2}-12-01`)
+      twoCyclesAgoDate = new Date(`${year - 3}-12-01`)
 
-  //   describe('when a valid licence reference and endDate for one year ago is provided', () => {
-  //     before(async () => {
-  //       if (month > returnCycleDates.allYear.endDate.month) {
-  //         endDate = new Date(year, 3, 29).toISOString().split('T')[0]
-  //       } else {
-  //         endDate = new Date(year - 1, 3, 29).toISOString().split('T')[0]
-  //       }
+      clock = Sinon.useFakeTimers(currentCycle)
+      endDate = twoCyclesAgoDate.toISOString().split('T')[0]
 
-  //       region = RegionHelper.select()
-  //       licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-  //       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-  //       returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-  //       await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-  //       primaryPurpose = PrimaryPurposeHelper.select()
-  //       purpose = PurposeHelper.select()
-  //       secondaryPurpose = SecondaryPurposeHelper.select()
-  //       await ReturnRequirementPurposeHelper.add({
-  //         alias: null,
-  //         primaryPurposeId: primaryPurpose.id,
-  //         purposeId: purpose.id,
-  //         returnRequirementId: returnRequirement.id,
-  //         secondaryPurposeId: secondaryPurpose.id
-  //       })
+      region = RegionHelper.select()
+      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
+      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
+      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
+      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      primaryPurpose = PrimaryPurposeHelper.select()
+      purpose = PurposeHelper.select()
+      secondaryPurpose = SecondaryPurposeHelper.select()
+      await ReturnRequirementPurposeHelper.add({
+        alias: null,
+        primaryPurposeId: primaryPurpose.id,
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id,
+        secondaryPurposeId: secondaryPurpose.id
+      })
 
-  //       lastYearsCycleStartDate = formatDateObjectToISO(new Date(cycleStartDateByDate(lastYear, summer)))
-  //       twoYearsAgoCycleStartDate = formatDateObjectToISO(new Date(cycleStartDateByDate(twoYearsAgo, summer)))
-  //       lastYearsCycleEndDate = formatDateObjectToISO(new Date(cycleEndDateByDate(lastYear, summer)))
-  //       twoYearsAgoCycleEndDate = formatDateObjectToISO(new Date(cycleEndDateByDate(twoYearsAgo, summer)))
+      returnCycle = await ReturnCycleHelper.selectByDate(currentCycleDate, summer)
+      previousCycle = await ReturnCycleHelper.selectByDate(previousCycleDate, summer)
+      twoCyclesAgo = await ReturnCycleHelper.selectByDate(twoCyclesAgoDate, summer)
 
-  //       await ReturnLogHelper.add({
-  //         endDate: cycleEndDateAsISO(summer),
-  //         licenceRef: licence.licenceRef,
-  //         startDate: cycleStartDateAsISO(summer)
-  //       })
-  //       await ReturnLogHelper.add({
-  //         endDate: lastYearsCycleEndDate,
-  //         licenceRef: licence.licenceRef,
-  //         startDate: lastYearsCycleStartDate
-  //       })
-  //       await ReturnLogHelper.add({
-  //         endDate: twoYearsAgoCycleEndDate,
-  //         licenceRef: licence.licenceRef,
-  //         startDate: twoYearsAgoCycleStartDate
-  //       })
+      await ReturnLogHelper.add({
+        endDate: formatDateObjectToISO(returnCycle.endDate),
+        licenceRef: licence.licenceRef,
+        returnCycleId: returnCycle.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(returnCycle.startDate)
+      })
+      await ReturnLogHelper.add({
+        endDate: formatDateObjectToISO(previousCycle.endDate),
+        licenceRef: licence.licenceRef,
+        returnCycleId: previousCycle.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(previousCycle.startDate)
+      })
+      await ReturnLogHelper.add({
+        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
+        licenceRef: licence.licenceRef,
+        returnCycleId: twoCyclesAgo.id,
+        returnReference: returnRequirement.legacyId,
+        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
+      })
 
-  //       // BaseRequest depends on the GlobalNotifier to have been set.
-  //       // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-  //       // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-  //       // it directly with our own stub
-  //       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-  //       global.GlobalNotifier = notifierStub
-  //     })
+      // BaseRequest depends on the GlobalNotifier to have been set.
+      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
+      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
+      // it directly with our own stub
+      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
+    })
 
-  //     it('voids the return logs from the given end date and reissues them', async () => {
-  //       await ProcessLicenceEndingService.go(licence.licenceRef, endDate)
+    it('voids the return logs from the given end date and reissues them', async () => {
+      await ProcessLicenceEndingService.go(licence.licenceRef, twoCyclesAgoDate)
 
-  //       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
-  //       const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
+      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
+      // console.log(result)
+      const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
 
-  //       expect(areDatesSequential).to.equal(true)
-  //       expect(result.length).to.equal(4)
-  //       expect(result[0].status).to.equal('due')
-  //       expect(result[1].status).to.equal('due')
-  //       expect(result[2].status).to.equal('void')
-  //       expect(result[3].status).to.equal('due')
-  //       expect(result[3].endDate).to.equal(new Date(endDate))
-  //     })
-  //   })
-  // })
+      expect(areDatesSequential).to.equal(true)
+      expect(result.length).to.equal(6)
+      expect(result[0].status).to.equal('due')
+      expect(result[1].status).to.equal('due')
+      expect(result[2].status).to.equal('due')
+      expect(result[2].endDate).to.equal(new Date(endDate))
+      expect(result[3].status).to.equal('void')
+      expect(result[4].status).to.equal('void')
+      expect(result[5].status).to.equal('void')
+    })
+  })
 })

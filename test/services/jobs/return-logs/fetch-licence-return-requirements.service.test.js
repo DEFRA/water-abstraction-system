@@ -25,7 +25,7 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 // Thing under test
 const FetchLicenceReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-licence-return-requirements.service.js')
 
-describe.only('Fetch licence return requirements service', () => {
+describe('Fetch licence return requirements service', () => {
   let licence
   let licenceRef
   let point
@@ -119,7 +119,7 @@ describe.only('Fetch licence return requirements service', () => {
     })
   })
 
-  describe.only('when summer is false, the licence has one return requirement and the return log has already been created', () => {
+  describe('when summer is false, the licence has one return requirement and the return log has already been created', () => {
     before(async () => {
       licenceRef = 'returnLogCreated'
       summer = false

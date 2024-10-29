@@ -47,6 +47,7 @@ async function _fetchReturnRequirements (licenceReference, summer, endDate) {
   const _cycleEndDate = cycleEndDateAsISO(summer)
   const _cycleStartDate = endDate ? cycleStartDateByDate(endDate, summer) : cycleStartDateAsISO(summer)
   const externalIds = await _fetchExternalIds(licenceReference, summer, _cycleStartDate)
+  console.log(externalIds)
 
   return ReturnRequirementModel.query()
     .where('returnRequirements.summer', summer)

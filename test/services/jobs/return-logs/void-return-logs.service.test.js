@@ -8,6 +8,7 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -15,7 +16,7 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 // Thing under test
 const VoidReturnLogsService = require('../../../../app/services/jobs/return-logs/void-return-logs.service.js')
 
-describe('Void return log service', () => {
+describe.only('Void return log service', () => {
   let licenceReference
   let allYearCycle
   let previousAllYearCycle
@@ -34,28 +35,28 @@ describe('Void return log service', () => {
       endDate.setMonth(7)
 
       await ReturnLogHelper.add({
-        endDate: summerCycle.endDate,
+        endDate: formatDateObjectToISO(summerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: summerCycle.id,
-        startDate: summerCycle.startDate
+        startDate: formatDateObjectToISO(summerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousSummerCycle.endDate,
+        endDate: formatDateObjectToISO(previousSummerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousSummerCycle.id,
-        startDate: previousSummerCycle.startDate
+        startDate: formatDateObjectToISO(previousSummerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: allYearCycle.endDate,
+        endDate: formatDateObjectToISO(allYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: allYearCycle.id,
-        startDate: allYearCycle.startDate
+        startDate: formatDateObjectToISO(allYearCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousAllYearCycle.endDate,
+        endDate: formatDateObjectToISO(previousAllYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousAllYearCycle.id,
-        startDate: previousAllYearCycle.startDate
+        startDate: formatDateObjectToISO(previousAllYearCycle.startDate)
       })
     })
 
@@ -83,28 +84,28 @@ describe('Void return log service', () => {
       endDate.setFullYear(endDate.getFullYear() - 1)
 
       await ReturnLogHelper.add({
-        endDate: summerCycle.endDate,
+        endDate: formatDateObjectToISO(summerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: summerCycle.id,
-        startDate: summerCycle.startDate
+        startDate: formatDateObjectToISO(summerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousSummerCycle.endDate,
+        endDate: formatDateObjectToISO(previousSummerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousSummerCycle.id,
-        startDate: previousSummerCycle.startDate
+        startDate: formatDateObjectToISO(previousSummerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: allYearCycle.endDate,
+        endDate: formatDateObjectToISO(allYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: allYearCycle.id,
-        startDate: allYearCycle.startDate
+        startDate: formatDateObjectToISO(allYearCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousAllYearCycle.endDate,
+        endDate: formatDateObjectToISO(previousAllYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousAllYearCycle.id,
-        startDate: previousAllYearCycle.startDate
+        startDate: formatDateObjectToISO(previousAllYearCycle.startDate)
       })
     })
 
@@ -131,28 +132,28 @@ describe('Void return log service', () => {
       endDate.setMonth(0)
 
       await ReturnLogHelper.add({
-        endDate: summerCycle.endDate,
+        endDate: formatDateObjectToISO(summerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: summerCycle.id,
-        startDate: summerCycle.startDate
+        startDate: formatDateObjectToISO(summerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousSummerCycle.endDate,
+        endDate: formatDateObjectToISO(previousSummerCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousSummerCycle.id,
-        startDate: previousSummerCycle.startDate
+        startDate: formatDateObjectToISO(previousSummerCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: allYearCycle.endDate,
+        endDate: formatDateObjectToISO(allYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: allYearCycle.id,
-        startDate: allYearCycle.startDate
+        startDate: formatDateObjectToISO(allYearCycle.startDate)
       })
       await ReturnLogHelper.add({
-        endDate: previousAllYearCycle.endDate,
+        endDate: formatDateObjectToISO(previousAllYearCycle.endDate),
         licenceRef: licenceReference,
         returnCycleId: previousAllYearCycle.id,
-        startDate: previousAllYearCycle.startDate
+        startDate: formatDateObjectToISO(previousAllYearCycle.startDate)
       })
     })
 

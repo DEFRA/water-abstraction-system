@@ -22,13 +22,16 @@ async function go (licenceReference, endDate) {
     const startTime = currentTimeInNanoseconds()
 
     await VoidReturnLogsService.go(licenceReference, endDate)
-    const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceReference)
+    const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceReference, endDate)
+    console.log(returnRequirements)
     const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
+    console.log(returnLogs)
 
     await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
   } catch (error) {
+    console.log(error)
     global.GlobalNotifier.omfg('Create licence return logs job failed', { error })
   }
 }
