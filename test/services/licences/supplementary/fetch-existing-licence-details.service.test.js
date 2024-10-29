@@ -35,6 +35,7 @@ describe('Fetch Existing Licence Details Service', () => {
         const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
         expect(result.id).to.equal(licence.id)
+        expect(result.region_id).to.equal(licence.regionId)
         expect(result.revoked_date).to.equal(new Date('2024-08-01'))
         expect(result.lapsed_date).to.equal(new Date('2024-06-01'))
         expect(result.expired_date).to.equal(new Date('2024-04-01'))

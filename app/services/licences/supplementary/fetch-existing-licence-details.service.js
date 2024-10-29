@@ -36,6 +36,7 @@ function _query () {
   return `
     SELECT
       l.id,
+      l.region_id,
       l.expired_date,
       l.lapsed_date,
       l.revoked_date,
