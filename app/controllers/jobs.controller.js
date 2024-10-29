@@ -6,10 +6,11 @@
  */
 
 const ExportService = require('../services/jobs/export/export.service.js')
+const ImportLicence = require('../services/jobs/import/import-licence.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
+const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
-const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 
 const redirectStatusCode = 204
 const notFoundStatusCode = 404
@@ -65,10 +66,17 @@ async function returnLogs (request, h) {
   return h.response().code(redirectStatusCode)
 }
 
+async function importLicence (_request, h) {
+  await ImportLicence.go()
+
+  return h.response().code(redirectStatusCode)
+}
+
 module.exports = {
   exportDb,
   licenceUpdates,
   returnLogs,
   sessionCleanup,
-  timeLimited
+  timeLimited,
+  importLicence
 }
