@@ -12,11 +12,21 @@ const ProcessLicenceService = require('../../import/legacy/process-licence.servi
  * @param {string[]} licenceRefs - an array of licence ref
  */
 async function go (licenceRefs) {
-  for (const licenceRef of licenceRefs) {
-    ProcessLicenceService.go(licenceRef)
+  const batchSize = 10
+
+  for (let i = 0; i < licenceRefs.length; i += batchSize) {
+    const batch = licenceRefs.slice(i, i + batchSize)
+
+    await _processBatch(batch)
   }
 
   return true
+}
+
+async function _processBatch (batch) {
+  const boss = batch.map((licenceRef) => { return ProcessLicenceService.go(licenceRef) })
+
+  await Promise.all(boss)
 }
 
 module.exports = {
