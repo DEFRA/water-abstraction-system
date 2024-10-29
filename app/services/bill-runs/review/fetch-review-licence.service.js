@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the individual review licence data for a two-part tariff bill run
+ * Fetches the selected review licence instance and related data for the two-part tariff review licence page
  * @module FetchReviewLicenceService
  */
 
@@ -9,6 +9,14 @@ const { ref } = require('objection')
 
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
+/**
+ * Fetches the selected review licence instance and associated data for the two-part tariff review licence page
+ *
+ * @param {string} reviewLicenceId - the UUID of the selected review licence
+ *
+ * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
+ * two-part tariff review licence page
+ */
 async function go (reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
