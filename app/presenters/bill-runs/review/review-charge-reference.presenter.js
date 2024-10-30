@@ -37,7 +37,7 @@ function go (reviewChargeReference) {
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     reviewChargeReferenceId,
     reviewLicenceId: reviewChargeVersion.reviewLicence.id,
-    totalBillableReturns: _totalAllocated(reviewChargeElements)
+    totalBillableReturns: _totalBillableReturns(reviewChargeElements)
   }
 }
 
@@ -111,7 +111,7 @@ function _chargePeriod (reviewChargeVersion) {
   return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
 }
 
-function _totalAllocated (reviewChargeElements) {
+function _totalBillableReturns (reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
     const { amendedAllocated } = reviewChargeElement
 
