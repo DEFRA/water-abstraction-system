@@ -26,7 +26,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} payload - The submitted form data
  *
- * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
+ * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
 async function go (reviewChargeReferenceId, yar, payload) {
