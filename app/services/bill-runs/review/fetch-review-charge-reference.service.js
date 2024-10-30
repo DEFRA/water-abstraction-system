@@ -58,6 +58,14 @@ async function _fetch (reviewChargeReferenceId) {
                   'toFinancialYearEnding'
                 ])
             })
+            .withGraphFetched('licence')
+            .modifyGraph('licence', (builder) => {
+              builder
+                .select([
+                  'id',
+                  'waterUndertaker'
+                ])
+            })
         })
     })
     .withGraphFetched('reviewChargeElements')
@@ -75,6 +83,7 @@ async function _fetch (reviewChargeReferenceId) {
           'id',
           'volume',
           'chargeCategoryId',
+          'loss',
           ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
           ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
         ])
