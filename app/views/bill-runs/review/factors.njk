@@ -16,12 +16,6 @@
 {% block content %}
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
-
-      {% set errorList %}
-        <div>{{error.aggregateFactorElement.text}}</div>
-        <div>{{error.chargeAdjustmentElement.text}}</div>
-      {% endset %}
-
       {% if error %}
         {{ govukErrorSummary({
           titleText: 'There is a problem',
