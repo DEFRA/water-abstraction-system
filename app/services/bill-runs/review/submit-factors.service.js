@@ -2,7 +2,7 @@
 
 /**
  * Handles user submission for the review charge reference factors page
- * @module SubmitAmendedAdjustmentFactorService
+ * @module SubmitFactorsService
  */
 
 const FactorsPresenter = require('../../../presenters/bill-runs/review/factors.presenter.js')
