@@ -39,9 +39,6 @@ function _query () {
     l.include_in_presroc_billing,
     l.id,
     l.region_id,
-    l.expired_date,
-    l.revoked_date,
-    l.lapsed_date,
     EXISTS (
       SELECT 1
       FROM public.charge_versions cv
