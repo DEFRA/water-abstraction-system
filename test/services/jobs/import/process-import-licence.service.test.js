@@ -76,6 +76,21 @@ describe('Process Import Licence Service', () => {
         .to.be.true()
     })
 
+    it('should format the licence for the Determine Supplementary Billing Flags Service', async () => {
+      await ProcessImportLicence.go(licences)
+
+      const firstLicence = licences[0]
+
+      expect(stubDetermineSupplementaryBillingFlagsService
+        .getCall(0)
+        .calledWithExactly({
+          expiredDate: firstLicence.expired_date,
+          lapsedDate: firstLicence.lapsed_date,
+          revokedDate: firstLicence.revoked_date
+        }, firstLicence.id))
+        .to.be.true()
+    })
+
     it('should process all the licence refs', async () => {
       await ProcessImportLicence.go(licences)
 
