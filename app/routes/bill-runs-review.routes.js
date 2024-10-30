@@ -89,6 +89,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/preview',
+    options: {
+      handler: BillRunsReviewController.preview,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/review/licence/{reviewLicenceId}',
     options: {
       handler: BillRunsReviewController.reviewLicence,

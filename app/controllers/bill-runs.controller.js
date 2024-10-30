@@ -8,7 +8,6 @@
 const Boom = require('@hapi/boom')
 
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
-const CalculateChargeService = require('../services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
@@ -66,14 +65,6 @@ async function matchDetails (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
-}
-
-async function previewCharge (request, h) {
-  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
-
-  await CalculateChargeService.go(licenceId, reviewChargeReferenceId, request.yar)
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
 }
 
 async function removeLicence (request, h) {
@@ -189,7 +180,6 @@ module.exports = {
   cancel,
   index,
   matchDetails,
-  previewCharge,
   removeLicence,
   send,
   submitAmendedBillableReturns,

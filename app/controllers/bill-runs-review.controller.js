@@ -7,6 +7,7 @@
 
 const AuthorisedService = require('../services/bill-runs/review/authorised.service.js')
 const FactorsService = require('../services/bill-runs/review/factors.service.js')
+const PreviewService = require('../services/bill-runs/review/preview.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
 const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/review/review-licence.service.js')
@@ -35,6 +36,14 @@ async function factors (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
+}
+
+async function preview (request, h) {
+  const { reviewChargeReferenceId } = request.params
+
+  await PreviewService.go(reviewChargeReferenceId, request.yar)
+
+  return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
 async function review (request, h) {
@@ -112,6 +121,7 @@ async function submitReviewLicence (request, h) {
 module.exports = {
   authorised,
   factors,
+  preview,
   review,
   reviewChargeReference,
   reviewLicence,

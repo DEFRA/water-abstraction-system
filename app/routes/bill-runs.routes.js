@@ -116,18 +116,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/preview-charge/{reviewChargeReferenceId}',
-    options: {
-      handler: BillRunsController.previewCharge,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/send',
     options: {
       handler: BillRunsController.send,
