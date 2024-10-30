@@ -1,0 +1,78 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to charge reference',
+      href: '/system/bill-runs/review/charge-reference/' + reviewChargeReferenceId
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-full">
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: 'There is a problem',
+          errorList: [
+            {
+              text: error.text,
+              href: '#amended-authorised-volume'
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      {# Title #}
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">{{chargeDescription}}</span>
+        {{pageTitle}}
+      </h1>
+      <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialPeriod}}</span>
+      <h2 class="govuk-heading-m" data-test="charge-period">
+        Charge period {{chargePeriod}}
+      </h2>
+
+      {% set insertText %}
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <span class="govuk-!-font-weight-bold">Total billable returns</span>
+          {{totalBillableReturns}} ML
+        </p>
+      {% endset %}
+
+      {{ govukInsetText({
+          html: insertText
+        })
+      }}
+
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        {{ govukInput({
+          label: {
+            text: "Authorised volume",
+            classes: "govuk-label"
+          },
+          id: "amended-authorised-volume",
+          name: "amendedAuthorisedVolume",
+          classes: "govuk-input--width-10",
+          value: amendedAuthorisedVolume,
+          suffix: {
+            text: "ML"
+          },
+          errorMessage: error
+        }) }}
+
+        {# Hidden input for authorised volume #}
+        <input type="hidden" name="totalBillableReturns" value="{{ totalBillableReturns }}">
+
+        {{ govukButton({ text: 'Confirm', preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
