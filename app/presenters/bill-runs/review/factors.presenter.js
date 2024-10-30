@@ -30,10 +30,10 @@ function go (reviewChargeReference) {
   return {
     amendedAggregate,
     amendedChargeAdjustment,
-    otherAdjustments: [...additionalCharges, ...adjustments],
     chargeDescription: chargeReference.chargeCategory.shortDescription,
     chargePeriod: _chargePeriod(reviewChargeVersion),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
+    otherAdjustments: [...additionalCharges, ...adjustments],
     reviewChargeReferenceId
   }
 }
