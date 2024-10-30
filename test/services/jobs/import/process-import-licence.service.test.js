@@ -21,18 +21,23 @@ describe('Process Import Licence Service', () => {
   const batchSize = 10
 
   let licences
-  let stubProcessLicenceReturnLogsService
+  let notifierStub
   let stubDetermineSupplementaryBillingFlagsService
+  let stubProcessLicenceReturnLogsService
 
   beforeEach(async () => {
     licences = _licences()
 
     stubDetermineSupplementaryBillingFlagsService = Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
     stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when iterating the licences', () => {

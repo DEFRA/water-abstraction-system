@@ -7,7 +7,7 @@
 
 const DetermineSupplementaryBillingFlagsService = require('../../import/determine-supplementary-billing-flags.service.js')
 const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-return-logs.service.js')
-// const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
+const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
  * Process import licence
@@ -19,18 +19,15 @@ const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-
 async function go (licences) {
   const batchSize = 10
 
-  // const startTime = currentTimeInNanoseconds()
+  const startTime = currentTimeInNanoseconds()
 
   for (let i = 0; i < licences.length; i += batchSize) {
-    // const startTime2 = currentTimeInNanoseconds()
     const batch = licences.slice(i, i + batchSize)
 
     await _processBatch(batch)
-
-    // calculateAndLogTimeTaken(startTime2, `Batch ${i} complete`)
   }
 
-  // calculateAndLogTimeTaken(startTime, `Finished importing ${licences.length} licences from NALD`)
+  calculateAndLogTimeTaken(startTime, `Finished importing ${licences.length} licences from NALD`)
 }
 
 async function _processBatch (batch) {
