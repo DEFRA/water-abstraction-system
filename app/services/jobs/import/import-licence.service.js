@@ -5,7 +5,7 @@
  * @module ImportLicence
  */
 
-const FetchNaldLicenceRefs = require('./fetch-nald-licence-ref.service.js')
+const FetchLicences = require('./fetch-licences.service.js')
 const ProcessImportLicence = require('./process-import-licence.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
@@ -20,7 +20,7 @@ async function go () {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licences = await FetchNaldLicenceRefs.go()
+    const licences = await FetchLicences.go()
 
     ProcessImportLicence.go(licences)
 
