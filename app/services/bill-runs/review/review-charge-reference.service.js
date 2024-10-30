@@ -5,7 +5,7 @@
  * @module ReviewChargeReferenceService
  */
 
-const FetchReviewChargeReferenceService = require('../review/fetch-review-charge-reference.service.js')
+const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
 const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/review/review-charge-reference.presenter.js')
 
 /**
