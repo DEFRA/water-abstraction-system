@@ -2,7 +2,7 @@
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
- * @module AmendAdjustmentFactorPresenter
+ * @module FactorsPresenter
  */
 
 const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js')
