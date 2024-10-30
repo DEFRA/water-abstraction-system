@@ -41,6 +41,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
+    options: {
+      handler: BillRunsReviewController.authorised,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
+    options: {
+      handler: BillRunsReviewController.submitAuthorised,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors',
     options: {
       handler: BillRunsReviewController.factors,

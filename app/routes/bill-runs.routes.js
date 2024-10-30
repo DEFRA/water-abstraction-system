@@ -80,30 +80,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
-    options: {
-      handler: BillRunsController.amendAuthorisedVolume,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
-    options: {
-      handler: BillRunsController.submitAmendedAuthorisedVolume,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     options: {
       handler: BillRunsController.matchDetails,

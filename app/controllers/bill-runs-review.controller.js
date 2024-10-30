@@ -5,13 +5,26 @@
  * @module BillRunsReviewController
  */
 
+const AuthorisedService = require('../services/bill-runs/review/authorised.service.js')
 const FactorsService = require('../services/bill-runs/review/factors.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
 const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/review/review-licence.service.js')
+const SubmitAuthorisedService = require('../services/bill-runs/review/submit-authorised.service.js')
 const SubmitFactorsService = require('../services/bill-runs/review/submit-factors.service.js')
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
+
+async function authorised (request, h) {
+  const { reviewChargeReferenceId } = request.params
+
+  const pageData = await AuthorisedService.go(reviewChargeReferenceId)
+
+  return h.view('bill-runs/review/authorised.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
 
 async function factors (request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -58,6 +71,17 @@ async function reviewLicence (request, h) {
   })
 }
 
+async function submitAuthorised (request, h) {
+  const { reviewChargeReferenceId } = request.params
+  const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/review/authorised.njk', pageData)
+  }
+
+  return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
+}
+
 async function submitFactors (request, h) {
   const { reviewChargeReferenceId } = request.params
   const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
@@ -86,10 +110,12 @@ async function submitReviewLicence (request, h) {
 }
 
 module.exports = {
+  authorised,
   factors,
   review,
   reviewChargeReference,
   reviewLicence,
+  submitAuthorised,
   submitFactors,
   submitReview,
   submitReviewLicence
