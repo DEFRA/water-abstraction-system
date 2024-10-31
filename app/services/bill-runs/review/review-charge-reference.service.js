@@ -26,7 +26,7 @@ async function go (reviewChargeReferenceId, yar) {
   const pageData = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
   return {
-    pageTitle: 'Charge reference details',
+    pageTitle: 'Review charge reference',
     bannerMessage,
     chargeMessage,
     ...pageData
