@@ -347,7 +347,7 @@
                     {% set elementRows = [] %}
 
                     <div class="govuk-!-margin-top-6">
-                      <span class="govuk-body govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-count-{{ chargeElementIndex }}">{{chargeElement.elementNumber}}</span>
+                      <span class="govuk-body govuk-!-font-weight-regular" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-count-{{ chargeElementIndex }}">Element {{chargeElement.elementIndex}} of {{chargeElement.elementCount}}</span>
                       <span class="float-right" data-test="charge-version-{{ chargeVersionIndex }}-charge-reference-{{chargeReferenceIndex}}-element-status-{{ chargeElementIndex }}">
                         {{ statusTag(chargeElement.status) }}
                       </span>
@@ -389,7 +389,7 @@
                           actions: {
                             items: [
                             {
-                              href: '/system/bill-runs/review/charge-element/' + chargeElement.id,
+                              href: '/system/bill-runs/review/charge-element/' + chargeElement.id + '/' + chargeElement.elementIndex,
                               html: '<div data-test="charge-version-' + chargeVersionIndex + '-charge-reference-' + chargeReferenceIndex + '-charge-element-match-details-' + chargeElementIndex + '">View match details</div>'
                             }
                           ]}
