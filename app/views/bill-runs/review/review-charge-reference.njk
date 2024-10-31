@@ -13,145 +13,144 @@
 {% endblock %}
 
 {% block content %}
+  {# Adjustment factor ammended banner #}
+  {% if bannerMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Adjustment updated',
+      text: bannerMessage
+    }) }}
+  {% endif %}
 
-{# Adjustment factor ammended banner #}
-{% if bannerMessage %}
-  {{ govukNotificationBanner({
-    titleText: 'Adjustment updated',
-    text: bannerMessage
-  }) }}
-{% endif %}
+  {# Charge preview banner #}
+  {% if chargeMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Information',
+      text: chargeMessage
+    }) }}
+  {% endif %}
 
-{# Charge preview banner #}
-{% if chargeMessage %}
-  {{ govukNotificationBanner({
-    titleText: 'Information',
-    text: chargeMessage
-  }) }}
-{% endif %}
-
-{# Title area #}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l" data-test="charge-reference">Charge reference {{chargeCategory}}</span><span data-test="charge-reference-description">{{chargeDescription}}</span>
-    </h1>
-    <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialPeriod}}</span>
-    <h2 class="govuk-heading-m" data-test="charge-period">
-      Charge period {{chargePeriod}}
-    </h2>
-  </div>
-</div>
-
-{# Return numbers ML #}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <div class="govuk-!-margin-right-6 float-left">
-      <h3>
-        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="total-billable-returns">{{totalBillableReturns}} ML</span>
-        <div>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Total billable returns</span>
-        </div>
-      </h3>
-    </div>
-    <div class="govuk-!-margin-right-6 float-left">
-      <h3>
-        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">/</span>
-      </h3>
-    </div>
-    <div class="govuk-!-margin-right-6 float-left">
-      <h3>
-        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="authorised-volume">{{amendedAuthorisedVolume}} ML</span>
-        <div>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Authorised volume</span>
-        </div>
-      </h3>
-    </div>
-  </div>
-</div>
-
-{# Buttons #}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
-  <div class="govuk-grid-column-full">
-    {% if canAmend %}
-      <span class="inline govuk-!-margin-right-3">
-        {{ govukButton({
-          text: "Change the authorised volume",
-          classes: "govuk-button--secondary",
-          preventDoubleClick: true,
-          href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/authorised"
-        }) }}
-      </span>
-    {% endif %}
-
-    <span class="inline">
-      {{ govukButton({
-        text: "Preview the charge",
-        classes: "govuk-button--secondary",
-        preventDoubleClick: true,
-        href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/preview"
-      }) }}
-    </span>
-  </div>
-</div>
-
-{# Reference details #}
-{% if additionalCharges or adjustments.length > 0 %}
+  {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">Reference details<h2>
-
-      {% set adjustmentsValue %}
-        {% for adjustment in adjustments %}
-          {% set adjustmentsIndex = loop.index0 %}
-          <div data-test="adjustment-{{ adjustmentsIndex }}">{{adjustment}}</div>
-        {% endfor %}
-      {% endset %}
-
-      {% if canAmend %}
-        {% set showLink = {
-          items: [{
-              href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/factors",
-              text: "Change factors"
-            }]
-          }
-        %}
-      {% endif %}
-
-      {% set tableRows = [] %}
-      {% if additionalCharges %}
-        {% set tableRow = {
-            key: {
-              text: "Additional charges"
-            },
-            value: {
-              html: '<div data-test="additional-charges">' + additionalCharges + '</div>'
-            }
-          }
-        %}
-
-        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-      {% endif %}
-
-      {% if adjustments %}
-        {% set tableRow = {
-            key: {
-              text: "Adjustments"
-            },
-            value: {
-              html: adjustmentsValue
-            },
-            actions: showLink
-          }
-        %}
-
-        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-      {% endif %}
-
-      {{ govukSummaryList({
-        rows: tableRows
-      }) }}
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l" data-test="charge-reference">Charge reference {{chargeCategory}}</span><span data-test="charge-reference-description">{{chargeDescription}}</span>
+      </h1>
+      <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialPeriod}}</span>
+      <h2 class="govuk-heading-m" data-test="charge-period">
+        Charge period {{chargePeriod}}
+      </h2>
     </div>
   </div>
-{% endif %}
+
+  {# Return numbers ML #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="total-billable-returns">{{totalBillableReturns}} ML</span>
+          <div>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Total billable returns</span>
+          </div>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">/</span>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="authorised-volume">{{amendedAuthorisedVolume}} ML</span>
+          <div>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Authorised volume</span>
+          </div>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  {# Buttons #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-full">
+      {% if canAmend %}
+        <span class="inline govuk-!-margin-right-3">
+          {{ govukButton({
+            text: "Change the authorised volume",
+            classes: "govuk-button--secondary",
+            preventDoubleClick: true,
+            href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/authorised"
+          }) }}
+        </span>
+      {% endif %}
+
+      <span class="inline">
+        {{ govukButton({
+          text: "Preview the charge",
+          classes: "govuk-button--secondary",
+          preventDoubleClick: true,
+          href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/preview"
+        }) }}
+      </span>
+    </div>
+  </div>
+
+  {# Reference details #}
+  {% if additionalCharges or adjustments.length > 0 %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">Reference details<h2>
+
+        {% set adjustmentsValue %}
+          {% for adjustment in adjustments %}
+            {% set adjustmentsIndex = loop.index0 %}
+            <div data-test="adjustment-{{ adjustmentsIndex }}">{{adjustment}}</div>
+          {% endfor %}
+        {% endset %}
+
+        {% if canAmend %}
+          {% set showLink = {
+            items: [{
+                href: "/system/bill-runs/review/charge-reference/" + reviewChargeReferenceId + "/factors",
+                text: "Change factors"
+              }]
+            }
+          %}
+        {% endif %}
+
+        {% set tableRows = [] %}
+        {% if additionalCharges %}
+          {% set tableRow = {
+              key: {
+                text: "Additional charges"
+              },
+              value: {
+                html: '<div data-test="additional-charges">' + additionalCharges + '</div>'
+              }
+            }
+          %}
+
+          {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+        {% endif %}
+
+        {% if adjustments %}
+          {% set tableRow = {
+              key: {
+                text: "Adjustments"
+              },
+              value: {
+                html: adjustmentsValue
+              },
+              actions: showLink
+            }
+          %}
+
+          {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+        {% endif %}
+
+        {{ govukSummaryList({
+          rows: tableRows
+        }) }}
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
