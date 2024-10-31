@@ -30,10 +30,8 @@
     {% endset %}
 
     {% set returnSummary %}
-      <div>
-        {{ return.purpose }}
-      </div>
-        {{ return.description }}
+      <div>{{ return.purpose }}</div>
+      {{ return.description }}
     {% endset %}
 
     {% set tag %}
@@ -62,9 +60,9 @@
         attributes: { 'data-test': matchType + '-return-status-' + matchedReturnIndex }
       },
       {
-        html: "<div>" + return.returnTotal + "</div>" + issues,
+        html: '<div>' + return.returnTotal + '</div>' + issues,
         classes: "govuk-body-s govuk-!-text-align-right",
-        attributes: { 'data-test': matchType + '-return-total-' + matchedReturnIndex}
+        attributes: { 'data-test': matchType + '-return-total-' + matchedReturnIndex }
       }]
     %}
 
