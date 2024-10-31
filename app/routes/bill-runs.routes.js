@@ -80,18 +80,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
-    options: {
-      handler: BillRunsController.matchDetails,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
     options: {
       handler: BillRunsController.amendBillableReturns,

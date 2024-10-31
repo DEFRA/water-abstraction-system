@@ -29,6 +29,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}',
+    options: {
+      handler: BillRunsReviewController.reviewChargeElement,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}',
     options: {
       handler: BillRunsReviewController.reviewChargeReference,

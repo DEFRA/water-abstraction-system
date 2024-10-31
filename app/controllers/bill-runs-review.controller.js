@@ -8,6 +8,7 @@
 const AuthorisedService = require('../services/bill-runs/review/authorised.service.js')
 const FactorsService = require('../services/bill-runs/review/factors.service.js')
 const PreviewService = require('../services/bill-runs/review/preview.service.js')
+const ReviewChargeElementService = require('../services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
 const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/review/review-licence.service.js')
@@ -53,6 +54,17 @@ async function review (request, h) {
   const pageData = await ReviewBillRunService.go(id, page, request.yar)
 
   return h.view('bill-runs/review/review.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function reviewChargeElement (request, h) {
+  const { elementIndex, reviewChargeElementId } = request.params
+
+  const pageData = await ReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
+
+  return h.view('bill-runs/review/review-charge-element.njk', {
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -123,6 +135,7 @@ module.exports = {
   factors,
   preview,
   review,
+  reviewChargeElement,
   reviewChargeReference,
   reviewLicence,
   submitAuthorised,

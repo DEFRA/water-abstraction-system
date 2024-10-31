@@ -11,7 +11,6 @@ const AmendBillableReturnsService = require('../services/bill-runs/two-part-tari
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
-const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
@@ -50,18 +49,6 @@ async function index (request, h) {
   const pageData = await IndexBillRunsService.go(page)
 
   return h.view('bill-runs/index.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
-async function matchDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
-
-  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId, request.yar)
-
-  return h.view('bill-runs/match-details.njk', {
-    pageTitle: 'View match details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -179,7 +166,6 @@ module.exports = {
   amendBillableReturns,
   cancel,
   index,
-  matchDetails,
   removeLicence,
   send,
   submitAmendedBillableReturns,
