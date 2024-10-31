@@ -71,7 +71,7 @@ class PointModel extends BaseModel {
 
     // If ng4 is populated then we know this point is an 'area'
     if (this.ngr4) {
-      abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${this.ngr1} ${this.ngr2} ${this.ngr3} and ${this.ngr4}`
+      abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${this.ngr1}, ${this.ngr2}, ${this.ngr3} and ${this.ngr4}`
     } else if (this.ngr2) {
       // If ng2 is populated then we know this point is a 'reach'
       abstractionPoint = `Between National Grid References ${this.ngr1} and ${this.ngr2}`
