@@ -24,7 +24,7 @@ describe('ExpandedError', () => {
       }
     })
 
-    it.only('will assign those to the error instance', () => {
+    it('will assign those to the error instance', () => {
       const result = new ExpandedError('My test error', additionalData)
 
       // Node test runner
