@@ -27,10 +27,6 @@ describe('ExpandedError', () => {
     it('will assign those to the error instance', () => {
       const result = new ExpandedError('My test error', additionalData)
 
-      // Node test runner
-      // assert.equal(result.message, 'My test error')
-      // assert.equal(result.billRunId, additionalData.billRunId)
-      // assert.equal(result.details, additionalData.details)
       expect(result.message).to.equal('My test error')
       expect(result.billRunId).to.equal(additionalData.billRunId)
       expect(result.details).to.equal(additionalData.details)
