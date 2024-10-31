@@ -190,7 +190,7 @@ describe('Point model', () => {
         it('returns an "area" description including the supplementary', () => {
           const result = testRecord.$describe()
 
-          expect(result).to.equal('Within the area formed by the straight lines running between National Grid References ST 58212 72697 ST 58151 72683 ST 58145 72727 and ST 58222 72744 (Head office)')
+          expect(result).to.equal('Within the area formed by the straight lines running between National Grid References ST 58212 72697, ST 58151 72683, ST 58145 72727 and ST 58222 72744 (Head office)')
         })
       })
 
@@ -198,7 +198,7 @@ describe('Point model', () => {
         it('returns just the "area" description', () => {
           const result = testRecord.$describe()
 
-          expect(result).to.equal('Within the area formed by the straight lines running between National Grid References ST 58212 72697 ST 58151 72683 ST 58145 72727 and ST 58222 72744')
+          expect(result).to.equal('Within the area formed by the straight lines running between National Grid References ST 58212 72697, ST 58151 72683, ST 58145 72727 and ST 58222 72744')
         })
       })
     })
