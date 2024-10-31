@@ -2,10 +2,10 @@
 
 // Test framework dependencies
 const Code = require('@hapi/code')
-const Lab = require('@hapi/lab')
+
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = require('node:test')
 const { expect } = Code
 
 // Test helpers

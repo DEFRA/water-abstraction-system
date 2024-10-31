@@ -1,11 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
+
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { afterEach, describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { afterEach, describe, it, before, beforeEach } = require('node:test')
 const { expect } = Code
 
 const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
@@ -120,12 +120,12 @@ describe('Return Cycle Dates lib', () => {
           returnCycleDates.summer.dueDate.month,
           returnCycleDates.summer.dueDate.day
         ).toISOString().split('T')[0]
+      })
 
-        it('should return the due date of next years summer cycle formatted as YYYY-MM-DD', () => {
-          const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
+      it('should return the due date of next years summer cycle formatted as YYYY-MM-DD', () => {
+        const result = ReturnCycleDatesLib.cycleDueDateAsISO(summer)
 
-          expect(result).to.equal(expectedDate)
-        })
+        expect(result).to.equal(expectedDate)
       })
     })
 

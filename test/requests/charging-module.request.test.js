@@ -1,11 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
+
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after, afterEach } = require('node:test')
 const { expect } = Code
 
 // Things we need to stub
