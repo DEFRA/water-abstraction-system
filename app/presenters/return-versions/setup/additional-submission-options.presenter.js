@@ -18,11 +18,11 @@ function go (session) {
     startDateYear, startDateMonth, startDateDay, additionalSubmissionOptions
   } = session
 
-  const quarterlyReturnSubmissions = _quarterlyReturnSubmissions(
-    waterUndertaker, startDateYear, startDateMonth, startDateDay)
+  const quarterlyReturnSubmissions = _quarterlyReturnSubmissions(startDateYear, startDateMonth, startDateDay)
 
   return {
-    additionalSubmissionOptions: _additionalSubmissionOptions(additionalSubmissionOptions, quarterlyReturnSubmissions),
+    additionalSubmissionOptions:
+      _additionalSubmissionOptions(additionalSubmissionOptions, waterUndertaker),
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceId,
     licenceRef,
@@ -37,7 +37,6 @@ function go (session) {
  * A return version is due for quarterly returns submissions when they:
  * - are a water company and the return version start date is > 1 April 2025
  *
- * @param {boolean} waterUndertaker - If the return version is for water company
  * @param {string} startDateYear - The return version start year
  * @param {string} startDateMonth - The return version start month
  * @param {string} startDateDay - The return version start day
@@ -46,12 +45,12 @@ function go (session) {
  *
  * @private
  */
-function _quarterlyReturnSubmissions (waterUndertaker, startDateYear, startDateMonth, startDateDay) {
+function _quarterlyReturnSubmissions (startDateYear, startDateMonth, startDateDay) {
   const returnVersionStartDate = new Date(`${startDateYear}-${startDateMonth}-${startDateDay}`)
 
   const quarterlyReturnSubmissionsStartDate = new Date('2025-04-01')
 
-  return waterUndertaker && returnVersionStartDate.getTime() >= quarterlyReturnSubmissionsStartDate.getTime()
+  return returnVersionStartDate.getTime() >= quarterlyReturnSubmissionsStartDate.getTime()
 }
 
 /**
@@ -62,18 +61,18 @@ function _quarterlyReturnSubmissions (waterUndertaker, startDateYear, startDateM
  * Otherwise default to none
  *
  * @param {string[]} additionalSubmissionOptions - The options set already from session
- * @param {boolean} quarterlyReturnSubmissions - If the return version is for quarterly return submissions
+ * @param {boolean} waterUndertaker - If the return version is for water company
  *
  * @returns {string[]}
  *
  * @private
  */
-function _additionalSubmissionOptions (additionalSubmissionOptions, quarterlyReturnSubmissions) {
+function _additionalSubmissionOptions (additionalSubmissionOptions, waterUndertaker) {
   if (additionalSubmissionOptions) {
     return additionalSubmissionOptions
   }
 
-  if (quarterlyReturnSubmissions) { return ['multiple-upload', 'quarterly-return-submissions'] }
+  if (waterUndertaker) { return ['multiple-upload', 'quarterly-return-submissions'] }
 
   return ['none']
 }
