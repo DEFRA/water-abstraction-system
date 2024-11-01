@@ -33,7 +33,6 @@ function go (session) {
 
 /**
  * Checks if the return version is a quarterly returns submission
- * @private
  *
  * A return version is due for quarterly returns submissions when they:
  * - are a water company and the return version start date is > 1 April 2025
@@ -44,6 +43,8 @@ function go (session) {
  * @param {string} startDateDay - The return version start day
  *
  * @returns {boolean}
+ *
+ * @private
  */
 function _quarterlyReturnSubmissions (waterUndertaker, startDateYear, startDateMonth, startDateDay) {
   const returnVersionStartDate = new Date(`${startDateYear}-${startDateMonth}-${startDateDay}`)
@@ -55,7 +56,6 @@ function _quarterlyReturnSubmissions (waterUndertaker, startDateYear, startDateM
 
 /**
  * Determines the default options
- * @private
  *
  * Previous session data takes priority
  * If a return version is for quarterly return submissions then it has it's own defaults to set
@@ -65,6 +65,8 @@ function _quarterlyReturnSubmissions (waterUndertaker, startDateYear, startDateM
  * @param {boolean} quarterlyReturnSubmissions - If the return version is for quarterly return submissions
  *
  * @returns {string[]}
+ *
+ * @private
  */
 function _additionalSubmissionOptions (additionalSubmissionOptions, quarterlyReturnSubmissions) {
   if (additionalSubmissionOptions) {
