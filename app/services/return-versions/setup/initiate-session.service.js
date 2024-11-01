@@ -45,7 +45,7 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceVersions, returnVersions, startDate } = licence
+  const { id, licenceRef, licenceVersions, returnVersions, startDate, waterUndertaker } = licence
   const ends = licence.$ends()
 
   return {
@@ -57,7 +57,8 @@ function _data (licence, journey) {
       licenceRef,
       licenceHolder: licence.$licenceHolder(),
       returnVersions,
-      startDate
+      startDate,
+      waterUndertaker
     },
     journey,
     requirements: [{}]
@@ -73,7 +74,8 @@ async function _fetchLicence (licenceId) {
       'lapsedDate',
       'licenceRef',
       'revokedDate',
-      'startDate'
+      'startDate',
+      'waterUndertaker'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {

@@ -26,7 +26,8 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z'
+          startDate: '2022-04-01T00:00:00.000Z',
+          waterUndertaker: false
         },
         journey: 'returns-required',
         requirements: [{}],
@@ -48,11 +49,12 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        additionalSubmissionOptions: [],
+        additionalSubmissionOptions: ['none'],
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        pageTitle: 'Select any additional submission options for the return requirements'
+        pageTitle: 'Select any additional submission options for the return requirements',
+        quarterlyReturnSubmissions: false
       }, { skip: ['sessionId'] })
     })
   })

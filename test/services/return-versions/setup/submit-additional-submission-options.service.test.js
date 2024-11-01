@@ -35,7 +35,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
             reason: null,
             modLogs: []
           }],
-          startDate: '2022-04-01T00:00:00.000Z'
+          startDate: '2022-04-01T00:00:00.000Z',
+          waterUndertaker: false
         },
         journey: 'returns-required',
         requirements: [{}],
@@ -90,7 +91,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           backLink: `/system/return-versions/setup/${session.id}/check`,
           pageTitle: 'Select any additional submission options for the return requirements',
           licenceRef: '01/ABC',
-          additionalSubmissionOptions: [undefined]
+          additionalSubmissionOptions: [undefined],
+          quarterlyReturnSubmissions: false
         }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
       })
 
