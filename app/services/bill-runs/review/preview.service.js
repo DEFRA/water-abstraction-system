@@ -30,7 +30,7 @@ async function go (reviewChargeReferenceId, yar) {
 
   const result = await _calculateCharge(transaction)
 
-  if (result.charge) {
+  if (result.charge || result.charge === 0) {
     yar.flash('charge', `Based on this information the example charge is ${formatMoney(result.charge)}`)
   }
 
