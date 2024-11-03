@@ -55,7 +55,7 @@ describe('Return Versions Setup - Points presenter', () => {
           description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
         }, {
           id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
+          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
         }],
         licenceRef: '01/ABC',
         selectedPointIds: '',
@@ -127,7 +127,7 @@ describe('Return Versions Setup - Points presenter', () => {
 
         expect(result.licencePoints).to.equal([{
           id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
+          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
         }])
       })
     })
