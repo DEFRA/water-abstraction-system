@@ -5,8 +5,8 @@
  * @module EditPresenter
  */
 
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
-const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+const { formatFinancialYear } = require('../../base.presenter.js')
+const { formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Prepares and processes bill run and review charge element data for presenting
@@ -31,7 +31,7 @@ function go (reviewChargeElement, elementIndex) {
     billableReturns,
     chargeDescription: chargeElement.description,
     chargePeriod: reviewChargeReference.reviewChargeVersion.$formatChargePeriod(),
-    chargePeriods: _chargePeriods(reviewChargeElement),
+    chargePeriods: formatChargePeriods(reviewChargeElement),
     elementIndex,
     financialPeriod: formatFinancialYear(
       reviewChargeReference.reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding
@@ -51,35 +51,6 @@ function _authorisedQuantity (reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
 
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
-}
-
-function _chargePeriods (reviewChargeElement) {
-  const { chargeElement, reviewChargeReference } = reviewChargeElement
-
-  const {
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  } = chargeElement
-
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeReference.reviewChargeVersion
-
-  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-
-  const abstractionPeriods = DetermineAbstractionPeriodService.go(
-    chargePeriod,
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  )
-
-  return abstractionPeriods.map((abstractionPeriod) => {
-    const { endDate, startDate } = abstractionPeriod
-
-    return `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`
-  })
 }
 
 module.exports = {

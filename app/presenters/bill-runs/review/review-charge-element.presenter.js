@@ -5,8 +5,8 @@
  * @module ReviewChargeElementPresenter
  */
 
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+const { formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Formats the review charge element data ready for presenting in the review charge element page
@@ -33,7 +33,7 @@ function go (reviewChargeElement, elementIndex) {
     billableReturns,
     chargeDescription: chargeElement.description,
     chargePeriod: reviewChargeReference.reviewChargeVersion.$formatChargePeriod(),
-    chargePeriods: _chargePeriods(reviewChargeElement),
+    chargePeriods: formatChargePeriods(reviewChargeElement),
     elementCount: reviewChargeReference.reviewChargeElements.length,
     elementIndex,
     financialPeriod: formatFinancialYear(
@@ -46,35 +46,6 @@ function go (reviewChargeElement, elementIndex) {
     reviewLicenceId: reviewChargeReference.reviewChargeVersion.reviewLicence.id,
     status
   }
-}
-
-function _chargePeriods (reviewChargeElement) {
-  const { chargeElement, reviewChargeReference } = reviewChargeElement
-
-  const {
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  } = chargeElement
-
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeReference.reviewChargeVersion
-
-  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-
-  const abstractionPeriods = DetermineAbstractionPeriodService.go(
-    chargePeriod,
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  )
-
-  return abstractionPeriods.map((abstractionPeriod) => {
-    const { endDate, startDate } = abstractionPeriod
-
-    return `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`
-  })
 }
 
 function _matchedReturns (reviewReturns) {

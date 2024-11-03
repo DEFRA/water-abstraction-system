@@ -8,7 +8,7 @@
 const Big = require('big.js')
 
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const { formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -67,7 +67,7 @@ function _chargeElements (reviewChargeElements, chargePeriod) {
 
     return {
       billableReturns: `${amendedAllocated} ML / ${chargeElement.authorisedAnnualQuantity} ML`,
-      chargePeriods: _chargeElementChargePeriod(chargeElement, chargePeriod),
+      chargePeriods: formatChargePeriods(reviewChargeElement, chargePeriod),
       returnVolumes: _chargeElementReturnVolumes(reviewReturns),
       description: chargeElement.description,
       elementCount: numberOfElements,
@@ -77,29 +77,6 @@ function _chargeElements (reviewChargeElements, chargePeriod) {
       issues: issues.length > 0 ? issues.split(', ') : [''],
       purpose: chargeElement.purpose.description
     }
-  })
-}
-
-function _chargeElementChargePeriod (chargeElement, chargePeriod) {
-  const {
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  } = chargeElement
-
-  const abstractionPeriods = DetermineAbstractionPeriodService.go(
-    chargePeriod,
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  )
-
-  return abstractionPeriods.map((abstractionPeriod) => {
-    const { endDate, startDate } = abstractionPeriod
-
-    return `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`
   })
 }
 
