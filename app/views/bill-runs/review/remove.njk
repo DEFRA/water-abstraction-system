@@ -10,8 +10,8 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: 'Go back to licence',
-      href: backLink
+      text: 'Go back to review licence',
+      href: '/system/bill-runs/review/licence/' + reviewLicenceId
     })
   }}
 {% endblock %}
@@ -68,7 +68,7 @@
             },
             {
               key: { text: "Financial year", classes: "meta-data__label" },
-              value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-year">' + financialYearPeriod + '</span>', classes: "meta-data__value" }
             }
           ]
         })
