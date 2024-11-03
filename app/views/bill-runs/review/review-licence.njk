@@ -121,8 +121,8 @@
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{pageTitle}}</h1>
 
       <p class="govuk-body">
-        <span data-test='licence-holder'>Licence holder {{ licence.licenceHolder }} </span>
-        <div>{{ statusTag(licence.status) }}</div>
+        <span data-test='licence-holder'>{{ licenceHolder }} </span>
+        <div>{{ statusTag(status) }}</div>
       </p>
     </div>
   </div>
@@ -131,21 +131,21 @@
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
     <li class="govuk-summary-list__actions-list-item">
       <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-        href="/system/licences/{{ licence.licenceId  }}/summary"
+        href="/system/licences/{{ licenceId  }}/summary"
         data-test="summary-link">
         Summary
       </a>
     </li>
     <li class="govuk-summary-list__actions-list-item">
       <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-        href="/system/licences/{{ licence.licenceId  }}/returns"
+        href="/system/licences/{{ licenceId  }}/returns"
         data-test="returns-link">
         Returns
       </a>
     </li>
     <li class="govuk-summary-list__actions-list-item">
       <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
-        href="/system/licences/{{ licence.licenceId  }}/set-up"
+        href="/system/licences/{{ licenceId  }}/set-up"
         data-test="charge-information-link">
         Charge information
       </a>
@@ -164,7 +164,7 @@
 
     <div class="govuk-button-group">
       {# Change status button #}
-      {% if licence.status === 'ready' %}
+      {% if status === 'ready' %}
         {% set statusButtonText = 'Put licence into review' %}
         {% set statusButtonValue = 'review' %}
         {% set statusButtonClass = "govuk-button--secondary" %}
@@ -183,7 +183,7 @@
       }) }}
 
       {# Mark progress button #}
-      {% if licence.progress %}
+      {% if progress %}
         {% set progressButtonText = 'Remove progress mark' %}
         {% set progressButtonValue = 'unmark' %}
       {% else %}
@@ -203,7 +203,7 @@
       {{ govukButton({
         text: 'Remove from bill run',
         classes: "govuk-button--secondary",
-        href: "../remove/" + licence.licenceId,
+        href: '/system/bill-runs/review/licence/' + reviewLicenceId + '/remove',
         preventDoubleClick: true
       }) }}
     </div>

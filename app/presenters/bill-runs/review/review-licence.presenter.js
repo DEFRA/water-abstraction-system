@@ -21,6 +21,7 @@ const DetermineAbstractionPeriodService = require('../../../services/bill-runs/d
 function go (reviewLicence) {
   const {
     billRun,
+    id: reviewLicenceId,
     licenceHolder,
     licenceId,
     licenceRef,
@@ -35,16 +36,15 @@ function go (reviewLicence) {
     billRunId: billRun.id,
     chargeVersions: _chargeVersions(reviewChargeVersions, billRun.toFinancialYearEnding),
     elementsInReview: _elementsInReview(reviewChargeVersions),
-    licence: {
-      licenceId,
-      licenceRef,
-      status,
-      licenceHolder,
-      progress
-    },
+    licenceHolder,
+    licenceId,
+    licenceRef,
     matchedReturns,
     pageTitle: `Licence ${licenceRef}`,
+    progress,
     region: billRun.region.displayName,
+    reviewLicenceId,
+    status,
     unmatchedReturns
   }
 }
