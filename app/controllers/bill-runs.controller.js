@@ -7,29 +7,15 @@
 
 const Boom = require('@hapi/boom')
 
-const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
-const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
-
-async function amendBillableReturns (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
-
-  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
-
-  return h.view('bill-runs/amend-billable-returns.njk', {
-    pageTitle: 'Set the billable returns quantity for this bill run',
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
 
 async function cancel (request, h) {
   const { id } = request.params
@@ -75,24 +61,6 @@ async function send (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
-}
-
-async function submitAmendedBillableReturns (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
-
-  const pageData = await SubmitAmendedBillableReturnsService.go(
-    billRunId,
-    licenceId,
-    reviewChargeElementId,
-    request.payload,
-    request.yar
-  )
-
-  if (pageData.error) {
-    return h.view('bill-runs/amend-billable-returns.njk', pageData)
-  }
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
 }
 
 async function submitCancel (request, h) {
@@ -163,12 +131,10 @@ async function view (request, h) {
 }
 
 module.exports = {
-  amendBillableReturns,
   cancel,
   index,
   removeLicence,
   send,
-  submitAmendedBillableReturns,
   submitCancel,
   submitRemoveLicence,
   submitSend,
