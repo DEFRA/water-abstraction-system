@@ -17,7 +17,7 @@ const SubmitAuthorisedService = require('../services/bill-runs/review/submit-aut
 const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../services/bill-runs/review/submit-factors.service.js')
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
-const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
+const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
 
 async function authorised (request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -150,11 +150,11 @@ async function submitReview (request, h) {
 }
 
 async function submitReviewLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
+  const { reviewLicenceId } = request.params
 
-  await SubmitReviewLicenceService.go(billRunId, licenceId, request.payload, request.yar)
+  await SubmitReviewLicenceService.go(reviewLicenceId, request.yar, request.payload)
 
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}`)
+  return h.redirect(`/system/bill-runs/review/licence/${reviewLicenceId}`)
 }
 
 module.exports = {

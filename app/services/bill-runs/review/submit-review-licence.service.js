@@ -18,20 +18,19 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * redirected to the `GET` it knows to display a notification banner to confirm that the progress or status has changed
  * to the user.
  *
- * @param {module:BillRunModel} billRunId - The UUID for the bill run
- * @param {module:LicenceModel} licenceId - The UUID of the licence that is being reviewed
- * @param {object} payload - The Hapi `request.payload` object passed on by the controller
+ * @param {string} reviewLicenceId - The UUID of the licence that is being reviewed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The Hapi `request.payload` object passed on by the controller
  *
  * @returns {Promise<object>} resolves to the result of the update query. Not intended to be used
  */
-async function go (billRunId, licenceId, payload, yar) {
+async function go (reviewLicenceId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
 
   // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
   _bannerMessage(yar, parsedPayload)
 
-  return _update(billRunId, licenceId, parsedPayload)
+  return _update(reviewLicenceId, parsedPayload)
 }
 
 function _bannerMessage (yar, parsedPayload) {
@@ -62,7 +61,7 @@ function _parsePayload (payload) {
   }
 }
 
-async function _update (billRunId, licenceId, parsedPayload) {
+async function _update (reviewLicenceId, parsedPayload) {
   const { progress, status } = parsedPayload
   const patch = {}
 
@@ -73,9 +72,8 @@ async function _update (billRunId, licenceId, parsedPayload) {
   }
 
   return ReviewLicenceModel.query()
+    .findById(reviewLicenceId)
     .patch(patch)
-    .where('billRunId', billRunId)
-    .andWhere('licenceId', licenceId)
 }
 
 module.exports = {
