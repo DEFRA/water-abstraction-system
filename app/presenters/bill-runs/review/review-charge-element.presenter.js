@@ -28,14 +28,12 @@ function go (reviewChargeElement, elementIndex) {
     status
   } = reviewChargeElement
 
-  const chargePeriod = _chargePeriod(reviewChargeReference.reviewChargeVersion)
-
   return {
     authorisedVolume: chargeElement.authorisedAnnualQuantity,
     billableReturns,
     chargeDescription: chargeElement.description,
-    chargePeriod: `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`,
-    chargePeriods: _chargePeriods(chargeElement, chargePeriod),
+    chargePeriod: reviewChargeReference.reviewChargeVersion.$formatChargePeriod(),
+    chargePeriods: _chargePeriods(reviewChargeElement),
     elementCount: reviewChargeReference.reviewChargeElements.length,
     elementIndex,
     financialPeriod: formatFinancialYear(
@@ -50,19 +48,19 @@ function go (reviewChargeElement, elementIndex) {
   }
 }
 
-function _chargePeriod (reviewChargeVersion) {
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
+function _chargePeriods (reviewChargeElement) {
+  const { chargeElement, reviewChargeReference } = reviewChargeElement
 
-  return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-}
-
-function _chargePeriods (chargeElement, chargePeriod) {
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth
   } = chargeElement
+
+  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeReference.reviewChargeVersion
+
+  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
 
   const abstractionPeriods = DetermineAbstractionPeriodService.go(
     chargePeriod,

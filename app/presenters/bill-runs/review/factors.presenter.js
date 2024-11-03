@@ -5,7 +5,7 @@
  * @module FactorsPresenter
  */
 
-const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js')
+const { formatFinancialYear } = require('../../base.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
@@ -31,7 +31,7 @@ function go (reviewChargeReference) {
     amendedAggregate,
     amendedChargeAdjustment,
     chargeDescription: chargeReference.chargeCategory.shortDescription,
-    chargePeriod: _chargePeriod(reviewChargeVersion),
+    chargePeriod: reviewChargeVersion.$formatChargePeriod(),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     otherAdjustments: [...additionalCharges, ...adjustments],
     reviewChargeReferenceId
@@ -81,13 +81,6 @@ function _adjustments (reviewChargeReference) {
   }
 
   return adjustments
-}
-
-function _chargePeriod (reviewChargeVersion) {
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
-  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-
-  return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
 }
 
 module.exports = {

@@ -26,14 +26,12 @@ function go (reviewChargeElement, elementIndex) {
     reviewChargeReference
   } = reviewChargeElement
 
-  const chargePeriod = _chargePeriod(reviewChargeReference.reviewChargeVersion)
-
   return {
     authorisedQuantity: _authorisedQuantity(reviewChargeElement),
     billableReturns,
     chargeDescription: chargeElement.description,
-    chargePeriod: `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`,
-    chargePeriods: _chargePeriods(chargeElement, chargePeriod),
+    chargePeriod: reviewChargeReference.reviewChargeVersion.$formatChargePeriod(),
+    chargePeriods: _chargePeriods(reviewChargeElement),
     elementIndex,
     financialPeriod: formatFinancialYear(
       reviewChargeReference.reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding
@@ -55,19 +53,19 @@ function _authorisedQuantity (reviewChargeElement) {
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
 }
 
-function _chargePeriod (reviewChargeVersion) {
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
+function _chargePeriods (reviewChargeElement) {
+  const { chargeElement, reviewChargeReference } = reviewChargeElement
 
-  return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-}
-
-function _chargePeriods (chargeElement, chargePeriod) {
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth
   } = chargeElement
+
+  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeReference.reviewChargeVersion
+
+  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
 
   const abstractionPeriods = DetermineAbstractionPeriodService.go(
     chargePeriod,

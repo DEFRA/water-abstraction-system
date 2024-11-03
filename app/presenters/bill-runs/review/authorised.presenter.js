@@ -7,7 +7,7 @@
 
 const Big = require('big.js')
 
-const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js')
+const { formatFinancialYear } = require('../../base.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference authorised page
@@ -29,18 +29,11 @@ function go (reviewChargeReference) {
   return {
     amendedAuthorisedVolume,
     chargeDescription: chargeReference.chargeCategory.shortDescription,
-    chargePeriod: _chargePeriod(reviewChargeVersion),
+    chargePeriod: reviewChargeVersion.$formatChargePeriod(),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     reviewChargeReferenceId,
     totalBillableReturns: _totalBillableReturns(reviewChargeElements)
   }
-}
-
-function _chargePeriod (reviewChargeVersion) {
-  const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
-  const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-
-  return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
 }
 
 function _totalBillableReturns (reviewChargeElements) {

@@ -161,7 +161,7 @@ function _chargeVersions (reviewChargeVersions, toFinancialYearEnding) {
 
     return {
       billingAccountDetails: _billingAccountDetails(chargeVersion.billingAccount),
-      chargePeriod: `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`,
+      chargePeriod: reviewChargeVersion.$formatChargePeriod(),
       chargeReferences: _chargeReferences(reviewChargeReferences, chargePeriod),
       description: _chargeVersionDescription(reviewChargeReferences),
       financialPeriod: formatFinancialYear(toFinancialYearEnding)
