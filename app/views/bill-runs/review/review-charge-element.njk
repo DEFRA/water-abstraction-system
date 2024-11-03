@@ -27,7 +27,7 @@
   {# Main heading #}
   <div class="govuk-grid-row govuk-!-margin-bottom-3">
     <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l" data-test="charge-element">{{caption}}</span>
+      <span class="govuk-caption-l" data-test="charge-element">Element {{elementIndex}} of {{elementCount}}</span>
       <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ chargeDescription }}</h1>
 
       {% for chargePeriod in chargePeriods %}
@@ -73,7 +73,7 @@
   </div>
 
   {# Periods #}
-  <span class="govuk-caption-m" data-test="financial-year"> Financial year {{financialPeriod}}</span>
+  <span class="govuk-caption-m" data-test="financial-year">Financial year {{financialPeriod}}</span>
   <h2 class="govuk-heading-m" data-test="charge-period">Charge period {{chargePeriod}}</h2>
 
   {# Billable returns, authorised volume and issues #}
@@ -121,9 +121,9 @@
   <div class="govuk-grid-row govuk-!-margin-bottom-6">
     <div class="govuk-grid-column-full">
       {{ govukButton({
-        text: "Edit the billable returns",
-        href: "/system/bill-runs/review/charge-element/" + reviewChargeElementId + "/edit",
-        classes: "govuk-button--secondary",
+        text: 'Edit the billable returns',
+        href: '/system/bill-runs/review/charge-element/' + reviewChargeElementId + '/' + elementIndex  + '/edit',
+        classes: 'govuk-button--secondary',
         preventDoubleClick: true
       }) }}
     </div>

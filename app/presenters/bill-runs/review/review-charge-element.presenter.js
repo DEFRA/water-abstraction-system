@@ -36,7 +36,8 @@ function go (reviewChargeElement, elementIndex) {
     chargeDescription: chargeElement.description,
     chargePeriod: `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`,
     chargePeriods: _chargePeriods(chargeElement, chargePeriod),
-    caption: `Element ${elementIndex} of ${reviewChargeReference.reviewChargeElements.length}`,
+    elementCount: reviewChargeReference.reviewChargeElements.length,
+    elementIndex,
     financialPeriod: formatFinancialYear(
       reviewChargeReference.reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding
     ),
