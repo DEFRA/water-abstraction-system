@@ -158,6 +158,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
+    options: {
+      handler: BillRunsReviewController.remove,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
+    options: {
+      handler: BillRunsReviewController.submitRemove,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 

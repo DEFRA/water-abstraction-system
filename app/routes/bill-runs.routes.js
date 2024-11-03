@@ -56,30 +56,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/remove/{licenceId}',
-    options: {
-      handler: BillRunsController.removeLicence,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/remove/{licenceId}',
-    options: {
-      handler: BillRunsController.submitRemoveLicence,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/send',
     options: {
       handler: BillRunsController.send,

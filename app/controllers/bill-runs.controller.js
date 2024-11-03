@@ -10,10 +10,8 @@ const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
-const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
-const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
@@ -35,17 +33,6 @@ async function index (request, h) {
   const pageData = await IndexBillRunsService.go(page)
 
   return h.view('bill-runs/index.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
-async function removeLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  const pageData = await RemoveBillRunLicenceService.go(billRunId, licenceId)
-
-  return h.view('bill-runs/remove-licence.njk', {
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -75,18 +62,6 @@ async function submitCancel (request, h) {
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
-}
-
-async function submitRemoveLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  const allLicencesRemoved = await SubmitRemoveBillRunLicenceService.go(billRunId, licenceId, request.yar)
-
-  if (allLicencesRemoved) {
-    return h.redirect('/system/bill-runs')
-  }
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review`)
 }
 
 async function submitSend (request, h) {
@@ -133,10 +108,8 @@ async function view (request, h) {
 module.exports = {
   cancel,
   index,
-  removeLicence,
   send,
   submitCancel,
-  submitRemoveLicence,
   submitSend,
   twoPartTariff,
   view
