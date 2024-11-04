@@ -164,6 +164,23 @@ function formatReturnStatus (reviewReturn) {
   return reviewReturn.returnStatus
 }
 
+/**
+ * Format the total allocated vs quantity for a review return, for example, '15.5 ML / 20 ML'
+ *
+ * @param {module:ReviewReturnModel} reviewReturn - instance of `ReviewReturn` to format the totals for
+ *
+ * @returns the return's totals formatted for display
+ */
+function formatReturnTotals (reviewReturn) {
+  const { allocated, quantity, returnStatus } = reviewReturn
+
+  if (['due', 'received'].includes(returnStatus)) {
+    return '/'
+  }
+
+  return `${allocated} ML / ${quantity} ML`
+}
+
 function _chargePeriod (reviewChargeVersion) {
   const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
 
@@ -176,5 +193,6 @@ module.exports = {
   formatAdditionalCharges,
   formatChargePeriod,
   formatChargePeriods,
-  formatReturnStatus
+  formatReturnStatus,
+  formatReturnTotals
 }

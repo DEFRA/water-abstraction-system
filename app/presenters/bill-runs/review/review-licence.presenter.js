@@ -11,7 +11,8 @@ const {
   determineReturnLink,
   formatChargePeriod,
   formatChargePeriods,
-  formatReturnStatus
+  formatReturnStatus,
+  formatReturnTotals
 } = require('./base-review.presenter.js')
 
 /**
@@ -184,7 +185,7 @@ function _formatReviewReturns (reviewReturns) {
       returnLink: determineReturnLink(reviewReturn),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
-      returnTotal: _returnTotal(reviewReturn)
+      returnTotal: formatReturnTotals(reviewReturn)
     }
 
     if (reviewReturn.reviewChargeElements.length > 0) {
@@ -195,16 +196,6 @@ function _formatReviewReturns (reviewReturns) {
   })
 
   return { matchedReturns, unmatchedReturns }
-}
-
-function _returnTotal (reviewReturn) {
-  const { allocated, quantity, returnStatus } = reviewReturn
-
-  if (['due', 'received'].includes(returnStatus)) {
-    return '/'
-  }
-
-  return `${allocated} ML / ${quantity} ML`
 }
 
 module.exports = {
