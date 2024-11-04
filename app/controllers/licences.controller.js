@@ -66,8 +66,7 @@ async function submitMarkForSupplementaryBilling (request, h) {
 
   const pageData = await SubmitMarkForSupplementaryBillingService.go(
     licenceId,
-    request.payload,
-    request.auth.credentials.user)
+    request.payload)
 
   if (pageData.error) {
     return h.view('licences/mark-for-supplementary-billing.njk', pageData)
