@@ -6,7 +6,11 @@
  */
 
 const { formatFinancialYear } = require('../../base.presenter.js')
-const { calculateTotalBillableReturns, formatChargePeriod } = require('./base-review.presenter.js')
+const {
+  calculateTotalBillableReturns,
+  formatAdditionalCharges,
+  formatChargePeriod
+} = require('./base-review.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference page
@@ -26,7 +30,7 @@ function go (reviewChargeReference) {
   } = reviewChargeReference
 
   return {
-    additionalCharges: _additionalCharges(chargeReference),
+    additionalCharges: formatAdditionalCharges(chargeReference).join(', '),
     adjustments: _adjustments(reviewChargeReference),
     amendedAuthorisedVolume,
     canAmend: _canAmend(reviewChargeReference),
@@ -38,22 +42,6 @@ function go (reviewChargeReference) {
     reviewLicenceId: reviewChargeVersion.reviewLicence.id,
     totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)
   }
-}
-
-function _additionalCharges (chargeReference) {
-  const { supportedSourceName, waterCompanyCharge } = chargeReference
-
-  const additionalCharges = []
-
-  if (supportedSourceName) {
-    additionalCharges.push(`Supported source ${supportedSourceName}`)
-  }
-
-  if (waterCompanyCharge) {
-    additionalCharges.push('Public Water Supply')
-  }
-
-  return additionalCharges.join(', ')
 }
 
 function _adjustments (reviewChargeReference) {

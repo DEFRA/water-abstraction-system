@@ -6,7 +6,7 @@
  */
 
 const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatChargePeriod } = require('./base-review.presenter.js')
+const { formatAdditionalCharges, formatChargePeriod } = require('./base-review.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
@@ -25,7 +25,7 @@ function go (reviewChargeReference) {
     id: reviewChargeReferenceId
   } = reviewChargeReference
 
-  const additionalCharges = _additionalCharges(chargeReference)
+  const additionalCharges = formatAdditionalCharges(chargeReference)
   const adjustments = _adjustments(reviewChargeReference)
 
   return {
@@ -37,22 +37,6 @@ function go (reviewChargeReference) {
     otherAdjustments: [...additionalCharges, ...adjustments],
     reviewChargeReferenceId
   }
-}
-
-function _additionalCharges (chargeReference) {
-  const { supportedSourceName, waterCompanyCharge } = chargeReference
-
-  const additionalCharges = []
-
-  if (supportedSourceName) {
-    additionalCharges.push(`Supported source ${supportedSourceName}`)
-  }
-
-  if (waterCompanyCharge) {
-    additionalCharges.push('Public Water Supply')
-  }
-
-  return additionalCharges
 }
 
 function _adjustments (reviewChargeReference) {

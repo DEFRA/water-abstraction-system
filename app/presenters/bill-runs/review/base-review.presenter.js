@@ -21,6 +21,58 @@ function calculateTotalBillableReturns (reviewChargeElements) {
 }
 
 /**
+ * Determine the link for a return, for example, should it go to the edit or view page?
+ *
+ * @param {module:ReviewReturnModel} reviewReturn - instance of `ReviewReturn` to determine the link for
+ *
+ * @returns {string} the relative URL the view template should use to link to the return
+ */
+function determineReturnLink (reviewReturn) {
+  const { returnId, returnStatus } = reviewReturn
+
+  if (['due', 'received'].includes(returnStatus)) {
+    return `/return/internal?returnId=${returnId}`
+  }
+
+  return `/returns/return?id=${returnId}`
+}
+
+/**
+ * Extract and format the additional charges from a charge reference for display
+ *
+ * If the charge reference has both a supported source and is a public water company then the following is returned.
+ *
+ * ```javascript
+ * const additionalCharges = [
+ *   'Supported source foo',
+ *   'Public Water Supply'
+ * ]
+ * ```
+ *
+ * If it has known an empty array is returned
+ *
+ * @param {object} chargeReference - an object representing as 'Charge Reference' that has the properties
+ * `supportedSourceName` and `waterCompanyCharge`, taken from the charge reference's `additionalCharges` field
+ *
+ * @returns {string[]} the additional charges (if present) formatted as a string for display
+ */
+function formatAdditionalCharges (chargeReference) {
+  const { supportedSourceName, waterCompanyCharge } = chargeReference
+
+  const additionalCharges = []
+
+  if (supportedSourceName) {
+    additionalCharges.push(`Supported source ${supportedSourceName}`)
+  }
+
+  if (waterCompanyCharge) {
+    additionalCharges.push('Public Water Supply')
+  }
+
+  return additionalCharges
+}
+
+/**
  * Formats the charge period into its string variant, for example, '1 April 2023 to 10 October 2023'
  *
  * @param {module:ReviewChargeVersionModel} reviewChargeVersion - instance of `ReviewChargeVersionModel` to format the
@@ -92,6 +144,8 @@ function _chargePeriod (reviewChargeVersion) {
 
 module.exports = {
   calculateTotalBillableReturns,
+  determineReturnLink,
+  formatAdditionalCharges,
   formatChargePeriod,
   formatChargePeriods
 }

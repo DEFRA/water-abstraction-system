@@ -6,7 +6,12 @@
  */
 
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
-const { calculateTotalBillableReturns, formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
+const {
+  calculateTotalBillableReturns,
+  determineReturnLink,
+  formatChargePeriod,
+  formatChargePeriods
+} = require('./base-review.presenter.js')
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -175,7 +180,7 @@ function _formatReviewReturns (reviewReturns) {
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
       returnId,
-      returnLink: _returnLink(reviewReturn),
+      returnLink: determineReturnLink(reviewReturn),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: _returnStatus(reviewReturn),
       returnTotal: _returnTotal(reviewReturn)
@@ -189,16 +194,6 @@ function _formatReviewReturns (reviewReturns) {
   })
 
   return { matchedReturns, unmatchedReturns }
-}
-
-function _returnLink (reviewReturn) {
-  const { returnId, returnStatus } = reviewReturn
-
-  if (['due', 'received'].includes(returnStatus)) {
-    return `/return/internal?returnId=${returnId}`
-  }
-
-  return `/returns/return?id=${returnId}`
 }
 
 function _returnStatus (reviewReturn) {
