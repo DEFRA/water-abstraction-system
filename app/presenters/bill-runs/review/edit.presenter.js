@@ -6,7 +6,7 @@
  */
 
 const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatChargePeriods } = require('./base-review.presenter.js')
+const { formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Prepares and processes bill run and review charge element data for presenting
@@ -30,7 +30,7 @@ function go (reviewChargeElement, elementIndex) {
     authorisedQuantity: _authorisedQuantity(reviewChargeElement),
     billableReturns,
     chargeDescription: chargeElement.description,
-    chargePeriod: reviewChargeReference.reviewChargeVersion.$formatChargePeriod(),
+    chargePeriod: formatChargePeriod(reviewChargeReference.reviewChargeVersion),
     chargePeriods: formatChargePeriods(reviewChargeElement),
     elementIndex,
     financialPeriod: formatFinancialYear(

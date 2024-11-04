@@ -8,7 +8,6 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
-const { formatLongDate } = require('../presenters/base.presenter.js')
 
 class ReviewChargeVersionModel extends BaseModel {
   static get tableName () {
@@ -42,18 +41,6 @@ class ReviewChargeVersionModel extends BaseModel {
         }
       }
     }
-  }
-
-  /**
-   * Formats the charge period into its string variant, for example, '1 April 2023 to 10 October 2023'
-   *
-   * @returns {string} The charge period formatted as a 'DD MMMM YYYY to DD MMMM YYYY' string
-   */
-  $formatChargePeriod () {
-    const startDate = this.chargePeriodStartDate
-    const endDate = this.chargePeriodEndDate
-
-    return `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`
   }
 }
 

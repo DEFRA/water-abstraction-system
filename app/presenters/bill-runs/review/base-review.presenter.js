@@ -4,6 +4,20 @@ const { formatLongDate } = require('../../base.presenter.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 
 /**
+ * Formats the charge period into its string variant, for example, '1 April 2023 to 10 October 2023'
+ *
+ * @param {module:ReviewChargeVersionModel} reviewChargeVersion - instance of `ReviewChargeVersionModel` to format the
+ * charge period for
+ *
+ * @returns {string} The review charge version's charge period formatted as a 'DD MMMM YYYY to DD MMMM YYYY' string
+ */
+function formatChargePeriod (reviewChargeVersion) {
+  const chargePeriod = _chargePeriod(reviewChargeVersion)
+
+  return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
+}
+
+/**
  * Determine the charge periods for a `ReviewChargeElementModel` and format them for display
  *
  * If the charge period is known, for example, the review licence presenter determines first and then passes it to
@@ -60,5 +74,6 @@ function _chargePeriod (reviewChargeVersion) {
 }
 
 module.exports = {
+  formatChargePeriod,
   formatChargePeriods
 }

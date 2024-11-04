@@ -8,7 +8,7 @@
 const Big = require('big.js')
 
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
-const { formatChargePeriods } = require('./base-review.presenter.js')
+const { formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -138,7 +138,7 @@ function _chargeVersions (reviewChargeVersions, toFinancialYearEnding) {
 
     return {
       billingAccountDetails: _billingAccountDetails(chargeVersion.billingAccount),
-      chargePeriod: reviewChargeVersion.$formatChargePeriod(),
+      chargePeriod: formatChargePeriod(reviewChargeVersion),
       chargeReferences: _chargeReferences(reviewChargeReferences, chargePeriod),
       description: _chargeVersionDescription(reviewChargeReferences),
       financialPeriod: formatFinancialYear(toFinancialYearEnding)
