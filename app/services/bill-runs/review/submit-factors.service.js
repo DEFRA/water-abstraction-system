@@ -43,12 +43,11 @@ async function go (reviewChargeReferenceId, yar, payload) {
   const pageData = FactorsPresenter.go(reviewChargeReference)
 
   return {
-    activeNavBar: 'search',
+    amendedAggregate: payload.amendedAggregate,
+    amendedChargeAdjustment: payload.amendedChargeAdjustment,
     error: validationResult,
     pageTitle: 'Set the adjustment factors',
-    ...pageData,
-    amendedAggregate: payload.amendedAggregate,
-    amendedChargeAdjustment: payload.amendedChargeAdjustment
+    ...pageData
   }
 }
 

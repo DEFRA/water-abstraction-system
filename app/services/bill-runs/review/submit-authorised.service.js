@@ -34,11 +34,10 @@ async function go (reviewChargeReferenceId, yar, payload) {
   const pageData = AuthorisedPresenter.go(reviewChargeReference)
 
   return {
-    activeNavBar: 'search',
-    pageTitle: 'Set the authorised volume',
+    amendedAuthorisedVolume: payload.amendedAuthorisedVolume,
     error: validationResult,
-    ...pageData,
-    amendedAuthorisedVolume: payload.amendedAuthorisedVolume
+    pageTitle: 'Set the authorised volume',
+    ...pageData
   }
 }
 

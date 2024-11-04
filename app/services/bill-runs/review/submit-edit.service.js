@@ -35,11 +35,10 @@ async function go (reviewChargeElementId, elementIndex, yar, payload) {
   const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
-    activeNavBar: 'search',
-    pageTitle: 'Set the billable returns quantity for this bill run',
-    error: validationResult,
     customQuantitySelected: payload.quantityOptions === 'customQuantity',
     customQuantityValue: payload.customQuantity,
+    error: validationResult,
+    pageTitle: 'Set the billable returns quantity for this bill run',
     ...pageData
   }
 }
