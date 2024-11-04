@@ -22,7 +22,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  * @param {object[]} years - The years that the licence can be flagged for
  * @param {boolean} twoPartTariff - If there are two-part tariff indicators on the licence
  *
- * @returns {object[]} - The years that can be flagged for supplementary billing
+ * @returns {Promise<object[]>} - The years that can be flagged for supplementary billing
  */
 async function go (regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
