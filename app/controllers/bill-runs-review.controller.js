@@ -74,10 +74,10 @@ async function remove (request, h) {
 }
 
 async function review (request, h) {
-  const { id } = request.params
+  const { billRunId } = request.params
   const { page } = request.query
 
-  const pageData = await ReviewBillRunService.go(id, page, request.yar)
+  const pageData = await ReviewBillRunService.go(billRunId, page, request.yar)
 
   return h.view('bill-runs/review/review.njk', {
     activeNavBar: 'bill-runs',
@@ -167,11 +167,11 @@ async function submitRemove (request, h) {
 }
 
 async function submitReview (request, h) {
-  const { id } = request.params
+  const { billRunId } = request.params
 
-  await SubmitReviewBillRunService.go(id, request.payload, request.yar)
+  await SubmitReviewBillRunService.go(billRunId, request.payload, request.yar)
 
-  return h.redirect(`/system/bill-runs/review/${id}`)
+  return h.redirect(`/system/bill-runs/review/${billRunId}`)
 }
 
 async function submitReviewLicence (request, h) {

@@ -5,7 +5,7 @@ const BillRunsReviewController = require('../controllers/bill-runs-review.contro
 const routes = [
   {
     method: 'GET',
-    path: '/bill-runs/review/{id}',
+    path: '/bill-runs/review/{billRunId}',
     options: {
       handler: BillRunsReviewController.review,
       auth: {
@@ -17,7 +17,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/{id}',
+    path: '/bill-runs/review/{billRunId}',
     options: {
       handler: BillRunsReviewController.submitReview,
       auth: {
