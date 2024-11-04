@@ -60,17 +60,7 @@ function _reasonLink (sessionId, returnsRequired) {
 }
 
 function _startDate (session) {
-  const { licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
-
-  let date
-
-  if (startDateOptions === 'licenceStartDate') {
-    date = new Date(licence.currentVersionStartDate)
-  } else {
-    date = new Date(`${startDateYear}-${startDateMonth}-${startDateDay}`)
-  }
-
-  return formatLongDate(date)
+  return formatLongDate(new Date(session.returnVersionStartDate))
 }
 
 module.exports = {
