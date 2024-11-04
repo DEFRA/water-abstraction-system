@@ -1,7 +1,24 @@
 'use strict'
 
+const Big = require('big.js')
+
 const { formatLongDate } = require('../../base.presenter.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+
+/**
+ * Calculates the total allocated volume across all review change elements
+ *
+ * @param {module:ReviewChargeElementModel[]} reviewChargeElements - array of `ReviewChargeElementModel` instances
+ *
+ * @returns {string} the sum of allocated volume against all review charge elements without loss of precision
+ */
+function calculateTotalBillableReturns (reviewChargeElements) {
+  return reviewChargeElements.reduce((total, reviewChargeElement) => {
+    const { amendedAllocated } = reviewChargeElement
+
+    return Big(total).plus(amendedAllocated).toNumber()
+  }, 0)
+}
 
 /**
  * Formats the charge period into its string variant, for example, '1 April 2023 to 10 October 2023'
@@ -74,6 +91,7 @@ function _chargePeriod (reviewChargeVersion) {
 }
 
 module.exports = {
+  calculateTotalBillableReturns,
   formatChargePeriod,
   formatChargePeriods
 }

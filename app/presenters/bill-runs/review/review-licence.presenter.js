@@ -5,10 +5,8 @@
  * @module ReviewLicencePresenter
  */
 
-const Big = require('big.js')
-
 const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
-const { formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
+const { calculateTotalBillableReturns, formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -95,7 +93,7 @@ function _chargeElementReturnVolumes (reviewReturns) {
 function _chargeReferences (reviewChargeReferences, chargePeriod) {
   return reviewChargeReferences.map((reviewChargeReference) => {
     const { amendedAuthorisedVolume, chargeReference, reviewChargeElements, id } = reviewChargeReference
-    const totalAllocated = _totalAllocated(reviewChargeElements)
+    const totalAllocated = calculateTotalBillableReturns(reviewChargeElements)
 
     return {
       billableReturnsWarning: totalAllocated > amendedAuthorisedVolume,
@@ -225,14 +223,6 @@ function _returnTotal (reviewReturn) {
   }
 
   return `${allocated} ML / ${quantity} ML`
-}
-
-function _totalAllocated (reviewChargeElements) {
-  return reviewChargeElements.reduce((total, reviewChargeElement) => {
-    const { amendedAllocated } = reviewChargeElement
-
-    return Big(total).plus(amendedAllocated).toNumber()
-  }, 0)
 }
 
 module.exports = {

@@ -5,10 +5,8 @@
  * @module ReviewChargeReferencePresenter
  */
 
-const Big = require('big.js')
-
 const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatChargePeriod } = require('./base-review.presenter.js')
+const { calculateTotalBillableReturns, formatChargePeriod } = require('./base-review.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference page
@@ -38,7 +36,7 @@ function go (reviewChargeReference) {
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     reviewChargeReferenceId,
     reviewLicenceId: reviewChargeVersion.reviewLicence.id,
-    totalBillableReturns: _totalBillableReturns(reviewChargeElements)
+    totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)
   }
 }
 
@@ -103,14 +101,6 @@ function _canAmend (reviewChargeReference) {
   const { aggregate, chargeAdjustment } = reviewChargeReference
 
   return (aggregate !== 1 || chargeAdjustment !== 1)
-}
-
-function _totalBillableReturns (reviewChargeElements) {
-  return reviewChargeElements.reduce((total, reviewChargeElement) => {
-    const { amendedAllocated } = reviewChargeElement
-
-    return Big(total).plus(amendedAllocated).toNumber()
-  }, 0)
 }
 
 module.exports = {
