@@ -73,7 +73,7 @@ async function remove (request, h) {
   })
 }
 
-async function review (request, h) {
+async function reviewBillRun (request, h) {
   const { billRunId } = request.params
   const { page } = request.query
 
@@ -166,7 +166,7 @@ async function submitRemove (request, h) {
   return h.redirect(`/system/bill-runs/review/${result.billRunId}`)
 }
 
-async function submitReview (request, h) {
+async function submitReviewBillRun (request, h) {
   const { billRunId } = request.params
 
   await SubmitReviewBillRunService.go(billRunId, request.payload, request.yar)
@@ -188,7 +188,7 @@ module.exports = {
   factors,
   preview,
   remove,
-  review,
+  reviewBillRun,
   reviewChargeElement,
   reviewChargeReference,
   reviewLicence,
@@ -196,6 +196,6 @@ module.exports = {
   submitEdit,
   submitFactors,
   submitRemove,
-  submitReview,
+  submitReviewBillRun,
   submitReviewLicence
 }

@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: BillRunsReviewController.review,
+      handler: BillRunsReviewController.reviewBillRun,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +19,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: BillRunsReviewController.submitReview,
+      handler: BillRunsReviewController.submitReviewBillRun,
       auth: {
         access: {
           scope: ['billing']
