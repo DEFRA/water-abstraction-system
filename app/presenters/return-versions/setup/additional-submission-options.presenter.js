@@ -15,10 +15,10 @@
 function go (session) {
   const {
     id: sessionId, licence: { id: licenceId, licenceRef, waterUndertaker },
-    startDateYear, startDateMonth, startDateDay, additionalSubmissionOptions
+    returnVersionStartDate, additionalSubmissionOptions
   } = session
 
-  const quarterlyReturnSubmissions = _quarterlyReturnSubmissions(startDateYear, startDateMonth, startDateDay)
+  const quarterlyReturnSubmissions = _quarterlyReturnSubmissions(returnVersionStartDate)
 
   return {
     additionalSubmissionOptions:
@@ -37,20 +37,16 @@ function go (session) {
  * A return version is due for quarterly returns submissions when they:
  * - are a water company and the return version start date is > 1 April 2025
  *
- * @param {string} startDateYear - The return version start year
- * @param {string} startDateMonth - The return version start month
- * @param {string} startDateDay - The return version start day
+ * @param {string} returnVersionStartDate - The return version start date
  *
  * @returns {boolean}
  *
  * @private
  */
-function _quarterlyReturnSubmissions (startDateYear, startDateMonth, startDateDay) {
-  const returnVersionStartDate = new Date(`${startDateYear}-${startDateMonth}-${startDateDay}`)
-
+function _quarterlyReturnSubmissions (returnVersionStartDate) {
   const quarterlyReturnSubmissionsStartDate = new Date('2025-04-01')
 
-  return returnVersionStartDate.getTime() >= quarterlyReturnSubmissionsStartDate.getTime()
+  return new Date(returnVersionStartDate).getTime() >= quarterlyReturnSubmissionsStartDate.getTime()
 }
 
 /**

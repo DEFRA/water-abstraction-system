@@ -22,11 +22,9 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
         checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z',
           waterUndertaker: false
         },
         journey: 'returns-required',

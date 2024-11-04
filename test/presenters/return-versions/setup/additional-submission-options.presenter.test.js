@@ -19,16 +19,13 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
         licenceRef: '01/ABC',
         licenceHolder: 'Turbo Kid',
-        startDate: '2022-04-01T00:00:00.000Z',
         waterUndertaker: false
       },
       journey: 'returns-required',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
       reason: 'major-change'
     }
   })
@@ -82,9 +79,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     describe('when the return version is for quarterly return submissions', () => {
       beforeEach(() => {
         session.licence.waterUndertaker = true
-        session.startDateYear = '2025'
-        session.startDateMonth = '4'
-        session.startDateDay = '1'
+        session.returnVersionStartDate = '2025-04-01'
       })
 
       it('returns quarterly returns submissions as true', () => {
@@ -130,9 +125,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     describe('when the return version is not for quarterly return submissions', () => {
       beforeEach(() => {
         session.licence.waterUndertaker = true
-        session.startDateYear = '2025'
-        session.startDateMonth = '3'
-        session.startDateDay = '31'
+        session.returnVersionStartDate = '2025-03-01'
       })
 
       describe('and the licence is for a water company', () => {
