@@ -10,7 +10,8 @@ const {
   calculateTotalBillableReturns,
   determineReturnLink,
   formatChargePeriod,
-  formatChargePeriods
+  formatChargePeriods,
+  formatReturnStatus
 } = require('./base-review.presenter.js')
 
 /**
@@ -182,7 +183,7 @@ function _formatReviewReturns (reviewReturns) {
       returnId,
       returnLink: determineReturnLink(reviewReturn),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-      returnStatus: _returnStatus(reviewReturn),
+      returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: _returnTotal(reviewReturn)
     }
 
@@ -194,20 +195,6 @@ function _formatReviewReturns (reviewReturns) {
   })
 
   return { matchedReturns, unmatchedReturns }
-}
-
-function _returnStatus (reviewReturn) {
-  const { returnStatus, underQuery } = reviewReturn
-
-  if (returnStatus === 'due') {
-    return 'overdue'
-  }
-
-  if (underQuery) {
-    return 'query'
-  }
-
-  return reviewReturn.returnStatus
 }
 
 function _returnTotal (reviewReturn) {

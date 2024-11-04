@@ -9,7 +9,8 @@ const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require
 const {
   determineReturnLink,
   formatChargePeriod,
-  formatChargePeriods
+  formatChargePeriods,
+  formatReturnStatus
 } = require('./base-review.presenter.js')
 
 /**
@@ -66,24 +67,10 @@ function _matchedReturns (reviewReturns) {
       returnId,
       returnLink: determineReturnLink(reviewReturn),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-      returnStatus: _returnStatus(reviewReturn),
+      returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: _returnTotal(reviewReturn)
     }
   })
-}
-
-function _returnStatus (reviewReturn) {
-  const { returnStatus, underQuery } = reviewReturn
-
-  if (returnStatus === 'due') {
-    return 'overdue'
-  }
-
-  if (underQuery) {
-    return 'query'
-  }
-
-  return reviewReturn.returnStatus
 }
 
 function _returnTotal (reviewReturn) {

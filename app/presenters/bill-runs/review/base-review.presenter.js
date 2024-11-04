@@ -136,6 +136,34 @@ function formatChargePeriods (reviewChargeElement, chargePeriod = null) {
   })
 }
 
+/**
+ * Format the status for a review return, for example, 'overdue'
+ *
+ * We cannot just return the status from the DB for a return because of the disparity between what we show and how the
+ * status is stored. For example, the status field in the DB holds completed, due, received, and void. When the review
+ * screens display the return we can assume anything with a status of `due` is overdue, hence the first disparity.
+ *
+ * The other is that if a return is under query this is not reflected in the status. Instead, a flag is set in a
+ * different field.
+ *
+ * @param {module:ReviewReturnModel} reviewReturn - instance of `ReviewReturn` to format the status for
+ *
+ * @returns {string} the return's status formatted for display
+ */
+function formatReturnStatus (reviewReturn) {
+  const { returnStatus, underQuery } = reviewReturn
+
+  if (returnStatus === 'due') {
+    return 'overdue'
+  }
+
+  if (underQuery) {
+    return 'query'
+  }
+
+  return reviewReturn.returnStatus
+}
+
 function _chargePeriod (reviewChargeVersion) {
   const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
 
@@ -147,5 +175,6 @@ module.exports = {
   determineReturnLink,
   formatAdditionalCharges,
   formatChargePeriod,
-  formatChargePeriods
+  formatChargePeriods,
+  formatReturnStatus
 }
