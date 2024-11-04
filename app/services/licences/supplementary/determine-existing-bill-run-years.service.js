@@ -37,11 +37,13 @@ async function go (regionId, years, twoPartTariff) {
  */
 async function _supplementaryBillingYears (regionId, years, twoPartTariff) {
   const batchType = twoPartTariff ? 'two_part_tariff' : 'annual'
+  const billRunStatus = ['sent', 'ready', 'review', 'sending']
 
   const billRuns = await BillRunModel.query()
     .distinct('toFinancialYearEnding')
     .where('regionId', regionId)
     .where('batchType', batchType)
+    .whereIn('status', billRunStatus)
     .whereIn('toFinancialYearEnding', years)
 
   return billRuns.map((billRun) => {
