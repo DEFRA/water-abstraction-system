@@ -9,7 +9,7 @@ const DetermineBillingYearsService = require('./determine-billing-years.service.
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
-const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
+// const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
 const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
 const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -51,7 +51,7 @@ async function go (payload) {
       result = await DetermineWorkflowFlagsService.go(payload.workflowId)
     } else if (payload.licenceId) {
       // Don't need to maintain the old recalculate bills link - This might get used for the other service logic instead
-      result = await DetermineLicenceFlagsService.go(payload.licenceId)
+      // result = await DetermineLicenceFlagsService.go(payload.licenceId)
     } else {
       return
     }
