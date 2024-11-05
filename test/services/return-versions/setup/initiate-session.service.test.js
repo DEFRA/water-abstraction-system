@@ -58,13 +58,14 @@ describe('Return Versions Setup - Initiate Session service', () => {
         expect(data).to.equal({
           checkPageVisited: false,
           licence: {
-            id: licence.id,
             currentVersionStartDate: new Date('2022-05-01'),
             endDate: new Date('2024-08-10'),
-            licenceRef,
+            id: licence.id,
             licenceHolder: 'Licence Holder Ltd',
+            licenceRef,
             returnVersions: [],
-            startDate: new Date('2022-01-01')
+            startDate: new Date('2022-01-01'),
+            waterUndertaker: false
           },
           journey: 'returns-required',
           requirements: [{}]

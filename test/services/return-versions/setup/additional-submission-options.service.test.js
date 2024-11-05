@@ -19,19 +19,13 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
   beforeEach(async () => {
     session = await SessionHelper.add({
       data: {
-        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z'
+          licenceHolder: 'Turbo Kid'
         },
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        quarterlyReturnSubmissions: false
       }
     })
   })
@@ -52,7 +46,8 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        pageTitle: 'Select any additional submission options for the return requirements'
+        pageTitle: 'Select any additional submission options for the return requirements',
+        quarterlyReturnSubmissions: false
       }, { skip: ['sessionId'] })
     })
   })

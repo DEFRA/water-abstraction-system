@@ -16,19 +16,11 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-        endDate: null,
-        licenceRef: '01/ABC',
-        licenceHolder: 'Turbo Kid',
-        startDate: '2022-04-01T00:00:00.000Z'
+        licenceRef: '01/ABC'
       },
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      quarterlyReturnSubmissions: false
     }
   })
 
@@ -37,10 +29,11 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
       expect(result).to.be.equal({
+        additionalSubmissionOptions: [],
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
+        quarterlyReturnSubmissions: false,
         sessionId: session.id
       })
     })

@@ -13,16 +13,19 @@
  * @returns {object} - The data formatted for the view template
  */
 function go (session) {
-  const { id: sessionId, licence: { id: licenceId, licenceRef }, additionalSubmissionOptions } = session
-  const data = {
+  const {
+    id: sessionId, licence: { id: licenceId, licenceRef },
+    additionalSubmissionOptions, quarterlyReturnSubmissions
+  } = session
+
+  return {
     additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceId,
     licenceRef,
+    quarterlyReturnSubmissions,
     sessionId
   }
-
-  return data
 }
 
 module.exports = {

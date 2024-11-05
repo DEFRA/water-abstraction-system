@@ -16,7 +16,10 @@ const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib
  * @returns {object} The data formatted for the view template
  */
 function go (session) {
-  const { additionalSubmissionOptions, id: sessionId, journey, licence, note, reason } = session
+  const {
+    additionalSubmissionOptions, quarterlyReturnSubmissions,
+    id: sessionId, journey, licence, note, reason
+  } = session
 
   const returnsRequired = journey === 'returns-required'
 
@@ -25,6 +28,7 @@ function go (session) {
     licenceRef: licence.licenceRef,
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
+    quarterlyReturnSubmissions,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,

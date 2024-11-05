@@ -45,19 +45,20 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceVersions, returnVersions, startDate } = licence
+  const { id, licenceRef, licenceVersions, returnVersions, startDate, waterUndertaker } = licence
   const ends = licence.$ends()
 
   return {
     checkPageVisited: false,
     licence: {
-      id,
       currentVersionStartDate: _currentVersionStartDate(licenceVersions),
       endDate: ends ? ends.date : null,
-      licenceRef,
+      id,
       licenceHolder: licence.$licenceHolder(),
+      licenceRef,
       returnVersions,
-      startDate
+      startDate,
+      waterUndertaker
     },
     journey,
     requirements: [{}]
@@ -68,12 +69,13 @@ async function _fetchLicence (licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
     .select([
-      'id',
       'expiredDate',
+      'id',
       'lapsedDate',
       'licenceRef',
       'revokedDate',
-      'startDate'
+      'startDate',
+      'waterUndertaker'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {

@@ -15,8 +15,8 @@ describe('Return Versions Setup - Check presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
       journey: 'returns-required',
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
@@ -26,9 +26,10 @@ describe('Return Versions Setup - Check presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      quarterlyReturnSubmissions: false,
+      reason: 'major-change',
       returnVersionStartDate: '2023-01-01',
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -49,6 +50,7 @@ describe('Return Versions Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
         reason: 'Major change',
         reasonLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
@@ -66,7 +68,19 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns a checked option', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+        expect(result.additionalSubmissionOptions).to.equal(['multiple-upload'])
+      })
+    })
+
+    describe('when the user has default additionalSubmissionOptions', () => {
+      beforeEach(() => {
+        session.additionalSubmissionOptions = ['multiple-upload', 'quarterly-return-submissions']
+      })
+
+      it('returns a checked option', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.additionalSubmissionOptions).to.equal(['multiple-upload', 'quarterly-return-submissions'])
       })
     })
 
