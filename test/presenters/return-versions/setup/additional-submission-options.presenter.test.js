@@ -39,7 +39,8 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       expect(result).to.be.equal({
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        additionalSubmissionOptions: [],
+        multipleUpload: undefined,
+        noAdditionalOptions: undefined,
         licenceRef: '01/ABC',
         sessionId: session.id
       })
@@ -54,24 +55,70 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     })
   })
 
-  describe('the "additionalSubmissionOptions" property', () => {
-    describe('when the user has previously submitted additional submission options', () => {
+  describe('the "multipleUpload" property', () => {
+    describe('when it has been set to true', () => {
       beforeEach(() => {
-        session.additionalSubmissionOptions = ['multiple-upload']
+        session.multipleUpload = true
       })
 
-      it('returns the options', () => {
+      it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+        expect(result.multipleUpload).to.be.true()
       })
     })
 
-    describe('when the user has not previously chosen options', () => {
-      it('returns empty options', () => {
+    describe('when it has been set to false', () => {
+      beforeEach(() => {
+        session.multipleUpload = false
+      })
+
+      it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.be.empty()
+        expect(result.multipleUpload).to.be.false()
+      })
+    })
+
+    describe('when it has not been set', () => {
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.multipleUpload).to.be.undefined()
+      })
+    })
+  })
+
+  describe('the "noAdditionalOptions" property', () => {
+    describe('when it has been set to true', () => {
+      beforeEach(() => {
+        session.noAdditionalOptions = true
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.noAdditionalOptions).to.be.true()
+      })
+    })
+
+    describe('when it has been set to false', () => {
+      beforeEach(() => {
+        session.noAdditionalOptions = false
+      })
+
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.noAdditionalOptions).to.be.false()
+      })
+    })
+
+    describe('when it has not been set', () => {
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.multipleUpload).to.be.undefined()
       })
     })
   })

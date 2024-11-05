@@ -26,6 +26,7 @@ describe('Return Versions Setup - Check presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      multipleUpload: false,
       returnVersionStartDate: '2023-01-01',
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
@@ -37,8 +38,8 @@ describe('Return Versions Setup - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
+        multipleUpload: false,
         note: {
           actions: [
             {
@@ -57,24 +58,24 @@ describe('Return Versions Setup - Check presenter', () => {
     })
   })
 
-  describe('the "additionalSubmissionOptions" property', () => {
-    describe('when the user has checked additionalSubmissionOptions', () => {
+  describe('the "multipleUpload" property', () => {
+    describe('when there is a multipleUpload', () => {
       beforeEach(() => {
-        session.additionalSubmissionOptions = ['multiple-upload']
+        session.multipleUpload = true
       })
 
-      it('returns a checked option', () => {
+      it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+        expect(result.multipleUpload).to.be.true()
       })
     })
 
-    describe('when the user has not checked an option', () => {
-      it('returns no options', () => {
+    describe('when there is not a multipleUpload', () => {
+      it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.be.empty()
+        expect(result.multipleUpload).to.be.false()
       })
     })
   })
