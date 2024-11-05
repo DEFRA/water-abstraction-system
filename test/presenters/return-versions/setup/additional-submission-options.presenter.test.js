@@ -54,99 +54,91 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "additionalSubmissionOptions" property', () => {
-    describe('when the user has previously submitted additional submission options', () => {
-      beforeEach(() => {
-        session.additionalSubmissionOptions = ['multiple-upload']
-      })
-
-      it('returns the options', () => {
-        const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
-      })
-    })
-
-    describe('when the user has not previously chosen options', () => {
-      it('returns empty options', () => {
-        const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-        expect(result.additionalSubmissionOptions).to.equal(['none'])
-      })
-    })
-  })
-
-  describe('the "quarterlyReturnSubmissions" property', () => {
-    describe('when the return version is for quarterly return submissions', () => {
-      beforeEach(() => {
-        session.licence.waterUndertaker = true
-        session.returnVersionStartDate = '2025-04-01'
-      })
-
-      it('returns quarterly returns submissions as true', () => {
-        const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-        expect(result.quarterlyReturnSubmissions).to.equal(true)
-      })
-
-      describe('and the licence holder is a water company', () => {
-        it('returns the default options', () => {
-          const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-          expect(result.additionalSubmissionOptions).to.include('multiple-upload')
-          expect(result.additionalSubmissionOptions).to.include('quarterly-return-submissions')
-        })
-      })
-
-      describe('and the licence holder is not a water company', () => {
+    describe('when the return version start date', () => {
+      describe('has been updated', () => {
         beforeEach(() => {
-          session.licence.waterUndertaker = false
+          session.startDateUpdated = true
         })
 
-        it('returns the default options', () => {
-          const result = AdditionalSubmissionOptionsPresenter.go(session)
+        describe('and the return version is for a water company', () => {
+          beforeEach(() => {
+            session.licence.waterUndertaker = true
+          })
 
-          expect(result.additionalSubmissionOptions).to.equal(['none'])
+          describe('and is not a quarterly return ', () => {
+            beforeEach(() => {
+              session.returnVersionStartDate = '2025-03-01'
+            })
+
+            it('return the water company default', () => {
+              const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+              expect(result.additionalSubmissionOptions).to.equal(['multiple-upload'])
+            })
+          })
+
+          describe('and is a quarterly return', () => {
+            beforeEach(() => {
+              session.returnVersionStartDate = '2025-04-01'
+            })
+
+            it('returns the default for water company and quarterly return', () => {
+              const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+              expect(result.additionalSubmissionOptions).to.equal(['multiple-upload', 'quarterly-return-submissions'])
+            })
+          })
+        })
+
+        describe('and the return version is not for a water company', () => {
+          beforeEach(() => {
+            session.returnVersionStartDate = '2025-03-01'
+            session.licence.waterUndertaker = false
+          })
+
+          it('return none as the default', () => {
+            const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+            expect(result.additionalSubmissionOptions).to.equal(['none'])
+          })
         })
       })
-
-      describe('and there is existing session data', () => {
+      describe('has not been updated', () => {
         beforeEach(() => {
           session.additionalSubmissionOptions = ['none']
+          session.startDateUpdated = false
         })
 
-        it('returns the session options', () => {
+        it('uses the session data', () => {
           const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-          expect(result.additionalSubmissionOptions).to.include('none')
+          expect(result.additionalSubmissionOptions).to.equal(['none'])
         })
       })
     })
 
-    describe('when the return version is not for quarterly return submissions', () => {
-      beforeEach(() => {
-        session.licence.waterUndertaker = true
-        session.returnVersionStartDate = '2025-03-01'
-      })
-
-      describe('and the licence is for a water company', () => {
-        it('returns the options', () => {
-          const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-          expect(result.quarterlyReturnSubmissions).to.be.false()
-          expect(result.additionalSubmissionOptions).to.equal(['multiple-upload', 'quarterly-return-submissions'])
-        })
-      })
-
-      describe('and the licence is not for a water company', () => {
+    describe('the "quarterlyReturnSubmissions" property', () => {
+      describe('when the return version is for quarterly return submissions', () => {
         beforeEach(() => {
-          session.licence.waterUndertaker = false
+          session.returnVersionStartDate = '2025-04-01'
         })
 
-        it('returns the options', () => {
+        it('returns "quarterlyReturnSubmissions" as true', () => {
           const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-          expect(result.quarterlyReturnSubmissions).to.be.false()
-          expect(result.additionalSubmissionOptions).to.equal(['none'])
+          expect(result.quarterlyReturnSubmissions).to.equal(true)
+        })
+      })
+
+      describe('when the return version is not for quarterly return submissions', () => {
+        beforeEach(() => {
+          session.returnVersionStartDate = '2025-03-20'
+        })
+
+        it('returns "quarterlyReturnSubmissions" as true', () => {
+          const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+          expect(result.quarterlyReturnSubmissions).to.equal(false)
         })
       })
     })

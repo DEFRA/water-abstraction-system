@@ -7,6 +7,7 @@
 
 const CheckPresenter = require('../../../../presenters/return-versions/setup/check/check.presenter.js')
 const FetchPointsService = require('../fetch-points.service.js')
+const RecalculateAdditionalOptions = require('./recalculate-additional-options.service.js')
 const ReturnRequirementsPresenter = require('../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js')
 const SessionModel = require('../../../../models/session.model.js')
 
@@ -24,6 +25,8 @@ async function go (sessionId, yar) {
   await _markCheckPageVisited(session)
 
   const returnRequirements = await _returnRequirements(session)
+
+  RecalculateAdditionalOptions.go(session)
 
   const formattedData = CheckPresenter.go(session)
 

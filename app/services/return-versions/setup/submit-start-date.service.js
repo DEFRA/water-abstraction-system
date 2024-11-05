@@ -61,6 +61,8 @@ async function _save (session, payload) {
 
   session.startDateOptions = selectedOption
 
+  const oldReturnVersionStartDate = session.returnVersionStartDate
+
   if (selectedOption === 'anotherStartDate') {
     session.startDateDay = payload['start-date-day']
     session.startDateMonth = payload['start-date-month']
@@ -70,6 +72,10 @@ async function _save (session, payload) {
     session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month'] - 1}-${payload['start-date-day']}`).toISOString().split('T')[0]
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate).toISOString().split('T')[0]
+  }
+
+  if (oldReturnVersionStartDate) {
+    session.startDateUpdated = oldReturnVersionStartDate !== session.returnVersionStartDate
   }
 
   return session.$update()
