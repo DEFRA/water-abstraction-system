@@ -8,6 +8,10 @@
 /**
  * Quarterly returns service
  *
+ * When the start date changes to or from a quarterly return we need to recalculate the additional options.
+ *
+ * We have introduced defaults for a water company for its additional options
+ *
  * @param {module:SessionModel} session - The returns requirements session instance
  *
  * @returns {object} - The data formatted for the view template
@@ -33,7 +37,7 @@ async function go (session) {
  * Checks if the return version is a quarterly returns submission
  *
  * A return version is due for quarterly returns submissions when they:
- * - are a water company and the return version start date is > 1 April 2025
+ * - are a water company and the return version start date > 1 April 2025
  *
  * @param {string} returnVersionStartDate - The return version start date
  *
@@ -48,11 +52,9 @@ function _quarterlyReturnSubmissions (returnVersionStartDate) {
 }
 
 /**
- * Determines the default options
+ * Determines the additional options
  *
- * Previous session data takes priority
- * If a return version is for quarterly return submissions then it has its own defaults to set
- * Otherwise default to none
+ * If the return version start date has not been updated, then we use the session data to maintain the users choice.
  *
  * @param {string[]} additionalSubmissionOptions - The options set already from session
  * @param {boolean} waterUndertaker - If the return version is for water company
@@ -69,10 +71,22 @@ function _additionalSubmissionOptions (
     return additionalSubmissionOptions
   }
 
-  return _calculateDefaults(waterUndertaker, quarterlyReturnSubmissions)
+  return _defaultAdditionalOptions(waterUndertaker, quarterlyReturnSubmissions)
 }
 
-function _calculateDefaults (waterUndertaker, quarterlyReturnSubmissions) {
+/**
+ * Determines the additional options
+ *
+ * If the licence is not for a water company then it just defaults to an empty array
+ *
+ * @param {boolean} waterUndertaker - If the licence is for a water company
+ * @param {boolean} quarterlyReturnSubmissions - If the return version is a quarterly return
+ *
+ * @returns {string[]}
+ *
+ * @private
+ */
+function _defaultAdditionalOptions (waterUndertaker, quarterlyReturnSubmissions) {
   const options = []
 
   if (waterUndertaker && quarterlyReturnSubmissions) {
