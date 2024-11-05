@@ -118,7 +118,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         expect(refreshedSession.startDateDay).to.equal('26')
         expect(refreshedSession.startDateMonth).to.equal('11')
         expect(refreshedSession.startDateYear).to.equal('2023')
-        expect(refreshedSession.returnVersionStartDate).to.equal('2023-10-26')
+        expect(refreshedSession.returnVersionStartDate).to.equal('2023-11-26')
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {

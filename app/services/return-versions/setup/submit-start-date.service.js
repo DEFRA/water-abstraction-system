@@ -67,9 +67,8 @@ async function _save (session, payload) {
     session.startDateDay = payload['start-date-day']
     session.startDateMonth = payload['start-date-month']
     session.startDateYear = payload['start-date-year']
-    // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
-    // January is actually 0, February is 1 etc. This is why we deduct 1 from the month.
-    session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month'] - 1}-${payload['start-date-day']}`).toISOString().split('T')[0]
+
+    session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`).toISOString().split('T')[0]
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate).toISOString().split('T')[0]
   }
