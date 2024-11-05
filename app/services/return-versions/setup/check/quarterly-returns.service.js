@@ -24,7 +24,6 @@ async function go (session) {
   session.additionalSubmissionOptions = _additionalSubmissionOptions(
     additionalSubmissionOptions, waterUndertaker, startDateUpdated, quarterlyReturnSubmissions)
 
-  // We need to set this to false to allow the session
   session.startDateUpdated = false
 
   return session.$update()
@@ -67,12 +66,7 @@ function _quarterlyReturnSubmissions (returnVersionStartDate) {
 function _additionalSubmissionOptions (
   additionalSubmissionOptions, waterUndertaker, startDateUpdated, quarterlyReturnSubmissions) {
   if (!startDateUpdated && additionalSubmissionOptions) {
-    //  fix this logic
-    if (additionalSubmissionOptions) {
-      return additionalSubmissionOptions
-    } else {
-      return _calculateDefaults(waterUndertaker, quarterlyReturnSubmissions)
-    }
+    return additionalSubmissionOptions
   }
 
   return _calculateDefaults(waterUndertaker, quarterlyReturnSubmissions)
