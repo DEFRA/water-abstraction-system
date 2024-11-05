@@ -26,7 +26,7 @@ async function go (sessionId, yar) {
 
   const returnRequirements = await _returnRequirements(session)
 
-  RecalculateAdditionalOptions.go(session)
+  await RecalculateAdditionalOptions.go(session)
 
   const formattedData = CheckPresenter.go(session)
 

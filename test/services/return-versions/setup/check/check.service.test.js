@@ -25,6 +25,7 @@ describe('Return Versions Setup - Check service', () => {
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
+        journey: 'returns-required',
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -33,11 +34,10 @@ describe('Return Versions Setup - Check service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        returnVersionStartDate: '2023-01-01',
-        journey: 'returns-required',
+        reason: 'major-change',
         requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        returnVersionStartDate: '2023-01-01',
+        startDateOptions: 'licenceStartDate'
       }
     })
 
@@ -60,7 +60,7 @@ describe('Return Versions Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        additionalSubmissionOptions: [],
+        additionalSubmissionOptions: ['none'],
         licenceRef: '01/ABC',
         note: {
           actions: [
@@ -73,6 +73,7 @@ describe('Return Versions Setup - Check service', () => {
         },
         notification: undefined,
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
         reason: 'Major change',
         reasonLink: `/system/return-versions/setup/${session.id}/reason`,
         requirements: [],

@@ -20,6 +20,7 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
+        journey: 'returns-required',
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           endDate: null,
@@ -27,10 +28,10 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
           licenceHolder: 'Turbo Kid',
           waterUndertaker: false
         },
-        journey: 'returns-required',
+        quarterlyReturnSubmissions: false,
+        reason: 'major-change',
         requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        startDateOptions: 'licenceStartDate'
       }
     })
   })

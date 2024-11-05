@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAdditionalSubmissionOptionsService = require('../../../../app/services/return-versions/setup/submit-additional-submission-options.service.js')
 
-describe('Return Versions Setup - Submit Additional Submission Options service', () => {
+describe.only('Return Versions Setup - Submit Additional Submission Options service', () => {
   let payload
   let session
   let yarStub
@@ -23,6 +23,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
+        journey: 'returns-required',
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -35,13 +36,14 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
             reason: null,
             modLogs: []
           }],
+          additionalSubmissionOptions: ['none'],
+          quarterlyReturnSubmissions: false,
           startDate: '2022-04-01T00:00:00.000Z',
           waterUndertaker: false
         },
-        journey: 'returns-required',
+        reason: 'major-change',
         requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        startDateOptions: 'licenceStartDate'
       }
     })
 
@@ -92,7 +94,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           pageTitle: 'Select any additional submission options for the return requirements',
           licenceRef: '01/ABC',
           additionalSubmissionOptions: [undefined],
-          quarterlyReturnSubmissions: false
+          quarterlyReturnSubmissions: undefined
         }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
       })
 

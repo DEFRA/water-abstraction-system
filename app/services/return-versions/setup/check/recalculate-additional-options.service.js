@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+async function go (session) {
   const {
     licence: { waterUndertaker },
     returnVersionStartDate, additionalSubmissionOptions, startDateUpdated
