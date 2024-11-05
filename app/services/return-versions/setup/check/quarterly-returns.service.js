@@ -89,11 +89,12 @@ function _additionalSubmissionOptions (
 function _defaultAdditionalOptions (waterUndertaker, quarterlyReturnSubmissions) {
   const options = []
 
+  if (waterUndertaker) {
+    options.push('multiple-upload')
+  }
+
   if (waterUndertaker && quarterlyReturnSubmissions) {
-    options.push('multiple-upload')
     options.push('quarterly-return-submissions')
-  } else if (waterUndertaker) {
-    options.push('multiple-upload')
   }
 
   return options
