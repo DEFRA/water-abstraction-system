@@ -78,12 +78,11 @@ async function _fetch (reviewLicenceId) {
             ])
         })
         .withGraphFetched('reviewChargeElements')
-        .modifyGraph('reviewReturns', (builder) => {
+        .modifyGraph('reviewChargeElements', (builder) => {
           builder
             .select([
-              'id'
+              'reviewChargeElements.id'
             ])
-            .orderBy('startDate', 'asc')
         })
     })
     .withGraphFetched('reviewChargeVersions')
@@ -136,12 +135,12 @@ async function _fetch (reviewLicenceId) {
                   builder
                     .select([
                       'id',
-                      'description',
                       'abstractionPeriodStartDay',
                       'abstractionPeriodStartMonth',
                       'abstractionPeriodEndDay',
                       'abstractionPeriodEndMonth',
-                      'authorisedAnnualQuantity'
+                      'authorisedAnnualQuantity',
+                      'description'
                     ])
                     .withGraphFetched('purpose')
                     .modifyGraph('purpose', (builder) => {
