@@ -26,6 +26,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         startDate: '2022-04-01T00:00:00.000Z'
       },
       journey: 'returns-required',
+      multipleUpload: false,
       requirements: [{}],
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
@@ -39,9 +40,9 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       expect(result).to.be.equal({
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        multipleUpload: undefined,
-        noAdditionalOptions: undefined,
         licenceRef: '01/ABC',
+        multipleUpload: false,
+        noAdditionalOptions: undefined,
         sessionId: session.id
       })
     })
@@ -79,14 +80,6 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         expect(result.multipleUpload).to.be.false()
       })
     })
-
-    describe('when it has not been set', () => {
-      it('returns false', () => {
-        const result = AdditionalSubmissionOptionsPresenter.go(session)
-
-        expect(result.multipleUpload).to.be.undefined()
-      })
-    })
   })
 
   describe('the "noAdditionalOptions" property', () => {
@@ -118,7 +111,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.multipleUpload).to.be.undefined()
+        expect(result.noAdditionalOptions).to.be.undefined()
       })
     })
   })
