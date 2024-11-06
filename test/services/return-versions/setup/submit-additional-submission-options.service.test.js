@@ -23,6 +23,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
+        journey: 'returns-required',
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -37,10 +38,10 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           }],
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required',
+        multipleUpload: false,
+        reason: 'major-change',
         requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
+        startDateOptions: 'licenceStartDate'
       }
     })
 
@@ -115,7 +116,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           backLink: `/system/return-versions/setup/${session.id}/check`,
           pageTitle: 'Select any additional submission options for the return requirements',
           licenceRef: '01/ABC',
-          multipleUpload: undefined,
+          multipleUpload: false,
           noAdditionalOptions: undefined
         }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
       })
