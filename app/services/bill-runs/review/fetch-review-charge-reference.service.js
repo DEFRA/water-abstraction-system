@@ -85,7 +85,6 @@ async function _fetch (reviewChargeReferenceId) {
         .select([
           'id',
           'volume',
-          'chargeCategoryId',
           'loss',
           ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
           ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
