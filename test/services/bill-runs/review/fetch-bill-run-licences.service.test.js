@@ -17,7 +17,7 @@ const ReviewLicenceHelper = require('../../../support/helpers/review-licence.hel
 // Thing under test
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
 
-describe('Fetch Bill Run Licences service', () => {
+describe('Bill Runs Review - Fetch Bill Run Licences service', () => {
   let filterIssues
   let filterLicenceHolderNumber
   let filterLicenceStatus
