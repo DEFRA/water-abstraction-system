@@ -137,6 +137,27 @@ function formatChargePeriods (reviewChargeElement, chargePeriod = null) {
 }
 
 /**
+ * Formats the issues held against review charge elements and returns for display
+ *
+ * TODO: Use NULL for no issues not an empty string
+ *
+ * An oversight when setting up the table/logic means 'issues' in `review_returns` and `review_charge_elements` is never
+ * null. If there are no issues we are setting it to an empty string not NULL. This means we always get a string back
+ * from the DB.
+ *
+ * @param {string} issues - the issues from the review charge element or return as a comma separated string
+ *
+ * @returns {string[]} the issues as a string array, else an empty array if issues is equal to ''
+ */
+function formatIssues (issues) {
+  if (issues === '') {
+    return []
+  }
+
+  return issues.split(', ')
+}
+
+/**
  * Format the status for a review return, for example, 'overdue'
  *
  * We cannot just return the status from the DB for a return because of the disparity between what we show and how the
@@ -193,6 +214,7 @@ module.exports = {
   formatAdditionalCharges,
   formatChargePeriod,
   formatChargePeriods,
+  formatIssues,
   formatReturnStatus,
   formatReturnTotals
 }

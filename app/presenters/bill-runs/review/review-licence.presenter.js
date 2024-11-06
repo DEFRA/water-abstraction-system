@@ -11,6 +11,7 @@ const {
   determineReturnLink,
   formatChargePeriod,
   formatChargePeriods,
+  formatIssues,
   formatReturnStatus,
   formatReturnTotals
 } = require('./base-review.presenter.js')
@@ -79,7 +80,7 @@ function _chargeElements (reviewChargeElements, chargePeriod) {
       elementIndex: index + 1,
       status,
       id,
-      issues: issues.length > 0 ? issues.split(', ') : [''],
+      issues: formatIssues(issues),
       purpose: chargeElement.purpose.description
     }
   })
@@ -178,7 +179,7 @@ function _formatReviewReturns (reviewReturns) {
     const formattedReviewReturn = {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       description,
-      issues: issues.length > 0 ? issues.split(', ') : [''],
+      issues: formatIssues(issues),
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
       returnId,

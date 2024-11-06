@@ -10,6 +10,7 @@ const {
   determineReturnLink,
   formatChargePeriod,
   formatChargePeriods,
+  formatIssues,
   formatReturnStatus,
   formatReturnTotals
 } = require('./base-review.presenter.js')
@@ -45,7 +46,7 @@ function go (reviewChargeElement, elementIndex) {
     financialPeriod: formatFinancialYear(
       reviewChargeReference.reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding
     ),
-    issues: issues.length > 0 ? issues.split(', ') : [],
+    issues: formatIssues(issues),
     licenceId: reviewChargeReference.reviewChargeVersion.reviewLicence.licenceId,
     matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns),
     reviewChargeElementId,
@@ -62,7 +63,7 @@ function _matchedReturns (reviewReturns) {
     return {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       description,
-      issues: issues.length > 0 ? issues.split(', ') : [''],
+      issues: formatIssues(issues),
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
       returnId,
