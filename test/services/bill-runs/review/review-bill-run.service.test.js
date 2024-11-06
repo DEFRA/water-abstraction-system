@@ -19,7 +19,7 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/rev
 // Thing under test
 const ReviewBillRunService = require('../../../../app/services/bill-runs/review/review-bill-run.service.js')
 
-describe('Review Bill Run Service', () => {
+describe('Bill Runs Review - Review Bill Run Service', () => {
   const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let page
