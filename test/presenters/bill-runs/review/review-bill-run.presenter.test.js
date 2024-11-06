@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
-describe('Review Bill Run presenter', () => {
+describe('Bill Runs Review - Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     let filterIssues
     let filterLicenceHolderNumber
@@ -192,7 +192,7 @@ function _testLicences () {
   return [
     // Licence with no issues
     {
-      licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
+      id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
       licenceRef: '1/11/11/*11/1111',
       licenceHolder: 'Big Farm Ltd',
       issues: '',
@@ -201,7 +201,7 @@ function _testLicences () {
     },
     // Licence with a single issue
     {
-      licenceId: '395bdc01-605b-44f5-9d90-5836cc013799',
+      id: '395bdc01-605b-44f5-9d90-5836cc013799',
       licenceRef: '2/22/22/*S2/2222',
       licenceHolder: 'Bob Bobbles',
       issues: 'Abstraction outside period',
@@ -210,7 +210,7 @@ function _testLicences () {
     },
     // Licence with multiple issues
     {
-      licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
       licenceRef: '3/33/33/*3/3333',
       licenceHolder: 'Farmer Palmer',
       issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
