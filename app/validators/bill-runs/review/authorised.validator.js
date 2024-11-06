@@ -2,7 +2,7 @@
 
 /**
  * Validates data submitted for the review charge reference authorised page
- * @module FactorsValidator
+ * @module AuthorisedValidator
  */
 
 const Joi = require('joi')
