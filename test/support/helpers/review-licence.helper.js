@@ -16,7 +16,7 @@ const ReviewLicenceModel = require('../../../app/models/review-licence.model.js'
  * - `billRunId` - [random UUID]
  * - `licenceId` - [random UUID]
  * - `licenceRef` - [randomly generated - 01/123]
- * - `licenceHolder` - A LicenceHolder
+ * - `licenceHolder` - Licence Holder Ltd
  * - `progress` - false
  * - `status` - ready
  * - `issues` - null
