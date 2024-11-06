@@ -19,7 +19,7 @@ const ReviewLicenceModel = require('../../../app/models/review-licence.model.js'
  * - `licenceHolder` - Licence Holder Ltd
  * - `progress` - false
  * - `status` - ready
- * - `issues` - null
+ * - `issues` - ''
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -51,7 +51,7 @@ function defaults (data = {}) {
     licenceHolder: 'Licence Holder Ltd',
     progress: false,
     status: 'ready',
-    issues: null
+    issues: ''
   }
 
   return {
