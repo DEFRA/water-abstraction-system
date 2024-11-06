@@ -22,25 +22,23 @@ const ReviewReturnHelper = require('../../../support/helpers/review-return.helpe
 const ReviewReturnModel = require('../../../../app/models/review-return.model.js')
 
 // Thing under test
-const RemoveReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/remove-review-data.service.js')
+const RemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/remove-review-licence.service.js')
 
-describe('Remove Review Data service', () => {
-  describe('when called with a valid billRunId & licenceId', () => {
-    const billRunId = 'f54005c6-66bc-43d7-a7e8-d162e6ebc317'
-    const licenceId = '41f1ad1d-0f25-4b2f-bc0a-4b38131db12a'
-
+describe('Bill Runs Review - Remove Review Licence service', () => {
+  describe('when called', () => {
     let reviewChargeElementId
     let reviewChargeElementReturnId
     let reviewChargeReferenceId
     let reviewChargeVersionId
+    let reviewLicence
     let reviewReturnId
 
     beforeEach(async () => {
-      const { id: reviewLicenceId } = await ReviewLicenceHelper.add({ billRunId, licenceId })
-      const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId })
+      reviewLicence = await ReviewLicenceHelper.add()
+      const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId: reviewLicence.id })
 
       reviewReturnId = reviewReturn.id
-      const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId })
+      const reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id })
 
       reviewChargeVersionId = reviewChargeVersion.id
       const reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId })
@@ -54,10 +52,10 @@ describe('Remove Review Data service', () => {
       reviewChargeElementReturnId = reviewChargeElementReturn.id
     })
 
-    it('will remove the records relating to the licence from the review tables', async () => {
-      await RemoveReviewDataService.go(billRunId, licenceId)
+    it('will remove the records relating to the review licence from the review tables', async () => {
+      await RemoveReviewLicenceService.go(reviewLicence.id)
 
-      expect(await ReviewLicenceModel.query().where('licenceId', licenceId)).to.be.empty()
+      expect(await ReviewLicenceModel.query().findById(reviewLicence.id)).to.be.undefined()
       expect(await ReviewReturnModel.query().findById(reviewReturnId)).to.be.undefined()
       expect(await ReviewChargeVersionModel.query().findById(reviewChargeVersionId)).to.be.undefined()
       expect(await ReviewChargeReferenceModel.query().findById(reviewChargeReferenceId)).to.be.undefined()
