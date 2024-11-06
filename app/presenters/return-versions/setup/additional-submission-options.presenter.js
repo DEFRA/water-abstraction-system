@@ -16,11 +16,11 @@ function go (session) {
   const { id: sessionId, licence: { id: licenceId, licenceRef }, multipleUpload, noAdditionalOptions } = session
 
   return {
-    multipleUpload,
-    noAdditionalOptions,
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceId,
     licenceRef,
+    multipleUpload,
+    noAdditionalOptions,
     sessionId
   }
 }
