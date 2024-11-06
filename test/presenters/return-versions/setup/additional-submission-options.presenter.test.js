@@ -56,7 +56,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "multipleUpload" property', () => {
-    describe('when it has been set to true', () => {
+    describe('when a user has selected "multipleUpload" for additional options', () => {
       beforeEach(() => {
         session.multipleUpload = true
       })
@@ -68,7 +68,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when it has been set to false', () => {
+    describe('when a user has not selected "multipleUpload" for additional options', () => {
       beforeEach(() => {
         session.multipleUpload = false
       })
@@ -90,7 +90,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "noAdditionalOptions" property', () => {
-    describe('when it has been set to true', () => {
+    describe('when a user has selected "none" for additional options', () => {
       beforeEach(() => {
         session.noAdditionalOptions = true
       })
@@ -102,7 +102,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when it has been set to false', () => {
+    describe('when a user not has selected "none" for additional options', () => {
       beforeEach(() => {
         session.noAdditionalOptions = false
       })
