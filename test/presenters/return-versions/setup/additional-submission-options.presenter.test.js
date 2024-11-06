@@ -57,7 +57,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "multipleUpload" property', () => {
-    describe('when a user has selected "multipleUpload" for additional options', () => {
+    describe('when the user has previously submitted "multipleUpload" for additional options or it has been set initially when the licence holder is a water company', () => {
       beforeEach(() => {
         session.multipleUpload = true
       })
@@ -69,7 +69,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when a user has not selected "multipleUpload" for additional options', () => {
+    describe('when the user has not previously submitted "multipleUpload" for additional options', () => {
       beforeEach(() => {
         session.multipleUpload = false
       })
@@ -83,7 +83,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "noAdditionalOptions" property', () => {
-    describe('when a user has selected "none" for additional options', () => {
+    describe('when the user has previously submitted "none" for additional options', () => {
       beforeEach(() => {
         session.noAdditionalOptions = true
       })
@@ -95,7 +95,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when a user not has selected "none" for additional options', () => {
+    describe('when the user has selected another additional option', () => {
       beforeEach(() => {
         session.noAdditionalOptions = false
       })
@@ -107,7 +107,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when it has not been set', () => {
+    describe('when the user has not previously submitted for no additional options', () => {
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
