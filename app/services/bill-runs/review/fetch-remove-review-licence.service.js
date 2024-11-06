@@ -40,6 +40,7 @@ async function _fetch (reviewLicenceId) {
         .withGraphFetched('region')
         .modifyGraph('region', (builder) => {
           builder.select([
+            'id',
             'displayName'
           ])
         })

@@ -43,6 +43,7 @@ async function _fetch (reviewLicenceId) {
         .withGraphFetched('region')
         .modifyGraph('region', (builder) => {
           builder.select([
+            'id',
             'displayName'
           ])
         })
@@ -69,6 +70,7 @@ async function _fetch (reviewLicenceId) {
         .modifyGraph('returnLog', (builder) => {
           builder
             .select([
+              'id',
               ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
               ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
               ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
