@@ -102,7 +102,7 @@ function formatChargePeriod (reviewChargeVersion) {
  *
  * @param {module:ReviewChargeElementModel} reviewChargeElement - instance of `ReviewChargeElementModel` containing at
  * least a `chargeElement` property populated with abstraction days and months
- * @param {*} [chargePeriod]
+ * @param {object} [chargePeriod] - The start and end date of the calculated charge period
  *
  * @returns {string[]} an array containing the review charge element's charge period(s) formatted as 'DD MMMM YYYY to DD
  * MMMM YYYY'

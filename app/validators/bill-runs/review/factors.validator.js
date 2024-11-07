@@ -10,6 +10,9 @@ const Joi = require('joi')
 /**
  * Validates data submitted for the review charge reference factors page
  *
+ * There are two inputs on the page, both of which need to contain valid values. However, they are always pre-populated
+ * with existing data, so in theory would only both be invalid if the user has incorrectly updated both.
+ *
  * @param {object} payload - The payload from the request to be validated
  *
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will

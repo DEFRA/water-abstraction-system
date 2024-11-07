@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the selected review charge element instance and related data for the 2PT review charge element page
+ * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
  * @module FetchReviewChargeReferenceService
  */
 
@@ -10,11 +10,14 @@ const { ref } = require('objection')
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
- * Fetches the match details for an individual charge element
+ * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
+ *
+ * This fetch service fetches the data needed for the main review charge element page, but also the edit page/service.
  *
  * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
  *
- * @returns {Promise<object>} An object containing the bill run and review charge element instances
+ * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
+ * two-part tariff review charge element page
  */
 async function go (reviewChargeElementId) {
   return _fetch(reviewChargeElementId)

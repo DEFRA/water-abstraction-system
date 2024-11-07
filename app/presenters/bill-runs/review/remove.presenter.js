@@ -13,7 +13,7 @@ const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js
  * @param {module:ReviewLicenceModel} reviewLicence - instance of the `ReviewLicenceModel` returned from
  * `FetchRemoveReviewLicenceService`
  *
- * @returns {object}page date needed for the remove review licence confirmation page
+ * @returns {object} page date needed for the remove review licence confirmation page
  */
 function go (reviewLicence) {
   const { billRun, id: reviewLicenceId, licenceRef } = reviewLicence
