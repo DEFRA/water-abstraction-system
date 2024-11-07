@@ -5,7 +5,7 @@
  * @module GenerateFromExistingRequirementsService
  */
 
-const FetchExistingRequirementsService = require('./fetch-existing-requirements.js')
+const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
 
 /**
  * Generates returns setup requirements from an existing return version

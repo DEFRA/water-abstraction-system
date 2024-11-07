@@ -4,10 +4,10 @@
  * @module ReviewReturnHelper
  */
 
-const { randomInteger } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')
+const { generateLegacyId } = require('./return-requirement.helper.js')
 const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 
 /**
@@ -17,7 +17,7 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  *
  * - `reviewLicenceId` - [random UUID]
  * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
- * - `returnReference` - `10031343`
+ * - `returnReference` - [randomly generated - 10000321]
  * - `quantity` - 0
  * - `allocated` - 0
  * - `underQuery` - false
@@ -26,11 +26,11 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  * - `abstractionOutsidePeriod` - false
  * - `receivedDate` - 2022-06-03
  * - `dueDate` - 2022-06-03
- * - `purposes` - {}
+ * - `purposes` - [{}]
  * - `description` - Lands at Mosshayne Farm, Exeter & Broadclyst
  * - `startDate` - 2022-04-01
  * - `endDate` - 2022-05-06
- * - `issues` - null
+ * - `issues` - ''
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -56,12 +56,12 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
+  const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
 
   const defaults = {
     reviewLicenceId: generateUUID(),
     returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
-    returnReference: '10031343',
+    returnReference,
     quantity: 0,
     allocated: 0,
     underQuery: false,
@@ -74,7 +74,7 @@ function defaults (data = {}) {
     description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
     startDate: new Date('2022-04-01'),
     endDate: new Date('2022-05-06'),
-    issues: null
+    issues: ''
   }
 
   return {

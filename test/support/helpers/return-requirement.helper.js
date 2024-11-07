@@ -46,7 +46,7 @@ function add (data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults (data = {}) {
-  const legacyId = data.legacyId ? data.legacyId : randomInteger(100, 99999)
+  const legacyId = data.legacyId ? data.legacyId : generateLegacyId()
 
   const defaults = {
     abstractionPeriodStartDay: 1,
@@ -66,7 +66,17 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generates a return requirement legacy ID (also known as return reference)
+ *
+ * @returns {number}
+ */
+function generateLegacyId () {
+  return randomInteger(100, 19999999)
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLegacyId
 }
