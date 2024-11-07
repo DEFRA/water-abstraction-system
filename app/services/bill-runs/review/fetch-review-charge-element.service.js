@@ -33,8 +33,8 @@ async function _fetch (reviewChargeElementId) {
       'status'
     ])
     .withGraphFetched('chargeElement')
-    .modifyGraph('chargeElement', (builder) => {
-      builder
+    .modifyGraph('chargeElement', (chargeElementBuilder) => {
+      chargeElementBuilder
         .select([
           'id',
           'abstractionPeriodStartDay',
@@ -46,34 +46,34 @@ async function _fetch (reviewChargeElementId) {
         ])
     })
     .withGraphFetched('reviewChargeReference')
-    .modifyGraph('reviewChargeReference', (builder) => {
-      builder
+    .modifyGraph('reviewChargeReference', (reviewChargeReferenceBuilder) => {
+      reviewChargeReferenceBuilder
         .select([
           'id',
           'amendedAuthorisedVolume'
         ])
         .withGraphFetched('reviewChargeElements')
-        .modifyGraph('reviewChargeElements', (builder) => {
-          builder
+        .modifyGraph('reviewChargeElements', (reviewChargeElementsBuilder) => {
+          reviewChargeElementsBuilder
             .select(['id'])
         })
         .withGraphFetched('reviewChargeVersion')
-        .modifyGraph('reviewChargeVersion', (builder) => {
-          builder
+        .modifyGraph('reviewChargeVersion', (reviewChargeVersionBuilder) => {
+          reviewChargeVersionBuilder
             .select([
               'id',
               'chargePeriodStartDate',
               'chargePeriodEndDate'
             ]).withGraphFetched('reviewLicence')
-            .modifyGraph('reviewLicence', (builder) => {
-              builder
+            .modifyGraph('reviewLicence', (reviewLicenceBuilder) => {
+              reviewLicenceBuilder
                 .select([
                   'id',
                   'licenceId'
                 ])
                 .withGraphFetched('billRun')
-                .modifyGraph('billRun', (builder) => {
-                  builder
+                .modifyGraph('billRun', (billRunBuilder) => {
+                  billRunBuilder
                     .select([
                       'id',
                       'toFinancialYearEnding'
@@ -83,8 +83,8 @@ async function _fetch (reviewChargeElementId) {
         })
     })
     .withGraphFetched('reviewReturns')
-    .modifyGraph('reviewReturns', (builder) => {
-      builder
+    .modifyGraph('reviewReturns', (reviewReturnsBuilder) => {
+      reviewReturnsBuilder
         .select([
           'reviewReturns.id',
           'reviewReturns.allocated',
@@ -101,8 +101,8 @@ async function _fetch (reviewChargeElementId) {
         ])
         .orderBy('reviewReturns.startDate', 'asc')
         .withGraphFetched('returnLog')
-        .modifyGraph('returnLog', (builder) => {
-          builder
+        .modifyGraph('returnLog', (returnLogBuilder) => {
+          returnLogBuilder
             .select([
               'id',
               ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),

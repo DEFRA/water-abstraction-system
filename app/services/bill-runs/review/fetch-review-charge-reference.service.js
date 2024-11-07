@@ -40,30 +40,30 @@ async function _fetch (reviewChargeReferenceId) {
       'winterDiscount'
     ])
     .withGraphFetched('reviewChargeVersion')
-    .modifyGraph('reviewChargeVersion', (builder) => {
-      builder
+    .modifyGraph('reviewChargeVersion', (reviewChargeVersionBuilder) => {
+      reviewChargeVersionBuilder
         .select([
           'id',
           'chargePeriodStartDate',
           'chargePeriodEndDate'
         ])
         .withGraphFetched('reviewLicence')
-        .modifyGraph('reviewLicence', (builder) => {
-          builder
+        .modifyGraph('reviewLicence', (reviewLicenceBuilder) => {
+          reviewLicenceBuilder
             .select([
               'id'
             ])
             .withGraphFetched('billRun')
-            .modifyGraph('billRun', (builder) => {
-              builder
+            .modifyGraph('billRun', (billRunBuilder) => {
+              billRunBuilder
                 .select([
                   'id',
                   'toFinancialYearEnding'
                 ])
             })
             .withGraphFetched('licence')
-            .modifyGraph('licence', (builder) => {
-              builder
+            .modifyGraph('licence', (licenceBuilder) => {
+              licenceBuilder
                 .select([
                   'id',
                   'waterUndertaker'
@@ -72,16 +72,16 @@ async function _fetch (reviewChargeReferenceId) {
         })
     })
     .withGraphFetched('reviewChargeElements')
-    .modifyGraph('reviewChargeElements', (builder) => {
-      builder
+    .modifyGraph('reviewChargeElements', (reviewChargeElementsBuilder) => {
+      reviewChargeElementsBuilder
         .select([
           'id',
           'amendedAllocated'
         ])
     })
     .withGraphFetched('chargeReference')
-    .modifyGraph('chargeReference', (builder) => {
-      builder
+    .modifyGraph('chargeReference', (chargeReferenceBuilder) => {
+      chargeReferenceBuilder
         .select([
           'id',
           'volume',
@@ -90,8 +90,8 @@ async function _fetch (reviewChargeReferenceId) {
           ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
         ])
         .withGraphFetched('chargeCategory')
-        .modifyGraph('chargeCategory', (builder) => {
-          builder
+        .modifyGraph('chargeCategory', (chargeCategoryBuilder) => {
+          chargeCategoryBuilder
             .select([
               'id',
               'reference',
