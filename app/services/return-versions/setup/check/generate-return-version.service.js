@@ -32,16 +32,6 @@ async function go (sessionData, userId) {
   }
 }
 
-function _calculateStartDate (sessionData) {
-  if (sessionData.startDateOptions === 'anotherStartDate') {
-    // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
-    // January is actually 0, February is 1 etc. This is why we deduct 1 from the month.
-    return new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
-  }
-
-  return new Date(sessionData.licence.currentVersionStartDate)
-}
-
 async function _generateReturnRequirements (sessionData) {
   // When no returns are required a return version is created without any return requirements
   if (sessionData.journey === 'no-returns-required') {
@@ -57,7 +47,7 @@ async function _generateReturnRequirements (sessionData) {
 }
 
 async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
-  const startDate = _calculateStartDate(sessionData)
+  const startDate = new Date(sessionData.returnVersionStartDate)
   let endDate = null
 
   if (nextVersionNumber > 1) {

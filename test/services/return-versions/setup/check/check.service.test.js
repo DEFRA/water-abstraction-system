@@ -33,6 +33,7 @@ describe('Return Versions Setup - Check service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        returnVersionStartDate: '2023-01-01',
         journey: 'returns-required',
         requirements: [{}],
         startDateOptions: 'licenceStartDate',
