@@ -36,85 +36,53 @@ describe('Bill Runs Review - Factors presenter', () => {
     })
   })
 
+  // NOTE: otherAdjustments combines the results of `formatAdditionalCharges()` and `formatAdjustments()` from
+  // `base-review.presenter.js`. So, just to ensure the combining is working correctly we just test what we get back
+  // when we have one of each, and one from each type
   describe('the "otherAdjustments" property', () => {
     beforeEach(() => {
       // Our fixture has this as true by default. We set it false so it doesn't interfere with the following tests
       reviewChargeReference.twoPartTariffAgreement = false
     })
 
-    describe('when the charge reference has an abatement agreement', () => {
+    describe('when the charge reference has only an adjustment', () => {
       beforeEach(() => {
         reviewChargeReference.abatementAgreement = 0.3
       })
 
-      it('adds the abatement agreement to the otherAdjustments property', () => {
+      it('the otherAdjustments property only contains the adjustment', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
         expect(result.otherAdjustments).to.equal(['Abatement agreement (0.3)'])
       })
     })
 
-    describe('when the charge reference has a winter discount', () => {
-      beforeEach(() => {
-        reviewChargeReference.winterDiscount = true
-      })
-
-      it('adds the winter discount to the otherAdjustments property', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
-
-        expect(result.otherAdjustments).to.equal(['Winter discount'])
-      })
-    })
-
-    describe('when the charge reference has a two part tariff agreement', () => {
-      beforeEach(() => {
-        reviewChargeReference.twoPartTariffAgreement = true
-      })
-
-      it('adds the two part tariff agreement to the otherAdjustments property', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
-
-        expect(result.otherAdjustments).to.equal(['Two part tariff agreement'])
-      })
-    })
-
-    describe('when the charge reference has a canal and river trust agreement', () => {
-      beforeEach(() => {
-        reviewChargeReference.canalAndRiverTrustAgreement = true
-      })
-
-      it('adds the canal and river trust agreement to the otherAdjustments property', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
-
-        expect(result.otherAdjustments).to.equal(['Canal and River trust agreement'])
-      })
-    })
-
-    describe('when the charge reference has a supported source', () => {
-      beforeEach(() => {
-        reviewChargeReference.chargeReference.supportedSourceName = 'Thames'
-      })
-
-      it('adds the supported source to the otherAdjustments property', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
-
-        expect(result.otherAdjustments).to.equal(['Supported source Thames'])
-      })
-    })
-
-    describe('when the charge reference has a public water supply', () => {
+    describe('when the charge reference has only an additional charge', () => {
       beforeEach(() => {
         reviewChargeReference.chargeReference.waterCompanyCharge = true
       })
 
-      it('adds the public water supply to the otherAdjustments property', () => {
+      it('the otherAdjustments property only contains the additional charge', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
         expect(result.otherAdjustments).to.equal(['Public Water Supply'])
       })
     })
 
-    describe('when the charge reference has no other adjustments', () => {
+    describe('when the charge reference has both an adjustment and an additional charge', () => {
+      beforeEach(() => {
+        reviewChargeReference.abatementAgreement = 0.3
+        reviewChargeReference.chargeReference.waterCompanyCharge = true
+      })
+
+      it('the otherAdjustments property contains both', () => {
+        const result = FactorsPresenter.go(reviewChargeReference)
+
+        expect(result.otherAdjustments).to.equal(['Public Water Supply', 'Abatement agreement (0.3)'])
+      })
+    })
+
+    describe('when the charge reference has no adjustments or additional charges', () => {
       beforeEach(() => {
         reviewChargeReference.twoPartTariffAgreement = false
       })

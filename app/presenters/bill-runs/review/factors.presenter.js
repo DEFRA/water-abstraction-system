@@ -6,7 +6,7 @@
  */
 
 const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatAdditionalCharges, formatChargePeriod } = require('./base-review.presenter.js')
+const { formatAdditionalCharges, formatChargePeriod, formatAdjustments } = require('./base-review.presenter.js')
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
@@ -26,7 +26,7 @@ function go (reviewChargeReference) {
   } = reviewChargeReference
 
   const additionalCharges = formatAdditionalCharges(chargeReference)
-  const adjustments = _adjustments(reviewChargeReference)
+  const adjustments = formatAdjustments(reviewChargeReference)
 
   return {
     amendedAggregate,
@@ -37,35 +37,6 @@ function go (reviewChargeReference) {
     otherAdjustments: [...additionalCharges, ...adjustments],
     reviewChargeReferenceId
   }
-}
-
-function _adjustments (reviewChargeReference) {
-  const {
-    abatementAgreement,
-    canalAndRiverTrustAgreement,
-    twoPartTariffAgreement,
-    winterDiscount
-  } = reviewChargeReference
-
-  const adjustments = []
-
-  if (abatementAgreement !== 1) {
-    adjustments.push(`Abatement agreement (${abatementAgreement})`)
-  }
-
-  if (winterDiscount) {
-    adjustments.push('Winter discount')
-  }
-
-  if (twoPartTariffAgreement) {
-    adjustments.push('Two part tariff agreement')
-  }
-
-  if (canalAndRiverTrustAgreement) {
-    adjustments.push('Canal and River trust agreement')
-  }
-
-  return adjustments
 }
 
 module.exports = {
