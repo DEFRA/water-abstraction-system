@@ -26,6 +26,7 @@ describe('Return Versions Setup - Check presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      returnVersionStartDate: '2023-01-01',
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
     }
@@ -171,10 +172,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
     describe('when the user has previously selected another date as the start date', () => {
       beforeEach(() => {
-        session.startDateDay = '26'
-        session.startDateMonth = '11'
-        session.startDateYear = '2023'
-        session.startDateOptions = 'anotherStartDate'
+        session.returnVersionStartDate = '2023-11-26'
       })
 
       it('returns the start date parts formatted as a long date', () => {
