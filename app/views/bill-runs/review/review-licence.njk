@@ -40,29 +40,30 @@
 
     {% set issues = '' %}
     {% for issue in return.issues %}
-      {% set issues = issues + '<div>' + issue + '</div>' %}
+      {% set issueIndex = loop.index0 %}
+      {% set issues = issues + '<div data-test="' + matchType + '-' + returnIndex + '-issue-' + issueIndex + '">' + issue + '</div>' %}
     {% endfor %}
 
     {% set tableRow = [
       {
         html: action,
         classes: 'govuk-body-s',
-        attributes: { 'data-test': matchType + '-return-action-' + matchedReturnIndex }
+        attributes: { 'data-test': matchType + '-return-action-' + returnIndex }
       },
       {
         html: returnSummary,
         classes: 'govuk-body-s',
-        attributes: { 'data-test': matchType + '-return-summary-' + matchedReturnIndex }
+        attributes: { 'data-test': matchType + '-return-summary-' + returnIndex }
         },
       {
         html: tag,
         classes: 'govuk-body-s',
-        attributes: { 'data-test': matchType + '-return-status-' + matchedReturnIndex }
+        attributes: { 'data-test': matchType + '-return-status-' + returnIndex }
       },
       {
         html: '<div>' + return.returnTotal + '</div>' + issues,
         classes: "govuk-body-s govuk-!-text-align-right",
-        attributes: { 'data-test': matchType + '-return-total-' + matchedReturnIndex }
+        attributes: { 'data-test': matchType + '-return-total-' + returnIndex }
       }]
     %}
 
@@ -244,7 +245,7 @@
 
     {# Unmatched Returns #}
     {% if unmatchedReturns.length > 0 %}
-      {{ returnsTable('unmatched', matchedReturns) }}
+      {{ returnsTable('unmatched', unmatchedReturns) }}
     {% endif %}
   {% endif %}
 

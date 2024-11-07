@@ -36,7 +36,8 @@
         {% set insertText %}
           <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Other adjustments apply:</p>
           {% for otherAdjustment in otherAdjustments %}
-            <div>{{otherAdjustment}}</div>
+            {% set adjustmentIndex = loop.index0 %}
+            <div data-test="adjustment-{{adjustmentIndex}}">{{otherAdjustment}}</div>
           {% endfor %}
         {% endset %}
 
