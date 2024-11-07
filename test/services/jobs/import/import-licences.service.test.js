@@ -10,11 +10,11 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchLicences = require('../../../../app/services/jobs/import/fetch-licences.service.js')
-const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')
+const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licences.service.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const ImportLicence = require('../../../../app/services/jobs/import/import-licence.service.js')
+const ImportLicenceService = require('../../../../app/services/jobs/import/import-licences.service.js')
 
 describe('Import Licence Service', () => {
   let stubFetchLicences
@@ -38,14 +38,14 @@ describe('Import Licence Service', () => {
   })
 
   it('fetches the nald licence data and starts the process to import the licences', async () => {
-    await ImportLicence.go()
+    await ImportLicenceService.go()
 
     expect(stubFetchLicences.calledOnce).to.be.true()
     expect(stubProcessImportLicence.calledWith(licences)).to.be.true()
   })
 
   it('logs to highlight the amount of licences being imported', async () => {
-    await ImportLicence.go()
+    await ImportLicenceService.go()
 
     const args = notifierStub.omg.firstCall.args
 

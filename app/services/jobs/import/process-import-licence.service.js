@@ -11,33 +11,22 @@ const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-
 /**
  * Process import licence
  *
- * Batches the licences process into small chunks to reduce strain on the system
- *
- * @param {object[]} licences - an array of licences
+ * @param {object} licence - a licence
  */
-async function go (licences) {
-  const batchSize = 10
+async function go (licence) {
+  try {
+    const endDates = {
+      expiredDate: licence.expired_date,
+      lapsedDate: licence.lapsed_date,
+      revokedDate: licence.revoked_date
+    }
 
-  for (let i = 0; i < licences.length; i += batchSize) {
-    const batch = licences.slice(i, i + batchSize)
+    await DetermineSupplementaryBillingFlagsService.go(endDates, licence.id)
 
-    await _processBatch(batch)
+    await ProcessLicenceReturnLogsService.go(licence.id)
+  } catch (error) {
+    global.GlobalNotifier.omfg(`Importing licence ${licence.id}`, null, error)
   }
-}
-
-async function _processBatch (batch) {
-  await Promise.all(
-    batch.map(async (
-      licence) => {
-      await DetermineSupplementaryBillingFlagsService.go(
-        {
-          expiredDate: licence.expired_date,
-          lapsedDate: licence.lapsed_date,
-          revokedDate: licence.revoked_date
-        }, licence.id)
-      await ProcessLicenceReturnLogsService.go(licence.id)
-    })
-  )
 }
 
 module.exports = {

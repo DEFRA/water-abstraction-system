@@ -2,11 +2,11 @@
 
 /**
  * Extracts and imports licence from NALD
- * @module ImportLicence
+ * @module ImportLicenceService
  */
 
 const FetchLicences = require('./fetch-licences.service.js')
-const ProcessImportLicence = require('./process-import-licence.service.js')
+const ProcessImportLicences = require('./process-import-licences.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
@@ -40,7 +40,7 @@ async function go () {
 
     const licences = await FetchLicences.go()
 
-    ProcessImportLicence.go(licences)
+    ProcessImportLicences.go(licences)
 
     calculateAndLogTimeTaken(startTime, `Importing ${licences.length} licences from NALD`)
   } catch (error) {
