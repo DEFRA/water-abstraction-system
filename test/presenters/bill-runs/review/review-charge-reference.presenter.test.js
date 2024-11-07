@@ -26,7 +26,11 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
 
       expect(result).to.equal({
         additionalCharges: '',
-        adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
+        adjustments: [
+          'Aggregate factor (0.333333333 / 0.333333333)',
+          'Charge adjustment (1 / 1)',
+          'Two part tariff agreement'
+        ],
         amendedAuthorisedVolume: 9.092,
         canAmend: true,
         chargeCategory: '4.6.5',

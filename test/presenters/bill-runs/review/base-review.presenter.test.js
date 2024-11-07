@@ -133,7 +133,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+        const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
         expect(result).to.be.empty()
       })
@@ -146,7 +146,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
         })
 
         it('includes it in the array returned', () => {
-          const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+          const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
           expect(result).to.include('Abatement agreement (0.3)')
         })
@@ -158,7 +158,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
         })
 
         it('does not add include it in the array returned', () => {
-          const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+          const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
           expect(result).to.not.include('Abatement agreement (1)')
         })
@@ -171,7 +171,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       })
 
       it('includes it in the array returned', () => {
-        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+        const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
         expect(result).to.include('Winter discount')
       })
@@ -183,7 +183,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       })
 
       it('includes it in the array returned', () => {
-        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+        const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
         expect(result).to.include('Two part tariff agreement')
       })
@@ -195,7 +195,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       })
 
       it('includes it in the array returned', () => {
-        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+        const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
         expect(result).to.include('Canal and River trust agreement')
       })

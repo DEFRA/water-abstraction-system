@@ -50,7 +50,11 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
           bannerMessage: 'The authorised volume for this licence have been updated',
           chargeMessage: undefined,
           additionalCharges: '',
-          adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
+          adjustments: [
+            'Aggregate factor (0.333333333 / 0.333333333)',
+            'Charge adjustment (1 / 1)',
+            'Two part tariff agreement'
+          ],
           amendedAuthorisedVolume: 9.092,
           canAmend: true,
           chargeCategory: '4.6.5',
@@ -82,7 +86,11 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
           bannerMessage: undefined,
           chargeMessage: 'Based on this information the example charge is £256.48.',
           additionalCharges: '',
-          adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
+          adjustments: [
+            'Aggregate factor (0.333333333 / 0.333333333)',
+            'Charge adjustment (1 / 1)',
+            'Two part tariff agreement'
+          ],
           amendedAuthorisedVolume: 9.092,
           canAmend: true,
           chargeCategory: '4.6.5',
@@ -114,7 +122,11 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
           bannerMessage: undefined,
           chargeMessage: undefined,
           additionalCharges: '',
-          adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
+          adjustments: [
+            'Aggregate factor (0.333333333 / 0.333333333)',
+            'Charge adjustment (1 / 1)',
+            'Two part tariff agreement'
+          ],
           amendedAuthorisedVolume: 9.092,
           canAmend: true,
           chargeCategory: '4.6.5',
