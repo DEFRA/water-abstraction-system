@@ -10,18 +10,18 @@ const ProcessImportLicence = require('./process-import-licence.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
- * Processes NALD licences due for import on a nightly basis 
+ * Processes NALD licences due for import on a nightly basis
  *
  * Overnight the {@link https://github.com/DEFRA/water-abstraction-import | water-abstraction-import} app imports each
  * abstraction licence found in NALD. New licences are added, existing ones are updated.
- * 
+ *
  * When an existing licence is imported, there are some additional processes we need to trigger. The first is
  * `DetermineSupplementaryBillingFlagsService`, which checks whether a licence needs to be flagged for supplementary
  * billing if a change has been made.
- * 
+ *
  * For the same reason, `ProcessLicenceReturnLogsService` needs to check if any changes need to be made to a licence's
  * return logs.
- * 
+ *
  * Because we are migrating from the legacy apps we couldn't trigger these processes in **water-abstraction-import**.
  * Instead, we have this job. The one caveat is that it needs to be scheduled to run _after_ the
  * {@link https://github.com/DEFRA/water-abstraction-team/blob/main/jobs/import.md#nald-import | NALD import job},
