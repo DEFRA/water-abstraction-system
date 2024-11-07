@@ -124,6 +124,84 @@ describe('Bill Runs Review - Base Review presenter', () => {
     })
   })
 
+  describe('#formatAdjustments()', () => {
+    let reviewChargeReference
+
+    describe('when the review charge reference has no adjustments', () => {
+      beforeEach(() => {
+        reviewChargeReference = {}
+      })
+
+      it('returns an empty array', () => {
+        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+        expect(result).to.be.empty()
+      })
+    })
+
+    describe('when the review charge reference has an abatement agreement', () => {
+      describe('that is set to a value other than 1', () => {
+        beforeEach(() => {
+          reviewChargeReference = { abatementAgreement: 0.3 }
+        })
+
+        it('includes it in the array returned', () => {
+          const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+          expect(result).to.include('Abatement agreement (0.3)')
+        })
+      })
+
+      describe('that is set to 1', () => {
+        beforeEach(() => {
+          reviewChargeReference = { abatementAgreement: 1 }
+        })
+
+        it('does not add include it in the array returned', () => {
+          const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+          expect(result).to.not.include('Abatement agreement (1)')
+        })
+      })
+    })
+
+    describe('when the review charge reference has a winter discount', () => {
+      beforeEach(() => {
+        reviewChargeReference = { winterDiscount: true }
+      })
+
+      it('includes it in the array returned', () => {
+        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+        expect(result).to.include('Winter discount')
+      })
+    })
+
+    describe('when the review charge reference has a two part tariff agreement', () => {
+      beforeEach(() => {
+        reviewChargeReference = { twoPartTariffAgreement: true }
+      })
+
+      it('includes it in the array returned', () => {
+        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+        expect(result).to.include('Two part tariff agreement')
+      })
+    })
+
+    describe('when the review charge reference has a canal and river trust agreement', () => {
+      beforeEach(() => {
+        reviewChargeReference = { canalAndRiverTrustAgreement: true }
+      })
+
+      it('includes it in the array returned', () => {
+        const result = BaseReviewPresenter.formatOtherAdjustments(reviewChargeReference)
+
+        expect(result).to.include('Canal and River trust agreement')
+      })
+    })
+  })
+
   describe('#formatChargePeriod()', () => {
     const reviewChargeVersion = {
       chargePeriodStartDate: new Date('2024-04-01'),

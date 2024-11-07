@@ -73,6 +73,49 @@ function formatAdditionalCharges (chargeReference) {
 }
 
 /**
+ * Extract and format the adjustments (excluding aggregate and charge adjustment) from a charge reference for display
+ *
+ * If the charge reference has adjustments, for example, an abatement and two-part tariff agreement then the following
+ * is returned.
+ *
+ * ```javascript
+ * const agreements = [
+ *   'Abatement agreement 0.8',
+ *   'Two part tariff agreement'
+ * ]
+ * ```
+ *
+ * We exclude aggregate and charge adjustment because the review screens have functionality to allow users to edit these
+ * values when they have been applied to a charge reference. Therefore they are handled separately.
+ *
+ * @param {module:ReviewChargeReferenceModel} reviewChargeReference - instance of `ReviewChargeReferenceModel` to format
+ * the adjustments for
+ *
+ * @returns {string[]} the adjustments (if present) formatted as a string for display
+ */
+function formatAdjustments (reviewChargeReference) {
+  const adjustments = []
+
+  if (reviewChargeReference.abatementAgreement && reviewChargeReference.abatementAgreement !== 1) {
+    adjustments.push(`Abatement agreement (${reviewChargeReference.abatementAgreement})`)
+  }
+
+  if (reviewChargeReference.winterDiscount) {
+    adjustments.push('Winter discount')
+  }
+
+  if (reviewChargeReference.twoPartTariffAgreement) {
+    adjustments.push('Two part tariff agreement')
+  }
+
+  if (reviewChargeReference.canalAndRiverTrustAgreement) {
+    adjustments.push('Canal and River trust agreement')
+  }
+
+  return adjustments
+}
+
+/**
  * Formats the charge period into its string variant, for example, '1 April 2023 to 10 October 2023'
  *
  * @param {module:ReviewChargeVersionModel} reviewChargeVersion - instance of `ReviewChargeVersionModel` to format the
@@ -212,6 +255,7 @@ module.exports = {
   calculateTotalBillableReturns,
   determineReturnLink,
   formatAdditionalCharges,
+  formatAdjustments,
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
