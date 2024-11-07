@@ -1,0 +1,140 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <div class="govuk-!-margin-bottom-1"> {{ item }}</div>
+  {% endfor %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + id + '/summary'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    {{ pageTitle }}
+  </h1>
+
+  {% for licencePoint in licencePoints %}
+    {# Set an easier to use index. #}
+    {% set rowIndex = loop.index0 %}
+
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: licencePoint.description,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+        }
+      },
+      rows: [
+        {
+          key: {
+            text: "Grid reference"
+          },
+          value: {
+            html: licencePoint.gridReference
+          }
+        },
+        {
+          key: {
+            text: "Category"
+          },
+          value: {
+            html: licencePoint.category
+          }
+        },
+        {
+          key: {
+            text: "Source"
+          },
+          value: {
+            html: licencePoint.sourceDescription
+          }
+        },
+        {
+          key: {
+            text: "Primary type"
+          },
+          value: {
+            html: licencePoint.primaryType
+          }
+        },
+        {
+          key: {
+            text: "Secondary type"
+          },
+          value: {
+            html: licencePoint.secondaryType
+          }
+        },
+        {
+          key: {
+            text: "Note"
+          },
+          value: {
+            html: licencePoint.note
+          }
+        },
+        {
+          key: {
+            text: "Location note"
+          },
+          value: {
+            html: licencePoint.locationNote
+          }
+        },
+        {
+          key: {
+            text: "Depth"
+          },
+          value: {
+            html: licencePoint.depth
+          }
+        },
+        {
+          key: {
+            text: "BGS reference"
+          },
+          value: {
+            html: licencePoint.bgsReference
+          }
+        }
+        ,
+        {
+          key: {
+            text: "Well reference"
+          },
+          value: {
+            html: licencePoint.wellReference
+          }
+        }
+        ,
+        {
+          key: {
+            text: "Hydro reference"
+          },
+          value: {
+            html: licencePoint.hydroReference
+          }
+        }
+        ,
+        {
+          key: {
+            text: "Hydro offset distance"
+          },
+          value: {
+            html: licencePoint.hydroOffsetDistance
+          }
+        }
+      ]
+    }) }}
+  {% endfor %}
+
+{% endblock %}
