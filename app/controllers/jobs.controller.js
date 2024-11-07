@@ -30,6 +30,12 @@ async function exportDb (_request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
+async function importLicence (_request, h) {
+  ImportLicence.go()
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
 async function licenceUpdates (_request, h) {
   ProcessLicenceUpdates.go()
 
@@ -66,17 +72,11 @@ async function returnLogs (request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
-async function importLicence (_request, h) {
-  ImportLicence.go()
-
-  return h.response().code(NO_CONTENT_STATUS_CODE)
-}
-
 module.exports = {
   exportDb,
+  importLicence,
   licenceUpdates,
   returnLogs,
   sessionCleanup,
-  timeLimited,
-  importLicence
+  timeLimited
 }
