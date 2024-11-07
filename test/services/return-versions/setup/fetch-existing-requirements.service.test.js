@@ -11,7 +11,7 @@ const { expect } = Code
 const RequirementsForReturnsSeeder = require('../../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
-const FetchExistingRequirementsService = require('../../../../app/services/return-versions/setup/fetch-existing-requirements.js')
+const FetchExistingRequirementsService = require('../../../../app/services/return-versions/setup/fetch-existing-requirements.service.js')
 
 describe('Return Versions Setup - Fetch Existing Requirements service', () => {
   let returnVersion
