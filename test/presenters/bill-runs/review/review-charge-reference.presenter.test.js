@@ -40,6 +40,9 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
     })
   })
 
+  // NOTE: adjustments combines the results of an internal `_factors()` method and `formatAdjustments()` from
+  // `base-review.presenter.js`. So, the tests focus on ensuring `_factors()` is working and combining as expected with
+  // the result of `formatAdjustments()`.
   describe('the "adjustments" property', () => {
     beforeEach(() => {
       // Our fixture has these set by default. We set unset them so they don't interfere with the following tests
@@ -48,85 +51,88 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
       reviewChargeReference.twoPartTariffAgreement = false
     })
 
-    describe('when the charge reference has an aggregate factor', () => {
-      beforeEach(() => {
-        reviewChargeReference.aggregate = 0.5
-        reviewChargeReference.amendedAggregate = 0.5
+    // NOTE: A value other than 1 or false means the charge reference has the 'adjustment'
+    describe('when the user can change the factors', () => {
+      describe('because the aggregate factor is not 1', () => {
+        beforeEach(() => {
+          reviewChargeReference.aggregate = 0.5
+          reviewChargeReference.amendedAggregate = 0.6
+        })
+
+        it('adds it to the ""adjustments" property and displays both amended and original values', () => {
+          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+
+          expect(result.adjustments).to.equal([
+            'Aggregate factor (0.6 / 0.5)',
+            'Charge adjustment (1 / 1)'
+          ])
+        })
       })
 
-      it('adds the aggregate factor to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+      describe('because the charge adjustment factor is not 1', () => {
+        beforeEach(() => {
+          reviewChargeReference.amendedChargeAdjustment = 0.8
+          reviewChargeReference.chargeAdjustment = 0.7
+        })
 
-        expect(result.adjustments).to.equal(['Aggregate factor (0.5)'])
-      })
-    })
+        it('adds it to the ""adjustments" property and displays both amended and original values', () => {
+          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
-    describe('when the charge reference has a charge adjustment factor', () => {
-      beforeEach(() => {
-        reviewChargeReference.amendedChargeAdjustment = 0.7
-        reviewChargeReference.chargeAdjustment = 0.7
-      })
-
-      it('adds the charge adjustment factor to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
-
-        expect(result.adjustments).to.equal(['Charge adjustment (0.7)'])
-      })
-    })
-
-    describe('when the charge reference has a abatement agreement', () => {
-      beforeEach(() => {
-        reviewChargeReference.abatementAgreement = 0.3
+          expect(result.adjustments).to.equal([
+            'Aggregate factor (1 / 1)',
+            'Charge adjustment (0.8 / 0.7)'
+          ])
+        })
       })
 
-      it('adds the abatement agreement to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+      describe('and there is also an adjustment', () => {
+        beforeEach(() => {
+          reviewChargeReference.aggregate = 0.9
+          reviewChargeReference.amendedAggregate = 0.9
+          reviewChargeReference.twoPartTariffAgreement = true
+        })
 
-        expect(result.adjustments).to.equal(['Abatement agreement (0.3)'])
-      })
-    })
+        it('adds it to the ""adjustments" property along with the factors', () => {
+          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
-    describe('when the charge reference has a winter discount', () => {
-      beforeEach(() => {
-        reviewChargeReference.winterDiscount = true
-      })
-
-      it('adds the winter discount to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
-
-        expect(result.adjustments).to.equal(['Winter discount'])
-      })
-    })
-
-    describe('when the charge reference has a two part tariff agreement', () => {
-      beforeEach(() => {
-        reviewChargeReference.twoPartTariffAgreement = true
-      })
-
-      it('adds the two part tariff agreement to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
-
-        expect(result.adjustments).to.equal(['Two part tariff agreement'])
+          expect(result.adjustments).to.equal([
+            'Aggregate factor (0.9 / 0.9)',
+            'Charge adjustment (1 / 1)',
+            'Two part tariff agreement'
+          ])
+        })
       })
     })
 
-    describe('when the charge reference has a canal and river trust agreement', () => {
-      beforeEach(() => {
-        reviewChargeReference.canalAndRiverTrustAgreement = true
+    describe('when the user cannot change the factors', () => {
+      describe('because both the aggregate and charge adjustment factors are 1', () => {
+        beforeEach(() => {
+          reviewChargeReference.aggregate = 1
+          reviewChargeReference.amendedAggregate = 1
+          reviewChargeReference.amendedChargeAdjustment = 1
+          reviewChargeReference.chargeAdjustment = 1
+        })
+
+        it('does not add either factor to "adjustments"', () => {
+          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+
+          expect(result.adjustments).to.not.include('Aggregate factor (1)')
+          expect(result.adjustments).to.not.include('Charge adjustment (1)')
+        })
       })
 
-      it('adds the canal and river trust agreement to the adjustments property', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+      describe('but there is an adjustment', () => {
+        beforeEach(() => {
+          reviewChargeReference.aggregate = 1
+          reviewChargeReference.amendedAggregate = 1
+          reviewChargeReference.twoPartTariffAgreement = true
+        })
 
-        expect(result.adjustments).to.equal(['Canal and River trust agreement'])
-      })
-    })
+        it('adds just the adjustment to the ""adjustments" property', () => {
+          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
-    describe('when the charge reference has no adjustments', () => {
-      it('sets the adjustments property as empty', () => {
-        const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
-
-        expect(result.adjustments).to.equal([])
+          expect(result.adjustments).to.equal(['Two part tariff agreement'])
+        })
       })
     })
   })

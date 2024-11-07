@@ -9,6 +9,7 @@ const { formatFinancialYear } = require('../../base.presenter.js')
 const {
   calculateTotalBillableReturns,
   formatAdditionalCharges,
+  formatAdjustments,
   formatChargePeriod
 } = require('./base-review.presenter.js')
 
@@ -29,11 +30,15 @@ function go (reviewChargeReference) {
     id: reviewChargeReferenceId
   } = reviewChargeReference
 
+  const canAmend = _canAmend(reviewChargeReference)
+  const adjustments = formatAdjustments(reviewChargeReference)
+  const factors = _factors(reviewChargeReference, canAmend)
+
   return {
     additionalCharges: formatAdditionalCharges(chargeReference).join(', '),
-    adjustments: _adjustments(reviewChargeReference),
+    adjustments: [...factors, ...adjustments],
     amendedAuthorisedVolume,
-    canAmend: _canAmend(reviewChargeReference),
+    canAmend,
     chargeCategory: chargeReference.chargeCategory.reference,
     chargeDescription: chargeReference.chargeCategory.shortDescription,
     chargePeriod: formatChargePeriod(reviewChargeVersion),
@@ -44,45 +49,22 @@ function go (reviewChargeReference) {
   }
 }
 
-function _adjustments (reviewChargeReference) {
+function _factors (reviewChargeReference, canAmend) {
   const {
-    abatementAgreement,
     aggregate,
     amendedAggregate,
     amendedChargeAdjustment,
-    canalAndRiverTrustAgreement,
-    chargeAdjustment,
-    twoPartTariffAgreement,
-    winterDiscount
+    chargeAdjustment
   } = reviewChargeReference
 
-  const adjustments = []
+  const factors = []
 
-  if (aggregate !== 1) {
-    adjustments.push(`Aggregate factor (${amendedAggregate})`)
+  if (canAmend) {
+    factors.push(`Aggregate factor (${amendedAggregate} / ${aggregate})`)
+    factors.push(`Charge adjustment (${amendedChargeAdjustment} / ${chargeAdjustment})`)
   }
 
-  if (chargeAdjustment !== 1) {
-    adjustments.push(`Charge adjustment (${amendedChargeAdjustment})`)
-  }
-
-  if (abatementAgreement !== 1) {
-    adjustments.push(`Abatement agreement (${abatementAgreement})`)
-  }
-
-  if (winterDiscount) {
-    adjustments.push('Winter discount')
-  }
-
-  if (twoPartTariffAgreement) {
-    adjustments.push('Two part tariff agreement')
-  }
-
-  if (canalAndRiverTrustAgreement) {
-    adjustments.push('Canal and River trust agreement')
-  }
-
-  return adjustments
+  return factors
 }
 
 function _canAmend (reviewChargeReference) {
