@@ -12,6 +12,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')
+const config = require('../../../../config/jobs.config.js')
 
 // Thing under test
 const ProcessImportLicences = require('../../../../app/services/jobs/import/process-import-licences.service.js')
@@ -24,6 +25,8 @@ describe('Process Import Licences Service', () => {
   let stubProcessImportLicence
 
   beforeEach(async () => {
+    config.importLicence.batchSize = batchSize
+
     licences = _licences()
 
     stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').resolves()

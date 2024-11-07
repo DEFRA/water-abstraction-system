@@ -81,7 +81,7 @@ describe('Process Import Licence Service', () => {
       stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
-    it.only('should catch the error', async () => {
+    it('should catch the error', async () => {
       await ProcessImportLicence.go(licence)
 
       expect(notifierStub.omfg.firstCall.args).to.equal([

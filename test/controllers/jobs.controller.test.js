@@ -62,7 +62,7 @@ describe('Jobs controller', () => {
   describe('/jobs/import-licence', () => {
     describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/import-licence' }
+        options = { method: 'POST', url: '/jobs/import-licences' }
       })
 
       describe('when the request succeeds', () => {

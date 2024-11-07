@@ -6,6 +6,8 @@
  */
 
 const ProcessImportLicence = require('./process-import-licence.service.js')
+const config = require('../../../../config/jobs.config.js')
+const { batchSize } = config.importLicence
 
 /**
  * Process import licences
@@ -15,8 +17,6 @@ const ProcessImportLicence = require('./process-import-licence.service.js')
  * @param {object[]} licences - an array of licences
  */
 async function go (licences) {
-  const batchSize = 10
-
   for (let i = 0; i < licences.length; i += batchSize) {
     const batch = licences.slice(i, i + batchSize)
 
