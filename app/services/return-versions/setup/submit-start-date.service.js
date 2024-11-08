@@ -69,7 +69,7 @@ async function _save (session, payload) {
     // January is actually 0, February is 1 etc. This is why we deduct 1 from the month.
     session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month'] - 1}-${payload['start-date-day']}`).toISOString().split('T')[0]
   } else {
-    session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate).toISOString().split('T')[0]
+    session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
   }
 
   return session.$update()

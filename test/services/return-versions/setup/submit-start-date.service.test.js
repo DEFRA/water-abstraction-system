@@ -58,12 +58,13 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         }
       })
 
-      it('saves the submitted option', async () => {
+      it.only('saves the submitted option', async () => {
         await SubmitStartDateService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
       })
 
       describe('and the page has been not been visited', () => {

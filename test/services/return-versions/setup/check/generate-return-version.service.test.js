@@ -61,7 +61,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           ],
           currentVersionStartDate: '2023-02-13T00:00:00.000Z'
         },
-        returnVersionStartDate: '2023-02-13',
+        returnVersionStartDate: '2023-02-13T00:00:00.000Z',
         requirements: ['return requirements data'],
         checkPageVisited: true,
         startDateOptions: 'licenceStartDate'
