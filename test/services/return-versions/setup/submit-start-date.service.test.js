@@ -58,7 +58,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         }
       })
 
-      it.only('saves the submitted option', async () => {
+      it('saves the submitted option', async () => {
         await SubmitStartDateService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
