@@ -11,7 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
 const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
-const FetchLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-licences.service.js')
+const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-return-logs.service.js')
