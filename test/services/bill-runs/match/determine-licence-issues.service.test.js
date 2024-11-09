@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/two-part-tariff/determine-licence-issues.service.js')
+const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 
 describe('Determine Licence Issues Service', () => {
   describe('when given a licence', () => {
