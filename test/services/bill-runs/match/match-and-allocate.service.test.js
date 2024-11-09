@@ -18,7 +18,7 @@ const PrepareReturnLogsService = require('../../../../app/services/bill-runs/two
 const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
 
 // Thing under test
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/two-part-tariff/match-and-allocate.service.js')
+const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
 describe('Match And Allocate Service', () => {
   let determineLicenceIssuesServiceStub
