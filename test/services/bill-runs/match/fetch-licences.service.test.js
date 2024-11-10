@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service.js')
+const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
 
 // Thing under test
-const FetchLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-licences.service.js')
+const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
 
 describe('Fetch Licences service', () => {
   const regionId = '64924759-8142-4a08-9d1e-1e902cd9d316'

@@ -13,7 +13,7 @@ const { generateReturnLogId } = require('../../../support/helpers/return-log.hel
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
 
 // Thing under test
-const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
+const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
 
 describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()
