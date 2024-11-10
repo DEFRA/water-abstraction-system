@@ -176,7 +176,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
               {
                 id: reviewChargeReference.id,
                 aggregate: 1,
-                amendedAuthorisedVolume: 50,
+                amendedAuthorisedVolume: 0,
                 chargeAdjustment: 1,
                 chargeReference: {
                   id: chargeReference.id,

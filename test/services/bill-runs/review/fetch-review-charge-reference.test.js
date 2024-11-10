@@ -69,11 +69,11 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
         abatementAgreement: 1,
         aggregate: 1,
         amendedAggregate: 1,
-        amendedAuthorisedVolume: 50,
+        amendedAuthorisedVolume: 0,
         amendedChargeAdjustment: 1,
         canalAndRiverTrustAgreement: false,
         chargeAdjustment: 1,
-        twoPartTariffAgreement: true,
+        twoPartTariffAgreement: false,
         winterDiscount: false,
         reviewChargeVersion: {
           id: reviewChargeVersion.id,
