@@ -13,7 +13,7 @@ const ReturnSubmissionHelper = require('../../../support/helpers/return-submissi
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 
 // Thing under test
-const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
+const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
