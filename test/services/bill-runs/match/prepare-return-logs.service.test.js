@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
+const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
 
 // Thing under test
-const PrepareReturnLogService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-return-logs.service.js')
+const PrepareReturnLogService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
 
 describe('Prepare Return Logs Service', () => {
   const billingPeriod = {

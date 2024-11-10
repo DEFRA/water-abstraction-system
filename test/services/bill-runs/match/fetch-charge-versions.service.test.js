@@ -21,7 +21,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service.js')
+const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
