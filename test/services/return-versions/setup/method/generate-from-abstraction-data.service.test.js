@@ -16,7 +16,7 @@ const LicenceVersionPurposeModel = require('../../../../../app/models/licence-ve
 // Thing under test
 const GenerateFromAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
 
-describe.only('Return Versions Setup - Generate From Abstraction Data service', () => {
+describe('Return Versions Setup - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'
 
   let fetchResult
