@@ -18,11 +18,7 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  * - `reviewLicenceId` - [random UUID]
  * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `returnReference` - [randomly generated - 10000321]
- * - `quantity` - 0
- * - `allocated` - 0
- * - `underQuery` - false
  * - `returnStatus` - completed
- * - `nilReturn` - false
  * - `abstractionOutsidePeriod` - false
  * - `receivedDate` - 2022-06-03
  * - `dueDate` - 2022-06-03
@@ -62,11 +58,7 @@ function defaults (data = {}) {
     reviewLicenceId: generateUUID(),
     returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
     returnReference,
-    quantity: 0,
-    allocated: 0,
-    underQuery: false,
     returnStatus: 'completed',
-    nilReturn: false,
     abstractionOutsidePeriod: false,
     receivedDate: new Date('2022-06-03'),
     dueDate: new Date('2022-06-03'),

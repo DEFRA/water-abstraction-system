@@ -83,7 +83,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
         },
         reviewChargeReference: {
           id: reviewChargeReference.id,
-          amendedAuthorisedVolume: 50,
+          amendedAuthorisedVolume: 0,
           reviewChargeElements: [
             {
               id: reviewChargeElement.id

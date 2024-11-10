@@ -17,8 +17,6 @@ const ReviewLicenceModel = require('../../../app/models/review-licence.model.js'
  * - `licenceId` - [random UUID]
  * - `licenceRef` - [randomly generated - 01/123]
  * - `licenceHolder` - Licence Holder Ltd
- * - `progress` - false
- * - `status` - ready
  * - `issues` - ''
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -49,8 +47,6 @@ function defaults (data = {}) {
     licenceId: generateUUID(),
     licenceRef: generateLicenceRef(),
     licenceHolder: 'Licence Holder Ltd',
-    progress: false,
-    status: 'ready',
     issues: ''
   }
 
