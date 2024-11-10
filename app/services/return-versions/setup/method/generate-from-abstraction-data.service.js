@@ -35,7 +35,19 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
 async function go (licenceId) {
   const licence = await FetchAbstractionDataService.go(licenceId)
 
-  return _transformForSetup(licence)
+  const returnRequirements = _transformForSetup(licence)
+
+  return returnRequirements.sort((requirement1, requirement2) => {
+    if (requirement1.siteDescription < requirement2.siteDescription) {
+      return -1
+    }
+
+    if (requirement1.siteDescription > requirement2.siteDescription) {
+      return 1
+    }
+
+    return 0
+  })
 }
 
 /**
