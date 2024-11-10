@@ -26,6 +26,7 @@ async function go (reviewLicenceId) {
 
 async function _removeChargeElements (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
     .from('reviewChargeElements AS rce')
     .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
@@ -36,8 +37,9 @@ async function _removeChargeElements (reviewLicenceId) {
 
 async function _removeChargeElementReturns (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
-    .from('reviewChargeElementsReturns AS rcer')
+    .from('reviewChargeElementReturns AS rcer')
     .innerJoin('reviewChargeElements AS rce', 'rcer.reviewChargeElementId', 'rce.id')
     .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
@@ -47,6 +49,7 @@ async function _removeChargeElementReturns (reviewLicenceId) {
 
 async function _removeChargeReferences (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
     .from('reviewChargeReferences AS rcr')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
@@ -56,6 +59,7 @@ async function _removeChargeReferences (reviewLicenceId) {
 
 async function _removeChargeVersions (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
     .from('reviewChargeVersions AS rcv')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
@@ -64,6 +68,7 @@ async function _removeChargeVersions (reviewLicenceId) {
 
 async function _removeLicence (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
     .from('reviewLicences')
     .where('id', reviewLicenceId)
@@ -71,6 +76,7 @@ async function _removeLicence (reviewLicenceId) {
 
 async function _removeReturns (reviewLicenceId) {
   return db
+    .withSchema('water')
     .del()
     .from('reviewReturns AS rr')
     .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
