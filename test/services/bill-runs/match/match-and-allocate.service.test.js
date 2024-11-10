@@ -14,7 +14,7 @@ const DetermineLicenceIssuesService = require('../../../../app/services/bill-run
 const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
-const PrepareReturnLogsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-return-logs.service.js')
+const PrepareReturnLogsService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
 const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
 
 // Thing under test
