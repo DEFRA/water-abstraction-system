@@ -24,7 +24,7 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 // Thing under test
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
-describe('Fetch return logs service', () => {
+describe.only('Fetch return requirements service', () => {
   const today = new Date()
   const month = today.getMonth()
   const year = today.getFullYear()
@@ -55,7 +55,7 @@ describe('Fetch return logs service', () => {
     startDate = formatDateObjectToISO(new Date(year - 1, 11, 1))
   }
 
-  describe('when summer is false, one return requirement and a licenceRef provided', () => {
+  describe('when provided a summer return cycle, one return requirement and a licenceRef provided', () => {
     before(async () => {
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
