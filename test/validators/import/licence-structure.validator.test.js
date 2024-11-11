@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -102,19 +102,21 @@ describe('Import Licence Structure validator', () => {
   })
 })
 
-function _transformedLicence () {
+function _transformedLicence() {
   return {
     licenceRef: '01/123',
-    licenceVersions: [{
-      externalId: '6:2113:100:0',
-      licenceVersionPurposes: [
-        {
-          externalId: '6:10000004'
-        },
-        {
-          externalId: '6:10000005'
-        }
-      ]
-    }]
+    licenceVersions: [
+      {
+        externalId: '6:2113:100:0',
+        licenceVersionPurposes: [
+          {
+            externalId: '6:10000004'
+          },
+          {
+            externalId: '6:10000005'
+          }
+        ]
+      }
+    ]
   }
 }

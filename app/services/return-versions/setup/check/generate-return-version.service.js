@@ -21,7 +21,7 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  *
  * @returns {Promise<object>} The new return version and requirement data for a licence
  */
-async function go (sessionData, userId) {
+async function go(sessionData, userId) {
   const nextVersionNumber = await _nextVersionNumber(sessionData.licence.id)
 
   const returnVersion = await _generateReturnVersion(nextVersionNumber, sessionData, userId)
@@ -33,7 +33,7 @@ async function go (sessionData, userId) {
   }
 }
 
-async function _generateReturnRequirements (sessionData) {
+async function _generateReturnRequirements(sessionData) {
   // When no returns are required a return version is created without any return requirements
   if (sessionData.journey === 'no-returns-required') {
     return []
@@ -47,7 +47,7 @@ async function _generateReturnRequirements (sessionData) {
   return returnRequirements
 }
 
-async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
+async function _generateReturnVersion(nextVersionNumber, sessionData, userId) {
   const startDate = new Date(sessionData.returnVersionStartDate)
   let endDate = null
   let quarterlyReturns = false
@@ -74,7 +74,7 @@ async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
   }
 }
 
-async function _nextVersionNumber (licenceId) {
+async function _nextVersionNumber(licenceId) {
   const { lastVersionNumber } = await ReturnVersionModel.query()
     .max('version as lastVersionNumber')
     .where({ licenceId })

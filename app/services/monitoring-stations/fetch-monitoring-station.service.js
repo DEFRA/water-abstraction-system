@@ -15,21 +15,14 @@ const MonitoringStationModel = require('../../models/monitoring-station.model.js
  * @returns {Promise<module:MonitoringStationModel>} the matching instance of `MonitoringStationModel` populated with
  * the data needed for the view monitoring station page
  */
-async function go (monitoringStationId) {
+async function go(monitoringStationId) {
   return _fetch(monitoringStationId)
 }
 
-async function _fetch (monitoringStationId) {
+async function _fetch(monitoringStationId) {
   return MonitoringStationModel.query()
     .findById(monitoringStationId)
-    .select([
-      'id',
-      'gridReference',
-      'label',
-      'riverName',
-      'stationReference',
-      'wiskiId'
-    ])
+    .select(['id', 'gridReference', 'label', 'riverName', 'stationReference', 'wiskiId'])
     .withGraphFetched('licenceMonitoringStations')
     .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
       licenceMonitoringStationsBuilder

@@ -17,7 +17,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (customerChangeData) {
+async function send(customerChangeData) {
   const path = 'v3/wrls/customer-changes'
 
   return ChargingModuleRequest.post(path, customerChangeData)

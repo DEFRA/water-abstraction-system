@@ -41,17 +41,9 @@ function go (billSummaries) {
   return billGroups
 }
 
-function _bills (summaries) {
+function _bills(summaries) {
   return summaries.map((summary) => {
-    const {
-      agentName,
-      allLicences,
-      id,
-      companyName,
-      financialYearEnding,
-      accountNumber,
-      netAmount
-    } = summary
+    const { agentName, allLicences, id, companyName, financialYearEnding, accountNumber, netAmount } = summary
 
     const licences = allLicences.split(',')
 
@@ -67,7 +59,7 @@ function _bills (summaries) {
   })
 }
 
-function _billingContact (agentName, companyName) {
+function _billingContact(agentName, companyName) {
   if (agentName) {
     return agentName
   }
@@ -75,7 +67,7 @@ function _billingContact (agentName, companyName) {
   return companyName
 }
 
-function _caption (bills, isWaterCompany) {
+function _caption(bills, isWaterCompany) {
   const numberOfRows = bills.length
 
   if (numberOfRows === 1) {
@@ -85,7 +77,7 @@ function _caption (bills, isWaterCompany) {
   return isWaterCompany ? `${numberOfRows} water companies` : `${numberOfRows} other abstractors`
 }
 
-function _otherAbstractors (summaries) {
+function _otherAbstractors(summaries) {
   const filteredSummaries = summaries.filter((summary) => {
     return !summary.waterCompany
   })
@@ -93,7 +85,7 @@ function _otherAbstractors (summaries) {
   return _bills(filteredSummaries)
 }
 
-function _waterCompanies (summaries) {
+function _waterCompanies(summaries) {
   const filteredSummaries = summaries.filter((summary) => {
     return summary.waterCompany
   })

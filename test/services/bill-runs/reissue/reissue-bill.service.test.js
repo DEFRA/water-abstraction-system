@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -234,13 +234,16 @@ describe('Reissue Bill service', () => {
       beforeEach(() => {
         ChargingModuleViewBillRunStatusRequest.send.restore()
 
-        billRunStatusStub = Sinon
-          .stub(ChargingModuleViewBillRunStatusRequest, 'send')
-          .onFirstCall().resolves({
-            succeeded: true, response: { body: { status: 'pending' } }
+        billRunStatusStub = Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'send')
+          .onFirstCall()
+          .resolves({
+            succeeded: true,
+            response: { body: { status: 'pending' } }
           })
-          .onSecondCall().resolves({
-            succeeded: true, response: { body: { status: 'initialised' } }
+          .onSecondCall()
+          .resolves({
+            succeeded: true,
+            response: { body: { status: 'initialised' } }
           })
       })
 
@@ -269,8 +272,10 @@ describe('Reissue Bill service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueBillService.go(sourceBill, reissueBillRun))
-          .to.reject(Error, 'Charging Module reissue request failed')
+        await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject(
+          Error,
+          'Charging Module reissue request failed'
+        )
       })
 
       it('includes the bill run and source bill external ids', async () => {
@@ -284,7 +289,9 @@ describe('Reissue Bill service', () => {
         const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.responseBody.error).to.equal('Conflict')
-        expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')
+        expect(errorResult.responseBody.message).to.equal(
+          'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.'
+        )
         expect(errorResult.responseBody.statusCode).to.equal(409)
       })
     })
@@ -305,8 +312,10 @@ describe('Reissue Bill service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueBillService.go(sourceBill, reissueBillRun))
-          .to.reject(Error, 'Charging Module view bill request failed')
+        await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject(
+          Error,
+          'Charging Module view bill request failed'
+        )
       })
 
       it('includes the bill run and reissue bill external ids', async () => {
@@ -322,14 +331,16 @@ describe('Reissue Bill service', () => {
         const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.responseBody.error).to.equal('Conflict')
-        expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')
+        expect(errorResult.responseBody.message).to.equal(
+          'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.'
+        )
         expect(errorResult.responseBody.statusCode).to.equal(409)
       })
     })
   })
 })
 
-function _generateCMTransaction (credit, rebilledTransactionId) {
+function _generateCMTransaction(credit, rebilledTransactionId) {
   return {
     id: generateUUID(),
     chargeValue: 1000,

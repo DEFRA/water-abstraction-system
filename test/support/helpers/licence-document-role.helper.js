@@ -22,7 +22,7 @@ const LicenceDocumentRoleModel = require('../../../app/models/licence-document-r
  *
  * @returns {Promise<module:LicenceDocumentRoleModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceDocumentRoleModel.query()
@@ -40,7 +40,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     licenceDocumentId: generateUUID(),
     companyId: generateUUID(),

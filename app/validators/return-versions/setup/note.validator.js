@@ -19,15 +19,12 @@ function go (payload) {
   const errorMessage = 'Enter details'
   const maxErrorMessage = 'Enter no more than 500 characters'
   const schema = Joi.object({
-    note: Joi.string()
-      .required()
-      .max(500)
-      .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage,
-        'string.max': maxErrorMessage
-      })
+    note: Joi.string().required().max(500).messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage,
+      'string.empty': errorMessage,
+      'string.max': maxErrorMessage
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

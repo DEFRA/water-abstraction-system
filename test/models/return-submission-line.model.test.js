@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -41,8 +41,7 @@ describe('Return Submission Line model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnSubmissionLineModel.query()
-          .innerJoinRelated('returnSubmission')
+        const query = await ReturnSubmissionLineModel.query().innerJoinRelated('returnSubmission')
 
         expect(query).to.exist()
       })

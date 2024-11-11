@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class LicenceVersionPurposeModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceVersionPurposes'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceVersion: {
         relation: Model.BelongsToOneRelation,
@@ -93,35 +93,24 @@ class LicenceVersionPurposeModel extends BaseModel {
    *
    * @returns {object}
    */
-  static get modifiers () {
+  static get modifiers() {
     return {
       // allPurposes modifier fetches the purpose plus primary and secondary purposes. Built to support determining if
       // the overall purpose is electricity generation or spray irrigation with two-part tariff. These are needed to
       // determine what frequency returns should be collected and reported by the licensee
-      allPurposes (query) {
+      allPurposes(query) {
         query
           .withGraphFetched('purpose')
           .modifyGraph('purpose', (builder) => {
-            builder.select([
-              'id',
-              'description',
-              'legacyId',
-              'twoPartTariff'
-            ])
+            builder.select(['id', 'description', 'legacyId', 'twoPartTariff'])
           })
           .withGraphFetched('primaryPurpose')
           .modifyGraph('primaryPurpose', (builder) => {
-            builder.select([
-              'id',
-              'legacyId'
-            ])
+            builder.select(['id', 'legacyId'])
           })
           .withGraphFetched('secondaryPurpose')
           .modifyGraph('secondaryPurpose', (builder) => {
-            builder.select([
-              'id',
-              'legacyId'
-            ])
+            builder.select(['id', 'legacyId'])
           })
       }
     }
@@ -139,7 +128,7 @@ class LicenceVersionPurposeModel extends BaseModel {
    *
    * @returns {boolean} true if the overall purpose is electricity generation (P-ELC-240 or P-ELC-200) else false
    */
-  $electricityGeneration () {
+  $electricityGeneration() {
     if (this.primaryPurpose.legacyId !== 'P') {
       return false
     }

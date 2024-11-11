@@ -14,7 +14,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise<module:LicenceVersionPurposePoints[]>} All LicenceVersionPurposePoints for the matching licenceId
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -24,21 +24,14 @@ async function go (licenceId) {
 //
 // It made sense to go from licence to the points via our 'currentVersion' modifier. It just means we need to bring
 // the points back into a single array afterwards.
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
     .select(['id'])
     .modify('currentVersion')
     .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
     .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
-      builder.select([
-        'points.id',
-        'points.description',
-        'points.ngr1',
-        'points.ngr2',
-        'points.ngr3',
-        'points.ngr4'
-      ])
+      builder.select(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
 
   const points = []

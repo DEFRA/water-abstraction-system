@@ -7,10 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = [
-  'summer',
-  'winter_all_year'
-]
+const VALID_VALUES = ['summer', 'winter_all_year']
 
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/season` page

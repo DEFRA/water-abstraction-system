@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -39,9 +39,7 @@ describe('View Licence Purpose presenter', () => {
             abstractionMethods: 'Unspecified Pump',
             abstractionMethodsTitle: 'Method of abstraction',
             abstractionPeriod: '1 April to 31 October',
-            abstractionPoints: [
-              'At National Grid Reference TL 23198 88603'
-            ],
+            abstractionPoints: ['At National Grid Reference TL 23198 88603'],
             abstractionPointsTitle: 'Abstraction point',
             purposeDescription: 'Spray Irrigation - Storage'
           }
@@ -266,7 +264,7 @@ describe('View Licence Purpose presenter', () => {
   })
 })
 
-function _testLicence () {
+function _testLicence() {
   const point = PointModel.fromJson({
     id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
     description: null,

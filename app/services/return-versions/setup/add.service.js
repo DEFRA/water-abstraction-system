@@ -26,7 +26,7 @@ async function go (sessionId) {
   return session.requirements.length - 1
 }
 
-async function _save (session) {
+async function _save(session) {
   session.requirements.push({})
 
   session.checkPageVisited = false

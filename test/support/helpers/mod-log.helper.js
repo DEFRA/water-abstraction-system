@@ -25,7 +25,7 @@ const { generateLicenceRef } = require('./licence.helper.js')
  *
  * @returns {Promise<module:ModLogModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ModLogModel.query()
@@ -43,7 +43,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {

@@ -25,7 +25,7 @@ function go (licenceSummaries) {
   return formattedBill
 }
 
-function _billLicences (licenceSummaries) {
+function _billLicences(licenceSummaries) {
   return licenceSummaries.map((licenceSummary) => {
     const { id, licenceRef: reference, total } = licenceSummary
 
@@ -37,7 +37,7 @@ function _billLicences (licenceSummaries) {
   })
 }
 
-function _tableCaption (billLicences) {
+function _tableCaption(billLicences) {
   const numberOfRows = billLicences.length
 
   if (numberOfRows === 1) {

@@ -12,15 +12,10 @@ const RegionModel = require('../../../models/region.model.js')
  *
  * @returns {Promise<object[]>} The display name and ID for all regions in the service ordered by display name
  */
-async function go () {
+async function go() {
   return RegionModel.query()
-    .select([
-      'id',
-      'displayName'
-    ])
-    .orderBy([
-      { column: 'displayName', order: 'asc' }
-    ])
+    .select(['id', 'displayName'])
+    .orderBy([{ column: 'displayName', order: 'asc' }])
 }
 
 module.exports = {

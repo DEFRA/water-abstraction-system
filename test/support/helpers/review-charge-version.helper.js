@@ -22,7 +22,7 @@ const ReviewChargeVersionModel = require('../../../app/models/review-charge-vers
  *
  * @returns {Promise<module:ReviewChargeVersionModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewChargeVersionModel.query()
@@ -40,7 +40,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     reviewLicenceId: generateUUID(),
     chargeVersionId: generateUUID(),

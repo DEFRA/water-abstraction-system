@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -154,7 +154,9 @@ describe('Return Versions Setup - Start Date validator', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Start date must be on or after the original licence start date')
+          expect(result.error.details[0].message).to.equal(
+            'Start date must be on or after the original licence start date'
+          )
         })
       })
 

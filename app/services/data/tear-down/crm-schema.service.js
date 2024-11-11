@@ -16,7 +16,7 @@ async function go () {
   return _deleteAllTestData()
 }
 
-async function _deleteAllTestData () {
+async function _deleteAllTestData() {
   return db.raw(`
   ALTER TABLE crm.document_header DISABLE TRIGGER ALL;
   ALTER TABLE crm_v2.addresses DISABLE TRIGGER ALL;

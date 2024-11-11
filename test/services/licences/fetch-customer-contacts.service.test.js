@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,8 +17,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Thing under test
-const FetchCustomerContactDetailsService =
-  require('../../../app/services/licences/fetch-customer-contacts.service.js')
+const FetchCustomerContactDetailsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 
 describe('Fetch Customer Contacts service', () => {
   let companyId

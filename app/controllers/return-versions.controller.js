@@ -7,7 +7,7 @@
 
 const ViewService = require('../services/return-versions/view.service.js')
 
-async function view (request, h) {
+async function view(request, h) {
   const { id } = request.params
   const pageData = await ViewService.go(id)
 

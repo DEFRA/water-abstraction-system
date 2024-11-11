@@ -32,7 +32,7 @@ const { generateUUID, timestampForPostgres } = require('../../../app/lib/general
  *
  * @returns {Promise<module:EventModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return EventModel.query()
@@ -50,7 +50,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {

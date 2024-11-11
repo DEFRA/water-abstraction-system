@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -22,17 +22,19 @@ describe('View Licence Bills presenter', () => {
       const result = ViewLicenceBillsPresenter.go([bill])
 
       expect(result).to.equal({
-        bills: [{
-          accountNumber: 'BA1234443S',
-          billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',
-          billId: 'dfed8cdd-05c0-4f03-9a95-a7bae74fe7be',
-          billNumber: 'WAC0003872T',
-          billRunType: 'Annual',
-          credit: false,
-          dateCreated: '1 January 2020',
-          financialYearEnding: '2021',
-          total: '£1,234,567.89'
-        }]
+        bills: [
+          {
+            accountNumber: 'BA1234443S',
+            billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',
+            billId: 'dfed8cdd-05c0-4f03-9a95-a7bae74fe7be',
+            billNumber: 'WAC0003872T',
+            billRunType: 'Annual',
+            credit: false,
+            dateCreated: '1 January 2020',
+            financialYearEnding: '2021',
+            total: '£1,234,567.89'
+          }
+        ]
       })
     })
 
@@ -101,7 +103,7 @@ describe('View Licence Bills presenter', () => {
   })
 })
 
-function _bill () {
+function _bill() {
   return {
     accountNumber: 'BA1234443S',
     billRun: { batchType: 'annual', scheme: 'sroc', summer: false },

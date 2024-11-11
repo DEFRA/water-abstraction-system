@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -52,11 +52,14 @@ describe('Create Bill Run service', () => {
     const errorCode = 50
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService.go(
-        region.id,
-        financialYearEndings,
-        { batchType, scheme, source, externalId, status, errorCode }
-      )
+      const result = await CreateBillRunService.go(region.id, financialYearEndings, {
+        batchType,
+        scheme,
+        source,
+        externalId,
+        status,
+        errorCode
+      })
 
       expect(result).to.be.an.instanceOf(BillRunModel)
 

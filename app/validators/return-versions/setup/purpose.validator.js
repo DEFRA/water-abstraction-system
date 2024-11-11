@@ -23,33 +23,26 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go (purposes, purposeIds) {
+function go(purposes, purposeIds) {
   const errorMessage = 'Select any purpose for the requirements for returns'
 
   const schema = Joi.object({
     purposes: Joi.array()
       .items({
-        id: Joi
-          .string()
+        id: Joi.string()
           .valid(...purposeIds)
           .required()
           .messages({
             'any.required': errorMessage,
             'any.only': errorMessage
           }),
-        alias: Joi
-          .string()
-          .max(100)
-          .optional()
-          .allow('')
-          .messages({
-            'string.max': 'Purpose description must be 100 characters or less'
-          }),
+        alias: Joi.string().max(100).optional().allow('').messages({
+          'string.max': 'Purpose description must be 100 characters or less'
+        }),
         // Description will not be persisted. It is simply to avoid having to fetch the purpose description again in
         // the /check page. But if we didn't match a selected ID to a description in the SubmitPurposeService then
         // something has gone wrong!
-        description: Joi
-          .string()
+        description: Joi.string()
       })
       .min(1)
       .required()

@@ -13,7 +13,7 @@
  * @returns {object} the NALD company data transformed into the WRLS format for a company
  * ready for validation and persisting
  */
-function go (company) {
+function go(company) {
   return {
     name: company.name,
     type: company.type,

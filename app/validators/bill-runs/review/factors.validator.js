@@ -18,32 +18,22 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (payload) {
+function go(payload) {
   const schema = Joi.object({
-    amendedAggregate: Joi
-      .number()
-      .min(0)
-      .required()
-      .custom(_maxDecimals, 'Max decimals')
-      .messages({
-        'number.base': 'The aggregate factor must be a number',
-        'number.unsafe': 'The aggregate factor must be a number',
-        'number.min': 'The aggregate factor must be greater than 0',
-        'any.required': 'Enter an aggregate factor',
-        'any.invalid': 'The aggregate factor must not have more than 15 decimal places'
-      }),
-    amendedChargeAdjustment: Joi
-      .number()
-      .min(0)
-      .required()
-      .custom(_maxDecimals, 'Max decimals')
-      .messages({
-        'number.base': 'The charge factor must be a number',
-        'number.unsafe': 'The charge factor must be a number',
-        'number.min': 'The charge factor must be greater than 0',
-        'any.required': 'Enter a charge factor',
-        'any.invalid': 'The charge factor must not have more than 15 decimal places'
-      })
+    amendedAggregate: Joi.number().min(0).required().custom(_maxDecimals, 'Max decimals').messages({
+      'number.base': 'The aggregate factor must be a number',
+      'number.unsafe': 'The aggregate factor must be a number',
+      'number.min': 'The aggregate factor must be greater than 0',
+      'any.required': 'Enter an aggregate factor',
+      'any.invalid': 'The aggregate factor must not have more than 15 decimal places'
+    }),
+    amendedChargeAdjustment: Joi.number().min(0).required().custom(_maxDecimals, 'Max decimals').messages({
+      'number.base': 'The charge factor must be a number',
+      'number.unsafe': 'The charge factor must be a number',
+      'number.min': 'The charge factor must be greater than 0',
+      'any.required': 'Enter a charge factor',
+      'any.invalid': 'The charge factor must not have more than 15 decimal places'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })
@@ -64,7 +54,7 @@ function go (payload) {
  * @returns {number|object} if valid the original value else a Joi 'any.invalid' error. Knowing we return this means
  * you can assign what error message to use when a number has too many decimals.
  */
-function _maxDecimals (value, helpers) {
+function _maxDecimals(value, helpers) {
   // Guard clause to ensure we don't try and interact with a null or undefined value
   if (!value) {
     return value

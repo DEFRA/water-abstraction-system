@@ -7,12 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = [
-  'annual',
-  'supplementary',
-  'two_part_supplementary',
-  'two_part_tariff'
-]
+const VALID_VALUES = ['annual', 'supplementary', 'two_part_supplementary', 'two_part_tariff']
 
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/type` page

@@ -16,15 +16,8 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go (licence) {
-  const {
-    expiredDate,
-    id,
-    licenceDocumentHeader,
-    licenceMonitoringStations,
-    region,
-    startDate
-  } = licence
+function go(licence) {
+  const { expiredDate, id, licenceDocumentHeader, licenceMonitoringStations, region, startDate } = licence
 
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
   const purposes = _purposes(licenceVersionPurposes)
@@ -61,7 +54,7 @@ function go (licence) {
   }
 }
 
-function _abstractionAmounts (licenceVersionPurposes) {
+function _abstractionAmounts(licenceVersionPurposes) {
   const details = []
 
   if (!licenceVersionPurposes || licenceVersionPurposes.length > 1) {
@@ -89,7 +82,7 @@ function _abstractionAmounts (licenceVersionPurposes) {
   return details
 }
 
-function _abstractionConditions (licenceVersionPurposes) {
+function _abstractionConditions(licenceVersionPurposes) {
   const allConditions = []
 
   if (!licenceVersionPurposes) {
@@ -112,7 +105,7 @@ function _abstractionConditions (licenceVersionPurposes) {
   return uniqueConditions.sort()
 }
 
-function _abstractionPeriods (licenceVersionPurposes) {
+function _abstractionPeriods(licenceVersionPurposes) {
   if (!licenceVersionPurposes) {
     return []
   }
@@ -129,7 +122,7 @@ function _abstractionPeriods (licenceVersionPurposes) {
   return uniqueAbstractionPeriods
 }
 
-function _abstractionPeriodsAndPurposesLinkText (abstractionPeriods, purposes) {
+function _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes) {
   let abstractionPeriodsAndPurposesLinkText = null
 
   if (abstractionPeriods.length > 0) {
@@ -142,11 +135,11 @@ function _abstractionPeriodsAndPurposesLinkText (abstractionPeriods, purposes) {
   return abstractionPeriodsAndPurposesLinkText
 }
 
-function _abstractionPeriodsCaption (abstractionPeriods) {
+function _abstractionPeriodsCaption(abstractionPeriods) {
   return abstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction'
 }
 
-function _abstractionPoints (licenceVersionPurposes) {
+function _abstractionPoints(licenceVersionPurposes) {
   if (!licenceVersionPurposes) {
     return []
   }
@@ -166,15 +159,17 @@ function _abstractionPoints (licenceVersionPurposes) {
   return uniqueAbstractionPoints.sort()
 }
 
-function _abstractionPointsCaption (abstractionPoints) {
+function _abstractionPointsCaption(abstractionPoints) {
   return abstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
 }
 
-function _abstractionPointsLinkText (abstractionPoints) {
-  return abstractionPoints.length > 1 ? 'View details of the abstraction points' : 'View details of the abstraction point'
+function _abstractionPointsLinkText(abstractionPoints) {
+  return abstractionPoints.length > 1
+    ? 'View details of the abstraction points'
+    : 'View details of the abstraction point'
 }
 
-function _endDate (expiredDate) {
+function _endDate(expiredDate) {
   if (!expiredDate || expiredDate < Date.now()) {
     return null
   }
@@ -182,7 +177,7 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _licenceHolder (licence) {
+function _licenceHolder(licence) {
   const licenceHolder = licence.$licenceHolder()
 
   if (!licenceHolder) {
@@ -192,7 +187,7 @@ function _licenceHolder (licence) {
   return licenceHolder
 }
 
-function _licenceVersionPurposes (licence) {
+function _licenceVersionPurposes(licence) {
   const currentVersion = licence.$currentVersion()
 
   if (!currentVersion || currentVersion?.licenceVersionPurposes.length === 0) {
@@ -202,7 +197,7 @@ function _licenceVersionPurposes (licence) {
   return currentVersion.licenceVersionPurposes
 }
 
-function _monitoringStations (licenceMonitoringStations) {
+function _monitoringStations(licenceMonitoringStations) {
   const monitoringStations = []
 
   for (const licenceMonitoringStation of licenceMonitoringStations) {
@@ -220,7 +215,7 @@ function _monitoringStations (licenceMonitoringStations) {
   return monitoringStations
 }
 
-function _purposes (licenceVersionPurposes) {
+function _purposes(licenceVersionPurposes) {
   if (!licenceVersionPurposes) {
     return null
   }
@@ -237,7 +232,7 @@ function _purposes (licenceVersionPurposes) {
   }
 }
 
-function _sourceOfSupply (licenceVersionPurposes) {
+function _sourceOfSupply(licenceVersionPurposes) {
   if (!licenceVersionPurposes || licenceVersionPurposes[0].points.length === 0) {
     return null
   }

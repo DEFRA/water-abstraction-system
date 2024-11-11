@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)

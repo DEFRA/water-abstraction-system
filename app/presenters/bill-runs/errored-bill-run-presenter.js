@@ -21,19 +21,9 @@ const {
  *
  * @returns {object} - the prepared bill run data to be passed to the errored bill run page
  */
-function go (billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    errorCode,
-    id,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function go(billRun) {
+  const { batchType, billRunNumber, createdAt, errorCode, id, region, scheme, status, summer, toFinancialYearEnding } =
+    billRun
 
   return {
     billRunId: id,
@@ -49,7 +39,7 @@ function go (billRun) {
   }
 }
 
-function _errorMessage (errorCode) {
+function _errorMessage(errorCode) {
   const errors = [
     { code: 10, message: 'Error when populating the charge versions.' },
     { code: 20, message: 'Error when processing the charge versions.' },

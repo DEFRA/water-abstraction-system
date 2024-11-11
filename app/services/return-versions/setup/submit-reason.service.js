@@ -26,7 +26,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the reason page including the validation error details
  */
-async function go (sessionId, payload, yar) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -53,13 +53,13 @@ async function go (sessionId, payload, yar) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.reason = payload.reason
 
   return session.$update()
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = ReasonValidator.go(payload)
 
   if (!validation.error) {

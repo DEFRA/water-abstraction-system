@@ -24,15 +24,17 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go (workflowId) {
+async function go(workflowId) {
   const query = _query()
 
-  const { rows: [row] } = await db.raw(query, [workflowId])
+  const {
+    rows: [row]
+  } = await db.raw(query, [workflowId])
 
   return row
 }
 
-function _query () {
+function _query() {
   return `
     SELECT
     l.include_in_sroc_billing,

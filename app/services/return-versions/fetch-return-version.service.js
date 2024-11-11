@@ -15,11 +15,11 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go (id) {
+async function go(id) {
   return _fetch(id)
 }
 
-async function _fetch (id) {
+async function _fetch(id) {
   return ReturnVersionModel.query()
     .findById(id)
     .select([
@@ -35,10 +35,7 @@ async function _fetch (id) {
     .modify('history')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef'
-      ]).modify('licenceHolder')
+      builder.select(['id', 'licenceRef']).modify('licenceHolder')
     })
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {

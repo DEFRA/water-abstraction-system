@@ -20,7 +20,7 @@ const ProcessImportedLicenceService = require('../licences/supplementary/process
  * @param {object} importedLicence - The imported licence
  * @param {string} licenceId - The UUID of the licence being updated by the import
  */
-async function go (importedLicence, licenceId) {
+async function go(importedLicence, licenceId) {
   try {
     const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
@@ -32,10 +32,8 @@ async function go (importedLicence, licenceId) {
   }
 }
 
-async function _licenceChanged (importedLicence, licenceId) {
-  const query = LicenceModel.query()
-    .select(['id'])
-    .where('id', licenceId)
+async function _licenceChanged(importedLicence, licenceId) {
+  const query = LicenceModel.query().select(['id']).where('id', licenceId)
 
   _whereClauses(query, importedLicence)
 
@@ -60,7 +58,7 @@ async function _licenceChanged (importedLicence, licenceId) {
  *
  * @private
  */
-function _whereClauses (query, importedLicence) {
+function _whereClauses(query, importedLicence) {
   const { expiredDate, lapsedDate, revokedDate } = importedLicence
 
   if (expiredDate) {

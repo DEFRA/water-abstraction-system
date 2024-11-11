@@ -65,7 +65,7 @@ function go (billRun, billSummaries) {
   }
 }
 
-function _billsCount (creditsCount, debitsCount, billRunType, billSummaries) {
+function _billsCount(creditsCount, debitsCount, billRunType, billSummaries) {
   const total = creditsCount + debitsCount
 
   // NOTE: A bill run wouldn't exist if there was just a single zero value bill on it. So, we can safely assume if the
@@ -93,7 +93,7 @@ function _billsCount (creditsCount, debitsCount, billRunType, billSummaries) {
   return `${total} ${billRunType} bills and ${numberOfZeroValueBills} zero value bills`
 }
 
-function _billRunTotal (valueInPence) {
+function _billRunTotal(valueInPence) {
   const valueAsMoney = formatMoney(valueInPence)
 
   if (valueInPence < 0) {
@@ -103,7 +103,7 @@ function _billRunTotal (valueInPence) {
   return valueAsMoney
 }
 
-function _creditsCount (count) {
+function _creditsCount(count) {
   if (count === 1) {
     return '1 credit note'
   }
@@ -111,7 +111,7 @@ function _creditsCount (count) {
   return `${count} credit notes`
 }
 
-function _debitsCount (count) {
+function _debitsCount(count) {
   if (count === 1) {
     return '1 invoice'
   }
@@ -119,7 +119,7 @@ function _debitsCount (count) {
   return `${count} invoices`
 }
 
-function _displayCreditDebitTotals (billRun) {
+function _displayCreditDebitTotals(billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'

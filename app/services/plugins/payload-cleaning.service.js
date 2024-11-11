@@ -77,7 +77,7 @@ const Sanitizer = require('sanitizer')
  *
  * @returns {object} - returns a 'clean' payload object
  */
-function go (payload) {
+function go(payload) {
   return _cleanObject(payload)
 }
 
@@ -100,7 +100,7 @@ function go (payload) {
  *
  * @private
  */
-function _cleanObject (obj) {
+function _cleanObject(obj) {
   if (obj === null) {
     return null
   }
@@ -146,7 +146,7 @@ function _cleanObject (obj) {
  *
  * @private
  */
-function _cleanArray (array) {
+function _cleanArray(array) {
   const cleanedArray = []
 
   for (const item of array) {
@@ -180,13 +180,13 @@ function _cleanArray (array) {
  *
  * @private
  */
-function _keepValue (value) {
+function _keepValue(value) {
   if (value === null) {
     return false
   } else if (typeof value === 'object') {
-    return (Object.keys(value).length > 0)
+    return Object.keys(value).length > 0
   } else if (typeof value === 'string') {
-    return (value !== '')
+    return value !== ''
   }
 
   // If its not null, an object or a string assume we need to keep it!
@@ -210,7 +210,7 @@ function _keepValue (value) {
  *
  * @private
  */
-function _cleanValue (value) {
+function _cleanValue(value) {
   if (typeof value === 'string') {
     let cleanedValue = Sanitizer.sanitize(value)
 

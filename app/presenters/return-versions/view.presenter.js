@@ -39,13 +39,9 @@ function go (returnVersion) {
   }
 }
 
-function _abstractionPeriod (requirement) {
-  const {
-    abstractionPeriodStartDay,
-    abstractionPeriodStartMonth,
-    abstractionPeriodEndDay,
-    abstractionPeriodEndMonth
-  } = requirement
+function _abstractionPeriod(requirement) {
+  const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
+    requirement
 
   const startDate = formatAbstractionDate(abstractionPeriodStartDay, abstractionPeriodStartMonth)
   const endDate = formatAbstractionDate(abstractionPeriodEndDay, abstractionPeriodEndMonth)
@@ -53,7 +49,7 @@ function _abstractionPeriod (requirement) {
   return `From ${startDate} to ${endDate}`
 }
 
-function _agreementsExceptions (returnRequirement) {
+function _agreementsExceptions(returnRequirement) {
   const agreementsExceptions = _buildAgreementExceptions(returnRequirement)
 
   if (agreementsExceptions.length === 1) {
@@ -64,11 +60,14 @@ function _agreementsExceptions (returnRequirement) {
     return agreementsExceptions.join(' and ')
   }
 
-  return agreementsExceptions.slice(0, agreementsExceptions.length - 1)
-    .join(', ') + ', and ' + agreementsExceptions[agreementsExceptions.length - 1]
+  return (
+    agreementsExceptions.slice(0, agreementsExceptions.length - 1).join(', ') +
+    ', and ' +
+    agreementsExceptions[agreementsExceptions.length - 1]
+  )
 }
 
-function _buildAgreementExceptions (returnRequirement) {
+function _buildAgreementExceptions(returnRequirement) {
   const { fiftySixException, gravityFill, reabstraction, twoPartTariff } = returnRequirement
   const agreementsExceptions = []
 
@@ -95,7 +94,7 @@ function _buildAgreementExceptions (returnRequirement) {
   return agreementsExceptions
 }
 
-function _createdBy (returnVersion) {
+function _createdBy(returnVersion) {
   const createdBy = returnVersion.$createdBy()
 
   if (createdBy) {
@@ -105,7 +104,7 @@ function _createdBy (returnVersion) {
   return 'Migrated from NALD'
 }
 
-function _mapRequirement (requirement) {
+function _mapRequirement(requirement) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement),
     agreementsExceptions: _agreementsExceptions(requirement),
@@ -120,7 +119,7 @@ function _mapRequirement (requirement) {
   }
 }
 
-function _purposes (returnRequirementPurposes) {
+function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     if (returnRequirementPurpose.alias) {
       return `${returnRequirementPurpose.purpose.description} (${returnRequirementPurpose.alias})`
@@ -130,7 +129,7 @@ function _purposes (returnRequirementPurposes) {
   })
 }
 
-function _points (points) {
+function _points(points) {
   return points.map((point) => {
     return point.$describe()
   })
@@ -144,7 +143,7 @@ function _points (points) {
  *
  * @private
  */
-function _reason (returnVersion) {
+function _reason(returnVersion) {
   const reason = returnVersion.$reason()
   const mappedReason = returnRequirementReasons[reason]
 
@@ -155,7 +154,7 @@ function _reason (returnVersion) {
   return reason ?? ''
 }
 
-function _requirements (requirements) {
+function _requirements(requirements) {
   return requirements.map((requirement) => {
     return _mapRequirement(requirement)
   })

@@ -38,7 +38,7 @@ function go (session) {
   }
 }
 
-function _note (note) {
+function _note(note) {
   if (note?.content) {
     return {
       actions: [
@@ -49,15 +49,13 @@ function _note (note) {
     }
   } else {
     return {
-      actions: [
-        { text: 'Add a note', href: 'note' }
-      ],
+      actions: [{ text: 'Add a note', href: 'note' }],
       text: 'No notes added'
     }
   }
 }
 
-function _reasonLink (sessionId, returnsRequired) {
+function _reasonLink(sessionId, returnsRequired) {
   if (returnsRequired) {
     return `/system/return-versions/setup/${sessionId}/reason`
   }
@@ -65,7 +63,7 @@ function _reasonLink (sessionId, returnsRequired) {
   return `/system/return-versions/setup/${sessionId}/no-returns-required`
 }
 
-function _startDate (session) {
+function _startDate(session) {
   return formatLongDate(new Date(session.returnVersionStartDate))
 }
 

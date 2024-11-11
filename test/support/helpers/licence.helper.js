@@ -23,7 +23,7 @@ const RegionHelper = require('./region.helper.js')
  *
  * @returns {Promise<module:LicenceModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceModel.query()
@@ -41,7 +41,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: regionId } = RegionHelper.select()
 
   const defaults = {
@@ -63,7 +63,7 @@ function defaults (data = {}) {
  *
  * @returns {string} - A randomly generated licence reference
  */
-function generateLicenceRef () {
+function generateLicenceRef() {
   const secondPart = randomInteger(10, 99)
   const thirdPart = randomInteger(10, 99)
   const fourthPart = randomInteger(1000, 9999)

@@ -33,7 +33,7 @@ const PersistSupplementaryBillingFlagsService = require('./persist-supplementary
  *
  * @param {object} payload - The payload from the request
  */
-async function go (payload) {
+async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)

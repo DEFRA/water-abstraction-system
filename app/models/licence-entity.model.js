@@ -30,11 +30,11 @@ const BaseModel = require('./base.model.js')
  * - delete_me (no idea! But only one record has this type so it can be ignored)
  */
 class LicenceEntityModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceEntities'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceEntityRoles: {
         relation: Model.HasManyRelation,

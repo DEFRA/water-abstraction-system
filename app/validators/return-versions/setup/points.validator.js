@@ -22,9 +22,7 @@ function go (payload) {
   const errorMessage = 'Select any points for the requirements for returns'
 
   const schema = Joi.object({
-    points: Joi.array()
-      .items(Joi.string().guid())
-      .required()
+    points: Joi.array().items(Joi.string().guid()).required()
   }).messages({
     'any.required': errorMessage,
     'array.sparse': errorMessage,

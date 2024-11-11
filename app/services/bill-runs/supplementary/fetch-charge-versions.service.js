@@ -30,13 +30,13 @@ const Workflow = require('../../../models/workflow.model.js')
  *
  * @returns {Promise<object>} Contains an array of unique licence IDs and array of charge versions to be processed
  */
-async function go (regionId, billingPeriod) {
+async function go(regionId, billingPeriod) {
   const allChargeVersions = await _fetch(regionId, billingPeriod)
 
   return _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersions)
 }
 
-async function _fetch (regionId, billingPeriod) {
+async function _fetch(regionId, billingPeriod) {
   const allChargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.id',
@@ -58,10 +58,7 @@ async function _fetch (regionId, billingPeriod) {
         .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
         .whereNull('workflows.deletedAt')
     )
-    .orderBy([
-      { column: 'chargeVersions.billingAccountId' },
-      { column: 'chargeVersions.licenceId' }
-    ])
+    .orderBy([{ column: 'chargeVersions.billingAccountId' }, { column: 'chargeVersions.licenceId' }])
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
@@ -78,35 +75,19 @@ async function _fetch (regionId, billingPeriod) {
     })
     .withGraphFetched('licence.region')
     .modifyGraph('licence.region', (builder) => {
-      builder.select([
-        'id',
-        'chargeRegionId'
-      ])
+      builder.select(['id', 'chargeRegionId'])
     })
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {
-      builder.select([
-        'triggersMinimumCharge'
-      ])
+      builder.select(['triggersMinimumCharge'])
     })
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
-      builder.select([
-        'id',
-        'source',
-        'loss',
-        'volume',
-        'adjustments',
-        'additionalCharges',
-        'description'
-      ])
+      builder.select(['id', 'source', 'loss', 'volume', 'adjustments', 'additionalCharges', 'description'])
     })
     .withGraphFetched('chargeReferences.chargeCategory')
     .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder.select([
-        'reference',
-        'shortDescription'
-      ])
+      builder.select(['reference', 'shortDescription'])
     })
     .withGraphFetched('chargeReferences.chargeElements')
     .modifyGraph('chargeReferences.chargeElements', (builder) => {
@@ -131,7 +112,7 @@ async function _fetch (regionId, billingPeriod) {
  *
  * @private
  */
-function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersions) {
+function _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersions) {
   const chargeVersions = []
 
   let licenceIdsForPeriod = []

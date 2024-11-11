@@ -20,7 +20,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go (payload) {
+function go(payload) {
   const errorMessage = {
     empty: 'Enter a description of the site',
     small: 'Site description must be 10 characters or more',
@@ -28,15 +28,11 @@ function go (payload) {
   }
 
   const schema = Joi.object({
-    siteDescription: Joi.string()
-      .required()
-      .min(10)
-      .max(100)
-      .messages({
-        'any.required': errorMessage.empty,
-        'string.min': errorMessage.small,
-        'string.max': errorMessage.big
-      })
+    siteDescription: Joi.string().required().min(10).max(100).messages({
+      'any.required': errorMessage.empty,
+      'string.min': errorMessage.small,
+      'string.max': errorMessage.big
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

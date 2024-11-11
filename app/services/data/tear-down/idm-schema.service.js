@@ -16,7 +16,7 @@ async function go () {
   return _deleteAllTestData()
 }
 
-async function _deleteAllTestData () {
+async function _deleteAllTestData() {
   return db.raw(`
   DELETE
   FROM

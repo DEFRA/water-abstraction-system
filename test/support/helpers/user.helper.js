@@ -26,7 +26,7 @@ const DEFAULT_INDEX = 4
  *
  * @returns {Promise<module:UserModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   // Overwrite the current password with the hashed version we want to persist
@@ -47,7 +47,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     username: `${generateUUID()}@wrls.gov.uk`,
     password: 'P@55word',
@@ -67,7 +67,7 @@ function defaults (data = {}) {
  *
  * @returns {number} a random integer between 100011 and 199999
  */
-function generateUserId () {
+function generateUserId() {
   // The last ID in the pre-seeded users is 100010
   return randomInteger(100011, 199999)
 }
@@ -86,7 +86,7 @@ function generateUserId () {
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return users[index]
   }

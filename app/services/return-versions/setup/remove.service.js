@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise<object>} The view data for the remove requirements page
  */
-async function go (sessionId, requirementIndex) {
+async function go(sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
   const formattedData = RemovePresenter.go(session, requirementIndex)
 

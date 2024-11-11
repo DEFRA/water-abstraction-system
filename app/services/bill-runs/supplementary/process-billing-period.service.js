@@ -26,16 +26,12 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @returns {boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billRun, billingPeriod, chargeVersions) {
+async function go(billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }
 
-  const preGeneratedData = await PreGenerateBillingDataService.go(
-    chargeVersions,
-    billRun.id,
-    billingPeriod
-  )
+  const preGeneratedData = await PreGenerateBillingDataService.go(chargeVersions, billRun.id, billingPeriod)
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
@@ -51,7 +47,7 @@ async function go (billRun, billingPeriod, chargeVersions) {
  *
  * @private
  */
-async function _buildDataToPersist (billingData, billingPeriod, billRunExternalId) {
+async function _buildDataToPersist(billingData, billingPeriod, billRunExternalId) {
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
@@ -105,7 +101,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
  *
  * @private
  */
-function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, billingPeriod) {
+function _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod) {
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
   // charge version.
   return chargeVersions.reduce((acc, chargeVersion) => {
@@ -138,7 +134,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
  *
  * @private
  */
-async function _persistData (dataToPersist) {
+async function _persistData(dataToPersist) {
   // If we don't have any transactions to persist then we also won't have any bills or bill licences, so we
   // simply return early
   if (dataToPersist.transactions.length === 0) {
@@ -152,7 +148,7 @@ async function _persistData (dataToPersist) {
   return true
 }
 
-function _retrievePreGeneratedData (preGeneratedData, billingAccountId, licence) {
+function _retrievePreGeneratedData(preGeneratedData, billingAccountId, licence) {
   const { bills, billLicences } = preGeneratedData
 
   const bill = bills[billingAccountId]
@@ -163,11 +159,11 @@ function _retrievePreGeneratedData (preGeneratedData, billingAccountId, licence)
   return { bill, billLicence }
 }
 
-function _billLicenceKey (billId, licenceId) {
+function _billLicenceKey(billId, licenceId) {
   return `${billId}-${licenceId}`
 }
 
-function _initialBillingData (licence, bill, billLicence) {
+function _initialBillingData(licence, bill, billLicence) {
   return {
     licence,
     bill,
@@ -176,7 +172,7 @@ function _initialBillingData (licence, bill, billLicence) {
   }
 }
 
-async function _cleanseTransactions (currentBillingData, billingPeriod) {
+async function _cleanseTransactions(currentBillingData, billingPeriod) {
   // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in
   // the first place
   if (!currentBillingData.bill) {
@@ -193,7 +189,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
   return cleansedTransactions
 }
 
-function _generateCalculatedTransactions (billLicenceId, billingPeriod, chargeVersion) {
+function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion) {
   try {
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 

@@ -21,7 +21,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  *
  * @returns {Promise<object>} The updated value for the billable returns
  */
-async function go (reviewChargeElementId, elementIndex, yar, payload) {
+async function go(reviewChargeElementId, elementIndex, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -43,15 +43,13 @@ async function go (reviewChargeElementId, elementIndex, yar, payload) {
   }
 }
 
-function _save (reviewChargeElementId, payload) {
+function _save(reviewChargeElementId, payload) {
   const volume = payload.quantityOptions === 'customQuantity' ? payload.customQuantity : payload.quantityOptions
 
-  return ReviewChargeElementModel.query()
-    .findById(reviewChargeElementId)
-    .patch({ amendedAllocated: volume })
+  return ReviewChargeElementModel.query().findById(reviewChargeElementId).patch({ amendedAllocated: volume })
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = EditValidator.go(payload)
 
   if (!validation.error) {

@@ -14,7 +14,7 @@ const BillingAccountModel = require('../../../models/billing-account.model.js')
  *
  * @returns {Promise<object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
-async function go (chargeVersions) {
+async function go(chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
   const billingAccountModels = await _fetch(uniqueBillingAccountIds)
 
@@ -25,7 +25,7 @@ async function go (chargeVersions) {
   return billingAccountObjects
 }
 
-function _extractUniqueBillingAccountIds (chargeVersions) {
+function _extractUniqueBillingAccountIds(chargeVersions) {
   const allBillingAccountIds = chargeVersions.map((chargeVersion) => {
     return chargeVersion.billingAccountId
   })
@@ -35,13 +35,13 @@ function _extractUniqueBillingAccountIds (chargeVersions) {
   return [...new Set(allBillingAccountIds)]
 }
 
-function _fetch (uniqueBillingAccountIds) {
+function _fetch(uniqueBillingAccountIds) {
   return BillingAccountModel.query()
     .select('id', 'accountNumber')
     .findByIds([...uniqueBillingAccountIds])
 }
 
-function _makeObjects (models) {
+function _makeObjects(models) {
   return models.map((model) => {
     return model.toJSON()
   })

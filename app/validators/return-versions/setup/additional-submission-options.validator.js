@@ -25,9 +25,7 @@ function go (options) {
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
-    additionalSubmissionOptions: Joi.array()
-      .items(Joi.string())
-      .required()
+    additionalSubmissionOptions: Joi.array().items(Joi.string()).required()
   }).messages({
     'any.required': errorMessage,
     'array.sparse': errorMessage

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -58,8 +58,13 @@ describe('Persist licence versions service', () => {
       let transformedLicence
 
       beforeEach(async () => {
-        transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
-          licenceVersionPurposeConditionType.id)
+        transformedLicence = _transformedLicence(
+          region.id,
+          primaryPurpose.id,
+          purpose.id,
+          secondaryPurpose.id,
+          licenceVersionPurposeConditionType.id
+        )
 
         // Licence
         const licence = await LicenceHelper.add({
@@ -102,12 +107,12 @@ describe('Persist licence versions service', () => {
         )
 
         // Licence Version Purpose Condition
-        const newLicenceVersionPurposeCondition = newLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+        const newLicenceVersionPurposeCondition =
+          newLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
 
         expect(newLicenceVersionPurposeCondition.externalId).to.equal(
-          transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
-            .licenceVersionPurposeConditions[0].externalId)
+          transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0].externalId
+        )
       })
     })
 
@@ -120,8 +125,13 @@ describe('Persist licence versions service', () => {
       let updatedLicence
 
       beforeEach(async () => {
-        transformedLicence = _transformedLicence(region.id, primaryPurpose.id, purpose.id, secondaryPurpose.id,
-          licenceVersionPurposeConditionType.id)
+        transformedLicence = _transformedLicence(
+          region.id,
+          primaryPurpose.id,
+          purpose.id,
+          secondaryPurpose.id,
+          licenceVersionPurposeConditionType.id
+        )
 
         const existing = await _createExistingRecords(transformedLicence)
 
@@ -158,8 +168,7 @@ describe('Persist licence versions service', () => {
         expect(updatedLicVerPur.abstractionPeriodEndDay).to.equal(transformedLicVerPur.abstractionPeriodEndDay)
         expect(updatedLicVerPur.abstractionPeriodEndMonth).to.equal(transformedLicVerPur.abstractionPeriodEndMonth)
         expect(updatedLicVerPur.abstractionPeriodStartDay).to.equal(transformedLicVerPur.abstractionPeriodStartDay)
-        expect(updatedLicVerPur.abstractionPeriodStartMonth).to
-          .equal(transformedLicVerPur.abstractionPeriodStartMonth)
+        expect(updatedLicVerPur.abstractionPeriodStartMonth).to.equal(transformedLicVerPur.abstractionPeriodStartMonth)
         expect(updatedLicVerPur.annualQuantity).to.equal(transformedLicVerPur.annualQuantity)
         expect(updatedLicVerPur.dailyQuantity).to.equal(transformedLicVerPur.dailyQuantity)
         expect(updatedLicVerPur.hourlyQuantity).to.equal(transformedLicVerPur.hourlyQuantity)
@@ -172,15 +181,16 @@ describe('Persist licence versions service', () => {
         expect(updatedLicVerPur.timeLimitedStartDate).to.equal(transformedLicVerPur.timeLimitedStartDate)
 
         // Licence Version Purpose Conditions
-        const updatedLicVerPurCon = updatedLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
-        const transformedLicVerPurCon = transformedLicence.licenceVersions[0]
-          .licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+        const updatedLicVerPurCon =
+          updatedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
+        const transformedLicVerPurCon =
+          transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0]
 
         expect(updatedLicVerPurCon.id).to.equal(existingLicenceVersionPurposeCondition.id)
         expect(updatedLicVerPurCon.externalId).to.equal(transformedLicVerPurCon.externalId)
-        expect(updatedLicVerPurCon.licenceVersionPurposeConditionTypeId)
-          .to.equal(transformedLicVerPurCon.licenceVersionPurposeConditionTypeId)
+        expect(updatedLicVerPurCon.licenceVersionPurposeConditionTypeId).to.equal(
+          transformedLicVerPurCon.licenceVersionPurposeConditionTypeId
+        )
         expect(updatedLicVerPurCon.notes).to.equal(transformedLicVerPurCon.notes)
         expect(updatedLicVerPurCon.param1).to.equal(transformedLicVerPurCon.param1)
         expect(updatedLicVerPurCon.param2).to.equal(transformedLicVerPurCon.param2)
@@ -190,9 +200,8 @@ describe('Persist licence versions service', () => {
   })
 })
 
-async function _fetchPersistedLicence (licenceRef) {
-  return LicenceModel
-    .query()
+async function _fetchPersistedLicence(licenceRef) {
+  return LicenceModel.query()
     .where('licenceRef', licenceRef)
     .withGraphFetched('licenceVersions')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
@@ -201,8 +210,13 @@ async function _fetchPersistedLicence (licenceRef) {
     .first()
 }
 
-function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPurposeId,
-  licenceVersionPurposeConditionTypeId) {
+function _transformedLicence(
+  regionId,
+  primaryPurposeId,
+  purposeId,
+  secondaryPurposeId,
+  licenceVersionPurposeConditionTypeId
+) {
   return {
     expiredDate: null,
     lapsedDate: null,
@@ -259,7 +273,7 @@ function _transformedLicence (regionId, primaryPurposeId, purposeId, secondaryPu
   }
 }
 
-async function _createExistingRecords (transformedLicence) {
+async function _createExistingRecords(transformedLicence) {
   const licence = await LicenceHelper.add({
     expiredDate: new Date('2052-06-23'),
     lapsedDate: new Date('2050-07-24'),
@@ -305,8 +319,8 @@ async function _createExistingRecords (transformedLicence) {
   const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
     licenceVersionPurposeId: licenceVersionPurpose.id,
     licenceVersionPurposeConditionTypeId: LicenceVersionPurposeConditionTypeHelper.select().id,
-    externalId: transformedLicence.licenceVersions[0].licenceVersionPurposes[0]
-      .licenceVersionPurposeConditions[0].externalId,
+    externalId:
+      transformedLicence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions[0].externalId,
     source: 'nald'
   })
 

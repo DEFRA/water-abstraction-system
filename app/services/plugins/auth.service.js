@@ -44,7 +44,7 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  *
  * @returns {object} the permission object
  */
-async function go (userId) {
+async function go(userId) {
   const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
 
   // We put each role's name into the scope array for hapi to use for its scope authorisation
@@ -79,7 +79,7 @@ async function go (userId) {
  *
  * @private
  */
-function _permission (scope = []) {
+function _permission(scope = []) {
   const billRuns = scope.includes('billing')
 
   const manageRoles = [
@@ -95,10 +95,7 @@ function _permission (scope = []) {
     return manageRoles.includes(role)
   })
 
-  const abstractionReformRoles = [
-    'ar_user',
-    'ar_approver'
-  ]
+  const abstractionReformRoles = ['ar_user', 'ar_approver']
   const abstractionReform = scope.some((role) => {
     return abstractionReformRoles.includes(role)
   })

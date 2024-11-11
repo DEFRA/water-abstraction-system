@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -36,7 +36,9 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().withArgs('banner').returns(['The billable returns for this licence have been updated']) }
+        yarStub = {
+          flash: Sinon.stub().withArgs('banner').returns(['The billable returns for this licence have been updated'])
+        }
       })
 
       it('returns page data for the view', async () => {

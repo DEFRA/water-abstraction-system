@@ -31,7 +31,7 @@ const UserHelper = require('../helpers/user.helper.js')
  * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
  * it is linked to
  */
-async function seed () {
+async function seed() {
   // Select a user
   const user = UserHelper.select()
 
@@ -123,7 +123,9 @@ async function _returnRequirement (
   })
 
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-    purposeId: purpose.id, returnRequirementId, alias
+    purposeId: purpose.id,
+    returnRequirementId,
+    alias
   })
 
   returnRequirementPurpose.purpose = purpose

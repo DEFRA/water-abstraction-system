@@ -22,11 +22,7 @@ const Joi = require('joi')
 function go (payload) {
   const frequencyReported = payload.frequencyReported
 
-  const VALID_VALUES = [
-    'day',
-    'week',
-    'month'
-  ]
+  const VALID_VALUES = ['day', 'week', 'month']
 
   const errorMessage = 'Select how often readings or volumes are reported'
 

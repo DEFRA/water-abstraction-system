@@ -22,7 +22,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} payload - The Hapi `request.payload` object passed on by the controller
  */
-async function go (reviewLicenceId, yar, payload) {
+async function go(reviewLicenceId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
 
   // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
@@ -31,7 +31,7 @@ async function go (reviewLicenceId, yar, payload) {
   await _update(reviewLicenceId, parsedPayload)
 }
 
-function _bannerMessage (yar, parsedPayload) {
+function _bannerMessage(yar, parsedPayload) {
   const { progress, status } = parsedPayload
 
   if (status) {
@@ -49,7 +49,7 @@ function _bannerMessage (yar, parsedPayload) {
   yar.flash('banner', 'The progress mark for this licence has been removed.')
 }
 
-function _parsePayload (payload) {
+function _parsePayload(payload) {
   const markProgress = payload['mark-progress'] ?? null
   const licenceStatus = payload['licence-status'] ?? null
 
@@ -59,7 +59,7 @@ function _parsePayload (payload) {
   }
 }
 
-async function _update (reviewLicenceId, parsedPayload) {
+async function _update(reviewLicenceId, parsedPayload) {
   const { progress, status } = parsedPayload
   const patch = {}
 

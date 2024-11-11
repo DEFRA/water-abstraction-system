@@ -17,35 +17,33 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<string>} - The licence ID from WRLS.
  */
-async function go (trx, updatedAt, transformedLicence) {
+async function go(trx, updatedAt, transformedLicence) {
   await _persistLicenceDocument(trx, updatedAt, transformedLicence.licenceDocument)
 
   await _persistLicenceDocumentRoles(trx, updatedAt, transformedLicence.licenceDocument.licenceDocumentRoles)
 }
 
-async function _persistLicenceDocument (trx, updatedAt, licenceDocument) {
+async function _persistLicenceDocument(trx, updatedAt, licenceDocument) {
   const { licenceDocumentRoles, ...propertiesToPersist } = licenceDocument
 
   return LicenceDocumentModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('licenceRef')
-    .merge([
-      'endDate',
-      'startDate',
-      'updatedAt'
-    ])
+    .merge(['endDate', 'startDate', 'updatedAt'])
 }
 
-async function _persistLicenceDocumentRoles (trx, updatedAt, licenceDocumentRoles) {
+async function _persistLicenceDocumentRoles(trx, updatedAt, licenceDocumentRoles) {
   for (const licenceDocumentRole of licenceDocumentRoles) {
     await _persistLicenceDocumentRole(trx, updatedAt, licenceDocumentRole)
   }
 }
 
-async function _persistLicenceDocumentRole (trx, updatedAt, licenceDocument) {
+async function _persistLicenceDocumentRole(trx, updatedAt, licenceDocument) {
   const { addressId, companyId, contactId, documentId, licenceRoleId, startDate, endDate } = licenceDocument
 
-  return db.raw(`
+  return db
+    .raw(
+      `
     INSERT INTO public."licence_document_roles" (address_id, company_id, contact_id, licence_document_id, licence_role_id, start_date, end_date, updated_at)
     SELECT add.id, com.id, con.id, ld.id, lr.id, ? ,?, ?
     FROM public.licence_documents ld
@@ -61,7 +59,9 @@ async function _persistLicenceDocumentRole (trx, updatedAt, licenceDocument) {
         address_id=EXCLUDED.address_id,
         end_date=EXCLUDED.end_date,
         updated_at = EXCLUDED.updated_at
-  `, [startDate, endDate, updatedAt, licenceRoleId, addressId, companyId, contactId, documentId])
+  `,
+      [startDate, endDate, updatedAt, licenceRoleId, addressId, companyId, contactId, documentId]
+    )
     .transacting(trx)
 }
 

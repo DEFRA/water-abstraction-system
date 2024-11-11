@@ -79,8 +79,7 @@ describe('Licence Version Purpose Condition model', () => {
 
     describe('when linking to licence version purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceVersionPurpose')
+        const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated('licenceVersionPurpose')
 
         expect(query).to.exist()
       })
@@ -100,8 +99,9 @@ describe('Licence Version Purpose Condition model', () => {
 
     describe('when linking to licence version purpose condition type', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceVersionPurposeConditionType')
+        const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated(
+          'licenceVersionPurposeConditionType'
+        )
 
         expect(query).to.exist()
       })

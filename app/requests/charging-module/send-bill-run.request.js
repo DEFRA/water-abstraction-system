@@ -33,49 +33,50 @@ const WaitForStatusRequest = require('./wait-for-status.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (billRunId) {
+async function send(billRunId) {
   await _approve(billRunId)
   await _send(billRunId)
 
   return _waitForSent(billRunId)
 }
 
-async function _approve (billRunId) {
+async function _approve(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/approve`
   const result = await ChargingModuleRequest.patch(path)
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module approve request failed',
-      { billRunExternalId: billRunId, responseBody: result.response.body }
-    )
+    const error = new ExpandedError('Charging Module approve request failed', {
+      billRunExternalId: billRunId,
+      responseBody: result.response.body
+    })
 
     throw error
   }
 }
 
-async function _send (billRunId) {
+async function _send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/send`
   const result = await ChargingModuleRequest.patch(path)
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module send request failed',
-      { billRunExternalId: billRunId, responseBody: result.response.body }
-    )
+    const error = new ExpandedError('Charging Module send request failed', {
+      billRunExternalId: billRunId,
+      responseBody: result.response.body
+    })
 
     throw error
   }
 }
 
-async function _waitForSent (billRunId) {
+async function _waitForSent(billRunId) {
   const result = await WaitForStatusRequest.send(billRunId, ['billed', 'billing_not_required'])
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module wait request failed',
-      { billRunExternalId: billRunId, attempts: result.attempts, responseBody: result.response.body }
-    )
+    const error = new ExpandedError('Charging Module wait request failed', {
+      billRunExternalId: billRunId,
+      attempts: result.attempts,
+      responseBody: result.response.body
+    })
 
     throw error
   }

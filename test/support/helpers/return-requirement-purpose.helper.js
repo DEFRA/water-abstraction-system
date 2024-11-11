@@ -26,7 +26,7 @@ const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
  *
  * @returns {Promise<module:ReturnRequirementPurposeModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementPurposeModel.query()
@@ -44,7 +44,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const purpose = PurposeHelper.select()
   const primaryPurpose = PrimaryPurposeHelper.select()
   const secondaryPurpose = SecondaryPurposeHelper.select()

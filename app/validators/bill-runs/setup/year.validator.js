@@ -7,12 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = [
-  '2024',
-  '2023',
-  '2022',
-  '2021'
-]
+const VALID_VALUES = ['2024', '2023', '2022', '2021']
 
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/year` page

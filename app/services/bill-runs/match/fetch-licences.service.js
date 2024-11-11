@@ -17,7 +17,7 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
  * @returns {Promise<object[]>} the licences to be matched, each containing an array of charge versions applicable for
  * two-part tariff
  */
-async function go (regionId, billingPeriod) {
+async function go(regionId, billingPeriod) {
   const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
@@ -25,7 +25,7 @@ async function go (regionId, billingPeriod) {
   return _groupByLicence(chargeVersions, uniqueLicenceIds)
 }
 
-function _extractUniqueLicenceIds (chargeVersions) {
+function _extractUniqueLicenceIds(chargeVersions) {
   const allLicenceIds = chargeVersions.map((chargeVersion) => {
     return chargeVersion.licence.id
   })
@@ -33,7 +33,7 @@ function _extractUniqueLicenceIds (chargeVersions) {
   return [...new Set(allLicenceIds)]
 }
 
-function _groupByLicence (chargeVersions, uniqueLicenceIds) {
+function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   // NOTE: We could have initialized licences as an empty array and pushed each new object. But for a big region
   // the number of licences we might be dealing will be in the hundreds, possibly thousands. In these cases we get a
   // performance bump if we create the array sized to our needs first, rather than asking Node to resize the array on

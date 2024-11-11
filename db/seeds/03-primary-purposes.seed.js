@@ -14,13 +14,13 @@ const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
  * Public table name - public.primary_purposes
  *
  */
-async function seed () {
+async function seed() {
   for (const purpose of primaryPurposes) {
     await _upsert(purpose)
   }
 }
 
-async function _upsert (primaryPurpose) {
+async function _upsert(primaryPurpose) {
   return PrimaryPurposeModel.query()
     .insert({ ...primaryPurpose, updatedAt: timestampForPostgres() })
     .onConflict('legacyId')

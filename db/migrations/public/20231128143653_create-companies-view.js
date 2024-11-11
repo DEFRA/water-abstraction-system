@@ -3,11 +3,10 @@
 const viewName = 'companies'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex('companies').withSchema('crm_v2').select([
+  return knex.schema.createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex('companies').withSchema('crm_v2').select([
         'companies.company_id AS id',
         'companies.name',
         'companies.type',
@@ -19,12 +18,11 @@ exports.up = function (knex) {
         // 'companies.current_hash', // is populated but is only used by the legacy import process
         'companies.date_created AS created_at',
         'companies.date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

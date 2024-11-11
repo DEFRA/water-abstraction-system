@@ -21,6 +21,7 @@ function go (session) {
   } = session
 
   return {
+    additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceId,
     licenceRef,
