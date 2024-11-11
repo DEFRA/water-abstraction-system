@@ -5,73 +5,47 @@
  * @module GenerateReturnLogService
  */
 
-const {
-  cycleDueDateAsISO,
-  cycleEndDate,
-  cycleEndDateAsISO,
-  cycleStartDateAsISO,
-  cycleStartDate
-} = require('../../../lib/return-cycle-dates.lib.js')
+const { cycleEndDate } = require('../../../lib/return-cycle-dates.lib.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const FetchReturnCycleService = require('./fetch-return-cycle.service.js')
-const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
 
 /**
  * Generates the payload for submission to the returns table.
  *
- * @param {Array} returnRequirements - the return requirements to be turned into return logs
+ * @param {object} returnRequirement - the return requirement to have a return log created for
+ * @param {object} returnCycle - the return cycle details
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (returnRequirements) {
-  const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleIds()
+async function go (returnRequirement, returnCycle) {
+  const startDate = _startDate(returnRequirement.returnVersion.startDate, returnCycle.startDate)
+  const endDate = _endDate(returnRequirement.returnVersion, returnCycle.endDate)
+  const id = _id(returnRequirement, startDate, endDate)
+  const metadata = await _metadata(returnRequirement.summer, endDate, returnRequirement)
 
-  const returnLogs = returnRequirements.map(async (requirements) => {
-    const startDate = _startDate(requirements.summer, requirements.returnVersion)
-    const endDate = _endDate(requirements.summer, requirements.returnVersion)
-    const id = _id(requirements, startDate, endDate)
-    const metadata = await _metadata(requirements.summer, endDate, requirements)
-
-    return {
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      dueDate: cycleDueDateAsISO(requirements.summer),
-      endDate,
-      id,
-      licenceRef: requirements.returnVersion.licence.licenceRef,
-      metadata,
-      returnCycleId: requirements.summer ? summerReturnCycleId : allYearReturnCycleId,
-      returnsFrequency: requirements.reportingFrequency,
-      returnReference: requirements.legacyId.toString(),
-      startDate,
-      status: 'due',
-      source: 'WRLS'
-    }
-  })
-
-  const results = await Promise.all(returnLogs)
-
-  return results
-}
-
-function _endDate (summer, returnVersion) {
-  const earliestDate = _earliestDate(summer, returnVersion)
-
-  const _cycleEndDate = cycleEndDate(summer)
-
-  if (earliestDate < _cycleEndDate) {
-    return formatDateObjectToISO(earliestDate)
+  return {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    dueDate: formatDateObjectToISO(returnCycle.dueDate),
+    endDate,
+    id,
+    licenceRef: returnRequirement.returnVersion.licence.licenceRef,
+    metadata,
+    returnCycleId: returnCycle.id,
+    returnsFrequency: returnRequirement.reportingFrequency,
+    returnReference: returnRequirement.legacyId.toString(),
+    startDate,
+    status: 'due',
+    source: 'WRLS'
   }
-
-  return cycleEndDateAsISO(summer)
 }
 
-function _earliestDate (summer, returnVersion) {
+function _endDate (returnVersion, returnCycleEndDate) {
   const dates = [
     returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
     returnVersion.licence.revokedDate,
-    returnVersion.endDate
+    returnVersion.endDate,
+    returnCycleEndDate
   ]
     .filter((date) => {
       return date
@@ -80,35 +54,13 @@ function _earliestDate (summer, returnVersion) {
       return new Date(date)
     })
 
-  if (dates.length === 0) {
-    return cycleEndDateAsISO(summer)
-  }
-
   dates.map((date) => {
     return date.getTime()
   })
 
-  return new Date(Math.min(...dates))
-}
+  const earliestDate = new Date(Math.min(...dates))
 
-async function _fetchReturnCycleIds () {
-  const today = formatDateObjectToISO(new Date())
-
-  let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
-  let summerReturnCycleId = await FetchReturnCycleService.go(today, true)
-
-  if (!allYearReturnCycleId) {
-    allYearReturnCycleId = await GenerateReturnCycleService.go(false)
-  }
-
-  if (!summerReturnCycleId) {
-    summerReturnCycleId = await GenerateReturnCycleService.go(true)
-  }
-
-  return {
-    allYearReturnCycleId,
-    summerReturnCycleId
-  }
+  return formatDateObjectToISO(earliestDate)
 }
 
 function _id (requirements, startDate, endDate) {
@@ -180,14 +132,15 @@ function _metadataPurposes (returnRequirementPurposes) {
   })
 }
 
-function _startDate (summer, returnVersion) {
-  const returnVersionStartDate = new Date(returnVersion.startDate)
+function _startDate (returnVersionStartDate, returnCycleStartDate) {
+  const _returnVersionStartDate = new Date(returnVersionStartDate)
+  const _returnCycleStartDate = new Date(returnCycleStartDate)
 
-  if (returnVersionStartDate > cycleStartDate(summer)) {
-    return formatDateObjectToISO(returnVersionStartDate)
+  if (_returnVersionStartDate > _returnCycleStartDate) {
+    return formatDateObjectToISO(_returnVersionStartDate)
   }
 
-  return cycleStartDateAsISO(summer)
+  return formatDateObjectToISO(_returnCycleStartDate)
 }
 
 module.exports = {

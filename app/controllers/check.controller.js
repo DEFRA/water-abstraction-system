@@ -6,7 +6,6 @@
  */
 
 const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
-const ProcessLicenceEndingService = require('../services/jobs/return-logs/process-licence-ending.service.js')
 const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
@@ -38,31 +37,6 @@ async function flagForBilling (request, h) {
 }
 
 /**
- * A test end point to void and reissue return logs for a given licence reference from a given date
- *
- * @param _request - the hapi request object
- * @param h - the hapi response object
- *
- * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
- */
-async function returnLogsForEndedLicence (_request, h) {
-  let licenceReference
-  let endDate
-
-  if (h.request.payload !== null && h.request.payload.licenceReference && h.request.payload.endDate
-  ) {
-    licenceReference = h.request.payload.licenceReference
-    endDate = h.request.payload.endDate
-  } else {
-    return h.response().code(404)
-  }
-
-  ProcessLicenceEndingService.go(licenceReference, endDate)
-
-  return h.response().code(NO_CONTENT_STATUS_CODE)
-}
-
-/**
  * A test end point to create return logs for a given licence reference
  *
  * @param _request - the hapi request object
@@ -86,6 +60,5 @@ async function returnLogsForLicence (_request, h) {
 
 module.exports = {
   flagForBilling,
-  returnLogsForEndedLicence,
   returnLogsForLicence
 }

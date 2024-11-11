@@ -19,7 +19,7 @@ async function go (summer) {
   const data = _generateData(summer)
   const returnCycle = await _createReturnCycle(data)
 
-  return returnCycle.id
+  return returnCycle
 }
 
 function _createReturnCycle (returnCycle) {

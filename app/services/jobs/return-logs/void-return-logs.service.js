@@ -6,13 +6,13 @@
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
+const { cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given a licence reference and a date this service voids the return logs from that date forward.
  *
  * @param {string} licenceReference - the reference whose return logs to void
- * @param {date} date - the date from which to void return logs - YYYY-MM-DD
+ * @param {Date} date - the date from which to void return logs - YYYY-MM-DD
  */
 async function go (licenceReference, date) {
   const allYearReturnLogs = await _fetchReturnLogs(licenceReference, date, false)
@@ -33,7 +33,6 @@ async function _fetchReturnLogs (licenceReference, date, summer) {
 }
 
 async function _voidReturnLogs (returnLogs) {
-  console.log(returnLogs)
   for (const returnLog of returnLogs) {
     await ReturnLogModel.query()
       .patch({ status: 'void' })
