@@ -5,15 +5,15 @@ const jsdoc = require('eslint-plugin-jsdoc')
 module.exports = [
   {
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "commonjs"
+      ecmaVersion: 'latest',
+      sourceType: 'commonjs'
     },
     plugins: {
       jsdoc
     },
     rules: {
       // Enforce braces around the function body of arrow functions
-      "arrow-body-style": ["error", "always"],
+      'arrow-body-style': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
       strict: ['error', 'global'],
       'jsdoc/check-alignment': 'warn',
