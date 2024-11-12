@@ -7,7 +7,8 @@ module.exports = [
       sourceType: "commonjs"
     },
     rules: {
-      'arrow-body-style': 'off', // Prettier handles arrow function body style
+      // Enforce braces around the function body of arrow functions
+      "arrow-body-style": ["error", "always"]
     }
   }
 ]
