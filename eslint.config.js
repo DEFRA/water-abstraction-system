@@ -9,7 +9,7 @@ module.exports = [
       sourceType: 'commonjs'
     },
     // Ignore the folder created when jsdocs are generated
-    ignores: ["docs/**/*"],
+    ignores: ['docs/**/*'],
     plugins: {
       jsdoc
     },
