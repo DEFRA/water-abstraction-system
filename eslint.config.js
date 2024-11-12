@@ -8,6 +8,8 @@ module.exports = [
       ecmaVersion: 'latest',
       sourceType: 'commonjs'
     },
+    // Ignore the folder created when jsdocs are generated
+    ignores: ["docs/**/*"],
     plugins: {
       jsdoc
     },
