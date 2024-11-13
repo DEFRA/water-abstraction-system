@@ -2,6 +2,7 @@
 
 const importPlugin = require('eslint-plugin-import')
 const jsdoc = require('eslint-plugin-jsdoc')
+const promisePlugin = require('eslint-plugin-promise')
 const stylistic = require('@stylistic/eslint-plugin-js')
 const globals = require('globals')
 
@@ -21,7 +22,8 @@ module.exports = [
     plugins: {
       '@stylistic/js': stylistic,
       import: importPlugin,
-      jsdoc
+      jsdoc,
+      promise: promisePlugin
     },
     rules: {
       // Enforce braces around the function body of arrow functions
@@ -193,7 +195,9 @@ module.exports = [
       'import/no-absolute-path': ['error', { esmodule: true, commonjs: true, amd: false }],
       'import/no-duplicates': 'error',
       'import/no-named-default': 'error',
-      'import/no-webpack-loader-syntax': 'error'
+      'import/no-webpack-loader-syntax': 'error',
+      // eslint-config-promise StandardJS rules copied from https://github.com/standard/eslint-config-standard
+      'promise/param-names': 'error'
     },
     settings: {
       jsdoc: {
