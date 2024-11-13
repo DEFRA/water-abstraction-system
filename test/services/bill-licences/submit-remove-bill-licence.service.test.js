@@ -14,6 +14,7 @@ const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js'
 
 // Things we need to stub
 const LegacyDeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
+const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 // Thing under test
 const SubmitRemoveBillLicenceService = require('../../../app/services/bill-licences/submit-remove-bill-licence.service.js')
@@ -24,12 +25,14 @@ describe('Submit Remove Bill Licence service', () => {
   let bill
   let billLicence
   let legacyDeleteBillLicenceRequestStub
+  let ProcessBillingFlagServiceStub
 
   beforeEach(async () => {
     bill = await BillHelper.add()
     billLicence = await BillLicenceHelper.add({ billId: bill.id })
 
     legacyDeleteBillLicenceRequestStub = Sinon.stub(LegacyDeleteBillLicenceRequest, 'send').resolves()
+    ProcessBillingFlagServiceStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -37,6 +40,12 @@ describe('Submit Remove Bill Licence service', () => {
   })
 
   describe('when called', () => {
+    it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
+      await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+
+      expect(ProcessBillingFlagServiceStub.called).to.be.true()
+    })
+
     it('sends a request to the legacy service to delete the bill licence', async () => {
       await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
