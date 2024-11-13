@@ -1,8 +1,9 @@
 'use strict'
 
-const globals = require('globals')
+const importPlugin = require('eslint-plugin-import')
 const jsdoc = require('eslint-plugin-jsdoc')
 const stylistic = require('@stylistic/eslint-plugin-js')
+const globals = require('globals')
 
 module.exports = [
   {
@@ -19,6 +20,7 @@ module.exports = [
     ignores: ['docs/**/*'],
     plugins: {
       '@stylistic/js': stylistic,
+      import: importPlugin,
       jsdoc
     },
     rules: {
@@ -184,7 +186,14 @@ module.exports = [
       // Core ESLint StandardJS rules copied from https://github.com/standard/eslint-config-standard but updated because
       // it is using the deprecated version and configured not to conflict with our prettier set up
       '@stylistic/js/no-tabs': ['error', { allowIndentationTabs: true }],
-      '@stylistic/js/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: false }]
+      '@stylistic/js/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: false }],
+      // eslint-config-import StandardJS rules copied from https://github.com/standard/eslint-config-standard
+      'import/export': 'error',
+      'import/first': 'error',
+      'import/no-absolute-path': ['error', { esmodule: true, commonjs: true, amd: false }],
+      'import/no-duplicates': 'error',
+      'import/no-named-default': 'error',
+      'import/no-webpack-loader-syntax': 'error'
     },
     settings: {
       jsdoc: {
