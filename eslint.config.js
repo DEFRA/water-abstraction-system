@@ -56,6 +56,7 @@ module.exports = [
         }
       ],
       'constructor-super': 'error',
+      curly: ['error', 'all'],
       'default-case-last': 'error',
       'dot-notation': ['error', { allowKeywords: true }],
       eqeqeq: ['error', 'always', { null: 'ignore' }],
