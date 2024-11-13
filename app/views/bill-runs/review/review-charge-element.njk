@@ -1,0 +1,212 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "macros/review-status-tag.njk" import statusTag %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to review licence',
+      href: '/system/bill-runs/review/licence/' + reviewLicenceId
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {# Billable returns ammended banner #}
+  {% if bannerMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Element updated',
+      text: bannerMessage
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l" data-test="charge-element">Element {{elementIndex}} of {{elementCount}}</span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ chargeDescription }}</h1>
+
+      {% for chargePeriod in chargePeriods %}
+        {% set chargePeriodIndex = loop.index0 %}
+        <p class="govuk-!-margin-bottom-0" data-test="charge-period-{{ chargePeriodIndex }}">{{ chargePeriod }}</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      {{ statusTag(status) }}
+    </div>
+  </div>
+
+  {# Licence nav bars #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-5">
+    <div class="govuk-grid-column-full">
+      <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
+        <li class="govuk-summary-list__actions-list-item">
+          <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+            href="/system/licences/{{ licenceId  }}/summary"
+            data-test="summary-link">
+            Summary
+          </a>
+        </li>
+        <li class="govuk-summary-list__actions-list-item">
+          <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+            href="/system/licences/{{ licenceId  }}/returns"
+            data-test="returns-link">
+            Returns
+          </a>
+        </li>
+        <li class="govuk-summary-list__actions-list-item">
+          <a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline"
+            href="/system/licences/{{ licenceId  }}/set-up"
+            data-test="charge-information-link">
+            Charge information
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {# Periods #}
+  <span class="govuk-caption-m" data-test="financial-year">Financial year {{financialPeriod}}</span>
+  <h2 class="govuk-heading-m" data-test="charge-period">Charge period {{chargePeriod}}</h2>
+
+  {# Billable returns, authorised volume and issues #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="billable-returns">{{billableReturns}} ML</span>
+          <div>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Billable returns</span>
+          </div>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">/</span>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="authorised-volume">{{authorisedVolume}} ML</span>
+          <div>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Authorised volume</span>
+          </div>
+        </h3>
+      </div>
+
+      {% if issues.length > 0 %}
+        <div class="govuk-!-margin-right-6 float-left">
+          <h3>
+            <div class="govuk-inset-text">
+              <h4 class="govuk-heading-s govuk-!-font-weight-bold">Issues</h4>
+              {% for issue in issues %}
+                {% set issuesIndex = loop.index0 %}
+                <div data-test="issues-{{ issuesIndex }}"> {{issue}} </div>
+              {% endfor %}
+            </div>
+          </h3>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Billable returns button #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-full">
+      {{ govukButton({
+        text: 'Edit the billable returns',
+        href: '/system/bill-runs/review/charge-element/' + reviewChargeElementId + '/' + elementIndex  + '/edit',
+        classes: 'govuk-button--secondary',
+        preventDoubleClick: true
+      }) }}
+    </div>
+  </div>
+
+
+  {# Matched Returns #}
+  {% if matchedReturns.length > 0 %}
+    {% set tableRows = [] %}
+    {% for return in matchedReturns %}
+      {% set returnIndex = loop.index0 %}
+
+      {% set action %}
+        <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <div>{{return.returnPeriod}}</div>
+        <div>{{return.abstractionPeriod}}</div>
+      {% endset %}
+
+      {% set returnSummary %}
+        <div>{{ return.purpose }}</div>
+        {{ return.description }}
+      {% endset %}
+
+      {% set tag %}
+        {{ statusTag(return.returnStatus) }}
+      {% endset %}
+
+      {% set issues = '' %}
+      {% for issue in return.issues %}
+        {% set issues = issues + '<div>' + issue + '</div>' %}
+      {% endfor %}
+
+      {% set tableRow = [
+        {
+          html: action,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-action-' + returnIndex }
+        },
+        {
+          html: returnSummary,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-summary-' + returnIndex }
+        },
+        {
+          html: tag,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-status-' + returnIndex }
+        },
+        {
+          html: '<div>' + return.returnTotal + '</div>' + issues,
+          classes: "govuk-body-s govuk-!-text-align-right",
+          attributes: { 'data-test': 'matched-return-total-' + returnIndex }
+        }]
+      %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {# Table displaying details of the matched returns #}
+    {{ govukTable({
+      caption: "Matched returns",
+      captionClasses: "govuk-table__caption--m",
+      attributes: { 'data-test': 'matched-returns' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: 'Return reference and periods'
+        },
+        {
+          text: 'Purpose and description'
+        },
+        {
+          text: 'Status'
+        },
+        {
+          text: 'Return totals Allocated/Total',
+          format: 'numeric',
+          classes: 'width-one-tenth'
+        }
+      ],
+        rows: tableRows
+      }) }}
+  {% else %}
+    <h2 class="govuk-heading-m" data-test="no-returns-message">No matching two-part tariff returns</h2>
+  {% endif %}
+{% endblock %}

@@ -64,6 +64,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
       })
 
       describe('and the page has been not been visited', () => {
@@ -118,7 +119,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         expect(refreshedSession.startDateDay).to.equal('26')
         expect(refreshedSession.startDateMonth).to.equal('11')
         expect(refreshedSession.startDateYear).to.equal('2023')
-        expect(refreshedSession.returnVersionStartDate).to.equal('2023-10-26')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-11-26'))
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
