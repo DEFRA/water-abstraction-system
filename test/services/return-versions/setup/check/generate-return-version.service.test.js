@@ -82,7 +82,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13 '))
+      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
@@ -133,7 +133,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.multipleUpload).to.be.true()
       expect(result.returnVersion.notes).to.equal(sessionData.note.content)
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13 '))
+      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 1 because no previous return versions exist
       expect(result.returnVersion.version).to.equal(1)
@@ -179,7 +179,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13 '))
+      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
       expect(result.returnVersion.version).to.equal(1)
     })

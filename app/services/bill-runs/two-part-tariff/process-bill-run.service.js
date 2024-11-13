@@ -8,7 +8,7 @@
 const BillRunModel = require('../../../models/bill-run.model.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('./match-and-allocate.service.js')
+const MatchAndAllocateService = require('../match/match-and-allocate.service.js')
 
 /**
  * Matches and allocates licences to returns for a two-part tariff bill run
