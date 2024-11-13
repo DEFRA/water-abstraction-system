@@ -2,6 +2,7 @@
 
 const importPlugin = require('eslint-plugin-import')
 const jsdoc = require('eslint-plugin-jsdoc')
+const nPlugin = require('eslint-plugin-n')
 const promisePlugin = require('eslint-plugin-promise')
 const stylistic = require('@stylistic/eslint-plugin-js')
 const globals = require('globals')
@@ -23,6 +24,7 @@ module.exports = [
       '@stylistic/js': stylistic,
       import: importPlugin,
       jsdoc,
+      n: nPlugin,
       promise: promisePlugin
     },
     rules: {
@@ -196,6 +198,14 @@ module.exports = [
       'import/no-duplicates': 'error',
       'import/no-named-default': 'error',
       'import/no-webpack-loader-syntax': 'error',
+      // eslint-config-n StandardJS rules copied from https://github.com/standard/eslint-config-standard
+      'n/handle-callback-err': ['error', '^(err|error)$'],
+      'n/no-callback-literal': 'error',
+      'n/no-deprecated-api': 'error',
+      'n/no-exports-assign': 'error',
+      'n/no-new-require': 'error',
+      'n/no-path-concat': 'error',
+      'n/process-exit-as-throw': 'error',
       // eslint-config-promise StandardJS rules copied from https://github.com/standard/eslint-config-standard
       'promise/param-names': 'error'
     },
