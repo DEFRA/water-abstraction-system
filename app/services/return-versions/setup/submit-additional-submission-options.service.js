@@ -81,7 +81,9 @@ function _notification (session, payload) {
 }
 
 async function _save (session, payload) {
-  session.additionalSubmissionOptions = payload.additionalSubmissionOptions
+  session.multipleUpload = payload.additionalSubmissionOptions.includes('multiple-upload')
+
+  session.noAdditionalOptions = payload.additionalSubmissionOptions.includes('none')
 
   return session.$update()
 }

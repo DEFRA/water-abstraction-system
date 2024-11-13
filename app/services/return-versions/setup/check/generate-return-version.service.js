@@ -58,7 +58,7 @@ async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
     createdBy: userId,
     endDate,
     licenceId: sessionData.licence.id,
-    multipleUpload: _multipleUpload(sessionData?.additionalSubmissionOptions),
+    multipleUpload: sessionData.multipleUpload,
     notes: sessionData?.note?.content,
     reason: sessionData.reason,
     startDate,
@@ -78,10 +78,6 @@ async function _nextVersionNumber (licenceId) {
   }
 
   return 1
-}
-
-function _multipleUpload (additionalSubmissionOptions) {
-  return additionalSubmissionOptions ? additionalSubmissionOptions.includes('multiple-upload') : false
 }
 
 module.exports = {
