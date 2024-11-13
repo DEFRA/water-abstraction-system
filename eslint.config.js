@@ -2,6 +2,7 @@
 
 const globals = require('globals')
 const jsdoc = require('eslint-plugin-jsdoc')
+const stylistic = require('@stylistic/eslint-plugin-js')
 
 module.exports = [
   {
@@ -17,6 +18,7 @@ module.exports = [
     // Ignore the folder created when jsdocs are generated
     ignores: ['docs/**/*'],
     plugins: {
+      '@stylistic/js': stylistic,
       jsdoc
     },
     rules: {
@@ -178,7 +180,10 @@ module.exports = [
         }
       ],
       'valid-typeof': ['error', { requireStringLiterals: true }],
-      yoda: ['error', 'never']
+      yoda: ['error', 'never'],
+      // Core ESLint StandardJS rules copied from https://github.com/standard/eslint-config-standard but updated because
+      // it is using the deprecated version
+      '@stylistic/js/no-tabs': ['error', { allowIndentationTabs: true }]
     },
     settings: {
       jsdoc: {
