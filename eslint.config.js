@@ -1,10 +1,10 @@
 'use strict'
 
+const stylisticPlugin = require('@stylistic/eslint-plugin-js')
 const importPlugin = require('eslint-plugin-import')
-const jsdoc = require('eslint-plugin-jsdoc')
+const jsdocPlugin = require('eslint-plugin-jsdoc')
 const nPlugin = require('eslint-plugin-n')
 const promisePlugin = require('eslint-plugin-promise')
-const stylistic = require('@stylistic/eslint-plugin-js')
 const globals = require('globals')
 
 module.exports = [
@@ -21,9 +21,9 @@ module.exports = [
     // Ignore the folder created when jsdocs are generated
     ignores: ['docs/**/*'],
     plugins: {
-      '@stylistic/js': stylistic,
+      '@stylistic/js': stylisticPlugin,
       import: importPlugin,
-      jsdoc,
+      jsdoc: jsdocPlugin,
       n: nPlugin,
       promise: promisePlugin
     },
