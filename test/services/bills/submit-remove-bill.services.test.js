@@ -13,6 +13,7 @@ const BillHelper = require('../../support/helpers/bill.helper.js')
 
 // Things we need to stub
 const LegacyDeleteBillRequest = require('../../../app/requests/legacy/delete-bill.request.js')
+const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 // Thing under test
 const SubmitRemoveBillService = require('../../../app/services/bills/submit-remove-bill.service.js')
@@ -22,11 +23,13 @@ describe('Submit Remove Bill service', () => {
 
   let bill
   let legacyDeleteBillRequestStub
+  let ProcessBillingFlagServiceStub
 
   beforeEach(async () => {
     bill = await BillHelper.add()
 
     legacyDeleteBillRequestStub = Sinon.stub(LegacyDeleteBillRequest, 'send').resolves()
+    ProcessBillingFlagServiceStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -34,6 +37,12 @@ describe('Submit Remove Bill service', () => {
   })
 
   describe('when called', () => {
+    it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
+      await SubmitRemoveBillService.go(bill.id, user)
+
+      expect(ProcessBillingFlagServiceStub.called).to.be.true()
+    })
+
     it('sends a request to the legacy service to delete the bill', async () => {
       await SubmitRemoveBillService.go(bill.id, user)
 
