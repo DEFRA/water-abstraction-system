@@ -182,8 +182,9 @@ module.exports = [
       'valid-typeof': ['error', { requireStringLiterals: true }],
       yoda: ['error', 'never'],
       // Core ESLint StandardJS rules copied from https://github.com/standard/eslint-config-standard but updated because
-      // it is using the deprecated version
-      '@stylistic/js/no-tabs': ['error', { allowIndentationTabs: true }]
+      // it is using the deprecated version and configured not to conflict with our prettier set up
+      '@stylistic/js/no-tabs': ['error', { allowIndentationTabs: true }],
+      '@stylistic/js/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: false }]
     },
     settings: {
       jsdoc: {
