@@ -15,7 +15,7 @@ const { randomInteger } = require('../general.js')
  * - `address1` - ENVIRONMENT AGENCY
  * - `address2` - HORIZON HOUSE
  * - `address3` - DEANERY ROAD
- * - `town` - BRISTOL
+ * - `address4` - BRISTOL
  * - `postcode` - BS1 5AH
  * - `country` - United Kingdom
  * - `dataSource` - wrls

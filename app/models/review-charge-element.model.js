@@ -30,8 +30,8 @@ class ReviewChargeElementModel extends BaseModel {
         join: {
           from: 'reviewChargeElements.id',
           through: {
-            from: 'reviewChargeElementsReturns.reviewChargeElementId',
-            to: 'reviewChargeElementsReturns.reviewReturnId'
+            from: 'reviewChargeElementReturns.reviewChargeElementId',
+            to: 'reviewChargeElementReturns.reviewReturnId'
           },
           to: 'reviewReturns.id'
         }
