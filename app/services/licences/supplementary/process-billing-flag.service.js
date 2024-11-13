@@ -5,10 +5,13 @@
  * @module ProcessBillingFlagService
  */
 
+const DetermineBillFlagsService = require('./determine-bill-flags.service.js')
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
+const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
+const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
 const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
 const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -37,57 +40,92 @@ const PersistSupplementaryBillingFlagsService = require('./persist-supplementary
 async function go (payload) {
   try {
     const startTime = currentTimeInNanoseconds()
+    const result = await _determineFlags(payload)
 
-    let result
+    let licenceIds
 
-    if (payload.importedLicence) {
-      result = await DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
-    } else if (payload.chargeVersionId) {
-      result = await DetermineChargeVersionFlagsService.go(payload.chargeVersionId, payload.workflowId)
-    } else if (payload.returnId) {
-      result = await DetermineReturnLogFlagsService.go(payload.returnId)
-    } else if (payload.workflowId) {
-      result = await DetermineWorkflowFlagsService.go(payload.workflowId)
-    } else if (payload.licenceId) {
-      // Don't need to maintain the old recalculate bills link - This might get used for the other service logic instead
-    } else {
+    if (!result) {
       return
+    } else if (result.length > 1) {
+      await _setFlagsForMultipleLicences(result)
+
+      licenceIds = result.map((item) => {
+        return item.licenceId
+      }).join(',')
+    } else {
+      await _setFlagForLicence(result)
+
+      licenceIds = result.licenceId
     }
 
-    const {
-      licenceId,
-      regionId,
-      startDate,
-      endDate,
-      flagForPreSrocSupplementary,
-      flagForSrocSupplementary,
-      flagForTwoPartTariffSupplementary
-    } = result
-
-    let twoPartTariffBillingYears = []
-
-    if (flagForTwoPartTariffSupplementary) {
-      const years = DetermineBillingYearsService.go(startDate, endDate)
-
-      if (!years) {
-        return
-      }
-
-      twoPartTariffBillingYears = await DetermineExistingBillRunYearsService.go(
-        regionId, years, flagForTwoPartTariffSupplementary
-      )
-    }
-
-    await PersistSupplementaryBillingFlagsService.go(
-      twoPartTariffBillingYears,
-      flagForPreSrocSupplementary,
-      flagForSrocSupplementary,
-      licenceId
-    )
-
-    calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId })
+    calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceIds })
   } catch (error) {
     global.GlobalNotifier.omfg('Supplementary Billing Flag failed', payload, error)
+  }
+}
+
+async function _determineFlags (payload) {
+  let result
+
+  if (payload.importedLicence) {
+    result = await DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
+  } else if (payload.chargeVersionId) {
+    result = await DetermineChargeVersionFlagsService.go(payload.chargeVersionId, payload.workflowId)
+  } else if (payload.returnId) {
+    result = await DetermineReturnLogFlagsService.go(payload.returnId)
+  } else if (payload.workflowId) {
+    result = await DetermineWorkflowFlagsService.go(payload.workflowId)
+  } else if (payload.licenceId) {
+    result = await DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
+  } else if (payload.billId) {
+    // Removing a bill from a bill run is the only route that requires flagging for supplementary billing on
+    // potentially more than 1 licence, hence why this is handled separate from the rest of the flagging
+    result = await DetermineBillFlagsService.go(payload.billId)
+  } else if (payload.billLicenceId) {
+    result = await DetermineBillLicenceFlagsService.go(payload.billLicenceId)
+  } else {
+    return
+  }
+
+  return result
+}
+
+async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) {
+  const { endDate, startDate, regionId, flagForTwoPartTariffSupplementary } = result
+  const years = DetermineBillingYearsService.go(startDate, endDate)
+
+  if (!years) {
+    return twoPartTariffBillingYears
+  }
+
+  return await DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
+}
+
+async function _setFlagForLicence (result) {
+  const {
+    licenceId,
+    flagForPreSrocSupplementary,
+    flagForSrocSupplementary,
+    flagForTwoPartTariffSupplementary
+  } = result
+
+  let twoPartTariffBillingYears = []
+
+  if (flagForTwoPartTariffSupplementary) {
+    twoPartTariffBillingYears = _determineTwoPartTariffYears(twoPartTariffBillingYears, result)
+  }
+
+  await PersistSupplementaryBillingFlagsService.go(
+    twoPartTariffBillingYears,
+    flagForPreSrocSupplementary,
+    flagForSrocSupplementary,
+    licenceId
+  )
+}
+
+async function _setFlagsForMultipleLicences (results) {
+  for (const result of results) {
+    await _setFlagForLicence(result)
   }
 }
 
