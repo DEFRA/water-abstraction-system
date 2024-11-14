@@ -29,7 +29,6 @@ describe('Generate return logs service', () => {
   const today = new Date()
   const year = today.getFullYear()
 
-  let dueDate
   let endDate
   let expiredDate
   let lapsedDate
@@ -53,7 +52,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ regionId: region.id })
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -78,7 +76,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -134,7 +132,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       expiredDate = new Date(year + 1, 1, 31).toISOString().split('T')[0]
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
@@ -159,7 +156,7 @@ describe('Generate return logs service', () => {
     it('should return one return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(expiredDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${expiredDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -216,7 +213,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       expiredDate = new Date(year + 1, 3, 31).toISOString().split('T')[0]
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
@@ -241,7 +237,7 @@ describe('Generate return logs service', () => {
     it('should return one return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -299,7 +295,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ regionId: region.id })
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -324,7 +319,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -381,7 +376,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       lapsedDate = new Date(year + 1, 1, 31).toISOString().split('T')[0]
 
       region = RegionHelper.select()
@@ -408,7 +402,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(lapsedDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${lapsedDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -465,7 +459,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       revokedDate = new Date(year + 1, 1, 31).toISOString().split('T')[0]
 
       region = RegionHelper.select()
@@ -492,7 +485,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(revokedDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${revokedDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -549,7 +542,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
       revokedDate = new Date(year + 1, 10, 31).toISOString().split('T')[0]
 
       region = RegionHelper.select()
@@ -576,7 +568,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)
@@ -633,8 +625,6 @@ describe('Generate return logs service', () => {
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(new Date(`${returnCycle.startDate.getFullYear()}-11-01`))
       endDate = formatDateObjectToISO(returnCycle.endDate)
-      dueDate = formatDateObjectToISO(returnCycle.dueDate)
-
       region = RegionHelper.select()
       licence = await LicenceHelper.add({ revokedDate, regionId: region.id })
       returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
@@ -659,7 +649,7 @@ describe('Generate return logs service', () => {
     it('should return a valid return log payload', async () => {
       const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
 
-      expect(result.dueDate).to.equal(dueDate)
+      expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
       expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
       expect(result.licenceRef).to.equal(licence.licenceRef)

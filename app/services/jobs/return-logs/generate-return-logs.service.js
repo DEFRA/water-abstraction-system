@@ -25,7 +25,7 @@ async function go (returnRequirement, returnCycle) {
   return {
     createdAt: new Date(),
     updatedAt: new Date(),
-    dueDate: formatDateObjectToISO(returnCycle.dueDate),
+    dueDate: returnCycle.dueDate,
     endDate,
     id,
     licenceRef: returnRequirement.returnVersion.licence.licenceRef,

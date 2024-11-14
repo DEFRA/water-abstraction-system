@@ -56,6 +56,7 @@ async function go (cycle, licenceReference) {
 
     calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle, licenceReference })
   } catch (error) {
+    console.log(error)
     global.GlobalNotifier.omfg('Create return logs job failed', { cycle, error })
   }
 }

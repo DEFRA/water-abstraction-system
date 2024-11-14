@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -19,6 +19,12 @@ describe('Fetch return cycles service', () => {
   let summerReturnCycle
   let testDate
   let previousSummerReturnCycle
+
+  before(async () => {
+    allYearReturnCycle = await ReturnCycleHelper.select(0, false)
+    summerReturnCycle = await ReturnCycleHelper.select(1, true)
+    previousSummerReturnCycle = await ReturnCycleHelper.select(2, true)
+  })
 
   describe('the date is at the start of the all year cycle', () => {
     it('should return the correct return cycles', async () => {
@@ -62,4 +68,5 @@ describe('Fetch return cycles service', () => {
       expect(result).to.equal([])
     })
   })
+
 })
