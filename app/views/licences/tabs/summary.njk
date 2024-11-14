@@ -93,10 +93,11 @@
             {{ abstractionPoints[0] }}
           {% endif %}
         </div>
-        <a href="/licences/{{ documentId }}/points">{{ abstractionPointsLinkText }}</a>
-        <div>
-          <a href="/system/licences/{{ licenceId }}/points"> NEW !! {{ abstractionPointsLinkText }}</a>
-        </div>
+        {% if enableLicencePointsView %}
+          <a href="/system/licences/{{ licenceId }}/points">{{ abstractionPointsLinkText }}</a>
+        {% else %}
+          <a href="/licences/{{ documentId }}/points">{{ abstractionPointsLinkText }}</a>
+        {% endif %}
       </dd>
     </div>
   {% endif %}
