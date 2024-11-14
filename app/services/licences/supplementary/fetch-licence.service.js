@@ -60,7 +60,7 @@ function _query () {
       AND ce.section_127_Agreement = TRUE
       AND cr.adjustments->>'s127' = 'true'
     ) AS two_part_tariff_charge_versions,
-    w.created_at,
+    w.created_at
     CASE
       WHEN l.lapsed_date <= CURRENT_DATE OR l.revoked_date <= CURRENT_DATE OR l.expired_date <= CURRENT_DATE
       THEN TRUE

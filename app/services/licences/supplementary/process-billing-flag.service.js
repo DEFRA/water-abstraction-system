@@ -70,7 +70,11 @@ async function _determineFlags (payload) {
   if (payload.importedLicence) {
     result = await DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
   } else if (payload.chargeVersionId) {
-    result = await DetermineChargeVersionFlagsService.go(payload.chargeVersionId, payload.workflowId)
+    result = []
+    // We checks how the change to the charge version affects the flagging
+    result.push(await DetermineChargeVersionFlagsService.go(payload.chargeVersionId))
+    // Then we check if the licence being in workflow meant it needs to be flagged
+    result.push(await DetermineWorkflowFlagsService.go(payload.workflowId))
   } else if (payload.returnId) {
     result = await DetermineReturnLogFlagsService.go(payload.returnId)
   } else if (payload.workflowId) {
