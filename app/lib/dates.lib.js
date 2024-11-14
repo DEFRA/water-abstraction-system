@@ -120,7 +120,7 @@ function _isLeapYear (year) {
  *
  * @param {string} date - The date to compare against the quarterly return submissions date
  *
- * @returns {boolean}
+ * @returns {boolean} - Will return true if the date is for a quarterly return submission
  *
  * @private
  */
