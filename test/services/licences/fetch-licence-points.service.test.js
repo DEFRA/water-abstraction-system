@@ -18,7 +18,7 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 // Thing under test
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
 
-describe.only('Fetch Licence Points service', () => {
+describe('Fetch Licence Points service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
