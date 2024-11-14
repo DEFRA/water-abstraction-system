@@ -38,8 +38,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        method: 'use-existing-requirements',
-        reason: 'minor-change',
+        checkPageVisited: true,
         journey: 'returns-required',
         licence: {
           id: licenceId,
@@ -61,9 +60,11 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           ],
           currentVersionStartDate: '2023-02-13T00:00:00.000Z'
         },
-        returnVersionStartDate: '2023-02-13T00:00:00.000Z',
+        method: 'use-existing-requirements',
+        multipleUpload: false,
+        reason: 'minor-change',
         requirements: ['return requirements data'],
-        checkPageVisited: true,
+        returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
 
@@ -99,12 +100,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        note: {
-          content: 'This is a test note',
-          userEmail: 'admin-internal@wrls.gov.uk'
-        },
-        method: 'set-up-manually',
-        reason: 'change-to-special-agreement',
+        checkPageVisited: true,
         journey: 'returns-required',
         licence: {
           id: licenceId,
@@ -114,13 +110,16 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           licenceHolder: 'Another licence holder',
           returnVersions: []
         },
+        method: 'set-up-manually',
+        multipleUpload: true,
+        note: {
+          content: 'This is a test note',
+          userEmail: 'admin-internal@wrls.gov.uk'
+        },
+        reason: 'change-to-special-agreement',
         requirements: ['return requirements data'],
         returnVersionStartDate: '2023-02-13',
-        checkPageVisited: true,
-        startDateOptions: 'anotherStartDate',
-        additionalSubmissionOptions: [
-          'multiple-upload'
-        ]
+        startDateOptions: 'anotherStartDate'
       }
     })
 
@@ -151,7 +150,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        reason: 'returns-exception',
+        checkPageVisited: true,
         journey: 'no-returns-required',
         licence: {
           id: licenceId,
@@ -162,9 +161,10 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           returnVersions: [],
           currentVersionStartDate: '2023-02-13T00:00:00.000Z'
         },
-        returnVersionStartDate: '2023-02-13',
+        multipleUpload: false,
+        reason: 'returns-exception',
         requirements: [{}],
-        checkPageVisited: true,
+        returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
     })
