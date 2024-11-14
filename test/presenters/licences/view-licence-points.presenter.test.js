@@ -54,7 +54,7 @@ describe('View Licence Point presenter', () => {
 
   describe('the "licencePoints" property', () => {
     describe('the "bgsReference" property', () => {
-      describe('when the point does not have a populated bgsReference value', () => {
+      describe('when the point does not have a populated bgs reference', () => {
         beforeEach(() => {
           data.points[0].bgsReference = null
         })
@@ -66,8 +66,8 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated bgsReference value', () => {
-        it('returns the point bgsReference', () => {
+      describe('when the point has a populated bgs reference', () => {
+        it('returns the point bgs reference', () => {
           const result = ViewLicencePointPresenter.go(data)
 
           expect(result.licencePoints[0].bgsReference).to.equal('TL 14/123')
@@ -76,7 +76,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "category" property', () => {
-      describe('when the point does not have a populated category value', () => {
+      describe('when the point does not have a populated category', () => {
         beforeEach(() => {
           data.points[0].category = null
         })
@@ -88,7 +88,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated category value', () => {
+      describe('when the point has a populated category', () => {
         it('returns the point category', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -106,7 +106,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "description" property', () => {
-      describe('when the point does not have a populated description value', () => {
+      describe('when the point does not have a populated description', () => {
         beforeEach(() => {
           data.points[0].description = null
         })
@@ -118,7 +118,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated description value', () => {
+      describe('when the point has a populated description', () => {
         it('returns the point description', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -144,7 +144,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "hydroReference" property', () => {
-      describe('when the point does not have a populated hydro reference value', () => {
+      describe('when the point does not have a populated hydro reference', () => {
         beforeEach(() => {
           data.points[0].hydroReference = null
         })
@@ -156,8 +156,8 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated hydro reference value', () => {
-        it('returns the point hydro reference value', () => {
+      describe('when the point has a populated hydro reference', () => {
+        it('returns the point hydro reference', () => {
           const result = ViewLicencePointPresenter.go(data)
 
           expect(result.licencePoints[0].hydroReference).to.equal('TL 14/133')
@@ -174,7 +174,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "locationNote" property', () => {
-      describe('when the point does not have a populated location note value', () => {
+      describe('when the point does not have a populated location note', () => {
         beforeEach(() => {
           data.points[0].locationNote = null
         })
@@ -186,7 +186,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated location note value', () => {
+      describe('when the point has a populated location note', () => {
         it('returns the point location note', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -196,7 +196,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "note" property', () => {
-      describe('when the point does not have a populated note value', () => {
+      describe('when the point does not have a populated note', () => {
         beforeEach(() => {
           data.points[0].note = null
         })
@@ -208,7 +208,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated note value', () => {
+      describe('when the point has a populated note', () => {
         it('returns the point note', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -218,7 +218,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "primaryType" property', () => {
-      describe('when the point does not have a populated primary type value', () => {
+      describe('when the point does not have a populated primary type', () => {
         beforeEach(() => {
           data.points[0].primaryType = null
         })
@@ -230,7 +230,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated primary type value', () => {
+      describe('when the point has a populated primary type', () => {
         it('returns the point primary type', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -240,7 +240,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "secondaryType" property', () => {
-      describe('when the point does not have a populated secondary type value', () => {
+      describe('when the point does not have a populated secondary type', () => {
         beforeEach(() => {
           data.points[0].secondaryType = null
         })
@@ -252,7 +252,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated secondary type value', () => {
+      describe('when the point has a populated secondary type', () => {
         it('returns the point secondary type', () => {
           const result = ViewLicencePointPresenter.go(data)
 
@@ -306,7 +306,7 @@ describe('View Licence Point presenter', () => {
     })
 
     describe('the "wellReference" property', () => {
-      describe('when the point does not have a populated well reference value', () => {
+      describe('when the point does not have a populated well reference', () => {
         beforeEach(() => {
           data.points[0].wellReference = null
         })
@@ -318,7 +318,7 @@ describe('View Licence Point presenter', () => {
         })
       })
 
-      describe('when the point has a populated well reference value', () => {
+      describe('when the point has a populated well reference', () => {
         it('returns the point well reference', () => {
           const result = ViewLicencePointPresenter.go(data)
 
