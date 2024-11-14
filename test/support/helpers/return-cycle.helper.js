@@ -99,8 +99,7 @@ async function select (index = -1, summer = false) {
  * So, they are seeded automatically when tests are run. Tests that need to link to a specific record can use this
  * method to provide a date and if it's summer or all year and then get the return cycle back.
  *
- * @param {Date} [date] - The reference entry to select. Defaults to -1 which means an entry will be returned at
- * random from the reference data
+ * @param {Date} [date] - The reference entry to select.
  * @param {boolean} summer - select either a summer or all year one
  *
  * @returns {object} The selected reference entry or one picked at random

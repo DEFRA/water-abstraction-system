@@ -10,17 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
-const {
-  cycleEndDateByDate,
-  cycleEndDateAsISO,
-  cycleStartDateByDate,
-  cycleStartDateAsISO
-} = require('../../../../app/lib/return-cycle-dates.lib.js')
-const { returnCycleDates } = require('../../../../app/lib/static-lookups.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
-const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
