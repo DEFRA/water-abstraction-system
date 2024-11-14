@@ -1,14 +1,27 @@
 'use strict'
 
-const stylisticPlugin = require('@stylistic/eslint-plugin-js')
-const importPlugin = require('eslint-plugin-import')
 const jsdocPlugin = require('eslint-plugin-jsdoc')
-const nPlugin = require('eslint-plugin-n')
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const promisePlugin = require('eslint-plugin-promise')
+const neostandard = require('neostandard')
 const globals = require('globals')
 
 module.exports = [
+  // Start with neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
+  // governance issue https://github.com/standard/standard/issues/1948#issuecomment-2138078249). The maintainers of
+  // neostandard have opted to lean into ESLint rather than follow the ethos of a standalone tool.
+  //
+  // So, it might be better to think of it as superseding eslint-config-standard. But unlike that package and its
+  // issues, neostandard is built for ESLint 9, so supports the new flat-file config and uses @stylistic/eslint-plugin
+  // for style rules rather than the deprecated ES Core ones.
+  //
+  // It also acknowledges current ways of working. For example, you can now enforce instead of ban semi colons using an
+  // option (the only blocker to some people using StandardJS in the past). It also acknowledges that many projects,
+  // like ours, want to apply StandardJS code rules, but leave the formatting to Prettier. Hence, you can now deactivate
+  // its style rules with the `noStyle` option.
+  //
+  // We add it first, so if anything we do conflicts with the StandardJS rules, our customisations take precedence.
+  // https://github.com/neostandard/neostandard
+  ...neostandard({ noStyle: true }),
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -19,14 +32,11 @@ module.exports = [
       },
       sourceType: 'commonjs'
     },
-    // Ignore the folder created when jsdocs are generated
+    // Ignore the folder created when JSDocs are generated
     ignores: ['docs/**/*'],
     plugins: {
-      '@stylistic/js': stylisticPlugin,
-      import: importPlugin,
-      jsdoc: jsdocPlugin,
-      n: nPlugin,
-      promise: promisePlugin
+      // https://github.com/gajus/eslint-plugin-jsdoc
+      jsdoc: jsdocPlugin
     },
     rules: {
       // Enforce braces around the function body of arrow functions
@@ -43,172 +53,7 @@ module.exports = [
       'jsdoc/require-hyphen-before-param-description': 'warn',
       'jsdoc/require-jsdoc': ['warn', { publicOnly: true }],
       'jsdoc/require-param': ['warn', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['warn', { publicOnly: true }],
-      // Core ESLint StandardJS rules copied from https://github.com/standard/eslint-config-standard with Prettier
-      // conflicting ones (checked via https://github.com/prettier/eslint-config-prettier) removed
-      'no-var': 'warn',
-      'object-shorthand': ['warn', 'properties'],
-      'accessor-pairs': ['error', { setWithoutGet: true, enforceForClassMembers: true }],
-      'array-callback-return': [
-        'error',
-        {
-          allowImplicit: false,
-          checkForEach: false
-        }
-      ],
-      camelcase: [
-        'error',
-        {
-          allow: ['^UNSAFE_'],
-          properties: 'never',
-          ignoreGlobals: true
-        }
-      ],
-      'constructor-super': 'error',
-      curly: ['error', 'all'],
-      'default-case-last': 'error',
-      'dot-notation': ['error', { allowKeywords: true }],
-      eqeqeq: ['error', 'always', { null: 'ignore' }],
-      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
-      'new-cap': ['error', { newIsCap: true, capIsNew: false, properties: true }],
-      'no-array-constructor': 'error',
-      'no-async-promise-executor': 'error',
-      'no-caller': 'error',
-      'no-case-declarations': 'error',
-      'no-class-assign': 'error',
-      'no-compare-neg-zero': 'error',
-      'no-cond-assign': 'error',
-      'no-const-assign': 'error',
-      'no-constant-condition': ['error', { checkLoops: false }],
-      'no-control-regex': 'error',
-      'no-debugger': 'error',
-      'no-delete-var': 'error',
-      'no-dupe-args': 'error',
-      'no-dupe-class-members': 'error',
-      'no-dupe-keys': 'error',
-      'no-duplicate-case': 'error',
-      'no-useless-backreference': 'error',
-      'no-empty': ['error', { allowEmptyCatch: true }],
-      'no-empty-character-class': 'error',
-      'no-empty-pattern': 'error',
-      'no-eval': 'error',
-      'no-ex-assign': 'error',
-      'no-extend-native': 'error',
-      'no-extra-bind': 'error',
-      'no-extra-boolean-cast': 'error',
-      'no-fallthrough': 'error',
-      'no-func-assign': 'error',
-      'no-global-assign': 'error',
-      'no-implied-eval': 'error',
-      'no-import-assign': 'error',
-      'no-invalid-regexp': 'error',
-      'no-irregular-whitespace': 'error',
-      'no-iterator': 'error',
-      'no-labels': ['error', { allowLoop: false, allowSwitch: false }],
-      'no-lone-blocks': 'error',
-      'no-loss-of-precision': 'error',
-      'no-misleading-character-class': 'error',
-      'no-prototype-builtins': 'error',
-      'no-useless-catch': 'error',
-      'no-multi-str': 'error',
-      'no-new': 'error',
-      'no-new-func': 'error',
-      'no-new-object': 'error',
-      'no-new-symbol': 'error',
-      'no-new-wrappers': 'error',
-      'no-obj-calls': 'error',
-      'no-octal': 'error',
-      'no-octal-escape': 'error',
-      'no-proto': 'error',
-      'no-redeclare': ['error', { builtinGlobals: false }],
-      'no-regex-spaces': 'error',
-      'no-return-assign': ['error', 'except-parens'],
-      'no-self-assign': ['error', { props: true }],
-      'no-self-compare': 'error',
-      'no-sequences': 'error',
-      'no-shadow-restricted-names': 'error',
-      'no-sparse-arrays': 'error',
-      'no-template-curly-in-string': 'error',
-      'no-this-before-super': 'error',
-      'no-throw-literal': 'error',
-      'no-undef': 'error',
-      'no-undef-init': 'error',
-      'no-unmodified-loop-condition': 'error',
-      'no-unneeded-ternary': ['error', { defaultAssignment: false }],
-      'no-unreachable': 'error',
-      'no-unreachable-loop': 'error',
-      'no-unsafe-finally': 'error',
-      'no-unsafe-negation': 'error',
-      'no-unused-expressions': [
-        'error',
-        {
-          allowShortCircuit: true,
-          allowTernary: true,
-          allowTaggedTemplates: true
-        }
-      ],
-      'no-unused-vars': [
-        'error',
-        {
-          args: 'none',
-          caughtErrors: 'none',
-          ignoreRestSiblings: true,
-          vars: 'all'
-        }
-      ],
-      'no-use-before-define': ['error', { functions: false, classes: false, variables: false }],
-      'no-useless-call': 'error',
-      'no-useless-computed-key': 'error',
-      'no-useless-constructor': 'error',
-      'no-useless-escape': 'error',
-      'no-useless-rename': 'error',
-      'no-useless-return': 'error',
-      'no-void': 'error',
-      'no-with': 'error',
-      'one-var': ['error', { initialized: 'never' }],
-      'prefer-const': ['error', { destructuring: 'all' }],
-      'prefer-promise-reject-errors': 'error',
-      'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
-      'spaced-comment': [
-        'error',
-        'always',
-        {
-          line: { markers: ['*package', '!', '/', ',', '='] },
-          block: { balanced: true, markers: ['*package', '!', ',', ':', '::', 'flow-include'], exceptions: ['*'] }
-        }
-      ],
-      'symbol-description': 'error',
-      'unicode-bom': ['error', 'never'],
-      'use-isnan': [
-        'error',
-        {
-          enforceForSwitchCase: true,
-          enforceForIndexOf: true
-        }
-      ],
-      'valid-typeof': ['error', { requireStringLiterals: true }],
-      yoda: ['error', 'never'],
-      // Core ESLint StandardJS rules copied from https://github.com/standard/eslint-config-standard but updated because
-      // it is using the deprecated version and configured not to conflict with our prettier set up
-      '@stylistic/js/no-tabs': ['error', { allowIndentationTabs: true }],
-      '@stylistic/js/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: false }],
-      // eslint-config-import StandardJS rules copied from https://github.com/standard/eslint-config-standard
-      'import/export': 'error',
-      'import/first': 'error',
-      'import/no-absolute-path': ['error', { esmodule: true, commonjs: true, amd: false }],
-      'import/no-duplicates': 'error',
-      'import/no-named-default': 'error',
-      'import/no-webpack-loader-syntax': 'error',
-      // eslint-config-n StandardJS rules copied from https://github.com/standard/eslint-config-standard
-      'n/handle-callback-err': ['error', '^(err|error)$'],
-      'n/no-callback-literal': 'error',
-      'n/no-deprecated-api': 'error',
-      'n/no-exports-assign': 'error',
-      'n/no-new-require': 'error',
-      'n/no-path-concat': 'error',
-      'n/process-exit-as-throw': 'error',
-      // eslint-config-promise StandardJS rules copied from https://github.com/standard/eslint-config-standard
-      'promise/param-names': 'error'
+      'jsdoc/require-returns': ['warn', { publicOnly: true }]
     },
     settings: {
       jsdoc: {
@@ -217,15 +62,19 @@ module.exports = [
       }
     }
   },
-  // This section works as an override to the configuration object above. It tells jsdoc to ignore any files in the
-  // `app/controllers` and `db/seeds` directories. The controllers purposefully do very little and the purpose of the
-  // seed files is obvious
+  // This section works as an override to the configuration object above. It tells the jsdoc plugin to ignore any files
+  // in the `app/controllers` and `db/seeds` directories. The controllers purposefully do very little and the purpose of
+  // the seed files is obvious
   {
     files: ['app/controllers/**/*', 'db/seeds/**/*'],
     rules: {
       'jsdoc/require-jsdoc': 'off'
     }
   },
-  // Any other config imports go at the top
+  // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared
+  // above that conflict with prettier. That shouldn't be any, as we tell neostandard not to include any style rules
+  // and the ones we've declared we've done as per eslint-config-prettier docs on special rules. As recommended by
+  // eslint-plugin-prettier, we declare this config last
+  // https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-new-eslintconfigjs
   eslintPluginPrettierRecommended
 ]
