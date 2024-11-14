@@ -36,10 +36,10 @@
       rows: [
         {
           key: {
-            text: "Grid reference"
+            text: "BGS reference"
           },
           value: {
-            html: licencePoint.gridReference
+            text: licencePoint.bgsReference
           }
         },
         {
@@ -47,47 +47,7 @@
             text: "Category"
           },
           value: {
-            html: licencePoint.category
-          }
-        },
-        {
-          key: {
-            text: "Source"
-          },
-          value: {
-            html: licencePoint.sourceDescription
-          }
-        },
-        {
-          key: {
-            text: "Primary type"
-          },
-          value: {
-            html: licencePoint.primaryType
-          }
-        },
-        {
-          key: {
-            text: "Secondary type"
-          },
-          value: {
-            html: licencePoint.secondaryType
-          }
-        },
-        {
-          key: {
-            text: "Note"
-          },
-          value: {
-            html: licencePoint.note
-          }
-        },
-        {
-          key: {
-            text: "Location note"
-          },
-          value: {
-            html: licencePoint.locationNote
+            text: licencePoint.category
           }
         },
         {
@@ -95,42 +55,97 @@
             text: "Depth"
           },
           value: {
-            html: licencePoint.depth
+            text: licencePoint.depth
           }
         },
         {
           key: {
-            text: "BGS reference"
+            text: "Grid reference",
+            attributes: { 'data-test': 'grid-reference-title-' + rowIndex }
           },
           value: {
-            html: licencePoint.bgsReference
+            text: licencePoint.gridReference,
+            attributes: { 'data-test': 'grid-reference-' + rowIndex }
           }
-        }
-        ,
+        },
         {
           key: {
-            text: "Well reference"
+            text: "Hydro intercept distance"
           },
           value: {
-            html: licencePoint.wellReference
+            text: licencePoint.hydroInterceptDistance
           }
-        }
-        ,
-        {
-          key: {
-            text: "Hydro reference"
-          },
-          value: {
-            html: licencePoint.hydroReference
-          }
-        }
-        ,
+        },
         {
           key: {
             text: "Hydro offset distance"
           },
           value: {
-            html: licencePoint.hydroOffsetDistance
+            text: licencePoint.hydroOffsetDistance
+          }
+        },
+        {
+          key: {
+            text: "Hydro reference"
+          },
+          value: {
+            text: licencePoint.hydroReference
+          }
+        },
+        {
+          key: {
+            text: "Location note"
+          },
+          value: {
+            text: licencePoint.locationNote
+          }
+        },
+        {
+          key: {
+            text: "Note"
+          },
+          value: {
+            text: licencePoint.note
+          }
+        },
+        {
+          key: {
+            text: "Primary type"
+          },
+          value: {
+            text: licencePoint.primaryType
+          }
+        },
+        {
+          key: {
+            text: "Secondary type"
+          },
+          value: {
+            text: licencePoint.secondaryType
+          }
+        },
+        {
+          key: {
+            text: "Source"
+          },
+          value: {
+            text: licencePoint.sourceDescription
+          }
+        },
+        {
+          key: {
+            text: "Source type"
+          },
+          value: {
+            text: licencePoint.sourceType
+          }
+        },
+        {
+          key: {
+            text: "Well reference"
+          },
+          value: {
+            text: licencePoint.wellReference
           }
         }
       ]
