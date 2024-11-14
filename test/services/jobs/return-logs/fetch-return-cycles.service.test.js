@@ -68,5 +68,4 @@ describe('Fetch return cycles service', () => {
       expect(result).to.equal([])
     })
   })
-
 })
