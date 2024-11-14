@@ -1,135 +1,92 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+/**
+ * Determines if a licence with a change in charge version should be flagged for supplementary billing
+ * @module DetermineChargeVersionFlagsService
+ */
 
-const { describe, it, before } = exports.lab = Lab.script()
-const { expect } = Code
+const { ref } = require('objection')
 
-// Test helpers
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
 
-// Thing under test
-const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
+/**
+ * Determines if a licence should be flagged for supplementary billing based on a change in charge version
+ *
+ * The service determines which flags should be added to the licence based on the chargeVersionId it receives.
+ * It uses the charge versions scheme and any associated two-part tariff indicators to decide the appropriate flags for
+ * supplementary billing.
+ *
+ * If the scheme is `alcs`, the licence is flagged for pre-sroc supplementary billing
+ * If the scheme is `sroc`:
+ * - with no two-part tariff indicators: The licence is flagged for Sroc supplementary billing.
+ * - with two-part tariff indicators: The licence is flagged for two-part tariff supplementary billing.
+ *
+ * NOTE: Unlike pre-sroc and sroc flags (which apply at the licence level), two-part tariff flags are year specific.
+ * They are stored in the `LicenceSupplementaryYears` table for each affected year of the charge version
+ *
+ * @param {string} chargeVersionId - The UUID for the charge version to fetch
+ *
+ * @returns {object} - An object containing the related licenceId, regionId, charge version start and end date and
+ * licence supplementary billing flags
+ */
+async function go (chargeVersionId) {
+  const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
 
-describe('Determine Charge Version Flags Service', () => {
-  describe('when given a valid chargeVersionId', () => {
-    let chargeVersion
-    let licence
+  const twoPartTariff = _twoPartTariffIndicators(chargeReferences)
 
-    describe('related to a licence that is already flagged for billing', () => {
-      before(async () => {
-        licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: true })
-        chargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId: licence.id })
-      })
+  const result = {
+    licenceId: licence.id,
+    regionId: licence.regionId,
+    startDate,
+    endDate,
+    flagForPreSrocSupplementary: licence.includeInPresrocBilling === 'yes',
+    flagForSrocSupplementary: licence.includeInSrocBilling,
+    flagForTwoPartTariffSupplementary: twoPartTariff
+  }
 
-      it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+  if (!result.flagForPreSrocSupplementary && scheme === 'alcs') {
+    result.flagForPreSrocSupplementary = true
+  }
 
-        expect(result.licenceId).to.equal(licence.id)
-        expect(result.regionId).to.equal(licence.regionId)
-        expect(result.startDate).to.equal(chargeVersion.startDate)
-        expect(result.endDate).to.equal(null)
-      })
+  if (!result.flagForSrocSupplementary && !twoPartTariff && scheme === 'sroc') {
+    result.flagForSrocSupplementary = true
+  }
 
-      describe('and has a charging schema of "alcs"', () => {
-        it('returns the correct flags', async () => {
-          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
+  return result
+}
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
-        })
-      })
-
-      describe('and has a charging schema of "sroc"', () => {
-        before(async () => {
-          chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
-        })
-
-        describe('but no two-part tariff indicators', () => {
-          it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
-          })
-        })
-
-        describe('with two-part tariff indicators', () => {
-          before(async () => {
-            await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id, adjustments: { s127: true } })
-          })
-
-          it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
-          })
-        })
-      })
+async function _fetchChargeVersion (chargeVersionId) {
+  return ChargeVersionModel.query()
+    .findById(chargeVersionId)
+    .select([
+      'id',
+      'scheme',
+      'startDate',
+      'endDate'])
+    .withGraphFetched('chargeReferences')
+    .modifyGraph('chargeReferences', (builder) => {
+      builder.select([
+        'id',
+        ref('adjustments:s127').castBool().as('twoPartTariff')
+      ])
     })
-
-    describe('related to a licence that is not already flagged for billing', () => {
-      before(async () => {
-        licence = await LicenceHelper.add()
-        chargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId: licence.id })
-      })
-
-      it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-        expect(result.licenceId).to.equal(licence.id)
-        expect(result.regionId).to.equal(licence.regionId)
-        expect(result.startDate).to.equal(chargeVersion.startDate)
-        expect(result.endDate).to.equal(null)
-      })
-
-      describe('and has a charging schema of "alcs"', () => {
-        it('returns the correct flags', async () => {
-          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
-        })
-      })
-
-      describe('and has a charging schema of "sroc"', () => {
-        before(async () => {
-          chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
-        })
-
-        describe('but no two-part tariff indicators', () => {
-          it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
-          })
-        })
-
-        describe('with two-part tariff indicators', () => {
-          before(async () => {
-            await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id, adjustments: { s127: true } })
-          })
-
-          it('returns the correct flags', async () => {
-            const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
-
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
-          })
-        })
-      })
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (builder) => {
+      builder.select([
+        'id',
+        'regionId',
+        'includeInSrocBilling',
+        'includeInPresrocBilling'
+      ])
     })
+}
+
+function _twoPartTariffIndicators (chargeReferences) {
+  return chargeReferences.some((chargeReference) => {
+    return chargeReference.twoPartTariff
   })
-})
+}
+
+module.exports = {
+  go
+}
