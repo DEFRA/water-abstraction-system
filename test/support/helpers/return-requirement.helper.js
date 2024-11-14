@@ -80,15 +80,6 @@ function generateLegacyId () {
   return randomInteger(100, 19999999)
 }
 
-/**
- * Generates a return requirement legacy ID (also known as return reference)
- *
- * @returns {number}
- */
-function generateLegacyId () {
-  return randomInteger(100, 19999999)
-}
-
 module.exports = {
   add,
   defaults,
