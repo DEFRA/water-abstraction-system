@@ -86,4 +86,18 @@ describe('Dates lib', () => {
       expect(result).to.be.true()
     })
   })
+
+  describe('isQuarterlyReturnSubmissions', () => {
+    it('should return true if the date is >= 2025-04-01', () => {
+      const result = DateLib.isQuarterlyReturnSubmissions('2025-04-01')
+
+      expect(result).to.be.true()
+    })
+
+    it('should return false if the date is < 2025-04-01', () => {
+      const result = DateLib.isQuarterlyReturnSubmissions('2025-03-31')
+
+      expect(result).to.be.false()
+    })
+  })
 })

@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const StartDatePresenter = require('../../../presenters/return-versions/setup/start-date.presenter.js')
 const StartDateValidator = require('../../../validators/return-versions/setup/start-date.validator.js')
+const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/start-date` page
@@ -56,6 +57,27 @@ async function go (sessionId, payload, yar) {
   }
 }
 
+/**
+ * Default Quarterly Returns
+ *
+ * When a return version is for a water company and the start date is for quarterly returns.
+ *
+ * We need to default the quarterly returns to true.
+ *
+ * However, we only want to do this on the initial setting of the start date after that it is in the users control.
+ *
+ * @param {SessionModel} session
+ *
+ * @private
+ */
+function _defaultQuarterlyReturns (session) {
+  if (!session.checkPageVisited &&
+    isQuarterlyReturnSubmissions(session.returnVersionStartDate) &&
+    session.licence.waterUndertaker) {
+    session.quarterlyReturns = true
+  }
+}
+
 async function _save (session, payload) {
   const selectedOption = payload['start-date-options']
 
@@ -69,6 +91,8 @@ async function _save (session, payload) {
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
   }
+
+  _defaultQuarterlyReturns(session)
 
   return session.$update()
 }
