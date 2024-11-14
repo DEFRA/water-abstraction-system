@@ -64,8 +64,10 @@ describe('Return Versions Setup - Initiate Session service', () => {
             licenceRef,
             licenceHolder: 'Licence Holder Ltd',
             returnVersions: [],
-            startDate: new Date('2022-01-01')
+            startDate: new Date('2022-01-01'),
+            waterUndertaker: false
           },
+          multipleUpload: false,
           journey: 'returns-required',
           requirements: [{}]
         }, { skip: ['id'] })
