@@ -2,12 +2,6 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro newLine(array) %}
-  {% for item in array %}
-    <div class="govuk-!-margin-bottom-1"> {{ item }}</div>
-  {% endfor %}
-{% endmacro %}
-
 {% block breadcrumbs %}
   {{ govukBackLink({
     text: 'Go back to summary',
@@ -36,26 +30,32 @@
       rows: [
         {
           key: {
-            text: "BGS reference"
+            text: "BGS reference",
+            attributes: { 'data-test': 'bgs-reference-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.bgsReference
+            text: licencePoint.bgsReference,
+            attributes: { 'data-test': 'bgs-reference-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Category"
+            text: "Category",
+            attributes: { 'data-test': 'category-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.category
+            text: licencePoint.category,
+            attributes: { 'data-test': 'category-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Depth"
+            text: "Depth",
+            attributes: { 'data-test': 'depth-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.depth
+            text: licencePoint.depth,
+            attributes: { 'data-test': 'depth-' + rowIndex }
           }
         },
         {
@@ -70,86 +70,105 @@
         },
         {
           key: {
-            text: "Hydro intercept distance"
+            text: "Hydro intercept distance",
+            attributes: { 'data-test': 'hydro-intercept-distance-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.hydroInterceptDistance
+            text: licencePoint.hydroInterceptDistance,
+            attributes: { 'data-test': 'hydro-intercept-distance-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Hydro offset distance"
+            text: "Hydro offset distance",
+            attributes: { 'data-test': 'hydro-offset-distance-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.hydroOffsetDistance
+            text: licencePoint.hydroOffsetDistance,
+            attributes: { 'data-test': 'hydro-offset-distance-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Hydro reference"
+            text: "Hydro reference",
+            attributes: { 'data-test': 'hydro-reference-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.hydroReference
+            text: licencePoint.hydroReference,
+            attributes: { 'data-test': 'hydro-reference-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Location note"
+            text: "Location note",
+            attributes: { 'data-test': 'location-note-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.locationNote
+            text: licencePoint.locationNote,
+            attributes: { 'data-test': 'location-note-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Note"
+            text: "Note",
+            attributes: { 'data-test': 'note-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.note
+            text: licencePoint.note,
+            attributes: { 'data-test': 'note-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Primary type"
+            text: "Primary type",
+            attributes: { 'data-test': 'primary-type-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.primaryType
+            text: licencePoint.primaryType,
+            attributes: { 'data-test': 'primary-type-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Secondary type"
+            text: "Secondary type",
+            attributes: { 'data-test': 'secondary-type-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.secondaryType
+            text: licencePoint.secondaryType,
+            attributes: { 'data-test': 'secondary-type-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Source"
+            text: "Source",
+            attributes: { 'data-test': 'source-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.sourceDescription
+            text: licencePoint.sourceDescription,
+            attributes: { 'data-test': 'source-description-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Source type"
+            text: "Source type",
+            attributes: { 'data-test': 'source-type-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.sourceType
+            text: licencePoint.sourceType,
+            attributes: { 'data-test': 'source-type-' + rowIndex }
           }
         },
         {
           key: {
-            text: "Well reference"
+            text: "Well reference",
+            attributes: { 'data-test': 'well-reference-title-' + rowIndex }
           },
           value: {
-            text: licencePoint.wellReference
+            text: licencePoint.wellReference,
+            attributes: { 'data-test': 'well-reference-' + rowIndex }
           }
         }
       ]
     }) }}
   {% endfor %}
-
 {% endblock %}
