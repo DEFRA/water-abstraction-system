@@ -38,23 +38,25 @@ async function _fetchLicence (licenceId) {
 
 async function _fetchPoints (licenceId) {
   const points = await db
+    .distinct()
     .select(
-      'p.id AS pointId',
+      'p.bgsReference',
       'p.category',
-      'p.note',
-      'p.primaryType',
-      'p.secondaryType',
-      'p.description AS pointDescription',
-      'p.locationNote',
       'p.depth',
+      'p.description',
+      'p.hydroInterceptDistance',
+      'p.hydroReference',
+      'p.hydroOffsetDistance',
+      'p.id AS pointId',
+      'p.locationNote',
       'p.ngr1',
       'p.ngr2',
       'p.ngr3',
       'p.ngr4',
-      'p.bgsReference',
+      'p.note',
+      'p.primaryType',
+      'p.secondaryType',
       'p.wellReference',
-      'p.hydroReference',
-      'p.hydroOffsetDistance',
       's.description AS sourceDescription',
       's.sourceType'
     )
