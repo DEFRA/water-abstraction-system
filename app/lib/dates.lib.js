@@ -114,23 +114,18 @@ function _isLeapYear (year) {
 }
 
 /**
- * Checks if the return version is a quarterly returns submission
+ * Checks if the given date is a quarterly returns submission
  *
- * A return version is due for quarterly returns submissions when they:
- * - are a water company and the return version start date > 1 April 2025
+ * A quarterly returns submission will be true when the date provided is >= 1 April 2025
  *
- * This function only handles the return version start date.
- *
- * @param {string} returnVersionStartDate - The return version start date
+ * @param {string} date - The date to compare against the quarterly return submissions date
  *
  * @returns {boolean}
  *
  * @private
  */
-function isQuarterlyReturnSubmissions (returnVersionStartDate) {
-  const quarterlyReturnSubmissionsStartDate = new Date('2025-04-01')
-
-  return new Date(returnVersionStartDate).getTime() >= quarterlyReturnSubmissionsStartDate.getTime()
+function isQuarterlyReturnSubmissions (date) {
+  return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 
 module.exports = {
