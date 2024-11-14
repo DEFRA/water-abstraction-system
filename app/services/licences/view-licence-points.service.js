@@ -5,8 +5,6 @@
  * @module ViewLicencePointsService
  */
 
-const util = require('util')
-
 const FetchLicencePointsService = require('../licences/fetch-licence-points.service.js')
 const ViewLicencePointsPresenter = require('../../presenters/licences/view-licence-points.presenter.js')
 
@@ -21,8 +19,6 @@ async function go (licenceId) {
   const licencePoints = await FetchLicencePointsService.go(licenceId)
 
   const pageData = ViewLicencePointsPresenter.go(licencePoints)
-
-  console.log('🚀🚀🚀 ~ pageData:', util.inspect(pageData, { showHidden: false, depth: null, colors: true }))
 
   return {
     activeNavBar: 'search',
