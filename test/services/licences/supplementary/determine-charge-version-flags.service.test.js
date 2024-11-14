@@ -13,9 +13,9 @@ const ChargeVersionHelper = require('../../../support/helpers/charge-version.hel
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const DetermineChargeVersionYearsService = require('../../../../app/services/licences/supplementary/determine-charge-version-years.service.js')
+const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 
-describe('Determine Charge Version Years Service', () => {
+describe('Determine Charge Version Flags Service', () => {
   describe('when given a valid chargeVersionId', () => {
     let chargeVersion
     let licence
@@ -26,7 +26,7 @@ describe('Determine Charge Version Years Service', () => {
     })
 
     it('always returns the licence, startDate and endDate', async () => {
-      const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
+      const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
 
       expect(result.licence).to.equal({ id: licence.id, regionId: licence.regionId })
       expect(result.startDate).to.equal(chargeVersion.startDate)
@@ -40,7 +40,7 @@ describe('Determine Charge Version Years Service', () => {
 
       describe('and a charge reference without two-part tariff indicators', () => {
         it('returns flagForBilling and twoPartTariff as false', async () => {
-          const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
+          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
 
           expect(result.flagForBilling).to.equal(false)
           expect(result.twoPartTariff).to.equal(false)
@@ -53,7 +53,7 @@ describe('Determine Charge Version Years Service', () => {
         })
 
         it('returns flagForBilling and twoPartTariff as true', async () => {
-          const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
+          const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
 
           expect(result.flagForBilling).to.equal(true)
           expect(result.twoPartTariff).to.equal(true)
@@ -67,7 +67,7 @@ describe('Determine Charge Version Years Service', () => {
       })
 
       it('returns flagForBilling and twoPartTariff as false', async () => {
-        const result = await DetermineChargeVersionYearsService.go(chargeVersion.id)
+        const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
 
         expect(result.flagForBilling).to.equal(false)
         expect(result.twoPartTariff).to.equal(false)
