@@ -111,7 +111,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
   })
 
   describe('the "quarterlyReturnSubmissions" property', () => {
-    describe('when the return version start date is in scope for quarterly returns', () => {
+    describe('when the return version start date is in for quarterly returns', () => {
       beforeEach(() => {
         session.returnVersionStartDate = '2025-04-01'
       })
@@ -123,7 +123,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       })
     })
 
-    describe('when the return version start date is not in scope for quarterly returns', () => {
+    describe('when the return version start date is not for quarterly returns', () => {
       beforeEach(() => {
         session.returnVersionStartDate = '2001-01-01'
       })
