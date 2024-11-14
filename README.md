@@ -12,27 +12,16 @@ This API provides an interface for calculating charges, queuing transactions and
 
 Make sure you already have:
 
-- [Node.js v16.\*](https://nodejs.org/en/)
-- [PostgreSQL v12](https://www.postgresql.org/)
+- [Node.js v20.\*](https://nodejs.org/en/)
+- [PostgreSQL v14](https://www.postgresql.org/)
 
-## Installation
+## Running locally
 
-First clone the repository and then drop into your new local repo:
-
-```bash
-git clone https://github.com/DEFRA/water-abstraction-system.git && cd water-abstraction-system
-```
-
-Create the databases:
-
-```bash
-npm run create-db
-npm run create-test-db
-```
-
-Our preference is to run the database and API within Docker, so [install Docker](https://docs.docker.com/get-docker/) if you don't already have it.
+This is one of a number of apps that make up the Water Resource Licencing service. Because of the service's complex infrastructure there is a separate project available that will build a fully working WRLS environment, using [Docker](https://docs.docker.com/get-docker/). We recommend reaching out to the [Water Abstraction team](https://github.com/orgs/DEFRA/teams/water-abstraction) and requesting access to **wal-dev-environment** if you need to get this project up and running.
 
 ## Configuration
+
+> This is automatically setup when running locally using **wal-dev-environment**
 
 Any configuration is expected to be driven by environment variables when the service is run in production as per [12 factor app](https://12factor.net/config).
 
