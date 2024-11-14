@@ -4,6 +4,7 @@ const stylisticPlugin = require('@stylistic/eslint-plugin-js')
 const importPlugin = require('eslint-plugin-import')
 const jsdocPlugin = require('eslint-plugin-jsdoc')
 const nPlugin = require('eslint-plugin-n')
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
 const promisePlugin = require('eslint-plugin-promise')
 const globals = require('globals')
 
@@ -224,5 +225,7 @@ module.exports = [
     rules: {
       'jsdoc/require-jsdoc': 'off'
     }
-  }
+  },
+  // Any other config imports go at the top
+  eslintPluginPrettierRecommended
 ]

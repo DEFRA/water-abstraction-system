@@ -115,11 +115,6 @@ jobs:
         run: |
           npm run lint
 
-      # Next run prettier format check. No point running the tests if there is a format issue
-      - name: Run format check
-        run: |
-          npm run format:check
-
       # Next generate docs. This checks any JSDoc changes are valid
       - name: Run docs check
         run: |
