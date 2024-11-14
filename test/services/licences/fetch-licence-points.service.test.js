@@ -62,7 +62,7 @@ describe('Fetch Licence Points service', () => {
       })
     })
 
-    it('returns the matching licence, licence versions, licence version purposes, points, and sources', async () => {
+    it('returns the matching licence and its related points and source', async () => {
       const result = await FetchLicencePointsService.go(licence.id)
 
       expect(result).to.equal({
