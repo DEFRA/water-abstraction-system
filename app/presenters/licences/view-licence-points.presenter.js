@@ -1,19 +1,18 @@
 'use strict'
 
 /**
- * Formats the licence and related licenceVersionPurposePoints data for the view licence points page
+ * Formats the licence and related points data for the view licence points page
  * @module ViewLicencePointsPresenter
  */
 
 const PointModel = require('../../models/point.model.js')
 
 /**
- * Formats the licence and related licenceVersionPurposePoints data for the view licence points page
+ * Formats the licence and related points data for the view licence points page
  *
- * @param {module:LicenceModel} data - The licence and related licenceVersionPurposePoints data returned by
- * `FetchLicencePointsService`
+ * @param {object} data - The licence and related points data returned by `FetchLicencePointsService`
  *
- * @returns {object} licence and licenceVersionPurposePoints data needed by the view template
+ * @returns {object} licence and points data needed by the view template
  */
 function go (data) {
   const { licence, points } = data
