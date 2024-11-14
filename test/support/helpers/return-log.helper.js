@@ -5,9 +5,9 @@
  */
 
 const { generateLicenceRef } = require('./licence.helper.js')
-const { randomInteger } = require('../general.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const { generateLegacyId } = require('./return-requirement.helper.js')
 
 /**
  * Add a new return log
@@ -51,7 +51,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
+  const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? data.startDate : '2022-04-01'
@@ -129,7 +129,7 @@ function generateReturnLogId (
   }
 
   if (!returnReference) {
-    returnReference = randomInteger(10000000, 19999999)
+    returnReference = generateLegacyId()
   }
 
   return `v${version}:1:${licenceRef}:${returnReference}:${startDate}:${endDate}`

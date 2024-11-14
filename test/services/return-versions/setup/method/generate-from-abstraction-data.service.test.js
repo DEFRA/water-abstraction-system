@@ -55,25 +55,6 @@ describe('Return Versions Setup - Generate From Abstraction Data service', () =>
             agreementsExceptions: ['none']
           },
           {
-            points: ['bf6a409e-7882-4c5d-9e49-2ebae2936576'],
-            purposes: [{
-              alias: '',
-              description: 'Vegetable Washing',
-              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
-            }],
-            returnsCycle: 'winter-and-all-year',
-            siteDescription: 'SOUTH BOREHOLE',
-            abstractionPeriod: {
-              'end-abstraction-period-day': 31,
-              'end-abstraction-period-month': 3,
-              'start-abstraction-period-day': 1,
-              'start-abstraction-period-month': 11
-            },
-            frequencyReported: 'week',
-            frequencyCollected: 'week',
-            agreementsExceptions: ['none']
-          },
-          {
             points: ['554cd6c5-5bfe-4133-9828-2f10aa6ac5f8'],
             purposes: [{
               alias: '',
@@ -91,6 +72,25 @@ describe('Return Versions Setup - Generate From Abstraction Data service', () =>
             frequencyReported: 'month',
             frequencyCollected: 'month',
             agreementsExceptions: ['two-part-tariff']
+          },
+          {
+            points: ['bf6a409e-7882-4c5d-9e49-2ebae2936576'],
+            purposes: [{
+              alias: '',
+              description: 'Vegetable Washing',
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
+            }],
+            returnsCycle: 'winter-and-all-year',
+            siteDescription: 'SOUTH BOREHOLE',
+            abstractionPeriod: {
+              'end-abstraction-period-day': 31,
+              'end-abstraction-period-month': 3,
+              'start-abstraction-period-day': 1,
+              'start-abstraction-period-month': 11
+            },
+            frequencyReported: 'week',
+            frequencyCollected: 'week',
+            agreementsExceptions: ['none']
           }
         ])
       })
@@ -109,10 +109,10 @@ describe('Return Versions Setup - Generate From Abstraction Data service', () =>
 
         // We assert the others haven't changed because of this
         expect(result[0].frequencyCollected).to.equal('day')
-        expect(result[1].frequencyCollected).to.equal('week')
+        expect(result[2].frequencyCollected).to.equal('week')
 
-        // We then assert that the 3rd requirement has changed because of this
-        expect(result[2].frequencyCollected).to.equal('day')
+        // We then assert that the 3rd requirement (2nd after being sorted in results) has changed because of this
+        expect(result[1].frequencyCollected).to.equal('day')
       })
     })
 

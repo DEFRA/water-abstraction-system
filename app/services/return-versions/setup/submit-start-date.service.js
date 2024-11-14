@@ -65,6 +65,9 @@ async function _save (session, payload) {
     session.startDateDay = payload['start-date-day']
     session.startDateMonth = payload['start-date-month']
     session.startDateYear = payload['start-date-year']
+    session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`)
+  } else {
+    session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
   }
 
   return session.$update()

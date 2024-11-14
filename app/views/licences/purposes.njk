@@ -1,0 +1,98 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <div class="govuk-!-margin-bottom-1"> {{ item }}</div>
+  {% endfor %}
+{% endmacro %}
+
+{% macro abstractionPointsCell(abstractionPoints, purposeDescription) %}
+  {% if abstractionPoints.length > 5 %}
+    {{ govukDetails({
+      summaryText: "View your " + abstractionPoints.length + " abstraction points for " + purposeDescription | lower,
+      html: newLine(abstractionPoints) | safe,
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
+    }) }}
+  {% else %}
+    {{ newLine(abstractionPoints) | safe }}
+  {% endif %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + id + '/summary'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    {{ pageTitle }}
+  </h1>
+
+  {% for licencePurpose in licencePurposes %}
+    {# Set an easier to use index. #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set tableRows = [] %}
+
+    {# Abstraction points cell #}
+    {% set abstractionPointsRow = {
+      key: {
+        text: licencePurpose.abstractionPointsTitle,
+        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
+      },
+      value: {
+        html: abstractionPointsCell(licencePurpose.abstractionPoints, licencePurpose.purposeDescription),
+        attributes: { 'data-test': 'abstraction-points-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
+
+    {# Period of abstraction cell #}
+    {% set abstractionPeriodRow = {
+      key: {
+        text: 'Period of abstraction',
+        attributes: { 'data-test': 'abstraction-period-title-' + rowIndex }
+      },
+      value: {
+        text: licencePurpose.abstractionPeriod,
+        attributes: { 'data-test': 'abstraction-period-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
+
+    {# Abstraction amount cell #}
+    {% set abstractionAmountsRow = {
+      key: {
+        text: licencePurpose.abstractionAmountsTitle,
+        attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
+      },
+      value: {
+        text: newLine(licencePurpose.abstractionAmounts),
+        attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
+        classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(abstractionAmountsRow), tableRows) %}
+
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: licencePurpose.purposeDescription,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+        }
+      },
+      rows: tableRows
+    }) }}
+  {% endfor %}
+{% endblock %}

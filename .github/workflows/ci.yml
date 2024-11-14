@@ -134,6 +134,11 @@ jobs:
           npm test
           sed -i 's/\/home\/runner\/work\/water-abstraction-system\/water-abstraction-system\//\/github\/workspace\//g' coverage/lcov.info
 
+      - name: Code coverage
+        uses: livewing/lcov-job-summary@v1.2.0
+        with:
+          lcov: coverage/lcov.info
+
       - name: Analyze with SonarCloud
         if: github.actor != 'dependabot[bot]'
         uses: sonarsource/sonarcloud-github-action@master
