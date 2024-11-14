@@ -132,6 +132,6 @@ module.exports = {
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
-  isValidDate,
-  isQuarterlyReturnSubmissions
+  isQuarterlyReturnSubmissions,
+  isValidDate
 }
