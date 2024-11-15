@@ -34,12 +34,9 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * licences and transactions
  * @param {module:BillRunModel} reissueBillRun - The bill run that the new bills should belong to
  *
- * @returns {Promise<object>} dataToReturn Data that has been generated while reissuing the bill
- * @returns {object[]} dataToReturn.bills Array of bills
- * @returns {object[]} dataToReturn.billLicences Array of bill licences
- * @returns {object[]} dataToReturn.transactions Array of transactions
+ * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
+ * properties: `bills`, `billLicences` and `transactions`.
  */
-
 async function go (sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
