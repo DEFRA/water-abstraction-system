@@ -113,9 +113,25 @@ function _isLeapYear (year) {
   return false
 }
 
+/**
+ * Checks if the given date is a quarterly returns submission
+ *
+ * A quarterly returns submission will be true when the date provided is >= 1 April 2025
+ *
+ * @param {string} date - The date to compare against the quarterly return submissions date
+ *
+ * @returns {boolean} - Will return true if the date is for a quarterly return submission
+ *
+ * @private
+ */
+function isQuarterlyReturnSubmissions (date) {
+  return new Date(date).getTime() >= new Date('2025-04-01').getTime()
+}
+
 module.exports = {
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
+  isQuarterlyReturnSubmissions,
   isValidDate
 }

@@ -51,6 +51,8 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
       expect(result).to.equal({
         multipleUpload: false,
         noAdditionalOptions: undefined,
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         activeNavBar: 'search',
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',

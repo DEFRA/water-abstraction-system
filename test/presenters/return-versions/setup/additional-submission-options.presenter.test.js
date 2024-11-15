@@ -43,6 +43,8 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         licenceRef: '01/ABC',
         multipleUpload: false,
         noAdditionalOptions: undefined,
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         sessionId: session.id
       })
     })
@@ -78,6 +80,58 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
         expect(result.multipleUpload).to.be.false()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturns" property', () => {
+    describe('when the user has previously submitted "quarterlyReturns" for additional options or it has been set initially when the licence holder is a water company and the return version start date is a quarterly return', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = true
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.true()
+      })
+    })
+
+    describe('when the user has not previously submitted "quarterlyReturns" for additional options', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = undefined
+      })
+
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.undefined()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturnSubmissions" property', () => {
+    describe('when the return version start date is in for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2025-04-01'
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.true()
+      })
+    })
+
+    describe('when the return version start date is not for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2001-01-01'
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.false()
       })
     })
   })
