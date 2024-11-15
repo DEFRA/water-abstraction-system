@@ -25,16 +25,16 @@ function go (session) {
   const returnsRequired = journey === 'returns-required'
 
   return {
-    multipleUpload,
     licenceRef: licence.licenceRef,
+    multipleUpload,
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
+    quarterlyReturns,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
-    startDate: _startDate(session),
-    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
-    quarterlyReturns
+    startDate: _startDate(session)
   }
 }
 
