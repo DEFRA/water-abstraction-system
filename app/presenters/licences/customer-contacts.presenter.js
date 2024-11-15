@@ -14,7 +14,6 @@ const ContactModel = require('../../models/contact.model.js')
  * template
  *
  * @returns {object} The data formatted for the view template
- * @returns {object} The data formatted for the view template
  */
 function go (customerContacts) {
   return {
