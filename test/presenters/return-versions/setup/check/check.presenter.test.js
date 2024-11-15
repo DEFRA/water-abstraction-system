@@ -50,6 +50,8 @@ describe('Return Versions Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         reason: 'Major change',
         reasonLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
@@ -76,6 +78,66 @@ describe('Return Versions Setup - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.multipleUpload).to.be.false()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturns" property', () => {
+    describe('when there is a quarterlyReturns', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = true
+      })
+
+      it('returns true', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.true()
+      })
+    })
+
+    describe('when there is not a quarterlyReturns', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = false
+      })
+
+      it('returns false', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.false()
+      })
+    })
+
+    describe('when quarterlyReturns has not been set', () => {
+      it('returns undefined', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.undefined()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturnSubmissions" property', () => {
+    describe('when the return version start date is for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2025-04-01'
+      })
+
+      it('returns true', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.true()
+      })
+    })
+
+    describe('when the return version start date is not for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2001-01-01'
+      })
+
+      it('returns false', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.false()
       })
     })
   })
