@@ -81,9 +81,11 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
+      expect(result.returnVersion.quarterlyReturns).to.be.false()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
       expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
+
       // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
       expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
@@ -117,8 +119,9 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           userEmail: 'admin-internal@wrls.gov.uk'
         },
         reason: 'change-to-special-agreement',
+        quarterlyReturns: true,
         requirements: ['return requirements data'],
-        returnVersionStartDate: '2023-02-13',
+        returnVersionStartDate: '2025-04-01', // date set for quarterly returns
         startDateOptions: 'anotherStartDate'
       }
     })
@@ -132,8 +135,9 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.true()
       expect(result.returnVersion.notes).to.equal(sessionData.note.content)
+      expect(result.returnVersion.quarterlyReturns).to.be.true()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
+      expect(result.returnVersion.startDate).to.equal(new Date('2025-04-01'))
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 1 because no previous return versions exist
       expect(result.returnVersion.version).to.equal(1)
