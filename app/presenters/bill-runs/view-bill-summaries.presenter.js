@@ -7,6 +7,15 @@
 
 const { formatMoney } = require('../base.presenter.js')
 
+/**
+ * Formats summary data of bills connected to a bill run for the bill run summary page
+ *
+ * @param {object[]} billSummaries - An array of bill summary objects.
+ *
+ * @returns {object[]} An array of bill groups. Each group contains a type, a caption, and an array of bills. If there
+ * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
+ * grouped under 'other-abstractors'.
+ */
 function go (billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
