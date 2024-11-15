@@ -33,6 +33,8 @@ class BaseModel extends Model {
    * ```
    *
    * We don't want to do this in every model so set it in the `BaseModel` as Objection recommends.
+   *
+   * @returns {string[]} An array of paths
    */
   static get modelPaths () {
     return [__dirname]
