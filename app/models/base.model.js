@@ -15,6 +15,7 @@ const { db } = require('../../db/db.js')
 Model.knex(db)
 
 class BaseModel extends Model {
+  // eslint-disable-next-line jsdoc/lines-before-block
   /**
    * Array of paths to search for models used in relationships
    *
