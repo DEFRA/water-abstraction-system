@@ -355,7 +355,17 @@
               value: {
                 text: 'Yes' if multipleUpload else "No"
               }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+              text: 'Quarterly returns submissions',
+              classes: "govuk-body "
+            },
+              value: {
+              text: 'Yes' if quarterlyReturns else "No"
             }
+            }if quarterlyReturnSubmissions
           ]
         }) }}
         {% else %}
