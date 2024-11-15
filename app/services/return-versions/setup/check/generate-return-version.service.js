@@ -8,6 +8,7 @@
 const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
 const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib')
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
@@ -49,9 +50,14 @@ async function _generateReturnRequirements (sessionData) {
 async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
   const startDate = new Date(sessionData.returnVersionStartDate)
   let endDate = null
+  let quarterlyReturns = false
 
   if (nextVersionNumber > 1) {
     endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
+  }
+
+  if (isQuarterlyReturnSubmissions(sessionData.returnVersionStartDate)) {
+    quarterlyReturns = sessionData.quarterlyReturns
   }
 
   return {
@@ -60,6 +66,7 @@ async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
     licenceId: sessionData.licence.id,
     multipleUpload: sessionData.multipleUpload,
     notes: sessionData?.note?.content,
+    quarterlyReturns,
     reason: sessionData.reason,
     startDate,
     status: 'current',
