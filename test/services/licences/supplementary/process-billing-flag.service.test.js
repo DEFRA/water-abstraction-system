@@ -9,17 +9,16 @@ const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script
 const { expect } = Code
 
 // Things we need to stub
-const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
-const DetermineChargeVersionYearsService = require('../../../../app/services/licences/supplementary/determine-charge-version-years.service.js')
+const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-const DetermineReturnLogYearsService = require('../../../../app/services/licences/supplementary/determine-return-log-years.service.js')
-const DetermineWorkflowYearsService = require('../../../../app/services/licences/supplementary/determine-workflow-years.service.js')
+const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
+const DetermineWorkflowFlagsService = require('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
+const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
 
 // Thing under test
-const ProcessSupplementaryBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
+const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 describe('Process Billing Flag Service', () => {
-  let licenceData
   let notifierStub
   let payload
 
@@ -30,63 +29,82 @@ describe('Process Billing Flag Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
+    Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
   })
 
   afterEach(() => {
     Sinon.restore()
   })
-
   describe('when given a valid payload', () => {
-    before(() => {
-      licenceData = {
-        licence: {
-          id: '216c3981-2e8d-4158-96de-0c8174d54077',
-          regionId: '0b962987-a338-4bc2-843f-c11a7ffa6c7c'
-        },
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31'),
-        twoPartTariff: false,
-        flagForBilling: false
-      }
-    })
-
-    describe('with a charge version id', () => {
+    describe('with a chargeVersionId', () => {
       before(() => {
         payload = {
-          chargeVersionId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+          chargeVersionId: '77c7f37a-7587-4df5-a569-95e88276346e'
         }
       })
 
-      describe('that should not be flagged for supplementary billing', () => {
+      describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves(licenceData)
-        })
-
-        it('does not call CreateLicenceSupplementaryYearService', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
-
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
-        })
-      })
-
-      describe('that should be flagged for supplementary billing', () => {
-        beforeEach(() => {
-          licenceData.twoPartTariff = true
-          licenceData.flagForBilling = true
-
-          Sinon.stub(DetermineChargeVersionYearsService, 'go').resolves(licenceData)
+          Sinon.stub(DetermineChargeVersionFlagsService, 'go').resolves(_licenceData(true))
           Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
-        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
+        it('calls the "DetermineChargeVersionFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+          expect(DetermineChargeVersionFlagsService.go.called).to.be.true()
+        })
+
+        it('calls the "DetermineExistingBillRunYearsService" to work out the two-part tariff years to persist', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.true()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+
+      describe('that should not be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineChargeVersionFlagsService, 'go').resolves(_licenceData(false))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+        })
+
+        it('calls the "DetermineChargeVersionFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineChargeVersionFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -98,74 +116,162 @@ describe('Process Billing Flag Service', () => {
       })
     })
 
-    describe('with a return id', () => {
+    describe('with a workflowId', () => {
       before(() => {
         payload = {
-          returnId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+          workflowId: 'f582f073-f5cb-4225-8e37-e7f05dc42a36'
         }
       })
 
-      describe('that should not be flagged for supplementary billing', () => {
+      describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineReturnLogYearsService, 'go').resolves(licenceData)
-        })
-
-        it('does not call CreateLicenceSupplementaryYearService', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
-
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
-        })
-      })
-
-      describe('that should be flagged for supplementary billing', () => {
-        beforeEach(() => {
-          licenceData.twoPartTariff = true
-          licenceData.flagForBilling = true
-
-          Sinon.stub(DetermineReturnLogYearsService, 'go').resolves(licenceData)
+          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(true))
           Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
-        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
+        it('calls the "DetermineWorkflowFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+          expect(DetermineWorkflowFlagsService.go.called).to.be.true()
+        })
+
+        it('calls the "DetermineExistingBillRunYearsService" to work out the two-part tariff years to persist', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.true()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+
+      describe('that should not be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(false))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+        })
+
+        it('calls the "DetermineWorkflowFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineWorkflowFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
         })
       })
     })
 
-    describe('with a workflow id', () => {
+    describe('with a returnId', () => {
       before(() => {
         payload = {
-          workflowId: 'a9e62338-8053-4bde-9344-def69f5ca416'
+          returnId: 'd92ab68d-25e3-4cb0-8528-5968bba1b85e'
         }
       })
 
-      describe('that should not be flagged for supplementary billing', () => {
+      describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineWorkflowYearsService, 'go').resolves(licenceData)
-        })
-
-        it('does not call CreateLicenceSupplementaryYearService', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
-
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
-        })
-      })
-
-      describe('that should be flagged for supplementary billing', () => {
-        beforeEach(() => {
-          licenceData.twoPartTariff = true
-          licenceData.flagForBilling = true
-
-          Sinon.stub(DetermineWorkflowYearsService, 'go').resolves(licenceData)
+          Sinon.stub(DetermineReturnLogFlagsService, 'go').resolves(_licenceData(true))
           Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
-        it('calls CreateLicenceSupplementaryYearService to handle persisting the flagged years', async () => {
-          await ProcessSupplementaryBillingFlagService.go(payload)
+        it('calls the "DetermineReturnLogFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+          expect(DetermineReturnLogFlagsService.go.called).to.be.true()
+        })
+
+        it('calls the "DetermineExistingBillRunYearsService" to work out the two-part tariff years to persist', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.true()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+
+      describe('that should not be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineReturnLogFlagsService, 'go').resolves(_licenceData(false))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+        })
+
+        it('calls the "DetermineReturnLogFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineReturnLogFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
         })
       })
     })
@@ -178,9 +284,9 @@ describe('Process Billing Flag Service', () => {
       })
 
       it('returns without throwing an error', async () => {
-        await ProcessSupplementaryBillingFlagService.go(payload)
+        await ProcessBillingFlagService.go(payload)
 
-        expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
+        expect(PersistSupplementaryBillingFlagsService.go.called).to.be.false()
       })
     })
   })
@@ -194,7 +300,7 @@ describe('Process Billing Flag Service', () => {
     })
 
     it('handles the error', async () => {
-      await ProcessSupplementaryBillingFlagService.go(payload)
+      await ProcessBillingFlagService.go(payload)
 
       const args = notifierStub.omfg.firstCall.args
 
@@ -204,3 +310,15 @@ describe('Process Billing Flag Service', () => {
     })
   })
 })
+
+function _licenceData (twoPartTariff) {
+  return {
+    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
+    startDate: new Date('2022-04-01'),
+    endDate: null,
+    flagForPreSrocSupplementary: false,
+    flagForSrocSupplementary: true,
+    flagForTwoPartTariffSupplementary: twoPartTariff
+  }
+}
