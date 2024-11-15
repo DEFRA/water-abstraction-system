@@ -60,18 +60,23 @@ async function go (workflowId) {
     return result
   }
 
-  if (licence.sroc_charge_versions) {
-    // If the licence is not flagged for SRoC billing but has SRoC charge versions, check if it needs to be flagged
-    if (!licence.include_in_sroc_billing) {
-      result.flagForSrocSupplementary = await _flagForSrocSupplementary(licence.created_at, licence.region_id)
-    }
-  } else if (licence.include_in_sroc_billing) {
-    // If the licence is flagged for SRoC billing but has no SRoC charge versions, remove the flag as the licence cannot
-    // be included in a supplementary bill run without charge versions.
-    result.flagForSrocSupplementary = false
-  }
+  await _updateFlags(licence, result)
 
   return result
+}
+
+async function _updateFlags (licence, result) {
+  // If the licence is not already flagged for SROC billing and has SROC charge versions we check if it needs to be
+  // flagged
+  if (licence.sroc_charge_versions && !licence.include_in_sroc_billing) {
+    result.flagForSrocSupplementary = await _flagForSrocSupplementary(licence.created_at, licence.region_id)
+  }
+
+  // If the licence is flagged for SRoC billing but has no SRoC charge versions, remove the flag as the licence cannot
+  // be included in a supplementary bill run without charge versions.
+  if (!licence.sroc_charge_versions && licence.include_in_sroc_billing) {
+    result.flagForSrocSupplementary = false
+  }
 }
 
 /**

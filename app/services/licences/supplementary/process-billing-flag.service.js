@@ -60,7 +60,7 @@ async function _determineFlags (payload) {
   } else if (payload.workflowId) {
     result = await DetermineWorkflowFlagsService.go(payload.workflowId)
   } else {
-    return
+    return result
   }
 
   return result
@@ -74,7 +74,7 @@ async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) 
     return twoPartTariffBillingYears
   }
 
-  return await DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
+  return DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
 }
 
 async function _setFlagForLicence (result) {
