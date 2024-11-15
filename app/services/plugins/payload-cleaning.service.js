@@ -73,7 +73,7 @@ const Sanitizer = require('sanitizer')
  *
  * So we created this service which is used by the `PayLoadCleanerPlugin` to 'clean' incoming requests.
  *
- * * @module ObjectCleaningService
+ * @param {object} payload - The payload to clean
  *
  * @returns {object} - returns a 'clean' payload object
  */

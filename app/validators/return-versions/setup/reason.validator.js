@@ -14,7 +14,7 @@ const errorMessage = 'Select the reason for the requirements for returns'
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/reason` page
  *
- * @param {object} payload - The payload from the request to be validated
+ * @param {object} data - The payload from the request to be validated
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were

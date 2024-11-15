@@ -14,13 +14,13 @@ const Joi = require('joi')
  * Users must select one or more points linked to the licence.
  * If these requirements are not met the validation will return an error.
  *
- * @param {object} options - The options extracted from payload taken from the request to be validated
+ * @param {object} data - The options extracted from payload taken from the request to be validated
  *
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (payload) {
-  const additionalSubmissionOptions = payload.additionalSubmissionOptions
+function go (data) {
+  const additionalSubmissionOptions = data.additionalSubmissionOptions
 
   const errorMessage = 'Select additional submission options for the requirements for returns'
 

@@ -18,6 +18,7 @@ const Joi = require('joi')
  * we check to ensure it is no more than 100 characters.
  *
  * @param {object[]} purposes - The selected purposes and aliases (if entered) from the payload
+ * @param {string[]} purposeIds - The IDs of the purposes in the database
  *
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
