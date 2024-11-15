@@ -28,6 +28,7 @@ async function _fetch (id) {
       'multipleUpload',
       'notes',
       'reason',
+      'quarterlyReturns',
       'startDate',
       'status'
     ])
