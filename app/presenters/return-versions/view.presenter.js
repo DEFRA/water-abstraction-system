@@ -7,8 +7,8 @@
 
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
-const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib')
 
 /**
  * Formats return version data ready for presenting in the view return version page
