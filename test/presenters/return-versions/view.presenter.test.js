@@ -108,14 +108,6 @@ describe('Return Versions - View presenter', () => {
     })
   })
 
-  describe('the "pageTitle" property', () => {
-    it("returns the title incorporating the licence holder's name", () => {
-      const result = ViewPresenter.go(returnVersion)
-
-      expect(result.pageTitle).to.equal('Requirements for returns for Mrs A J Easley')
-    })
-  })
-
   describe('the "quarterlyReturns" property', () => {
     describe('when quarterlyReturns is true', () => {
       beforeEach(() => {
@@ -157,6 +149,14 @@ describe('Return Versions - View presenter', () => {
 
         expect(result.quarterlyReturnSubmissions).to.be.false()
       })
+    })
+  })
+
+  describe('the "pageTitle" property', () => {
+    it("returns the title incorporating the licence holder's name", () => {
+      const result = ViewPresenter.go(returnVersion)
+
+      expect(result.pageTitle).to.equal('Requirements for returns for Mrs A J Easley')
     })
   })
 
