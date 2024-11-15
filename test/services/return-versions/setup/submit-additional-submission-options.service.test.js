@@ -26,22 +26,11 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
         journey: 'returns-required',
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null,
-            modLogs: []
-          }],
-          startDate: '2022-04-01T00:00:00.000Z'
+          licenceHolder: 'Turbo Kid'
         },
-        multipleUpload: false,
-        reason: 'major-change',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate'
+        multipleUpload: false
       }
     })
 
@@ -103,6 +92,31 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       })
     })
 
+    describe('with quarterly returns selected', () => {
+      beforeEach(() => {
+        payload = {
+          additionalSubmissionOptions: 'quarterly-returns'
+        }
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.quarterlyReturns).to.be.true()
+      })
+
+      it('sets the notification message to "Updated"', async () => {
+        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+
+        const [flashType, notification] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(notification).to.equal({ title: 'Updated', text: 'Changes updated' })
+      })
+    })
+
     describe('with an invalid payload', () => {
       beforeEach(() => {
         payload = {}
@@ -117,7 +131,9 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           pageTitle: 'Select any additional submission options for the return requirements',
           licenceRef: '01/ABC',
           multipleUpload: false,
-          noAdditionalOptions: undefined
+          noAdditionalOptions: undefined,
+          quarterlyReturnSubmissions: false,
+          quarterlyReturns: undefined
         }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
       })
 
