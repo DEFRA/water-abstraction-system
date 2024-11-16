@@ -6,7 +6,7 @@
  */
 
 const FetchMonitoringStationService = require('../monitoring-stations/fetch-monitoring-station.service.js')
-const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stations/view-monitoring-stations.presenter.js')
+const ViewPresenter = require('../../presenters/monitoring-stations/view.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
@@ -19,7 +19,7 @@ const ViewMonitoringStationPresenter = require('../../presenters/monitoring-stat
 async function go (auth, monitoringStationId) {
   const fetchLicences = await FetchMonitoringStationService.go(monitoringStationId)
 
-  const pageData = ViewMonitoringStationPresenter.go(auth, fetchLicences)
+  const pageData = ViewPresenter.go(auth, fetchLicences)
 
   return {
     activeNavBar: 'search',

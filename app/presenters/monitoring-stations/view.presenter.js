@@ -2,7 +2,7 @@
 
 /**
  * Formats the monitoring station details and related licences data for the view monitoring-station  page
- * @module ViewMonitoringStationsPresenter
+ * @module ViewPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
