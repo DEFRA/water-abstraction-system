@@ -11,12 +11,12 @@ const ViewPresenter = require('../../presenters/monitoring-stations/view.present
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  *
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} monitoringStationId - The UUID for the monitoring station
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go (auth, monitoringStationId) {
+async function go (monitoringStationId, auth) {
   const fetchLicences = await FetchMonitoringStationService.go(monitoringStationId)
 
   const pageData = ViewPresenter.go(auth, fetchLicences)
