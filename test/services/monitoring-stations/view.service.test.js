@@ -77,6 +77,7 @@ describe('Monitoring Stations - View service', () => {
         pageTitle: 'BUSY POINT',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
+        restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
             abstractionPeriod: '1 April to 31 August',
@@ -84,7 +85,6 @@ describe('Monitoring Stations - View service', () => {
             alertDate: null,
             licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             licenceRef: 'AT/TEST',
-            measure: 'Flow',
             restriction: 'Reduce',
             restrictionCount: 1,
             threshold: '100 m3/s'

@@ -90,14 +90,6 @@
       %}
       {% set tableRow = (tableRow.push(abstractionPeriodCell), tableRow) %}
 
-      {% set measureCell =
-        {
-          text: restriction.measure,
-          attributes: { 'data-test': 'measure-' + rowIndex }
-        }
-      %}
-      {% set tableRow = (tableRow.push(measureCell), tableRow) %}
-
       {% set restrictionCell =
         {
           text: restriction.restriction,
@@ -143,17 +135,17 @@
             text: "Licence"
           },
           {
-            text: "Abstraction period"
+            text: "Abstraction period",
+            classes: 'govuk-!-width-one-quarter'
           },
           {
-            text: "Measure"
-          },
-          {
-            text: "Restriction type and threshold",
+            text: restrictionHeading,
+            classes: 'govuk-!-width-one-quarter',
             colspan: 2
           },
           {
             text: "Last alert type and date issued",
+            classes: 'govuk-!-width-one-quarter',
             colspan: 2
           }
         ],

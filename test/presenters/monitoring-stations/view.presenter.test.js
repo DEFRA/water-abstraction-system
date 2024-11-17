@@ -66,6 +66,7 @@ describe('Monitoring Stations - View presenter', () => {
         pageTitle: 'BUSY POINT',
         permissionToManageLinks: true,
         permissionToSendAlerts: true,
+        restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {
             abstractionPeriod: '1 April to 31 August',
@@ -73,7 +74,6 @@ describe('Monitoring Stations - View presenter', () => {
             alertDate: null,
             licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             licenceRef: 'AT/TEST',
-            measure: 'Flow',
             restriction: 'Reduce',
             restrictionCount: 1,
             threshold: '100 m3/s'
@@ -153,6 +153,44 @@ describe('Monitoring Stations - View presenter', () => {
         const result = ViewPresenter.go(monitoringStation, auth)
 
         expect(result.permissionToSendAlerts).to.equal(false)
+      })
+    })
+  })
+
+  describe('the "restrictionHeading" property', () => {
+    describe('when the monitoring station has only "flow" based licence monitoring station records', () => {
+      it('returns "Flow restriction type and threshold"', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.restrictionHeading).to.equal('Flow restriction type and threshold')
+      })
+    })
+
+    describe('when the monitoring station has only "level" based licence monitoring station records', () => {
+      beforeEach(() => {
+        monitoringStation.licenceMonitoringStations[0].measureType = 'level'
+      })
+
+      it('returns "Flow restriction type and threshold"', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.restrictionHeading).to.equal('Level restriction type and threshold')
+      })
+    })
+
+    describe('when the monitoring station has both "flow" and "level" based licence monitoring station records', () => {
+      beforeEach(() => {
+        const secondLicenceMonitoringStation = { ...monitoringStation.licenceMonitoringStations[0] }
+
+        secondLicenceMonitoringStation.id = '6f498459-8b7e-48f9-bc88-293dce414e8d'
+        secondLicenceMonitoringStation.measureType = 'level'
+        monitoringStation.licenceMonitoringStations.push(secondLicenceMonitoringStation)
+      })
+
+      it('returns "Flow and level restriction type and threshold"', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.restrictionHeading).to.equal('Flow and level restriction type and threshold')
       })
     })
   })
