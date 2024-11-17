@@ -13,6 +13,7 @@ const MonitoringStationModel = require('../../../app/models/monitoring-station.m
  * If no `data` is provided, default values will be used. These are
  *
  * - `hydrologyStationId` - [random UUID]
+ * - `label` - 'MONITOR PLACE'
  * - `createdAt` - new Date()
  * - `updatedAt` - new Date()
  *
@@ -43,6 +44,7 @@ function defaults (data = {}) {
 
   const defaults = {
     hydrologyStationId: generateUUID(),
+    label: 'MONITOR PLACE',
     // INFO: The table does not have a default for the date columns
     createdAt: timestamp,
     updatedAt: timestamp

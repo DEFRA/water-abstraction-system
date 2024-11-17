@@ -155,7 +155,7 @@ describe('Fetch Licence Summary service', () => {
           id: licenceMonitoringStation.id,
           monitoringStation: {
             id: monitoringStation.id,
-            label: 'MEVAGISSEY FIRE STATION'
+            label: 'MONITOR PLACE'
           }
         }],
         licenceDocument: {
