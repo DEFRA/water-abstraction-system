@@ -87,6 +87,12 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
           thresholdUnit: 'm3/s',
           thresholdValue: 150
         })
+        // NOTE: Final check that we are only returning non-deleted monitoring licence stations
+        await LicenceMonitoringStationHelper.add({
+          deletedAt: new Date('2024-11-17'),
+          licenceId: licenceWithoutConditions.id,
+          monitoringStationId: monitoringStation.id
+        })
       })
 
       it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {

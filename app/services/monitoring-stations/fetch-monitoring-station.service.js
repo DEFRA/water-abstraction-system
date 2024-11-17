@@ -48,6 +48,7 @@ async function _fetch (monitoringStationId) {
           'licenceMonitoringStations.thresholdValue'
         ])
         .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
+        .whereNull('licenceMonitoringStations.deletedAt')
         .orderBy([
           { column: 'licences.licenceRef', order: 'asc' },
           { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
