@@ -4,145 +4,177 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const { randomInteger } = require('../../support/general.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
+const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const PointHelper = require('../../support/helpers/point.helper.js')
 
 // Thing under test
 const FetchMonitoringStationService = require('../../../app/services/monitoring-stations/fetch-monitoring-station.service.js')
 
-describe('Fetch Monitoring Stations service', () => {
+describe('Monitoring Stations - Fetch Monitoring Station service', () => {
   let monitoringStation
-  let monitoringStationId
-  let licence
-  let licenceId
   let licenceMonitoringStationOne
   let licenceMonitoringStationTwo
   let licenceMonitoringStationThree
+  let licenceWithCondition
+  let licenceWithoutConditions
+  let licenceWithConditionPurpose
+  let licenceWithConditionPurposeCondition
 
-  describe('when a monitoring station has linked licences', () => {
-    before(async () => {
-      licence = await LicenceHelper.add()
-      licenceId = licence.id
-
-      monitoringStation = await MonitoringStationHelper.add()
-      monitoringStationId = monitoringStation.id
-
-      licenceMonitoringStationOne = await LicenceMonitoringStationHelper.add({
-        licenceId,
-        monitoringStationId,
-        createdAt: '2020-09-24 15:13:07.228'
+  describe('when a matching monitoring station exists', () => {
+    describe('and it has no tagged licences with restrictions', () => {
+      beforeEach(async () => {
+        monitoringStation = await MonitoringStationHelper.add({
+          gridReference: PointHelper.generateNationalGridReference(),
+          label: 'LONELY POINT'
+        })
       })
 
-      licenceMonitoringStationTwo = await LicenceMonitoringStationHelper.add({
-        licenceId,
-        monitoringStationId,
-        createdAt: '2022-09-24 15:13:07.228'
-      })
+      it('returns the matching monitoring station with no licence monitoring stations', async () => {
+        const result = await FetchMonitoringStationService.go(monitoringStation.id)
 
-      licenceMonitoringStationThree = await LicenceMonitoringStationHelper.add({
-        licenceId,
-        monitoringStationId,
-        createdAt: '2022-09-24 15:13:07.228',
-        statusUpdatedAt: '2024-09-24 15:13:07.228'
+        expect(result).to.equal({
+          id: monitoringStation.id,
+          gridReference: monitoringStation.gridReference,
+          label: 'LONELY POINT',
+          riverName: null,
+          stationReference: null,
+          wiskiId: null,
+          licenceMonitoringStations: []
+        })
       })
     })
 
-    it('returns the matching monitoring station, and linked licences in order of `createdAt` and `statusUpdatedAt`', async () => {
-      const result = await FetchMonitoringStationService.go(monitoringStationId)
+    describe('and it has tagged licences with restrictions', () => {
+      beforeEach(async () => {
+        monitoringStation = await MonitoringStationHelper.add({
+          gridReference: PointHelper.generateNationalGridReference(),
+          label: 'BUSY POINT'
+        })
 
-      expect(result).to.equal({
-        id: monitoringStationId,
-        gridReference: 'TL2664640047',
-        label: 'MEVAGISSEY FIRE STATION',
-        riverName: null,
-        stationReference: null,
-        wiskiId: null,
-        licenceMonitoringStations: [
-          {
-            abstractionPeriodStartDay: null,
-            abstractionPeriodStartMonth: null,
-            abstractionPeriodEndDay: null,
-            abstractionPeriodEndMonth: null,
-            alertType: 'reduce',
-            createdAt: licenceMonitoringStationThree.createdAt,
-            restrictionType: 'flow',
-            statusUpdatedAt: licenceMonitoringStationThree.statusUpdatedAt,
-            thresholdUnit: 'm3/s',
-            thresholdValue: 100,
-            licence: {
-              id: licenceId,
-              licenceRef: licence.licenceRef
+        // NOTE: We control the licence references used to assert the licence sorting is working as expected
+        licenceWithCondition = await LicenceHelper.add({ licenceRef: `02/02/02/${randomInteger(1, 9999)}` })
+        const licenceVersion = await LicenceVersionHelper.add({ licenceId: licenceWithCondition.id })
+
+        licenceWithConditionPurpose = await LicenceVersionPurposeHelper.add({ licenceVersionId: licenceVersion.id })
+        licenceWithConditionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+          licenceVersionPurposeId: licenceWithConditionPurpose.id
+        })
+        licenceMonitoringStationOne = await LicenceMonitoringStationHelper.add({
+          licenceId: licenceWithCondition.id,
+          licenceVersionPurposeConditionId: licenceWithConditionPurposeCondition.id,
+          monitoringStationId: monitoringStation.id
+        })
+
+        licenceWithoutConditions = await LicenceHelper.add({ licenceRef: `01/01/01/${randomInteger(1, 9999)}` })
+        licenceMonitoringStationTwo = await LicenceMonitoringStationHelper.add({
+          licenceId: licenceWithoutConditions.id,
+          monitoringStationId: monitoringStation.id
+        })
+        // NOTE: We set the threshold used to assert the restriction sorting is working as expected
+        licenceMonitoringStationThree = await LicenceMonitoringStationHelper.add({
+          licenceId: licenceWithoutConditions.id,
+          monitoringStationId: monitoringStation.id,
+          thresholdUnit: 'm3/s',
+          thresholdValue: 150
+        })
+      })
+
+      it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {
+        const result = await FetchMonitoringStationService.go(monitoringStation.id)
+
+        expect(result).to.equal({
+          id: monitoringStation.id,
+          gridReference: monitoringStation.gridReference,
+          label: 'BUSY POINT',
+          riverName: null,
+          stationReference: null,
+          wiskiId: null,
+          licenceMonitoringStations: [
+            {
+              id: licenceMonitoringStationThree.id,
+              abstractionPeriodEndDay: null,
+              abstractionPeriodEndMonth: null,
+              abstractionPeriodStartDay: null,
+              abstractionPeriodStartMonth: null,
+              licence: {
+                id: licenceWithoutConditions.id,
+                licenceRef: licenceWithoutConditions.licenceRef
+              },
+              licenceId: licenceWithoutConditions.id,
+              licenceVersionPurposeCondition: null,
+              measureType: 'flow',
+              restrictionType: 'reduce',
+              status: 'resume',
+              statusUpdatedAt: null,
+              thresholdUnit: 'm3/s',
+              thresholdValue: 150
+            },
+            {
+              id: licenceMonitoringStationTwo.id,
+              abstractionPeriodEndDay: null,
+              abstractionPeriodEndMonth: null,
+              abstractionPeriodStartDay: null,
+              abstractionPeriodStartMonth: null,
+              licence: {
+                id: licenceWithoutConditions.id,
+                licenceRef: licenceWithoutConditions.licenceRef
+              },
+              licenceId: licenceWithoutConditions.id,
+              licenceVersionPurposeCondition: null,
+              measureType: 'flow',
+              restrictionType: 'reduce',
+              status: 'resume',
+              statusUpdatedAt: null,
+              thresholdUnit: 'm3/s',
+              thresholdValue: 100
+            },
+            {
+              id: licenceMonitoringStationOne.id,
+              abstractionPeriodEndDay: null,
+              abstractionPeriodEndMonth: null,
+              abstractionPeriodStartDay: null,
+              abstractionPeriodStartMonth: null,
+              licence: {
+                id: licenceWithCondition.id,
+                licenceRef: licenceWithCondition.licenceRef
+              },
+              licenceId: licenceWithCondition.id,
+              licenceVersionPurposeCondition: {
+                id: licenceWithConditionPurposeCondition.id,
+                licenceVersionPurpose: {
+                  id: licenceWithConditionPurpose.id,
+                  abstractionPeriodEndDay: 31,
+                  abstractionPeriodEndMonth: 3,
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 1
+                }
+              },
+              measureType: 'flow',
+              restrictionType: 'reduce',
+              status: 'resume',
+              statusUpdatedAt: null,
+              thresholdUnit: 'm3/s',
+              thresholdValue: 100
             }
-          },
-          {
-            abstractionPeriodStartDay: null,
-            abstractionPeriodStartMonth: null,
-            abstractionPeriodEndDay: null,
-            abstractionPeriodEndMonth: null,
-            alertType: 'reduce',
-            createdAt: licenceMonitoringStationTwo.createdAt,
-            restrictionType: 'flow',
-            statusUpdatedAt: null,
-            thresholdUnit: 'm3/s',
-            thresholdValue: 100,
-            licence: {
-              id: licenceId,
-              licenceRef: licence.licenceRef
-            }
-          },
-          {
-            abstractionPeriodStartDay: null,
-            abstractionPeriodStartMonth: null,
-            abstractionPeriodEndDay: null,
-            abstractionPeriodEndMonth: null,
-            alertType: 'reduce',
-            createdAt: licenceMonitoringStationOne.createdAt,
-            restrictionType: 'flow',
-            statusUpdatedAt: null,
-            thresholdUnit: 'm3/s',
-            thresholdValue: 100,
-            licence: {
-              id: licenceId,
-              licenceRef: licence.licenceRef
-            }
-          }
-        ]
+          ]
+        })
       })
     })
   })
 
-  describe('when a monitoring station does not have linked licences', () => {
-    before(async () => {
-      licence = await LicenceHelper.add()
-      licenceId = licence.id
-
-      monitoringStation = await MonitoringStationHelper.add()
-      monitoringStationId = monitoringStation.id
-    })
-
-    it('returns undefined', async () => {
-      const result = await FetchMonitoringStationService.go(monitoringStationId)
-
-      expect(result).to.equal({
-        id: monitoringStationId,
-        gridReference: 'TL2664640047',
-        label: 'MEVAGISSEY FIRE STATION',
-        riverName: null,
-        stationReference: null,
-        wiskiId: null,
-        licenceMonitoringStations: []
-      })
-    })
-  })
-
-  describe('when a monitoring station does not exist', () => {
-    it('returns undefined', async () => {
-      const result = await FetchMonitoringStationService.go('35f92949-984c-44ba-96c6-ed4520a4f961')
+  describe('when no matching monitoring station exists', () => {
+    it('returns nothing', async () => {
+      const result = await FetchMonitoringStationService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).to.be.undefined()
     })
