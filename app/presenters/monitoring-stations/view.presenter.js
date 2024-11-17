@@ -1,136 +1,128 @@
 'use strict'
 
 /**
- * Formats the monitoring station details and related licences data for the view monitoring-station  page
+ * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../base.presenter.js')
 
 /**
- * Formats the monitoring station details and related licences data for the view monitoring-station  page
+ * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
  *
- * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {module:MonitoringStationModel[]} monitoringStation - The monitoring station and associated licences data
- * returned by `FetchMonitoringStationService`
+ * A licence can be tagged to a monitoring station more than once. A common example we see is where a licence has been
+ * tagged with a 'reduce' restriction, and then tagged again at a lower threshold with a 'stop' restriction.
  *
- * @returns {object} monitoring station and licence data needed by the view template
+ * This results in two licence monitoring station records. When we display them on the page, we want to show both
+ * records but the licence reference (and link to it) only once.
+ *
+ * We solve this by using the 'rowspan' property of the first cell that holds the licence ref and link. So, no need for
+ * grouping by licence here!
+ *
+ * The other key thing the presenter has to deal with is what abstraction period to show. Those records linked to a
+ * licence condition need to display the abstraction period on the associated licence purpose. Else the user will have
+ * add an abstraction period against the licence monitoring station record when they tagged it.
+ *
+ * @param {module:MonitoringStationModel} monitoringStation - The monitoring station and associated licence monitoring
+ * station data
+ * @param {object} auth - The auth object taken from `request.auth`
+ *
+ * @returns {object} page data needed by the view template
  */
-function go (auth, monitoringStation) {
-  const formattedLicences = _formatLicences(monitoringStation.licenceMonitoringStations)
-  const sortedLicences = _sortLicences(formattedLicences)
-  const groupedLicences = _groupLicences(sortedLicences)
+function go (monitoringStation, auth) {
+  const {
+    id: monitoringStationId,
+    gridReference,
+    label: monitoringStationName,
+    licenceMonitoringStations,
+    riverName,
+    stationReference,
+    wiskiId
+  } = monitoringStation
 
   return {
-    gridReference: monitoringStation.gridReference ?? '',
-    licences: groupedLicences,
-    monitoringStationId: monitoringStation.id,
-    monitoringStationName: monitoringStation.label,
-    pageTitle: _pageTitle(monitoringStation.riverName, monitoringStation.label),
+    gridReference,
+    monitoringStationId,
+    pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
-    stationReference: monitoringStation.stationReference ?? '',
-    wiskiId: monitoringStation.wiskiId ?? ''
+    restrictions: _restrictions(licenceMonitoringStations),
+    stationReference,
+    wiskiId
   }
 }
 
-function _alertedUpdatedAt (licenceDetails) {
-  if (licenceDetails.statusUpdatedAt) {
-    return formatLongDate(licenceDetails.statusUpdatedAt)
+function _abstractionPeriod (licenceMonitoringStation) {
+  const {
+    abstractionPeriodEndDay: stationEndDay,
+    abstractionPeriodEndMonth: stationEndMonth,
+    abstractionPeriodStartDay: stationStartDay,
+    abstractionPeriodStartMonth: stationStartMonth,
+    licenceVersionPurposeCondition
+  } = licenceMonitoringStation
+
+  if (licenceVersionPurposeCondition) {
+    const {
+      abstractionPeriodEndDay: purposeEndDay,
+      abstractionPeriodEndMonth: purposeEndMonth,
+      abstractionPeriodStartDay: purposeStartDay,
+      abstractionPeriodStartMonth: purposeStartMonth
+    } = licenceVersionPurposeCondition.licenceVersionPurpose
+
+    return formatAbstractionPeriod(purposeStartDay, purposeStartMonth, purposeEndDay, purposeEndMonth)
   }
 
-  return formatLongDate(licenceDetails.createdAt)
+  return formatAbstractionPeriod(stationStartDay, stationStartMonth, stationEndDay, stationEndMonth)
 }
 
-function _alertType (licence) {
-  if (licence.alertType === 'stop') {
-    return 'Stop'
+function _alert (status, statusUpdatedAt) {
+  if (!statusUpdatedAt) {
+    return null
   }
 
-  if (licence.alertType === 'reduce') {
-    return 'Reduce'
-  }
-
-  return 'Stop or reduce'
+  return sentenceCase(status)
 }
 
-function _formatLicenceDetailsAbstractionPeriod (licenceDetails) {
-  return formatAbstractionPeriod(
-    licenceDetails.abstractionPeriodStartDay,
-    licenceDetails.abstractionPeriodStartMonth,
-    licenceDetails.abstractionPeriodEndDay,
-    licenceDetails.abstractionPeriodEndMonth
-  )
-}
+function _restrictions (licenceMonitoringStations) {
+  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+    const {
+      licence,
+      measureType,
+      restrictionType,
+      status,
+      statusUpdatedAt,
+      thresholdUnit,
+      thresholdValue
+    } = licenceMonitoringStation
 
-function _formatLicences (licenceDetails) {
-  return licenceDetails.map((licenceDetail) => {
     return {
-      abstractionPeriod: _formatLicenceDetailsAbstractionPeriod(licenceDetail),
-      alertType: _alertType(licenceDetail),
-      alertUpdatedAt: _alertedUpdatedAt(licenceDetail),
-      createdAt: licenceDetail.createdAt,
-      lastUpdatedAt: licenceDetail.statusUpdatedAt,
-      id: licenceDetail.licence.id,
-      licenceRef: licenceDetail.licence.licenceRef,
-      restrictionType: licenceDetail.restrictionType === 'flow' ? 'Flow' : 'Level',
-      threshold: `${licenceDetail.thresholdValue} ${licenceDetail.thresholdUnit}`
+      abstractionPeriod: _abstractionPeriod(licenceMonitoringStation),
+      alert: _alert(status, statusUpdatedAt),
+      alertDate: statusUpdatedAt ? formatLongDate(statusUpdatedAt) : null,
+      licenceId: licence.id,
+      licenceRef: licence.licenceRef,
+      measure: sentenceCase(measureType),
+      restriction: _restriction(restrictionType),
+      restrictionCount: _restrictionCount(licence.id, licenceMonitoringStations),
+      threshold: `${thresholdValue} ${thresholdUnit}`
     }
   })
 }
 
-/**
- * This function groups licence objects by their unique `id`.
- *
- * It takes the array of licences and uses the `reduce` method to accumulate an object, where each key is a licence
- * `id`. For each unique `id`, a new object is created with `licenceId`, `licenceRef`, and an empty `linkages` array.
- * The current licence object is then pushed into the `linkages` array of the corresponding group. Finally, the grouped
- * licences are returned as an array of these grouped objects.
- *
- * ```javascript
- * [
- *   {
- *     licenceId: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
- *     licenceRef: '01/0157',
- *     linkages: [
- *       {
- *         alertType: 'Reduce',
- *         abstractionPeriod: '1 April to 31 August',
- *         alertUpdatedAt: '26 September 2024',
- *         createdAt: 2024-09-26T09:34:54.152Z,
- *         lastUpdatedAt: null,
- *         id: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
- *         licenceRef: '01/0157',
- *         restrictionType: 'Level',
- *         threshold: '700 mAOD'
- *       }
- *     ]
- *   }
- * ]
- * ```
- *
- * @param {object[]} licences - The sorted licences returned by the _sortLicences() function
- *
- * @returns {object[]} grouped licences array where each item is an object with licence details and linked licences
- */
-function _groupLicences (licences) {
-  const groupedLicences = licences.reduce((grouped, current) => {
-    const { id, licenceRef } = current
+function _restriction (restrictionType) {
+  if (restrictionType === 'stop_or_reduce') {
+    return 'Stop or reduce'
+  }
 
-    if (!grouped[id]) {
-      grouped[id] = {
-        id,
-        licenceRef,
-        linkages: []
-      }
-    }
+  return sentenceCase(restrictionType)
+}
 
-    grouped[id].linkages.push(current)
+function _restrictionCount (licenceId, licenceMonitoringStations) {
+  const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return licenceMonitoringStation.licenceId === licenceId
+  })
 
-    return grouped
-  }, {})
-
-  return Object.values(groupedLicences)
+  return count.length
 }
 
 function _pageTitle (riverName, stationName) {
@@ -139,20 +131,6 @@ function _pageTitle (riverName, stationName) {
   }
 
   return stationName
-}
-
-function _sortLicences (licences) {
-  // NOTE: Sorting the licences in order of `licenceRef` proved difficult to complete as licences are fetched by those
-  // linked to a licence monitoring station, where the licence reference is stored inside the nested licence object.
-  // However, by extracting and comparing `licenceRef` directly within the sort function, we can order the licences
-  // alphabetically. The sort logic below compares the `licenceRef` of each licence and orders them in ascending order.
-  return licences.sort((licenceA, licenceB) => {
-    if (licenceA.licenceRef !== licenceB.licenceRef) {
-      return licenceA.licenceRef < licenceB.licenceRef ? -1 : 1
-    }
-
-    return 0
-  })
 }
 
 module.exports = {
