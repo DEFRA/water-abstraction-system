@@ -6,8 +6,11 @@
  */
 
 const FetchLicences = require('./fetch-licences.service.js')
-const ProcessImportLicences = require('./process-import-licences.service.js')
+const ProcessImportLicence = require('./process-import-licence.service.js')
+const config = require('../../../../config/jobs.config.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+
+const { batchSize } = config.importLicence
 
 /**
  * Processes NALD licences due for import on a nightly basis
@@ -40,12 +43,29 @@ async function go () {
 
     const licences = await FetchLicences.go()
 
-    ProcessImportLicences.go(licences)
+    await _processLicences(licences)
 
     calculateAndLogTimeTaken(startTime, `Importing ${licences.length} licences from NALD`)
   } catch (error) {
     global.GlobalNotifier.omfg('Importing Licence job failed', null, error)
   }
+}
+
+async function _processLicences (licences) {
+  for (let i = 0; i < licences.length; i += batchSize) {
+    const batch = licences.slice(i, i + batchSize)
+
+    await _processBatch(batch)
+  }
+}
+
+async function _processBatch (batch) {
+  await Promise.all(
+    batch.map(async (
+      licence) => {
+      await ProcessImportLicence.go(licence)
+    })
+  )
 }
 
 module.exports = {
