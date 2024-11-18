@@ -25,13 +25,9 @@ function earliestDate (dates) {
       return new Date(date)
     })
 
-  _dates.map((date) => {
-    return date.getTime()
-  })
+  const _earliestDate = new Date(Math.min(..._dates))
 
-  const earliestDate = new Date(Math.min(..._dates))
-
-  return earliestDate
+  return _earliestDate
 }
 
 /**
