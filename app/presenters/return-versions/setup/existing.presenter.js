@@ -19,6 +19,7 @@ function go (session) {
   const { id: sessionId, licence } = session
 
   return {
+    backLink: `/system/return-versions/setup/${sessionId}/method`,
     existingOptions: _existingOptions(licence.returnVersions),
     licenceRef: licence.licenceRef,
     sessionId
