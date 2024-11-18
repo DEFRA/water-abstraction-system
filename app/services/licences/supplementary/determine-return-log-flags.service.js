@@ -45,11 +45,11 @@ async function go (returnLogId) {
     flagForTwoPartTariffSupplementary: twoPartTariff
   }
 
-  if (!result.flagForPreSrocSupplementary && startDate < SROC_START_DATE) {
+  if (startDate < SROC_START_DATE) {
     result.flagForPreSrocSupplementary = true
   }
 
-  if (!result.flagForSrocSupplementary && !twoPartTariff && endDate > SROC_START_DATE) {
+  if (!twoPartTariff && endDate > SROC_START_DATE) {
     result.flagForSrocSupplementary = true
   }
 
