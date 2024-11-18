@@ -138,4 +138,18 @@ describe('Dates lib', () => {
       expect(result).to.be.false()
     })
   })
+
+  describe('earliestDate', () => {
+    it('should return the earliest date of 2025-04-01, 2025-03-31, 2025-03-30', () => {
+      const result = DateLib.earliestDate(['2025-04-01', '2025-03-31', '2025-03-30'])
+
+      expect(result).to.equal(new Date('2025-03-30'))
+    })
+
+    it('should be able to handle null valuse and still return the earliest date', () => {
+      const result = DateLib.earliestDate(['2025-04-01', null, '2025-03-31', '2025-03-30'])
+
+      expect(result).to.equal(new Date('2025-03-30'))
+    })
+  })
 })

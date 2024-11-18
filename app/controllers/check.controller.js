@@ -5,7 +5,7 @@
  * @module CheckController
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
+const ProcessLicenceEndingService = require('../services/import/process-licence-ending.service.js')
 const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
@@ -14,7 +14,7 @@ const NO_CONTENT_STATUS_CODE = 204
  * A test end point for the licence supplementary billing flags process
  *
  * This endpoint takes a licenceId and an expired, lapsed and revoked date. It passes this onto the
- * `DetermineSupplementaryBillingFlagsService` to test if it correctly flags the licence for supplementary billing. This
+ * `ProcessLicenceEndingService` to test if it correctly flags the licence for supplementary billing. This
  * normally happens during the licence import process.
  *
  * @param request - the hapi request object
@@ -31,7 +31,7 @@ async function flagForBilling (request, h) {
     revokedDate: revokedDate ? new Date(revokedDate) : null
   }
 
-  await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+  await ProcessLicenceEndingService.go(transformedLicence, licenceId)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }

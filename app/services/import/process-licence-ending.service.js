@@ -4,18 +4,19 @@
  * Determines if an imported licence has a new end date
  * @module DetermineSupplementaryBillingFlagsService
  */
-
+const { earliestDate } = require('../../lib/dates.lib.js')
 const LicenceModel = require('../../models/licence.model.js')
 const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
+const ProcessLicenceReturnLogsService = require('../jobs/return-logs/process-licence-return-logs.service.js')
 
 /**
  * Determines if an imported licence has a new end date.
  *
  * This service is responsible for determining whether a licence imported has a new end day and therefore should be
- * flagged for supplementary billing.
+ * flagged for supplementary billing and have new return logs generated.
  *
  * It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS licence and the imported
- * data, and if there is a change in the dates allows the licence to go on to determining the flags.
+ * data, and if there is a change in the dates goes on to determine the flags and generate the return logs.
  *
  * @param {object} importedLicence - The imported licence
  * @param {string} licenceId - The UUID of the licence being updated by the import
@@ -30,7 +31,12 @@ async function go (importedLicence, licenceId) {
       return
     }
 
-    return ProcessImportedLicenceService.go(importedLicence, licenceId)
+    await ProcessImportedLicenceService.go(importedLicence, licenceId)
+
+    const { expiredDate, lapsedDate, revokedDate } = importedLicence
+    const _earliestDate = earliestDate([expiredDate, lapsedDate, revokedDate])
+
+    await ProcessLicenceReturnLogsService.go(importedLicence.licenceRef, _earliestDate)
   } catch (error) {
     global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }

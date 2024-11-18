@@ -10,6 +10,31 @@ const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
 
 /**
+ * Given a return version and return cycle end date, return the earliest date as a string in the ISO format.
+ *
+ * @param {Array} returnVersion - The list of dates to check.
+ * @returns {String} - The earliest date as a string in the ISO format.
+ * @private
+ */
+function earliestDate (dates) {
+  const _dates = [...dates]
+    .filter((date) => {
+      return date
+    })
+    .map((date) => {
+      return new Date(date)
+    })
+
+  _dates.map((date) => {
+    return date.getTime()
+  })
+
+  const earliestDate = new Date(Math.min(..._dates))
+
+  return earliestDate
+}
+
+/**
  * Formats a string assumed to be a date in the format 01/01/2001
  *
  * Formats to iso format 2001-01-01
@@ -129,6 +154,7 @@ function isQuarterlyReturnSubmissions (date) {
 }
 
 module.exports = {
+  earliestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
