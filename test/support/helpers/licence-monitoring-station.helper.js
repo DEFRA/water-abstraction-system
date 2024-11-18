@@ -8,13 +8,13 @@ const { generateUUID, timestampForPostgres } = require('../../../app/lib/general
 const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
 
 /**
- * Add a new licence-monitoring-station entity
+ * Add a new licence monitoring station
  *
  * If no `data` is provided, default values will be used. These are
  *
  * - `monitoringStationId` - [random UUID]
  * - `licenceId` - [random UUID]
- * - `restrictionType` - flow
+ * - `measureType` - flow
  * - `source` - wrls
  * - `thresholdUnit` - m3/s
  * - `thresholdValue` - 100
@@ -47,12 +47,13 @@ function defaults (data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
-    monitoringStationId: generateUUID(),
     licenceId: generateUUID(),
-    restrictionType: 'flow',
+    measureType: 'flow',
+    monitoringStationId: generateUUID(),
     source: 'wrls',
     thresholdUnit: 'm3/s',
     thresholdValue: 100,
+    // INFO: The table does not have a default for the date columns
     createdAt: timestamp,
     updatedAt: timestamp
   }
