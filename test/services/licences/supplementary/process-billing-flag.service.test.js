@@ -283,30 +283,15 @@ describe('Process Billing Flag Service', () => {
         payload = {}
       })
 
-      it('returns without throwing an error', async () => {
+      it('throws an error', async () => {
         await ProcessBillingFlagService.go(payload)
 
-        expect(PersistSupplementaryBillingFlagsService.go.called).to.be.false()
+        const args = notifierStub.omfg.firstCall.args
+
+        expect(args[0]).to.equal('Supplementary Billing Flag failed')
+        expect(args[1]).to.equal(payload)
+        expect(args[2]).to.be.an.error()
       })
-    })
-  })
-
-  describe('when there is an error', () => {
-    beforeEach(() => {
-      // To make the service fail, we have passed it a charge version that doesn't exist in the db
-      payload = {
-        chargeVersionId: '5db0060a-69ae-4312-a363-9cb580d19d92'
-      }
-    })
-
-    it('handles the error', async () => {
-      await ProcessBillingFlagService.go(payload)
-
-      const args = notifierStub.omfg.firstCall.args
-
-      expect(args[0]).to.equal('Supplementary Billing Flag failed')
-      expect(args[1]).to.equal(payload)
-      expect(args[2]).to.be.an.error()
     })
   })
 })

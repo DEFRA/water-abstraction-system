@@ -38,10 +38,6 @@ async function go (payload) {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)
 
-    if (!result) {
-      return
-    }
-
     await _setFlagForLicence(result)
 
     calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId: result.licenceId })
@@ -51,19 +47,15 @@ async function go (payload) {
 }
 
 async function _determineFlags (payload) {
-  let result
-
   if (payload.chargeVersionId) {
-    result = await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+    return await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   } else if (payload.returnId) {
-    result = await DetermineReturnLogFlagsService.go(payload.returnId)
+    return await DetermineReturnLogFlagsService.go(payload.returnId)
   } else if (payload.workflowId) {
-    result = await DetermineWorkflowFlagsService.go(payload.workflowId)
+    return await DetermineWorkflowFlagsService.go(payload.workflowId)
   } else {
-    return result
+    throw new Error('Invalid payload for process billing flags service')
   }
-
-  return result
 }
 
 async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) {
