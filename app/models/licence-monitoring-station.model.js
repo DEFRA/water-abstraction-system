@@ -31,6 +31,14 @@ class LicenceMonitoringStationModel extends BaseModel {
           from: 'licenceMonitoringStations.licenceId',
           to: 'licences.id'
         }
+      },
+      licenceVersionPurposeCondition: {
+        relation: Model.HasOneRelation,
+        modelClass: 'licence-version-purpose-condition.model',
+        join: {
+          from: 'licenceMonitoringStations.licenceVersionPurposeConditionId',
+          to: 'licenceVersionPurposeConditions.id'
+        }
       }
     }
   }

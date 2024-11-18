@@ -74,6 +74,8 @@ describe('Return Versions Setup - Check service', () => {
         },
         notification: undefined,
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         reason: 'Major change',
         reasonLink: `/system/return-versions/setup/${session.id}/reason`,
         requirements: [],

@@ -41,6 +41,7 @@ describe('Return Versions - Fetch Return Version service', () => {
         id: returnVersion.id,
         multipleUpload: false,
         notes: null,
+        quarterlyReturns: false,
         reason: 'new-licence',
         startDate: new Date('2022-04-01'),
         status: 'current',
