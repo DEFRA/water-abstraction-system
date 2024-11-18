@@ -84,7 +84,7 @@ async function _updateFlags (licence, result) {
  *
  * Searches for any annual bill runs that have been created since the workflow records `createdAt` date. Uses the
  * licence region, batch type and bill run status as criteria.
-
+ *
  * Flags the licence for supplementary billing if any eligible bill runs are found.
  *
  * @private
