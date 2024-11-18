@@ -44,11 +44,11 @@ async function go (chargeVersionId) {
     flagForTwoPartTariffSupplementary: twoPartTariff
   }
 
-  if (!result.flagForPreSrocSupplementary && scheme === 'alcs') {
+  if (scheme === 'alcs') {
     result.flagForPreSrocSupplementary = true
   }
 
-  if (!result.flagForSrocSupplementary && !twoPartTariff && scheme === 'sroc') {
+  if (!twoPartTariff && scheme === 'sroc') {
     result.flagForSrocSupplementary = true
   }
 
