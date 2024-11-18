@@ -36,15 +36,15 @@ describe('Return Versions - View service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        additionalSubmissionOptions: {
-          multipleUpload: 'No'
-        },
         createdBy: 'carol.shaw@atari.com',
         createdDate: '5 April 2022',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
         licenceRef: '01/123',
+        multipleUpload: 'No',
         notes: ['A special note'],
         pageTitle: 'Requirements for returns for Mrs A J Easley',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: 'No',
         reason: 'New licence',
         requirements: [
           {
