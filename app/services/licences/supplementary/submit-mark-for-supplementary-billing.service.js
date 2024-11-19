@@ -3,7 +3,7 @@
 /**
  * Orchestrates flagging a licence for pre sroc and sroc supplementary billing
  * @module SubmitMarkForSupplementaryBillingService
-*/
+ */
 
 const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')

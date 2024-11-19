@@ -50,9 +50,9 @@ describe('Mark For Supplementary Billing presenter', () => {
           licenceId: 'test-id',
           licenceRef: '01/Test',
           financialYears: [
-            { text: '2023 to 2024', value: 2024 },
-            { text: '2022 to 2023', value: 2023 },
-            { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+            { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
+            { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
+            { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' }, attributes: { 'data-test': 'pre-sroc-years' } }
           ]
         })
       })
@@ -75,10 +75,15 @@ describe('Mark For Supplementary Billing presenter', () => {
           licenceId: 'test-id',
           licenceRef: '01/Test',
           financialYears: [
-            { text: '2024 to 2025', value: 2025 },
-            { text: '2023 to 2024', value: 2024 },
-            { text: '2022 to 2023', value: 2023 },
-            { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+            { text: '2024 to 2025', value: 2025, attributes: { 'data-test': 'sroc-years-2025' } },
+            { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
+            { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
+            {
+              text: 'Before 2022',
+              value: 'preSroc',
+              hint: { text: 'Old charge scheme' },
+              attributes: { 'data-test': 'pre-sroc-years' }
+            }
           ]
         })
       })
@@ -101,12 +106,12 @@ describe('Mark For Supplementary Billing presenter', () => {
           licenceId: 'test-id',
           licenceRef: '01/Test',
           financialYears: [
-            { text: '2027 to 2028', value: 2028 },
-            { text: '2026 to 2027', value: 2027 },
-            { text: '2025 to 2026', value: 2026 },
-            { text: '2024 to 2025', value: 2025 },
-            { text: '2023 to 2024', value: 2024 },
-            { text: '2022 to 2023', value: 2023 }
+            { text: '2027 to 2028', value: 2028, attributes: { 'data-test': 'sroc-years-2028' } },
+            { text: '2026 to 2027', value: 2027, attributes: { 'data-test': 'sroc-years-2027' } },
+            { text: '2025 to 2026', value: 2026, attributes: { 'data-test': 'sroc-years-2026' } },
+            { text: '2024 to 2025', value: 2025, attributes: { 'data-test': 'sroc-years-2025' } },
+            { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
+            { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } }
           ]
         })
       })
