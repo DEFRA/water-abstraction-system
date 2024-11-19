@@ -8,7 +8,7 @@
 const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
 
 /**
- * This service is intended to be used by our `AuthPlugin` to authenticate and authorise users.
+ * Used by `AuthPlugin` to authenticate and authorise users
  *
  * We take a user id and look it up in the `idm` schema using `FetchUserRolesAndGroupsService`. This gives us a user
  * object along with arrays of role objects and group objects that the user has been assigned to.
@@ -20,17 +20,29 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  *
  * Finally, we return a 'permission' object. This is used to determine which nav bar menu items a user sees.
  *
+ * ```javascript
+ * {
+ *   // whether the user was found
+ *   isValid: true,
+ *   credentials: {
+ *     // Object representing the user
+ *     user: { name: 'User' },
+ *     // Groups the user is assigned to
+ *     groups: [{ group: 'Group' }],
+ *     // Roles the user has
+ *     roles: [{ role: 'Role' }],
+ *     // The names of the roles the user has, for route authorisation purposes
+ *     scope: ['billing', 'charge_version_workflow_editor'],
+ *     // Object with each top level permission as a key and true or false whether the user has authorisation to access
+ *     // the area
+ *     permission: { abstractionReform: false, billRuns: true, manage: true }
+ *   }
+ * }
+ * ```
+ *
  * @param {number} userId - The user id to be authenticated
  *
- * @returns {object} response
- * @returns {boolean} response.isValid Indicates whether the user was found
- * @returns {object} response.credentials User credentials found in the IDM
- * @returns {UserModel} response.credentials.user Object representing the user
- * @returns {RoleModel[]} response.credentials.roles Objects representing the roles the user has
- * @returns {GroupModel[]} response.credentials.groups Objects representing the groups the user is assigned to
- * @returns {string[]} response.credentials.scope The names of the roles the user has, for route authorisation purposes
- * @returns {object} response.credentials.permission Object with each top level permission as a key and true or false
- * whether the user has authorisation to access the area
+ * @returns {object} the permission object
  */
 async function go (userId) {
   const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)

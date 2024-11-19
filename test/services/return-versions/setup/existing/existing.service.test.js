@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ExistingService = require('../../../../app/services/return-versions/setup/existing.service.js')
+const ExistingService = require('../../../../../app/services/return-versions/setup/existing/existing.service.js')
 
 describe('Return Versions Setup - Existing service', () => {
   let session

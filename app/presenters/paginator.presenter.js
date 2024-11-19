@@ -21,7 +21,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * The pagination component is the thing seen at the bottom of pages which have to display dynamic results, for example,
  * search results or all bill runs. For example,
  *
- *  `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
+ * `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
  *
  * The first step is to take the number of records and divide them by our page size config (defaults to 25) to determine
  * how many pages are needed. If only 1 page is required (`numberOfRecords` is less then or equal to 25) no pagination
@@ -58,7 +58,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * This applies for any scenario where the number of pages is 7 or less. In this case we simply iterate from 1 up to the
  * number of pages creating a page item for each one. No ellipses are used.
  *
- *  `[1] 2 3 4 5 6 7 Next -->`
+ * `[1] 2 3 4 5 6 7 Next -->`
  *
  * ### Complex
  *

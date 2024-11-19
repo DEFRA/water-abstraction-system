@@ -13,12 +13,12 @@ const Joi = require('joi')
  * When setting up a requirement users must specify points for the return requirement. Users must select one or more
  * points linked to the licence. If these requirements are not met the validation will return an error.
  *
- * @param {object} points - The selected points (if entered) from the payload
+ * @param {object} payload - The selected points (if entered) from the payload
  *
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (points) {
+function go (payload) {
   const errorMessage = 'Select any points for the requirements for returns'
 
   const schema = Joi.object({
@@ -32,7 +32,7 @@ function go (points) {
     'string.guid': errorMessage
   })
 
-  return schema.validate({ points }, { abortEarly: false })
+  return schema.validate({ points: payload }, { abortEarly: false })
 }
 
 module.exports = {
