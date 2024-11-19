@@ -8,10 +8,10 @@ const { describe, it, before } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const RequirementsForReturnsSeeder = require('../../../support/seeders/requirements-for-returns.seeder.js')
+const RequirementsForReturnsSeeder = require('../../../../support/seeders/requirements-for-returns.seeder.js')
 
 // Thing under test
-const FetchExistingRequirementsService = require('../../../../app/services/return-versions/setup/fetch-existing-requirements.service.js')
+const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
 
 describe('Return Versions Setup - Fetch Existing Requirements service', () => {
   let returnVersion

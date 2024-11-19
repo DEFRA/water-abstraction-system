@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchExistingRequirementsService = require('../../../../app/services/return-versions/setup/fetch-existing-requirements.service.js')
+const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
 
 // Thing under test
-const GenerateFromExistingRequirementsService = require('../../../../app/services/return-versions/setup/generate-from-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
 
 describe('Return Versions Setup - Generate From Existing Requirements service', () => {
   let returnVersion

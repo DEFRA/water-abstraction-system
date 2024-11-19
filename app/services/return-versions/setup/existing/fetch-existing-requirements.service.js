@@ -5,7 +5,7 @@
  * @module FetchExistingRequirementsService
  */
 
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
  * Fetches an existing return version and its return requirements in order for a new one to be copied from it
