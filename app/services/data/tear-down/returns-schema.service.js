@@ -7,6 +7,11 @@
 
 const { db } = require('../../../../db/db.js')
 
+/**
+ * Removes all data created for acceptance tests from the returns schema
+ *
+ * @returns {Promise<object>}
+ */
 async function go () {
   return _deleteAllTestData()
 }

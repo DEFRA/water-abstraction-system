@@ -17,6 +17,7 @@ const { db } = require('../../../../db/db.js')
  * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
  * @param {object} transformedCompanies - An object representing a valid WRLS Company.
  *
+ * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
 async function go (trx, updatedAt, transformedCompanies) {
   return _persistCompanies(trx, updatedAt, transformedCompanies)

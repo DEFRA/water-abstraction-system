@@ -63,6 +63,15 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generates a NALD pattern external ID (e.g. 9:10001)
+ *
+ * The pattern is: [region code]:[NALD ID]
+ *
+ * @param {number} [regionCode] - The region code to use, if not provided a random one is used
+ *
+ * @returns {string} The generated external ID
+ */
 function generateRegionNaldPatternExternalId (regionCode = null) {
   const regionCodeToUse = regionCode ?? randomInteger(1, 9)
 
