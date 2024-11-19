@@ -49,6 +49,7 @@ describe('Generate return logs service', () => {
 
   describe('when provided an all year return cycle and a return requirement', () => {
     before(async () => {
+      summer = false
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
@@ -129,6 +130,7 @@ describe('Generate return logs service', () => {
 
   describe('when provided an all year return cycle, there is an expired date and one return requirement', () => {
     before(async () => {
+      summer = false
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)
@@ -210,6 +212,7 @@ describe('Generate return logs service', () => {
 
   describe('when provided an all year return cycle, there is an expired date after the end of the cycle', () => {
     before(async () => {
+      summer = false
       returnCycle = await ReturnCycleHelper.select(0, summer)
       startDate = formatDateObjectToISO(returnCycle.startDate)
       endDate = formatDateObjectToISO(returnCycle.endDate)

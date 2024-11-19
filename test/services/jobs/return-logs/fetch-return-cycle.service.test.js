@@ -14,7 +14,7 @@ const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.
 // Thing under test
 const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
 
-describe.skip('Fetch return cycle service', () => {
+describe('Fetch return cycle service', () => {
   const today = new Date()
   const year = today.getFullYear()
 

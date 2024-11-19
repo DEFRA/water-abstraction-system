@@ -12,7 +12,6 @@ const { expect } = Code
 const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
 const { cycleDueDate, cycleEndDate, cycleStartDate } = require('../../../../app/lib/return-cycle-dates.lib.js')
 const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
-const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
@@ -24,6 +23,9 @@ const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
 const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+
+// Things we need to stub
+const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
@@ -45,6 +47,8 @@ describe('Process return logs service', () => {
   let licence
   let licence2
   let notifierStub
+  let point
+  let point2
   let primaryPurpose
   let purpose
   let region
@@ -125,7 +129,8 @@ describe('Process return logs service', () => {
         regionId: region.naldRegionId,
         returnVersionId: returnVersion2.id
       })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      point = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      point2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
@@ -143,6 +148,113 @@ describe('Process return logs service', () => {
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
       global.GlobalNotifier = notifierStub
+      Sinon.stub(GenerateReturnLogsService, 'go')
+        .onFirstCall().resolves({
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: allYearDueDate,
+          endDate: allYearEndDate,
+          id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`,
+          licenceRef: licence.licenceRef,
+          metadata: {
+            description: 'BOREHOLE AT AVALON',
+            isCurrent: true,
+            isFinal: false,
+            isSummer: false,
+            isTwoPartTariff: false,
+            isUpload: false,
+            nald: {
+              regionCode: region.naldRegionId,
+              areaCode: licence.regions.historicalAreaCode,
+              formatId: returnRequirement.legacyId,
+              periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+              periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+              periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+              periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+            },
+            points: [{
+              name: point.description,
+              ngr1: point.ngr1,
+              ngr2: point.ngr2,
+              ngr3: point.ngr3,
+              ngr4: point.ngr4
+            }],
+            purposes: [{
+              primary: {
+                code: primaryPurpose.legacyId,
+                description: primaryPurpose.description
+              },
+              secondary: {
+                code: secondaryPurpose.legacyId,
+                description: secondaryPurpose.description
+              },
+              tertiary: {
+                code: purpose.legacyId,
+                description: purpose.description
+              }
+            }],
+            version: 1
+          },
+          returnCycleId: allYearReturnCycle.id,
+          returnsFrequency: 'day',
+          returnReference: returnRequirement.legacyId.toString(),
+          startDate: allYearStartDate,
+          status: 'due',
+          source: 'WRLS'
+        })
+        .onSecondCall().resolves({
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: allYearDueDate,
+          endDate: allYearEndDate,
+          id: `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`,
+          licenceRef: licence2.licenceRef,
+          metadata: {
+            description: 'BOREHOLE AT AVALON',
+            isCurrent: true,
+            isFinal: false,
+            isSummer: false,
+            isTwoPartTariff: false,
+            isUpload: false,
+            nald: {
+              regionCode: region.naldRegionId,
+              areaCode: licence2.regions.historicalAreaCode,
+              formatId: returnRequirement2.legacyId,
+              periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
+              periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
+              periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
+              periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
+            },
+            points: [{
+              name: point2.description,
+              ngr1: point2.ngr1,
+              ngr2: point2.ngr2,
+              ngr3: point2.ngr3,
+              ngr4: point2.ngr4
+            }],
+            purposes: [{
+              primary: {
+                code: primaryPurpose.legacyId,
+                description: primaryPurpose.description
+              },
+              secondary: {
+                code: secondaryPurpose.legacyId,
+                description: secondaryPurpose.description
+              },
+              tertiary: {
+                code: purpose.legacyId,
+                description: purpose.description
+              }
+            }],
+            version: 1
+          },
+          returnCycleId: allYearReturnCycle.id,
+          returnsFrequency: 'day',
+          returnReference: returnRequirement2.legacyId.toString(),
+          startDate: allYearStartDate,
+          status: 'due',
+          source: 'WRLS'
+        })
     })
 
     it('can successfully save a return log in the database', async () => {
@@ -289,7 +401,8 @@ describe('Process return logs service', () => {
         returnVersionId: returnVersion2.id,
         summer: true
       })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      point = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
+      point2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
       primaryPurpose = PrimaryPurposeHelper.select()
       purpose = PurposeHelper.select()
       secondaryPurpose = SecondaryPurposeHelper.select()
@@ -307,6 +420,113 @@ describe('Process return logs service', () => {
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
       global.GlobalNotifier = notifierStub
+      Sinon.stub(GenerateReturnLogsService, 'go')
+        .onFirstCall().resolves({
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: allYearDueDate,
+          endDate: allYearEndDate,
+          id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`,
+          licenceRef: licence.licenceRef,
+          metadata: {
+            description: 'BOREHOLE AT AVALON',
+            isCurrent: true,
+            isFinal: false,
+            isSummer: true,
+            isTwoPartTariff: false,
+            isUpload: false,
+            nald: {
+              regionCode: region.naldRegionId,
+              areaCode: licence.regions.historicalAreaCode,
+              formatId: returnRequirement.legacyId,
+              periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+              periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+              periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+              periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+            },
+            points: [{
+              name: point.description,
+              ngr1: point.ngr1,
+              ngr2: point.ngr2,
+              ngr3: point.ngr3,
+              ngr4: point.ngr4
+            }],
+            purposes: [{
+              primary: {
+                code: primaryPurpose.legacyId,
+                description: primaryPurpose.description
+              },
+              secondary: {
+                code: secondaryPurpose.legacyId,
+                description: secondaryPurpose.description
+              },
+              tertiary: {
+                code: purpose.legacyId,
+                description: purpose.description
+              }
+            }],
+            version: 1
+          },
+          returnCycleId: summerReturnCycle.id,
+          returnsFrequency: 'day',
+          returnReference: returnRequirement.legacyId.toString(),
+          startDate: allYearStartDate,
+          status: 'due',
+          source: 'WRLS'
+        })
+        .onSecondCall().resolves({
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: allYearDueDate,
+          endDate: allYearEndDate,
+          id: `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`,
+          licenceRef: licence2.licenceRef,
+          metadata: {
+            description: 'BOREHOLE AT AVALON',
+            isCurrent: true,
+            isFinal: false,
+            isSummer: true,
+            isTwoPartTariff: false,
+            isUpload: false,
+            nald: {
+              regionCode: region.naldRegionId,
+              areaCode: licence2.regions.historicalAreaCode,
+              formatId: returnRequirement2.legacyId,
+              periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
+              periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
+              periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
+              periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
+            },
+            points: [{
+              name: point2.description,
+              ngr1: point2.ngr1,
+              ngr2: point2.ngr2,
+              ngr3: point2.ngr3,
+              ngr4: point2.ngr4
+            }],
+            purposes: [{
+              primary: {
+                code: primaryPurpose.legacyId,
+                description: primaryPurpose.description
+              },
+              secondary: {
+                code: secondaryPurpose.legacyId,
+                description: secondaryPurpose.description
+              },
+              tertiary: {
+                code: purpose.legacyId,
+                description: purpose.description
+              }
+            }],
+            version: 1
+          },
+          returnCycleId: summerReturnCycle.id,
+          returnsFrequency: 'day',
+          returnReference: returnRequirement2.legacyId.toString(),
+          startDate: allYearStartDate,
+          status: 'due',
+          source: 'WRLS'
+        })
     })
 
     it('can successfully save a return log in the database', async () => {
