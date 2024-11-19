@@ -42,7 +42,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             gravityFill: false,
             reabstraction: false,
             reportingFrequency: 'week',
-            siteDescription: 'FIRST BOREHOLE AT AVALON',
+            siteDescription: 'WINTER BOREHOLE AT AVALON',
             summer: false,
             twoPartTariff: false,
             points: [
@@ -74,7 +74,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             gravityFill: true,
             reabstraction: true,
             reportingFrequency: 'month',
-            siteDescription: 'SECOND BOREHOLE AT AVALON',
+            siteDescription: 'SUMMER BOREHOLE AT AVALON',
             summer: true,
             twoPartTariff: true,
             points: [

@@ -79,7 +79,7 @@ async function _returnRequirement (
     reabstraction: agreements,
     reportingFrequency,
     returnVersionId,
-    siteDescription: summer ? 'SECOND BOREHOLE AT AVALON' : 'FIRST BOREHOLE AT AVALON',
+    siteDescription: summer ? 'SUMMER BOREHOLE AT AVALON' : 'WINTER BOREHOLE AT AVALON',
     summer,
     twoPartTariff: agreements
   })

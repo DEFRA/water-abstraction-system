@@ -93,7 +93,7 @@ describe('Return Versions - Fetch Return Version service', () => {
             ],
             reabstraction: false,
             reportingFrequency: 'week',
-            siteDescription: 'FIRST BOREHOLE AT AVALON',
+            siteDescription: 'WINTER BOREHOLE AT AVALON',
             summer: false,
             twoPartTariff: false
           },
@@ -129,7 +129,7 @@ describe('Return Versions - Fetch Return Version service', () => {
             ],
             reabstraction: true,
             reportingFrequency: 'month',
-            siteDescription: 'SECOND BOREHOLE AT AVALON',
+            siteDescription: 'SUMMER BOREHOLE AT AVALON',
             summer: true,
             twoPartTariff: true
           }
