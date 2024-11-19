@@ -98,7 +98,7 @@ function _formatLicencePurposes (licenceVersionPurposes) {
       abstractionAmounts,
       abstractionAmountsTitle: abstractionAmounts.length > 1 ? 'Abstraction amounts' : 'Abstraction amount',
       abstractionMethods,
-      abstractionMethodsTitle: abstractionMethods.length > 1 ? 'Abstraction methods' : 'Abstraction method',
+      abstractionMethodsTitle: abstractionMethods.length > 1 ? 'Methods of abstraction' : 'Method of abstraction',
       abstractionPeriod: _abstractionPeriod(licenceVersionPurpose),
       abstractionPoints,
       abstractionPointsTitle: abstractionPoints.length > 1 ? 'Abstraction points' : 'Abstraction point',
