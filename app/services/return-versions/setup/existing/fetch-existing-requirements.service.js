@@ -29,8 +29,8 @@ async function _fetch (returnVersionId) {
       'id'
     ])
     .withGraphFetched('returnRequirements')
-    .modifyGraph('returnRequirements', (builder) => {
-      builder
+    .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
+      returnRequirementsBuilder
         .select([
           'id',
           'abstractionPeriodEndDay',
@@ -47,28 +47,31 @@ async function _fetch (returnVersionId) {
           'twoPartTariff'
         ])
         .orderBy('siteDescription', 'asc')
-    })
-    .withGraphFetched('returnRequirements.points')
-    .modifyGraph('returnRequirements.points', (builder) => {
-      builder.select([
-        'points.id',
-        'points.description'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes')
-    .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
-      builder.select([
-        'id',
-        'alias',
-        'purposeId'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
-      builder.select([
-        'id',
-        'description'
-      ])
+        .withGraphFetched('points')
+        .modifyGraph('points', (pointsBuilder) => {
+          pointsBuilder
+            .select([
+              'points.id',
+              'points.description'
+            ])
+        })
+        .withGraphFetched('returnRequirementPurposes')
+        .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+          returnRequirementPurposesBuilder
+            .select([
+              'id',
+              'alias',
+              'purposeId'
+            ])
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder
+                .select([
+                  'id',
+                  'description'
+                ])
+            })
+        })
     })
 }
 
