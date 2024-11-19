@@ -30,21 +30,23 @@ async function _fetch (returnVersionId) {
     ])
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (builder) => {
-      builder.select([
-        'id',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'collectionFrequency',
-        'fiftySixException',
-        'gravityFill',
-        'reabstraction',
-        'reportingFrequency',
-        'siteDescription',
-        'summer',
-        'twoPartTariff'
-      ])
+      builder
+        .select([
+          'id',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'collectionFrequency',
+          'fiftySixException',
+          'gravityFill',
+          'reabstraction',
+          'reportingFrequency',
+          'siteDescription',
+          'summer',
+          'twoPartTariff'
+        ])
+        .orderBy('siteDescription', 'asc')
     })
     .withGraphFetched('returnRequirements.points')
     .modifyGraph('returnRequirements.points', (builder) => {
