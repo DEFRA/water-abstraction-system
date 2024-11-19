@@ -75,11 +75,7 @@ function _billingPeriod (billRun) {
 
 async function _fetchBillingAccounts (billRunId) {
   try {
-    // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
-    // fails
-    const billingAccounts = await FetchBillingAccountsService.go(billRunId)
-
-    return billingAccounts
+    return await FetchBillingAccountsService.go(billRunId)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
