@@ -100,6 +100,8 @@ async function _returnRequirement (
     purposeId: purpose.id, returnRequirementId, alias
   })
 
+  returnRequirementPurpose.purpose = purpose
+
   returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
   return returnRequirement

@@ -14,22 +14,24 @@ const RequirementsForReturnsSeeder = require('../../../../support/seeders/requir
 const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
 
 describe('Return Versions Setup - Fetch Existing Requirements service', () => {
-  let returnVersion
+  let seededReturnRequirementOne
+  let seededReturnRequirementTwo
+  let seededReturnVersion
 
   describe('when a matching return version exists', () => {
     before(async () => {
       const seedData = await RequirementsForReturnsSeeder.seed()
 
-      returnVersion = seedData.returnVersion
+      seededReturnVersion = seedData.returnVersion
+      seededReturnRequirementOne = seededReturnVersion.returnRequirements[0]
+      seededReturnRequirementTwo = seededReturnVersion.returnRequirements[1]
     })
 
     it('returns the details of the requirements for returns', async () => {
-      const result = await FetchExistingRequirementsService.go(returnVersion.id)
-
-      const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
+      const result = await FetchExistingRequirementsService.go(seededReturnVersion.id)
 
       expect(result).to.equal({
-        id: returnVersion.id,
+        id: seededReturnVersion.id,
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
@@ -39,10 +41,10 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             collectionFrequency: 'week',
             fiftySixException: true,
             gravityFill: true,
-            id: returnRequirementsTwo.id,
+            id: seededReturnRequirementTwo.id,
             points: [
               {
-                id: returnRequirementsTwo.points[0].id,
+                id: seededReturnRequirementTwo.points[0].id,
                 description: 'WELL AT WELLINGTON'
               }
             ],
@@ -50,12 +52,12 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             reportingFrequency: 'month',
             returnRequirementPurposes: [
               {
-                id: returnRequirementsTwo.returnRequirementPurposes[0].id,
+                id: seededReturnRequirementTwo.returnRequirementPurposes[0].id,
                 alias: null,
-                purposeId: returnRequirementsTwo.returnRequirementPurposes[0].purpose.id,
+                purposeId: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id,
                 purpose: {
-                  id: returnRequirementsTwo.returnRequirementPurposes[0].purpose.id,
-                  description: returnRequirementsTwo.returnRequirementPurposes[0].purpose.description
+                  id: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id,
+                  description: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.description
                 }
               }
             ],
@@ -71,10 +73,10 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             collectionFrequency: 'week',
             fiftySixException: false,
             gravityFill: false,
-            id: returnRequirementsOne.id,
+            id: seededReturnRequirementOne.id,
             points: [
               {
-                id: returnRequirementsOne.points[0].id,
+                id: seededReturnRequirementOne.points[0].id,
                 description: 'WELL AT WELLINGTON'
               }
             ],
@@ -82,12 +84,12 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             reportingFrequency: 'week',
             returnRequirementPurposes: [
               {
-                id: returnRequirementsOne.returnRequirementPurposes[0].id,
+                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
                 alias: 'I have an alias',
-                purposeId: returnRequirementsOne.returnRequirementPurposes[0].purpose.id,
+                purposeId: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id,
                 purpose: {
-                  id: returnRequirementsOne.returnRequirementPurposes[0].purpose.id,
-                  description: returnRequirementsOne.returnRequirementPurposes[0].purpose.description
+                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id,
+                  description: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.description
                 }
               }
             ],
