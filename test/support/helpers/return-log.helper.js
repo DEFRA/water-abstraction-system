@@ -135,6 +135,17 @@ function generateReturnLogId (
   return `v${version}:1:${licenceRef}:${returnReference}:${startDate}:${endDate}`
 }
 
+/**
+ * Checks if the return logs for a given licence reference are continuous.
+ *
+ * This function queries the return logs associated with the provided licence reference,
+ * excluding any logs with a status of 'void'. It then verifies if the end date of each
+ * return log is sequential with the start date of the next log.
+ *
+ * @param {string} licenceReference - The reference of the licence to check return logs for.
+ * @returns {Promise<boolean>} - A promise that resolves to true if the return logs are continuous,
+ * or false otherwise.
+ */
 async function hasContinousReturnLogs (licenceReference) {
   const returnLogs = await ReturnLogModel.query()
     .select(['endDate', 'startDate'])
