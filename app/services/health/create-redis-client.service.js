@@ -13,7 +13,7 @@ const redisConfig = require('../../../config/redis.config.js')
  * Connect to Redis and return a client
  *
  * @returns {Promise<Redis>} - a new redis instance
-*/
+ */
 async function go () {
   return new Redis({
     host: redisConfig.host,
