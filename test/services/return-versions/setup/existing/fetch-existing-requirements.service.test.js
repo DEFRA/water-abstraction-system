@@ -32,7 +32,6 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
         id: returnVersion.id,
         returnRequirements: [
           {
-            id: returnRequirementsTwo.id,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
@@ -40,17 +39,15 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             collectionFrequency: 'week',
             fiftySixException: true,
             gravityFill: true,
-            reabstraction: true,
-            reportingFrequency: 'month',
-            siteDescription: 'SUMMER BOREHOLE AT AVALON',
-            summer: true,
-            twoPartTariff: true,
+            id: returnRequirementsTwo.id,
             points: [
               {
                 id: returnRequirementsTwo.points[0].id,
                 description: 'WELL AT WELLINGTON'
               }
             ],
+            reabstraction: true,
+            reportingFrequency: 'month',
             returnRequirementPurposes: [
               {
                 id: returnRequirementsTwo.returnRequirementPurposes[0].id,
@@ -61,10 +58,12 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
                   description: returnRequirementsTwo.returnRequirementPurposes[0].purpose.description
                 }
               }
-            ]
+            ],
+            siteDescription: 'SUMMER BOREHOLE AT AVALON',
+            summer: true,
+            twoPartTariff: true
           },
           {
-            id: returnRequirementsOne.id,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
@@ -72,17 +71,15 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             collectionFrequency: 'week',
             fiftySixException: false,
             gravityFill: false,
-            reabstraction: false,
-            reportingFrequency: 'week',
-            siteDescription: 'WINTER BOREHOLE AT AVALON',
-            summer: false,
-            twoPartTariff: false,
+            id: returnRequirementsOne.id,
             points: [
               {
                 id: returnRequirementsOne.points[0].id,
                 description: 'WELL AT WELLINGTON'
               }
             ],
+            reabstraction: false,
+            reportingFrequency: 'week',
             returnRequirementPurposes: [
               {
                 id: returnRequirementsOne.returnRequirementPurposes[0].id,
@@ -93,7 +90,10 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
                   description: returnRequirementsOne.returnRequirementPurposes[0].purpose.description
                 }
               }
-            ]
+            ],
+            siteDescription: 'WINTER BOREHOLE AT AVALON',
+            summer: false,
+            twoPartTariff: false
           }
         ]
       })
