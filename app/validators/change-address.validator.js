@@ -13,19 +13,19 @@ const StaticLookupsLib = require('../lib/static-lookups.lib.js')
  *
  * The JOI schema was interpreted from what we found in water-abstraction-service/src/modules/invoice-accounts/routes.js
  *
- * @param {object} data - The data to be validated (assumed to be the request payload)
+ * @param {object} payload - The payload from the request to be validated
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (data) {
+function go (payload) {
   const schema = Joi.object({
     address: _addressSchema(),
     agentCompany: _agentCompanySchema(),
     contact: _contactSchema()
   })
 
-  return schema.validate(data)
+  return schema.validate(payload)
 }
 
 function _addressSchema () {

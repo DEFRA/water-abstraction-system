@@ -10,13 +10,13 @@ const Joi = require('joi')
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/region` page
  *
- * @param {object} data - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  * @param {object[]} regions - The list of regions from the DB
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (data, regions) {
+function go (payload, regions) {
   const validValues = regions.map((region) => {
     return region.id
   })
@@ -32,7 +32,7 @@ function go (data, regions) {
       })
   })
 
-  return schema.validate(data, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {

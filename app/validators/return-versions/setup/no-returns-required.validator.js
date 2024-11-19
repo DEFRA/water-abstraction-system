@@ -17,12 +17,12 @@ const VALID_VALUES = [
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/no-returns-required` page
  *
- * @param {object} data - The payload from the request to be validated
+ * @param {object} payload - The payload from the request to be validated
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (data) {
+function go (payload) {
   const schema = Joi.object({
     reason: Joi.string()
       .required()
@@ -34,7 +34,7 @@ function go (data) {
       })
   })
 
-  return schema.validate(data, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {
