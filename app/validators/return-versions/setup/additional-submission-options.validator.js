@@ -19,8 +19,8 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (payload) {
-  const additionalSubmissionOptions = payload.additionalSubmissionOptions
+function go (options) {
+  const additionalSubmissionOptions = options.additionalSubmissionOptions
 
   const errorMessage = 'Select additional submission options for the requirements for returns'
 

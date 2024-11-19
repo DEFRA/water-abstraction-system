@@ -44,23 +44,23 @@ module.exports = {
     'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
     strict: ['error', 'global'],
-    'jsdoc/require-jsdoc': ['warn', {
+    'jsdoc/require-jsdoc': ['error', {
       publicOnly: true
     }],
-    'jsdoc/require-description': 'warn',
-    'jsdoc/require-param': ['warn', {
+    'jsdoc/require-description': 'error',
+    'jsdoc/require-param': ['error', {
       exemptedBy: ['private']
     }],
-    'jsdoc/require-returns': ['warn', {
+    'jsdoc/require-returns': ['error', {
       publicOnly: true
     }],
-    'jsdoc/check-tag-names': 'warn',
-    'jsdoc/check-alignment': 'warn',
+    'jsdoc/check-tag-names': 'error',
+    'jsdoc/check-alignment': 'error',
     'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
-    'jsdoc/check-indentation': 'warn',
-    'jsdoc/lines-before-block': 'warn',
-    'jsdoc/check-types': 'warn',
-    'jsdoc/require-hyphen-before-param-description': 'warn'
+    'jsdoc/check-indentation': 'error',
+    'jsdoc/lines-before-block': 'error',
+    'jsdoc/check-types': 'error',
+    'jsdoc/require-hyphen-before-param-description': 'error'
   },
   settings: {
     jsdoc: {

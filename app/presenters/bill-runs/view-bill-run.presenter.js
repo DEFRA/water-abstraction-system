@@ -15,6 +15,14 @@ const {
   titleCase
 } = require('../base.presenter.js')
 
+/**
+ * Formats bill run data ready for presenting in the view bill run page
+ *
+ * @param {module:BillRunModel} billRun - an instance of `BillRunModel`
+ * @param {object[]} billSummaries - summary data of bills connected to the bill run
+ *
+ * @returns {object} - the prepared bill run data to be passed to the view bill run page
+ */
 function go (billRun, billSummaries) {
   const {
     batchType,

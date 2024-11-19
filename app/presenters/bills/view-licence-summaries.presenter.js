@@ -7,6 +7,13 @@
 
 const { formatMoney } = require('../base.presenter.js')
 
+/**
+ * Formats summary data of licences connected to a bill for the multi-licence bill page
+ *
+ * @param {object[]} licenceSummaries - an array of licence summaries
+ *
+ * @returns {object} a formatted representation of the bill's licence summaries
+ */
 function go (licenceSummaries) {
   const billLicences = _billLicences(licenceSummaries)
 
