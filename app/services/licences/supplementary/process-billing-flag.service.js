@@ -80,7 +80,7 @@ async function _setFlagForLicence (result) {
   let twoPartTariffBillingYears = []
 
   if (flagForTwoPartTariffSupplementary) {
-    twoPartTariffBillingYears = _determineTwoPartTariffYears(twoPartTariffBillingYears, result)
+    twoPartTariffBillingYears = await _determineTwoPartTariffYears(twoPartTariffBillingYears, result)
   }
 
   await PersistSupplementaryBillingFlagsService.go(
