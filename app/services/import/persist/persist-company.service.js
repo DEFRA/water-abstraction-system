@@ -16,15 +16,13 @@ const { db } = require('../../../../db/db.js')
  * @param {object} trx - An Objection.js transaction object for PostgreSQL.
  * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
  * @param {object} transformedCompanies - An object representing a valid WRLS Company.
- *
- * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
 async function go (trx, updatedAt, transformedCompanies) {
-  return _persistCompanies(trx, updatedAt, transformedCompanies)
+  await _persistCompanies(trx, updatedAt, transformedCompanies)
 }
 
 async function _persistAddress (trx, updatedAt, address) {
-  return AddressModel.query(trx)
+  await AddressModel.query(trx)
     .insert({ ...address, updatedAt })
     .onConflict('externalId')
     .merge([
@@ -67,7 +65,7 @@ async function _persistCompanies (trx, updatedAt, companies) {
 async function _persistCompany (trx, updatedAt, company) {
   const { contact, companyContact, addresses, companyAddresses, ...propertiesToPersist } = company
 
-  return CompanyModel.query(trx)
+  await CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('externalId')
     .merge([
@@ -86,7 +84,7 @@ async function _persistCompanyAddresses (trx, updatedAt, companyAddresses) {
 async function _persistCompanyAddress (trx, updatedAt, companyAddress) {
   const { companyId, startDate, endDate, licenceRoleId, addressId } = companyAddress
 
-  return db.raw(`
+  await db.raw(`
     INSERT INTO public."company_addresses" (company_id, address_id, licence_role_id, start_date, end_date, "default", created_at, updated_at)
     SELECT com.id, add.id, lr.id, ? ,?, true, NOW(), ?
     FROM public.companies com
@@ -106,7 +104,7 @@ async function _persistCompanyAddress (trx, updatedAt, companyAddress) {
 async function _persistsCompanyContact (trx, updatedAt, companyContact) {
   const { externalId, startDate, licenceRoleId } = companyContact
 
-  return db.raw(`
+  await db.raw(`
     INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
     SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
     FROM public.companies com
@@ -123,7 +121,7 @@ async function _persistsCompanyContact (trx, updatedAt, companyContact) {
 }
 
 async function _persistContact (trx, updatedAt, contact) {
-  return ContactModel.query(trx)
+  await ContactModel.query(trx)
     .insert({ ...contact, updatedAt })
     .onConflict('externalId')
     .merge([

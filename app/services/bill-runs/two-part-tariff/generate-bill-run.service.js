@@ -42,8 +42,6 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
  *
  * @param {module:BillRunModel} billRunId - The UUID of the two-part tariff bill run that has been reviewed and is ready
  * for generating
- *
- * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
 async function go (billRunId) {
   const billRun = await _fetchBillRun(billRunId)
@@ -53,8 +51,7 @@ async function go (billRunId) {
   }
 
   await _updateStatus(billRunId, 'processing')
-
-  _generateBillRun(billRun)
+  await _generateBillRun(billRun)
 }
 
 /**
