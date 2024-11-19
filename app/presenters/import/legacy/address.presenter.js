@@ -10,7 +10,7 @@
  *
  * @param {ImportLegacyAddressType} address - the legacy NALD address
  * @param {string} dataSource
-
+ *
  * @returns {object} the NALD company data transformed into the WRLS format for an address
  * ready for validation and persisting
  */

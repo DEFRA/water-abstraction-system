@@ -8,6 +8,8 @@
 /**
  * Formats data for the `/licences/{id}/contact-details` view licence contact details page
  *
+ * @param {object[]} contacts - The results from `FetchLicenceContactsService` to be formatted for the view
+ *
  * @returns {object} The data formatted for the view template
  */
 function go (contacts) {

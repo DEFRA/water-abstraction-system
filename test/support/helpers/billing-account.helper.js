@@ -50,6 +50,13 @@ function defaults (data = {}) {
   }
 }
 
+/**
+ * Generates a random account number
+ *
+ * The account number is in the format 'T########A', where '#' is a digit.
+ *
+ * @returns {string} - The generated account number
+ */
 function generateAccountNumber () {
   const numbering = randomInteger(10000000, 99999999)
 
