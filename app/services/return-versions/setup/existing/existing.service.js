@@ -5,8 +5,8 @@
  * @module ExistingService
  */
 
-const ExistingPresenter = require('../../../presenters/return-versions/setup/existing.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/existing` page
