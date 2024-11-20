@@ -32,21 +32,21 @@ function _formatLicencePoints (points) {
     const pointInstance = PointModel.fromJson(point)
 
     return {
-      bgsReference: pointInstance.bgsReference ? pointInstance.bgsReference : '',
-      category: pointInstance.category ? pointInstance.category : '',
+      bgsReference: pointInstance.bgsReference ?? '',
+      category: pointInstance.category ?? '',
       depth: pointInstance.depth.toString(),
-      description: pointInstance.description ? pointInstance.description : '',
+      description: pointInstance.description ?? '',
       gridReference: pointInstance.$describe(),
       hydroInterceptDistance: pointInstance.hydroInterceptDistance.toString(),
       hydroOffsetDistance: pointInstance.hydroOffsetDistance.toString(),
-      hydroReference: pointInstance.hydroReference ? pointInstance.hydroReference : '',
-      locationNote: pointInstance.locationNote ? pointInstance.locationNote : '',
-      note: pointInstance.note ? pointInstance.note : '',
-      primaryType: pointInstance.primaryType ? pointInstance.primaryType : '',
-      secondaryType: pointInstance.secondaryType ? pointInstance.secondaryType : '',
-      sourceDescription: pointInstance.sourceDescription ? pointInstance.sourceDescription : '',
-      sourceType: pointInstance.sourceType ? pointInstance.sourceType : '',
-      wellReference: pointInstance.wellReference ? pointInstance.wellReference : ''
+      hydroReference: pointInstance.hydroReference ?? '',
+      locationNote: pointInstance.locationNote ?? '',
+      note: pointInstance.note ?? '',
+      primaryType: pointInstance.primaryType ?? '',
+      secondaryType: pointInstance.secondaryType ?? '',
+      sourceDescription: pointInstance.sourceDescription ?? '',
+      sourceType: pointInstance.sourceType ?? '',
+      wellReference: pointInstance.wellReference ?? ''
     }
   })
 }
