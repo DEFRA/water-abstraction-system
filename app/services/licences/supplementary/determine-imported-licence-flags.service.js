@@ -41,16 +41,7 @@ async function go (importedLicence, licenceId) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
   const { endDate } = determineCurrentFinancialYear()
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails, endDate)
-
-  // If the licence is already flagged for SROC supplementary billing, set the flag based on whether the licence
-  // has SROC charge versions. This way, if the licence lacks charge versions, the flag is removed by setting it
-  // to false; otherwise, it stays true. We check this because this is an opportunity to remove sroc supplementary
-  // billing flags from a licence that won't ever be picked up by the sroc billing engine (so the flag will never get
-  // removed). The same principles applies to the pre sroc flag
-  const flagForSrocSupplementary =
-  existingLicenceDetails.flagged_for_sroc ? existingLicenceDetails.sroc_charge_versions : false
-  const flagForPreSrocSupplementary =
-  existingLicenceDetails.flagged_for_presroc ? existingLicenceDetails.pre_sroc_charge_versions : false
+  const { flagForSrocSupplementary, flagForPreSrocSupplementary } = _determineExistingFlags(existingLicenceDetails)
 
   const result = {
     licenceId: existingLicenceDetails.id,
@@ -68,14 +59,28 @@ async function go (importedLicence, licenceId) {
     return result
   }
 
-  if (!flagForPreSrocSupplementary) {
-    result.flagForPreSrocSupplementary = _flagForPresrocSupplementary(existingLicenceDetails, earliestChangedDate)
-  }
-
-  result.flagForSrocSupplementary = existingLicenceDetails.sroc_charge_versions
-  result.flagForTwoPartTariffSupplementary = existingLicenceDetails.two_part_tariff_charge_versions
+  _updateFlags(earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result)
 
   return result
+}
+
+/**
+ * If the licence is already flagged for SROC supplementary billing, set the flag based on whether the licence
+ * has SROC charge versions. This way, if the licence lacks charge versions, the flag is removed by setting it
+ * to false; otherwise, it stays true. We check this because this is an opportunity to remove sroc supplementary
+ * billing flags from a licence that won't ever be picked up by the sroc billing engine (so the flag will never get
+ * removed). The same principles applies to the pre sroc flag
+ *
+ * @private
+ */
+function _determineExistingFlags (existingLicenceDetails) {
+  const flagForSrocSupplementary =
+  existingLicenceDetails.flagged_for_sroc ? existingLicenceDetails.sroc_charge_versions : false
+
+  const flagForPreSrocSupplementary =
+  existingLicenceDetails.flagged_for_presroc ? existingLicenceDetails.pre_sroc_charge_versions : false
+
+  return { flagForSrocSupplementary, flagForPreSrocSupplementary }
 }
 
 function _earliestChangedDate (importedLicence, existingLicenceDetails, currentFinancialYearEndDate) {
@@ -112,25 +117,33 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails, currentF
 }
 
 /**
- * Determines if a pre-SRoC supplementary billing flag should be set based on the earliest end date of the licence.
+ * Updates the supplementary billing flags for a licence based on the earliest changed date and existing licence details
  *
- * Pre-SRoC flags are only set when a licence change impacts bill runs prior to the SRoC start date (1st April 2022).
+ * This function determines:
+ * - If a pre-sroc flag should be set when the earliest changed date affects bill runs prior to the sroc start date
+ *   (1st April 2022) and the licence has pre-sroc charge versions.
+ * - If an sroc flag should be set based on the presence of sroc charge versions on the licence.
+ * - If a two-part tariff flag should be set based on the presence of two-part tariff charge versions on the licence.
+ *
  * For example:
- * - If the licence's end date is changed to 1st January 2019 (pre-SRoC), both pre-SRoC and SRoC flags are set
- *   because all bill runs since that date are affected.
- * - If the change is after the SRoC start date (e.g., 1st April 2022), only the SRoC flag is set since earlier
- *   bill runs are unaffected.
+ * - If the licence's end date is changed to 1st January 2019 (pre-sroc), the function sets the pre-sroc flag
+ *   because all bill runs since that date are affected. The sroc flag is also set if applicable.
+ * - If the change is after the sroc start date (e.g., 1st April 2022), only the sroc or two-part tariff flag is updated
+ *   depending on the charge versions present on the licence.
+ *
+ * If the pre-sroc flag is already set, it is not recalculated.
  *
  * @private
  */
-function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
-  const { pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
+function _updateFlags (earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result) {
+  if (!flagForPreSrocSupplementary) {
+    const { pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
-  if (chargeVersions && earliestChangedDate < SROC_START_DATE) {
-    return true
+    result.flagForPreSrocSupplementary = chargeVersions && earliestChangedDate < SROC_START_DATE
   }
 
-  return false
+  result.flagForSrocSupplementary = existingLicenceDetails.sroc_charge_versions
+  result.flagForTwoPartTariffSupplementary = existingLicenceDetails.two_part_tariff_charge_versions
 }
 
 module.exports = {

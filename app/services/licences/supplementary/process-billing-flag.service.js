@@ -51,11 +51,11 @@ async function _determineFlags (payload) {
   if (payload.importedLicence) {
     return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
   } else if (payload.chargeVersionId) {
-    return await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   } else if (payload.returnId) {
-    return await DetermineReturnLogFlagsService.go(payload.returnId)
+    return DetermineReturnLogFlagsService.go(payload.returnId)
   } else if (payload.workflowId) {
-    return await DetermineWorkflowFlagsService.go(payload.workflowId)
+    return DetermineWorkflowFlagsService.go(payload.workflowId)
   } else {
     throw new Error('Invalid payload for process billing flags service')
   }
