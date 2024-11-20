@@ -4,7 +4,6 @@
  * Extracts and imports licence from NALD
  * @module ImportLicenceService
  */
-// const pMap = require('p-map')
 
 let pMap;
 
@@ -63,7 +62,6 @@ async function go () {
  *
  * When we process the licences we want to batch them into smaller chunks in an attempt to make the
  * import process as efficient as possible
- *
  *
  * @param {object[]} licences - An array of licences
  *
