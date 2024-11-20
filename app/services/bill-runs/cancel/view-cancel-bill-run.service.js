@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
- * @module CancelBillRunService
+ * @module ViewCancelBillRunService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')

@@ -12,9 +12,9 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
-const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
+const ViewCancelBillRunService = require('../../../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
 
-describe('Cancel Bill Run service', () => {
+describe('Bill Runs - View Cancel Bill Run service', () => {
   let region
   let testBillRunId
 
@@ -33,7 +33,7 @@ describe('Cancel Bill Run service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data and format it for use in the cancel bill run page', async () => {
-      const result = await CancelBillRunService.go(testBillRunId)
+      const result = await ViewCancelBillRunService.go(testBillRunId)
 
       expect(result).to.equal({
         backLink: `/system/bill-runs/${testBillRunId}`,
@@ -51,7 +51,7 @@ describe('Cancel Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(CancelBillRunService.go('testId'))
+      await expect(ViewCancelBillRunService.go('testId'))
         .to
         .reject()
     })
