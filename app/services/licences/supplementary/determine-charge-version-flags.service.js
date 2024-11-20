@@ -70,6 +70,7 @@ async function _fetchChargeVersion (chargeVersionId) {
     .modifyGraph('chargeReferences', (builder) => {
       builder.select([
         'id',
+        'scheme',
         ref('adjustments:s127').castBool().as('twoPartTariff')
       ])
     })
