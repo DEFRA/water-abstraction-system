@@ -41,8 +41,8 @@ async function _fetch (id) {
       ]).modify('licenceHolder')
     })
     .withGraphFetched('returnRequirements')
-    .modifyGraph('returnRequirements', (builder) => {
-      builder
+    .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
+      returnRequirementsBuilder
         .select([
           'abstractionPeriodEndDay',
           'abstractionPeriodEndMonth',
@@ -60,31 +60,34 @@ async function _fetch (id) {
           'twoPartTariff'
         ])
         .orderBy('legacyId', 'asc')
-    })
-    .withGraphFetched('returnRequirements.points')
-    .modifyGraph('returnRequirements.points', (builder) => {
-      builder.select([
-        'points.description',
-        'points.id',
-        'points.ngr1',
-        'points.ngr2',
-        'points.ngr3',
-        'points.ngr4'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes')
-    .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
-      builder.select([
-        'alias',
-        'id'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
-      builder.select([
-        'description',
-        'id'
-      ])
+        .withGraphFetched('points')
+        .modifyGraph('points', (pointsBuilder) => {
+          pointsBuilder
+            .select([
+              'points.description',
+              'points.id',
+              'points.ngr1',
+              'points.ngr2',
+              'points.ngr3',
+              'points.ngr4'
+            ])
+        })
+        .withGraphFetched('returnRequirementPurposes')
+        .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+          returnRequirementPurposesBuilder
+            .select([
+              'alias',
+              'id'
+            ])
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (builder) => {
+              builder
+                .select([
+                  'description',
+                  'id'
+                ])
+            })
+        })
     })
 }
 
