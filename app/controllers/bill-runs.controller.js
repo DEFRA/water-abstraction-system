@@ -7,11 +7,11 @@
 
 const Boom = require('@hapi/boom')
 
-const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
+const CancelBillRunService = require('../services/bill-runs/cancel/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
-const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 

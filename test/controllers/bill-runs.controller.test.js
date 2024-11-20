@@ -13,11 +13,11 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
-const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const CancelBillRunService = require('../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
-const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 

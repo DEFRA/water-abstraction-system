@@ -5,8 +5,8 @@
  * @module CancelBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const CancelBillRunPresenter = require('../../presenters/bill-runs/cancel-bill-run.presenter.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
+const CancelBillRunPresenter = require('../../../presenters/bill-runs/cancel-bill-run.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page

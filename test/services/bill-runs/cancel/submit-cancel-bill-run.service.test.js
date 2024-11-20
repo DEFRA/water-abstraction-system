@@ -11,24 +11,24 @@ const { expect } = Code
 // Test helpers
 const { setTimeout } = require('timers/promises')
 
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunChargeVersionYearHelper = require('../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunVolumeHelper = require('../../support/helpers/bill-run-volume.helper.js')
-const ReviewChargeElementHelper = require('../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../support/helpers/review-return.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+const BillHelper = require('../../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
+const BillRunVolumeHelper = require('../../../support/helpers/bill-run-volume.helper.js')
+const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
+const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Things we need to stub
-const ChargingModuleDeleteBillRunRequest = require('../../../app/requests/charging-module/delete-bill-run.request.js')
+const ChargingModuleDeleteBillRunRequest = require('../../../../app/requests/charging-module/delete-bill-run.request.js')
 
 // Thing under test
-const SubmitCancelBillBunService = require('../../../app/services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitCancelBillBunService = require('../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 
 describe('Submit Cancel Bill Run service', () => {
   let chargingModuleDeleteBillRunRequestStub
