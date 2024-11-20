@@ -18,11 +18,17 @@ const SROC_START_DATE = new Date('2022-04-01')
  * It uses the return logs dates and if the return is two-part tariff to decide the appropriate flags for supplementary
  * billing.
  *
+ * Before we determine which flags to add to the licence we first determine which flags the licence already has so we
+ * can maintain them. This is done when we declare our result object.
+ *
  * If the returns start date is before the start date for sroc (1st April 2022), the licence is flagged for pre-sroc
  * supplementary billing
- * If the returns end date is after the start date for sroc (1st April 2022)
- * - and the return is two-part tariff: The licence is flagged for two-part tariff supplementary billing.
- * - and the return is not two-part tariff: The licence is flagged for sroc supplementary billing.
+ *
+ * If the returns end date is after the start date for sroc (1st April 2022) and the return is not two-part tariff, the
+ * licence is flagged for sroc supplementary billing.
+ *
+ * If the return is two-part tariff then we flag it for twoPartTariffSupplementary and pass the start and end date of
+ * the return through to the next service, where the two-part tariff years are determined.
  *
  * NOTE: Unlike pre-sroc and sroc flags (which apply at the licence level), two-part tariff flags are year specific.
  * They are stored in the `LicenceSupplementaryYears` table for each affected year of the charge version

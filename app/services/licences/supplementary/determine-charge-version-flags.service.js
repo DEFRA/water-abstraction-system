@@ -16,6 +16,9 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * It uses the charge versions scheme and any associated two-part tariff indicators to decide the appropriate flags for
  * supplementary billing.
  *
+ * Before we determine which flags to add to the licence we first determine which flags the licence already has so we
+ * can maintain them. This is done when we declare our result object.
+ *
  * If the scheme is `alcs`, the licence is flagged for pre-sroc supplementary billing
  * If the scheme is `sroc`:
  * - with no two-part tariff indicators: The licence is flagged for Sroc supplementary billing.
@@ -32,7 +35,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
 async function go (chargeVersionId) {
   const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
 
-  const twoPartTariff = _twoPartTariffIndicators(chargeReferences)
+  const twoPartTariff = _twoPartTariffSrocIndicators(chargeReferences)
 
   const result = {
     licenceId: licence.id,
@@ -81,9 +84,9 @@ async function _fetchChargeVersion (chargeVersionId) {
     })
 }
 
-function _twoPartTariffIndicators (chargeReferences) {
+function _twoPartTariffSrocIndicators (chargeReferences) {
   return chargeReferences.some((chargeReference) => {
-    return chargeReference.twoPartTariff
+    return chargeReference.twoPartTariff && chargeReference.scheme === 'sroc'
   })
 }
 
