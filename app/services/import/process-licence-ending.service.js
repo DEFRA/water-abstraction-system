@@ -2,7 +2,7 @@
 
 /**
  * Determines if an imported licence has a new end date
- * @module DetermineSupplementaryBillingFlagsService
+ * @module ProcessLicenceEndingService
  */
 const { earliestDate } = require('../../lib/dates.lib.js')
 const LicenceModel = require('../../models/licence.model.js')
