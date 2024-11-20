@@ -8,6 +8,7 @@
 const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
 const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
@@ -32,16 +33,6 @@ async function go (sessionData, userId) {
   }
 }
 
-function _calculateStartDate (sessionData) {
-  if (sessionData.startDateOptions === 'anotherStartDate') {
-    // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
-    // January is actually 0, February is 1 etc. This is why we deduct 1 from the month.
-    return new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
-  }
-
-  return new Date(sessionData.licence.currentVersionStartDate)
-}
-
 async function _generateReturnRequirements (sessionData) {
   // When no returns are required a return version is created without any return requirements
   if (sessionData.journey === 'no-returns-required') {
@@ -57,19 +48,25 @@ async function _generateReturnRequirements (sessionData) {
 }
 
 async function _generateReturnVersion (nextVersionNumber, sessionData, userId) {
-  const startDate = _calculateStartDate(sessionData)
+  const startDate = new Date(sessionData.returnVersionStartDate)
   let endDate = null
+  let quarterlyReturns = false
 
   if (nextVersionNumber > 1) {
     endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
+  }
+
+  if (isQuarterlyReturnSubmissions(sessionData.returnVersionStartDate)) {
+    quarterlyReturns = sessionData.quarterlyReturns
   }
 
   return {
     createdBy: userId,
     endDate,
     licenceId: sessionData.licence.id,
-    multipleUpload: _multipleUpload(sessionData?.additionalSubmissionOptions),
+    multipleUpload: sessionData.multipleUpload,
     notes: sessionData?.note?.content,
+    quarterlyReturns,
     reason: sessionData.reason,
     startDate,
     status: 'current',
@@ -88,10 +85,6 @@ async function _nextVersionNumber (licenceId) {
   }
 
   return 1
-}
-
-function _multipleUpload (additionalSubmissionOptions) {
-  return additionalSubmissionOptions ? additionalSubmissionOptions.includes('multiple-upload') : false
 }
 
 module.exports = {

@@ -33,6 +33,8 @@ describe('Return Versions Setup - Check service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        multipleUpload: false,
+        returnVersionStartDate: '2023-01-01',
         journey: 'returns-required',
         requirements: [{}],
         startDateOptions: 'licenceStartDate',
@@ -59,8 +61,8 @@ describe('Return Versions Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
+        multipleUpload: false,
         note: {
           actions: [
             {
@@ -72,6 +74,8 @@ describe('Return Versions Setup - Check service', () => {
         },
         notification: undefined,
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         reason: 'Major change',
         reasonLink: `/system/return-versions/setup/${session.id}/reason`,
         requirements: [],

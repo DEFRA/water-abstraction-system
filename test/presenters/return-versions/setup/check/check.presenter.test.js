@@ -26,6 +26,8 @@ describe('Return Versions Setup - Check presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      multipleUpload: false,
+      returnVersionStartDate: '2023-01-01',
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
     }
@@ -36,8 +38,8 @@ describe('Return Versions Setup - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
+        multipleUpload: false,
         note: {
           actions: [
             {
@@ -48,6 +50,8 @@ describe('Return Versions Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check the requirements for returns for Turbo Kid',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         reason: 'Major change',
         reasonLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
@@ -56,24 +60,84 @@ describe('Return Versions Setup - Check presenter', () => {
     })
   })
 
-  describe('the "additionalSubmissionOptions" property', () => {
-    describe('when the user has checked additionalSubmissionOptions', () => {
+  describe('the "multipleUpload" property', () => {
+    describe('when there is a multipleUpload', () => {
       beforeEach(() => {
-        session.additionalSubmissionOptions = ['multiple-upload']
+        session.multipleUpload = true
       })
 
-      it('returns a checked option', () => {
+      it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+        expect(result.multipleUpload).to.be.true()
       })
     })
 
-    describe('when the user has not checked an option', () => {
-      it('returns no options', () => {
+    describe('when there is not a multipleUpload', () => {
+      it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.be.empty()
+        expect(result.multipleUpload).to.be.false()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturns" property', () => {
+    describe('when there is a quarterlyReturns', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = true
+      })
+
+      it('returns true', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.true()
+      })
+    })
+
+    describe('when there is not a quarterlyReturns', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = false
+      })
+
+      it('returns false', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.false()
+      })
+    })
+
+    describe('when quarterlyReturns has not been set', () => {
+      it('returns undefined', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.undefined()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturnSubmissions" property', () => {
+    describe('when the return version start date is for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2025-04-01'
+      })
+
+      it('returns true', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.true()
+      })
+    })
+
+    describe('when the return version start date is not for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2001-01-01'
+      })
+
+      it('returns false', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.false()
       })
     })
   })
@@ -171,10 +235,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
     describe('when the user has previously selected another date as the start date', () => {
       beforeEach(() => {
-        session.startDateDay = '26'
-        session.startDateMonth = '11'
-        session.startDateYear = '2023'
-        session.startDateOptions = 'anotherStartDate'
+        session.returnVersionStartDate = '2023-11-26'
       })
 
       it('returns the start date parts formatted as a long date', () => {

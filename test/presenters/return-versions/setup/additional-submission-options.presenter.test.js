@@ -26,6 +26,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         startDate: '2022-04-01T00:00:00.000Z'
       },
       journey: 'returns-required',
+      multipleUpload: false,
       requirements: [{}],
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
@@ -39,8 +40,11 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       expect(result).to.be.equal({
         backLink: `/system/return-versions/setup/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
+        multipleUpload: false,
+        noAdditionalOptions: undefined,
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
         sessionId: session.id
       })
     })
@@ -54,24 +58,114 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     })
   })
 
-  describe('the "additionalSubmissionOptions" property', () => {
-    describe('when the user has previously submitted additional submission options', () => {
+  describe('the "multipleUpload" property', () => {
+    describe('when the user has previously submitted "multipleUpload" for additional options or it has been set initially when the licence holder is a water company', () => {
       beforeEach(() => {
-        session.additionalSubmissionOptions = ['multiple-upload']
+        session.multipleUpload = true
       })
 
-      it('returns the options', () => {
+      it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+        expect(result.multipleUpload).to.be.true()
       })
     })
 
-    describe('when the user has not previously chosen options', () => {
-      it('returns empty options', () => {
+    describe('when the user has not previously submitted "multipleUpload" for additional options', () => {
+      beforeEach(() => {
+        session.multipleUpload = false
+      })
+
+      it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.be.empty()
+        expect(result.multipleUpload).to.be.false()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturns" property', () => {
+    describe('when the user has previously submitted "quarterlyReturns" for additional options or it has been set initially when the licence holder is a water company and the return version start date is a quarterly return', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = true
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.true()
+      })
+    })
+
+    describe('when the user has not previously submitted "quarterlyReturns" for additional options', () => {
+      beforeEach(() => {
+        session.quarterlyReturns = undefined
+      })
+
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturns).to.be.undefined()
+      })
+    })
+  })
+
+  describe('the "quarterlyReturnSubmissions" property', () => {
+    describe('when the return version start date is in for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2025-04-01'
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.true()
+      })
+    })
+
+    describe('when the return version start date is not for quarterly returns', () => {
+      beforeEach(() => {
+        session.returnVersionStartDate = '2001-01-01'
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.quarterlyReturnSubmissions).to.be.false()
+      })
+    })
+  })
+
+  describe('the "noAdditionalOptions" property', () => {
+    describe('when the user has previously submitted "none" for additional options', () => {
+      beforeEach(() => {
+        session.noAdditionalOptions = true
+      })
+
+      it('returns true', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.noAdditionalOptions).to.be.true()
+      })
+    })
+
+    describe('when the user has selected another additional option', () => {
+      beforeEach(() => {
+        session.noAdditionalOptions = false
+      })
+
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.noAdditionalOptions).to.be.false()
+      })
+    })
+
+    describe('when the user has not previously submitted for no additional options', () => {
+      it('returns false', () => {
+        const result = AdditionalSubmissionOptionsPresenter.go(session)
+
+        expect(result.noAdditionalOptions).to.be.undefined()
       })
     })
   })

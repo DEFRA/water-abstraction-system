@@ -56,15 +56,26 @@
           {
             value: "multiple-upload",
             text: "Multiple upload",
-            checked: additionalSubmissionOptions.includes("multiple-upload")
+            checked: multipleUpload,
+            hint: {
+              text: "Allow large abstractors, such as water companies, to submit returns for multiple licences at the same time."
+            }
           },
+          {
+            value: "quarterly-returns",
+            text: "Quarterly return submissions",
+            checked: quarterlyReturns,
+            hint: {
+              text: "Allow water companies to submit daliy readings each quarter."
+            }
+          } if quarterlyReturnSubmissions,
           {
             divider: "or"
           },
           {
             value: "none",
             text: "None",
-            checked: additionalSubmissionOptions.includes("none"),
+            checked: noAdditionalOptions,
             behaviour: "exclusive"
           }
         ]

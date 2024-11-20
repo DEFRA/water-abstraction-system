@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Fetches the matching monitoring station and associated licences needed for the view monitoring-station page
+ * Fetches the matching monitoring station and additional records needed for the view monitoring station page
  * @module FetchMonitoringStationService
  */
 
 const MonitoringStationModel = require('../../models/monitoring-station.model.js')
 
 /**
- * Fetches the matching monitoring station and associated licences needed for the view monitoring-station page
+ * Fetches the matching monitoring station and additional records needed for the view monitoring station page
  *
  * @param {string} monitoringStationId - The UUID for the monitoring station to fetch
  *
- * @returns {Promise<module:MonitoringStationModel>} the matching `MonitoringStationModel` populated with the data
- * needed for the view monitoring station page
+ * @returns {Promise<module:MonitoringStationModel>} the matching instance of `MonitoringStationModel` populated with
+ * the data needed for the view monitoring station page
  */
 async function go (monitoringStationId) {
   return _fetch(monitoringStationId)
@@ -31,32 +31,54 @@ async function _fetch (monitoringStationId) {
       'wiskiId'
     ])
     .withGraphFetched('licenceMonitoringStations')
-    .modifyGraph('licenceMonitoringStations', (builder) => {
-      builder
+    .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
+      licenceMonitoringStationsBuilder
         .select([
-          'abstractionPeriodStartDay',
-          'abstractionPeriodStartMonth',
-          'abstractionPeriodEndDay',
-          'abstractionPeriodEndMonth',
-          'alertType',
-          'createdAt',
-          'restrictionType',
-          'statusUpdatedAt',
-          'thresholdUnit',
-          'thresholdValue'
+          'licenceMonitoringStations.id',
+          'licenceMonitoringStations.abstractionPeriodEndDay',
+          'licenceMonitoringStations.abstractionPeriodEndMonth',
+          'licenceMonitoringStations.abstractionPeriodStartDay',
+          'licenceMonitoringStations.abstractionPeriodStartMonth',
+          'licenceMonitoringStations.licenceId',
+          'licenceMonitoringStations.measureType',
+          'licenceMonitoringStations.restrictionType',
+          'licenceMonitoringStations.status',
+          'licenceMonitoringStations.statusUpdatedAt',
+          'licenceMonitoringStations.thresholdUnit',
+          'licenceMonitoringStations.thresholdValue'
         ])
+        .join('licences', 'licenceMonitoringStations.licenceId', 'licences.id')
+        .whereNull('licenceMonitoringStations.deletedAt')
         .orderBy([
-          { column: 'createdAt', order: 'desc' },
-          { column: 'statusUpdatedAt', order: 'desc', nulls: 'last' }
+          { column: 'licences.licenceRef', order: 'asc' },
+          { column: 'licenceMonitoringStations.thresholdValue', order: 'desc' }
         ])
-    })
-    .withGraphFetched('licenceMonitoringStations.licence')
-    .modifyGraph('licenceMonitoringStations.licence', (builder) => {
-      builder
-        .select([
-          'id',
-          'licenceRef'
-        ])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder
+            .select([
+              'id',
+              'licenceRef'
+            ])
+        })
+        .withGraphFetched('licenceVersionPurposeCondition')
+        .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
+          licenceVersionPurposeConditionBuilder
+            .select([
+              'id'
+            ])
+            .withGraphFetched('licenceVersionPurpose')
+            .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
+              licenceVersionPurposeBuilder
+                .select([
+                  'id',
+                  'abstractionPeriodEndDay',
+                  'abstractionPeriodEndMonth',
+                  'abstractionPeriodStartMonth',
+                  'abstractionPeriodStartDay'
+                ])
+            })
+        })
     })
 }
 

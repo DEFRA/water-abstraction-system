@@ -27,17 +27,18 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          currentVersionStartDate: '2023-01-01',
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
           returnVersions: [{
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            startDate: '2023-01-01',
             reason: null,
             modLogs: []
           }],
-          startDate: '2022-04-01T00:00:00.000Z'
+          startDate: '2022-04-01',
+          waterUndertaker: true
         },
         journey: 'returns-required',
         requirements: [{}],
@@ -64,6 +65,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
       })
 
       describe('and the page has been not been visited', () => {
@@ -99,7 +101,7 @@ describe('Return Versions Setup - Submit Start Date service', () => {
       })
     })
 
-    describe('with a valid payload (another start date', () => {
+    describe('with a valid payload (another start date)', () => {
       beforeEach(async () => {
         payload = {
           'start-date-options': 'anotherStartDate',
@@ -118,6 +120,38 @@ describe('Return Versions Setup - Submit Start Date service', () => {
         expect(refreshedSession.startDateDay).to.equal('26')
         expect(refreshedSession.startDateMonth).to.equal('11')
         expect(refreshedSession.startDateYear).to.equal('2023')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-11-26'))
+      })
+
+      it('returns the correct details the controller needs to redirect the journey', async () => {
+        const result = await SubmitStartDateService.go(session.id, payload, yarStub)
+
+        expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
+      })
+    })
+
+    describe('with a valid payload and is for quarterly returns', () => {
+      beforeEach(async () => {
+        payload = {
+          'start-date-options': 'anotherStartDate',
+          'start-date-day': '01',
+          'start-date-month': '04',
+          'start-date-year': '2025'
+        }
+      })
+
+      it('saves the submitted values', async () => {
+        await SubmitStartDateService.go(session.id, payload, yarStub)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.startDateOptions).to.equal('anotherStartDate')
+        expect(refreshedSession.startDateDay).to.equal('01')
+        expect(refreshedSession.startDateMonth).to.equal('04')
+        expect(refreshedSession.startDateYear).to.equal('2025')
+        expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2025-04-01'))
+
+        expect(refreshedSession.quarterlyReturns).to.be.true()
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {

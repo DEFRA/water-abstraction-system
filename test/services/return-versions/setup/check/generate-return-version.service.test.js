@@ -38,8 +38,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        method: 'use-existing-requirements',
-        reason: 'minor-change',
+        checkPageVisited: true,
         journey: 'returns-required',
         licence: {
           id: licenceId,
@@ -61,8 +60,11 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           ],
           currentVersionStartDate: '2023-02-13T00:00:00.000Z'
         },
+        method: 'use-existing-requirements',
+        multipleUpload: false,
+        reason: 'minor-change',
         requirements: ['return requirements data'],
-        checkPageVisited: true,
+        returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
 
@@ -79,9 +81,11 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
+      expect(result.returnVersion.quarterlyReturns).to.be.false()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
+      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
+
       // Version number is 103 because this is the next version number after the previous version
       expect(result.returnVersion.version).to.equal(103)
       expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
@@ -98,12 +102,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        note: {
-          content: 'This is a test note',
-          userEmail: 'admin-internal@wrls.gov.uk'
-        },
-        method: 'set-up-manually',
-        reason: 'change-to-special-agreement',
+        checkPageVisited: true,
         journey: 'returns-required',
         licence: {
           id: licenceId,
@@ -113,15 +112,17 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           licenceHolder: 'Another licence holder',
           returnVersions: []
         },
+        method: 'set-up-manually',
+        multipleUpload: true,
+        note: {
+          content: 'This is a test note',
+          userEmail: 'admin-internal@wrls.gov.uk'
+        },
+        reason: 'change-to-special-agreement',
+        quarterlyReturns: true,
         requirements: ['return requirements data'],
-        startDateDay: '1',
-        startDateYear: '2024',
-        startDateMonth: '4',
-        checkPageVisited: true,
-        startDateOptions: 'anotherStartDate',
-        additionalSubmissionOptions: [
-          'multiple-upload'
-        ]
+        returnVersionStartDate: '2025-04-01', // date set for quarterly returns
+        startDateOptions: 'anotherStartDate'
       }
     })
 
@@ -134,10 +135,9 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.licenceId).to.equal(licenceId)
       expect(result.returnVersion.multipleUpload).to.be.true()
       expect(result.returnVersion.notes).to.equal(sessionData.note.content)
+      expect(result.returnVersion.quarterlyReturns).to.be.true()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(
-        new Date(sessionData.startDateYear, sessionData.startDateMonth - 1, sessionData.startDateDay)
-      )
+      expect(result.returnVersion.startDate).to.equal(new Date('2025-04-01'))
       expect(result.returnVersion.status).to.equal('current')
       // Version number is 1 because no previous return versions exist
       expect(result.returnVersion.version).to.equal(1)
@@ -154,7 +154,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
     beforeEach(async () => {
       licenceId = generateUUID()
       sessionData = {
-        reason: 'returns-exception',
+        checkPageVisited: true,
         journey: 'no-returns-required',
         licence: {
           id: licenceId,
@@ -165,8 +165,10 @@ describe('Return Versions Setup - Generate Return Version service', () => {
           returnVersions: [],
           currentVersionStartDate: '2023-02-13T00:00:00.000Z'
         },
+        multipleUpload: false,
+        reason: 'returns-exception',
         requirements: [{}],
-        checkPageVisited: true,
+        returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
     })
@@ -181,7 +183,7 @@ describe('Return Versions Setup - Generate Return Version service', () => {
       expect(result.returnVersion.multipleUpload).to.be.false()
       expect(result.returnVersion.notes).to.be.undefined()
       expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date(sessionData.licence.currentVersionStartDate))
+      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
       expect(result.returnVersion.status).to.equal('current')
       expect(result.returnVersion.version).to.equal(1)
     })

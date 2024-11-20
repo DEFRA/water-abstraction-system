@@ -19,7 +19,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  * @param {string} billId - UUID of the Charging Module the bill to be reissued
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
-*/
+ */
 async function send (billRunId, billId) {
   const path = `v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`
 

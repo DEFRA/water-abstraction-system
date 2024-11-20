@@ -19,6 +19,7 @@ exports.up = function (knex) {
       table.string('external_id')
       table.text('reason')
       table.boolean('multiple_upload').notNullable().defaultTo(false)
+      table.boolean('quarterly_returns').notNullable().defaultTo(false)
       table.text('notes')
       table.integer('created_by')
 
