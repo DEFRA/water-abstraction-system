@@ -15,40 +15,43 @@ const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
 
 describe('Return Versions - Fetch Return Version service', () => {
-  let licence
   let modLog
-  let returnVersion
-  let user
+  let seededLicence
+  let seededReturnRequirementOne
+  let seededReturnRequirementTwo
+  let seededReturnVersion
+  let seededUser
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
       const seedData = await RequirementsForReturnsSeeder.seed()
 
-      licence = seedData.licence
-      returnVersion = seedData.returnVersion
-      modLog = await ModLogHelper.add({ returnVersionId: returnVersion.id, note: 'This is a test note' })
-      user = seedData.user
+      seededLicence = seedData.licence
+      seededReturnVersion = seedData.returnVersion
+      seededReturnRequirementOne = seededReturnVersion.returnRequirements[0]
+      seededReturnRequirementTwo = seededReturnVersion.returnRequirements[1]
+      seededUser = seedData.user
+
+      modLog = await ModLogHelper.add({ returnVersionId: seededReturnVersion.id, note: 'This is a test note' })
     })
 
     it('returns the details of the return version', async () => {
-      const result = await FetchReturnVersionService.go(returnVersion.id)
-
-      const [returnRequirementsOne, returnRequirementsTwo] = result.returnRequirements
+      const result = await FetchReturnVersionService.go(seededReturnVersion.id)
 
       expect(result).to.equal({
-        createdAt: returnVersion.createdAt,
-        createdBy: user.id,
-        id: returnVersion.id,
+        createdAt: seededReturnVersion.createdAt,
+        createdBy: seededUser.id,
+        id: seededReturnVersion.id,
         multipleUpload: false,
         notes: null,
         quarterlyReturns: false,
         reason: 'new-licence',
         startDate: new Date('2022-04-01'),
         status: 'current',
-        user: { id: user.id, username: user.username },
+        user: { id: seededUser.id, username: seededUser.username },
         licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef,
+          id: seededLicence.id,
+          licenceRef: seededLicence.licenceRef,
           licenceDocument: null
         },
         modLogs: [
@@ -69,13 +72,13 @@ describe('Return Versions - Fetch Return Version service', () => {
             collectionFrequency: 'week',
             fiftySixException: false,
             gravityFill: false,
-            id: returnRequirementsOne.id,
-            legacyId: returnRequirementsOne.legacyId,
+            id: seededReturnRequirementOne.id,
+            legacyId: seededReturnRequirementOne.legacyId,
             points: [
               {
                 description: 'WELL AT WELLINGTON',
-                id: returnRequirementsOne.points[0].id,
-                ngr1: returnRequirementsOne.points[0].ngr1,
+                id: seededReturnRequirementOne.points[0].id,
+                ngr1: seededReturnRequirementOne.points[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null
@@ -84,16 +87,16 @@ describe('Return Versions - Fetch Return Version service', () => {
             returnRequirementPurposes: [
               {
                 alias: 'I have an alias',
-                id: returnRequirementsOne.returnRequirementPurposes[0].id,
+                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
                 purpose: {
                   description: 'Spray Irrigation - Storage',
-                  id: returnRequirementsOne.returnRequirementPurposes[0].purpose.id
+                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id
                 }
               }
             ],
             reabstraction: false,
             reportingFrequency: 'week',
-            siteDescription: 'FIRST BOREHOLE AT AVALON',
+            siteDescription: 'WINTER BOREHOLE AT AVALON',
             summer: false,
             twoPartTariff: false
           },
@@ -105,13 +108,13 @@ describe('Return Versions - Fetch Return Version service', () => {
             collectionFrequency: 'week',
             fiftySixException: true,
             gravityFill: true,
-            id: returnRequirementsTwo.id,
-            legacyId: returnRequirementsTwo.legacyId,
+            id: seededReturnRequirementTwo.id,
+            legacyId: seededReturnRequirementTwo.legacyId,
             points: [
               {
                 description: 'WELL AT WELLINGTON',
-                id: returnRequirementsTwo.points[0].id,
-                ngr1: returnRequirementsTwo.points[0].ngr1,
+                id: seededReturnRequirementTwo.points[0].id,
+                ngr1: seededReturnRequirementTwo.points[0].ngr1,
                 ngr2: null,
                 ngr3: null,
                 ngr4: null
@@ -120,16 +123,16 @@ describe('Return Versions - Fetch Return Version service', () => {
             returnRequirementPurposes: [
               {
                 alias: null,
-                id: returnRequirementsTwo.returnRequirementPurposes[0].id,
+                id: seededReturnRequirementTwo.returnRequirementPurposes[0].id,
                 purpose: {
                   description: 'Spray Irrigation - Storage',
-                  id: returnRequirementsTwo.returnRequirementPurposes[0].purpose.id
+                  id: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id
                 }
               }
             ],
             reabstraction: true,
             reportingFrequency: 'month',
-            siteDescription: 'SECOND BOREHOLE AT AVALON',
+            siteDescription: 'SUMMER BOREHOLE AT AVALON',
             summer: true,
             twoPartTariff: true
           }
