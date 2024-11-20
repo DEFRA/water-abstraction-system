@@ -6,7 +6,7 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const CancelBillRunPresenter = require('../../../presenters/bill-runs/cancel-bill-run.presenter.js')
+const ViewCancelBillRunPresenter = require('../../../presenters/bill-runs/view-cancel-bill-run.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
@@ -19,7 +19,7 @@ const CancelBillRunPresenter = require('../../../presenters/bill-runs/cancel-bil
 async function go (id) {
   const billRun = await _fetchBillRun(id)
 
-  const pageData = CancelBillRunPresenter.go(billRun)
+  const pageData = ViewCancelBillRunPresenter.go(billRun)
 
   return pageData
 }
