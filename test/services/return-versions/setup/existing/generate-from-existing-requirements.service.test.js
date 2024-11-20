@@ -9,13 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchExistingRequirementsService = require('../../../../app/services/return-versions/setup/fetch-existing-requirements.service.js')
+const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
 
 // Thing under test
-const GenerateFromExistingRequirementsService = require('../../../../app/services/return-versions/setup/generate-from-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
 
 describe('Return Versions Setup - Generate From Existing Requirements service', () => {
-  let returnVersion
+  const returnVersionId = '7af310df-8bd1-476e-8476-eac7ce4153e9'
+
+  let fetchResult
 
   afterEach(() => {
     Sinon.restore()
@@ -24,21 +26,21 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
   describe('when a matching return version exists', () => {
     describe('and all its return requirements have a site description', () => {
       beforeEach(() => {
-        returnVersion = _returnVersion()
+        fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
       })
 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersion.id)
+        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
         expect(result).to.equal([
           {
-            points: [returnVersion.returnRequirements[0].points[0].id],
+            points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [{
-              alias: returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias,
+              alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
               description: 'Spray Irrigation - Storage',
-              id: returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId
+              id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
             }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
@@ -53,11 +55,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             agreementsExceptions: ['none']
           },
           {
-            points: [returnVersion.returnRequirements[1].points[0].id],
+            points: [fetchResult.returnRequirements[1].points[0].id],
             purposes: [{
               alias: '',
               description: 'Spray Irrigation - Storage',
-              id: returnVersion.returnRequirements[1].returnRequirementPurposes[0].purposeId
+              id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
             }],
             returnsCycle: 'summer',
             siteDescription: 'SECOND BOREHOLE AT AVALON',
@@ -82,22 +84,22 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 
     describe('but one of its return requirements does not have a site description', () => {
       beforeEach(() => {
-        returnVersion = _returnVersion()
-        returnVersion.returnRequirements[1].siteDescription = null
+        fetchResult = _fetchResult()
+        fetchResult.returnRequirements[1].siteDescription = null
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
       })
 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersion.id)
+        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
         expect(result).to.equal([
           {
-            points: [returnVersion.returnRequirements[0].points[0].id],
+            points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [{
-              alias: returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias,
+              alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
               description: 'Spray Irrigation - Storage',
-              id: returnVersion.returnRequirements[0].returnRequirementPurposes[0].purposeId
+              id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
             }],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
@@ -112,11 +114,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
             agreementsExceptions: ['none']
           },
           {
-            points: [returnVersion.returnRequirements[1].points[0].id],
+            points: [fetchResult.returnRequirements[1].points[0].id],
             purposes: [{
               alias: '',
               description: 'Spray Irrigation - Storage',
-              id: returnVersion.returnRequirements[1].returnRequirementPurposes[0].purposeId
+              id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
             }],
             returnsCycle: 'summer',
             siteDescription: 'WELL AT WELLINGTON',
@@ -141,21 +143,17 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
   })
 
   describe('when a matching return version does not exist', () => {
-    beforeEach(() => {
-      returnVersion = undefined
-
-      Sinon.stub(FetchExistingRequirementsService, 'go').resolves(returnVersion)
-    })
-
     it('throws an error', async () => {
-      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).to.reject()
+      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926'))
+        .to
+        .reject()
     })
   })
 })
 
-function _returnVersion () {
+function _fetchResult (returnVersionId) {
   return {
-    id: '3a591cdc-7ca0-4252-b159-6994b9319e70',
+    id: returnVersionId,
     returnRequirements: [
       {
         id: 'b8c8e40f-2557-4ce5-8fd9-fd7f6bb71c30',

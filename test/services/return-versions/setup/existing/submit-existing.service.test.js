@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const GenerateFromExistingRequirementsService = require('../../../../app/services/return-versions/setup/generate-from-existing-requirements.service.js')
+const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
 
 // Thing under test
-const SubmitExistingService = require('../../../../app/services/return-versions/setup/submit-existing.service.js')
+const SubmitExistingService = require('../../../../../app/services/return-versions/setup/existing/submit-existing.service.js')
 
 describe('Return Versions Setup - Submit Existing service', () => {
   let payload
