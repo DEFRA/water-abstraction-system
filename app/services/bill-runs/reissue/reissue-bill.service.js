@@ -34,12 +34,9 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * licences and transactions
  * @param {module:BillRunModel} reissueBillRun - The bill run that the new bills should belong to
  *
- * @returns {Promise<object>} dataToReturn Data that has been generated while reissuing the bill
- * @returns {object[]} dataToReturn.bills Array of bills
- * @returns {object[]} dataToReturn.billLicences Array of bill licences
- * @returns {object[]} dataToReturn.transactions Array of transactions
+ * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
+ * properties: `bills`, `billLicences` and `transactions`.
  */
-
 async function go (sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
@@ -138,6 +135,8 @@ function _generateBillLicence (billId, licenceId, licenceRef) {
  *
  * This service sends "view status" requests to the CM (every second to avoid bombarding it) until the status is not
  * `pending`, at which point it returns.
+ *
+ * @private
  */
 async function _pauseUntilNotPending (billRunExternalId) {
   let status
@@ -169,6 +168,8 @@ async function _pauseUntilNotPending (billRunExternalId) {
 
 /**
  * Generates a new transaction using sourceTransaction as a base and amending properties as appropriate
+ *
+ * @private
  */
 function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
   return {
@@ -188,6 +189,8 @@ function _generateTransaction (chargingModuleReissueTransaction, sourceTransacti
  * The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
  * and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
  * amount should be positive or negative
+ *
+ * @private
  */
 function _determineSignOfNetAmount (chargeValue, credit) {
   return credit ? -chargeValue : chargeValue
@@ -195,6 +198,8 @@ function _determineSignOfNetAmount (chargeValue, credit) {
 
 /**
  * Maps the provided CM invoice fields to their bill equivalents
+ *
+ * @private
  */
 function _mapChargingModuleInvoice (chargingModuleInvoice) {
   const chargingModuleRebilledTypes = new Map()
@@ -215,6 +220,8 @@ function _mapChargingModuleInvoice (chargingModuleInvoice) {
 
 /**
  * Updates the source bill's rebilling state and original bill ID
+ *
+ * @private
  */
 async function _markSourceBillAsRebilled (sourceBill) {
   await sourceBill.$query().patch({
@@ -241,6 +248,8 @@ function _retrieveChargingModuleLicence (chargingModuleInvoice, licenceRef) {
 /**
  * If a bill exists for this combination of source bill and CM reissue invoice then return it; otherwise,
  * generate it, store it and then return it.
+ *
+ * @private
  */
 function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, chargingModuleReissueInvoice) {
   // Because we have nested iteration of source bill and Charging Module reissue invoice, we need to ensure we have
@@ -279,6 +288,8 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
 /**
  * If a bill licence exists for this billing account id then return it; otherwise, generate it, store it and then return
  * it.
+ *
+ * @private
  */
 function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, sourceBillLicence) {
   const existingBillLicence = dataToReturn.billLicences.find((billLicence) => {

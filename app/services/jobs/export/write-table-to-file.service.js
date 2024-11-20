@@ -15,9 +15,11 @@ const ConvertToCSVService = require('./convert-to-csv.service.js')
 
 /**
  * Converts data into CSV format and writes it to a file
- *  @param {object} data - The knex query to fetch the table
- *  @param {string} schemaFolderPath - The folder path of the schema
- *  @param {string} tableName - The name of the table
+ *
+ * @param {string[]} headers - The table headers as an array
+ * @param {object} rows - The rows of the table as an object
+ * @param {string} schemaFolderPath - The folder path of the schema
+ * @param {string} tableName - The name of the table
  */
 async function go (headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)

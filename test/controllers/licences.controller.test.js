@@ -567,7 +567,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('You’ve marked this licence for the next supplementary bill run')
+          expect(response.payload).to.contain('You&#39;ve marked this licence for the next supplementary bill run')
         })
       })
     })

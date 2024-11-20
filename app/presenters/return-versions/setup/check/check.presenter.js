@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../../base.presenter.js')
+const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
 const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib.js')
 
 /**
@@ -16,15 +17,20 @@ const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib
  * @returns {object} The data formatted for the view template
  */
 function go (session) {
-  const { multipleUpload, id: sessionId, journey, licence, note, reason } = session
+  const {
+    id: sessionId, journey, licence, multipleUpload, note, reason,
+    returnVersionStartDate, quarterlyReturns
+  } = session
 
   const returnsRequired = journey === 'returns-required'
 
   return {
-    multipleUpload,
     licenceRef: licence.licenceRef,
+    multipleUpload,
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
+    quarterlyReturns,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,

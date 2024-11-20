@@ -7,6 +7,7 @@
 
 const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -18,19 +19,19 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  * @returns {object} page data needed by the view template
  */
 function go (returnVersion) {
-  const { licence, multipleUpload, returnRequirements, startDate, status } =
+  const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } =
     returnVersion
 
   return {
-    additionalSubmissionOptions: {
-      multipleUpload: multipleUpload === true ? 'Yes' : 'No'
-    },
     createdBy: _createdBy(returnVersion),
     createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    multipleUpload: multipleUpload === true ? 'Yes' : 'No',
     notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
+    quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
     reason: _reason(returnVersion),
     requirements: _requirements(returnRequirements),
     startDate: formatLongDate(startDate),

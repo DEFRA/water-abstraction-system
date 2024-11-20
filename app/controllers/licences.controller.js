@@ -29,7 +29,7 @@ async function markedForSupplementaryBilling (request, h) {
   const pageData = await MarkedForSupplementaryBillingService.go(licenceId)
 
   return h.view('licences/marked-for-supplementary-billing.njk', {
-    pageTitle: 'You’ve marked this licence for the next supplementary bill run',
+    pageTitle: "You've marked this licence for the next supplementary bill run",
     activeNavBar: 'search',
     ...pageData
   })

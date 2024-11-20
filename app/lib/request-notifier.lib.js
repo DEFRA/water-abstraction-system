@@ -20,6 +20,7 @@ const BaseNotifierLib = require('./base-notifier.lib.js')
  * related log entries and Errbit notifications by using the ID.
  */
 class RequestNotifierLib extends BaseNotifierLib {
+  // eslint-disable-next-line jsdoc/lines-before-block
   /**
    * Instantiate a new instance
    *

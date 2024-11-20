@@ -27,15 +27,15 @@ describe('Return Versions - View presenter', () => {
     const result = ViewPresenter.go(returnVersion)
 
     expect(result).to.equal({
-      additionalSubmissionOptions: {
-        multipleUpload: 'No'
-      },
       createdBy: 'carol.shaw@atari.com',
       createdDate: '5 April 2022',
       licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
       licenceRef: '01/123',
+      multipleUpload: 'No',
       notes: ['A special note'],
       pageTitle: 'Requirements for returns for Mrs A J Easley',
+      quarterlyReturnSubmissions: false,
+      quarterlyReturns: 'No',
       reason: 'New licence',
       requirements: [
         {
@@ -53,28 +53,6 @@ describe('Return Versions - View presenter', () => {
       ],
       startDate: '1 April 2022',
       status: 'current'
-    })
-  })
-
-  describe('the "additionalSubmissionOptions" property', () => {
-    describe('when multipleUpload is true', () => {
-      beforeEach(() => {
-        returnVersion.multipleUpload = true
-      })
-
-      it('returns "Yes"', () => {
-        const result = ViewPresenter.go(returnVersion)
-
-        expect(result.additionalSubmissionOptions.multipleUpload).to.equal('Yes')
-      })
-    })
-
-    describe('when multipleUpload is false', () => {
-      it('returns "No"', () => {
-        const result = ViewPresenter.go(returnVersion)
-
-        expect(result.additionalSubmissionOptions.multipleUpload).to.equal('No')
-      })
     })
   })
 
@@ -108,11 +86,77 @@ describe('Return Versions - View presenter', () => {
     })
   })
 
+  describe('the "multipleUpload" property', () => {
+    describe('when multipleUpload is true', () => {
+      beforeEach(() => {
+        returnVersion.multipleUpload = true
+      })
+
+      it('returns "Yes"', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.multipleUpload).to.equal('Yes')
+      })
+    })
+
+    describe('when multipleUpload is false', () => {
+      it('returns "No"', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.multipleUpload).to.equal('No')
+      })
+    })
+  })
+
   describe('the "pageTitle" property', () => {
     it("returns the title incorporating the licence holder's name", () => {
       const result = ViewPresenter.go(returnVersion)
 
       expect(result.pageTitle).to.equal('Requirements for returns for Mrs A J Easley')
+    })
+  })
+
+  describe('the "quarterlyReturns" property', () => {
+    describe('when quarterlyReturns is true', () => {
+      beforeEach(() => {
+        returnVersion.quarterlyReturns = true
+      })
+
+      it('returns "Yes"', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.quarterlyReturns).to.equal('Yes')
+      })
+    })
+
+    describe('when quarterlyReturns is false', () => {
+      it('returns "No"', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.quarterlyReturns).to.equal('No')
+      })
+    })
+  })
+
+  describe('the "quarterlyReturnSubmissions" property', () => {
+    describe('when return version start date is for quarterly return submissions', () => {
+      beforeEach(() => {
+        returnVersion.startDate = new Date('2025-04-01')
+      })
+
+      it('returns true', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.quarterlyReturnSubmissions).to.be.true()
+      })
+    })
+
+    describe('when return version start date is not for quarterly return submissions', () => {
+      it('returns false', () => {
+        const result = ViewPresenter.go(returnVersion)
+
+        expect(result.quarterlyReturnSubmissions).to.be.false()
+      })
     })
   })
 

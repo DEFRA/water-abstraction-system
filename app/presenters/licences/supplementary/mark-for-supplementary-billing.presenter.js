@@ -57,9 +57,18 @@ function _yearsToDisplay () {
     const year = currentFinancialYearEnd - i
 
     if (year > LAST_PRE_SROC_FINANCIAL_YEAR_END) {
-      lastSixFinancialYears.push({ text: formatFinancialYear(year), value: year })
+      lastSixFinancialYears.push({
+        text: formatFinancialYear(year),
+        value: year,
+        attributes: { 'data-test': `sroc-years-${year}` }
+      })
     } else {
-      lastSixFinancialYears.push({ text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } })
+      lastSixFinancialYears.push({
+        text: 'Before 2022',
+        value: 'preSroc',
+        hint: { text: 'Old charge scheme' },
+        attributes: { 'data-test': 'pre-sroc-years' }
+      })
 
       break
     }
