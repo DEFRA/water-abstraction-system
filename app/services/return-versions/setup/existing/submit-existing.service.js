@@ -5,10 +5,10 @@
  * @module SubmitExistingService
  */
 
-const ExistingPresenter = require('../../../presenters/return-versions/setup/existing.presenter.js')
-const ExistingValidator = require('../../../validators/return-versions/setup/existing.validator.js')
+const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
+const ExistingValidator = require('../../../../validators/return-versions/setup/existing.validator.js')
 const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
