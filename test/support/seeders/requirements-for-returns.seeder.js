@@ -79,7 +79,7 @@ async function _returnRequirement (
     reabstraction: agreements,
     reportingFrequency,
     returnVersionId,
-    siteDescription: summer ? 'SECOND BOREHOLE AT AVALON' : 'FIRST BOREHOLE AT AVALON',
+    siteDescription: summer ? 'SUMMER BOREHOLE AT AVALON' : 'WINTER BOREHOLE AT AVALON',
     summer,
     twoPartTariff: agreements
   })
@@ -99,6 +99,8 @@ async function _returnRequirement (
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
     purposeId: purpose.id, returnRequirementId, alias
   })
+
+  returnRequirementPurpose.purpose = purpose
 
   returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
