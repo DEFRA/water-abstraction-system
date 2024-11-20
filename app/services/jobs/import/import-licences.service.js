@@ -70,13 +70,6 @@ async function go () {
  * @private
  */
 async function _processLicences (licences) {
-  // for (let i = 0; i < licences.length; i += batchSize) {
-  //   const batch = licences.slice(i, i + batchSize)
-  //
-  //   await _processBatch(batch)
-  //
-  // }
-
   if (!pMap) {
     throw new Error('pMap is not yet loaded.')
   }
@@ -87,23 +80,6 @@ async function _processLicences (licences) {
 
   await pMap(licences, mapper, { concurrency: batchSize })
 }
-
-// /**
-//  * Process Batch
-//  *
-//  * We need to process the licences in the current batch as efficiently as possible.
-//  *
-//  * @param {object[]} batch - a licence
-//  *
-//  * @private
-//  */
-// async function _processBatch (batch) {
-//   return Promise.allSettled(
-//     batch.map(async (licence) => {
-//       await ProcessImportLicence.go(licence)
-//     })
-//   )
-// }
 
 module.exports = {
   go
