@@ -5,10 +5,9 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const ProcessLicenceEndingService = require('../process-licence-ending.service.js')
+const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistImportService = require('../persist-import.service.js')
-const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformLicenceDocumentService = require('./transform-licence-document.service.js')
 const TransformLicenceDocumentRolesService = require('./transform-licence-document-roles.service.js')
@@ -39,7 +38,7 @@ async function go (licenceRef) {
     // We have other services that need to know when a licence has been imported. However, they only care about changes
     // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
     if (wrlsLicenceId) {
-      ProcessLicenceEndingService.go(transformedLicence, wrlsLicenceId)
+      DetermineSupplementaryBillingFlagsService.go(transformedLicence, wrlsLicenceId)
     }
 
     // Pass the transformed licence through each transformation step, building the licence as we go
@@ -64,9 +63,6 @@ async function go (licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistImportService.go(transformedLicence, transformedCompanies)
-
-    // create the reutrn logs for the licence
-    await ProcessLicenceReturnLogsService.go(licenceRef)
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
