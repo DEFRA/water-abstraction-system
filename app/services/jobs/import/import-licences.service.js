@@ -4,6 +4,13 @@
  * Extracts and imports licence from NALD
  * @module ImportLicenceService
  */
+// const pMap = require('p-map')
+
+let pMap;
+
+(async () => {
+  pMap = (await import('p-map')).default
+})()
 
 const FetchLicences = require('./fetch-licences.service.js')
 const ProcessImportLicence = require('./process-import-licence.service.js')
@@ -51,22 +58,53 @@ async function go () {
   }
 }
 
+/**
+ * Process Licences
+ *
+ * When we process the licences we want to batch them into smaller chunks in an attempt to make the
+ * import process as efficient as possible
+ *
+ *
+ * @param {object[]} licences - An array of licences
+ *
+ * @private
+ */
 async function _processLicences (licences) {
-  for (let i = 0; i < licences.length; i += batchSize) {
-    const batch = licences.slice(i, i + batchSize)
+  // for (let i = 0; i < licences.length; i += batchSize) {
+  //   const batch = licences.slice(i, i + batchSize)
+  //
+  //   await _processBatch(batch)
+  //
+  //   console.log('Batch end: ' + i)
+  // }
 
-    await _processBatch(batch)
+  if (!pMap) {
+    throw new Error('pMap is not yet loaded.')
   }
+
+  const mapper = async (licence) => {
+    return ProcessImportLicence.go(licence)
+  }
+
+  await pMap(licences, mapper, { concurrency: 10 })
 }
 
-async function _processBatch (batch) {
-  await Promise.all(
-    batch.map(async (
-      licence) => {
-      await ProcessImportLicence.go(licence)
-    })
-  )
-}
+// /**
+//  * Process Batch
+//  *
+//  * We need to process the licences in the current batch as efficiently as possible.
+//  *
+//  * @param {object[]} batch - a licence
+//  *
+//  * @private
+//  */
+// async function _processBatch (batch) {
+//   return Promise.allSettled(
+//     batch.map(async (licence) => {
+//       await ProcessImportLicence.go(licence)
+//     })
+//   )
+// }
 
 module.exports = {
   go

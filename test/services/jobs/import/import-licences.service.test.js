@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const ImportLicenceService = require('../../../../app/services/jobs/import/import-licences.service.js')
 
-describe.only('Import Licence Service', () => {
+describe('Import Licence Service', () => {
   const batchSize = 10
 
   let stubFetchLicences
@@ -31,7 +31,6 @@ describe.only('Import Licence Service', () => {
     licences = _licences()
 
     stubFetchLicences = Sinon.stub(FetchLicences, 'go').resolves(licences)
-    stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').resolves()
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -42,39 +41,43 @@ describe.only('Import Licence Service', () => {
     delete global.GlobalNotifier
   })
 
-  it('fetches the nald licence data', async () => {
-    await ImportLicenceService.go()
-
-    expect(stubFetchLicences.calledOnce).to.be.true()
-  })
-
-  it('logs to highlight the amount of licences being imported', async () => {
-    await ImportLicenceService.go()
-
-    const args = notifierStub.omg.firstCall.args
-
-    expect(args[0]).to.equal('Importing 100 licences from NALD')
-    expect(args[1].timeTakenMs).to.exist()
-  })
-
-  describe('processes the licence', () => {
-    it('should call the process licence service with the first licence', async () => {
-      await ImportLicenceService.go()
-
-      const firstLicence = licences[0]
-
-      expect(stubProcessImportLicence.getCall(0).calledWithExactly(firstLicence)).to.be.true()
+  describe('when processing the import licences', () => {
+    beforeEach(() => {
+      stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').resolves()
     })
 
-    it('should call the process licence service with the last licence', async () => {
+    it('fetches the nald licence data', async () => {
       await ImportLicenceService.go()
 
-      const lastLicence = licences[licences.length - 1]
+      expect(stubFetchLicences.calledOnce).to.be.true()
+    })
 
-      expect(stubProcessImportLicence.getCall(licences.length - 1).calledWithExactly(lastLicence)).to.be.true()
+    it('logs to highlight the amount of licences being imported', async () => {
+      await ImportLicenceService.go()
+
+      const args = notifierStub.omg.firstCall.args
+
+      expect(args[0]).to.equal('Importing 100 licences from NALD')
+      expect(args[1].timeTakenMs).to.exist()
     })
 
     describe('when batching the licences to process', () => {
+      it('should call the process licence service with the first licence', async () => {
+        await ImportLicenceService.go()
+
+        const firstLicence = licences[0]
+
+        expect(stubProcessImportLicence.getCall(0).calledWithExactly(firstLicence)).to.be.true()
+      })
+
+      it('should call the process licence service with the last licence', async () => {
+        await ImportLicenceService.go()
+
+        const lastLicence = licences[licences.length - 1]
+
+        expect(stubProcessImportLicence.getCall(licences.length - 1).calledWithExactly(lastLicence)).to.be.true()
+      })
+
       it('should process all the fetched licences', async () => {
         await ImportLicenceService.go()
 
@@ -89,6 +92,28 @@ describe.only('Import Licence Service', () => {
 
         expect(stubProcessImportLicence.getCalls().length / batchSize).to.equal(expectedBatches)
       })
+    })
+  })
+
+  describe('when handling the batch size', { timeout: 15000 }, () => {
+    const delayInSeconds = 1
+
+    beforeEach(() => {
+      stubProcessImportLicence = Sinon.stub(ProcessImportLicence, 'go').callsFake(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve()
+          }, delayInSeconds * 1000)
+        })
+      })
+    })
+
+    it('should handle the batch as efficiently as possible', async () => {
+      await ImportLicenceService.go()
+
+      const args = notifierStub.omg.firstCall.args
+
+      expect(args[1].timeTakenSs).to.equal(10n)
     })
   })
 })

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Process import licence
+ * Process licence for the licences imported from NALD
  * @module ProcessImportLicence
  */
 
@@ -9,7 +9,12 @@ const DetermineSupplementaryBillingFlagsService = require('../../import/determin
 const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-return-logs.service.js')
 
 /**
- * Process import licence
+ * Process licence for the licences imported from NALD
+ *
+ * When the licence exists in the WRLS databse and we are improting from NALD.
+ *
+ * We need to check if the licence needs to be flagged for supplementary billing and
+ * determine if any new return logs need to be created depending on the current cycle.
  *
  * @param {object} licence - a licence
  */

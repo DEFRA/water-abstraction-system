@@ -55,6 +55,7 @@
     "knex": "^2.5.1",
     "nunjucks": "^3.2.4",
     "objection": "^3.1.1",
+    "p-map": "^7.0.2",
     "pg": "^8.11.2",
     "pg-query-stream": "^4.5.2",
     "request": "^2.88.2",
