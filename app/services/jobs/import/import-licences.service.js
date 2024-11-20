@@ -75,7 +75,6 @@ async function _processLicences (licences) {
   //
   //   await _processBatch(batch)
   //
-  //   console.log('Batch end: ' + i)
   // }
 
   if (!pMap) {
@@ -86,7 +85,7 @@ async function _processLicences (licences) {
     return ProcessImportLicence.go(licence)
   }
 
-  await pMap(licences, mapper, { concurrency: 10 })
+  await pMap(licences, mapper, { concurrency: batchSize })
 }
 
 // /**
