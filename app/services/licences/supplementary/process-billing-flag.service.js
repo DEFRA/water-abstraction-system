@@ -8,6 +8,7 @@
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
+const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
 const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
 const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -47,7 +48,9 @@ async function go (payload) {
 }
 
 async function _determineFlags (payload) {
-  if (payload.chargeVersionId) {
+  if (payload.importedLicence) {
+    return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
+  } else if (payload.chargeVersionId) {
     return await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   } else if (payload.returnId) {
     return await DetermineReturnLogFlagsService.go(payload.returnId)
