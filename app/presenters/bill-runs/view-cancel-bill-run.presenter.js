@@ -2,7 +2,7 @@
 
 /**
  * Formats the bill run data ready for presenting in the cancel bill run confirmation page
- * @module CancelBillRunPresenter
+ * @module ViewCancelBillRunPresenter
  */
 
 const {
