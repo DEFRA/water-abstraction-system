@@ -11,158 +11,71 @@ const { expect } = Code
 // Test helpers
 const { setTimeout } = require('timers/promises')
 
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunVolumeHelper = require('../../../support/helpers/bill-run-volume.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
-
 // Things we need to stub
-const ChargingModuleDeleteBillRunRequest = require('../../../../app/requests/charging-module/delete-bill-run.request.js')
+const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
+const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
 
 // Thing under test
 const SubmitCancelBillBunService = require('../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 
 describe('Submit Cancel Bill Run service', () => {
-  let chargingModuleDeleteBillRunRequestStub
-  let notifierStub
+  const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
 
-  beforeEach(() => {
-    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
+  let cancelBillRunStub
+  let deleteBillRunStub
+  let deleteDoneFake
+
+  beforeEach(async () => {
+    cancelBillRunStub = Sinon.stub(CancelBillRunService, 'go')
+    deleteDoneFake = Sinon.fake()
+    deleteBillRunStub = Sinon.stub(DeleteBillRunService, 'go').callsFake(async () => {
+      await setTimeout(500)
+      deleteDoneFake()
+    })
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the bill run exists', () => {
-    let bill
-    let billLicence
-    let billRun
-    let billRunChargeVersionYear
-    let billRunVolume
-    let reviewChargeElement
-    let reviewChargeElementReturn
-    let reviewChargeReference
-    let reviewChargeVersion
-    let reviewLicence
-    let reviewReturn
-    let transaction
+  describe('when called', () => {
+    describe('and the CancelBillRunService succeeds', () => {
+      beforeEach(() => {
+        const billRun = { id: billRunId, externalId: '917aaad6-1e7b-4848-8713-1fe1d9fc1e30', status: 'cancel' }
 
-    describe('and can be deleted', () => {
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add({ status: 'ready' })
-
-        const { id: billRunId } = billRun
-
-        // Add records to all the tables the service deletes from
-        reviewLicence = await ReviewLicenceHelper.add({ billRunId })
-        reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId: reviewLicence.id })
-        reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id })
-        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id })
-        reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: reviewChargeReference.id })
-        reviewChargeElementReturn = await ReviewChargeElementReturnHelper.add({
-          reviewChargeElementId: reviewChargeElement.id,
-          reviewReturnId: reviewReturn.id
-        })
-
-        billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ billRunId })
-        billRunVolume = await BillRunVolumeHelper.add({ billRunId })
-        bill = await BillHelper.add({ billRunId })
-
-        billLicence = await BillLicenceHelper.add({ billId: bill.id })
-        transaction = await TransactionHelper.add({ billLicenceId: billLicence.id })
-
-        chargingModuleDeleteBillRunRequestStub.resolves()
-
-        // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-        // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-        // test we recreate the condition by setting it directly with our own stub
-        notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-        global.GlobalNotifier = notifierStub
+        cancelBillRunStub.resolves(billRun)
       })
 
-      it('sends a request to the Charging Module API to delete its copy', async () => {
-        await SubmitCancelBillBunService.go(billRun.id)
+      it('deletes the bill run in the background and does not throw an error', async () => {
+        await SubmitCancelBillBunService.go(billRunId)
 
-        // NOTE: introducing a delay in the test is not ideal. But the service is written such that the deletion happens
-        // in the background and is not awaited. We want to confirm the tables have been cleared. But the only way to do
-        // so is to give the background process time to complete.
-        await setTimeout(500)
+        expect(cancelBillRunStub.called).to.be.true()
+        expect(deleteBillRunStub.called).to.be.true()
 
-        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.true()
-      })
-
-      it('deletes any two-part tariff review data', async () => {
-        await SubmitCancelBillBunService.go(billRun.id)
+        // NOTE: We have faked the DeleteBillRunService taking some time to complete so we can test that
+        // SubmitCancelBillBunService returns control back to us whilst the delete is still in progress. We then pause
+        // and allow the delete to complete to confirm that it was running in the background.
+        expect(deleteDoneFake.called).to.be.false()
 
         await setTimeout(500)
 
-        const reviewChargeElementCount = await reviewChargeElement.$query().select('id').resultSize()
-        const reviewChargeElementReturnCount = await reviewChargeElementReturn.$query().select('id').resultSize()
-        const reviewChargeReferenceCount = await reviewChargeReference.$query().select('id').resultSize()
-        const reviewChargeVersionCount = await reviewChargeVersion.$query().select('id').resultSize()
-        const reviewLicenceCount = await reviewLicence.$query().select('id').resultSize()
-        const reviewReturnCount = await reviewReturn.$query().select('id').resultSize()
-
-        expect(reviewChargeElementCount).to.equal(0)
-        expect(reviewChargeElementReturnCount).to.equal(0)
-        expect(reviewChargeReferenceCount).to.equal(0)
-        expect(reviewChargeVersionCount).to.equal(0)
-        expect(reviewLicenceCount).to.equal(0)
-        expect(reviewReturnCount).to.equal(0)
-      })
-
-      it('deletes any billing data data', async () => {
-        await SubmitCancelBillBunService.go(billRun.id)
-
-        await setTimeout(500)
-
-        const billRunChargeVersionYearCount = await billRunChargeVersionYear.$query().select('id').resultSize()
-        const billRunVolumeCount = await billRunVolume.$query().select('id').resultSize()
-        const transactionCount = await transaction.$query().select('id').resultSize()
-        const billLicenceCount = await billLicence.$query().select('id').resultSize()
-        const billCount = await bill.$query().select('id').resultSize()
-        const billRunCount = await billRun.$query().select('id').resultSize()
-
-        expect(billRunChargeVersionYearCount).to.equal(0)
-        expect(billRunVolumeCount).to.equal(0)
-        expect(transactionCount).to.equal(0)
-        expect(billLicenceCount).to.equal(0)
-        expect(billCount).to.equal(0)
-        expect(billRunCount).to.equal(0)
+        expect(deleteDoneFake.called).to.be.true()
       })
     })
 
-    describe('but cannot be deleted because of its status', () => {
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add({ status: 'sent' })
+    // NOTE: We are only testing what happens when CancelBillRunService fails because it contains no error handling
+    // whereas DeleteBillRunService has been written to ensure _no_ errors are thrown. If we were to stub it and force
+    // a rejection it would not represent anything that would ever happen in the app.
+    describe('and the CancelBillRunService fails', () => {
+      beforeEach(() => {
+        cancelBillRunStub.rejects()
       })
 
-      it('does nothing', async () => {
-        await SubmitCancelBillBunService.go(billRun.id)
+      it('does not delete the bill run and throws an error', async () => {
+        await expect(SubmitCancelBillBunService.go(billRunId)).to.reject()
 
-        const refreshedBillRun = await billRun.$query()
-
-        expect(refreshedBillRun).to.exist()
-        expect(refreshedBillRun.status).to.equal('sent')
-        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.false()
+        expect(deleteBillRunStub.called).to.equal(false)
       })
-    })
-  })
-
-  describe('when the bill run does not exist', () => {
-    it('throws as error', async () => {
-      await expect(SubmitCancelBillBunService.go('testId'))
-        .to
-        .reject()
     })
   })
 })
