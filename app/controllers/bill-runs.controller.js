@@ -53,15 +53,11 @@ async function send (request, h) {
 async function submitCancel (request, h) {
   const { id } = request.params
 
-  try {
-    // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
-    // `cancel'.
-    await SubmitCancelBillRunService.go(id)
+  // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
+  // `cancel'. Deleting the bill run will carry on in the background after that
+  await SubmitCancelBillRunService.go(id)
 
-    return h.redirect('/system/bill-runs')
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.redirect('/system/bill-runs')
 }
 
 async function submitSend (request, h) {
