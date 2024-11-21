@@ -81,29 +81,29 @@ async function _deleteBillingRecords (billRunId) {
   // deleting the transactions for an Anglian annual bill run can take more than 30 mins!!
   await _deleteBillRunTransactions(billRunId)
 
-  await _removeBillLicences(billRunId)
+  await _deleteBillLicences(billRunId)
 
   await Promise.all([
-    _removeBills(billRunId),
-    _removeBillRunChargeVersionYears(billRunId),
-    _removeBillRunVolumes(billRunId)
+    _deleteBills(billRunId),
+    _deleteBillRunChargeVersionYears(billRunId),
+    _deleteBillRunVolumes(billRunId)
   ])
 
   // We can now finally delete the bill run record
   await BillRunModel.query().deleteById(billRunId)
 }
 
-async function _removeBills (billRunId) {
+async function _deleteBills (billRunId) {
   return BillModel.query().delete().where('billRunId', billRunId)
 }
 
-async function _removeBillLicences (billRunId) {
+async function _deleteBillLicences (billRunId) {
   return BillLicenceModel.query()
     .delete()
     .whereExists(BillLicenceModel.relatedQuery('bill').where('bill.billRunId', billRunId))
 }
 
-async function _removeBillRunChargeVersionYears (billRunId) {
+async function _deleteBillRunChargeVersionYears (billRunId) {
   return BillRunChargeVersionYearModel.query().delete().where('billRunId', billRunId)
 }
 
@@ -126,11 +126,11 @@ async function _deleteBillRunTransactions (billRunId) {
   )
 }
 
-async function _removeBillRunVolumes (billRunId) {
+async function _deleteBillRunVolumes (billRunId) {
   return BillRunVolumeModel.query().delete().where('billRunId', billRunId)
 }
 
-async function _removeChargeElements (billRunId) {
+async function _deleteChargeElements (billRunId) {
   return db
     .del()
     .from('reviewChargeElements AS rce')
@@ -147,12 +147,12 @@ async function _removeChargeElements (billRunId) {
  *
  * @private
  */
-async function _removeChargeElementsAndReferences (billRunId) {
-  await _removeChargeElements(billRunId)
-  await _removeChargeReferences(billRunId)
+async function _deleteChargeElementsAndReferences (billRunId) {
+  await _deleteChargeElements(billRunId)
+  await _deleteChargeReferences(billRunId)
 }
 
-async function _removeChargeElementReturns (billRunId) {
+async function _deleteChargeElementReturns (billRunId) {
   return db
     .withSchema('water')
     .del()
@@ -162,7 +162,7 @@ async function _removeChargeElementReturns (billRunId) {
     .where('rl.billRunId', billRunId)
 }
 
-async function _removeChargeReferences (billRunId) {
+async function _deleteChargeReferences (billRunId) {
   return db
     .withSchema('water')
     .del()
@@ -172,14 +172,14 @@ async function _removeChargeReferences (billRunId) {
     .where('rl.billRunId', billRunId)
 }
 
-async function _removeChargeVersions (billRunId) {
+async function _deleteChargeVersions (billRunId) {
   return ReviewChargeVersionModel.query()
     .delete()
     .innerJoinRelated('reviewLicence')
     .where('reviewLicence.billRunId', billRunId)
 }
 
-async function _removeReturns (billRunId) {
+async function _deleteReturns (billRunId) {
   return ReviewReturnModel.query()
     .delete()
     .innerJoinRelated('reviewLicence')
@@ -196,8 +196,8 @@ async function _deleteReviewResults (billRunId) {
   // To help performance we allow both these processes to run in parallel. Because their where clause depends on
   // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
   // the same for deleting the charge versions and returns.
-  await Promise.all([_removeChargeElementReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
-  await Promise.all([_removeChargeVersions(billRunId), _removeReturns(billRunId)])
+  await Promise.all([_deleteChargeElementReturns(billRunId), _deleteChargeElementsAndReferences(billRunId)])
+  await Promise.all([_deleteChargeVersions(billRunId), _deleteReturns(billRunId)])
 
   return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
 }
