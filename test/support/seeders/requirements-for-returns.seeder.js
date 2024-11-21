@@ -41,9 +41,12 @@ async function seed () {
   // Create a return version to which we'll link multiple return requirements
   const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
 
+  const legacyIds = _legacyIds()
+
   // Create the first requirement record
   let returnRequirement = await _returnRequirement(
     returnVersion.id,
+    legacyIds[0],
     'week',
     false,
     false,
@@ -55,6 +58,7 @@ async function seed () {
   // Create the second requirement record
   returnRequirement = await _returnRequirement(
     returnVersion.id,
+    legacyIds[1],
     'month',
     true,
     true,
@@ -65,8 +69,29 @@ async function seed () {
   return { licence, returnVersion, user }
 }
 
+/**
+ * Our tests for FetchReturnVersionsService include checks that the order of the return requirements is as expected. The
+ * order is based on legacy ID (return reference), so we need to control what values we use for the tests to work. But
+ * legacy ID is also a constrained value in the table: it has to be unique.
+ *
+ * So, rather than fixing the values, we still randomly generate them to avoid errors because of duplicated values. We
+ * then use the higher ID for the first seeded return requirement (lower for the second).
+ *
+ * In the test, we can then confirm the return requirement with the lower legacy ID comes first (we expect them ordered
+ * in ascending order on the page).
+ *
+ * @private
+ */
+function _legacyIds () {
+  const legacyId1 = ReturnRequirementHelper.generateLegacyId()
+  const legacyId2 = ReturnRequirementHelper.generateLegacyId()
+
+  return legacyId1 > legacyId2 ? [legacyId1, legacyId2] : [legacyId2, legacyId1]
+}
+
 async function _returnRequirement (
   returnVersionId,
+  legacyId,
   reportingFrequency,
   summer,
   agreements,
@@ -76,6 +101,7 @@ async function _returnRequirement (
     collectionFrequency: 'week',
     fiftySixException: agreements,
     gravityFill: agreements,
+    legacyId,
     reabstraction: agreements,
     reportingFrequency,
     returnVersionId,

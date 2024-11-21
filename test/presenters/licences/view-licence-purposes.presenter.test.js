@@ -36,6 +36,8 @@ describe('View Licence Purpose presenter', () => {
               '40.00 cubic metres per second'
             ],
             abstractionAmountsTitle: 'Abstraction amounts',
+            abstractionMethods: 'Unspecified Pump',
+            abstractionMethodsTitle: 'Method of abstraction',
             abstractionPeriod: '1 April to 31 October',
             abstractionPoints: [
               'At National Grid Reference TL 23198 88603'
@@ -101,6 +103,86 @@ describe('View Licence Purpose presenter', () => {
           const result = ViewLicencePurposePresenter.go(licence)
 
           expect(result.licencePurposes[0].abstractionAmountsTitle).to.equal('Abstraction amounts')
+        })
+      })
+    })
+
+    describe('the "abstractionMethods" property', () => {
+      describe('when the licence has more than two unique abstraction methods linked to a licence purpose', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposePoints = [
+            {
+              abstractionMethod: 'Unspecified Pump'
+            },
+            {
+              abstractionMethod: 'Submersible Pump (Fixed)'
+            },
+            {
+              abstractionMethod: 'Gravity & Sluice (Adjustable)'
+            }
+          ]
+        })
+
+        it('return the values display text joined with an ", and" (Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable))', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionMethods).to.equal('Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable)')
+        })
+      })
+
+      describe('when the licence has two unique abstraction methods linked to a licence purpose', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposePoints = [
+            {
+              abstractionMethod: 'Unspecified Pump'
+            },
+            {
+              abstractionMethod: 'Submersible Pump (Fixed)'
+            }
+          ]
+        })
+
+        it('return the values display text joined with an "and" (Unspecified Pump and Submersible Pump (Fixed))', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionMethods).to.equal('Unspecified Pump and Submersible Pump (Fixed)')
+        })
+      })
+
+      describe('when the licence has one unique abstraction method linked to a licence purpose', () => {
+        it('return the values display text (Unspecified Pump)', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionMethods).to.equal('Unspecified Pump')
+        })
+      })
+    })
+
+    describe('the "abstractionMethodsTitle" property', () => {
+      describe('when there are multiple unique abstraction methods linked to a licence purpose', () => {
+        beforeEach(() => {
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposePoints = [
+            {
+              abstractionMethod: 'Unspecified Pump'
+            },
+            {
+              abstractionMethod: 'Gravity & Sluice (Adjustable)'
+            }
+          ]
+        })
+
+        it('returns the text "Methods of abstraction" as the title', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionMethodsTitle).to.equal('Methods of abstraction')
+        })
+      })
+
+      describe('when there is one or less unique abstraction methods linked to a licence purpose', () => {
+        it('returns the text "Method of abstraction" as the title', () => {
+          const result = ViewLicencePurposePresenter.go(licence)
+
+          expect(result.licencePurposes[0].abstractionMethodsTitle).to.equal('Method of abstraction')
         })
       })
     })
@@ -217,6 +299,9 @@ function _testLicence () {
         dailyQuantity: 720,
         hourlyQuantity: 144,
         instantQuantity: 40,
+        licenceVersionPurposePoints: [{
+          abstractionMethod: 'Unspecified Pump'
+        }],
         purpose: {
           id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
           description: 'Spray Irrigation - Storage'

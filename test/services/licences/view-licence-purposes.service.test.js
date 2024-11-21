@@ -38,6 +38,8 @@ describe('View Licence Purposes service', () => {
               '40.00 cubic metres per second'
             ],
             abstractionAmountsTitle: 'Abstraction amounts',
+            abstractionMethods: 'Unspecified Pump',
+            abstractionMethodsTitle: 'Method of abstraction',
             abstractionPeriod: '1 April to 31 October',
             abstractionPoints: [
               'At National Grid Reference TL 23198 88603'
@@ -73,6 +75,9 @@ function _testFetchLicencePurposes () {
         dailyQuantity: 720,
         hourlyQuantity: 144,
         instantQuantity: 40,
+        licenceVersionPurposePoints: [{
+          abstractionMethod: 'Unspecified Pump'
+        }],
         purpose: {
           id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
           description: 'Spray Irrigation - Storage'
