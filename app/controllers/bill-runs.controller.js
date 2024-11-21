@@ -7,18 +7,18 @@
 
 const Boom = require('@hapi/boom')
 
-const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
-const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
+const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
 
 async function cancel (request, h) {
   const { id } = request.params
 
-  const pageData = await CancelBillRunService.go(id)
+  const pageData = await ViewCancelBillRunService.go(id)
 
   return h.view('bill-runs/cancel.njk', {
     pageTitle: "You're about to cancel this bill run",
@@ -53,15 +53,11 @@ async function send (request, h) {
 async function submitCancel (request, h) {
   const { id } = request.params
 
-  try {
-    // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
-    // `cancel'.
-    await SubmitCancelBillRunService.go(id)
+  // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
+  // `cancel'. Deleting the bill run will carry on in the background after that
+  await SubmitCancelBillRunService.go(id)
 
-    return h.redirect('/system/bill-runs')
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.redirect('/system/bill-runs')
 }
 
 async function submitSend (request, h) {

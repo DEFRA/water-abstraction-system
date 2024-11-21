@@ -14,6 +14,7 @@ const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
+const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
@@ -33,6 +34,7 @@ describe('Licence Version Purpose model', () => {
 
   let testLicenceVersion
   let testLicenceVersionPurposeConditions
+  let testLicenceVersionPurposePoints
   let testPoint
   let testRecord
 
@@ -51,12 +53,19 @@ describe('Licence Version Purpose model', () => {
     await LicenceVersionPurposePointHelper.add({ licenceVersionPurposeId: testRecord.id, pointId: testPoint.id })
 
     testLicenceVersionPurposeConditions = []
+    testLicenceVersionPurposePoints = []
+
     for (let i = 0; i < 2; i++) {
       const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
         licenceVersionPurposeId: testRecord.id
       })
 
+      const licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+        licenceVersionPurposeId: testRecord.id
+      })
+
       testLicenceVersionPurposeConditions.push(licenceVersionPurposeCondition)
+      testLicenceVersionPurposePoints.push(licenceVersionPurposePoint)
     }
   })
 
@@ -111,6 +120,29 @@ describe('Licence Version Purpose model', () => {
         expect(result.licenceVersionPurposeConditions[0]).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[0])
         expect(result.licenceVersionPurposeConditions).to.include(testLicenceVersionPurposeConditions[1])
+      })
+    })
+
+    describe('when linking to licence version purpose points', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query()
+          .innerJoinRelated('licenceVersionPurposePoints')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose points', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposePoints')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposePoints).to.be.an.array()
+        expect(result.licenceVersionPurposePoints[0]).to.be.an.instanceOf(LicenceVersionPurposePointModel)
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[0])
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[1])
       })
     })
 
