@@ -78,7 +78,7 @@ async function submitMarkForSupplementaryBilling (request, h) {
 }
 
 async function supplementary (request, h) {
-  LicenceSupplementaryProcessBillingFlagService.go(request.payload)
+  await LicenceSupplementaryProcessBillingFlagService.go(request.payload)
 
   return h.response().code(204)
 }
