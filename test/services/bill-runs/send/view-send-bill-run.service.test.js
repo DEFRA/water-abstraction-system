@@ -12,9 +12,9 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
-const SendBillRunService = require('../../../../app/services/bill-runs/send/send-bill-run.service.js')
+const ViewSendBillRunService = require('../../../../app/services/bill-runs/send/view-send-bill-run.service.js')
 
-describe('Send Bill Run service', () => {
+describe('Bill Runs - View Send Bill Run service', () => {
   let billRunId
   let region
 
@@ -33,7 +33,7 @@ describe('Send Bill Run service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data and format it for use in the send bill run page', async () => {
-      const result = await SendBillRunService.go(billRunId)
+      const result = await ViewSendBillRunService.go(billRunId)
 
       expect(result).to.equal({
         billRunId,
@@ -50,7 +50,7 @@ describe('Send Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(SendBillRunService.go('testId'))
+      await expect(ViewSendBillRunService.go('testId'))
         .to
         .reject()
     })

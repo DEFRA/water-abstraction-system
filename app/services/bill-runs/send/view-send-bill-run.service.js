@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the send bill run confirmation page
- * @module SendBillRunService
+ * @module ViewSendBillRunService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')

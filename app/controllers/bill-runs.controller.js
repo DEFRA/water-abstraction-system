@@ -9,11 +9,11 @@ const Boom = require('@hapi/boom')
 
 const GenerateBillRunService = require('../services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
-const SendBillRunService = require('../services/bill-runs/send/send-bill-run.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
+const ViewSendBillRunService = require('../services/bill-runs/send/view-send-bill-run.service.js')
 
 async function cancel (request, h) {
   const { id } = request.params
@@ -41,7 +41,7 @@ async function index (request, h) {
 async function send (request, h) {
   const { id } = request.params
 
-  const pageData = await SendBillRunService.go(id)
+  const pageData = await ViewSendBillRunService.go(id)
 
   return h.view('bill-runs/send.njk', {
     pageTitle: "You're about to send this bill run",
