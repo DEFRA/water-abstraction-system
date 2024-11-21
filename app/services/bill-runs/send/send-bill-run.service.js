@@ -5,8 +5,8 @@
  * @module SendBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const SendBillRunPresenter = require('../../presenters/bill-runs/send-bill-run.presenter.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
+const SendBillRunPresenter = require('../../../presenters/bill-runs/send-bill-run.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the send bill run confirmation page

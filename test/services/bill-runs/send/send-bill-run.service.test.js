@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
-const SendBillRunService = require('../../../app/services/bill-runs/send-bill-run.service.js')
+const SendBillRunService = require('../../../../app/services/bill-runs/send/send-bill-run.service.js')
 
 describe('Send Bill Run service', () => {
   let billRunId

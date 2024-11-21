@@ -5,13 +5,13 @@
  * @module SubmitSendBillRunService
  */
 
-const BillModel = require('../../models/bill.model.js')
-const BillRunModel = require('../../models/bill-run.model.js')
-const ExpandedError = require('../../errors/expanded.error.js')
-const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
-const ChargingModuleSendBillRunRequest = require('../../requests/charging-module/send-bill-run.request.js')
-const ChargingModuleViewBillRunRequest = require('../../requests/charging-module/view-bill-run.request.js')
-const UnflagBilledLicencesService = require('./supplementary/unflag-billed-licences.service.js')
+const BillModel = require('../../../models/bill.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
+const ExpandedError = require('../../../errors/expanded.error.js')
+const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../../lib/general.lib.js')
+const ChargingModuleSendBillRunRequest = require('../../../requests/charging-module/send-bill-run.request.js')
+const ChargingModuleViewBillRunRequest = require('../../../requests/charging-module/view-bill-run.request.js')
+const UnflagBilledLicencesService = require('../supplementary/unflag-billed-licences.service.js')
 
 /**
  * Orchestrates the sending of a bill run

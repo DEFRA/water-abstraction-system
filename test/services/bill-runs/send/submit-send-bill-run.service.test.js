@@ -11,18 +11,18 @@ const { expect } = Code
 // Test helpers
 const { setTimeout } = require('timers/promises')
 
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const ExpandedError = require('../../../app/errors/expanded.error.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const BillHelper = require('../../../support/helpers/bill.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const ExpandedError = require('../../../../app/errors/expanded.error.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const ChargingModuleSendBillRunRequest = require('../../../app/requests/charging-module/send-bill-run.request.js')
-const ChargingModuleViewBillRunRequest = require('../../../app/requests/charging-module/view-bill-run.request.js')
-const UnflagBilledLicencesService = require('../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
+const ChargingModuleSendBillRunRequest = require('../../../../app/requests/charging-module/send-bill-run.request.js')
+const ChargingModuleViewBillRunRequest = require('../../../../app/requests/charging-module/view-bill-run.request.js')
+const UnflagBilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
 
 // Thing under test
-const SubmitSendBillBunService = require('../../../app/services/bill-runs/submit-send-bill-run.service.js')
+const SubmitSendBillBunService = require('../../../../app/services/bill-runs/send/submit-send-bill-run.service.js')
 
 describe('Submit Send Bill Run service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the send happens in the
