@@ -28,6 +28,8 @@ describe('Return Versions - Fetch Return Version service', () => {
 
       seededLicence = seedData.licence
       seededReturnVersion = seedData.returnVersion
+
+      // NOTE: We seed our return requirements out of order so we can check they're returned in the order we expect
       seededReturnRequirementOne = seededReturnVersion.returnRequirements[0]
       seededReturnRequirementTwo = seededReturnVersion.returnRequirements[1]
       seededUser = seedData.user
@@ -70,42 +72,6 @@ describe('Return Versions - Fetch Return Version service', () => {
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             collectionFrequency: 'week',
-            fiftySixException: false,
-            gravityFill: false,
-            id: seededReturnRequirementOne.id,
-            legacyId: seededReturnRequirementOne.legacyId,
-            points: [
-              {
-                description: 'WELL AT WELLINGTON',
-                id: seededReturnRequirementOne.points[0].id,
-                ngr1: seededReturnRequirementOne.points[0].ngr1,
-                ngr2: null,
-                ngr3: null,
-                ngr4: null
-              }
-            ],
-            returnRequirementPurposes: [
-              {
-                alias: 'I have an alias',
-                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
-                purpose: {
-                  description: 'Spray Irrigation - Storage',
-                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id
-                }
-              }
-            ],
-            reabstraction: false,
-            reportingFrequency: 'week',
-            siteDescription: 'WINTER BOREHOLE AT AVALON',
-            summer: false,
-            twoPartTariff: false
-          },
-          {
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            collectionFrequency: 'week',
             fiftySixException: true,
             gravityFill: true,
             id: seededReturnRequirementTwo.id,
@@ -135,6 +101,42 @@ describe('Return Versions - Fetch Return Version service', () => {
             siteDescription: 'SUMMER BOREHOLE AT AVALON',
             summer: true,
             twoPartTariff: true
+          },
+          {
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            collectionFrequency: 'week',
+            fiftySixException: false,
+            gravityFill: false,
+            id: seededReturnRequirementOne.id,
+            legacyId: seededReturnRequirementOne.legacyId,
+            points: [
+              {
+                description: 'WELL AT WELLINGTON',
+                id: seededReturnRequirementOne.points[0].id,
+                ngr1: seededReturnRequirementOne.points[0].ngr1,
+                ngr2: null,
+                ngr3: null,
+                ngr4: null
+              }
+            ],
+            returnRequirementPurposes: [
+              {
+                alias: 'I have an alias',
+                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
+                purpose: {
+                  description: 'Spray Irrigation - Storage',
+                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id
+                }
+              }
+            ],
+            reabstraction: false,
+            reportingFrequency: 'week',
+            siteDescription: 'WINTER BOREHOLE AT AVALON',
+            summer: false,
+            twoPartTariff: false
           }
         ]
       })
