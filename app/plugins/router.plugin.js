@@ -26,6 +26,7 @@ const ImportRoutes = require('../routes/import.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
+const ReturnsRoutes = require('../routes/returns.routes.js')
 const ReturnVersionsSetupRoutes = require('../routes/return-versions-setup.routes.js')
 const ReturnVersionsRoutes = require('../routes/return-versions.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
@@ -46,6 +47,7 @@ const routes = [
   ...LicenceRoutes,
   ...JobRoutes,
   ...MonitoringStationRoutes,
+  ...ReturnsRoutes,
   ...ReturnVersionsRoutes,
   ...ReturnVersionsSetupRoutes,
   ...DataRoutes,
