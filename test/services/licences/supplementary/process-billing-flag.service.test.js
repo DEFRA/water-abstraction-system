@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script
 const { expect } = Code
 
 // Things we need to stub
+const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
 const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
@@ -249,6 +250,86 @@ describe('Process Billing Flag Service', () => {
           await ProcessBillingFlagService.go(payload)
 
           expect(DetermineReturnLogFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+    })
+
+    describe('with a bill licence Id', () => {
+      before(() => {
+        payload = {
+          billLicenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea'
+        }
+      })
+
+      describe('that should be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineBillLicenceFlagsService, 'go').resolves(_licenceData(true))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+        })
+
+        it('calls the "DetermineBillLicenceFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineBillLicenceFlagsService.go.called).to.be.true()
+        })
+
+        it('calls the "DetermineExistingBillRunYearsService" to work out the two-part tariff years to persist', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.true()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+
+      describe('that should not be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineBillLicenceFlagsService, 'go').resolves(_licenceData(false))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+        })
+
+        it('calls the "DetermineBillLicenceFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineBillLicenceFlagsService.go.called).to.be.true()
         })
 
         it('does not call the "DetermineExistingBillRunYearsService"', async () => {

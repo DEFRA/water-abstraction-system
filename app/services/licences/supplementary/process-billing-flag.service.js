@@ -6,6 +6,7 @@
  */
 
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
+const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
 const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
@@ -48,11 +49,13 @@ async function go (payload) {
 
 async function _determineFlags (payload) {
   if (payload.chargeVersionId) {
-    return await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   } else if (payload.returnId) {
-    return await DetermineReturnLogFlagsService.go(payload.returnId)
+    return DetermineReturnLogFlagsService.go(payload.returnId)
   } else if (payload.workflowId) {
-    return await DetermineWorkflowFlagsService.go(payload.workflowId)
+    return DetermineWorkflowFlagsService.go(payload.workflowId)
+  } else if (payload.billLicenceId) {
+    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
   } else {
     throw new Error('Invalid payload for process billing flags service')
   }
