@@ -224,9 +224,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
           expect(
-            notifierStub.omfg.calledWith('Failed to remove billing records')
+            notifierStub.omfg.calledWith('Delete bill run failed')
           ).to.be.true()
-          expect(errorLogArgs[1]).to.equal({ billRunId: billRun.id })
+          expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
       })
@@ -252,9 +252,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
           expect(
-            notifierStub.omfg.calledWith('Failed to remove review results')
+            notifierStub.omfg.calledWith('Delete bill run failed')
           ).to.be.true()
-          expect(errorLogArgs[1]).to.equal({ billRunId: billRun.id })
+          expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
       })

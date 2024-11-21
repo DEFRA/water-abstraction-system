@@ -43,7 +43,7 @@ async function go (billRun) {
     // an annual bill run it will be removing the bill run. Either way, all 3 processes can be run in parallel as none
     // of them have a dependence on the
     // other
-    await Promise.all([
+    const results = await Promise.allSettled([
       // If the Charging Module errors whilst doing this it shouldn't block us carrying on with deleting the bill run on
       // our side. It just means the the CHA will be storing an 'orphaned' bill run that will never get sent.
       ChargingModuleDeleteBillRunRequest.send(externalId),
@@ -55,7 +55,7 @@ async function go (billRun) {
       _deleteBillingRecords(billRunId)
     ])
 
-    calculateAndLogTimeTaken(startTime, 'Delete bill run complete', { billRun })
+    _logResult(startTime, billRun, results)
   } catch (error) {
     global.GlobalNotifier.omfg('Delete bill run failed', billRun, error)
   }
@@ -77,24 +77,20 @@ async function go (billRun) {
  * @private
  */
 async function _deleteBillingRecords (billRunId) {
-  try {
-    // NOTE: This needs to run first but is also typically the one that takes the longest to complete. In production
-    // deleting the transactions for an Anglian annual bill run can take more than 30 mins!!
-    await _deleteBillRunTransactions(billRunId)
+  // NOTE: This needs to run first but is also typically the one that takes the longest to complete. In production
+  // deleting the transactions for an Anglian annual bill run can take more than 30 mins!!
+  await _deleteBillRunTransactions(billRunId)
 
-    await _removeBillLicences(billRunId)
+  await _removeBillLicences(billRunId)
 
-    await Promise.all([
-      _removeBills(billRunId),
-      _removeBillRunChargeVersionYears(billRunId),
-      _removeBillRunVolumes(billRunId)
-    ])
+  await Promise.all([
+    _removeBills(billRunId),
+    _removeBillRunChargeVersionYears(billRunId),
+    _removeBillRunVolumes(billRunId)
+  ])
 
-    // We can now finally delete the bill run record
-    await BillRunModel.query().deleteById(billRunId)
-  } catch (error) {
-    global.GlobalNotifier.omfg('Failed to remove billing records', { billRunId }, error)
-  }
+  // We can now finally delete the bill run record
+  await BillRunModel.query().deleteById(billRunId)
 }
 
 async function _removeBills (billRunId) {
@@ -197,17 +193,35 @@ async function _removeReturns (billRunId) {
  * @private
  */
 async function _deleteReviewResults (billRunId) {
-  try {
-    // To help performance we allow both these processes to run in parallel. Because their where clause depends on
-    // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
-    // the same for deleting the charge versions and returns.
-    await Promise.all([_removeChargeElementReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
-    await Promise.all([_removeChargeVersions(billRunId), _removeReturns(billRunId)])
+  // To help performance we allow both these processes to run in parallel. Because their where clause depends on
+  // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
+  // the same for deleting the charge versions and returns.
+  await Promise.all([_removeChargeElementReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
+  await Promise.all([_removeChargeVersions(billRunId), _removeReturns(billRunId)])
 
-    return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
-  } catch (error) {
-    global.GlobalNotifier.omfg('Failed to remove review results', { billRunId }, error)
+  return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
+}
+
+/**
+ * Deals with what log message to output. By using Promise.allSettled rather than Promise.all we know all three calls
+ * will be allowed to resolve instead of stopping as soon as one fails.
+ *
+ * This means we can handle any errors thrown in one place, rather than in each of the individual functions.
+ *
+ * Obviously, if no errors are thrown we can just log our complete message!
+ *
+ * @private
+ */
+function _logResult (startTime, billRun, results) {
+  const firstError = results.find((result) => {
+    return result.status === 'rejected'
+  })
+
+  if (!firstError) {
+    calculateAndLogTimeTaken(startTime, 'Delete bill run complete', { billRun })
   }
+
+  global.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
 }
 
 module.exports = {
