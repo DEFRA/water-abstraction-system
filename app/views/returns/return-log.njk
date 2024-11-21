@@ -1,0 +1,12 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Data for {{ data.returnId }}</span>
+    </h1>
+    <pre>
+      {{ dataString }}
+    </pre>
+  </div>
+{% endblock %}
