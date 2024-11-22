@@ -43,17 +43,17 @@ module.exports = [
       'arrow-body-style': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
       strict: ['error', 'global'],
-      'jsdoc/check-alignment': 'warn',
-      'jsdoc/check-indentation': 'warn',
-      'jsdoc/check-types': 'warn',
-      'jsdoc/check-tag-names': 'warn',
-      'jsdoc/lines-before-block': 'warn',
+      'jsdoc/check-alignment': 'error',
+      'jsdoc/check-indentation': 'error',
+      'jsdoc/check-types': 'error',
+      'jsdoc/check-tag-names': 'error',
+      'jsdoc/lines-before-block': 'error',
       'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
-      'jsdoc/require-description': 'warn',
-      'jsdoc/require-hyphen-before-param-description': 'warn',
-      'jsdoc/require-jsdoc': ['warn', { publicOnly: true }],
-      'jsdoc/require-param': ['warn', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['warn', { publicOnly: true }]
+      'jsdoc/require-description': 'error',
+      'jsdoc/require-hyphen-before-param-description': 'error',
+      'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
+      'jsdoc/require-param': ['error', { exemptedBy: ['private'] }],
+      'jsdoc/require-returns': ['error', { publicOnly: true }]
     },
     settings: {
       jsdoc: {
