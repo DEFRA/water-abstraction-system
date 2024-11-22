@@ -18,9 +18,8 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
  *
  * @returns {object} page data needed by the view template
  */
-function go (returnVersion) {
-  const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } =
-    returnVersion
+function go(returnVersion) {
+  const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
 
   return {
     createdBy: _createdBy(returnVersion),

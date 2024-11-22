@@ -70,15 +70,17 @@ async function go(sessionId, payload, yar) {
  *
  * @private
  */
-function _defaultQuarterlyReturns (session) {
-  if (!session.checkPageVisited &&
+function _defaultQuarterlyReturns(session) {
+  if (
+    !session.checkPageVisited &&
     isQuarterlyReturnSubmissions(session.returnVersionStartDate) &&
-    session.licence.waterUndertaker) {
+    session.licence.waterUndertaker
+  ) {
     session.quarterlyReturns = true
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   const selectedOption = payload['start-date-options']
 
   session.startDateOptions = selectedOption

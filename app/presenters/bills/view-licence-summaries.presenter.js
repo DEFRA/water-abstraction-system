@@ -14,7 +14,7 @@ const { formatMoney } = require('../base.presenter.js')
  *
  * @returns {object} a formatted representation of the bill's licence summaries
  */
-function go (licenceSummaries) {
+function go(licenceSummaries) {
   const billLicences = _billLicences(licenceSummaries)
 
   const formattedBill = {

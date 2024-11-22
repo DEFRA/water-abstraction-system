@@ -18,7 +18,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (payload) {
+function go(payload) {
   const errorMessage = 'Select any points for the requirements for returns'
 
   const schema = Joi.object({

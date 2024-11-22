@@ -124,7 +124,7 @@ function _isLeapYear(year) {
  *
  * @private
  */
-function isQuarterlyReturnSubmissions (date) {
+function isQuarterlyReturnSubmissions(date) {
   return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 

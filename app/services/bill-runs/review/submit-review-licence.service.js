@@ -69,9 +69,7 @@ async function _update(reviewLicenceId, parsedPayload) {
     patch.progress = progress
   }
 
-  await ReviewLicenceModel.query()
-    .findById(reviewLicenceId)
-    .patch(patch)
+  await ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
 }
 
 module.exports = {

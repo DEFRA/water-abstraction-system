@@ -32,7 +32,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * @returns {object} - An object containing the related licenceId, regionId, charge version start and end date and
  * licence supplementary billing flags
  */
-async function go (chargeVersionId) {
+async function go(chargeVersionId) {
   const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
 
   const twoPartTariff = _twoPartTariffSrocIndicators(chargeReferences)
@@ -58,34 +58,21 @@ async function go (chargeVersionId) {
   return result
 }
 
-async function _fetchChargeVersion (chargeVersionId) {
+async function _fetchChargeVersion(chargeVersionId) {
   return ChargeVersionModel.query()
     .findById(chargeVersionId)
-    .select([
-      'id',
-      'scheme',
-      'startDate',
-      'endDate'])
+    .select(['id', 'scheme', 'startDate', 'endDate'])
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
-      builder.select([
-        'id',
-        'scheme',
-        ref('adjustments:s127').castBool().as('twoPartTariff')
-      ])
+      builder.select(['id', 'scheme', ref('adjustments:s127').castBool().as('twoPartTariff')])
     })
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'regionId',
-        'includeInSrocBilling',
-        'includeInPresrocBilling'
-      ])
+      builder.select(['id', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
     })
 }
 
-function _twoPartTariffSrocIndicators (chargeReferences) {
+function _twoPartTariffSrocIndicators(chargeReferences) {
   return chargeReferences.some((chargeReference) => {
     return chargeReference.twoPartTariff && chargeReference.scheme === 'sroc'
   })

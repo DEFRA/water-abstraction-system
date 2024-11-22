@@ -87,8 +87,7 @@ describe('Licence Monitoring Station model', () => {
 
     describe('when linking to licence version purpose condition', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceMonitoringStationModel.query()
-          .innerJoinRelated('licenceVersionPurposeCondition')
+        const query = await LicenceMonitoringStationModel.query().innerJoinRelated('licenceVersionPurposeCondition')
 
         expect(query).to.exist()
       })

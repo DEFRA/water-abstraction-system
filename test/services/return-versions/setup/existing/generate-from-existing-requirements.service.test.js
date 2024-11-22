@@ -37,11 +37,13 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
         expect(result).to.equal([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
-            purposes: [{
-              alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
-              description: 'Spray Irrigation - Storage',
-              id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
-            }],
+            purposes: [
+              {
+                alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
+              }
+            ],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
@@ -56,11 +58,13 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
           },
           {
             points: [fetchResult.returnRequirements[1].points[0].id],
-            purposes: [{
-              alias: '',
-              description: 'Spray Irrigation - Storage',
-              id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
-            }],
+            purposes: [
+              {
+                alias: '',
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
+              }
+            ],
             returnsCycle: 'summer',
             siteDescription: 'SECOND BOREHOLE AT AVALON',
             abstractionPeriod: {
@@ -96,11 +100,13 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
         expect(result).to.equal([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
-            purposes: [{
-              alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
-              description: 'Spray Irrigation - Storage',
-              id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
-            }],
+            purposes: [
+              {
+                alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
+              }
+            ],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
@@ -115,11 +121,13 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
           },
           {
             points: [fetchResult.returnRequirements[1].points[0].id],
-            purposes: [{
-              alias: '',
-              description: 'Spray Irrigation - Storage',
-              id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
-            }],
+            purposes: [
+              {
+                alias: '',
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
+              }
+            ],
             returnsCycle: 'summer',
             siteDescription: 'WELL AT WELLINGTON',
             abstractionPeriod: {
@@ -144,14 +152,12 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 
   describe('when a matching return version does not exist', () => {
     it('throws an error', async () => {
-      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926'))
-        .to
-        .reject()
+      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).to.reject()
     })
   })
 })
 
-function _fetchResult (returnVersionId) {
+function _fetchResult(returnVersionId) {
   return {
     id: returnVersionId,
     returnRequirements: [

@@ -72,7 +72,7 @@ function defaults(data = {}) {
  *
  * @returns {string} The generated external ID
  */
-function generateRegionNaldPatternExternalId (regionCode = null) {
+function generateRegionNaldPatternExternalId(regionCode = null) {
   const regionCodeToUse = regionCode ?? randomInteger(1, 9)
 
   return `${regionCodeToUse}:${randomInteger(100, 99999)}`

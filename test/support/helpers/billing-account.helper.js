@@ -57,7 +57,7 @@ function defaults(data = {}) {
  *
  * @returns {string} - The generated account number
  */
-function generateAccountNumber () {
+function generateAccountNumber() {
   const numbering = randomInteger(10000000, 99999999)
 
   return `T${numbering}A`

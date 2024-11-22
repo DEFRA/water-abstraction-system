@@ -31,12 +31,14 @@ describe('Return Versions Setup - Submit Start Date service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01',
           waterUndertaker: true
         },

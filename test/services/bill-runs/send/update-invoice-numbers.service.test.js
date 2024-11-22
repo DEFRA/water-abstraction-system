@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 const BillModel = require('../../../../app/models/bill.model.js')
@@ -106,7 +106,8 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
         expect(billRunPatchStub.calledOnce).to.be.true()
         expect(billRunPatchStub.firstCall.firstArg).to.equal(
-          { status: 'sent', transactionFileReference: 'nalwi50031' }, { skip: ['updatedAt'] }
+          { status: 'sent', transactionFileReference: 'nalwi50031' },
+          { skip: ['updatedAt'] }
         )
       })
 
@@ -115,9 +116,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(
-          notifierStub.omg.calledWith('Send bill run complete')
-        ).to.be.true()
+        expect(notifierStub.omg.calledWith('Send bill run complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.billRun).to.equal(billRun)
@@ -159,9 +158,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Send bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -171,9 +168,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.rejects(
-            new ExpandedError('Charging Module send request failed', {})
-          )
+          chargingModuleSendBillRunRequestStub.rejects(new ExpandedError('Charging Module send request failed', {}))
         })
 
         it('does not throw an error', async () => {
@@ -185,9 +180,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Send bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
         })
@@ -210,9 +203,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Send bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
         })
@@ -240,9 +231,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Send bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -256,10 +245,12 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
           chargingModuleViewBillRunRequestStub.resolves()
 
           Sinon.stub(BillModel, 'query').returns({
-            patch: Sinon.stub().returnsThis(), where: Sinon.stub().resolves()
+            patch: Sinon.stub().returnsThis(),
+            where: Sinon.stub().resolves()
           })
           Sinon.stub(BillRunModel, 'query').returns({
-            findById: Sinon.stub().returnsThis(), patch: Sinon.stub().rejects()
+            findById: Sinon.stub().returnsThis(),
+            patch: Sinon.stub().rejects()
           })
         })
 
@@ -272,9 +263,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Send bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -283,7 +272,7 @@ describe('Bill Runs - Update Invoice Numbers service', () => {
   })
 })
 
-function _billRun () {
+function _billRun() {
   return {
     batchType: 'annual',
     createdAt: new Date('2024-05-07'),

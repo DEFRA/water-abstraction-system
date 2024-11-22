@@ -88,13 +88,16 @@ describe('Return Versions Setup - Submit Existing service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitExistingService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Use previous requirements for returns',
-          backLink: `/system/return-versions/setup/${session.id}/method`,
-          existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
-          licenceRef: '01/ABC'
-        }, { skip: ['sessionId', 'error'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            pageTitle: 'Use previous requirements for returns',
+            backLink: `/system/return-versions/setup/${session.id}/method`,
+            existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
+            licenceRef: '01/ABC'
+          },
+          { skip: ['sessionId', 'error'] }
+        )
       })
 
       describe('because the user has not submitted anything', () => {

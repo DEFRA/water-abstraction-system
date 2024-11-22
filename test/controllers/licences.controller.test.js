@@ -649,7 +649,7 @@ function _viewLicenceContactDetails() {
   }
 }
 
-function _viewLicencePoints () {
+function _viewLicencePoints() {
   return {
     id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
     licencePoints: [
@@ -675,7 +675,7 @@ function _viewLicencePoints () {
   }
 }
 
-function _viewLicencePurposes () {
+function _viewLicencePurposes() {
   return {
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
     licenceRef: '01/140/R01',

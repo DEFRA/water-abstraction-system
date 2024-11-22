@@ -17,11 +17,11 @@ const { db } = require('../../../../db/db.js')
  * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
  * @param {object} transformedCompanies - An object representing a valid WRLS Company.
  */
-async function go (trx, updatedAt, transformedCompanies) {
+async function go(trx, updatedAt, transformedCompanies) {
   await _persistCompanies(trx, updatedAt, transformedCompanies)
 }
 
-async function _persistAddress (trx, updatedAt, address) {
+async function _persistAddress(trx, updatedAt, address) {
   await AddressModel.query(trx)
     .insert({ ...address, updatedAt })
     .onConflict('externalId')
@@ -70,7 +70,9 @@ async function _persistCompanyAddresses(trx, updatedAt, companyAddresses) {
 async function _persistCompanyAddress(trx, updatedAt, companyAddress) {
   const { companyId, startDate, endDate, licenceRoleId, addressId } = companyAddress
 
-  await db.raw(`
+  await db
+    .raw(
+      `
     INSERT INTO public."company_addresses" (company_id, address_id, licence_role_id, start_date, end_date, "default", created_at, updated_at)
     SELECT com.id, add.id, lr.id, ? ,?, true, NOW(), ?
     FROM public.companies com
@@ -92,7 +94,9 @@ async function _persistCompanyAddress(trx, updatedAt, companyAddress) {
 async function _persistsCompanyContact(trx, updatedAt, companyContact) {
   const { externalId, startDate, licenceRoleId } = companyContact
 
-  await db.raw(`
+  await db
+    .raw(
+      `
     INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
     SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
     FROM public.companies com
@@ -110,7 +114,7 @@ async function _persistsCompanyContact(trx, updatedAt, companyContact) {
     .transacting(trx)
 }
 
-async function _persistContact (trx, updatedAt, contact) {
+async function _persistContact(trx, updatedAt, contact) {
   await ContactModel.query(trx)
     .insert({ ...contact, updatedAt })
     .onConflict('externalId')

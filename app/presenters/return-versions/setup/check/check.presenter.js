@@ -16,10 +16,16 @@ const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib
  *
  * @returns {object} The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const {
-    id: sessionId, journey, licence, multipleUpload, note, reason,
-    returnVersionStartDate, quarterlyReturns
+    id: sessionId,
+    journey,
+    licence,
+    multipleUpload,
+    note,
+    reason,
+    returnVersionStartDate,
+    quarterlyReturns
   } = session
 
   const returnsRequired = journey === 'returns-required'

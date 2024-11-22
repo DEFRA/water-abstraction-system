@@ -22,16 +22,7 @@ async function go(id) {
 async function _fetch(id) {
   return ReturnVersionModel.query()
     .findById(id)
-    .select([
-      'createdAt',
-      'id',
-      'multipleUpload',
-      'notes',
-      'reason',
-      'quarterlyReturns',
-      'startDate',
-      'status'
-    ])
+    .select(['createdAt', 'id', 'multipleUpload', 'notes', 'reason', 'quarterlyReturns', 'startDate', 'status'])
     .modify('history')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
@@ -59,30 +50,22 @@ async function _fetch(id) {
         .orderBy('legacyId', 'asc')
         .withGraphFetched('points')
         .modifyGraph('points', (pointsBuilder) => {
-          pointsBuilder
-            .select([
-              'points.description',
-              'points.id',
-              'points.ngr1',
-              'points.ngr2',
-              'points.ngr3',
-              'points.ngr4'
-            ])
+          pointsBuilder.select([
+            'points.description',
+            'points.id',
+            'points.ngr1',
+            'points.ngr2',
+            'points.ngr3',
+            'points.ngr4'
+          ])
         })
         .withGraphFetched('returnRequirementPurposes')
         .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
           returnRequirementPurposesBuilder
-            .select([
-              'alias',
-              'id'
-            ])
+            .select(['alias', 'id'])
             .withGraphFetched('purpose')
             .modifyGraph('purpose', (builder) => {
-              builder
-                .select([
-                  'description',
-                  'id'
-                ])
+              builder.select(['description', 'id'])
             })
         })
     })

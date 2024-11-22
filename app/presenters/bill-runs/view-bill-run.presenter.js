@@ -23,7 +23,7 @@ const {
  *
  * @returns {object} - the prepared bill run data to be passed to the view bill run page
  */
-function go (billRun, billSummaries) {
+function go(billRun, billSummaries) {
   const {
     batchType,
     billRunNumber,

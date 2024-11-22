@@ -56,14 +56,7 @@ async function seed() {
   returnVersion.returnRequirements = [returnRequirement]
 
   // Create the second requirement record
-  returnRequirement = await _returnRequirement(
-    returnVersion.id,
-    legacyIds[1],
-    'month',
-    true,
-    true,
-    null
-  )
+  returnRequirement = await _returnRequirement(returnVersion.id, legacyIds[1], 'month', true, true, null)
   returnVersion.returnRequirements.push(returnRequirement)
 
   return { licence, returnVersion, user }
@@ -82,21 +75,14 @@ async function seed() {
  *
  * @private
  */
-function _legacyIds () {
+function _legacyIds() {
   const legacyId1 = ReturnRequirementHelper.generateLegacyId()
   const legacyId2 = ReturnRequirementHelper.generateLegacyId()
 
   return legacyId1 > legacyId2 ? [legacyId1, legacyId2] : [legacyId2, legacyId1]
 }
 
-async function _returnRequirement (
-  returnVersionId,
-  legacyId,
-  reportingFrequency,
-  summer,
-  agreements,
-  alias
-) {
+async function _returnRequirement(returnVersionId, legacyId, reportingFrequency, summer, agreements, alias) {
   const returnRequirement = await ReturnRequirementHelper.add({
     collectionFrequency: 'week',
     fiftySixException: agreements,

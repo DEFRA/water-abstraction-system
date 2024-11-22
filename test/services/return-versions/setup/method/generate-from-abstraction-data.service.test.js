@@ -81,11 +81,13 @@ describe('Return Versions Setup - Generate From Abstraction Data service', () =>
           },
           {
             points: ['bf6a409e-7882-4c5d-9e49-2ebae2936576'],
-            purposes: [{
-              alias: '',
-              description: 'Vegetable Washing',
-              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
-            }],
+            purposes: [
+              {
+                alias: '',
+                description: 'Vegetable Washing',
+                id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
+              }
+            ],
             returnsCycle: 'winter-and-all-year',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {

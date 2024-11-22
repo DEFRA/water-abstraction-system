@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>}
  */
-async function go () {
+async function go() {
   return _deleteAllTestData()
 }
 

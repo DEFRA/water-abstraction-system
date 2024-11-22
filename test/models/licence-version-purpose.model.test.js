@@ -126,8 +126,7 @@ describe('Licence Version Purpose model', () => {
 
     describe('when linking to licence version purpose points', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('licenceVersionPurposePoints')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('licenceVersionPurposePoints')
 
         expect(query).to.exist()
       })

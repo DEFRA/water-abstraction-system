@@ -126,7 +126,7 @@ async function get(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function patch (url, additionalOptions = {}) {
+async function patch(url, additionalOptions = {}) {
   return _sendRequest('patch', url, additionalOptions)
 }
 
@@ -151,7 +151,7 @@ async function patch (url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function post (url, additionalOptions = {}) {
+async function post(url, additionalOptions = {}) {
   return _sendRequest('post', url, additionalOptions)
 }
 

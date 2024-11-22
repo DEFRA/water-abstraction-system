@@ -79,7 +79,7 @@ async function submitMarkForSupplementaryBilling(request, h) {
   return h.redirect(`/system/licences/${licenceId}/marked-for-supplementary-billing`)
 }
 
-async function supplementary (request, h) {
+async function supplementary(request, h) {
   await LicenceSupplementaryProcessBillingFlagService.go(request.payload)
 
   return h.response().code(204)
@@ -136,7 +136,7 @@ async function viewLicenceContacts(request, h) {
   })
 }
 
-async function viewLicencePoints (request, h) {
+async function viewLicencePoints(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewLicencePointsService.go(licenceId)
@@ -146,7 +146,7 @@ async function viewLicencePoints (request, h) {
   })
 }
 
-async function viewLicencePurposes (request, h) {
+async function viewLicencePurposes(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewLicencePurposesService.go(licenceId)

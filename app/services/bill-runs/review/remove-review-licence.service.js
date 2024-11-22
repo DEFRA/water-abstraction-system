@@ -21,7 +21,7 @@ async function go(reviewLicenceId) {
   await _removeLicence(reviewLicenceId)
 }
 
-async function _removeChargeElements (reviewLicenceId) {
+async function _removeChargeElements(reviewLicenceId) {
   await db
     .withSchema('water')
     .del()
@@ -32,7 +32,7 @@ async function _removeChargeElements (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeElementReturns (reviewLicenceId) {
+async function _removeChargeElementReturns(reviewLicenceId) {
   await db
     .withSchema('water')
     .del()
@@ -44,7 +44,7 @@ async function _removeChargeElementReturns (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeReferences (reviewLicenceId) {
+async function _removeChargeReferences(reviewLicenceId) {
   await db
     .withSchema('water')
     .del()
@@ -54,7 +54,7 @@ async function _removeChargeReferences (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeVersions (reviewLicenceId) {
+async function _removeChargeVersions(reviewLicenceId) {
   await db
     .withSchema('water')
     .del()
@@ -63,15 +63,11 @@ async function _removeChargeVersions (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeLicence (reviewLicenceId) {
-  await db
-    .withSchema('water')
-    .del()
-    .from('reviewLicences')
-    .where('id', reviewLicenceId)
+async function _removeLicence(reviewLicenceId) {
+  await db.withSchema('water').del().from('reviewLicences').where('id', reviewLicenceId)
 }
 
-async function _removeReturns (reviewLicenceId) {
+async function _removeReturns(reviewLicenceId) {
   await db
     .withSchema('water')
     .del()

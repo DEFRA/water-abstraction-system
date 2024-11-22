@@ -16,7 +16,7 @@ const { formatMoney } = require('../base.presenter.js')
  * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
  * grouped under 'other-abstractors'.
  */
-function go (billSummaries) {
+function go(billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
 

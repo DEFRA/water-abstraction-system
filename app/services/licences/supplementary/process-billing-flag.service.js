@@ -46,7 +46,7 @@ async function go(payload) {
   }
 }
 
-async function _determineFlags (payload) {
+async function _determineFlags(payload) {
   if (payload.chargeVersionId) {
     return await DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
   } else if (payload.returnId) {
@@ -58,7 +58,7 @@ async function _determineFlags (payload) {
   }
 }
 
-async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) {
+async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
   const { endDate, startDate, regionId, flagForTwoPartTariffSupplementary } = result
   const years = DetermineBillingYearsService.go(startDate, endDate)
 
@@ -69,13 +69,8 @@ async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) 
   return DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
 }
 
-async function _setFlagForLicence (result) {
-  const {
-    licenceId,
-    flagForPreSrocSupplementary,
-    flagForSrocSupplementary,
-    flagForTwoPartTariffSupplementary
-  } = result
+async function _setFlagForLicence(result) {
+  const { licenceId, flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = result
 
   let twoPartTariffBillingYears = []
 

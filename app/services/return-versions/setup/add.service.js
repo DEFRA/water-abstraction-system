@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {number} - The index of the new requirement. Needed by the setup pages so they know which requirement to
  * display and update
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   await _save(session)

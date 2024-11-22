@@ -17,7 +17,7 @@ const LicenceVersionModel = require('../../../models/licence-version.model.js')
  * @param {object} transformedLicence - An object representing a valid WRLS licence.
  * @param {string} licenceId - A licence id from WRLS
  */
-async function go (trx, updatedAt, transformedLicence, licenceId) {
+async function go(trx, updatedAt, transformedLicence, licenceId) {
   await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
 }
 

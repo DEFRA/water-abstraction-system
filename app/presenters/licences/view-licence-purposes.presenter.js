@@ -63,7 +63,7 @@ function _formatAbstractionAmounts(licenceVersionPurpose) {
   return details
 }
 
-function _formatAbstractionMethod (licenceVersionPurposePoints) {
+function _formatAbstractionMethod(licenceVersionPurposePoints) {
   const abstractionMethods = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
     return licenceVersionPurposePoint.abstractionMethod
   })
@@ -78,11 +78,14 @@ function _formatAbstractionMethod (licenceVersionPurposePoints) {
     return uniqueAbstractionMethods.join(' and ')
   }
 
-  return uniqueAbstractionMethods.slice(0, uniqueAbstractionMethods.length - 1)
-    .join(', ') + ', and ' + uniqueAbstractionMethods[uniqueAbstractionMethods.length - 1]
+  return (
+    uniqueAbstractionMethods.slice(0, uniqueAbstractionMethods.length - 1).join(', ') +
+    ', and ' +
+    uniqueAbstractionMethods[uniqueAbstractionMethods.length - 1]
+  )
 }
 
-function _formatAbstractionPoints (points) {
+function _formatAbstractionPoints(points) {
   return points.map((point) => {
     return point.$describe()
   })
@@ -98,7 +101,10 @@ function _formatLicencePurposes(licenceVersionPurposes) {
       abstractionAmounts,
       abstractionAmountsTitle: abstractionAmounts.length > 1 ? 'Abstraction amounts' : 'Abstraction amount',
       abstractionMethods,
-      abstractionMethodsTitle: licenceVersionPurpose.licenceVersionPurposePoints.length > 1 ? 'Methods of abstraction' : 'Method of abstraction',
+      abstractionMethodsTitle:
+        licenceVersionPurpose.licenceVersionPurposePoints.length > 1
+          ? 'Methods of abstraction'
+          : 'Method of abstraction',
       abstractionPeriod: _abstractionPeriod(licenceVersionPurpose),
       abstractionPoints,
       abstractionPointsTitle: abstractionPoints.length > 1 ? 'Abstraction points' : 'Abstraction point',

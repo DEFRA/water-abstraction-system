@@ -37,7 +37,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
  * properties: `bills`, `billLicences` and `transactions`.
  */
-async function go (sourceBill, reissueBillRun) {
+async function go(sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
     billLicences: [],
