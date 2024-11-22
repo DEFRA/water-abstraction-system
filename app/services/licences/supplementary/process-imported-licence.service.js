@@ -17,8 +17,6 @@ const SROC_START_DATE = new Date('2022-04-01')
  *
  * @param {object} importedLicence - Object representing the updated licence being imported
  * @param {string} licenceId - The UUID of the licence being imported
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (importedLicence, licenceId) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
@@ -34,7 +32,7 @@ async function go (importedLicence, licenceId) {
   const flagForSrocSupplementary = _flagForSrocSupplementary(existingLicenceDetails)
   const twoPartTariffBillingYears = _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate)
 
-  return PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
