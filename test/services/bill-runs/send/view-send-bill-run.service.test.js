@@ -12,9 +12,9 @@ const { expect } = Code
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Thing under test
-const ViewCancelBillRunService = require('../../../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
+const ViewSendBillRunService = require('../../../../app/services/bill-runs/send/view-send-bill-run.service.js')
 
-describe('Bill Runs - View Cancel Bill Run service', () => {
+describe('Bill Runs - View Send Bill Run service', () => {
   const billRunId = 'd351ee81-157e-4621-98eb-db121cb48cbb'
 
   let billRunQueryStub
@@ -51,11 +51,11 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
         toFinancialYearEnding: 2025
       })
     })
-    it('will fetch the data and format it for use in the cancel bill run page', async () => {
-      const result = await ViewCancelBillRunService.go(billRunId)
+
+    it('will fetch the data and format it for use in the send bill run page', async () => {
+      const result = await ViewSendBillRunService.go(billRunId)
 
       expect(result).to.equal({
-        backLink: `/system/bill-runs/${billRunId}`,
         billRunId,
         billRunNumber: 10101,
         billRunStatus: 'ready',
@@ -70,7 +70,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewCancelBillRunService.go('testId'))
+      await expect(ViewSendBillRunService.go('testId'))
         .to
         .reject()
     })

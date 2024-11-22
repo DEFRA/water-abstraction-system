@@ -11,8 +11,6 @@ const { db } = require('../../../../db/db.js')
  * Deletes all data relating to a review licence from the review tables
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
- *
- * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
 async function go (reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
@@ -20,12 +18,11 @@ async function go (reviewLicenceId) {
   await _removeChargeElements(reviewLicenceId)
   await _removeChargeReferences(reviewLicenceId)
   await _removeChargeVersions(reviewLicenceId)
-
-  return _removeLicence(reviewLicenceId)
+  await _removeLicence(reviewLicenceId)
 }
 
 async function _removeChargeElements (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeElements AS rce')
@@ -36,7 +33,7 @@ async function _removeChargeElements (reviewLicenceId) {
 }
 
 async function _removeChargeElementReturns (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeElementReturns AS rcer')
@@ -48,7 +45,7 @@ async function _removeChargeElementReturns (reviewLicenceId) {
 }
 
 async function _removeChargeReferences (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeReferences AS rcr')
@@ -58,7 +55,7 @@ async function _removeChargeReferences (reviewLicenceId) {
 }
 
 async function _removeChargeVersions (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeVersions AS rcv')
@@ -67,7 +64,7 @@ async function _removeChargeVersions (reviewLicenceId) {
 }
 
 async function _removeLicence (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewLicences')
@@ -75,7 +72,7 @@ async function _removeLicence (reviewLicenceId) {
 }
 
 async function _removeReturns (reviewLicenceId) {
-  return db
+  await db
     .withSchema('water')
     .del()
     .from('reviewReturns AS rr')
