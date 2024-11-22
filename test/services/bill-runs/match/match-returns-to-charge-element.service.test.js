@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -15,8 +15,7 @@ describe('Match Returns To Charge Element Service', () => {
   let returnLogs
 
   beforeEach(() => {
-    chargeElement =
-    {
+    chargeElement = {
       id: '8eac5976-d16c-4818-8bc8-384d958ce863',
       purpose: {
         id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
@@ -159,7 +158,7 @@ describe('Match Returns To Charge Element Service', () => {
 })
 
 // All data not required for the tests has been excluded from the generated data
-function _testReturnLogs () {
+function _testReturnLogs() {
   return [
     {
       id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',

@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ChargeElementModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'chargeElements'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       chargeReference: {
         relation: Model.BelongsToOneRelation,

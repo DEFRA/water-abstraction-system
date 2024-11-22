@@ -15,7 +15,7 @@ const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
  *
  * @returns The data formatted and sorted for the view template
  */
-function go (licence) {
+function go(licence) {
   const { id: licenceId, licenceRef } = licence
 
   const chargeVersionEntries = _chargeVersionEntries(licence)
@@ -32,7 +32,7 @@ function go (licence) {
   }
 }
 
-function _chargeVersionEntries (licence) {
+function _chargeVersionEntries(licence) {
   const { chargeVersions, id } = licence
 
   return chargeVersions.map((chargeVersion) => {
@@ -52,7 +52,7 @@ function _chargeVersionEntries (licence) {
   })
 }
 
-function _createdBy (entry) {
+function _createdBy(entry) {
   const createdBy = entry.$createdBy()
 
   if (createdBy) {
@@ -62,7 +62,7 @@ function _createdBy (entry) {
   return 'Migrated from NALD'
 }
 
-function _licenceVersionEntries (licence) {
+function _licenceVersionEntries(licence) {
   const { licenceVersions } = licence
 
   return licenceVersions.map((licenceVersion) => {
@@ -82,7 +82,7 @@ function _licenceVersionEntries (licence) {
   })
 }
 
-function _returnVersionEntries (licence) {
+function _returnVersionEntries(licence) {
   const { returnVersions } = licence
 
   return returnVersions.map((returnVersion) => {
@@ -104,7 +104,7 @@ function _returnVersionEntries (licence) {
   })
 }
 
-function _sortEntries (chargeVersionEntries, licenceVersionEntries, returnVersionEntries) {
+function _sortEntries(chargeVersionEntries, licenceVersionEntries, returnVersionEntries) {
   const joinedEntries = [...chargeVersionEntries, ...licenceVersionEntries, ...returnVersionEntries]
 
   return joinedEntries.sort((entryA, entryB) => {

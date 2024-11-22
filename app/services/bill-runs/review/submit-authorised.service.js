@@ -20,7 +20,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
-async function go (reviewChargeReferenceId, yar, payload) {
+async function go(reviewChargeReferenceId, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -41,13 +41,13 @@ async function go (reviewChargeReferenceId, yar, payload) {
   }
 }
 
-async function _save (reviewChargeReferenceId, payload) {
+async function _save(reviewChargeReferenceId, payload) {
   return ReviewChargeReferenceModel.query()
     .findById(reviewChargeReferenceId)
     .patch({ amendedAuthorisedVolume: payload.amendedAuthorisedVolume })
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = AuthorisedValidator.go(payload)
 
   if (!validation.error) {

@@ -11,11 +11,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class UserModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'users'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       chargeVersionNotes: {
         relation: Model.HasManyRelation,
@@ -84,7 +84,7 @@ class UserModel extends BaseModel {
     }
   }
 
-  static generateHashedPassword (password) {
+  static generateHashedPassword(password) {
     // 10 is the number of salt rounds to perform to generate the salt. The legacy code uses
     // const salt = bcrypt.genSaltSync(10) to pre-generate the salt before passing it to hashSync(). But this is
     // intended for operations where you need to hash a large number of values. If you just pass in a number bcrypt will

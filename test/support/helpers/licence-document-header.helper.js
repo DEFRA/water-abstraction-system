@@ -23,7 +23,7 @@ const LicenceDocumentHeaderModel = require('../../../app/models/licence-document
  *
  * @returns {Promise<module:LicenceDocumentHeaderModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceDocumentHeaderModel.query()
@@ -41,7 +41,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     regimeEntityId: generateUUID(),
     naldId: randomInteger(1000, 199999),
@@ -55,7 +55,7 @@ function defaults (data = {}) {
   }
 }
 
-function _metadata () {
+function _metadata() {
   return {
     Town: 'BRISTOL',
     County: 'AVON',

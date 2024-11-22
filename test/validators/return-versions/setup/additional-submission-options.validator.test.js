@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -13,9 +13,7 @@ const AdditionalSubmissionOptionsValidator = require('../../../../app/validators
 describe('Return Versions Setup - Additional Submission Options validator', () => {
   describe('when valid data is provided', () => {
     const payload = {
-      additionalSubmissionOptions: [
-        'multiple-upload'
-      ]
+      additionalSubmissionOptions: ['multiple-upload']
     }
 
     it('confirms the data is valid', () => {
@@ -28,9 +26,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
   describe('when invalid data is provided', () => {
     const payload = {
-      options: [
-        'Invalid option'
-      ]
+      options: ['Invalid option']
     }
 
     it('fails validation', () => {
@@ -38,7 +34,9 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select additional submission options for the requirements for returns')
+      expect(result.error.details[0].message).to.equal(
+        'Select additional submission options for the requirements for returns'
+      )
     })
   })
 
@@ -50,7 +48,9 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select additional submission options for the requirements for returns')
+      expect(result.error.details[0].message).to.equal(
+        'Select additional submission options for the requirements for returns'
+      )
     })
   })
 })

@@ -23,7 +23,7 @@ const ReviewLicenceModel = require('../../../app/models/review-licence.model.js'
  *
  * @returns {Promise<module:ReviewLicenceModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewLicenceModel.query()
@@ -41,7 +41,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     billRunId: generateUUID(),
     licenceId: generateUUID(),

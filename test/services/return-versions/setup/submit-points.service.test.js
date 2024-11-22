@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -36,12 +36,14 @@ describe('Return Versions Setup - Submit Points service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -75,9 +77,7 @@ describe('Return Versions Setup - Submit Points service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].points).to.equal([
-          'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'
-        ])
+        expect(refreshedSession.requirements[0].points).to.equal(['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'])
       })
 
       describe('and the page has been not been visited', () => {
@@ -125,18 +125,23 @@ describe('Return Versions Setup - Submit Points service', () => {
     it('returns page data for the view', async () => {
       const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        pageTitle: 'Select the points for the requirements for returns',
-        backLink: `/system/return-versions/setup/${session.id}/purpose/0`,
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePoints: [{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-        }],
-        licenceRef: '01/ABC',
-        selectedPointIds: ''
-      }, { skip: ['sessionId', 'error'] })
+      expect(result).to.equal(
+        {
+          activeNavBar: 'search',
+          pageTitle: 'Select the points for the requirements for returns',
+          backLink: `/system/return-versions/setup/${session.id}/purpose/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licencePoints: [
+            {
+              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+            }
+          ],
+          licenceRef: '01/ABC',
+          selectedPointIds: ''
+        },
+        { skip: ['sessionId', 'error'] }
+      )
     })
 
     describe('because the user has not submitted anything', () => {
@@ -151,7 +156,7 @@ describe('Return Versions Setup - Submit Points service', () => {
   })
 })
 
-function _points () {
+function _points() {
   const point = PointModel.fromJson({
     description: 'RIVER MEDWAY AT YALDING INTAKE',
     id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',

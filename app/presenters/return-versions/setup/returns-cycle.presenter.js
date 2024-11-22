@@ -13,7 +13,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex) {
+function go(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -26,7 +26,7 @@ function go (session, requirementIndex) {
   }
 }
 
-function _backLink (session, requirementIndex) {
+function _backLink(session, requirementIndex) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

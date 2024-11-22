@@ -24,7 +24,7 @@ const UpdateInvoiceNumbersService = require('./update-invoice-numbers.service.js
  *
  * @param {string} billRunId - UUID of the bill run to be sent
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await SendBillBunService.go(billRunId)
 
   if (billRun.status === 'sending') {

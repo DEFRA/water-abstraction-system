@@ -23,7 +23,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const canBeDeleted = _canBeDeleted(billRun.status)
@@ -49,7 +49,7 @@ async function go (billRunId) {
  *
  * @private
  */
-function _canBeDeleted (status) {
+function _canBeDeleted(status) {
   const invalidStatusesForDeleting = ['sending', 'sent']
 
   return !invalidStatusesForDeleting.includes(status)
@@ -65,20 +65,12 @@ function _canBeDeleted (status) {
  *
  * @private
  */
-async function _fetchBillRun (id) {
-  return BillRunModel.query()
-    .findById(id)
-    .select([
-      'id',
-      'externalId',
-      'status'
-    ])
+async function _fetchBillRun(id) {
+  return BillRunModel.query().findById(id).select(['id', 'externalId', 'status'])
 }
 
-async function _updateStatus (billRunId) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status: 'cancel', updatedAt: timestampForPostgres() })
+async function _updateStatus(billRunId) {
+  return BillRunModel.query().findById(billRunId).patch({ status: 'cancel', updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

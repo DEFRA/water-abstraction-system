@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -35,7 +35,8 @@ describe('Unflag unbilled licences service', () => {
       await WorkflowHelper.add({ licenceId: licenceNotBilledInBillRunAndWorkflow.id, deletedAt: null })
 
       licenceNotBilledInBillRunAndUpdated = await LicenceHelper.add({
-        includeInSrocBilling: true, updatedAt: new Date('2099-01-01')
+        includeInSrocBilling: true,
+        updatedAt: new Date('2099-01-01')
       })
 
       licenceBilledInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })

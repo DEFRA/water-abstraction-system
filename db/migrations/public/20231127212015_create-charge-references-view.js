@@ -3,11 +3,10 @@
 const viewName = 'charge_references'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex('charge_elements').withSchema('water').select([
+  return knex.schema.createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex('charge_elements').withSchema('water').select([
         'charge_element_id AS id',
         'charge_version_id',
         'external_id',
@@ -42,12 +41,11 @@ exports.up = function (knex) {
         'eiuc_region',
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

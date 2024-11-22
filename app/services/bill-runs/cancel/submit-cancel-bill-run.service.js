@@ -24,7 +24,7 @@ const DeleteBillRunService = require('./delete-bill-run.service.js')
  *
  * @param {string} billRunId  - UUID of the bill run to be cancelled
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await CancelBillBunService.go(billRunId)
 
   if (billRun.status === 'cancel') {

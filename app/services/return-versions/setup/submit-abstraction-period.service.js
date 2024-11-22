@@ -27,7 +27,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the abstraction period page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload, yar) {
+async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -54,7 +54,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
   }
 }
 
-async function _save (session, requirementIndex, payload) {
+async function _save(session, requirementIndex, payload) {
   session.requirements[requirementIndex].abstractionPeriod = payload
 
   return session.$update()
@@ -66,13 +66,13 @@ async function _save (session, requirementIndex, payload) {
  *
  * @private
  */
-function _submittedSessionData (session, requirementIndex, payload) {
+function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].abstractionPeriod = Object.keys(payload).length > 0 ? payload : null
 
   return AbstractionPeriodPresenter.go(session, requirementIndex)
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
   if (!validation.startResult.error && !validation.endResult.error) {

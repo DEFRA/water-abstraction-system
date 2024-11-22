@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
@@ -21,12 +21,11 @@ describe('Auth service', () => {
 
   describe('when the user id is found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-        .resolves({
-          user: { name: 'User' },
-          roles: [{ role: 'Role' }],
-          groups: [{ group: 'Group' }]
-        })
+      Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        user: { name: 'User' },
+        roles: [{ role: 'Role' }],
+        groups: [{ group: 'Group' }]
+      })
     })
 
     it('returns isValid as `true`', async () => {
@@ -69,12 +68,11 @@ describe('Auth service', () => {
   describe('when the user has a top-level permission role', () => {
     describe('such as "ar_user"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-          .resolves({
-            user: { name: 'User' },
-            roles: [{ role: 'ar_user' }],
-            groups: [{ group: 'Group' }]
-          })
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+          user: { name: 'User' },
+          roles: [{ role: 'ar_user' }],
+          groups: [{ group: 'Group' }]
+        })
       })
 
       it('returns the matching top level permission as true', async () => {
@@ -86,12 +84,11 @@ describe('Auth service', () => {
 
     describe('such as "billing"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-          .resolves({
-            user: { name: 'User' },
-            roles: [{ role: 'billing' }],
-            groups: [{ group: 'Group' }]
-          })
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+          user: { name: 'User' },
+          roles: [{ role: 'billing' }],
+          groups: [{ group: 'Group' }]
+        })
       })
 
       it('returns the matching top level permission as true', async () => {
@@ -105,12 +102,11 @@ describe('Auth service', () => {
 
     describe('such as "returns"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-          .resolves({
-            user: { name: 'User' },
-            roles: [{ role: 'returns' }],
-            groups: [{ group: 'Group' }]
-          })
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+          user: { name: 'User' },
+          roles: [{ role: 'returns' }],
+          groups: [{ group: 'Group' }]
+        })
       })
 
       it('returns the matching top level permission as true', async () => {
@@ -123,12 +119,11 @@ describe('Auth service', () => {
 
   describe('when the user id is not found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-        .resolves({
-          user: null,
-          roles: [],
-          groups: []
-        })
+      Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        user: null,
+        roles: [],
+        groups: []
+      })
     })
 
     it('returns isValid as "false"', async () => {

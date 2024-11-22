@@ -19,7 +19,7 @@ const BillRunModel = require('../../models/bill-run.model.js')
  * @param {string} billRunId - UUID of the bill run to be marked with `error` status
  * @param {number} [errorCode] - Numeric error code as defined in BillRunModel. Defaults to `null`
  */
-async function go (billRunId, errorCode = null) {
+async function go(billRunId, errorCode = null) {
   try {
     await _updateBillRun(billRunId, errorCode)
   } catch (error) {
@@ -27,13 +27,11 @@ async function go (billRunId, errorCode = null) {
   }
 }
 
-async function _updateBillRun (billRunId, errorCode) {
-  await BillRunModel.query()
-    .findById(billRunId)
-    .patch({
-      status: 'error',
-      errorCode
-    })
+async function _updateBillRun(billRunId, errorCode) {
+  await BillRunModel.query().findById(billRunId).patch({
+    status: 'error',
+    errorCode
+  })
 }
 
 module.exports = {

@@ -24,15 +24,17 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const query = _query()
 
-  const { rows: [row] } = await db.raw(query, [licenceId])
+  const {
+    rows: [row]
+  } = await db.raw(query, [licenceId])
 
   return row
 }
 
-function _query () {
+function _query() {
   return `
     SELECT
       l.id,

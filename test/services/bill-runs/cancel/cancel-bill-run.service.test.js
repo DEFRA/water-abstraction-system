@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -41,8 +41,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       beforeEach(() => {
         queryStub.onFirstCall().returns({
           findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon
-            .stub()
+          select: Sinon.stub()
             .withArgs('id', 'externalId', 'status')
             .resolves({ id: billRunId, externalId, status: 'ready' })
         })
@@ -68,8 +67,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       beforeEach(async () => {
         queryStub.onFirstCall().returns({
           findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon
-            .stub()
+          select: Sinon.stub()
             .withArgs('id', 'externalId', 'status')
             .resolves({ id: billRunId, externalId, status: 'sent' })
         })
@@ -92,9 +90,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919'))
-        .to
-        .reject()
+      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).to.reject()
     })
   })
 })

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
@@ -37,8 +37,7 @@ describe('Import Legacy Transform Addresses service', () => {
     })
 
     it('attaches the record transformed and validated for WRLS to the transformed company', async () => {
-      await TransformAddressesService
-        .go(regionCode, naldLicenceId, transformedCompanies)
+      await TransformAddressesService.go(regionCode, naldLicenceId, transformedCompanies)
 
       expect(transformedCompanies[0]).to.equal({
         addresses: [
@@ -76,7 +75,7 @@ describe('Import Legacy Transform Addresses service', () => {
   })
 })
 
-function _legacyAddress () {
+function _legacyAddress() {
   return {
     address1: '4 Privet Drive',
     address2: null,

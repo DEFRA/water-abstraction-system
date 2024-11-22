@@ -16,7 +16,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload, regions) {
+function go(payload, regions) {
   const validValues = regions.map((region) => {
     return region.id
   })

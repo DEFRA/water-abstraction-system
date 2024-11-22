@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,8 +13,7 @@ const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.j
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchChargeVersionsService =
-  require('../../../app/services/licences/fetch-charge-versions.service.js')
+const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
   const licenceId = generateUUID()

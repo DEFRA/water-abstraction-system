@@ -30,7 +30,7 @@ const YearValidator = require('../../../validators/bill-runs/setup/year.validato
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the year page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -59,13 +59,13 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.year = payload.year
 
   return session.$update()
 }
 
-function _validate (payload, regions) {
+function _validate(payload, regions) {
   const validation = YearValidator.go(payload, regions)
 
   if (!validation.error) {

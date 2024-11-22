@@ -15,7 +15,7 @@ const ViewPresenter = require('../../presenters/return-versions/view.presenter.j
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go (returnVersionId) {
+async function go(returnVersionId) {
   const requirementsForReturns = await FetchReturnVersionService.go(returnVersionId)
 
   const data = ViewPresenter.go(requirementsForReturns)

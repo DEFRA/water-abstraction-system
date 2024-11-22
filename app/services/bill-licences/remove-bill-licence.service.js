@@ -16,7 +16,7 @@ const RemoveBillLicencePresenter = require('../../presenters/bill-licences/remov
  * @returns {Promise<object>} a formatted representation of the bill licence, its bill, billing account and the bill run
  * it is linked to for the remove bill licence page
  */
-async function go (billLicenceId) {
+async function go(billLicenceId) {
   const billLicence = await FetchBillLicenceSummaryService.go(billLicenceId)
 
   return RemoveBillLicencePresenter.go(billLicence)

@@ -34,7 +34,7 @@ const PersistSupplementaryBillingFlagsService = require('./persist-supplementary
  *
  * @param {object} payload - The payload from the request
  */
-async function go (payload) {
+async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)
@@ -61,7 +61,7 @@ async function _determineFlags (payload) {
   }
 }
 
-async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) {
+async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
   const { endDate, startDate, regionId, flagForTwoPartTariffSupplementary } = result
   const years = DetermineBillingYearsService.go(startDate, endDate)
 
@@ -72,13 +72,8 @@ async function _determineTwoPartTariffYears (twoPartTariffBillingYears, result) 
   return DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
 }
 
-async function _setFlagForLicence (result) {
-  const {
-    licenceId,
-    flagForPreSrocSupplementary,
-    flagForSrocSupplementary,
-    flagForTwoPartTariffSupplementary
-  } = result
+async function _setFlagForLicence(result) {
+  const { licenceId, flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = result
 
   let twoPartTariffBillingYears = []
 

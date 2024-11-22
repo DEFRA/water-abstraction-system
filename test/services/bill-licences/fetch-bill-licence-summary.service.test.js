@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -60,13 +60,19 @@ describe('Fetch Bill Licence Summary service', () => {
     contactId = contact.id
 
     const billingAccountAddress = await BillingAccountAddressHelper.add({
-      billingAccountId, companyId: agentCompanyId, contactId, endDate: null
+      billingAccountId,
+      companyId: agentCompanyId,
+      contactId,
+      endDate: null
     })
 
     billingAccountAddressId = billingAccountAddress.id
 
     const billRun = await BillRunHelper.add({
-      billRunNumber: 1075, createdAt: new Date('2023-05-01'), status: 'ready', regionId
+      billRunNumber: 1075,
+      createdAt: new Date('2023-05-01'),
+      status: 'ready',
+      regionId
     })
 
     billRunId = billRun.id
@@ -77,7 +83,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
     billLicence = await BillLicenceHelper.add({ billId, licenceRef })
 
-    const transaction = await TransactionHelper.add({ billLicenceId: billLicence.id, netAmount: 1000.10 })
+    const transaction = await TransactionHelper.add({ billLicenceId: billLicence.id, netAmount: 1000.1 })
 
     transactionId = transaction.id
   })
@@ -103,26 +109,28 @@ describe('Fetch Bill Licence Summary service', () => {
               name: 'Example Trading Ltd',
               type: 'organisation'
             },
-            billingAccountAddresses: [{
-              id: billingAccountAddressId,
-              company: {
-                id: agentCompanyId,
-                name: 'Agent Company Ltd',
-                type: 'organisation'
-              },
-              contact: {
-                id: contactId,
-                contactType: 'person',
-                dataSource: 'wrls',
-                department: null,
-                firstName: 'Amara',
-                initials: null,
-                lastName: 'Gupta',
-                middleInitials: null,
-                salutation: null,
-                suffix: null
+            billingAccountAddresses: [
+              {
+                id: billingAccountAddressId,
+                company: {
+                  id: agentCompanyId,
+                  name: 'Agent Company Ltd',
+                  type: 'organisation'
+                },
+                contact: {
+                  id: contactId,
+                  contactType: 'person',
+                  dataSource: 'wrls',
+                  department: null,
+                  firstName: 'Amara',
+                  initials: null,
+                  lastName: 'Gupta',
+                  middleInitials: null,
+                  salutation: null,
+                  suffix: null
+                }
               }
-            }]
+            ]
           },
           billRun: {
             id: billRunId,
@@ -143,7 +151,7 @@ describe('Fetch Bill Licence Summary service', () => {
           {
             id: transactionId,
             credit: false,
-            netAmount: 1000.10
+            netAmount: 1000.1
           }
         ]
       })

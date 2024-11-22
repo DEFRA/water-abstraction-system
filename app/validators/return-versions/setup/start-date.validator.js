@@ -31,7 +31,7 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload, licenceStartDate, licenceEndDate) {
+function go(payload, licenceStartDate, licenceEndDate) {
   const { 'start-date-options': selectedOption } = payload
 
   if (selectedOption === 'anotherStartDate') {
@@ -43,12 +43,8 @@ function go (payload, licenceStartDate, licenceEndDate) {
   return _validateLicenceVersionStartDate(payload)
 }
 
-function _fullDate (payload) {
-  const {
-    'start-date-day': day,
-    'start-date-month': month,
-    'start-date-year': year
-  } = payload
+function _fullDate(payload) {
+  const { 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = payload
 
   const paddedMonth = month ? leftPadZeroes(month, 2) : ''
   const paddedDay = day ? leftPadZeroes(day, 2) : ''
@@ -56,10 +52,9 @@ function _fullDate (payload) {
   return `${year}-${paddedMonth}-${paddedDay}`
 }
 
-function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
+function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   const schema = Joi.object({
-    fullDate: Joi
-      .date()
+    fullDate: Joi.date()
       .format(['YYYY-MM-DD'])
       .required()
       .min(licenceStartDate)
@@ -76,14 +71,12 @@ function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
-function _validateLicenceVersionStartDate (payload) {
+function _validateLicenceVersionStartDate(payload) {
   const schema = Joi.object({
-    'start-date-options': Joi.string()
-      .required()
-      .messages({
-        'any.required': 'Select the start date for the requirements for returns',
-        'string.empty': 'Select the start date for the requirements for returns'
-      })
+    'start-date-options': Joi.string().required().messages({
+      'any.required': 'Select the start date for the requirements for returns',
+      'string.empty': 'Select the start date for the requirements for returns'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })

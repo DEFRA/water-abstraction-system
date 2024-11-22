@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -40,17 +40,15 @@ describe('Fetch Licences service', () => {
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves(
-          [
-            {
-              id: '9407b74d-816c-44a2-9926-73a89a9da985',
-              startDate: '2022-04-01T00:00:00.000Z',
-              endDate: null,
-              status: 'current',
-              licence: licenceOne
-            }
-          ]
-        )
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+          {
+            id: '9407b74d-816c-44a2-9926-73a89a9da985',
+            startDate: '2022-04-01T00:00:00.000Z',
+            endDate: null,
+            status: 'current',
+            licence: licenceOne
+          }
+        ])
       })
 
       it('will fetch the data, format it and group the charge version by the licence', async () => {
@@ -86,31 +84,29 @@ describe('Fetch Licences service', () => {
       }
 
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves(
-          [
-            {
-              id: '9407b74d-816c-44a2-9926-73a89a9da985',
-              startDate: '2022-10-01T00:00:00.000Z',
-              endDate: null,
-              status: 'current',
-              licence: licenceOne
-            },
-            {
-              id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
-              startDate: '2022-04-01T00:00:00.000Z',
-              endDate: '2022-09-30T00:00:00.000Z',
-              status: 'current',
-              licence: licenceOne
-            },
-            {
-              id: 'efe652ba-f42c-4113-a190-f3d9d829a640',
-              startDate: '2022-04-01T00:00:00.000Z',
-              endDate: null,
-              status: 'current',
-              licence: licenceTwo
-            }
-          ]
-        )
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+          {
+            id: '9407b74d-816c-44a2-9926-73a89a9da985',
+            startDate: '2022-10-01T00:00:00.000Z',
+            endDate: null,
+            status: 'current',
+            licence: licenceOne
+          },
+          {
+            id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
+            startDate: '2022-04-01T00:00:00.000Z',
+            endDate: '2022-09-30T00:00:00.000Z',
+            status: 'current',
+            licence: licenceOne
+          },
+          {
+            id: 'efe652ba-f42c-4113-a190-f3d9d829a640',
+            startDate: '2022-04-01T00:00:00.000Z',
+            endDate: null,
+            status: 'current',
+            licence: licenceTwo
+          }
+        ])
       })
 
       it('will fetch the data, format it and group the charge versions by the licences', async () => {

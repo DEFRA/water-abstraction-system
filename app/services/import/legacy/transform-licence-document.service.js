@@ -20,7 +20,7 @@ const LicenceDocumentValidator = require('../../../validators/import/licence-doc
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  */
-async function go (regionCode, naldLicenceId, transformedLicence) {
+async function go(regionCode, naldLicenceId, transformedLicence) {
   const naldLicenceDocument = await FetchLicenceDocumentService.go(regionCode, naldLicenceId)
 
   const transformedLicenceDocument = LicenceDocumentPresenter.go(naldLicenceDocument)

@@ -25,7 +25,7 @@ const { generateLicenceRef } = require('./licence.helper.js')
  *
  * @returns {Promise<module:ModLogModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ModLogModel.query()
@@ -43,7 +43,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {
@@ -72,7 +72,7 @@ function defaults (data = {}) {
  *
  * @returns {string} The generated external ID
  */
-function generateRegionNaldPatternExternalId (regionCode = null) {
+function generateRegionNaldPatternExternalId(regionCode = null) {
   const regionCodeToUse = regionCode ?? randomInteger(1, 9)
 
   return `${regionCodeToUse}:${randomInteger(100, 99999)}`

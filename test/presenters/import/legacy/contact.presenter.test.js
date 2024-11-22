@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Import Legacy Contact presenter', () => {
   })
 })
 
-function _legacyContact () {
+function _legacyContact() {
   return {
     salutation: 'Mr',
     initials: 'H',

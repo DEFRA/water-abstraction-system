@@ -33,7 +33,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
  */
-async function go (cycle, licenceReference = null) {
+async function go(cycle, licenceReference = null) {
   try {
     const startTime = currentTimeInNanoseconds()
     const summer = cycle === 'summer'
@@ -49,10 +49,9 @@ async function go (cycle, licenceReference = null) {
   }
 }
 
-async function _createReturnLogs (returnLogs) {
+async function _createReturnLogs(returnLogs) {
   for (const returnLog of returnLogs) {
-    await ReturnLogModel.query()
-      .insert(returnLog)
+    await ReturnLogModel.query().insert(returnLog)
   }
 }
 

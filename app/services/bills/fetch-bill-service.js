@@ -18,7 +18,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
  * for each licence linked to the bill
  */
-async function go (id) {
+async function go(id) {
   const bill = await _fetchBill(id)
   const licenceSummaries = await _fetchLicenceSummaries(id)
 
@@ -28,7 +28,7 @@ async function go (id) {
   }
 }
 
-async function _fetchBill (id) {
+async function _fetchBill(id) {
   return BillModel.query()
     .findById(id)
     .select([
@@ -61,10 +61,7 @@ async function _fetchBill (id) {
     })
     .withGraphFetched('billRun.region')
     .modifyGraph('billRun.region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 }
 
@@ -83,7 +80,7 @@ async function _fetchBill (id) {
  *
  * @private
  */
-async function _fetchLicenceSummaries (id) {
+async function _fetchLicenceSummaries(id) {
   return db
     .distinct(['bil.id', 'bil.licenceRef'])
     .sum('bt.net_amount AS total')

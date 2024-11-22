@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -27,39 +27,21 @@ describe('View Licence Contact Details presenter', () => {
         pageTitle: 'Licence contact details',
         licenceContactDetails: [
           {
-            address: [
-              'ENVIRONMENT AGENCY',
-              'HORIZON HOUSE',
-              'DEANERY ROAD',
-              'BRISTOL',
-              'BS1 5AH',
-              'United Kingdom'
-            ],
+            address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'BS1 5AH', 'United Kingdom'],
             role: 'Licence holder',
             name: 'Acme ltd'
           },
           {
-            address: [
-              'Furland',
-              'Crewkerne',
-              'Somerset',
-              'TA18 7TT',
-              'United Kingdom'
-            ],
+            address: ['Furland', 'Crewkerne', 'Somerset', 'TA18 7TT', 'United Kingdom'],
             role: 'Licence contact',
             name: 'Furland Farm'
           },
           {
-            address: [
-              'Crinkley Bottom',
-              'Cricket St Thomas',
-              'Somerset',
-              'TA20 1KL',
-              'United Kingdom'
-            ],
+            address: ['Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL', 'United Kingdom'],
             role: 'Returns to',
             name: 'Mr N Edmonds'
-          }]
+          }
+        ]
       })
     })
 
@@ -118,7 +100,7 @@ describe('View Licence Contact Details presenter', () => {
   })
 })
 
-function _testFetchLicenceContactDetailsData () {
+function _testFetchLicenceContactDetailsData() {
   return {
     id: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
     licenceRef: '00/111/222',

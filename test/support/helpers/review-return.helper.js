@@ -32,7 +32,7 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  *
  * @returns {Promise<module:ReviewReturnModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewReturnModel.query()
@@ -50,7 +50,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
 

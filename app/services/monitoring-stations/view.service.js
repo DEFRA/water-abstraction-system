@@ -16,7 +16,7 @@ const ViewPresenter = require('../../presenters/monitoring-stations/view.present
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go (monitoringStationId, auth) {
+async function go(monitoringStationId, auth) {
   const monitoringStation = await FetchMonitoringStationService.go(monitoringStationId)
 
   const pageData = ViewPresenter.go(monitoringStation, auth)

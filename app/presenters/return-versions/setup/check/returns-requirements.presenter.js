@@ -26,14 +26,14 @@ const AGREEMENTS_EXCEPTIONS = {
  *
  * @returns {object} returns requirement data needed by the view template
  */
-function go (requirements, points, journey) {
+function go(requirements, points, journey) {
   return {
     returnsRequired: journey === 'returns-required',
     requirements: _requirements(requirements, points)
   }
 }
 
-function _abstractionPeriod (abstractionPeriod) {
+function _abstractionPeriod(abstractionPeriod) {
   const {
     'start-abstraction-period-day': startDay,
     'start-abstraction-period-month': startMonth,
@@ -46,7 +46,7 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
-function _agreementsExceptions (agreementsExceptions) {
+function _agreementsExceptions(agreementsExceptions) {
   const formattedExceptions = agreementsExceptions.map((exception) => {
     return AGREEMENTS_EXCEPTIONS[exception]
   })
@@ -59,11 +59,14 @@ function _agreementsExceptions (agreementsExceptions) {
     return formattedExceptions.join(' and ')
   }
 
-  return formattedExceptions.slice(0, formattedExceptions.length - 1)
-    .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
+  return (
+    formattedExceptions.slice(0, formattedExceptions.length - 1).join(', ') +
+    ', and ' +
+    formattedExceptions[formattedExceptions.length - 1]
+  )
 }
 
-function _requirements (requirements, points) {
+function _requirements(requirements, points) {
   const completedRequirements = []
 
   for (const [index, requirement] of requirements.entries()) {
@@ -79,7 +82,7 @@ function _requirements (requirements, points) {
   return completedRequirements
 }
 
-function _mapPurposes (purposes) {
+function _mapPurposes(purposes) {
   return purposes.map((purpose) => {
     if (purpose.alias) {
       return `${purpose.description} (${purpose.alias})`
@@ -89,7 +92,7 @@ function _mapPurposes (purposes) {
   })
 }
 
-function _mapRequirement (requirement, index, points) {
+function _mapRequirement(requirement, index, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
@@ -103,7 +106,7 @@ function _mapRequirement (requirement, index, points) {
   }
 }
 
-function _mapPoints (selectedPoints, points) {
+function _mapPoints(selectedPoints, points) {
   return selectedPoints.map((selectedPoint) => {
     const matchedPoint = points.find((point) => {
       return point.id === selectedPoint

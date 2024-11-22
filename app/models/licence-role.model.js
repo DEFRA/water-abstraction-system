@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class LicenceRoleModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceRoles'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       companyAddresses: {
         relation: Model.HasManyRelation,

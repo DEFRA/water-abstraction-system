@@ -19,11 +19,11 @@ const { cycleEndDateAsISO, cycleStartDateAsISO, cycleStartDate } = require('../.
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (licenceReference) {
+async function go(licenceReference) {
   return _fetchReturnRequirements(licenceReference)
 }
 
-async function _fetchExternalIds (licenceReference) {
+async function _fetchExternalIds(licenceReference) {
   const externalIds = await ReturnLogModel.query()
     .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
     .where('startDate', '>=', cycleStartDate(false))
@@ -36,7 +36,7 @@ async function _fetchExternalIds (licenceReference) {
   return externalIdsArray
 }
 
-async function _fetchReturnRequirements (licenceReference) {
+async function _fetchReturnRequirements(licenceReference) {
   // pass in false to ge the all year start and end date to make sure we cover the entire year
   const _cycleEndDate = cycleEndDateAsISO(false)
   const _cycleStartDate = cycleStartDateAsISO(false)
@@ -47,19 +47,18 @@ async function _fetchReturnRequirements (licenceReference) {
     .whereExists(_whereExistsClause(licenceReference, _cycleStartDate, _cycleEndDate))
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (builder) => {
-      builder.select(['endDate',
-        'id',
-        'startDate',
-        'reason'])
+      builder.select(['endDate', 'id', 'startDate', 'reason'])
     })
     .withGraphFetched('returnVersion.licence')
     .modifyGraph('returnVersion.licence', (builder) => {
-      builder.select(['expiredDate',
+      builder.select([
+        'expiredDate',
         'id',
         'lapsedDate',
         'licenceRef',
         'revokedDate',
-        db.raw('regions->>\'historicalAreaCode\' as areacode')])
+        db.raw("regions->>'historicalAreaCode' as areacode")
+      ])
     })
     .withGraphFetched('returnVersion.licence.region')
     .modifyGraph('returnVersion.licence.region', (builder) => {
@@ -67,13 +66,7 @@ async function _fetchReturnRequirements (licenceReference) {
     })
     .withGraphFetched('points')
     .modifyGraph('points', (builder) => {
-      builder.select([
-        'points.description',
-        'points.ngr1',
-        'points.ngr2',
-        'points.ngr3',
-        'points.ngr4'
-      ])
+      builder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
     .withGraphFetched('returnRequirementPurposes.primaryPurpose')
     .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {
@@ -89,33 +82,26 @@ async function _fetchReturnRequirements (licenceReference) {
     })
 }
 
-function _whereExistsClause (licenceReference, cycleStartDate, cycleEndDate) {
+function _whereExistsClause(licenceReference, cycleStartDate, cycleEndDate) {
   const query = ReturnVersionModel.query().select(1)
 
-  query.select(1)
+  query
+    .select(1)
     .innerJoinRelated('licence')
     .where('licence.licenceRef', licenceReference)
     .where('returnVersions.startDate', '<=', cycleEndDate)
     .where('returnVersions.status', 'current')
     .where((builder) => {
-      builder
-        .whereNull('returnVersions.endDate')
-        .orWhere('returnVersions.endDate', '>=', cycleStartDate)
+      builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.expiredDate')
-        .orWhere('licence.expiredDate', '>=', cycleStartDate)
+      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.lapsedDate')
-        .orWhere('licence.lapsedDate', '>=', cycleStartDate)
+      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.revokedDate')
-        .orWhere('licence.revokedDate', '>=', cycleStartDate)
+      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
     })
 
   query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')

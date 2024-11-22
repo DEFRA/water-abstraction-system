@@ -18,7 +18,7 @@ const ReviewChargeElementPresenter = require('../../../presenters/bill-runs/revi
  *
  * @returns {Promise<object>} the 'pageData' needed for the review charge element page
  */
-async function go (reviewChargeElementId, elementIndex, yar) {
+async function go(reviewChargeElementId, elementIndex, yar) {
   const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
 
   const [bannerMessage] = yar.flash('banner')

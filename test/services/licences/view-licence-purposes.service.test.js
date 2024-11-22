@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -41,9 +41,7 @@ describe('View Licence Purposes service', () => {
             abstractionMethods: 'Unspecified Pump',
             abstractionMethodsTitle: 'Method of abstraction',
             abstractionPeriod: '1 April to 31 October',
-            abstractionPoints: [
-              'At National Grid Reference TL 23198 88603'
-            ],
+            abstractionPoints: ['At National Grid Reference TL 23198 88603'],
             abstractionPointsTitle: 'Abstraction point',
             purposeDescription: 'Spray Irrigation - Storage'
           }
@@ -55,46 +53,54 @@ describe('View Licence Purposes service', () => {
   })
 })
 
-function _testFetchLicencePurposes () {
+function _testFetchLicencePurposes() {
   return LicenceModel.fromJson({
     id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
     licenceRef: '01/123',
-    licenceVersions: [{
-      createdAt: new Date('2022-06-05'),
-      id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
-      reason: 'new-licence',
-      status: 'current',
-      startDate: new Date('2022-04-01'),
-      licenceVersionPurposes: [{
-        id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 10,
-        annualQuantity: 180000,
-        dailyQuantity: 720,
-        hourlyQuantity: 144,
-        instantQuantity: 40,
-        licenceVersionPurposePoints: [{
-          abstractionMethod: 'Unspecified Pump'
-        }],
-        purpose: {
-          id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
-          description: 'Spray Irrigation - Storage'
-        },
-        points: [{
-          id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
-          description: null,
-          ngr1: 'TL 23198 88603',
-          ngr2: null,
-          ngr3: null,
-          ngr4: null,
-          source: {
-            id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
-            description: 'SURFACE WATER SOURCE OF SUPPLY'
+    licenceVersions: [
+      {
+        createdAt: new Date('2022-06-05'),
+        id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+        reason: 'new-licence',
+        status: 'current',
+        startDate: new Date('2022-04-01'),
+        licenceVersionPurposes: [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            annualQuantity: 180000,
+            dailyQuantity: 720,
+            hourlyQuantity: 144,
+            instantQuantity: 40,
+            licenceVersionPurposePoints: [
+              {
+                abstractionMethod: 'Unspecified Pump'
+              }
+            ],
+            purpose: {
+              id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+              description: 'Spray Irrigation - Storage'
+            },
+            points: [
+              {
+                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                description: null,
+                ngr1: 'TL 23198 88603',
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: {
+                  id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
+                  description: 'SURFACE WATER SOURCE OF SUPPLY'
+                }
+              }
+            ]
           }
-        }]
-      }]
-    }]
+        ]
+      }
+    ]
   })
 }

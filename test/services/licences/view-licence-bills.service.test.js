@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -44,11 +44,11 @@ describe('View Licence service bills', () => {
   })
 })
 
-function _licence () {
+function _licence() {
   return { licenceName: 'fake licence' }
 }
 
-function _billsFetchService () {
+function _billsFetchService() {
   return {
     bills: [],
     pagination: { total: 1 }

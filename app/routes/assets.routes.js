@@ -13,17 +13,14 @@ const routes = [
       },
       auth: false
     }
-  }, {
+  },
+  {
     method: 'GET',
     path: '/assets/{path*}',
     options: {
       handler: {
         directory: {
-          path: [
-            'app/public/static',
-            'app/public/build',
-            'node_modules/govuk-frontend/govuk/assets'
-          ]
+          path: ['app/public/static', 'app/public/build', 'node_modules/govuk-frontend/govuk/assets']
         }
       },
       app: {

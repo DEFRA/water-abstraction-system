@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -42,15 +42,18 @@ describe('Fetch Agreements service', () => {
       it('returns the matching agreements data', async () => {
         const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
 
-        expect(results[0]).to.equal({
-          endDate,
-          financialAgreement: {
-            id: financialAgreement.id,
-            code: financialAgreement.code
+        expect(results[0]).to.equal(
+          {
+            endDate,
+            financialAgreement: {
+              id: financialAgreement.id,
+              code: financialAgreement.code
+            },
+            startDate,
+            signedOn
           },
-          startDate,
-          signedOn
-        }, { skip: ['id'] })
+          { skip: ['id'] }
+        )
       })
     })
 

@@ -25,7 +25,7 @@ const MethodValidator = require('../../../../validators/return-versions/setup/me
  * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -48,7 +48,7 @@ async function go (sessionId, payload) {
   }
 }
 
-function _redirect (method) {
+function _redirect(method) {
   if (method === 'use-abstraction-data') {
     return 'check'
   }
@@ -60,7 +60,7 @@ function _redirect (method) {
   return 'purpose/0'
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.method = payload.method
 
   // If the user selected the method 'Start by using abstraction data' to setup the return requirements we use
@@ -73,7 +73,7 @@ async function _save (session, payload) {
   return session.$update()
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = MethodValidator.go(payload)
 
   if (!validation.error) {

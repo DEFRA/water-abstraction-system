@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -39,9 +39,7 @@ describe('View Licence Purpose presenter', () => {
             abstractionMethods: 'Unspecified Pump',
             abstractionMethodsTitle: 'Method of abstraction',
             abstractionPeriod: '1 April to 31 October',
-            abstractionPoints: [
-              'At National Grid Reference TL 23198 88603'
-            ],
+            abstractionPoints: ['At National Grid Reference TL 23198 88603'],
             abstractionPointsTitle: 'Abstraction point',
             purposeDescription: 'Spray Irrigation - Storage'
           }
@@ -126,7 +124,9 @@ describe('View Licence Purpose presenter', () => {
         it('return the values display text joined with an ", and" (Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable))', () => {
           const result = ViewLicencePurposePresenter.go(licence)
 
-          expect(result.licencePurposes[0].abstractionMethods).to.equal('Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable)')
+          expect(result.licencePurposes[0].abstractionMethods).to.equal(
+            'Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable)'
+          )
         })
       })
 
@@ -266,7 +266,7 @@ describe('View Licence Purpose presenter', () => {
   })
 })
 
-function _testLicence () {
+function _testLicence() {
   const point = PointModel.fromJson({
     id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
     description: null,
@@ -283,31 +283,37 @@ function _testLicence () {
   return LicenceModel.fromJson({
     id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
     licenceRef: '01/123',
-    licenceVersions: [{
-      createdAt: new Date('2022-06-05'),
-      id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
-      reason: 'new-licence',
-      status: 'current',
-      startDate: new Date('2022-04-01'),
-      licenceVersionPurposes: [{
-        id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 10,
-        annualQuantity: 180000,
-        dailyQuantity: 720,
-        hourlyQuantity: 144,
-        instantQuantity: 40,
-        licenceVersionPurposePoints: [{
-          abstractionMethod: 'Unspecified Pump'
-        }],
-        purpose: {
-          id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
-          description: 'Spray Irrigation - Storage'
-        },
-        points: [point]
-      }]
-    }]
+    licenceVersions: [
+      {
+        createdAt: new Date('2022-06-05'),
+        id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+        reason: 'new-licence',
+        status: 'current',
+        startDate: new Date('2022-04-01'),
+        licenceVersionPurposes: [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            annualQuantity: 180000,
+            dailyQuantity: 720,
+            hourlyQuantity: 144,
+            instantQuantity: 40,
+            licenceVersionPurposePoints: [
+              {
+                abstractionMethod: 'Unspecified Pump'
+              }
+            ],
+            purpose: {
+              id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+              description: 'Spray Irrigation - Storage'
+            },
+            points: [point]
+          }
+        ]
+      }
+    ]
   })
 }

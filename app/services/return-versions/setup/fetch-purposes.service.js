@@ -14,25 +14,20 @@ const PurposeModel = require('../../../models/purpose.model.js')
  *
  * @returns {Promise<object>} The distinct purposes for the matching licence's current version
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return PurposeModel.query()
-    .select([
-      'purposes.id',
-      'purposes.description'
-    ])
+    .select(['purposes.id', 'purposes.description'])
     .whereExists(
       PurposeModel.relatedQuery('licenceVersionPurposes')
         .innerJoin('licenceVersions', 'licenceVersions.id', 'licenceVersionPurposes.licenceVersionId')
         .where('licenceVersions.licenceId', licenceId)
         .where('licenceVersions.status', 'current')
     )
-    .orderBy([
-      { column: 'purposes.description', order: 'asc' }
-    ])
+    .orderBy([{ column: 'purposes.description', order: 'asc' }])
 }
 
 module.exports = {

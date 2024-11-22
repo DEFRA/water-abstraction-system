@@ -23,7 +23,7 @@ const ViewLicenceSummaryService = require('../services/licences/view-licence-sum
 
 const ViewLicencePage = 'licences/view.njk'
 
-async function markedForSupplementaryBilling (request, h) {
+async function markedForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await MarkedForSupplementaryBillingService.go(licenceId)
@@ -35,7 +35,7 @@ async function markedForSupplementaryBilling (request, h) {
   })
 }
 
-async function markForSupplementaryBilling (request, h) {
+async function markForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await MarkForSupplementaryBillingService.go(licenceId)
@@ -47,7 +47,7 @@ async function markForSupplementaryBilling (request, h) {
   })
 }
 
-async function noReturnsRequired (request, h) {
+async function noReturnsRequired(request, h) {
   const { id } = request.params
 
   const session = await InitiateSessionService.go(id, 'no-returns-required')
@@ -55,7 +55,7 @@ async function noReturnsRequired (request, h) {
   return h.redirect(`/system/return-versions/setup/${session.id}/start-date`)
 }
 
-async function returnsRequired (request, h) {
+async function returnsRequired(request, h) {
   const { id } = request.params
 
   const session = await InitiateSessionService.go(id, 'returns-required')
@@ -63,13 +63,14 @@ async function returnsRequired (request, h) {
   return h.redirect(`/system/return-versions/setup/${session.id}/start-date`)
 }
 
-async function submitMarkForSupplementaryBilling (request, h) {
+async function submitMarkForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await SubmitMarkForSupplementaryBillingService.go(
     licenceId,
     request.payload,
-    request.auth.credentials.user)
+    request.auth.credentials.user
+  )
 
   if (pageData.error) {
     return h.view('licences/mark-for-supplementary-billing.njk', pageData)
@@ -78,14 +79,18 @@ async function submitMarkForSupplementaryBilling (request, h) {
   return h.redirect(`/system/licences/${licenceId}/marked-for-supplementary-billing`)
 }
 
-async function supplementary (request, h) {
+async function supplementary(request, h) {
   await LicenceSupplementaryProcessBillingFlagService.go(request.payload)
 
   return h.response().code(204)
 }
 
-async function viewBills (request, h) {
-  const { params: { id }, auth, query: { page = 1 } } = request
+async function viewBills(request, h) {
+  const {
+    params: { id },
+    auth,
+    query: { page = 1 }
+  } = request
 
   const pageData = await ViewLicenceBillsService.go(id, auth, page)
 
@@ -94,8 +99,12 @@ async function viewBills (request, h) {
   })
 }
 
-async function viewCommunications (request, h) {
-  const { params: { id }, auth, query: { page = 1 } } = request
+async function viewCommunications(request, h) {
+  const {
+    params: { id },
+    auth,
+    query: { page = 1 }
+  } = request
 
   const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
 
@@ -104,7 +113,7 @@ async function viewCommunications (request, h) {
   })
 }
 
-async function viewLicenceContactDetails (request, h) {
+async function viewLicenceContactDetails(request, h) {
   const { id } = request.params
 
   const pageData = await ViewLicenceContactDetailsService.go(id)
@@ -114,8 +123,11 @@ async function viewLicenceContactDetails (request, h) {
   })
 }
 
-async function viewLicenceContacts (request, h) {
-  const { params: { id }, auth } = request
+async function viewLicenceContacts(request, h) {
+  const {
+    params: { id },
+    auth
+  } = request
 
   const pageData = await ViewLicenceContactsService.go(id, auth)
 
@@ -124,7 +136,7 @@ async function viewLicenceContacts (request, h) {
   })
 }
 
-async function viewLicencePoints (request, h) {
+async function viewLicencePoints(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewLicencePointsService.go(licenceId)
@@ -134,7 +146,7 @@ async function viewLicencePoints (request, h) {
   })
 }
 
-async function viewLicencePurposes (request, h) {
+async function viewLicencePurposes(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewLicencePurposesService.go(licenceId)
@@ -144,8 +156,11 @@ async function viewLicencePurposes (request, h) {
   })
 }
 
-async function viewHistory (request, h) {
-  const { params: { id }, auth } = request
+async function viewHistory(request, h) {
+  const {
+    params: { id },
+    auth
+  } = request
 
   const pageData = await ViewLicenceHistoryService.go(id, auth)
 
@@ -154,8 +169,12 @@ async function viewHistory (request, h) {
   })
 }
 
-async function viewReturns (request, h) {
-  const { params: { id }, auth, query: { page = 1 } } = request
+async function viewReturns(request, h) {
+  const {
+    params: { id },
+    auth,
+    query: { page = 1 }
+  } = request
 
   const pageData = await ViewLicenceReturnsService.go(id, auth, page)
 
@@ -164,8 +183,11 @@ async function viewReturns (request, h) {
   })
 }
 
-async function viewSetUp (request, h) {
-  const { params: { id }, auth } = request
+async function viewSetUp(request, h) {
+  const {
+    params: { id },
+    auth
+  } = request
 
   const pageData = await ViewLicenceSetUpService.go(id, auth)
 
@@ -174,8 +196,11 @@ async function viewSetUp (request, h) {
   })
 }
 
-async function viewSummary (request, h) {
-  const { params: { id }, auth } = request
+async function viewSummary(request, h) {
+  const {
+    params: { id },
+    auth
+  } = request
 
   const pageData = await ViewLicenceSummaryService.go(id, auth)
 

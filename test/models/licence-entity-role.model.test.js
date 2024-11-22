@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,16 +49,13 @@ describe('Licence Entity Role model', () => {
   describe('Relationships', () => {
     describe('when linking to company entity', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityRoleModel.query()
-          .innerJoinRelated('companyEntity')
+        const query = await LicenceEntityRoleModel.query().innerJoinRelated('companyEntity')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company entity', async () => {
-        const result = await LicenceEntityRoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('companyEntity')
+        const result = await LicenceEntityRoleModel.query().findById(testRecord.id).withGraphFetched('companyEntity')
 
         expect(result).to.be.instanceOf(LicenceEntityRoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -70,8 +67,7 @@ describe('Licence Entity Role model', () => {
 
     describe('when linking to licence document header', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityRoleModel.query()
-          .innerJoinRelated('licenceDocumentHeader')
+        const query = await LicenceEntityRoleModel.query().innerJoinRelated('licenceDocumentHeader')
 
         expect(query).to.exist()
       })
@@ -91,16 +87,13 @@ describe('Licence Entity Role model', () => {
 
     describe('when linking to licence entity', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityRoleModel.query()
-          .innerJoinRelated('licenceEntity')
+        const query = await LicenceEntityRoleModel.query().innerJoinRelated('licenceEntity')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence entity', async () => {
-        const result = await LicenceEntityRoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceEntity')
+        const result = await LicenceEntityRoleModel.query().findById(testRecord.id).withGraphFetched('licenceEntity')
 
         expect(result).to.be.instanceOf(LicenceEntityRoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -112,16 +105,13 @@ describe('Licence Entity Role model', () => {
 
     describe('when linking to regime entity', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityRoleModel.query()
-          .innerJoinRelated('regimeEntity')
+        const query = await LicenceEntityRoleModel.query().innerJoinRelated('regimeEntity')
 
         expect(query).to.exist()
       })
 
       it('can eager load the regime entity', async () => {
-        const result = await LicenceEntityRoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('regimeEntity')
+        const result = await LicenceEntityRoleModel.query().findById(testRecord.id).withGraphFetched('regimeEntity')
 
         expect(result).to.be.instanceOf(LicenceEntityRoleModel)
         expect(result.id).to.equal(testRecord.id)

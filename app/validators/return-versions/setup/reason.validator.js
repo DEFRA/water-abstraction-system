@@ -19,7 +19,7 @@ const errorMessage = 'Select the reason for the requirements for returns'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   const validValues = Object.keys(returnRequirementReasons)
 
   const schema = Joi.object({

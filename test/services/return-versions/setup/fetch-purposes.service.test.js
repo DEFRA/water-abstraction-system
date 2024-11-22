@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,9 +25,21 @@ describe('Return Versions Setup - Fetch Purposes service', () => {
 
     // we purposefully don't add them in alphabetical order so we can test they get sorted by the service
     purposes = [
-      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Large Garden Watering' }) },
-      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Heat Pump' }) },
-      { ...PurposeHelper.data.find((purpose) => { return purpose.description === 'Horticultural Watering' }) }
+      {
+        ...PurposeHelper.data.find((purpose) => {
+          return purpose.description === 'Large Garden Watering'
+        })
+      },
+      {
+        ...PurposeHelper.data.find((purpose) => {
+          return purpose.description === 'Heat Pump'
+        })
+      },
+      {
+        ...PurposeHelper.data.find((purpose) => {
+          return purpose.description === 'Horticultural Watering'
+        })
+      }
     ]
 
     // Create the licenceVersionPurposes. Note - two of them are for the same purpose. This is common in the service

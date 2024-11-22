@@ -17,7 +17,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<ImportLegacyContactType[]>}
  */
-async function go (regionCode, licenceId) {
+async function go(regionCode, licenceId) {
   const query = _query()
 
   const { rows } = await db.raw(query, [regionCode, licenceId])
@@ -25,7 +25,7 @@ async function go (regionCode, licenceId) {
   return rows
 }
 
-function _query () {
+function _query() {
   return `
   SELECT DISTINCT ON (np."ID")
     to_date(nalv."EFF_ST_DATE", 'DD/MM/YYYY') as start_date,
