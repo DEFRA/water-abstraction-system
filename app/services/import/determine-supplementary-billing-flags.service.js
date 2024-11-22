@@ -19,8 +19,6 @@ const ProcessBillingFlagService = require('../licences/supplementary/process-bil
  *
  * @param {object} importedLicence - The imported licence
  * @param {string} licenceId - The UUID of the licence being updated by the import
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (importedLicence, licenceId) {
   try {
@@ -35,7 +33,7 @@ async function go (importedLicence, licenceId) {
       licenceId
     }
 
-    return ProcessBillingFlagService.go(payload)
+    await ProcessBillingFlagService.go(payload)
   } catch (error) {
     global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }
