@@ -17,13 +17,13 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
-async function go (licenceId, page) {
+async function go(licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
 
   return { returns: results, pagination: { total } }
 }
 
-async function _fetch (licenceId, page) {
+async function _fetch(licenceId, page) {
   return ReturnLogModel.query()
     .select([
       'returnLogs.id',
@@ -36,9 +36,7 @@ async function _fetch (licenceId, page) {
     ])
     .innerJoinRelated('licence')
     .where('licence.id', licenceId)
-    .orderBy([
-      { column: 'dueDate', order: 'desc' }
-    ])
+    .orderBy([{ column: 'dueDate', order: 'desc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

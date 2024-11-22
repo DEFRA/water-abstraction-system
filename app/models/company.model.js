@@ -42,11 +42,11 @@ const BaseModel = require('./base.model.js')
  *
  */
 class CompanyModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'companies'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,

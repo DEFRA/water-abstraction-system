@@ -14,7 +14,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<string[]>} Table names for the specified schema
  */
-async function go (schemaName) {
+async function go(schemaName) {
   const tableData = await _fetchTableNames(schemaName)
 
   // tableData has information we do not need
@@ -27,7 +27,7 @@ async function go (schemaName) {
   return tableNames
 }
 
-async function _fetchTableNames (schemaName) {
+async function _fetchTableNames(schemaName) {
   const query = `
       SELECT table_name
       FROM information_schema.tables
@@ -38,7 +38,7 @@ async function _fetchTableNames (schemaName) {
   return db.raw(query)
 }
 
-function _pluckTableNames (tableData) {
+function _pluckTableNames(tableData) {
   return tableData.map((obj) => {
     return obj.table_name
   })

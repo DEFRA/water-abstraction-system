@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -76,7 +76,7 @@ describe('View Licence History service', () => {
   })
 })
 
-function _testFetchLicenceHistory () {
+function _testFetchLicenceHistory() {
   const changeReason = ChangeReasonModel.fromJson({
     id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
     description: 'Major change'
@@ -91,9 +91,11 @@ function _testFetchLicenceHistory () {
     id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
     licenceRef: '01/123',
     licenceDocument: {
-      licenceDocumentRoles: [{
-        id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
-      }]
+      licenceDocumentRoles: [
+        {
+          id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
+        }
+      ]
     }
   })
 
@@ -141,14 +143,8 @@ function _testFetchLicenceHistory () {
   return {
     id: testLicence.id,
     licenceRef: testLicence.licenceRef,
-    licenceVersions: [
-      licenceVersions
-    ],
-    chargeVersions: [
-      chargeVersions
-    ],
-    returnVersions: [
-      returnVersions
-    ]
+    licenceVersions: [licenceVersions],
+    chargeVersions: [chargeVersions],
+    returnVersions: [returnVersions]
   }
 }

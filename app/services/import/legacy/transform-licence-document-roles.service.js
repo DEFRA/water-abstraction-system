@@ -20,7 +20,7 @@ const LicenceDocumentRolePresenter = require('../../../presenters/import/legacy/
  * @param licenceRef
  *
  */
-async function go (regionCode, naldLicenceId, transformedLicence, licenceRef) {
+async function go(regionCode, naldLicenceId, transformedLicence, licenceRef) {
   const naldLicenceDocumentRoles = await FetchLicenceDocumentRolesService.go(regionCode, naldLicenceId)
 
   for (const licenceDocumentRole of naldLicenceDocumentRoles) {

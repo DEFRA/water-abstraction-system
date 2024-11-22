@@ -15,19 +15,19 @@ const ContactModel = require('../../models/contact.model.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go (customerContacts) {
+function go(customerContacts) {
   return {
     customerContacts: _customerContacts(customerContacts)
   }
 }
 
-function _buildCustomerName (customer) {
+function _buildCustomerName(customer) {
   const contact = ContactModel.fromJson(customer)
 
   return contact.$name()
 }
 
-function _customerContacts (customerContacts) {
+function _customerContacts(customerContacts) {
   return customerContacts.map((customer) => {
     return {
       email: customer.email,

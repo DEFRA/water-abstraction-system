@@ -22,7 +22,7 @@ const { generateLicenceRef } = require('./licence.helper.js')
  *
  * @returns {Promise<module:PermitLicenceModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return PermitLicenceModel.query()
@@ -40,7 +40,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const defaults = {
     licenceStatusId: 1,
@@ -74,7 +74,7 @@ function defaults (data = {}) {
  * with what the legacy apps expect.
  * @param licenceRef
  */
-function _licenceDataValue (licenceRef) {
+function _licenceDataValue(licenceRef) {
   return {
     ID: '9000000',
     data: {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -35,21 +35,19 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
         expect(result).to.equal({
           returnsRequired: true,
-          requirements: [{
-            abstractionPeriod: 'From 1 June to 1 March',
-            agreementsExceptions: 'Gravity fill',
-            frequencyCollected: 'daily',
-            frequencyReported: 'daily',
-            index: 0,
-            points: [
-              'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-            ],
-            purposes: [
-              'Spray irrigation'
-            ],
-            returnsCycle: 'Summer',
-            siteDescription: 'A place in the sun'
-          }]
+          requirements: [
+            {
+              abstractionPeriod: 'From 1 June to 1 March',
+              agreementsExceptions: 'Gravity fill',
+              frequencyCollected: 'daily',
+              frequencyReported: 'daily',
+              index: 0,
+              points: ['At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'],
+              purposes: ['Spray irrigation'],
+              returnsCycle: 'Summer',
+              siteDescription: 'A place in the sun'
+            }
+          ]
         })
       })
 
@@ -104,7 +102,12 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
         describe('when more than two options were selected', () => {
           beforeEach(() => {
-            requirement.agreementsExceptions = ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception']
+            requirement.agreementsExceptions = [
+              'gravity-fill',
+              'transfer-re-abstraction-scheme',
+              'two-part-tariff',
+              '56-returns-exception'
+            ]
           })
 
           it('returns the options display text joined with an ", and" (Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception)', () => {
@@ -112,7 +115,9 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { agreementsExceptions } = result.requirements[0]
 
-            expect(agreementsExceptions).to.equal('Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception')
+            expect(agreementsExceptions).to.equal(
+              'Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception'
+            )
           })
         })
       })
@@ -199,7 +204,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
   })
 })
 
-function _point () {
+function _point() {
   return PointModel.fromJson({
     description: 'RIVER MEDWAY AT YALDING INTAKE',
     id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
@@ -210,7 +215,7 @@ function _point () {
   })
 }
 
-function _requirement () {
+function _requirement() {
   return {
     abstractionPeriod: {
       'end-abstraction-period-day': '01',
@@ -218,17 +223,17 @@ function _requirement () {
       'start-abstraction-period-day': '01',
       'start-abstraction-period-month': '06'
     },
-    agreementsExceptions: [
-      'gravity-fill'
-    ],
+    agreementsExceptions: ['gravity-fill'],
     frequencyCollected: 'day',
     frequencyReported: 'day',
     points: ['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'],
-    purposes: [{
-      id: '772136d1-9184-417b-90cd-91053287d1df',
-      alias: '',
-      description: 'Spray irrigation'
-    }],
+    purposes: [
+      {
+        id: '772136d1-9184-417b-90cd-91053287d1df',
+        alias: '',
+        description: 'Spray irrigation'
+      }
+    ],
     returnsCycle: 'summer',
     siteDescription: 'A place in the sun'
   }

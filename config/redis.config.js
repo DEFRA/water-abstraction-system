@@ -13,7 +13,7 @@ const config = {
   host: process.env.REDIS_HOST,
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
-  disableTls: (String(process.env.REDIS_DISABLE_TLS) === 'true') || false
+  disableTls: String(process.env.REDIS_DISABLE_TLS) === 'true' || false
 }
 
 module.exports = config

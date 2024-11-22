@@ -4,12 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const LicenceVersionPurposePresenter =
-  require('../../../../app/presenters/import/legacy/licence-version-purpose.presenter.js')
+const LicenceVersionPurposePresenter = require('../../../../app/presenters/import/legacy/licence-version-purpose.presenter.js')
 
 describe('Import Legacy Licence Version Purpose presenter', () => {
   let legacyLicenceVersionPurpose
@@ -42,7 +41,7 @@ describe('Import Legacy Licence Version Purpose presenter', () => {
   })
 })
 
-function _legacyLicenceVersionPurpose () {
+function _legacyLicenceVersionPurpose() {
   return {
     abstraction_period_end_day: 31,
     abstraction_period_end_month: 3,

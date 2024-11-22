@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -226,7 +226,7 @@ describe('Persist Allocated Licence to Results service', () => {
   })
 })
 
-function _generateData (returnMatched = true) {
+function _generateData(returnMatched = true) {
   const returnId = generateReturnLogId()
 
   const chargeElementReturnLogs = [
@@ -237,8 +237,7 @@ function _generateData (returnMatched = true) {
   ]
 
   // All data not required for the tests has been excluded from the generated data
-  const dataToPersist =
-  {
+  const dataToPersist = {
     id: generateUUID(),
     licenceRef: '1/11/10/*S/0084',
     licenceHolder: 'A licence holder',

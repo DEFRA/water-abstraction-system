@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,6 +14,7 @@ const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
+const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
@@ -33,6 +34,7 @@ describe('Licence Version Purpose model', () => {
 
   let testLicenceVersion
   let testLicenceVersionPurposeConditions
+  let testLicenceVersionPurposePoints
   let testPoint
   let testRecord
 
@@ -44,19 +46,29 @@ describe('Licence Version Purpose model', () => {
     testLicenceVersion = await LicenceVersionHelper.add()
 
     testRecord = await LicenceVersionPurposeHelper.add({
-      licenceVersionId: testLicenceVersion.id, primaryPurposeId, purposeId, secondaryPurposeId
+      licenceVersionId: testLicenceVersion.id,
+      primaryPurposeId,
+      purposeId,
+      secondaryPurposeId
     })
 
     testPoint = await PointHelper.add()
     await LicenceVersionPurposePointHelper.add({ licenceVersionPurposeId: testRecord.id, pointId: testPoint.id })
 
     testLicenceVersionPurposeConditions = []
+    testLicenceVersionPurposePoints = []
+
     for (let i = 0; i < 2; i++) {
       const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
         licenceVersionPurposeId: testRecord.id
       })
 
+      const licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+        licenceVersionPurposeId: testRecord.id
+      })
+
       testLicenceVersionPurposeConditions.push(licenceVersionPurposeCondition)
+      testLicenceVersionPurposePoints.push(licenceVersionPurposePoint)
     }
   })
 
@@ -72,8 +84,7 @@ describe('Licence Version Purpose model', () => {
   describe('Relationships', () => {
     describe('when linking to licence version', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('licenceVersion')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('licenceVersion')
 
         expect(query).to.exist()
       })
@@ -93,8 +104,7 @@ describe('Licence Version Purpose model', () => {
 
     describe('when linking to licence version purpose conditions', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('licenceVersionPurposeConditions')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('licenceVersionPurposeConditions')
 
         expect(query).to.exist()
       })
@@ -114,18 +124,37 @@ describe('Licence Version Purpose model', () => {
       })
     })
 
+    describe('when linking to licence version purpose points', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('licenceVersionPurposePoints')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purpose points', async () => {
+        const result = await LicenceVersionPurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposePoints')
+
+        expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposePoints).to.be.an.array()
+        expect(result.licenceVersionPurposePoints[0]).to.be.an.instanceOf(LicenceVersionPurposePointModel)
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[0])
+        expect(result.licenceVersionPurposePoints).to.include(testLicenceVersionPurposePoints[1])
+      })
+    })
+
     describe('when linking through licence version purpose points to points', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('points')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('points')
 
         expect(query).to.exist()
       })
 
       it('can eager load the points', async () => {
-        const result = await LicenceVersionPurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('points')
+        const result = await LicenceVersionPurposeModel.query().findById(testRecord.id).withGraphFetched('points')
 
         expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -139,8 +168,7 @@ describe('Licence Version Purpose model', () => {
 
     describe('when linking to primary purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('primaryPurpose')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('primaryPurpose')
 
         expect(query).to.exist()
       })
@@ -160,16 +188,13 @@ describe('Licence Version Purpose model', () => {
 
     describe('when linking to purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('purpose')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purpose', async () => {
-        const result = await LicenceVersionPurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purpose')
+        const result = await LicenceVersionPurposeModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(LicenceVersionPurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -181,8 +206,7 @@ describe('Licence Version Purpose model', () => {
 
     describe('when linking to secondary purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeModel.query()
-          .innerJoinRelated('secondaryPurpose')
+        const query = await LicenceVersionPurposeModel.query().innerJoinRelated('secondaryPurpose')
 
         expect(query).to.exist()
       })

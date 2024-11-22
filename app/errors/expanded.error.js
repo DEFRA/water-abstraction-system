@@ -8,7 +8,7 @@ class ExpandedError extends Error {
    * @param {string} message - Message that will be given to the error instance
    * @param {object} data - An object containing the additional data properties to be assigned to the error instance
    */
-  constructor (message, data) {
+  constructor(message, data) {
     super(message)
 
     for (const [key, value] of Object.entries(data)) {

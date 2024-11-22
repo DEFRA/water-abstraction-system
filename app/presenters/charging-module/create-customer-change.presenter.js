@@ -54,7 +54,7 @@
  *
  * @returns {object} the request data needed in the format required by the Charging Module
  */
-function go (billingAccount, address, company, contact) {
+function go(billingAccount, address, company, contact) {
   const { accountNumber: customerReference } = billingAccount
 
   const region = customerReference.charAt(0)
@@ -69,7 +69,7 @@ function go (billingAccount, address, company, contact) {
   }
 }
 
-function _addressLine6 (address6, country) {
+function _addressLine6(address6, country) {
   if (!address6 && !country) {
     return ''
   }
@@ -85,7 +85,7 @@ function _addressLine6 (address6, country) {
   return country
 }
 
-function _customerName (billingAccount, company) {
+function _customerName(billingAccount, company) {
   if (company.name) {
     return company.name
   }
@@ -93,7 +93,7 @@ function _customerName (billingAccount, company) {
   return billingAccount.company.name
 }
 
-function _formattedAddress (address, contact) {
+function _formattedAddress(address, contact) {
   const addressLines = []
 
   const { address1, address2, address3, address4, address5, address6, country, postcode } = address
@@ -149,13 +149,13 @@ function _formattedAddress (address, contact) {
  *
  * @private
  */
-function _truncate (stringToTruncate, maximumLength) {
+function _truncate(stringToTruncate, maximumLength) {
   // Don't truncate if the string is equal to or less than maximum length
   if (stringToTruncate.length <= maximumLength) {
     return stringToTruncate
   }
 
-  const truncatedString = stringToTruncate.slice(0, (maximumLength - 3))
+  const truncatedString = stringToTruncate.slice(0, maximumLength - 3)
 
   return `${truncatedString}...`
 }

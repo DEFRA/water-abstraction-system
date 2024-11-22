@@ -15,12 +15,8 @@ const { formatMoney } = require('../base.presenter.js')
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-function go (transaction) {
-  const {
-    chargeType,
-    credit,
-    netAmount
-  } = transaction
+function go(transaction) {
+  const { chargeType, credit, netAmount } = transaction
 
   return {
     billableDays: '',

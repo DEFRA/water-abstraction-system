@@ -30,7 +30,7 @@ const AirbrakeConfig = require('../../config/airbrake.config.js')
  * which our 'AirbrakePlugin` adds to Hapi. If 'null' the class will create a new instance instead.
  */
 class BaseNotifierLib {
-  constructor (logger = null, notifier = null) {
+  constructor(logger = null, notifier = null) {
     this._logger = this._setLogger(logger)
     this._notifier = this._setNotifier(notifier)
   }
@@ -44,7 +44,7 @@ class BaseNotifierLib {
    * @param {object} [data={}] - An object containing any values to be logged, for example, a bill run ID to be included
    * with the log message. Defaults to an empty object
    */
-  omg (message, data = {}) {
+  omg(message, data = {}) {
     this._logger.info(this._formatLogPacket(data), message)
   }
 
@@ -80,7 +80,7 @@ class BaseNotifierLib {
    * @param {Error} [error=null] - An instance of the error to be logged and sent to Errbit. If no error is provided one
    * will be created using `message` as the error message
    */
-  omfg (message, data = {}, error = null) {
+  omfg(message, data = {}, error = null) {
     // This deals with anyone calling omfg() with `omfg('It broke', null, error)` which would cause things to break
     if (!data) {
       data = {}
@@ -94,7 +94,8 @@ class BaseNotifierLib {
 
     this._logger.error(this._formatLogPacket(data, error), message)
 
-    this._notifier.notify(this._formatNotifyPacket(data, error, message))
+    this._notifier
+      .notify(this._formatNotifyPacket(data, error, message))
       // This section is a 'just in case' anything goes wrong when trying to send the notification to Errbit. It will
       // either fail (cannot connect) or blow up entirely. If it does we log the error directly (no calls to the
       // formatter)
@@ -119,7 +120,7 @@ class BaseNotifierLib {
    * testing highlighted that should an error occur and we don't `flush()` Airbrake's queue, we never see them in
    * Errbit. So, we expose Airbrake's `flush()` using this method which notifiers that extend the base can make use of.
    */
-  async flush () {
+  async flush() {
     await this._notifier.flush()
   }
 
@@ -138,7 +139,7 @@ class BaseNotifierLib {
    *
    * @private
    */
-  _formatLogPacket (data, error) {
+  _formatLogPacket(data, error) {
     const packet = {
       ...data
     }
@@ -165,7 +166,7 @@ class BaseNotifierLib {
    *
    * @private
    */
-  _formatNotifyPacket (data, error, message) {
+  _formatNotifyPacket(data, error, message) {
     return {
       error,
       session: {
@@ -186,7 +187,7 @@ class BaseNotifierLib {
    *
    * @private
    */
-  _setLogger (logger) {
+  _setLogger(logger) {
     if (logger) {
       return logger
     }
@@ -205,7 +206,7 @@ class BaseNotifierLib {
    *
    * @private
    */
-  _setNotifier (notifier) {
+  _setNotifier(notifier) {
     if (notifier) {
       return notifier
     }

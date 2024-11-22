@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -79,11 +79,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
       const result = Object.keys(billLicences[0])
 
-      expect(result).to.only.include([
-        'licenceRef',
-        'licenceId',
-        'transactions'
-      ])
+      expect(result).to.only.include(['licenceRef', 'licenceId', 'transactions'])
     })
 
     describe('and there are alcs bills to be reissued', () => {

@@ -37,7 +37,7 @@ const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
  * Once it has that info it creates a query that tells PostgreSQL to TRUNCATE all the tables and restart their
  * identity columns. For example, if a table relies on an incrementing ID the query will reset that to 1.
  */
-async function clean () {
+async function clean() {
   const schemas = ['public', ...LEGACY_SCHEMAS]
 
   for (const schema of schemas) {
@@ -61,7 +61,7 @@ async function clean () {
  * of this is it will cause the next migration run to error. That was until we added this function to wipe the test DB
  * of all tables, views and schemas. If this gets run before the migrations it will be starting with a clean slate.
  */
-async function wipe () {
+async function wipe() {
   // Drop the public views first
   const viewNames = await _viewNames('public')
 
@@ -83,11 +83,11 @@ async function wipe () {
   }
 }
 
-function _migrationTables () {
+function _migrationTables() {
   return [dbConfig.migrations.tableName, `${dbConfig.migrations.tableName}_lock`]
 }
 
-async function _seed () {
+async function _seed() {
   // NOTE: Order matches the order they are seeded via Knex seeding. Do not alphabetize!
   await RegionsSeeder.seed()
   await PurposesSeeder.seed()
@@ -107,7 +107,7 @@ async function _seed () {
   await ReturnCycleSeeder.seed()
 }
 
-async function _tableNames (schema) {
+async function _tableNames(schema) {
   const result = await db('pg_tables')
     .select('tablename')
     .where('schemaname', schema)
@@ -118,10 +118,8 @@ async function _tableNames (schema) {
   })
 }
 
-async function _viewNames (schema) {
-  const result = await db('pg_views')
-    .select('viewname')
-    .where('schemaname', schema)
+async function _viewNames(schema) {
+  const result = await db('pg_views').select('viewname').where('schemaname', schema)
 
   return result.map((view) => {
     return `"${schema}".${view.viewname}`
@@ -132,7 +130,7 @@ async function _viewNames (schema) {
  * Close the connection to the database
  *
  */
-async function closeConnection () {
+async function closeConnection() {
   await db.destroy()
 }
 

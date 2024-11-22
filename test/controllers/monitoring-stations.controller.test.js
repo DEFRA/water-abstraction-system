@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -60,21 +60,22 @@ describe('Monitoring stations controller', () => {
             {
               licenceId: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
               licenceRef: '01/0157',
-              linkages: [{
-                abstractionPeriod: '01 May to 12 August',
-                alertType: 'Stop',
-                alertUpdatedAt: '26 September 2024',
-                createdAt: '2023-12-14 21:33:04.006',
-                lastUpdatedAt: '2024-09-26 01:39:11.340',
-                id: '76ada4a6-00f6-4e9a-b930-a3512b0f4d77',
-                licenceRef: 'AT/Test',
-                restrictionType: 'Level',
-                threshold: '500 Ml/d'
-              }]
+              linkages: [
+                {
+                  abstractionPeriod: '01 May to 12 August',
+                  alertType: 'Stop',
+                  alertUpdatedAt: '26 September 2024',
+                  createdAt: '2023-12-14 21:33:04.006',
+                  lastUpdatedAt: '2024-09-26 01:39:11.340',
+                  id: '76ada4a6-00f6-4e9a-b930-a3512b0f4d77',
+                  licenceRef: 'AT/Test',
+                  restrictionType: 'Level',
+                  threshold: '500 Ml/d'
+                }
+              ]
             }
           ]
-        }
-        )
+        })
       })
 
       describe('when the request succeeds', () => {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -146,9 +146,7 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
@@ -161,9 +159,7 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
@@ -172,7 +168,7 @@ describe('Annual Process billing period service', () => {
   })
 })
 
-function _chargingModuleResponse (transactionId) {
+function _chargingModuleResponse(transactionId) {
   return {
     succeeded: true,
     response: {
@@ -181,14 +177,14 @@ function _chargingModuleResponse (transactionId) {
   }
 }
 
-function _testBillingAccount () {
+function _testBillingAccount() {
   return {
     id: '973a5852-9c06-4c14-b1e2-d32b88d3e878',
     accountNumber: 'T71117364A'
   }
 }
 
-function _testChargeVersion (billingAccountId) {
+function _testChargeVersion(billingAccountId) {
   return {
     id: generateUUID(),
     scheme: 'sroc',
@@ -222,7 +218,12 @@ function _testChargeVersion (billingAccountId) {
         loss: 'low',
         volume: '6.819',
         adjustments: {
-          s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+          s126: null,
+          s127: false,
+          s130: false,
+          charge: null,
+          winter: false,
+          aggregate: '0.562114443'
         },
         additionalCharges: { isSupplyPublicWater: true },
         description: 'Mineral washing',
@@ -240,7 +241,9 @@ function _testChargeVersion (billingAccountId) {
             abstractionPeriodEndMonth: 10,
             // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
             // of processing the billing account.
-            toJSON: () => { return '{}' }
+            toJSON: () => {
+              return '{}'
+            }
           }
         ]
       }

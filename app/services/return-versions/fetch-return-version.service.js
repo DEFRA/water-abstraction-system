@@ -15,74 +15,59 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go (id) {
+async function go(id) {
   return _fetch(id)
 }
 
-async function _fetch (id) {
+async function _fetch(id) {
   return ReturnVersionModel.query()
     .findById(id)
-    .select([
-      'createdAt',
-      'id',
-      'multipleUpload',
-      'notes',
-      'reason',
-      'quarterlyReturns',
-      'startDate',
-      'status'
-    ])
+    .select(['createdAt', 'id', 'multipleUpload', 'notes', 'reason', 'quarterlyReturns', 'startDate', 'status'])
     .modify('history')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef'
-      ]).modify('licenceHolder')
+      builder.select(['id', 'licenceRef']).modify('licenceHolder')
     })
     .withGraphFetched('returnRequirements')
-    .modifyGraph('returnRequirements', (builder) => {
-      builder.select([
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'collectionFrequency',
-        'fiftySixException',
-        'gravityFill',
-        'id',
-        'legacyId',
-        'reabstraction',
-        'reportingFrequency',
-        'siteDescription',
-        'summer',
-        'twoPartTariff'
-      ])
-    })
-    .withGraphFetched('returnRequirements.points')
-    .modifyGraph('returnRequirements.points', (builder) => {
-      builder.select([
-        'points.description',
-        'points.id',
-        'points.ngr1',
-        'points.ngr2',
-        'points.ngr3',
-        'points.ngr4'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes')
-    .modifyGraph('returnRequirements.returnRequirementPurposes', (builder) => {
-      builder.select([
-        'alias',
-        'id'
-      ])
-    })
-    .withGraphFetched('returnRequirements.returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirements.returnRequirementPurposes.purpose', (builder) => {
-      builder.select([
-        'description',
-        'id'
-      ])
+    .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
+      returnRequirementsBuilder
+        .select([
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'collectionFrequency',
+          'fiftySixException',
+          'gravityFill',
+          'id',
+          'legacyId',
+          'reabstraction',
+          'reportingFrequency',
+          'siteDescription',
+          'summer',
+          'twoPartTariff'
+        ])
+        .orderBy('legacyId', 'asc')
+        .withGraphFetched('points')
+        .modifyGraph('points', (pointsBuilder) => {
+          pointsBuilder.select([
+            'points.description',
+            'points.id',
+            'points.ngr1',
+            'points.ngr2',
+            'points.ngr3',
+            'points.ngr4'
+          ])
+        })
+        .withGraphFetched('returnRequirementPurposes')
+        .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+          returnRequirementPurposesBuilder
+            .select(['alias', 'id'])
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (builder) => {
+              builder.select(['description', 'id'])
+            })
+        })
     })
 }
 

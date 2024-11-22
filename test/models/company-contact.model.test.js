@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,16 +48,13 @@ describe('Company Contacts model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyContactModel.query()
-          .innerJoinRelated('company')
+        const query = await CompanyContactModel.query().innerJoinRelated('company')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company', async () => {
-        const result = await CompanyContactModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('company')
+        const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('company')
 
         expect(result).to.be.instanceOf(CompanyContactModel)
         expect(result.id).to.equal(testRecord.id)
@@ -79,16 +76,13 @@ describe('Company Contacts model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyContactModel.query()
-          .innerJoinRelated('contact')
+        const query = await CompanyContactModel.query().innerJoinRelated('contact')
 
         expect(query).to.exist()
       })
 
       it('can eager load the contact', async () => {
-        const result = await CompanyContactModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('contact')
+        const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('contact')
 
         expect(result).to.be.instanceOf(CompanyContactModel)
         expect(result.id).to.equal(testRecord.id)
@@ -110,16 +104,13 @@ describe('Company Contacts model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyContactModel.query()
-          .innerJoinRelated('licenceRole')
+        const query = await CompanyContactModel.query().innerJoinRelated('licenceRole')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence role', async () => {
-        const result = await CompanyContactModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceRole')
+        const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('licenceRole')
 
         expect(result).to.be.instanceOf(CompanyContactModel)
         expect(result.id).to.equal(testRecord.id)

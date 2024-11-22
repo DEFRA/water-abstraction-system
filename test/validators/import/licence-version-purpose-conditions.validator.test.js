@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -168,7 +168,7 @@ describe('Import Licence Version Purpose Conditions validator', () => {
   })
 })
 
-function _licenceVersionPurposeConditionsValidatorCondition () {
+function _licenceVersionPurposeConditionsValidatorCondition() {
   return {
     externalId: '6:100004',
     licenceVersionPurposeConditionTypeId: 'b10cc9d1-d46f-465d-a74a-26b2e567c699'

@@ -87,7 +87,7 @@ Again, this confirmed disabling the table triggers still had a massive impact on
 > The average times are in milliseconds. Just divide by 1000 for secs, for example, 1770 / 1000 = 1.7 secs
 
 | Schema  | No change | Just triggers | Single Query | Promise all | Best of | All in one |
-|---------|-----------|---------------|--------------|-------------|---------|------------|
+| ------- | --------- | ------------- | ------------ | ----------- | ------- | ---------- |
 | CRM     | 1770      | 2106          | **1185**     | 964         | 1444    | N/A        |
 | IDM     | 58        | 73            | **46**       | 852         | 1199    | N/A        |
 | PERMIT  | 165       | 266           | **156**      | 893         | 1282    | N/A        |

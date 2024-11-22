@@ -30,7 +30,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @param {module:ContactModel} contact - The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
-async function go (billingAccount, address, company, contact) {
+async function go(billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
   const result = await ChargingModuleCreateCustomerChangeRequest.send(requestData)

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -56,8 +56,7 @@ describe('Licence Version Purpose Condition model', () => {
   describe('Relationships', () => {
     describe('when linking to licence monitoring stations', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceMonitoringStations')
+        const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated('licenceMonitoringStations')
 
         expect(query).to.exist()
       })
@@ -79,8 +78,7 @@ describe('Licence Version Purpose Condition model', () => {
 
     describe('when linking to licence version purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceVersionPurpose')
+        const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated('licenceVersionPurpose')
 
         expect(query).to.exist()
       })
@@ -100,8 +98,9 @@ describe('Licence Version Purpose Condition model', () => {
 
     describe('when linking to licence version purpose condition type', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionModel.query()
-          .innerJoinRelated('licenceVersionPurposeConditionType')
+        const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated(
+          'licenceVersionPurposeConditionType'
+        )
 
         expect(query).to.exist()
       })
@@ -115,10 +114,9 @@ describe('Licence Version Purpose Condition model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceVersionPurposeConditionType).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
-        expect(result.licenceVersionPurposeConditionType).to.equal(
-          testLicenceVersionPurposeConditionType,
-          { skip: ['createdAt', 'updatedAt'] }
-        )
+        expect(result.licenceVersionPurposeConditionType).to.equal(testLicenceVersionPurposeConditionType, {
+          skip: ['createdAt', 'updatedAt']
+        })
       })
     })
   })

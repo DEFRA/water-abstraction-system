@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -42,16 +42,13 @@ describe('Scheduled Notification model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ScheduledNotificationModel.query()
-          .innerJoinRelated('event')
+        const query = await ScheduledNotificationModel.query().innerJoinRelated('event')
 
         expect(query).to.exist()
       })
 
       it('can eager load the event', async () => {
-        const result = await ScheduledNotificationModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('event')
+        const result = await ScheduledNotificationModel.query().findById(testRecord.id).withGraphFetched('event')
 
         expect(result).to.be.instanceOf(ScheduledNotificationModel)
         expect(result.id).to.equal(testRecord.id)

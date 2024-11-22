@@ -11,21 +11,18 @@ const { db } = require('../../../../db/db.js')
  * Deletes all data relating to a review licence from the review tables
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
- *
- * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)
   await _removeChargeReferences(reviewLicenceId)
   await _removeChargeVersions(reviewLicenceId)
-
-  return _removeLicence(reviewLicenceId)
+  await _removeLicence(reviewLicenceId)
 }
 
-async function _removeChargeElements (reviewLicenceId) {
-  return db
+async function _removeChargeElements(reviewLicenceId) {
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeElements AS rce')
@@ -35,8 +32,8 @@ async function _removeChargeElements (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeElementReturns (reviewLicenceId) {
-  return db
+async function _removeChargeElementReturns(reviewLicenceId) {
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeElementReturns AS rcer')
@@ -47,8 +44,8 @@ async function _removeChargeElementReturns (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeReferences (reviewLicenceId) {
-  return db
+async function _removeChargeReferences(reviewLicenceId) {
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeReferences AS rcr')
@@ -57,8 +54,8 @@ async function _removeChargeReferences (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeVersions (reviewLicenceId) {
-  return db
+async function _removeChargeVersions(reviewLicenceId) {
+  await db
     .withSchema('water')
     .del()
     .from('reviewChargeVersions AS rcv')
@@ -66,16 +63,12 @@ async function _removeChargeVersions (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeLicence (reviewLicenceId) {
-  return db
-    .withSchema('water')
-    .del()
-    .from('reviewLicences')
-    .where('id', reviewLicenceId)
+async function _removeLicence(reviewLicenceId) {
+  await db.withSchema('water').del().from('reviewLicences').where('id', reviewLicenceId)
 }
 
-async function _removeReturns (reviewLicenceId) {
-  return db
+async function _removeReturns(reviewLicenceId) {
+  await db
     .withSchema('water')
     .del()
     .from('reviewReturns AS rr')

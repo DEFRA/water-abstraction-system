@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -17,11 +17,7 @@ describe('Monitoring Stations - View presenter', () => {
   beforeEach(() => {
     auth = {
       credentials: {
-        scope: [
-          'billing',
-          'hof_notifications',
-          'manage_gauging_station_licence_links'
-        ]
+        scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
       }
     }
 
@@ -118,10 +114,7 @@ describe('Monitoring Stations - View presenter', () => {
 
     describe('when a user does not have the "manage_gauging_station_licence_links" role', () => {
       beforeEach(() => {
-        auth.credentials.scope = [
-          'billing',
-          'hof_notifications'
-        ]
+        auth.credentials.scope = ['billing', 'hof_notifications']
       })
 
       it('returns false for "permissionToManageLinks"', () => {
@@ -143,10 +136,7 @@ describe('Monitoring Stations - View presenter', () => {
 
     describe('when a user does not have the "hof_notifications" role', () => {
       beforeEach(() => {
-        auth.credentials.scope = [
-          'billing',
-          'manage_gauging_station_licence_links'
-        ]
+        auth.credentials.scope = ['billing', 'manage_gauging_station_licence_links']
       })
 
       it('returns false for "permissionToSendAlerts"', () => {

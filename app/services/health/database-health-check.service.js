@@ -18,7 +18,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns an array of stats for each table found in the db
  */
-async function go () {
+async function go() {
   const stats = db.select().table('pg_stat_user_tables')
 
   return stats

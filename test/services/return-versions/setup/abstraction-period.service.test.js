@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,14 +48,17 @@ describe('Return Versions Setup - Abstraction Period service', () => {
     it('returns page data for the view', async () => {
       const result = await AbstractionPeriodService.go(session.id, requirementIndex)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        pageTitle: 'Enter the abstraction period for the requirements for returns',
-        abstractionPeriod: null,
-        backLink: `/system/return-versions/setup/${session.id}/points/0`,
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC'
-      }, { skip: ['sessionId'] })
+      expect(result).to.equal(
+        {
+          activeNavBar: 'search',
+          pageTitle: 'Enter the abstraction period for the requirements for returns',
+          abstractionPeriod: null,
+          backLink: `/system/return-versions/setup/${session.id}/points/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC'
+        },
+        { skip: ['sessionId'] }
+      )
     })
   })
 })

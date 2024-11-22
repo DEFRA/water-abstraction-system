@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -127,7 +127,9 @@ describe('Bill Runs Setup Create presenter', () => {
           it('returns a link to the PRESROC review page', () => {
             const result = CreatePresenter.go(session, matchingBillRun)
 
-            expect(result.billRunLink).to.equal('/billing/batch/c0608545-9870-4605-a407-5ff49f8a5182/two-part-tariff-review')
+            expect(result.billRunLink).to.equal(
+              '/billing/batch/c0608545-9870-4605-a407-5ff49f8a5182/two-part-tariff-review'
+            )
           })
         })
       })
@@ -142,7 +144,9 @@ describe('Bill Runs Setup Create presenter', () => {
         it('returns the "You need to confirm or cancel this [..]" message', () => {
           const result = CreatePresenter.go(session, matchingBillRun)
 
-          expect(result.warningMessage).to.equal('You need to confirm or cancel this bill run before you can create a new one')
+          expect(result.warningMessage).to.equal(
+            'You need to confirm or cancel this bill run before you can create a new one'
+          )
         })
       })
 
@@ -159,7 +163,9 @@ describe('Bill Runs Setup Create presenter', () => {
           it('returns the "You can only have one [..]" message', () => {
             const result = CreatePresenter.go(session, matchingBillRun)
 
-            expect(result.warningMessage).to.equal('You can only have one Two-part tariff per region in a financial year')
+            expect(result.warningMessage).to.equal(
+              'You can only have one Two-part tariff per region in a financial year'
+            )
           })
         })
 

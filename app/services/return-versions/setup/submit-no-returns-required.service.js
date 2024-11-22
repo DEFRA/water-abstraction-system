@@ -25,7 +25,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The page data for the no returns required page
  */
-async function go (sessionId, payload, yar) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
@@ -52,13 +52,13 @@ async function go (sessionId, payload, yar) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.reason = payload.reason
 
   return session.$update()
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = NoReturnsRequiredValidator.go(payload)
 
   if (!validation.error) {

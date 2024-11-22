@@ -5,7 +5,9 @@
  */
 
 const { selectRandomEntry } = require('../general.js')
-const { data: licenceVersionPurposeConditionTypes } = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
+const {
+  data: licenceVersionPurposeConditionTypes
+} = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -21,7 +23,7 @@ const { data: licenceVersionPurposeConditionTypes } = require('../../../db/seeds
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return licenceVersionPurposeConditionTypes[index]
   }

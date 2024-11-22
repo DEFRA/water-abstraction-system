@@ -21,7 +21,7 @@ const MonitoringStationModel = require('../../../app/models/monitoring-station.m
  *
  * @returns {Promise<module:MonitoringStationModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return MonitoringStationModel.query()
@@ -39,7 +39,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {

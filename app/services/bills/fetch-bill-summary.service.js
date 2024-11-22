@@ -21,30 +21,21 @@ const BillModel = require('../../models/bill.model.js')
  * @returns {Promise<object>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
-async function go (billId) {
+async function go(billId) {
   return _fetch(billId)
 }
 
-async function _fetch (billId) {
+async function _fetch(billId) {
   return BillModel.query()
     .findById(billId)
-    .select([
-      'id',
-      'netAmount'
-    ])
+    .select(['id', 'netAmount'])
     .withGraphFetched('billingAccount')
     .modifyGraph('billingAccount', (builder) => {
       builder.modify('contactDetails')
     })
     .withGraphFetched('billLicences')
     .modifyGraph('billLicences', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef'
-      ])
-        .orderBy([
-          { column: 'licenceRef', order: 'asc' }
-        ])
+      builder.select(['id', 'licenceRef']).orderBy([{ column: 'licenceRef', order: 'asc' }])
     })
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
@@ -61,10 +52,7 @@ async function _fetch (billId) {
     })
     .withGraphFetched('billRun.region')
     .modifyGraph('billRun.region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 }
 

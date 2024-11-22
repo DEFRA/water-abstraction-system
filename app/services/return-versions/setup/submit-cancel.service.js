@@ -14,11 +14,9 @@ const SessionModel = require('../../../models/session.model.js')
  * deleted from the database.
  *
  * @param {string} sessionId - The UUID for the return requirement setup session record
- *
- * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (sessionId) {
-  return SessionModel.query().deleteById(sessionId)
+async function go(sessionId) {
+  await SessionModel.query().deleteById(sessionId)
 }
 
 module.exports = {

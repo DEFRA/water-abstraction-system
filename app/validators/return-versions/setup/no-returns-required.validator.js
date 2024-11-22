@@ -22,7 +22,7 @@ const VALID_VALUES = [
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   const schema = Joi.object({
     reason: Joi.string()
       .required()
