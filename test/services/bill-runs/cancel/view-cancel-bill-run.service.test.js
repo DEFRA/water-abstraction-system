@@ -3,48 +3,67 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+// Things we need to stub
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Thing under test
 const ViewCancelBillRunService = require('../../../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
 
 describe('Bill Runs - View Cancel Bill Run service', () => {
-  let region
-  let testBillRunId
+  const billRunId = 'd351ee81-157e-4621-98eb-db121cb48cbb'
+
+  let billRunQueryStub
 
   beforeEach(async () => {
-    region = RegionHelper.select()
-    const billRun = await BillRunHelper.add({
-      billRunNumber: 10101,
-      createdAt: new Date('2024-02-28'),
-      externalId: 'f54e53f0-37a0-400f-9f0e-bf8575c17668',
-      regionId: region.id,
-      status: 'ready'
-    })
+    billRunQueryStub = Sinon.stub()
 
-    testBillRunId = billRun.id
+    Sinon.stub(BillRunModel, 'query').returns({
+      findById: Sinon.stub().withArgs(billRunId).returnsThis(),
+      select: Sinon.stub().returnsThis(),
+      withGraphFetched: Sinon.stub().returnsThis(),
+      modifyGraph: billRunQueryStub
+    })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a bill with a matching ID exists', () => {
+    beforeEach(() => {
+      billRunQueryStub.resolves({
+        batchType: 'annual',
+        billRunNumber: 10101,
+        createdAt: new Date('2024-02-28'),
+        id: billRunId,
+        region: {
+          displayName: 'Avalon',
+          id: 'a1b202f3-0673-4358-82ab-6c39c7f183fb'
+        },
+        scheme: 'sroc',
+        status: 'ready',
+        summer: false,
+        toFinancialYearEnding: 2025
+      })
+    })
     it('will fetch the data and format it for use in the cancel bill run page', async () => {
-      const result = await ViewCancelBillRunService.go(testBillRunId)
+      const result = await ViewCancelBillRunService.go(billRunId)
 
       expect(result).to.equal({
-        backLink: `/system/bill-runs/${testBillRunId}`,
-        billRunId: testBillRunId,
+        backLink: `/system/bill-runs/${billRunId}`,
+        billRunId,
         billRunNumber: 10101,
         billRunStatus: 'ready',
-        billRunType: 'Supplementary',
+        billRunType: 'Annual',
         chargeScheme: 'Current',
         dateCreated: '28 February 2024',
-        financialYear: '2022 to 2023',
-        region: region.displayName
+        financialYear: '2024 to 2025',
+        region: 'Avalon'
       })
     })
   })
