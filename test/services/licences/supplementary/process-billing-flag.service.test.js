@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -377,7 +377,7 @@ describe('Process Billing Flag Service', () => {
   })
 })
 
-function _licenceData (twoPartTariff) {
+function _licenceData(twoPartTariff) {
   return {
     licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
     regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',

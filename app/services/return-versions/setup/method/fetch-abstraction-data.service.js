@@ -24,7 +24,7 @@ const LicenceModel = require('../../../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the matching licence model instance with abstraction data related properties
  * populated
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -34,47 +34,50 @@ async function go (licenceId) {
  *
  * @private
  */
-async function _fetch (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'licences.id',
-      'licences.waterUndertaker',
-      // This is generates a sub-select query which uses `EXISTS` to convert whether a user has a current two-part
-      // tariff agreement into a boolean value
-      LicenceModel.raw(`
+async function _fetch(licenceId) {
+  return (
+    LicenceModel.query()
+      .findById(licenceId)
+      .select([
+        'licences.id',
+        'licences.waterUndertaker',
+        // This is generates a sub-select query which uses `EXISTS` to convert whether a user has a current two-part
+        // tariff agreement into a boolean value
+        LicenceModel.raw(
+          `
         EXISTS (SELECT 1
           FROM licence_agreements la
           INNER JOIN financial_agreements fa ON fa.id = la.financial_agreement_id
           WHERE la.licence_ref = licences.licence_ref
           AND fa.code = 'S127'
           AND (la.end_date IS NULL OR la.end_date >= ?)) AS two_part_tariff_agreement
-          `, [new Date()])
-    ])
-    // Grab only the current version for the licence. The licence version purposes are linked off it
-    .modify('currentVersion')
-    .withGraphFetched('licenceVersions.licenceVersionPurposes')
-    .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
-      builder.select([
-        'licenceVersionPurposes.id',
-        'licenceVersionPurposes.abstractionPeriodEndDay',
-        'licenceVersionPurposes.abstractionPeriodEndMonth',
-        'licenceVersionPurposes.abstractionPeriodStartDay',
-        'licenceVersionPurposes.abstractionPeriodStartMonth',
-        'licenceVersionPurposes.dailyQuantity',
-        'licenceVersionPurposes.externalId'
+          `,
+          [new Date()]
+        )
       ])
-        // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary
-        // and secondary against a licence version purpose
-        .modify('allPurposes')
-        .withGraphFetched('points')
-        .modifyGraph('points', (pointsBuilder) => {
-          pointsBuilder.select([
-            'points.id',
-            'points.description'
+      // Grab only the current version for the licence. The licence version purposes are linked off it
+      .modify('currentVersion')
+      .withGraphFetched('licenceVersions.licenceVersionPurposes')
+      .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
+        builder
+          .select([
+            'licenceVersionPurposes.id',
+            'licenceVersionPurposes.abstractionPeriodEndDay',
+            'licenceVersionPurposes.abstractionPeriodEndMonth',
+            'licenceVersionPurposes.abstractionPeriodStartDay',
+            'licenceVersionPurposes.abstractionPeriodStartMonth',
+            'licenceVersionPurposes.dailyQuantity',
+            'licenceVersionPurposes.externalId'
           ])
-        })
-    })
+          // Use the Objection.js modifier we've added to LicenceVersionPurposeModel to retrieve the purpose, plus primary
+          // and secondary against a licence version purpose
+          .modify('allPurposes')
+          .withGraphFetched('points')
+          .modifyGraph('points', (pointsBuilder) => {
+            pointsBuilder.select(['points.id', 'points.description'])
+          })
+      })
+  )
 }
 
 module.exports = {

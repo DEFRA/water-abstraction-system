@@ -14,19 +14,13 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return ReturnVersionModel.query()
-    .select([
-      'id',
-      'startDate',
-      'endDate',
-      'status',
-      'reason'
-    ])
+    .select(['id', 'startDate', 'endDate', 'status', 'reason'])
     .where('licenceId', licenceId)
     .whereNot('status', 'draft')
     .orderBy([
@@ -35,12 +29,7 @@ async function _fetch (licenceId) {
     ])
     .withGraphFetched('modLogs')
     .modifyGraph('modLogs', (builder) => {
-      builder
-        .select([
-          'id',
-          'reasonDescription'
-        ])
-        .orderBy('externalId', 'asc')
+      builder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
     })
 }
 

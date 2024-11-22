@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,11 +15,11 @@ const { postRequestOptions } = require('../support/general.js')
 const Boom = require('@hapi/boom')
 const GenerateBillRunService = require('../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
-const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
+const SubmitSendBillRunService = require('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
+const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-send-bill-run.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -62,18 +62,20 @@ describe('Bill Runs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(IndexBillRunsService, 'go').resolves({
-            billRuns: [{
-              id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
-              createdAt: '1 January 2024',
-              link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
-              number: 1002,
-              numberOfBills: 7,
-              region: 'Avalon',
-              scheme: 'sroc',
-              status: 'ready',
-              total: '£200.00',
-              type: 'Supplementary'
-            }],
+            billRuns: [
+              {
+                id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+                createdAt: '1 January 2024',
+                link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+                number: 1002,
+                numberOfBills: 7,
+                region: 'Avalon',
+                scheme: 'sroc',
+                status: 'ready',
+                total: '£200.00',
+                type: 'Supplementary'
+              }
+            ],
             busy: 'none',
             pageTitle: 'Bill runs (page 2 of 30)',
             pagination: {
@@ -213,7 +215,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SendBillRunService, 'go').resolves({
+          Sinon.stub(ViewSendBillRunService, 'go').resolves({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
             pageTitle: "You're about to send this bill run"
@@ -304,7 +306,7 @@ describe('Bill Runs controller', () => {
   })
 })
 
-function _getRequestOptions (path) {
+function _getRequestOptions(path) {
   const root = '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28'
   const url = path ? `${root}/${path}` : root
 
@@ -318,14 +320,14 @@ function _getRequestOptions (path) {
   }
 }
 
-function _postRequestOptions (path) {
+function _postRequestOptions(path) {
   const root = '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28'
   const url = path ? `${root}/${path}` : root
 
   return postRequestOptions(url)
 }
 
-function _multiGroupBillRun () {
+function _multiGroupBillRun() {
   return {
     billsCount: '2 Annual bills',
     billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
@@ -349,35 +351,39 @@ function _multiGroupBillRun () {
       {
         type: 'water-companies',
         caption: '1 water company',
-        bills: [{
-          id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-          accountNumber: 'E22288888A',
-          billingContact: 'Acme Water Services Ltd',
-          licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
-          licencesCount: 3,
-          financialYear: 2023,
-          total: '£213,178.00'
-        }]
+        bills: [
+          {
+            id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+            accountNumber: 'E22288888A',
+            billingContact: 'Acme Water Services Ltd',
+            licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
+            licencesCount: 3,
+            financialYear: 2023,
+            total: '£213,178.00'
+          }
+        ]
       },
       {
         type: 'other-abstractors',
         caption: '1 other abstractor',
-        bills: [{
-          id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-          accountNumber: 'E11101999A',
-          billingContact: 'Geordie Leforge',
-          licences: ['17/53/001/G/782'],
-          licencesCount: 1,
-          financialYear: 2023,
-          total: '£97.00'
-        }]
+        bills: [
+          {
+            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+            accountNumber: 'E11101999A',
+            billingContact: 'Geordie Leforge',
+            licences: ['17/53/001/G/782'],
+            licencesCount: 1,
+            financialYear: 2023,
+            total: '£97.00'
+          }
+        ]
       }
     ],
     view: 'bill-runs/view.njk'
   }
 }
 
-function _singleGroupBillRun () {
+function _singleGroupBillRun() {
   return {
     billsCount: '1 Annual bill',
     billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
@@ -401,15 +407,17 @@ function _singleGroupBillRun () {
       {
         type: 'other-abstractors',
         caption: '1 other abstractor',
-        bills: [{
-          id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-          accountNumber: 'E11101999A',
-          billingContact: 'Geordie Leforge',
-          licences: ['17/53/001/G/782'],
-          licencesCount: 1,
-          financialYear: 2023,
-          total: '£97.00'
-        }]
+        bills: [
+          {
+            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+            accountNumber: 'E11101999A',
+            billingContact: 'Geordie Leforge',
+            licences: ['17/53/001/G/782'],
+            licencesCount: 1,
+            financialYear: 2023,
+            total: '£97.00'
+          }
+        ]
       }
     ],
     view: 'bill-runs/view.njk'

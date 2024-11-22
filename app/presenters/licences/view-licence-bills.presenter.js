@@ -14,13 +14,13 @@ const { formatBillRunType, formatLongDate, formatMoney } = require('../base.pres
  *
  * @returns {object} The data formatted for the view template
  */
-function go (bills) {
+function go(bills) {
   return {
     bills: _bills(bills)
   }
 }
 
-function _bills (bills) {
+function _bills(bills) {
   return bills.map((bill) => {
     const {
       accountNumber,
@@ -47,7 +47,7 @@ function _bills (bills) {
   })
 }
 
-function _formatBillNumber (bill) {
+function _formatBillNumber(bill) {
   if (bill.invoiceNumber) {
     return bill.invoiceNumber
   }

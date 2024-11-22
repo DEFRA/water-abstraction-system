@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -83,10 +83,12 @@ describe('View Licence Set Up presenter', () => {
       endDate: null,
       status: 'current',
       reason: 'change-to-special-agreement',
-      modLogs: [{
-        id: '956a876a-2a51-4e86-bb39-3101395a741b',
-        reasonDescription: 'Special Agreement - Change'
-      }]
+      modLogs: [
+        {
+          id: '956a876a-2a51-4e86-bb39-3101395a741b',
+          reasonDescription: 'Special Agreement - Change'
+        }
+      ]
     })
 
     agreements = []
@@ -119,7 +121,12 @@ describe('View Licence Set Up presenter', () => {
 
         it('correctly presents the agreements data', () => {
           const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions, workflows, agreements, returnVersions, auth, commonData
+            chargeVersions,
+            workflows,
+            agreements,
+            returnVersions,
+            auth,
+            commonData
           )
 
           expect(result.agreements).to.equal([
@@ -149,7 +156,12 @@ describe('View Licence Set Up presenter', () => {
         describe('when all the actions are available for an agreement', () => {
           it('shows delete, end and recalculate bills actions', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
             expect(result.agreements[0].action).to.equal([
@@ -177,7 +189,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('there are no actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].action).to.equal([])
@@ -191,7 +208,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('there is no action link to delete', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].action).to.equal([
@@ -214,7 +236,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('there is no action link to end the agreement', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].action).to.equal([
@@ -233,7 +260,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('there is no action link to Recalculate bills', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].action).to.equal([
@@ -254,7 +286,12 @@ describe('View Licence Set Up presenter', () => {
           describe('is for Two-part tariff ', () => {
             it('correctly maps the code to the description', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].description).to.equal('Two-part tariff')
@@ -268,7 +305,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly maps the code to the description', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, supported source (S130S)')
@@ -282,7 +324,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly maps the code to the description', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, unsupported source (S130U)')
@@ -294,8 +341,14 @@ describe('View Licence Set Up presenter', () => {
               agreement.financialAgreement.code = 'S126'
             })
             it('correctly maps the code to the description', () => {
-              const result = ViewLicenceSetUpPresenter
-                .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+              const result = ViewLicenceSetUpPresenter.go(
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
+              )
 
               expect(result.agreements[0].description).to.equal('Abatement')
             })
@@ -309,7 +362,12 @@ describe('View Licence Set Up presenter', () => {
 
           it('shows delete, end and recalculate bills actions', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
             expect(result.agreements[0].action).to.equal([
@@ -343,7 +401,12 @@ describe('View Licence Set Up presenter', () => {
 
           it('shows delete, end and recalculate bills actions', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
             expect(result.agreements[0].action).to.equal([])
@@ -360,7 +423,12 @@ describe('View Licence Set Up presenter', () => {
 
         it('groups both types of data into the "chargeInformation" property', () => {
           const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions, workflows, agreements, returnVersions, auth, commonData
+            chargeVersions,
+            workflows,
+            agreements,
+            returnVersions,
+            auth,
+            commonData
           )
 
           expect(result.chargeInformation).to.equal([
@@ -373,11 +441,14 @@ describe('View Licence Set Up presenter', () => {
               reason: 'changed something'
             },
             {
-              action: [{
-                link: '/licences/' +
-                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
+              action: [
+                {
+                  link:
+                    '/licences/' +
+                    'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                  text: 'View'
+                }
+              ],
               id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
               startDate: '1 January 2020',
               endDate: '',
@@ -402,21 +473,31 @@ describe('View Licence Set Up presenter', () => {
 
           it('correctly presents the data with a dash for the end date', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
-            expect(result.chargeInformation).to.equal([{
-              action: [{
-                link: '/licences/' +
-                'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
-              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-              startDate: '1 January 2020',
-              endDate: '',
-              status: 'current',
-              reason: 'Major change'
-            }])
+            expect(result.chargeInformation).to.equal([
+              {
+                action: [
+                  {
+                    link:
+                      '/licences/' +
+                      'f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                    text: 'View'
+                  }
+                ],
+                id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+                startDate: '1 January 2020',
+                endDate: '',
+                status: 'current',
+                reason: 'Major change'
+              }
+            ])
           })
         })
 
@@ -428,21 +509,31 @@ describe('View Licence Set Up presenter', () => {
 
           it('correctly presents the data with the end date', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
-            expect(result.chargeInformation).to.equal([{
-              action: [{
-                link: '/licences' +
-                '/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
-                text: 'View'
-              }],
-              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
-              startDate: '1 January 2020',
-              endDate: '31 March 2024',
-              status: 'current',
-              reason: 'Major change'
-            }])
+            expect(result.chargeInformation).to.equal([
+              {
+                action: [
+                  {
+                    link:
+                      '/licences' +
+                      '/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                    text: 'View'
+                  }
+                ],
+                id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+                startDate: '1 January 2020',
+                endDate: '31 March 2024',
+                status: 'current',
+                reason: 'Major change'
+              }
+            ])
           })
         })
       })
@@ -464,38 +555,55 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
-                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                  text: 'Review'
-                }],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 April 2022',
-                endDate: '',
-                status: 'review',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [
+                    {
+                      link:
+                        '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                        'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                      text: 'Review'
+                    }
+                  ],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '1 April 2022',
+                  endDate: '',
+                  status: 'review',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
 
           describe('and the user is not permitted to review workflow records', () => {
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 April 2022',
-                endDate: '',
-                status: 'review',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '1 April 2022',
+                  endDate: '',
+                  status: 'review',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
         })
@@ -513,38 +621,55 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
-                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                  text: 'Review'
-                }],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 April 2022',
-                endDate: '',
-                status: 'changes_requested',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [
+                    {
+                      link:
+                        '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                        'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                      text: 'Review'
+                    }
+                  ],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '1 April 2022',
+                  endDate: '',
+                  status: 'changes_requested',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
 
           describe('and the user is not permitted to review workflow records', () => {
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '1 April 2022',
-                endDate: '',
-                status: 'changes_requested',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '1 April 2022',
+                  endDate: '',
+                  status: 'changes_requested',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
         })
@@ -562,21 +687,31 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [{
-                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
-                  'f547f465-0a62-45ff-9909-38825f05e0c4/review',
-                  text: 'Review'
-                }],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '',
-                endDate: '',
-                status: 'to_setup',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [
+                    {
+                      link:
+                        '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
+                        'f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                      text: 'Review'
+                    }
+                  ],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '',
+                  endDate: '',
+                  status: 'to_setup',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
 
@@ -587,17 +722,24 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly presents the data and workflow actions', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.chargeInformation).to.equal([{
-                action: [],
-                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
-                startDate: '',
-                endDate: '',
-                status: 'to_setup',
-                reason: 'changed something'
-              }])
+              expect(result.chargeInformation).to.equal([
+                {
+                  action: [],
+                  id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                  startDate: '',
+                  endDate: '',
+                  status: 'to_setup',
+                  reason: 'changed something'
+                }
+              ])
             })
           })
         })
@@ -610,7 +752,12 @@ describe('View Licence Set Up presenter', () => {
 
         it('correctly presents the returns versions data', () => {
           const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions, workflows, agreements, returnVersions, auth, commonData
+            chargeVersions,
+            workflows,
+            agreements,
+            returnVersions,
+            auth,
+            commonData
           )
 
           expect(result.returnVersions).to.equal([
@@ -638,7 +785,12 @@ describe('View Licence Set Up presenter', () => {
 
           it('correctly presents the returns versions data with the missing data defaults', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
             expect(result.returnVersions).to.equal([
@@ -682,7 +834,8 @@ describe('View Licence Set Up presenter', () => {
                   agreements,
                   returnVersions,
                   auth,
-                  commonData)
+                  commonData
+                )
 
                 expect(result.links.agreements.setUpAgreement).to.equal(
                   '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/select-type'
@@ -700,8 +853,14 @@ describe('View Licence Set Up presenter', () => {
               })
 
               it('the agreement link is not present', () => {
-                const result = ViewLicenceSetUpPresenter
-                  .go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
+                const result = ViewLicenceSetUpPresenter.go(
+                  chargeVersions,
+                  workflows,
+                  agreements,
+                  returnVersions,
+                  auth,
+                  commonData
+                )
 
                 expect(result.links.agreements.setUpAgreement).to.be.undefined()
               })
@@ -728,7 +887,8 @@ describe('View Licence Set Up presenter', () => {
                   agreements,
                   returnVersions,
                   auth,
-                  commonData)
+                  commonData
+                )
 
                 expect(result.setUpAgreement).to.be.undefined()
               })
@@ -746,13 +906,15 @@ describe('View Licence Set Up presenter', () => {
                   agreements,
                   returnVersions,
                   auth,
-                  commonData)
+                  commonData
+                )
 
-                expect(result.links.chargeInformation.makeLicenceNonChargeable).to
-                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' +
-                    'non-chargeable-reason?start=1')
-                expect(result.links.chargeInformation.setupNewCharge).to
-                  .equal('/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create')
+                expect(result.links.chargeInformation.makeLicenceNonChargeable).to.equal(
+                  '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/' + 'non-chargeable-reason?start=1'
+                )
+                expect(result.links.chargeInformation.setupNewCharge).to.equal(
+                  '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
+                )
               })
             })
             describe('and the licence "ends" more than 6 years ago', () => {
@@ -778,7 +940,8 @@ describe('View Licence Set Up presenter', () => {
                   agreements,
                   returnVersions,
                   auth,
-                  commonData)
+                  commonData
+                )
 
                 expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
                 expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
@@ -791,13 +954,20 @@ describe('View Licence Set Up presenter', () => {
           describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
             it('return the associated links', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
-              expect(result.links.returnVersions.returnsRequired).to
-                .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required')
-              expect(result.links.returnVersions.noReturnsRequired).to
-                .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required')
+              expect(result.links.returnVersions.returnsRequired).to.equal(
+                '/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required'
+              )
+              expect(result.links.returnVersions.noReturnsRequired).to.equal(
+                '/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required'
+              )
             })
           })
 
@@ -808,7 +978,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('return no returnVersions links', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.links.returnVersions).to.equal({})
@@ -834,7 +1009,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('correctly presents the recalculate bills link', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.links.recalculateBills.markForSupplementaryBilling).to.equal(
@@ -853,7 +1033,12 @@ describe('View Licence Set Up presenter', () => {
 
             it('the recalculate bills link is not present', () => {
               const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions, workflows, agreements, returnVersions, auth, commonData
+                chargeVersions,
+                workflows,
+                agreements,
+                returnVersions,
+                auth,
+                commonData
               )
 
               expect(result.recalculateBills).to.be.undefined()
@@ -870,7 +1055,12 @@ describe('View Licence Set Up presenter', () => {
 
           it('the recalculate bills link is not present', () => {
             const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions, workflows, agreements, returnVersions, auth, commonData
+              chargeVersions,
+              workflows,
+              agreements,
+              returnVersions,
+              auth,
+              commonData
             )
 
             expect(result.recalculateBills).to.be.undefined()

@@ -24,7 +24,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  *
  * @returns {object[]} - The years that can be flagged for supplementary billing
  */
-async function go (regionId, years, twoPartTariff) {
+async function go(regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
 }
 
@@ -35,7 +35,7 @@ async function go (regionId, years, twoPartTariff) {
  *
  * @private
  */
-async function _supplementaryBillingYears (regionId, years, twoPartTariff) {
+async function _supplementaryBillingYears(regionId, years, twoPartTariff) {
   const batchType = twoPartTariff ? 'two_part_tariff' : 'annual'
 
   const billRuns = await BillRunModel.query()

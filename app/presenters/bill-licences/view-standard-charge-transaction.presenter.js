@@ -23,7 +23,7 @@ const {
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-function go (transaction) {
+function go(transaction) {
   if (transaction.scheme === 'sroc') {
     return _srocContent(transaction)
   }
@@ -31,8 +31,11 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _additionalCharges (
-  waterCompanyCharge, waterCompanyChargeValue, supportedSourceChargeValue, supportedSourceName
+function _additionalCharges(
+  waterCompanyCharge,
+  waterCompanyChargeValue,
+  supportedSourceChargeValue,
+  supportedSourceName
 ) {
   const charges = []
 
@@ -51,7 +54,7 @@ function _additionalCharges (
   return charges.join(', ')
 }
 
-function _adjustments (
+function _adjustments(
   adjustmentFactor,
   aggregateFactor,
   winterOnly,
@@ -90,7 +93,7 @@ function _adjustments (
   return adjustments.join(', ')
 }
 
-function _agreement (section127Agreement) {
+function _agreement(section127Agreement) {
   if (section127Agreement) {
     return 'Two-part tariff'
   }
@@ -98,7 +101,7 @@ function _agreement (section127Agreement) {
   return null
 }
 
-function _chargeElement (purpose, startDay, startMonth, endDay, endMonth, source, season, loss) {
+function _chargeElement(purpose, startDay, startMonth, endDay, endMonth, source, season, loss) {
   return {
     purpose: purpose.description,
     abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
@@ -108,7 +111,7 @@ function _chargeElement (purpose, startDay, startMonth, endDay, endMonth, source
   }
 }
 
-function _chargeElements (chargeElements) {
+function _chargeElements(chargeElements) {
   return chargeElements.map((chargeElement) => {
     const {
       abstractionPeriodEndDay: endDay,
@@ -127,11 +130,11 @@ function _chargeElements (chargeElements) {
   })
 }
 
-function _chargeReference (baselineCharge, chargeCategoryCode) {
+function _chargeReference(baselineCharge, chargeCategoryCode) {
   return `${chargeCategoryCode} (£${formatPounds(baselineCharge)})`
 }
 
-function _presrocContent (transaction) {
+function _presrocContent(transaction) {
   const {
     authorisedDays,
     billableDays,
@@ -175,7 +178,7 @@ function _presrocContent (transaction) {
   }
 }
 
-function _srocContent (transaction) {
+function _srocContent(transaction) {
   const {
     adjustmentFactor,
     aggregateFactor,
@@ -211,7 +214,10 @@ function _srocContent (transaction) {
 
   return {
     additionalCharges: _additionalCharges(
-      waterCompanyCharge, waterCompanyChargeInPence, supportedSourceChargeInPence, supportedSourceName
+      waterCompanyCharge,
+      waterCompanyChargeInPence,
+      supportedSourceChargeInPence,
+      supportedSourceName
     ),
     adjustments: _adjustments(
       adjustmentFactor,

@@ -56,7 +56,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {object} An object containing an `authorisedDays` and `billableDays` property
  */
-function go (chargePeriod, billingPeriod, chargeReference) {
+function go(chargePeriod, billingPeriod, chargeReference) {
   const { chargeElements } = chargeReference
 
   const authorisedAbstractionPeriods = []
@@ -102,7 +102,7 @@ function go (chargePeriod, billingPeriod, chargeReference) {
  *
  * @private
  */
-function _calculateDays (abstractionOverlapPeriod) {
+function _calculateDays(abstractionOverlapPeriod) {
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
 
   // ceil() always rounds up, even if the result is 1.1 (rounds to 2). We add 1 to make the calculation inclusive of
@@ -135,7 +135,7 @@ function _calculateDays (abstractionOverlapPeriod) {
  *
  * @private
  */
-function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
+function _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod) {
   const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)
   const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
 
@@ -145,7 +145,7 @@ function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod)
   }
 }
 
-function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
+function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
   const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
 
   const totalDays = consolidatedAbstractionPeriods.reduce((acc, abstractionPeriod) => {

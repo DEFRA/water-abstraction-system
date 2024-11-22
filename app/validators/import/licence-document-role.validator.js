@@ -14,7 +14,7 @@ const Joi = require('joi')
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licenceDocumentRole) {
+function go(licenceDocumentRole) {
   const schema = Joi.object({
     addressId: Joi.string().required(),
     companyId: Joi.string().required(),
@@ -23,7 +23,6 @@ function go (licenceDocumentRole) {
     endDate: Joi.date().required().allow(null),
     licenceRoleId: Joi.string().guid().required(),
     startDate: Joi.date().required()
-
   })
 
   const result = schema.validate(licenceDocumentRole, { convert: false })

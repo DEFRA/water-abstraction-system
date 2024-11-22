@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,14 +48,17 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
     it('returns page data for the view', async () => {
       const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        pageTitle: 'Select agreements and exceptions for the requirements for returns',
-        agreementsExceptions: null,
-        backLink: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC'
-      }, { skip: ['sessionId'] })
+      expect(result).to.equal(
+        {
+          activeNavBar: 'search',
+          pageTitle: 'Select agreements and exceptions for the requirements for returns',
+          agreementsExceptions: null,
+          backLink: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC'
+        },
+        { skip: ['sessionId'] }
+      )
     })
   })
 })

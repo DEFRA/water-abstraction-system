@@ -14,7 +14,7 @@ const PointModel = require('../../models/point.model.js')
  *
  * @returns {object} licence and points data needed by the view template
  */
-function go (data) {
+function go(data) {
   const { licence, points } = data
 
   const licencePoints = _formatLicencePoints(points)
@@ -27,7 +27,7 @@ function go (data) {
   }
 }
 
-function _formatLicencePoints (points) {
+function _formatLicencePoints(points) {
   return points.map((point) => {
     const pointInstance = PointModel.fromJson(point)
 

@@ -5,12 +5,7 @@
  * @module IndexBillRunsPresenter
  */
 
-const {
-  formatBillRunType,
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatBillRunType, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
@@ -19,20 +14,9 @@ const {
  *
  * @returns {object[]} Each bill run summary formatted for use in the `index.njk` template for `/bill-runs`
  */
-function go (billRuns) {
+function go(billRuns) {
   return billRuns.map((billRun) => {
-    const {
-      batchType,
-      billRunNumber,
-      createdAt,
-      id,
-      netTotal,
-      numberOfBills,
-      region,
-      scheme,
-      summer,
-      status
-    } = billRun
+    const { batchType, billRunNumber, createdAt, id, netTotal, numberOfBills, region, scheme, summer, status } = billRun
 
     return {
       id,
@@ -49,7 +33,7 @@ function go (billRuns) {
   })
 }
 
-function _formatTotal (status, batchType, netTotal) {
+function _formatTotal(status, batchType, netTotal) {
   if (status === 'review' && batchType === 'two_part_tariff') {
     return ''
   }
@@ -57,7 +41,7 @@ function _formatTotal (status, batchType, netTotal) {
   return formatMoney(netTotal, true)
 }
 
-function _link (billRunId, status, scheme) {
+function _link(billRunId, status, scheme) {
   if (['cancel', 'processing', 'queued', 'sending'].includes(status)) {
     return null
   }

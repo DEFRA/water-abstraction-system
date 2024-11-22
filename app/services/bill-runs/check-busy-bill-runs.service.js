@@ -15,7 +15,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns {Promise<string>} the state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  */
-async function go () {
+async function go() {
   const { building, cancelling } = await _fetch()
 
   if (building && cancelling) {
@@ -33,10 +33,12 @@ async function go () {
   return 'none'
 }
 
-async function _fetch () {
+async function _fetch() {
   const results = await db.select(
     db.raw("EXISTS(SELECT 1 FROM public.bill_runs bb WHERE bb.status = 'cancel') AS cancelling"),
-    db.raw("EXISTS(SELECT 1 FROM public.bill_runs bb WHERE bb.status IN ('processing', 'queued', 'sending')) AS building")
+    db.raw(
+      "EXISTS(SELECT 1 FROM public.bill_runs bb WHERE bb.status IN ('processing', 'queued', 'sending')) AS building"
+    )
   )
 
   return results[0]

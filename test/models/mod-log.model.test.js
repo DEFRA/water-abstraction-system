@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,7 +31,8 @@ describe('Mod Log model', () => {
   before(async () => {
     testLicence = await LicenceHelper.add()
     testChargeVersion = await ChargeVersionHelper.add({
-      licenceId: testLicence.id, licenceRef: testLicence.licenceRef
+      licenceId: testLicence.id,
+      licenceRef: testLicence.licenceRef
     })
     testLicenceVersion = await LicenceVersionHelper.add({ licenceId: testLicence.id })
     testReturnVersion = await ReturnVersionHelper.add({ licenceId: testLicence.id })
@@ -60,16 +61,13 @@ describe('Mod Log model', () => {
   describe('Relationships', () => {
     describe('when linking to charge version', () => {
       it('can successfully run a related query', async () => {
-        const query = await ModLogModel.query()
-          .innerJoinRelated('chargeVersion')
+        const query = await ModLogModel.query().innerJoinRelated('chargeVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version', async () => {
-        const result = await ModLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersion')
+        const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
         expect(result).to.be.instanceOf(ModLogModel)
         expect(result.id).to.equal(testRecord.id)
@@ -81,16 +79,13 @@ describe('Mod Log model', () => {
 
     describe('when linking to licence', () => {
       it('can successfully run a related query', async () => {
-        const query = await ModLogModel.query()
-          .innerJoinRelated('licence')
+        const query = await ModLogModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await ModLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(ModLogModel)
         expect(result.id).to.equal(testRecord.id)
@@ -102,16 +97,13 @@ describe('Mod Log model', () => {
 
     describe('when linking to licence version', () => {
       it('can successfully run a related query', async () => {
-        const query = await ModLogModel.query()
-          .innerJoinRelated('licenceVersion')
+        const query = await ModLogModel.query().innerJoinRelated('licenceVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence version', async () => {
-        const result = await ModLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceVersion')
+        const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('licenceVersion')
 
         expect(result).to.be.instanceOf(ModLogModel)
         expect(result.id).to.equal(testRecord.id)
@@ -123,16 +115,13 @@ describe('Mod Log model', () => {
 
     describe('when linking to return version', () => {
       it('can successfully run a related query', async () => {
-        const query = await ModLogModel.query()
-          .innerJoinRelated('returnVersion')
+        const query = await ModLogModel.query().innerJoinRelated('returnVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return version', async () => {
-        const result = await ModLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnVersion')
+        const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('returnVersion')
 
         expect(result).to.be.instanceOf(ModLogModel)
         expect(result.id).to.equal(testRecord.id)

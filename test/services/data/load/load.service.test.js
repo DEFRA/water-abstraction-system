@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -116,7 +116,10 @@ describe('Load service', () => {
         it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
           const result = await LoadService.go(payload)
 
-          const licence = await db('licences').withSchema('water').first('isTest').where('licenceId', result.licences[0])
+          const licence = await db('licences')
+            .withSchema('water')
+            .first('isTest')
+            .where('licenceId', result.licences[0])
 
           expect(licence.isTest).to.be.true()
         })

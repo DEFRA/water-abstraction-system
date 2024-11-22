@@ -3,12 +3,10 @@
 const viewName = 'addresses'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex(viewName).withSchema('crm_v2').select([
+  return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex(viewName).withSchema('crm_v2').select([
         'addresses.address_id AS id',
         'addresses.address_1',
         'addresses.address_2',
@@ -26,17 +24,16 @@ exports.up = function (knex) {
         // 'addresses.current_hash', // is populated but is only used by the legacy import process
         'addresses.date_created AS created_at',
         'addresses.date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropView(viewName)
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex(viewName).withSchema('crm_v2').select([
+  return knex.schema.dropView(viewName).createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex(viewName).withSchema('crm_v2').select([
         'addresses.address_id AS id',
         'addresses.address_1',
         'addresses.address_2',
@@ -54,6 +51,7 @@ exports.down = function (knex) {
         // 'addresses.current_hash', // is populated but is only used by the legacy import process
         'addresses.date_created AS created_at',
         'addresses.date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }

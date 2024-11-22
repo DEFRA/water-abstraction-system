@@ -25,7 +25,7 @@ const SupplementaryYearValidator = require('../../../validators/licences/supplem
  *
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
-async function go (licenceId, payload, user) {
+async function go(licenceId, payload, user) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -50,17 +50,11 @@ async function go (licenceId, payload, user) {
   }
 }
 
-async function _fetchLicenceData (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef',
-      'regionId'
-    ])
+async function _fetchLicenceData(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef', 'regionId'])
 }
 
-async function _flagLicenceYears (supplementaryYears, licenceId, user) {
+async function _flagLicenceYears(supplementaryYears, licenceId, user) {
   if (supplementaryYears.includes('preSroc')) {
     await LegacyRequest.post('water', `licences/${licenceId}/mark-for-supplementary-billing`, user.id)
 
@@ -87,7 +81,7 @@ async function _flagLicenceYears (supplementaryYears, licenceId, user) {
   await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
 }
 
-async function _getPageData (licenceId) {
+async function _getPageData(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
@@ -95,7 +89,7 @@ async function _getPageData (licenceId) {
   return pageData
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = SupplementaryYearValidator.go(payload)
 
   if (!validation.error) {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,7 +18,7 @@ const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/
 // Thing under test
 const SubmitCancelBillBunService = require('../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
 
-describe('Submit Cancel Bill Run service', () => {
+describe('Bill Runs - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
 
   let cancelBillRunStub

@@ -14,7 +14,7 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  * @param {object[]} financialYearEnds - An array of the financial year ends to be persisted as individual records
  * @param {boolean} twoPartTariff - If there are any two-part tariff indicators on the licence
  */
-async function go (licenceId, financialYearEnds, twoPartTariff) {
+async function go(licenceId, financialYearEnds, twoPartTariff) {
   for (const financialYearEnd of financialYearEnds) {
     const match = await _fetchExistingLicenceSupplementaryYears(licenceId, financialYearEnd, twoPartTariff)
 
@@ -27,7 +27,7 @@ async function go (licenceId, financialYearEnds, twoPartTariff) {
   }
 }
 
-async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYearEnd, twoPartTariff) {
+async function _fetchExistingLicenceSupplementaryYears(licenceId, financialYearEnd, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .select('id')
     .where('licenceId', licenceId)
@@ -38,13 +38,12 @@ async function _fetchExistingLicenceSupplementaryYears (licenceId, financialYear
     .first()
 }
 
-async function _persistSupplementaryBillingYearsData (licenceId, financialYearEnd, twoPartTariff) {
-  return LicenceSupplementaryYearModel.query()
-    .insert({
-      licenceId,
-      financialYearEnd,
-      twoPartTariff
-    })
+async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd, twoPartTariff) {
+  return LicenceSupplementaryYearModel.query().insert({
+    licenceId,
+    financialYearEnd,
+    twoPartTariff
+  })
 }
 
 module.exports = {

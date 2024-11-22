@@ -24,7 +24,7 @@ const {
  *
  * @returns {object} page date needed for the review licence page
  */
-function go (reviewLicence) {
+function go(reviewLicence) {
   const {
     billRun,
     id: reviewLicenceId,
@@ -55,7 +55,7 @@ function go (reviewLicence) {
   }
 }
 
-function _billingAccountDetails (billingAccount) {
+function _billingAccountDetails(billingAccount) {
   return {
     billingAccountId: billingAccount.id,
     accountNumber: billingAccount.accountNumber,
@@ -65,7 +65,7 @@ function _billingAccountDetails (billingAccount) {
   }
 }
 
-function _chargeElements (reviewChargeElements, chargePeriod) {
+function _chargeElements(reviewChargeElements, chargePeriod) {
   const numberOfElements = reviewChargeElements.length
 
   return reviewChargeElements.map((reviewChargeElement, index) => {
@@ -86,7 +86,7 @@ function _chargeElements (reviewChargeElements, chargePeriod) {
   })
 }
 
-function _chargeElementReturnVolumes (reviewReturns) {
+function _chargeElementReturnVolumes(reviewReturns) {
   return reviewReturns.map((reviewReturn) => {
     const { quantity, returnReference, returnStatus } = reviewReturn
 
@@ -98,7 +98,7 @@ function _chargeElementReturnVolumes (reviewReturns) {
   })
 }
 
-function _chargeReferences (reviewChargeReferences, chargePeriod) {
+function _chargeReferences(reviewChargeReferences, chargePeriod) {
   return reviewChargeReferences.map((reviewChargeReference) => {
     const { amendedAuthorisedVolume, chargeReference, reviewChargeElements, id } = reviewChargeReference
     const totalAllocated = calculateTotalBillableReturns(reviewChargeElements)
@@ -115,7 +115,7 @@ function _chargeReferences (reviewChargeReferences, chargePeriod) {
   })
 }
 
-function _chargeReferenceLinkTitle (reviewChargeReference) {
+function _chargeReferenceLinkTitle(reviewChargeReference) {
   const { aggregate, chargeAdjustment } = reviewChargeReference
 
   if (aggregate !== 1 || chargeAdjustment !== 1) {
@@ -125,7 +125,7 @@ function _chargeReferenceLinkTitle (reviewChargeReference) {
   return 'View details'
 }
 
-function _chargeVersionDescription (reviewChargeReferences) {
+function _chargeVersionDescription(reviewChargeReferences) {
   const referenceCount = reviewChargeReferences.length
   const elementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
     return total + reviewChargeReference.reviewChargeElements.length
@@ -137,7 +137,7 @@ function _chargeVersionDescription (reviewChargeReferences) {
   return `${referenceCount} charge ${referenceText} with ${elementCount} two-part tariff charge ${elementText}`
 }
 
-function _chargeVersions (reviewChargeVersions, toFinancialYearEnding) {
+function _chargeVersions(reviewChargeVersions, toFinancialYearEnding) {
   return reviewChargeVersions.map((reviewChargeVersion) => {
     const { chargePeriodStartDate, chargePeriodEndDate, chargeVersion, reviewChargeReferences } = reviewChargeVersion
     const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
@@ -152,7 +152,7 @@ function _chargeVersions (reviewChargeVersions, toFinancialYearEnding) {
   })
 }
 
-function _elementsInReview (reviewChargeVersions) {
+function _elementsInReview(reviewChargeVersions) {
   // If the licence we are reviewing is linked to at least one charge element (via charge version -> charge reference ->
   // charge element) that has a status of 'review' then the licence is said to have a status of 'REVIEW'
   return reviewChargeVersions.some((reviewChargeVersion) => {
@@ -168,7 +168,7 @@ function _elementsInReview (reviewChargeVersions) {
   })
 }
 
-function _formatReviewReturns (reviewReturns) {
+function _formatReviewReturns(reviewReturns) {
   const matchedReturns = []
   const unmatchedReturns = []
 

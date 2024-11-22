@@ -4,7 +4,7 @@ const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { data: licenceRoles } = require('./data/licence-roles.js')
 const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 
-async function seed () {
+async function seed() {
   for (const licenceRole of licenceRoles) {
     const exists = await _exists(licenceRole)
 
@@ -16,7 +16,7 @@ async function seed () {
   }
 }
 
-async function _exists (licenceRole) {
+async function _exists(licenceRole) {
   const { label, name } = licenceRole
 
   const result = await LicenceRoleModel.query()
@@ -29,11 +29,11 @@ async function _exists (licenceRole) {
   return !!result
 }
 
-async function _insert (licenceRole) {
+async function _insert(licenceRole) {
   return LicenceRoleModel.query().insert(licenceRole)
 }
 
-async function _update (licenceRole) {
+async function _update(licenceRole) {
   const { label, name } = licenceRole
 
   return LicenceRoleModel.query()

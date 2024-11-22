@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,8 +12,7 @@ const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
-const FetchReturnVersionsService =
-  require('../../../app/services/licences/fetch-return-versions.service.js')
+const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
 
 describe('Fetch Return Versions service', () => {
   const startDate = new Date('2022-04-01')
@@ -26,19 +25,28 @@ describe('Fetch Return Versions service', () => {
     beforeEach(async () => {
       // NOTE: We add these 2, both with the same start date to ensure the order that they are returned as expected
       supersededReturnVersion = await ReturnVersionHelper.add({
-        startDate, status: 'superseded', version: 100
+        startDate,
+        status: 'superseded',
+        version: 100
       })
       currentReturnVersion = await ReturnVersionHelper.add({
-        licenceId: supersededReturnVersion.licenceId, startDate, status: 'current', version: 101
+        licenceId: supersededReturnVersion.licenceId,
+        startDate,
+        status: 'current',
+        version: 101
       })
 
       // We add this 3rd one with a status of draft to ensure it is not included
       await ReturnVersionHelper.add({
-        licenceId: supersededReturnVersion.licenceId, startDate: new Date('2022-05-01'), status: 'draft', version: 102
+        licenceId: supersededReturnVersion.licenceId,
+        startDate: new Date('2022-05-01'),
+        status: 'draft',
+        version: 102
       })
 
       currentReturnVersionModLog = await ModLogHelper.add({
-        reasonDescription: 'Record Loaded During Migration', returnVersionId: currentReturnVersion.id
+        reasonDescription: 'Record Loaded During Migration',
+        returnVersionId: currentReturnVersion.id
       })
     })
 
@@ -52,10 +60,12 @@ describe('Fetch Return Versions service', () => {
           endDate: null,
           status: 'current',
           reason: 'new-licence',
-          modLogs: [{
-            id: currentReturnVersionModLog.id,
-            reasonDescription: 'Record Loaded During Migration'
-          }]
+          modLogs: [
+            {
+              id: currentReturnVersionModLog.id,
+              reasonDescription: 'Record Loaded During Migration'
+            }
+          ]
         },
         {
           id: supersededReturnVersion.id,

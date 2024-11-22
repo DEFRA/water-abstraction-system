@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -16,22 +16,14 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        agreementsExceptions: [
-          'gravity-fill',
-          'two-part-tariff',
-          '56-returns-exception'
-        ]
+        agreementsExceptions: ['gravity-fill', 'two-part-tariff', '56-returns-exception']
       }
     })
 
     it('confirms the data is valid', () => {
       const result = AgreementsExceptionsValidator.go(payload)
 
-      expect(result.value.agreementsExceptions).to.equal([
-        'gravity-fill',
-        'two-part-tariff',
-        '56-returns-exception'
-      ])
+      expect(result.value.agreementsExceptions).to.equal(['gravity-fill', 'two-part-tariff', '56-returns-exception'])
 
       expect(result.error).not.to.exist()
     })

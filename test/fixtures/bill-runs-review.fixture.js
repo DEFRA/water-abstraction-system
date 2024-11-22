@@ -7,7 +7,7 @@ const BillingAccountModel = require('../../app/models/billing-account.model.js')
  *
  * @returns {object}
  */
-function removeReviewLicence () {
+function removeReviewLicence() {
   return {
     id: 'bb779166-0576-4581-b504-edbc0227d763',
     licenceId: '32416c67-f755-4c3f-8816-ecde0ee596bd',
@@ -31,7 +31,7 @@ function removeReviewLicence () {
  *
  * @returns {object}
  */
-function reviewChargeElement () {
+function reviewChargeElement() {
   return {
     id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
     amendedAllocated: 0,
@@ -49,9 +49,7 @@ function reviewChargeElement () {
     reviewChargeReference: {
       id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
       amendedAuthorisedVolume: 9.092,
-      reviewChargeElements: [
-        { id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1' }
-      ],
+      reviewChargeElements: [{ id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1' }],
       reviewChargeVersion: {
         id: 'a71c386c-d9b8-4915-a508-74fb1508c071',
         chargePeriodStartDate: new Date('2023-04-01'),
@@ -103,7 +101,7 @@ function reviewChargeElement () {
  *
  * @returns {object}
  */
-function reviewChargeReference () {
+function reviewChargeReference() {
   return {
     id: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
     abatementAgreement: 1,
@@ -158,7 +156,7 @@ function reviewChargeReference () {
  *
  * @returns {object}
  */
-function reviewLicence () {
+function reviewLicence() {
   return {
     id: 'bb779166-0576-4581-b504-edbc0227d763',
     billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',

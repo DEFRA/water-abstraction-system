@@ -23,31 +23,31 @@ const notFoundStatusCode = 404
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function exportDb (_request, h) {
+async function exportDb(_request, h) {
   ExportService.go()
 
   return h.response().code(redirectStatusCode)
 }
 
-async function licenceUpdates (_request, h) {
+async function licenceUpdates(_request, h) {
   ProcessLicenceUpdates.go()
 
   return h.response().code(redirectStatusCode)
 }
 
-async function sessionCleanup (_request, h) {
+async function sessionCleanup(_request, h) {
   ProcessSessionStorageCleanupService.go()
 
   return h.response().code(redirectStatusCode)
 }
 
-async function timeLimited (_request, h) {
+async function timeLimited(_request, h) {
   ProcessTimeLimitedLicencesService.go()
 
   return h.response().code(redirectStatusCode)
 }
 
-async function returnLogs (request, h) {
+async function returnLogs(request, h) {
   const { cycle } = request.params
 
   if (!['summer', 'all-year'].includes(cycle)) {

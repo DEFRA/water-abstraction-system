@@ -20,7 +20,7 @@ const ProcessBillingFlagService = require('../licences/supplementary/process-bil
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go (billLicenceId, user) {
+async function go(billLicenceId, user) {
   const { bill } = await _fetchBillLicence(billLicenceId)
 
   const payload = {
@@ -33,18 +33,13 @@ async function go (billLicenceId, user) {
   return `/billing/batch/${bill.billRunId}/processing?invoiceId=${bill.id}`
 }
 
-async function _fetchBillLicence (billLicenceId) {
+async function _fetchBillLicence(billLicenceId) {
   return BillLicenceModel.query()
     .findById(billLicenceId)
-    .select([
-      'id'
-    ])
+    .select(['id'])
     .withGraphFetched('bill')
     .modifyGraph('bill', (builder) => {
-      builder.select([
-        'id',
-        'billRunId'
-      ])
+      builder.select(['id', 'billRunId'])
     })
 }
 

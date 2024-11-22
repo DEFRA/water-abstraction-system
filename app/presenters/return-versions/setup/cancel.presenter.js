@@ -15,7 +15,7 @@ const { returnRequirementFrequencies, returnRequirementReasons } = require('../.
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {
@@ -29,7 +29,7 @@ function go (session) {
   }
 }
 
-function _returnRequirements (journey, requirements) {
+function _returnRequirements(journey, requirements) {
   if (journey === 'no-returns-required') {
     return null
   }
@@ -42,7 +42,7 @@ function _returnRequirements (journey, requirements) {
   })
 }
 
-function _startDate (session) {
+function _startDate(session) {
   const { licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   let date

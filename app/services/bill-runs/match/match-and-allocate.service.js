@@ -28,7 +28,7 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
  *
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, false otherwise
  */
-async function go (billRun, billingPeriod) {
+async function go(billRun, billingPeriod) {
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod)
 
   if (licences.length > 0) {
@@ -38,7 +38,7 @@ async function go (billRun, billingPeriod) {
   return licences.length > 0
 }
 
-async function _process (licences, billingPeriod, billRun) {
+async function _process(licences, billingPeriod, billRun) {
   for (const licence of licences) {
     await PrepareReturnLogsService.go(licence, billingPeriod)
 
@@ -82,7 +82,7 @@ async function _process (licences, billingPeriod, billRun) {
   }
 }
 
-function _useAuthorisedVolume (chargeReference) {
+function _useAuthorisedVolume(chargeReference) {
   const { chargeElements } = chargeReference
 
   let availableQuantity = chargeReference.volume

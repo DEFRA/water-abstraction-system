@@ -12,7 +12,7 @@
  *
  * @returns {string} A CSV formatted string
  */
-function go (data) {
+function go(data) {
   if (!data) {
     return undefined
   }
@@ -25,10 +25,12 @@ function go (data) {
  *
  * @private
  */
-function _transformDataToCSV (data) {
-  const transformedRow = data.map((value) => {
-    return _transformValueToCSV(value)
-  }).join(',')
+function _transformDataToCSV(data) {
+  const transformedRow = data
+    .map((value) => {
+      return _transformValueToCSV(value)
+    })
+    .join(',')
 
   return transformedRow + '\n'
 }
@@ -38,7 +40,7 @@ function _transformDataToCSV (data) {
  *
  * @private
  */
-function _transformValueToCSV (value) {
+function _transformValueToCSV(value) {
   // Return empty string for undefined or null values
   if (!value && value !== false) {
     return ''
@@ -58,9 +60,7 @@ function _transformValueToCSV (value) {
   if (typeof value === 'object') {
     const objectToString = JSON.stringify(value)
 
-    const escapedObjectToString = objectToString.replace(/"/g, '""')
-      .replace(/:/g, ': ')
-      .replace(/,/g, ', ')
+    const escapedObjectToString = objectToString.replace(/"/g, '""').replace(/:/g, ': ').replace(/,/g, ', ')
 
     return `"${escapedObjectToString}"`
   }

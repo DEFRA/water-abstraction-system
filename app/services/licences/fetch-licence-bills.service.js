@@ -17,13 +17,13 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
-async function go (licenceId, page) {
+async function go(licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
 
   return { bills: results, pagination: { total } }
 }
 
-async function _fetch (licenceId, page) {
+async function _fetch(licenceId, page) {
   return BillModel.query()
     .select([
       'bills.accountNumber',
@@ -43,16 +43,9 @@ async function _fetch (licenceId, page) {
     .where('billRuns.status', 'sent')
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
-      builder.select([
-        'id',
-        'batchType',
-        'scheme',
-        'summer'
-      ])
+      builder.select(['id', 'batchType', 'scheme', 'summer'])
     })
-    .orderBy([
-      { column: 'createdAt', order: 'desc' }
-    ])
+    .orderBy([{ column: 'createdAt', order: 'desc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

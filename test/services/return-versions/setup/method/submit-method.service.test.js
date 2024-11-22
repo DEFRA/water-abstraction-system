@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,11 +31,13 @@ describe('Return Versions Setup - Submit Method service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null
+            }
+          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -121,14 +123,17 @@ describe('Return Versions Setup - Submit Method service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitMethodService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'How do you want to set up the requirements for returns?',
-          backLink: `/system/return-versions/setup/${session.id}/reason`,
-          displayCopyExisting: true,
-          licenceRef: '01/ABC',
-          method: null
-        }, { skip: ['sessionId', 'error'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            pageTitle: 'How do you want to set up the requirements for returns?',
+            backLink: `/system/return-versions/setup/${session.id}/reason`,
+            displayCopyExisting: true,
+            licenceRef: '01/ABC',
+            method: null
+          },
+          { skip: ['sessionId', 'error'] }
+        )
       })
 
       describe('because the user has not submitted anything', () => {
@@ -144,7 +149,7 @@ describe('Return Versions Setup - Submit Method service', () => {
   })
 })
 
-function _generatedReturnRequirements () {
+function _generatedReturnRequirements() {
   return [
     {
       points: ['12345'],

@@ -75,33 +75,89 @@ const LOAD_HELPERS = {
   billRunVolumes: { helper: BillRunVolumeHelper, test: false },
   billRuns: { helper: BillRunHelper, test: false },
   bills: { helper: BillHelper, test: false },
-  billingAccountAddresses: { helper: BillingAccountAddressHelper, test: true, legacy: { schema: 'crm_v2', table: 'invoice_account_addresses', id: 'invoice_account_address_id' } },
-  billingAccounts: { helper: BillingAccountHelper, test: true, legacy: { schema: 'crm_v2', table: 'invoice_accounts', id: 'invoice_account_id' } },
+  billingAccountAddresses: {
+    helper: BillingAccountAddressHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'invoice_account_addresses', id: 'invoice_account_address_id' }
+  },
+  billingAccounts: {
+    helper: BillingAccountHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'invoice_accounts', id: 'invoice_account_id' }
+  },
   changeReasons: { helper: ChangeReasonHelper, test: false },
-  chargeElements: { helper: ChargeElementHelper, test: true, legacy: { schema: 'water', table: 'charge_purposes', id: 'charge_purpose_id' } },
-  chargeReferences: { helper: ChargeReferenceHelper, test: true, legacy: { schema: 'water', table: 'charge_elements', id: 'charge_element_id' } },
-  chargeVersions: { helper: ChargeVersionHelper, test: true, legacy: { schema: 'water', table: 'charge_versions', id: 'charge_version_id' } },
-  companyAddresses: { helper: CompanyAddressHelper, test: true, legacy: { schema: 'crm_v2', table: 'company_addresses', id: 'company_address_id' } },
-  companyContacts: { helper: CompanyContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'company_contacts', id: 'company_contact_id' } },
+  chargeElements: {
+    helper: ChargeElementHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'charge_purposes', id: 'charge_purpose_id' }
+  },
+  chargeReferences: {
+    helper: ChargeReferenceHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'charge_elements', id: 'charge_element_id' }
+  },
+  chargeVersions: {
+    helper: ChargeVersionHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'charge_versions', id: 'charge_version_id' }
+  },
+  companyAddresses: {
+    helper: CompanyAddressHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'company_addresses', id: 'company_address_id' }
+  },
+  companyContacts: {
+    helper: CompanyContactHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'company_contacts', id: 'company_contact_id' }
+  },
   companies: { helper: CompanyHelper, test: true, legacy: { schema: 'crm_v2', table: 'companies', id: 'company_id' } },
   contacts: { helper: ContactHelper, test: true, legacy: { schema: 'crm_v2', table: 'contacts', id: 'contact_id' } },
   events: { helper: EventHelper, test: false },
-  licenceAgreements: { helper: LicenceAgreementHelper, test: true, legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' } },
+  licenceAgreements: {
+    helper: LicenceAgreementHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'licence_agreements', id: 'licence_agreement_id' }
+  },
   licenceDocumentHeaders: { helper: LicenceDocumentHeaderHelper, test: false },
-  licenceDocumentRoles: { helper: LicenceDocumentRoleHelper, test: true, legacy: { schema: 'crm_v2', table: 'document_roles', id: 'document_role_id' } },
-  licenceDocuments: { helper: LicenceDocumentHelper, test: true, legacy: { schema: 'crm_v2', table: 'documents', id: 'document_id' } },
+  licenceDocumentRoles: {
+    helper: LicenceDocumentRoleHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'document_roles', id: 'document_role_id' }
+  },
+  licenceDocuments: {
+    helper: LicenceDocumentHelper,
+    test: true,
+    legacy: { schema: 'crm_v2', table: 'documents', id: 'document_id' }
+  },
   licenceEntityRoles: { helper: LicenceEntityRoleHelper, test: false },
   licenceEntities: { helper: LicenceEntityHelper, test: false },
-  licenceMonitoringStations: { helper: LicenceMonitoringStationHelper, test: true, legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' } },
+  licenceMonitoringStations: {
+    helper: LicenceMonitoringStationHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' }
+  },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
   LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
-  licenceVersionPurposes: { helper: LicenceVersionPurposeHelper, test: true, legacy: { schema: 'water', table: 'licence_version_purposes', id: 'licence_version_purpose_id' } },
+  licenceVersionPurposes: {
+    helper: LicenceVersionPurposeHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'licence_version_purposes', id: 'licence_version_purpose_id' }
+  },
   licenceVersionPurposePoints: { helper: LicenceVersionPurposePointHelper, test: false },
-  licenceVersions: { helper: LicenceVersionHelper, test: true, legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' } },
+  licenceVersions: {
+    helper: LicenceVersionHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'licence_versions', id: 'licence_version_id' }
+  },
   licences: { helper: LicenceHelper, test: true, legacy: { schema: 'water', table: 'licences', id: 'licence_id' } },
   modLogs: { helper: ModLogHelper, test: false },
-  monitoringStations: { helper: MonitoringStationHelper, test: true, legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' } },
+  monitoringStations: {
+    helper: MonitoringStationHelper,
+    test: true,
+    legacy: { schema: 'water', table: 'gauging_stations', id: 'gauging_station_id' }
+  },
   points: { helper: PointHelper, test: false },
   permitLicences: { helper: PermitLicenceHelper, test: false },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
@@ -210,7 +266,7 @@ const LOAD_HELPERS = {
  * }
  * ```
  */
-async function go (payload) {
+async function go(payload) {
   // Instantiate a result object to which we'll record the ID's generated/used
   const result = {}
 
@@ -279,7 +335,7 @@ async function go (payload) {
  *
  * @private
  */
-async function _applyLookups (instance) {
+async function _applyLookups(instance) {
   const keys = Object.keys(instance)
 
   for (const key of keys) {
@@ -309,13 +365,13 @@ async function _applyLookups (instance) {
  *
  * @private
  */
-async function _applyTestFlag (legacy, id) {
+async function _applyTestFlag(legacy, id) {
   const { schema, table, id: tableId } = legacy
 
   return db(table).withSchema(schema).update('is_test', true).where(tableId, id)
 }
 
-function _helper (entityKey) {
+function _helper(entityKey) {
   const loadHelper = LOAD_HELPERS[entityKey]
 
   if (!loadHelper) {
@@ -325,12 +381,8 @@ function _helper (entityKey) {
   return loadHelper
 }
 
-async function _selector (schema, table, select, where, value) {
-  const result = await db
-    .withSchema(schema)
-    .first(select)
-    .from(table)
-    .where(where, value)
+async function _selector(schema, table, select, where, value) {
+  const result = await db.withSchema(schema).first(select).from(table).where(where, value)
 
   return result[select]
 }

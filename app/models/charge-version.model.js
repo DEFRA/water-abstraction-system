@@ -10,19 +10,16 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ChargeVersionModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'chargeVersions'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'approvedBy',
-      'createdBy'
-    ]
+  static get jsonAttributes() {
+    return ['approvedBy', 'createdBy']
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billingAccount: {
         relation: Model.BelongsToOneRelation,
@@ -104,40 +101,24 @@ class ChargeVersionModel extends BaseModel {
    *
    * @returns {object}
    */
-  static get modifiers () {
+  static get modifiers() {
     return {
       // history modifier fetches all the related records needed to determine history properties, for example, created
       // at, and created by from the record, plus its note, change reason, and NALD mod logs (where they exist)
-      history (query) {
+      history(query) {
         query
-          .select([
-            'createdAt',
-            'createdBy'
-          ])
+          .select(['createdAt', 'createdBy'])
           .withGraphFetched('modLogs')
           .modifyGraph('modLogs', (builder) => {
-            builder.select([
-              'id',
-              'naldDate',
-              'note',
-              'reasonDescription',
-              'userId'
-            ])
-              .orderBy('externalId', 'asc')
+            builder.select(['id', 'naldDate', 'note', 'reasonDescription', 'userId']).orderBy('externalId', 'asc')
           })
           .withGraphFetched('changeReason')
           .modifyGraph('changeReason', (builder) => {
-            builder.select([
-              'id',
-              'description'
-            ])
+            builder.select(['id', 'description'])
           })
           .withGraphFetched('chargeVersionNote')
           .modifyGraph('chargeVersionNote', (builder) => {
-            builder.select([
-              'id',
-              'note'
-            ])
+            builder.select(['id', 'note'])
           })
       }
     }
@@ -164,7 +145,7 @@ class ChargeVersionModel extends BaseModel {
    *
    * @returns {Date} the date the 'source' record was created
    */
-  $createdAt () {
+  $createdAt() {
     const firstModLog = this._firstModLog()
 
     return firstModLog?.naldDate ?? this.createdAt
@@ -194,7 +175,7 @@ class ChargeVersionModel extends BaseModel {
    * @returns {string} the user name of the user that created the 'source' record, else `null` if it cannot be
    * determined
    */
-  $createdBy () {
+  $createdBy() {
     if (this.createdBy) {
       return this.createdBy.email
     }
@@ -225,7 +206,7 @@ class ChargeVersionModel extends BaseModel {
    *
    * @returns {string[]} an array of all the notes in ascending date order taken from the record's history
    */
-  $notes () {
+  $notes() {
     if (this.chargeVersionNote) {
       return [this.chargeVersionNote.note]
     }
@@ -264,7 +245,7 @@ class ChargeVersionModel extends BaseModel {
    *
    * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
    */
-  $reason () {
+  $reason() {
     if (this.changeReason) {
       return this.changeReason.description
     }
@@ -274,7 +255,7 @@ class ChargeVersionModel extends BaseModel {
     return firstModLog?.reasonDescription ?? null
   }
 
-  _firstModLog () {
+  _firstModLog() {
     if (this.modLogs.length > 0) {
       return this.modLogs[0]
     }

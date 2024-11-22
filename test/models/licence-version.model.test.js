@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -53,16 +53,13 @@ describe('Licence Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionModel.query()
-          .innerJoinRelated('licence')
+        const query = await LicenceVersionModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await LicenceVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await LicenceVersionModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(LicenceVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -87,16 +84,13 @@ describe('Licence Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionModel.query()
-          .innerJoinRelated('modLogs')
+        const query = await LicenceVersionModel.query().innerJoinRelated('modLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the mod logs', async () => {
-        const result = await LicenceVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('modLogs')
+        const result = await LicenceVersionModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
         expect(result).to.be.instanceOf(LicenceVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -124,16 +118,13 @@ describe('Licence Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionModel.query()
-          .innerJoinRelated('purposes')
+        const query = await LicenceVersionModel.query().innerJoinRelated('purposes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purposes', async () => {
-        const result = await LicenceVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purposes')
+        const result = await LicenceVersionModel.query().findById(testRecord.id).withGraphFetched('purposes')
 
         expect(result).to.be.instanceOf(LicenceVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -163,10 +154,14 @@ describe('Licence Version model', () => {
         const firstNaldId = randomInteger(100, 99998)
 
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), licenceVersionId
+          externalId: `${regionCode}:${firstNaldId}`,
+          naldDate: new Date('2012-06-01'),
+          licenceVersionId
         })
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), licenceVersionId
+          externalId: `${regionCode}:${firstNaldId + 1}`,
+          naldDate: new Date('2012-06-02'),
+          licenceVersionId
         })
 
         testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
@@ -233,10 +228,14 @@ describe('Licence Version model', () => {
           const firstNaldId = randomInteger(100, 99998)
 
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`, note: null, licenceVersionId
+            externalId: `${regionCode}:${firstNaldId}`,
+            note: null,
+            licenceVersionId
           })
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`, note: null, licenceVersionId
+            externalId: `${regionCode}:${firstNaldId + 1}`,
+            note: null,
+            licenceVersionId
           })
 
           testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
@@ -256,10 +255,14 @@ describe('Licence Version model', () => {
           const firstNaldId = randomInteger(100, 99998)
 
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`, note: null, licenceVersionId
+            externalId: `${regionCode}:${firstNaldId}`,
+            note: null,
+            licenceVersionId
           })
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', licenceVersionId
+            externalId: `${regionCode}:${firstNaldId + 1}`,
+            note: 'Transfer per app 12-DEF',
+            licenceVersionId
           })
 
           testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
@@ -294,10 +297,14 @@ describe('Licence Version model', () => {
           const firstNaldId = randomInteger(100, 99998)
 
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, licenceVersionId
+            externalId: `${regionCode}:${firstNaldId}`,
+            reasonDescription: null,
+            licenceVersionId
           })
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'New licence', licenceVersionId
+            externalId: `${regionCode}:${firstNaldId + 1}`,
+            reasonDescription: 'New licence',
+            licenceVersionId
           })
 
           testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
@@ -316,10 +323,14 @@ describe('Licence Version model', () => {
           const firstNaldId = randomInteger(100, 99998)
 
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'New licence', licenceVersionId
+            externalId: `${regionCode}:${firstNaldId}`,
+            reasonDescription: 'New licence',
+            licenceVersionId
           })
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', licenceVersionId
+            externalId: `${regionCode}:${firstNaldId + 1}`,
+            reasonDescription: 'Transferred',
+            licenceVersionId
           })
 
           testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')

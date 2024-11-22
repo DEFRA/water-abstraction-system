@@ -19,15 +19,13 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (options) {
+function go(options) {
   const additionalSubmissionOptions = options.additionalSubmissionOptions
 
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
-    additionalSubmissionOptions: Joi.array()
-      .items(Joi.string())
-      .required()
+    additionalSubmissionOptions: Joi.array().items(Joi.string()).required()
   }).messages({
     'any.required': errorMessage,
     'array.sparse': errorMessage

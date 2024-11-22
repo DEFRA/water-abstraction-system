@@ -17,7 +17,7 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/rev
  * @returns {Promise<object>} the 'pageData' needed for the review licence page. It contains the licence, bill run,
  * matched and unmatched returns and the licence charge data
  */
-async function go (reviewLicenceId, yar) {
+async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchReviewLicenceService.go(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')

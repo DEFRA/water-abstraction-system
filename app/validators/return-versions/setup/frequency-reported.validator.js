@@ -19,14 +19,10 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (payload) {
+function go(payload) {
   const frequencyReported = payload.frequencyReported
 
-  const VALID_VALUES = [
-    'day',
-    'week',
-    'month'
-  ]
+  const VALID_VALUES = ['day', 'week', 'month']
 
   const errorMessage = 'Select how often readings or volumes are reported'
 

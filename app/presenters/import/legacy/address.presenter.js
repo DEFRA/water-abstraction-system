@@ -14,7 +14,7 @@
  * @returns {object} the NALD company data transformed into the WRLS format for an address
  * ready for validation and persisting
  */
-function go (address, dataSource) {
+function go(address, dataSource) {
   return {
     address1: address.address1,
     address2: address.address2,

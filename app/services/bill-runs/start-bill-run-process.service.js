@@ -23,7 +23,7 @@ const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bi
  *
  * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
-async function go (regionId, batchType, userEmail, financialYearEnding) {
+async function go(regionId, batchType, userEmail, financialYearEnding) {
   const billingPeriods = DetermineBillingPeriodsService.go(batchType, financialYearEnding)
 
   if (billingPeriods.length === 0) {
@@ -38,14 +38,14 @@ async function go (regionId, batchType, userEmail, financialYearEnding) {
   return _response(billRun)
 }
 
-function _financialYearEndings (billingPeriods) {
+function _financialYearEndings(billingPeriods) {
   return {
     fromFinancialYearEnding: billingPeriods[billingPeriods.length - 1].endDate.getFullYear(),
     toFinancialYearEnding: billingPeriods[0].endDate.getFullYear()
   }
 }
 
-function _processBillRun (billRun, billingPeriods) {
+function _processBillRun(billRun, billingPeriods) {
   // We do not `await` the bill run being processed so we can leave it to run in the background while we return an
   // immediate response
   switch (billRun.batchType) {
@@ -61,7 +61,7 @@ function _processBillRun (billRun, billingPeriods) {
   }
 }
 
-function _response (billRun) {
+function _response(billRun) {
   return CreateBillRunPresenter.go(billRun)
 }
 

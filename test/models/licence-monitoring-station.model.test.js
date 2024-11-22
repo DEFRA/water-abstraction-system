@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,8 +49,7 @@ describe('Licence Monitoring Station model', () => {
   describe('Relationships', () => {
     describe('when linking to monitoring station', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceMonitoringStationModel.query()
-          .innerJoinRelated('monitoringStation')
+        const query = await LicenceMonitoringStationModel.query().innerJoinRelated('monitoringStation')
 
         expect(query).to.exist()
       })
@@ -70,16 +69,13 @@ describe('Licence Monitoring Station model', () => {
 
     describe('when linking to licence', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceMonitoringStationModel.query()
-          .innerJoinRelated('licence')
+        const query = await LicenceMonitoringStationModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await LicenceMonitoringStationModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await LicenceMonitoringStationModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(LicenceMonitoringStationModel)
         expect(result.id).to.equal(testRecord.id)
@@ -91,8 +87,7 @@ describe('Licence Monitoring Station model', () => {
 
     describe('when linking to licence version purpose condition', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceMonitoringStationModel.query()
-          .innerJoinRelated('licenceVersionPurposeCondition')
+        const query = await LicenceMonitoringStationModel.query().innerJoinRelated('licenceVersionPurposeCondition')
 
         expect(query).to.exist()
       })

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -115,7 +115,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/returns-cycle/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/returns-cycle/0'
+            )
           })
         })
 
@@ -164,7 +166,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(NoteService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Add a note'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Add a note'
         })
       })
 
@@ -274,7 +277,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(CheckService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Check the return requirements for Acme Corp.'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Check the return requirements for Acme Corp.'
         })
       })
 
@@ -316,7 +320,8 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ExistingService, 'go').resolves({
-            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Use previous requirements for returns'
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+            pageTitle: 'Use previous requirements for returns'
           })
         })
 
@@ -366,7 +371,8 @@ describe('Return Versions controller', () => {
     describe('GET ', () => {
       beforeEach(async () => {
         Sinon.stub(FrequencyCollectedService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select how often readings or volumes are collected'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select how often readings or volumes are collected'
         })
       })
 
@@ -404,7 +410,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/frequency-reported/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/frequency-reported/0'
+            )
           })
         })
 
@@ -430,7 +438,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(FrequencyReportedService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select how often readings or volumes are reported'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select how often readings or volumes are reported'
         })
       })
 
@@ -468,7 +477,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/agreements-exceptions/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/agreements-exceptions/0'
+            )
           })
         })
 
@@ -494,7 +505,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(MethodService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'How do you want to set up the requirements for returns?'
         })
       })
 
@@ -532,7 +544,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/page-data-redirect')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/page-data-redirect'
+            )
           })
         })
       })
@@ -545,7 +559,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(NoReturnsRequiredService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Why are no returns required?'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Why are no returns required?'
         })
       })
 
@@ -563,7 +578,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation passes', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ })
+            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({})
           })
 
           it('redirects to /system/return-versions/{sessionId}/check', async () => {
@@ -596,7 +611,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(PointsService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the points for the requirements for returns'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select the points for the requirements for returns'
         })
       })
 
@@ -634,7 +650,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/abstraction-period/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/abstraction-period/0'
+            )
           })
         })
 
@@ -660,7 +678,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(SelectPurposeService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the purpose for the requirement for returns'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select the purpose for the requirement for returns'
         })
       })
 
@@ -724,7 +743,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(SelectReasonService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the requirements for returns'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select the reason for the requirements for returns'
         })
       })
 
@@ -788,7 +808,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(RemoveService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'You are about to remove these requirements for returns'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'You are about to remove these requirements for returns'
         })
       })
 
@@ -809,7 +830,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(ReturnCycleService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the returns cycle for the return requirement'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select the returns cycle for the return requirement'
         })
       })
 
@@ -847,7 +869,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/site-description/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/site-description/0'
+            )
           })
         })
 
@@ -912,7 +936,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/frequency-collected/0')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/frequency-collected/0'
+            )
           })
         })
 
@@ -938,7 +964,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(StartDateService, 'go').resolves({
-          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the start date for the requirements for returns'
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Select the start date for the requirements for returns'
         })
       })
 
@@ -989,7 +1016,9 @@ describe('Return Versions controller', () => {
             const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/no-returns-required')
+            expect(response.headers.location).to.equal(
+              '/system/return-versions/setup/' + sessionId + '/no-returns-required'
+            )
           })
         })
 
@@ -1010,7 +1039,7 @@ describe('Return Versions controller', () => {
   })
 })
 
-function _getOptions (path, index = -1) {
+function _getOptions(path, index = -1) {
   let url = `/return-versions/setup/${sessionId}/${path}`
 
   if (index > -1) {
@@ -1027,7 +1056,7 @@ function _getOptions (path, index = -1) {
   }
 }
 
-function _postOptions (path, index = -1, payload) {
+function _postOptions(path, index = -1, payload) {
   let url = `/return-versions/setup/${sessionId}/${path}`
 
   if (index > -1) {

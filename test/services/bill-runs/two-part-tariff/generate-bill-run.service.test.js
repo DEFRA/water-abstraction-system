@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -33,7 +33,9 @@ describe('Generate Bill Run Service', () => {
   const delay = 500
 
   const billRunDetails = {
-    batchType: 'two_part_tariff', fromFinancialYearEnding: 2023, toFinancialYearEnding: 2023
+    batchType: 'two_part_tariff',
+    fromFinancialYearEnding: 2023,
+    toFinancialYearEnding: 2023
   }
 
   let billRun
@@ -66,9 +68,7 @@ describe('Generate Bill Run Service', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(GenerateBillRunService.go(billRun.id))
-          .to
-          .reject()
+        const error = await expect(GenerateBillRunService.go(billRun.id)).to.reject()
 
         expect(error).to.be.an.instanceOf(ExpandedErrorError)
         expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in review')

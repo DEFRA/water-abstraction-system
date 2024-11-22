@@ -13,7 +13,7 @@
  * @returns {object} the NALD licence version purpose data transformed into the WRLS format ready for validation and
  * persisting
  */
-function go (licenceVersionPurpose) {
+function go(licenceVersionPurpose) {
   return {
     abstractionPeriodEndDay: licenceVersionPurpose.abstraction_period_end_day,
     abstractionPeriodEndMonth: licenceVersionPurpose.abstraction_period_end_month,

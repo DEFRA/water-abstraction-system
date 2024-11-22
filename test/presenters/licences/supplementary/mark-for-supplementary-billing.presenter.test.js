@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -52,7 +52,12 @@ describe('Mark For Supplementary Billing presenter', () => {
           financialYears: [
             { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
             { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
-            { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' }, attributes: { 'data-test': 'pre-sroc-years' } }
+            {
+              text: 'Before 2022',
+              value: 'preSroc',
+              hint: { text: 'Old charge scheme' },
+              attributes: { 'data-test': 'pre-sroc-years' }
+            }
           ]
         })
       })
