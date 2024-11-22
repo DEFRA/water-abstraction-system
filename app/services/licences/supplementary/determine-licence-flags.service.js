@@ -27,7 +27,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {object} - An object containing the related licenceId, regionId and licence supplementary billing flags
  */
-async function go (licenceId, scheme) {
+async function go(licenceId, scheme) {
   const licence = await _fetchLicence(licenceId)
 
   let flagForSrocSupplementary = licence.includeInSrocBilling
@@ -52,14 +52,10 @@ async function go (licenceId, scheme) {
   return result
 }
 
-async function _fetchLicence (licenceId) {
+async function _fetchLicence(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select([
-      'regionId',
-      'includeInSrocBilling',
-      'includeInPresrocBilling'
-    ])
+    .select(['regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
 }
 
 module.exports = {
