@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -60,10 +60,13 @@ describe('Fetch Licence Summary service', () => {
 
     // Create 2 licence versions so we can test the service only gets the 'current' version
     await LicenceVersionHelper.add({
-      licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+      licenceId: licence.id,
+      startDate: new Date('2021-10-11'),
+      status: 'superseded'
     })
     licenceVersion = await LicenceVersionHelper.add({
-      licenceId: licence.id, startDate: new Date('2022-05-01')
+      licenceId: licence.id,
+      startDate: new Date('2022-05-01')
     })
 
     purpose = PurposeHelper.select()
@@ -118,57 +121,67 @@ describe('Fetch Licence Summary service', () => {
             id: licenceVersion.id,
             startDate: new Date('2022-05-01'),
             status: 'current',
-            licenceVersionPurposes: [{
-              id: licenceVersionPurpose.id,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 1,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              annualQuantity: null,
-              dailyQuantity: null,
-              hourlyQuantity: null,
-              instantQuantity: null,
-              purpose: {
-                id: purpose.id,
-                description: purpose.description
-              },
-              points: [{
-                description: point.description,
-                id: point.id,
-                ngr1: point.ngr1,
-                ngr2: point.ngr2,
-                ngr3: point.ngr3,
-                ngr4: point.ngr4,
-                source: { description: source.description, id: source.id }
-              }],
-              licenceVersionPurposeConditions: [{
-                id: licenceVersionPurposeCondition.id,
-                licenceVersionPurposeConditionType: {
-                  id: licenceVersionPurposeConditionType.id,
-                  displayTitle: 'Aggregate condition link between licences'
-                }
-              }]
-            }]
+            licenceVersionPurposes: [
+              {
+                id: licenceVersionPurpose.id,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 1,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                annualQuantity: null,
+                dailyQuantity: null,
+                hourlyQuantity: null,
+                instantQuantity: null,
+                purpose: {
+                  id: purpose.id,
+                  description: purpose.description
+                },
+                points: [
+                  {
+                    description: point.description,
+                    id: point.id,
+                    ngr1: point.ngr1,
+                    ngr2: point.ngr2,
+                    ngr3: point.ngr3,
+                    ngr4: point.ngr4,
+                    source: { description: source.description, id: source.id }
+                  }
+                ],
+                licenceVersionPurposeConditions: [
+                  {
+                    id: licenceVersionPurposeCondition.id,
+                    licenceVersionPurposeConditionType: {
+                      id: licenceVersionPurposeConditionType.id,
+                      displayTitle: 'Aggregate condition link between licences'
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ],
-        licenceMonitoringStations: [{
-          id: licenceMonitoringStation.id,
-          monitoringStation: {
-            id: monitoringStation.id,
-            label: 'MONITOR PLACE'
+        licenceMonitoringStations: [
+          {
+            id: licenceMonitoringStation.id,
+            monitoringStation: {
+              id: monitoringStation.id,
+              label: 'MONITOR PLACE'
+            }
           }
-        }],
+        ],
         licenceDocument: {
           id: licenceHolderSeed.licenceDocumentId,
-          licenceDocumentRoles: [{
-            id: licenceHolderSeed.licenceDocumentRoleId,
-            contact: null,
-            company: {
-              id: licenceHolderSeed.companyId,
-              name: 'Licence Holder Ltd',
-              type: 'organisation'
+          licenceDocumentRoles: [
+            {
+              id: licenceHolderSeed.licenceDocumentRoleId,
+              contact: null,
+              company: {
+                id: licenceHolderSeed.companyId,
+                name: 'Licence Holder Ltd',
+                type: 'organisation'
+              }
             }
-          }]
+          ]
         },
         licenceDocumentHeader: {
           id: licenceDocumentHeader.id

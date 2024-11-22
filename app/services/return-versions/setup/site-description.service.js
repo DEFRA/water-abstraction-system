@@ -19,7 +19,7 @@ const SiteDescriptionPresenter = require('../../../presenters/return-versions/se
  *
  * @returns {Promise<object>} The view data for the site description page
  */
-async function go (sessionId, requirementIndex) {
+async function go(sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
 
   const formattedData = SiteDescriptionPresenter.go(session, requirementIndex)

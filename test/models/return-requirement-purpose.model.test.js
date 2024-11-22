@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,8 +48,7 @@ describe('Return Requirement Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementPurposeModel.query()
-          .innerJoinRelated('primaryPurpose')
+        const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('primaryPurpose')
 
         expect(query).to.exist()
       })
@@ -79,16 +78,13 @@ describe('Return Requirement Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementPurposeModel.query()
-          .innerJoinRelated('purpose')
+        const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purpose', async () => {
-        const result = await ReturnRequirementPurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purpose')
+        const result = await ReturnRequirementPurposeModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -110,8 +106,7 @@ describe('Return Requirement Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementPurposeModel.query()
-          .innerJoinRelated('returnRequirement')
+        const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('returnRequirement')
 
         expect(query).to.exist()
       })
@@ -142,8 +137,7 @@ describe('Return Requirement Purpose model', () => {
     })
 
     it('can successfully run a related query', async () => {
-      const query = await ReturnRequirementPurposeModel.query()
-        .innerJoinRelated('secondaryPurpose')
+      const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('secondaryPurpose')
 
       expect(query).to.exist()
     })

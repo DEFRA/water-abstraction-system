@@ -20,7 +20,7 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (batchType, regionId, financialYearEnding, user, summer = false) {
+async function send(batchType, regionId, financialYearEnding, user, summer = false) {
   const { id: userId, username: userEmail } = user
 
   const path = 'billing/batches'

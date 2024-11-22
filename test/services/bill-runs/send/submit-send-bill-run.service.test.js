@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -80,7 +80,7 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
   })
 })
 
-function _billRun () {
+function _billRun() {
   return {
     batchType: 'annual',
     createdAt: new Date('2024-05-07'),

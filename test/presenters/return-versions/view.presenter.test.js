@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -184,12 +184,14 @@ describe('Return Versions - View presenter', () => {
 
       describe('but there is a mod log entry with a reason', () => {
         beforeEach(() => {
-          returnVersion.modLogs = [{
-            naldDate: new Date('2019-03-01'),
-            note: null,
-            reasonDescription: 'Record loaded during migration',
-            userId: 'TTESTER'
-          }]
+          returnVersion.modLogs = [
+            {
+              naldDate: new Date('2019-03-01'),
+              note: null,
+              reasonDescription: 'Record loaded during migration',
+              userId: 'TTESTER'
+            }
+          ]
         })
 
         it('returns reason from the mod log', () => {
@@ -265,7 +267,9 @@ describe('Return Versions - View presenter', () => {
 
           const { agreementsExceptions } = result.requirements[0]
 
-          expect(agreementsExceptions).to.equal('Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception')
+          expect(agreementsExceptions).to.equal(
+            'Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception'
+          )
         })
       })
     })
@@ -387,7 +391,7 @@ describe('Return Versions - View presenter', () => {
   })
 })
 
-function _returnVersion () {
+function _returnVersion() {
   const contact = ContactModel.fromJson({
     firstName: 'Annie',
     middleInitials: 'J',
@@ -399,10 +403,12 @@ function _returnVersion () {
     id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
     licenceRef: '01/123',
     licenceDocument: {
-      licenceDocumentRoles: [{
-        id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
-        contact
-      }]
+      licenceDocumentRoles: [
+        {
+          id: '3b903973-2143-47fe-b7a2-b205aa8eb933',
+          contact
+        }
+      ]
     }
   })
 
@@ -426,28 +432,32 @@ function _returnVersion () {
     modLogs: [],
     user: { id: 1, username: 'carol.shaw@atari.com' },
     licence,
-    returnRequirements: [{
-      abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 10,
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
-      collectionFrequency: 'month',
-      fiftySixException: false,
-      gravityFill: false,
-      id: 'fa0c6032-7031-4aa2-be95-4a2edf1753ac',
-      legacyId: 10012345,
-      reabstraction: false,
-      reportingFrequency: 'month',
-      siteDescription: 'Borehole in field',
-      summer: false,
-      twoPartTariff: false,
-      points: [point],
-      returnRequirementPurposes: [{
-        alias: null,
-        id: '7a2e3a5a-b10d-4a0f-b115-42b7551c4e8c',
-        purpose: { description: 'Spray Irrigation - Direct', id: 'e0bd8bd4-cfb8-44ba-b76b-2b722fcc2207' }
-      }]
-    }]
+    returnRequirements: [
+      {
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 10,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        collectionFrequency: 'month',
+        fiftySixException: false,
+        gravityFill: false,
+        id: 'fa0c6032-7031-4aa2-be95-4a2edf1753ac',
+        legacyId: 10012345,
+        reabstraction: false,
+        reportingFrequency: 'month',
+        siteDescription: 'Borehole in field',
+        summer: false,
+        twoPartTariff: false,
+        points: [point],
+        returnRequirementPurposes: [
+          {
+            alias: null,
+            id: '7a2e3a5a-b10d-4a0f-b115-42b7551c4e8c',
+            purpose: { description: 'Spray Irrigation - Direct', id: 'e0bd8bd4-cfb8-44ba-b76b-2b722fcc2207' }
+          }
+        ]
+      }
+    ]
   }
 
   return ReturnVersionModel.fromJson(returnVersionData)

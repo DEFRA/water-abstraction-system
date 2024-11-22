@@ -33,20 +33,20 @@ const SROC_FIRST_FIN_YEAR_END = 2023
  *
  * @returns {object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
-function go (billRunType, financialYearEnding) {
+function go(billRunType, financialYearEnding) {
   const financialYear = _financialYear(financialYearEnding)
 
   return _billingPeriods(billRunType, financialYear)
 }
 
-function _addBillingPeriod (billingPeriods, startYear, endYear) {
+function _addBillingPeriod(billingPeriods, startYear, endYear) {
   billingPeriods.push({
     startDate: new Date(startYear, APRIL, 1),
     endDate: new Date(endYear, MARCH, 31)
   })
 }
 
-function _billingPeriods (billRunType, financialYear) {
+function _billingPeriods(billRunType, financialYear) {
   const billingPeriods = []
 
   const years = { startYear: financialYear.startDate.getFullYear(), endYear: financialYear.endDate.getFullYear() }
@@ -62,7 +62,7 @@ function _billingPeriods (billRunType, financialYear) {
   // If years.endYear is 2029. So Math.max(2023, 2024) results in 2024 being the earliest year we go back to
   // It means we'll never pick a PRESROC for our billing periods. But also we are future proofed should we still be
   // here in 2029!
-  const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (years.endYear - NO_OF_YEARS_TO_LOOK_BACK))
+  const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, years.endYear - NO_OF_YEARS_TO_LOOK_BACK)
 
   while (earliestSrocFinYearEnd <= years.endYear) {
     _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
@@ -81,7 +81,7 @@ function _billingPeriods (billRunType, financialYear) {
  *
  * @private
  */
-function _financialYear (financialYearEnding) {
+function _financialYear(financialYearEnding) {
   if (financialYearEnding) {
     return {
       startDate: new Date(financialYearEnding - 1, APRIL, 1),

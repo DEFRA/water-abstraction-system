@@ -14,7 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
  *
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future Charging Module requests
  */
-async function send () {
+async function send() {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
 
   const result = await BaseRequest.post(url.href, _options())
@@ -22,7 +22,7 @@ async function send () {
   return _parseResult(result)
 }
 
-function _options () {
+function _options() {
   return {
     searchParams: {
       grant_type: 'client_credentials'
@@ -34,7 +34,7 @@ function _options () {
   }
 }
 
-function _encodeAuthorisation () {
+function _encodeAuthorisation() {
   const keys = Buffer.from(
     `${servicesConfig.chargingModule.token.username}:${servicesConfig.chargingModule.token.password}`
   )
@@ -42,7 +42,7 @@ function _encodeAuthorisation () {
   return keys.toString('base64')
 }
 
-function _parseResult (result) {
+function _parseResult(result) {
   const authentication = {
     accessToken: null,
     expiresIn: null

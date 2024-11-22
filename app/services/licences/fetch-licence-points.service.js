@@ -16,7 +16,7 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<object>} An object containing the licence instance and related points data needed for the licence
  * points page
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const licence = await _fetchLicence(licenceId)
   const points = await _fetchPoints(licenceId)
 
@@ -26,16 +26,11 @@ async function go (licenceId) {
   }
 }
 
-async function _fetchLicence (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select(
-      'id',
-      'licenceRef'
-    )
+async function _fetchLicence(licenceId) {
+  return LicenceModel.query().findById(licenceId).select('id', 'licenceRef')
 }
 
-async function _fetchPoints (licenceId) {
+async function _fetchPoints(licenceId) {
   const points = await db
     .distinct()
     .select(

@@ -14,10 +14,14 @@ const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const {
-    id: sessionId, licence: { id: licenceId, licenceRef },
-    multipleUpload, noAdditionalOptions, returnVersionStartDate, quarterlyReturns
+    id: sessionId,
+    licence: { id: licenceId, licenceRef },
+    multipleUpload,
+    noAdditionalOptions,
+    returnVersionStartDate,
+    quarterlyReturns
   } = session
 
   return {

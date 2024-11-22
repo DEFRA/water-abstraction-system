@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -128,7 +128,7 @@ describe('Charging Module Calculate Charge request', () => {
   })
 })
 
-function _transactionData () {
+function _transactionData() {
   return {
     abatementFactor: 1.0,
     actualVolume: 1.0,

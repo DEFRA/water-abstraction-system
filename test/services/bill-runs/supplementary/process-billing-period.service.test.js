@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -79,17 +79,16 @@ describe('Supplementary Process billing period service', () => {
       describe('but none of them are billable', () => {
         describe('because the billable days calculated as 0', () => {
           beforeEach(async () => {
-            const { id: chargeVersionId } = await ChargeVersionHelper.add(
-              {
-                changeReasonId: changeReason.id,
-                billingAccountId: billingAccount.id,
-                startDate: new Date(2022, 7, 1, 9),
-                licenceId: licence.id
-              }
-            )
-            const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-              { chargeCategoryId: chargeCategory.id, chargeVersionId }
-            )
+            const { id: chargeVersionId } = await ChargeVersionHelper.add({
+              changeReasonId: changeReason.id,
+              billingAccountId: billingAccount.id,
+              startDate: new Date(2022, 7, 1, 9),
+              licenceId: licence.id
+            })
+            const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+              chargeCategoryId: chargeCategory.id,
+              chargeVersionId
+            })
 
             await ChargeElementHelper.add({
               chargeReferenceId,
@@ -116,18 +115,17 @@ describe('Supplementary Process billing period service', () => {
         describe('because the charge version status is "superseded"', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
-              const { id: chargeVersionId } = await ChargeVersionHelper.add(
-                {
-                  changeReasonId: changeReason.id,
-                  billingAccountId: billingAccount.id,
-                  startDate: new Date(2022, 7, 1, 9),
-                  licenceId: licence.id,
-                  status: 'superseded'
-                }
-              )
-              const { chargeElementId } = await ChargeReferenceHelper.add(
-                { chargeCategoryId: chargeCategory.id, chargeVersionId }
-              )
+              const { id: chargeVersionId } = await ChargeVersionHelper.add({
+                changeReasonId: changeReason.id,
+                billingAccountId: billingAccount.id,
+                startDate: new Date(2022, 7, 1, 9),
+                licenceId: licence.id,
+                status: 'superseded'
+              })
+              const { chargeElementId } = await ChargeReferenceHelper.add({
+                chargeCategoryId: chargeCategory.id,
+                chargeVersionId
+              })
 
               await ChargeElementHelper.add({
                 chargeElementId,
@@ -153,17 +151,16 @@ describe('Supplementary Process billing period service', () => {
 
       describe('and they are billable', () => {
         beforeEach(async () => {
-          const { id: chargeVersionId } = await ChargeVersionHelper.add(
-            {
-              changeReasonId: changeReason.id,
-              billingAccountId: billingAccount.id,
-              startDate: new Date(2022, 7, 1, 9),
-              licenceId: licence.id
-            }
-          )
-          const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-            { chargeCategoryId: chargeCategory.id, chargeVersionId }
-          )
+          const { id: chargeVersionId } = await ChargeVersionHelper.add({
+            changeReasonId: changeReason.id,
+            billingAccountId: billingAccount.id,
+            startDate: new Date(2022, 7, 1, 9),
+            licenceId: licence.id
+          })
+          const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+            chargeCategoryId: chargeCategory.id,
+            chargeVersionId
+          })
 
           await ChargeElementHelper.add({
             chargeReferenceId,
@@ -177,42 +174,45 @@ describe('Supplementary Process billing period service', () => {
 
           chargeVersions = chargeVersionData.chargeVersions
 
-          const sentTransactions = [{
-            id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
-            billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
-            chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-10-31'),
-            source: 'non-tidal',
-            season: 'all year',
-            loss: 'low',
-            credit: false,
-            chargeType: 'standard',
-            authorisedQuantity: 6.82,
-            billableQuantity: 6.82,
-            authorisedDays: 365,
-            billableDays: 214,
-            status: 'charge_created',
-            description: 'Water abstraction charge: Mineral washing',
-            volume: 6.82,
-            section126Factor: 1,
-            section127Agreement: false,
-            section130Agreement: false,
-            newLicence: false,
-            secondPartCharge: false,
-            scheme: 'sroc',
-            aggregateFactor: 0.562114443,
-            adjustmentFactor: 1,
-            chargeCategoryCode: '4.4.5',
-            chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-            supportedSource: false,
-            supportedSourceName: null,
-            waterCompanyCharge: true,
-            winterOnly: false,
-            waterUndertaker: false,
-            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
-            purposes: [{}]
-          }]
+          const sentTransactions = [
+            {
+              id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
+              billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
+              chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
+              startDate: new Date('2022-04-01'),
+              endDate: new Date('2022-10-31'),
+              source: 'non-tidal',
+              season: 'all year',
+              loss: 'low',
+              credit: false,
+              chargeType: 'standard',
+              authorisedQuantity: 6.82,
+              billableQuantity: 6.82,
+              authorisedDays: 365,
+              billableDays: 214,
+              status: 'charge_created',
+              description: 'Water abstraction charge: Mineral washing',
+              volume: 6.82,
+              section126Factor: 1,
+              section127Agreement: false,
+              section130Agreement: false,
+              newLicence: false,
+              secondPartCharge: false,
+              scheme: 'sroc',
+              aggregateFactor: 0.562114443,
+              adjustmentFactor: 1,
+              chargeCategoryCode: '4.4.5',
+              chargeCategoryDescription:
+                'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+              supportedSource: false,
+              supportedSourceName: null,
+              waterCompanyCharge: true,
+              winterOnly: false,
+              waterUndertaker: false,
+              externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
+              purposes: [{}]
+            }
+          ]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
           Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
@@ -237,9 +237,10 @@ describe('Supplementary Process billing period service', () => {
         billingAccountId: billingAccount.id,
         licenceId: licence.id
       })
-      const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-        { chargeCategoryId: chargeCategory.id, chargeVersionId }
-      )
+      const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+        chargeCategoryId: chargeCategory.id,
+        chargeVersionId
+      })
 
       await ChargeElementHelper.add({ chargeReferenceId })
 
@@ -254,9 +255,7 @@ describe('Supplementary Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
@@ -271,9 +270,7 @@ describe('Supplementary Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)

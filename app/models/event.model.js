@@ -8,7 +8,7 @@
 const BaseModel = require('./base.model.js')
 
 class EventModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'events'
   }
 }

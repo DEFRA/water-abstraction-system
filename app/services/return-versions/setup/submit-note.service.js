@@ -26,7 +26,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go (sessionId, payload, user, yar) {
+async function go(sessionId, payload, user, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
@@ -52,8 +52,10 @@ async function go (sessionId, payload, user, yar) {
   }
 }
 
-function _notification (session, newNote) {
-  const { data: { note } } = session
+function _notification(session, newNote) {
+  const {
+    data: { note }
+  } = session
   const text = 'Changes made'
 
   if (!note && newNote) {
@@ -73,7 +75,7 @@ function _notification (session, newNote) {
   return null
 }
 
-async function _save (session, payload, user) {
+async function _save(session, payload, user) {
   session.note = {
     content: payload.note,
     userEmail: user.username
@@ -82,13 +84,13 @@ async function _save (session, payload, user) {
   return session.$update()
 }
 
-function _submittedSessionData (session, payload) {
+function _submittedSessionData(session, payload) {
   session.note = payload.note ? payload.note : null
 
   return NotePresenter.go(session)
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = NoteValidator.go(payload)
 
   if (!validation.error) {

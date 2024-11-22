@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -65,7 +65,8 @@ describe('Bill Runs Review - Review Licence Service', () => {
                 {
                   billableReturnsWarning: false,
                   chargeCategory: 'Charge reference 4.6.5',
-                  chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+                  chargeDescription:
+                    'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
                   id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   chargeElements: [
                     {
@@ -162,7 +163,8 @@ describe('Bill Runs Review - Review Licence Service', () => {
                 {
                   billableReturnsWarning: false,
                   chargeCategory: 'Charge reference 4.6.5',
-                  chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+                  chargeDescription:
+                    'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
                   id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   chargeElements: [
                     {

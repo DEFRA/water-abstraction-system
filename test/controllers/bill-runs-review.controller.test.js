@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -139,9 +139,7 @@ describe('Bill Runs Review controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(
-            '/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28'
-          )
+          expect(response.headers.location).to.equal('/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28')
         })
       })
     })
@@ -319,7 +317,9 @@ describe('Bill Runs Review controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Charge reference 4.6.5')
-          expect(response.payload).to.contain('High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model')
+          expect(response.payload).to.contain(
+            'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
+          )
           expect(response.payload).to.contain('Reference details')
         })
       })
@@ -354,7 +354,9 @@ describe('Bill Runs Review controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Set the authorised volume')
-          expect(response.payload).to.contain('High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model')
+          expect(response.payload).to.contain(
+            'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
+          )
           expect(response.payload).to.contain('Total billable returns')
         })
       })
@@ -435,7 +437,9 @@ describe('Bill Runs Review controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Set the adjustment factors')
-          expect(response.payload).to.contain('High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model')
+          expect(response.payload).to.contain(
+            'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
+          )
         })
       })
     })
@@ -526,60 +530,65 @@ describe('Bill Runs Review controller', () => {
 
         Sinon.stub(ReviewLicenceService, 'go').resolves({
           billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
-          chargeVersions: [{
-            billingAccountDetails: [{
-              billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-              accountNumber: 'E99999999A',
-              accountName: 'Mr B Blobby',
-              contactName: null,
-              addressLines: [
-                'C/O Noel Edmonds',
-                'Crinkley Bottom',
-                'Cricket St Thomas',
-                'Somerset',
-                'TA20 1KL'
-              ]
-            }],
-            chargePeriod: '1 April 2023 to 31 March 2024',
-            chargeReferences: [{
-              billableReturnsWarning: false,
-              chargeCategory: 'Charge reference 4.6.5',
-              chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
-              id: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
-              chargeElements: [{
-                billableReturns: '0 ML / 9.092 ML',
-                chargePeriods: ['1 April 2023 to 30 September 2023'],
-                returnVolumes: ['0 ML (11142960)'],
-                description: 'Spray Irrigation - Direct',
-                elementCount: 1,
-                elementIndex: 1,
-                status: 'review',
-                id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
-                issues: ['Aggregate'],
-                purpose: 'Spray Irrigation - Direct'
-              }],
-              chargeReferenceLinkTitle: 'Change details',
-              totalBillableReturns: '0 ML / 9.092 ML'
-            }],
-            description: '1 charge reference with 1 two-part tariff charge element',
-            financialPeriod: '2023 to 2024'
-          }],
+          chargeVersions: [
+            {
+              billingAccountDetails: [
+                {
+                  billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+                  accountNumber: 'E99999999A',
+                  accountName: 'Mr B Blobby',
+                  contactName: null,
+                  addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL']
+                }
+              ],
+              chargePeriod: '1 April 2023 to 31 March 2024',
+              chargeReferences: [
+                {
+                  billableReturnsWarning: false,
+                  chargeCategory: 'Charge reference 4.6.5',
+                  chargeDescription:
+                    'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+                  id: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
+                  chargeElements: [
+                    {
+                      billableReturns: '0 ML / 9.092 ML',
+                      chargePeriods: ['1 April 2023 to 30 September 2023'],
+                      returnVolumes: ['0 ML (11142960)'],
+                      description: 'Spray Irrigation - Direct',
+                      elementCount: 1,
+                      elementIndex: 1,
+                      status: 'review',
+                      id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
+                      issues: ['Aggregate'],
+                      purpose: 'Spray Irrigation - Direct'
+                    }
+                  ],
+                  chargeReferenceLinkTitle: 'Change details',
+                  totalBillableReturns: '0 ML / 9.092 ML'
+                }
+              ],
+              description: '1 charge reference with 1 two-part tariff charge element',
+              financialPeriod: '2023 to 2024'
+            }
+          ],
           elementsInReview: true,
           licenceHolder: 'Licence Holder Ltd',
           licenceId: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
           licenceRef: '1/11/10/*S/0084',
-          matchedReturns: [{
-            abstractionPeriod: '1 April to 30 September',
-            description: 'Test Road. Points 1 and 2.',
-            issues: ['Returns received late'],
-            purpose: 'Spray Irrigation - Direct',
-            reference: '11142960',
-            returnId: 'v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
-            returnLink: '/returns/return?id=v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
-            returnPeriod: '1 November 2022 to 31 October 2023',
-            returnStatus: 'completed',
-            returnTotal: '0 ML / 0 ML'
-          }],
+          matchedReturns: [
+            {
+              abstractionPeriod: '1 April to 30 September',
+              description: 'Test Road. Points 1 and 2.',
+              issues: ['Returns received late'],
+              purpose: 'Spray Irrigation - Direct',
+              reference: '11142960',
+              returnId: 'v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
+              returnLink: '/returns/return?id=v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
+              returnPeriod: '1 November 2022 to 31 October 2023',
+              returnStatus: 'completed',
+              returnTotal: '0 ML / 0 ML'
+            }
+          ],
           pageTitle: 'Licence 13/43/028/S/045',
           progress: false,
           region: 'Southern (Test replica)',
@@ -611,7 +620,9 @@ describe('Bill Runs Review controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/review/licence/deaffa60-6488-4e54-a402-485d43aca1af')
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/review/licence/deaffa60-6488-4e54-a402-485d43aca1af'
+          )
         })
       })
     })
@@ -696,7 +707,7 @@ describe('Bill Runs Review controller', () => {
   })
 })
 
-function _getRequestOptions (path, query = null) {
+function _getRequestOptions(path, query = null) {
   const root = '/bill-runs/review'
   const rootPath = path ? `${root}/${path}` : root
   const url = query ? `${rootPath}?${query}` : rootPath
@@ -711,7 +722,7 @@ function _getRequestOptions (path, query = null) {
   }
 }
 
-function _postRequestOptions (path) {
+function _postRequestOptions(path) {
   const root = '/bill-runs/review'
   const rootPath = path ? `${root}/${path}` : root
 

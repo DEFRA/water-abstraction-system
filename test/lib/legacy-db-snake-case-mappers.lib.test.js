@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -55,7 +55,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
     })
 
     describe('when the wrapIdentifier() hook it creates is used', () => {
-      function origWrap (identifier) {
+      function origWrap(identifier) {
         return identifier
       }
 

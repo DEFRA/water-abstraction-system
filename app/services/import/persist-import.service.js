@@ -20,7 +20,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object>}
  */
-async function go (transformedLicence, transformedCompanies) {
+async function go(transformedLicence, transformedCompanies) {
   return LicenceModel.transaction(async (trx) => {
     const updatedAt = timestampForPostgres()
 

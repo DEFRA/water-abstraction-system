@@ -20,18 +20,8 @@ const {
  *
  * @returns {object} - the prepared bill run data to be passed to the cancel bill run confirmation page
  */
-function go (billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    id,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function go(billRun) {
+  const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
     backLink: _backLink(id, scheme, status),
@@ -46,7 +36,7 @@ function go (billRun) {
   }
 }
 
-function _backLink (id, scheme, status) {
+function _backLink(id, scheme, status) {
   if (status === 'review') {
     if (scheme === 'alcs') {
       return `/billing/batch/${id}/two-part-tariff-review`

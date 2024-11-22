@@ -34,7 +34,7 @@ const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/u
  *
  * @returns object containing Knex postProcessResponse() and wrapIdentifier() hooks
  */
-function legacyDbSnakeCaseMappers (opt = {}) {
+function legacyDbSnakeCaseMappers(opt = {}) {
   return knexIdentifierMappers({
     parse: (str) => {
       return _legacyCamelCase(str, opt)
@@ -45,7 +45,7 @@ function legacyDbSnakeCaseMappers (opt = {}) {
   })
 }
 
-function _legacyCamelCase (str, { upperCase = false } = {}) {
+function _legacyCamelCase(str, { upperCase = false } = {}) {
   if (str === 'crm_v2') {
     return str
   }
@@ -53,13 +53,9 @@ function _legacyCamelCase (str, { upperCase = false } = {}) {
   return camelCase(str, { upperCase })
 }
 
-function _legacySnakeCase (
+function _legacySnakeCase(
   str,
-  {
-    upperCase = false,
-    underscoreBeforeDigits = false,
-    underscoreBetweenUppercaseLetters = false
-  } = {}
+  { upperCase = false, underscoreBeforeDigits = false, underscoreBetweenUppercaseLetters = false } = {}
 ) {
   if (str === 'crm_v2') {
     return str

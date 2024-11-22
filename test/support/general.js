@@ -39,7 +39,7 @@
  *
  * @returns {object} the options to be used in the call to `server.inject()`
  */
-function postRequestOptions (
+function postRequestOptions(
   path,
   payload = {},
   scope = ['billing'],
@@ -73,7 +73,7 @@ function postRequestOptions (
  *
  * @returns a number between min and max (inclusive)
  */
-function randomInteger (min, max) {
+function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
@@ -89,7 +89,7 @@ function randomInteger (min, max) {
  *
  * @returns a random entry from the data provided
  */
-function selectRandomEntry (data) {
+function selectRandomEntry(data) {
   const randomIndex = randomInteger(0, data.length - 1)
 
   return data[randomIndex]
@@ -106,7 +106,7 @@ function selectRandomEntry (data) {
  *
  * @returns a random number
  */
-function randomRegionCode () {
+function randomRegionCode() {
   return randomInteger(1, 999999)
 }
 

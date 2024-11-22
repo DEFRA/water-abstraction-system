@@ -12,14 +12,14 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go (contacts) {
+function go(contacts) {
   return {
     customerId: _findCustomerId(contacts),
     licenceContacts: _licenceContacts(contacts)
   }
 }
 
-function _findCustomerId (contacts) {
+function _findCustomerId(contacts) {
   const customerContact = contacts.find((contact) => {
     return contact.communicationType === 'Licence Holder'
   })
@@ -31,7 +31,7 @@ function _findCustomerId (contacts) {
   return null
 }
 
-function _licenceContactName (contact) {
+function _licenceContactName(contact) {
   if (contact.contactId) {
     return `${contact.firstName || ''} ${contact.lastName}`.trim()
   }
@@ -39,7 +39,7 @@ function _licenceContactName (contact) {
   return contact.companyName
 }
 
-function _licenceContacts (contacts) {
+function _licenceContacts(contacts) {
   return contacts.map((contact) => {
     return {
       address: {

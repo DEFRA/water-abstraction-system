@@ -22,7 +22,7 @@ const SessionModel = require('../../../../models/session.model.js')
  *
  * @returns {string} The licence ID
  */
-async function go (sessionId, userId) {
+async function go(sessionId, userId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)

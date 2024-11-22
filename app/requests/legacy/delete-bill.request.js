@@ -25,7 +25,7 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (billRunId, billId, user) {
+async function send(billRunId, billId, user) {
   const { id: userId } = user
   const path = `billing/batches/${billRunId}/invoices/${billId}`
 

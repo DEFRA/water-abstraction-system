@@ -19,7 +19,7 @@ const LicenceVersionPurposeConditionPresenter = require('../../../presenters/imp
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  */
-async function go (regionCode, naldLicenceId, transformedLicence) {
+async function go(regionCode, naldLicenceId, transformedLicence) {
   const naldLicenceVersionPurposeConditions = await FetchLicenceVersionPurposeConditionsService.go(
     regionCode,
     naldLicenceId
@@ -27,7 +27,8 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
 
   for (const naldLicenceVersionPurposeCondition of naldLicenceVersionPurposeConditions) {
     const matchingLicenceVersionPurpose = _matchingLicenceVersionPurpose(
-      transformedLicence.licenceVersions, naldLicenceVersionPurposeCondition
+      transformedLicence.licenceVersions,
+      naldLicenceVersionPurposeCondition
     )
 
     const transformedLicenceVersionPurposeCondition = LicenceVersionPurposeConditionPresenter.go(
@@ -40,7 +41,7 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
   }
 }
 
-function _matchingLicenceVersionPurpose (licenceVersions, naldLicenceVersionPurposesCondition) {
+function _matchingLicenceVersionPurpose(licenceVersions, naldLicenceVersionPurposesCondition) {
   let matchedLicenceVersionPurpose
 
   // Because the licence version purpose we need to match is against a licence version, we need to iterate through them

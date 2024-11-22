@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class TransactionModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'transactions'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       chargeReference: {
         relation: Model.BelongsToOneRelation,
@@ -36,13 +36,8 @@ class TransactionModel extends BaseModel {
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'abstractionPeriod',
-      'grossValuesCalculated',
-      'metadata',
-      'purposes'
-    ]
+  static get jsonAttributes() {
+    return ['abstractionPeriod', 'grossValuesCalculated', 'metadata', 'purposes']
   }
 }
 

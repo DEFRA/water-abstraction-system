@@ -22,7 +22,7 @@ const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.
  *
  * @returns {Promise<module:LicenceEntityRoleModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceEntityRoleModel.query()
@@ -40,7 +40,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     licenceEntityId: generateUUID(),

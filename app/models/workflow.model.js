@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class WorkflowModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'workflows'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,

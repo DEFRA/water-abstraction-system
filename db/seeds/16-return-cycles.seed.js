@@ -2,10 +2,14 @@
 
 const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
-const { cycleDueDateByDate, cycleEndDateByDate, cycleStartDateByDate } = require('../../app/lib/return-cycle-dates.lib.js')
+const {
+  cycleDueDateByDate,
+  cycleEndDateByDate,
+  cycleStartDateByDate
+} = require('../../app/lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
 
-async function seed () {
+async function seed() {
   const today = new Date()
   const day = today.getDay()
   const month = today.getMonth()
@@ -22,7 +26,7 @@ async function seed () {
   }
 }
 
-function _generateReturnCycle (date, summer) {
+function _generateReturnCycle(date, summer) {
   return {
     id: generateUUID(),
     startDate: cycleStartDateByDate(date, summer),
@@ -33,15 +37,11 @@ function _generateReturnCycle (date, summer) {
   }
 }
 
-async function _upsert (cycle) {
+async function _upsert(cycle) {
   return ReturnCycleModel.query()
     .insert({ ...cycle, createdAt: timestampForPostgres(), updatedAt: timestampForPostgres() })
     .onConflict(['startDate', 'endDate', 'summer'])
-    .merge([
-      'dueDate',
-      'submittedInWrls',
-      'updatedAt'
-    ])
+    .merge(['dueDate', 'submittedInWrls', 'updatedAt'])
 }
 
 module.exports = {

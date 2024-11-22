@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -36,7 +36,8 @@ describe('View Licence Points service', () => {
             category: 'Single Point',
             depth: '123',
             description: 'RIVER OUSE AT BLETSOE',
-            gridReference: 'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)',
+            gridReference:
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)',
             hydroInterceptDistance: '8.01',
             hydroOffsetDistance: '5.56',
             hydroReference: 'TL 14/133',
@@ -56,7 +57,7 @@ describe('View Licence Points service', () => {
   })
 })
 
-function _testFetchLicencePoints () {
+function _testFetchLicencePoints() {
   const point = PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',

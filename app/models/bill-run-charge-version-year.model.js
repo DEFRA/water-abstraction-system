@@ -23,11 +23,11 @@ const BaseModel = require('./base.model.js')
  * Welcome to dealing with the legacy database schema! ¯\_(ツ)_/¯
  */
 class BillRunChargeVersionYearModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'billRunChargeVersionYears'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billRun: {
         relation: Model.BelongsToOneRelation,

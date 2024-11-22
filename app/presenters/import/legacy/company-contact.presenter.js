@@ -17,7 +17,7 @@
  *
  * @returns {object} the details needed to persist the company contact in WRLS
  */
-function go (contact) {
+function go(contact) {
   return {
     externalId: contact.external_id,
     startDate: contact.start_date,

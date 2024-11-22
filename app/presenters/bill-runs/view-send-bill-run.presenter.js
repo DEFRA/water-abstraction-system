@@ -20,18 +20,8 @@ const {
  *
  * @returns {object} - the prepared bill run data to be passed to the send bill run confirmation page
  */
-function go (billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    id,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function go(billRun) {
+  const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
     billRunId: id,

@@ -31,16 +31,11 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * licence, charge version, charge element etc records, plus the two-part tariff review details needed to generate the
  * bill run
  */
-async function go (billRunId) {
+async function go(billRunId) {
   return BillingAccountModel.query()
-    .select([
-      'billingAccounts.id',
-      'billingAccounts.accountNumber'
-    ])
+    .select(['billingAccounts.id', 'billingAccounts.accountNumber'])
     .whereExists(_whereBillingAccountExistsClause(billRunId))
-    .orderBy([
-      { column: 'billingAccounts.accountNumber' }
-    ])
+    .orderBy([{ column: 'billingAccounts.accountNumber' }])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
       builder
@@ -76,22 +71,20 @@ async function go (billRunId) {
     })
     .withGraphFetched('chargeVersions.licence.region')
     .modifyGraph('chargeVersions.licence.region', (builder) => {
-      builder.select([
-        'id',
-        'chargeRegionId'
-      ])
+      builder.select(['id', 'chargeRegionId'])
     })
     .withGraphFetched('chargeVersions.chargeReferences')
     .modifyGraph('chargeVersions.chargeReferences', (builder) => {
-      builder.select([
-        'chargeReferences.id',
-        'chargeReferences.source',
-        'chargeReferences.loss',
-        'chargeReferences.volume',
-        'chargeReferences.adjustments',
-        'chargeReferences.additionalCharges',
-        'chargeReferences.description'
-      ])
+      builder
+        .select([
+          'chargeReferences.id',
+          'chargeReferences.source',
+          'chargeReferences.loss',
+          'chargeReferences.volume',
+          'chargeReferences.adjustments',
+          'chargeReferences.additionalCharges',
+          'chargeReferences.description'
+        ])
         .innerJoin('reviewChargeReferences', 'reviewChargeReferences.chargeReferenceId', 'chargeReferences.id')
         .innerJoin('reviewChargeVersions', 'reviewChargeVersions.id', 'reviewChargeReferences.reviewChargeVersionId')
         .innerJoin('reviewLicences', 'reviewLicences.id', 'reviewChargeVersions.reviewLicenceId')
@@ -99,53 +92,57 @@ async function go (billRunId) {
     })
     .withGraphFetched('chargeVersions.chargeReferences.reviewChargeReferences')
     .modifyGraph('chargeVersions.chargeReferences.reviewChargeReferences', (builder) => {
-      builder.select([
-        'reviewChargeReferences.id',
-        'reviewChargeReferences.amendedAggregate',
-        'reviewChargeReferences.amendedChargeAdjustment',
-        'reviewChargeReferences.amendedAuthorisedVolume'
-      ])
+      builder
+        .select([
+          'reviewChargeReferences.id',
+          'reviewChargeReferences.amendedAggregate',
+          'reviewChargeReferences.amendedChargeAdjustment',
+          'reviewChargeReferences.amendedAuthorisedVolume'
+        ])
         .innerJoin('reviewChargeVersions', 'reviewChargeVersions.id', 'reviewChargeReferences.reviewChargeVersionId')
         .innerJoin('reviewLicences', 'reviewLicences.id', 'reviewChargeVersions.reviewLicenceId')
         .where('reviewLicences.billRunId', billRunId)
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeCategory')
     .modifyGraph('chargeVersions.chargeReferences.chargeCategory', (builder) => {
-      builder.select([
-        'id',
-        'reference',
-        'shortDescription'
-      ])
+      builder.select(['id', 'reference', 'shortDescription'])
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeElements')
     .modifyGraph('chargeVersions.chargeReferences.chargeElements', (builder) => {
-      builder.select([
-        'chargeElements.id',
-        'chargeElements.abstractionPeriodStartDay',
-        'chargeElements.abstractionPeriodStartMonth',
-        'chargeElements.abstractionPeriodEndDay',
-        'chargeElements.abstractionPeriodEndMonth'
-      ])
+      builder
+        .select([
+          'chargeElements.id',
+          'chargeElements.abstractionPeriodStartDay',
+          'chargeElements.abstractionPeriodStartMonth',
+          'chargeElements.abstractionPeriodEndDay',
+          'chargeElements.abstractionPeriodEndMonth'
+        ])
         .innerJoin('reviewChargeElements', 'reviewChargeElements.chargeElementId', 'chargeElements.id')
-        .innerJoin('reviewChargeReferences', 'reviewChargeReferences.id', 'reviewChargeElements.reviewChargeReferenceId')
+        .innerJoin(
+          'reviewChargeReferences',
+          'reviewChargeReferences.id',
+          'reviewChargeElements.reviewChargeReferenceId'
+        )
         .innerJoin('reviewChargeVersions', 'reviewChargeVersions.id', 'reviewChargeReferences.reviewChargeVersionId')
         .innerJoin('reviewLicences', 'reviewLicences.id', 'reviewChargeVersions.reviewLicenceId')
         .where('reviewLicences.billRunId', billRunId)
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeElements.reviewChargeElements')
     .modifyGraph('chargeVersions.chargeReferences.chargeElements.reviewChargeElements', (builder) => {
-      builder.select([
-        'reviewChargeElements.id',
-        'reviewChargeElements.amendedAllocated'
-      ])
-        .innerJoin('reviewChargeReferences', 'reviewChargeReferences.id', 'reviewChargeElements.reviewChargeReferenceId')
+      builder
+        .select(['reviewChargeElements.id', 'reviewChargeElements.amendedAllocated'])
+        .innerJoin(
+          'reviewChargeReferences',
+          'reviewChargeReferences.id',
+          'reviewChargeElements.reviewChargeReferenceId'
+        )
         .innerJoin('reviewChargeVersions', 'reviewChargeVersions.id', 'reviewChargeReferences.reviewChargeVersionId')
         .innerJoin('reviewLicences', 'reviewLicences.id', 'reviewChargeVersions.reviewLicenceId')
         .where('reviewLicences.billRunId', billRunId)
     })
 }
 
-function _whereBillingAccountExistsClause (billRunId) {
+function _whereBillingAccountExistsClause(billRunId) {
   const query = ChargeVersionModel.query().select(1)
 
   query

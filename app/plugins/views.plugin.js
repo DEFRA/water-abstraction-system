@@ -61,7 +61,7 @@ const ViewsPlugin = {
  * @param {object} options - Vision's `config.compileOptions` property which we assign the Nunjucks Environment instance
  * to in `prepare()` below
  */
-function compile (template, options) {
+function compile(template, options) {
   const compiledTemplate = Nunjucks.compile(template, options.environment)
 
   return (context) => {
@@ -88,7 +88,7 @@ function compile (template, options) {
  *
  * @returns {object} the global context for all templates
  */
-function context (request) {
+function context(request) {
   return {
     // `assetPath` is referred to in layout.njk as the path to get static assets like client-side javascript
     assetPath: '/assets',
@@ -124,13 +124,10 @@ function context (request) {
  *
  * @returns the result of calling `next()`
  */
-function prepare (config, next) {
+function prepare(config, next) {
   // Tell Nunjucks the paths to where your templates live. We _think_ Nunjucks searches in order of the paths provided.
   // So, search our templates first before searching in the govuk-frontend package for a template.
-  const paths = [
-    path.join(config.relativeTo, config.path),
-    'node_modules/govuk-frontend/'
-  ]
+  const paths = [path.join(config.relativeTo, config.path), 'node_modules/govuk-frontend/']
 
   // configure() returns an instance of Nunjucks Environment class (
   // see https://mozilla.github.io/nunjucks/api.html#environment) which is the central object for handling templates.
@@ -157,7 +154,7 @@ function prepare (config, next) {
  *
  * @private
  */
-function _navigationLinks (auth) {
+function _navigationLinks(auth) {
   if (!auth.isAuthenticated) {
     return []
   }

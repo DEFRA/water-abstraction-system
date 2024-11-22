@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -14,23 +14,24 @@ describe('View Licence Communications presenter', () => {
   let communications
 
   beforeEach(() => {
-    communications = [{
-      id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
-      messageType: 'letter',
-      messageRef: 'returns_invitation_licence_holder_letter',
-      event: {
-        createdAt: '2024-05-15T10:27:15.000Z',
-        metadata: {
-          name: 'Returns: invitation',
-          options: {
-          }
-        },
-        type: 'notification',
-        subtype: 'returnInvitation',
-        status: 'processed',
-        issuer: 'admin-internal@wrls.gov.uk'
+    communications = [
+      {
+        id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
+        messageType: 'letter',
+        messageRef: 'returns_invitation_licence_holder_letter',
+        event: {
+          createdAt: '2024-05-15T10:27:15.000Z',
+          metadata: {
+            name: 'Returns: invitation',
+            options: {}
+          },
+          type: 'notification',
+          subtype: 'returnInvitation',
+          status: 'processed',
+          issuer: 'admin-internal@wrls.gov.uk'
+        }
       }
-    }]
+    ]
   })
 
   describe('when provided with populated communications data', () => {
@@ -38,17 +39,18 @@ describe('View Licence Communications presenter', () => {
       const result = ViewLicenceCommunicationsPresenter.go(communications)
 
       expect(result).to.equal({
-        communications: [{
-          id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
-          method: 'Letter',
-          sender: 'admin-internal@wrls.gov.uk',
-          sent: '15 May 2024',
-          type: {
-            label: 'Returns: invitation',
-            pdf: false,
-            sentVia: 'sent 15 May 2024 via letter'
+        communications: [
+          {
+            id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
+            method: 'Letter',
+            sender: 'admin-internal@wrls.gov.uk',
+            sent: '15 May 2024',
+            type: {
+              label: 'Returns: invitation',
+              pdf: false,
+              sentVia: 'sent 15 May 2024 via letter'
+            }
           }
-        }
         ]
       })
     })

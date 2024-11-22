@@ -39,7 +39,7 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
  * @returns {object} - An object containing the related licenceId, regionId, workflow start and end date and
  * licence supplementary billing flags
  */
-async function go (workflowId) {
+async function go(workflowId) {
   const licence = await FetchLicenceService.go(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 
@@ -65,7 +65,7 @@ async function go (workflowId) {
   return result
 }
 
-async function _updateFlags (licence, result) {
+async function _updateFlags(licence, result) {
   // If the licence is not already flagged for SROC billing and has SROC charge versions we check if it needs to be
   // flagged
   if (licence.sroc_charge_versions && !licence.include_in_sroc_billing) {
@@ -89,7 +89,7 @@ async function _updateFlags (licence, result) {
  *
  * @private
  */
-async function _flagForSrocSupplementary (createdAt, regionId) {
+async function _flagForSrocSupplementary(createdAt, regionId) {
   const recordCount = await BillRunModel.query()
     .where('createdAt', '>=', createdAt)
     .where('batchType', 'annual')

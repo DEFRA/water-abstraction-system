@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -91,19 +91,25 @@ describe('Two-part Tariff - Process Billing Period service', () => {
           const bills = await _fetchPersistedBill(billRun.id)
 
           expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal({
-            accountNumber: billingAccount.accountNumber,
-            address: {}, // Address is set to an empty object for SROC billing invoices
-            billingAccountId: billingAccount.id,
-            credit: false,
-            financialYearEnding: billingPeriod.endDate.getFullYear()
-          }, { skip: ['billLicences'] })
+          expect(bills[0]).to.equal(
+            {
+              accountNumber: billingAccount.accountNumber,
+              address: {}, // Address is set to an empty object for SROC billing invoices
+              billingAccountId: billingAccount.id,
+              credit: false,
+              financialYearEnding: billingPeriod.endDate.getFullYear()
+            },
+            { skip: ['billLicences'] }
+          )
 
           expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal({
-            licenceId: licence.id,
-            licenceRef: licence.licenceRef
-          }, { skip: ['transactions'] })
+          expect(bills[0].billLicences[0]).to.equal(
+            {
+              licenceId: licence.id,
+              licenceRef: licence.licenceRef
+            },
+            { skip: ['transactions'] }
+          )
 
           expect(bills[0].billLicences[0].transactions).to.have.length(2)
         })
@@ -136,19 +142,25 @@ describe('Two-part Tariff - Process Billing Period service', () => {
           const bills = await _fetchPersistedBill(billRun.id)
 
           expect(bills).to.have.length(1)
-          expect(bills[0]).to.equal({
-            accountNumber: billingAccount.accountNumber,
-            address: {}, // Address is set to an empty object for SROC billing invoices
-            billingAccountId: billingAccount.id,
-            credit: false,
-            financialYearEnding: billingPeriod.endDate.getFullYear()
-          }, { skip: ['billLicences'] })
+          expect(bills[0]).to.equal(
+            {
+              accountNumber: billingAccount.accountNumber,
+              address: {}, // Address is set to an empty object for SROC billing invoices
+              billingAccountId: billingAccount.id,
+              credit: false,
+              financialYearEnding: billingPeriod.endDate.getFullYear()
+            },
+            { skip: ['billLicences'] }
+          )
 
           expect(bills[0].billLicences).to.have.length(1)
-          expect(bills[0].billLicences[0]).to.equal({
-            licenceId: licence.id,
-            licenceRef: licence.licenceRef
-          }, { skip: ['transactions'] })
+          expect(bills[0].billLicences[0]).to.equal(
+            {
+              licenceId: licence.id,
+              licenceRef: licence.licenceRef
+            },
+            { skip: ['transactions'] }
+          )
 
           expect(bills[0].billLicences[0].transactions).to.have.length(2)
         })
@@ -190,9 +202,7 @@ describe('Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
@@ -205,9 +215,7 @@ describe('Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
-          .to
-          .reject()
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
 
         expect(error).to.be.an.instanceOf(BillRunError)
         expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
@@ -216,14 +224,14 @@ describe('Two-part Tariff - Process Billing Period service', () => {
   })
 })
 
-function _billingAccount () {
+function _billingAccount() {
   return {
     id: generateUUID(),
     accountNumber: generateAccountNumber()
   }
 }
 
-function _chargingModuleResponse (transactionId) {
+function _chargingModuleResponse(transactionId) {
   return {
     succeeded: true,
     response: {
@@ -232,10 +240,12 @@ function _chargingModuleResponse (transactionId) {
   }
 }
 
-function _chargeVersion (billingAccountId, licence) {
+function _chargeVersion(billingAccountId, licence) {
   // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
   // of processing the billing account.
-  const toJSON = () => { return '{}' }
+  const toJSON = () => {
+    return '{}'
+  }
 
   return {
     id: generateUUID(),
@@ -250,7 +260,12 @@ function _chargeVersion (billingAccountId, licence) {
         id: generateUUID(),
         additionalCharges: { isSupplyPublicWater: false },
         adjustments: {
-          s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+          s126: null,
+          s127: false,
+          s130: false,
+          charge: null,
+          winter: false,
+          aggregate: '0.562114443'
         },
         chargeCategory: {
           id: 'b270718a-12c0-4fca-884b-3f8612dbe2f5',
@@ -279,12 +294,14 @@ function _chargeVersion (billingAccountId, licence) {
         ],
         description: 'Lower Queenstown - Pittisham',
         loss: 'low',
-        reviewChargeReferences: [{
-          id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
-          amendedAggregate: 0.75,
-          amendedAuthorisedVolume: 20,
-          amendedChargeAdjustment: 0.6
-        }],
+        reviewChargeReferences: [
+          {
+            id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
+            amendedAggregate: 0.75,
+            amendedAuthorisedVolume: 20,
+            amendedChargeAdjustment: 0.6
+          }
+        ],
         source: 'non-tidal',
         volume: 20
       }
@@ -292,7 +309,7 @@ function _chargeVersion (billingAccountId, licence) {
   }
 }
 
-async function _fetchPersistedBill (billRunId) {
+async function _fetchPersistedBill(billRunId) {
   return BillModel.query()
     .select(['accountNumber', 'address', 'billingAccountId', 'credit', 'financialYearEnding'])
     .where('billRunId', billRunId)
@@ -306,7 +323,7 @@ async function _fetchPersistedBill (billRunId) {
     })
 }
 
-function _licence () {
+function _licence() {
   const region = RegionHelper.select()
 
   return {

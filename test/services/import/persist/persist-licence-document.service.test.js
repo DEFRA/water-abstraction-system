@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -70,7 +70,12 @@ describe('Persist licence document service', () => {
         licenceRef = generateLicenceRef()
 
         licenceDocumentRole = _transformedLicenceDocumentRole(
-          licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
+          licenceRef,
+          licenceRoleId,
+          company.externalId,
+          address.externalId,
+          contact.externalId
+        )
 
         licenceDocument = _transformedLicenceDocument(licenceRef)
 
@@ -104,10 +109,14 @@ describe('Persist licence document service', () => {
         licenceRef = generateLicenceRef()
 
         licenceDocumentRole = _transformedLicenceDocumentRole(
-          licenceRef, licenceRoleId, company.externalId, address.externalId, contact.externalId)
+          licenceRef,
+          licenceRoleId,
+          company.externalId,
+          address.externalId,
+          contact.externalId
+        )
 
-        await _createExistingRecords(
-          licenceRef, licenceRoleId, company, address, contact)
+        await _createExistingRecords(licenceRef, licenceRoleId, company, address, contact)
 
         transformedLicence.licenceDocument = {
           ..._transformedLicenceDocument(licenceRef),
@@ -124,8 +133,9 @@ describe('Persist licence document service', () => {
         await trx.commit()
 
         // Get the persisted data
-        const updatedLicenceDocument = await
-        _fetchPersistedLicenceDocument(transformedLicence.licenceDocument.licenceRef)
+        const updatedLicenceDocument = await _fetchPersistedLicenceDocument(
+          transformedLicence.licenceDocument.licenceRef
+        )
 
         // Check the updated licence
         expect(updatedLicenceDocument.licenceRef).to.equal(transformedLicence.licenceDocument.licenceRef)
@@ -144,9 +154,8 @@ describe('Persist licence document service', () => {
   })
 })
 
-async function _fetchPersistedLicenceDocument (licenceRef) {
-  return LicenceDocumentModel
-    .query()
+async function _fetchPersistedLicenceDocument(licenceRef) {
+  return LicenceDocumentModel.query()
     .where('licenceRef', licenceRef)
     .withGraphFetched('licenceDocumentRoles')
     .select('*')
@@ -154,7 +163,7 @@ async function _fetchPersistedLicenceDocument (licenceRef) {
     .first()
 }
 
-function _transformedLicenceDocument (licenceRef) {
+function _transformedLicenceDocument(licenceRef) {
   return {
     licenceRef,
     startDate: new Date('1992-08-19'),
@@ -162,7 +171,7 @@ function _transformedLicenceDocument (licenceRef) {
   }
 }
 
-function _transformedLicenceDocumentRole (licenceRef, licenceRoleId, companyId, addressId, contactId) {
+function _transformedLicenceDocumentRole(licenceRef, licenceRoleId, companyId, addressId, contactId) {
   return {
     addressId,
     companyId,
@@ -174,7 +183,7 @@ function _transformedLicenceDocumentRole (licenceRef, licenceRoleId, companyId, 
   }
 }
 
-async function _createExistingRecords (licenceRef, licenceRoleId, company, address, contact) {
+async function _createExistingRecords(licenceRef, licenceRoleId, company, address, contact) {
   const licenceDocument = await LicenceDocumentHelper.add({
     licenceRef,
     endDate: new Date('2001-01-01')

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -43,16 +43,15 @@ describe('Fetch Licence Bills service', () => {
       beforeEach(async () => {
         await BillRunHelper.add({ id: billRunId, status: 'sent' })
 
-        await BillHelper.add(
-          {
-            id: billId,
-            billRunId,
-            invoiceNumber: '123',
-            accountNumber: 'T21404193A',
-            netAmount: 12345,
-            billingAccountId,
-            createdAt: createdDate
-          })
+        await BillHelper.add({
+          id: billId,
+          billRunId,
+          invoiceNumber: '123',
+          accountNumber: 'T21404193A',
+          netAmount: 12345,
+          billingAccountId,
+          createdAt: createdDate
+        })
 
         // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
         await BillHelper.add({ billRunId })
@@ -65,8 +64,8 @@ describe('Fetch Licence Bills service', () => {
           total: 1
         })
 
-        expect(result.bills).to.equal(
-          [{
+        expect(result.bills).to.equal([
+          {
             accountNumber: 'T21404193A',
             billRun: {
               id: billRunId,
@@ -83,8 +82,8 @@ describe('Fetch Licence Bills service', () => {
             invoiceNumber: '123',
             legacyId: null,
             netAmount: 12345
-          }]
-        )
+          }
+        ])
       })
     })
 
@@ -92,16 +91,15 @@ describe('Fetch Licence Bills service', () => {
       beforeEach(async () => {
         await BillRunHelper.add({ id: billRunId })
 
-        await BillHelper.add(
-          {
-            id: billId,
-            billRunId,
-            invoiceNumber: '123',
-            accountNumber: 'T21404193A',
-            netAmount: 12345,
-            billingAccountId,
-            createdAt: createdDate
-          })
+        await BillHelper.add({
+          id: billId,
+          billRunId,
+          invoiceNumber: '123',
+          accountNumber: 'T21404193A',
+          netAmount: 12345,
+          billingAccountId,
+          createdAt: createdDate
+        })
 
         // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
         await BillHelper.add({ billRunId })
