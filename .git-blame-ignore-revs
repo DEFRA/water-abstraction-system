@@ -14,3 +14,6 @@
 #
 # Note that `git blame` does not use any file by default, and  the filename `.git-blame-ignore-revs` is just a
 # convention.
+
+# Use prettier to manage code style and formatting (#1476)
+1be5deaa2931f1f618353c1778c4a47d16dd42f0
