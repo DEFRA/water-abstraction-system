@@ -19,7 +19,7 @@ const lastDayOfFebruaryLeapYear = 29
  * @param {string} date - The date in the format 01/01/2001
  * @returns {string | null} - a date in the iso format 2001-01-01
  */
-function formatStandardDateToISO (date) {
+function formatStandardDateToISO(date) {
   if (date === 'null' || date === null) {
     return null
   }
@@ -41,7 +41,7 @@ function formatStandardDateToISO (date) {
  * @param {Date} date - a date object to be formatted
  * @returns {Date} - the date formatted in YYYY-MM-DD.
  */
-function formatDateObjectToISO (date) {
+function formatDateObjectToISO(date) {
   return date.toISOString().split('T')[0]
 }
 
@@ -51,7 +51,7 @@ function formatDateObjectToISO (date) {
  * @param {dateString | undefined } dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isValidDate (dateString) {
+function isValidDate(dateString) {
   if (!dateString) {
     return false
   }
@@ -71,7 +71,7 @@ function isValidDate (dateString) {
  * @param {dateString} dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isISODateFormat (dateString) {
+function isISODateFormat(dateString) {
   const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
 
   return isoDatePattern.test(dateString)
@@ -89,7 +89,7 @@ function isISODateFormat (dateString) {
  *
  * @private
  */
-function _isValidLeapYearDate (dateString) {
+function _isValidLeapYearDate(dateString) {
   const [year, month, day] = dateString.split('-')
 
   if (_isLeapYear(year) === true && Number(month) === february && Number(day) > lastDayOfFebruaryLeapYear) {
@@ -103,10 +103,10 @@ function _isValidLeapYearDate (dateString) {
   return true
 }
 
-function _isLeapYear (year) {
+function _isLeapYear(year) {
   const set400 = 400
 
-  if ((year % 4 === 0 && year % 100 !== 0) || (year % set400 === 0)) {
+  if ((year % 4 === 0 && year % 100 !== 0) || year % set400 === 0) {
     return true
   }
 
@@ -124,7 +124,7 @@ function _isLeapYear (year) {
  *
  * @private
  */
-function isQuarterlyReturnSubmissions (date) {
+function isQuarterlyReturnSubmissions(date) {
   return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -47,7 +47,10 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
         it('persists the flags on the licence', async () => {
           await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+            twoPartTariffFinancialYears,
+            preSrocFlag,
+            srocFlag,
+            testLicence.id
           )
 
           const licence = await LicenceModel.query().findById(testLicence.id)
@@ -59,7 +62,10 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
         it('calls `CreateLicenceSupplementaryYearsService` to handle persisting the financial years', async () => {
           await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+            twoPartTariffFinancialYears,
+            preSrocFlag,
+            srocFlag,
+            testLicence.id
           )
 
           expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
@@ -75,7 +81,10 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
         it('persists the flags on the licence', async () => {
           await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+            twoPartTariffFinancialYears,
+            preSrocFlag,
+            srocFlag,
+            testLicence.id
           )
 
           const licence = await LicenceModel.query().findById(testLicence.id)
@@ -87,7 +96,10 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
         it('does not call `CreateLicenceSupplementaryYearsService`', async () => {
           await PersistSupplementaryBillingFlagsService.go(
-            twoPartTariffFinancialYears, preSrocFlag, srocFlag, testLicence.id
+            twoPartTariffFinancialYears,
+            preSrocFlag,
+            srocFlag,
+            testLicence.id
           )
 
           expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()

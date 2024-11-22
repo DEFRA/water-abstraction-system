@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -156,7 +156,7 @@ describe('Import Contact validator', () => {
   })
 })
 
-function _transformedContact () {
+function _transformedContact() {
   return {
     salutation: 'Mr',
     initials: 'H',

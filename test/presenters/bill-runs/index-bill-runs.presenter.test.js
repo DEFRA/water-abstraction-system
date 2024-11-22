@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -133,7 +133,9 @@ describe('Index Bill Runs presenter', () => {
           it('generates the href needed to link to the old bill run review', () => {
             const results = IndexBillRunsPresenter.go(billRuns)
 
-            expect(results[0].link).to.equal('/billing/batch/31fec553-f2de-40cf-a8d7-a5fb65f5761b/two-part-tariff-review')
+            expect(results[0].link).to.equal(
+              '/billing/batch/31fec553-f2de-40cf-a8d7-a5fb65f5761b/two-part-tariff-review'
+            )
             expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
           })
         })
@@ -194,7 +196,7 @@ describe('Index Bill Runs presenter', () => {
   })
 })
 
-function _billRuns () {
+function _billRuns() {
   return [
     {
       id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, after } = exports.lab = Lab.script()
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -65,59 +65,65 @@ describe('Process licence return logs service', () => {
       // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
       // it directly with our own stub
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      Sinon.stub(GenerateReturnLogsService, 'go').resolves([{
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        dueDate: allYearDueDate,
-        endDate: allYearEndDate,
-        id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`,
-        licenceRef: licence.licenceRef,
-        metadata: {
-          description: 'BOREHOLE AT AVALON',
-          isCurrent: true,
-          isFinal: false,
-          isSummer: false,
-          isTwoPartTariff: false,
-          isUpload: false,
-          nald: {
-            regionCode: region.naldRegionId,
-            areaCode: licence.regions.historicalAreaCode,
-            formatId: returnRequirement.legacyId,
-            periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-            periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-            periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-            periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+      Sinon.stub(GenerateReturnLogsService, 'go').resolves([
+        {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: allYearDueDate,
+          endDate: allYearEndDate,
+          id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`,
+          licenceRef: licence.licenceRef,
+          metadata: {
+            description: 'BOREHOLE AT AVALON',
+            isCurrent: true,
+            isFinal: false,
+            isSummer: false,
+            isTwoPartTariff: false,
+            isUpload: false,
+            nald: {
+              regionCode: region.naldRegionId,
+              areaCode: licence.regions.historicalAreaCode,
+              formatId: returnRequirement.legacyId,
+              periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+              periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+              periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+              periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+            },
+            points: [
+              {
+                name: point.description,
+                ngr1: point.ngr1,
+                ngr2: point.ngr2,
+                ngr3: point.ngr3,
+                ngr4: point.ngr4
+              }
+            ],
+            purposes: [
+              {
+                primary: {
+                  code: primaryPurpose.legacyId,
+                  description: primaryPurpose.description
+                },
+                secondary: {
+                  code: secondaryPurpose.legacyId,
+                  description: secondaryPurpose.description
+                },
+                tertiary: {
+                  code: purpose.legacyId,
+                  description: purpose.description
+                }
+              }
+            ],
+            version: 1
           },
-          points: [{
-            name: point.description,
-            ngr1: point.ngr1,
-            ngr2: point.ngr2,
-            ngr3: point.ngr3,
-            ngr4: point.ngr4
-          }],
-          purposes: [{
-            primary: {
-              code: primaryPurpose.legacyId,
-              description: primaryPurpose.description
-            },
-            secondary: {
-              code: secondaryPurpose.legacyId,
-              description: secondaryPurpose.description
-            },
-            tertiary: {
-              code: purpose.legacyId,
-              description: purpose.description
-            }
-          }],
-          version: 1
-        },
-        returnCycleId,
-        returnsFrequency: 'day',
-        returnReference: returnRequirement.legacyId.toString(),
-        startDate: allYearStartDate,
-        status: 'due',
-        source: 'WRLS'
-      }])
+          returnCycleId,
+          returnsFrequency: 'day',
+          returnReference: returnRequirement.legacyId.toString(),
+          startDate: allYearStartDate,
+          status: 'due',
+          source: 'WRLS'
+        }
+      ])
       global.GlobalNotifier = notifierStub
     })
 
@@ -129,7 +135,9 @@ describe('Process licence return logs service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(new Date(allYearDueDate))
       expect(result[0].endDate).to.equal(new Date(allYearEndDate))
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(new Date(allYearStartDate))

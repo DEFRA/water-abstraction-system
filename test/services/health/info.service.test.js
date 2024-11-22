@@ -6,7 +6,7 @@ const Code = require('@hapi/code')
 const Sinon = require('sinon')
 const Proxyquire = require('proxyquire')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -62,9 +62,7 @@ describe('Info service', () => {
     legacyRequestStub.withArgs('permits', 'health/info', null, false).resolves(goodRequestResults.app)
     legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
 
-    chargingModuleRequestStub
-      .withArgs('status')
-      .resolves(goodRequestResults.chargingModule)
+    chargingModuleRequestStub.withArgs('status').resolves(goodRequestResults.chargingModule)
   })
 
   afterEach(() => {
@@ -87,13 +85,10 @@ describe('Info service', () => {
       // stub the util library's `promisify()` method and tell it to call our anonymous stub when invoked. The bit that
       // makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real one when we load
       // our module under test
-      const execStub = Sinon
-        .stub()
-        .withArgs('clamdscan --version')
-        .resolves({
-          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-          stderror: null
-        })
+      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+        stderror: null
+      })
       const utilStub = {
         promisify: Sinon.stub().callsFake(() => {
           return execStub
@@ -107,7 +102,11 @@ describe('Info service', () => {
       const result = await InfoService.go()
 
       expect(result).to.include([
-        'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        'virusScannerData',
+        'redisConnectivityData',
+        'addressFacadeData',
+        'chargingModuleData',
+        'appData'
       ])
 
       expect(result.appData).to.have.length(10)
@@ -129,13 +128,10 @@ describe('Info service', () => {
         .resolves(goodRequestResults.addressFacade)
       legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
-      const execStub = Sinon
-        .stub()
-        .withArgs('clamdscan --version')
-        .resolves({
-          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-          stderror: null
-        })
+      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+        stderror: null
+      })
       const utilStub = {
         promisify: Sinon.stub().callsFake(() => {
           return execStub
@@ -157,7 +153,11 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+          'virusScannerData',
+          'redisConnectivityData',
+          'addressFacadeData',
+          'chargingModuleData',
+          'appData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -183,13 +183,10 @@ describe('Info service', () => {
       beforeEach(async () => {
         // We tweak our anonymous stub so that it returns stderr populated, which is what happens if the shell call
         // returns a non-zero exit code.
-        const execStub = Sinon
-          .stub()
-          .withArgs('clamdscan --version')
-          .resolves({
-            stdout: null,
-            stderr: 'Could not connect to clamd'
-          })
+        const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+          stdout: null,
+          stderr: 'Could not connect to clamd'
+        })
         const utilStub = {
           promisify: Sinon.stub().callsFake(() => {
             return execStub
@@ -203,7 +200,11 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+          'virusScannerData',
+          'redisConnectivityData',
+          'addressFacadeData',
+          'chargingModuleData',
+          'appData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -217,8 +218,7 @@ describe('Info service', () => {
       beforeEach(async () => {
         // In this tweak we tell our anonymous stub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
-        const execStub = Sinon
-          .stub()
+        const execStub = Sinon.stub()
           .withArgs('clamdscan --version')
           .throwsException(new Error('ClamAV check went boom'))
         const utilStub = {
@@ -234,7 +234,11 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+          'virusScannerData',
+          'redisConnectivityData',
+          'addressFacadeData',
+          'chargingModuleData',
+          'appData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -248,13 +252,10 @@ describe('Info service', () => {
   describe('when a service we check via http request', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
-      const execStub = Sinon
-        .stub()
-        .withArgs('clamdscan --version')
-        .resolves({
-          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-          stderror: null
-        })
+      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+        stderror: null
+      })
       const utilStub = {
         promisify: Sinon.stub().callsFake(() => {
           return execStub
@@ -270,9 +271,7 @@ describe('Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
-        baseRequestStub
-          .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
-          .resolves(badResult)
+        baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
@@ -280,7 +279,11 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+          'virusScannerData',
+          'redisConnectivityData',
+          'addressFacadeData',
+          'chargingModuleData',
+          'appData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
@@ -296,9 +299,7 @@ describe('Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
-        baseRequestStub
-          .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
-          .resolves(badResult)
+        baseRequestStub.withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`).resolves(badResult)
         legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
@@ -306,7 +307,11 @@ describe('Info service', () => {
         const result = await InfoService.go()
 
         expect(result).to.include([
-          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+          'virusScannerData',
+          'redisConnectivityData',
+          'addressFacadeData',
+          'chargingModuleData',
+          'appData'
         ])
         expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')

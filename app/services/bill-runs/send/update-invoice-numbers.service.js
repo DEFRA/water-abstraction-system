@@ -26,7 +26,7 @@ const UnflagBilledLicencesService = require('../supplementary/unflag-billed-lice
  *
  * @param {module:BillRunModule} billRun - The bill run to be sent
  */
-async function go (billRun) {
+async function go(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 
@@ -50,7 +50,7 @@ async function go (billRun) {
   }
 }
 
-async function _fetchChargingModuleBillRun (externalId) {
+async function _fetchChargingModuleBillRun(externalId) {
   const result = await ChargingModuleViewBillRunRequest.send(externalId)
 
   if (!result.succeeded) {
@@ -60,7 +60,7 @@ async function _fetchChargingModuleBillRun (externalId) {
   return result.response.body.billRun
 }
 
-async function _updateBills (externalBillRun) {
+async function _updateBills(externalBillRun) {
   const { invoices } = externalBillRun
 
   for (const invoice of invoices) {
@@ -70,11 +70,10 @@ async function _updateBills (externalBillRun) {
   }
 }
 
-async function _updateBillRun (billRunId, externalBillRun) {
+async function _updateBillRun(billRunId, externalBillRun) {
   const { transactionFileReference } = externalBillRun
 
-  return BillRunModel
-    .query()
+  return BillRunModel.query()
     .findById(billRunId)
     .patch({ status: 'sent', transactionFileReference, updatedAt: timestampForPostgres() })
 }

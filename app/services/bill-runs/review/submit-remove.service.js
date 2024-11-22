@@ -25,7 +25,7 @@ const RemoveReviewLicenceService = require('./remove-review-licence.service.js')
  * @returns {Promise<object>} an object containing the bill run ID plus a boolean flag that indicates whether this was
  * the last licence in the bill run (bill run is now empty)
  */
-async function go (reviewLicenceId, yar) {
+async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchRemoveReviewLicenceModel.go(reviewLicenceId)
 
   await RemoveReviewLicenceService.go(reviewLicenceId)
@@ -47,13 +47,13 @@ async function go (reviewLicenceId, yar) {
   }
 }
 
-async function _empty (reviewLicence) {
+async function _empty(reviewLicence) {
   const { billRun } = reviewLicence
 
   return ProcessBillRunPostRemove.go(billRun.id)
 }
 
-async function _flagForSupplementaryBilling (reviewLicence) {
+async function _flagForSupplementaryBilling(reviewLicence) {
   const { billRun, licenceId } = reviewLicence
 
   return CreateLicenceSupplementaryYearService.go(licenceId, [billRun.toFinancialYearEnding], true)

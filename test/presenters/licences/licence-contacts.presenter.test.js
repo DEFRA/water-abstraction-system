@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -40,20 +40,22 @@ describe('Licence Contacts presenter', () => {
 
       expect(result).to.equal({
         customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
-        licenceContacts: [{
-          address: {
-            address1: '34 Eastgate',
-            address2: null,
-            address3: null,
-            address4: null,
-            address5: null,
-            address6: null,
-            country: 'United Kingdom',
-            postcode: 'CF71 7DG'
-          },
-          communicationType: 'Licence Holder',
-          name: 'Acme ltd'
-        }]
+        licenceContacts: [
+          {
+            address: {
+              address1: '34 Eastgate',
+              address2: null,
+              address3: null,
+              address4: null,
+              address5: null,
+              address6: null,
+              country: 'United Kingdom',
+              postcode: 'CF71 7DG'
+            },
+            communicationType: 'Licence Holder',
+            name: 'Acme ltd'
+          }
+        ]
       })
     })
 

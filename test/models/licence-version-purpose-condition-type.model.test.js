@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,8 +20,9 @@ describe('Licence Version Purposes Condition Type model', () => {
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await LicenceVersionPurposeConditionTypeModel
-        .query().findById(licenceVersionPurposeConditionType.id)
+      const result = await LicenceVersionPurposeConditionTypeModel.query().findById(
+        licenceVersionPurposeConditionType.id
+      )
 
       expect(result).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
       expect(result.id).to.equal(licenceVersionPurposeConditionType.id)
@@ -39,8 +40,9 @@ describe('Licence Version Purposes Condition Type model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposeConditionTypeModel.query()
-          .innerJoinRelated('licenceVersionPurposeConditions')
+        const query = await LicenceVersionPurposeConditionTypeModel.query().innerJoinRelated(
+          'licenceVersionPurposeConditions'
+        )
 
         expect(query).to.exist()
       })

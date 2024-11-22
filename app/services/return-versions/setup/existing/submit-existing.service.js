@@ -26,7 +26,7 @@ const SessionModel = require('../../../../models/session.model.js')
  * @returns {Promise<object>} If no errors an empty object else the page data for the existing page including the
  * validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload, session)
@@ -47,14 +47,16 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.requirements = await GenerateFromExistingRequirementsService.go(payload.existing)
 
   return session.$update()
 }
 
-function _validate (payload, session) {
-  const { licence: { returnVersions } } = session
+function _validate(payload, session) {
+  const {
+    licence: { returnVersions }
+  } = session
 
   const validation = ExistingValidator.go(payload, returnVersions)
 

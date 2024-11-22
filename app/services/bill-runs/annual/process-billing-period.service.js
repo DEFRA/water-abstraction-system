@@ -27,7 +27,7 @@ const BillingConfig = require('../../../../config/billing.config.js')
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billRun, billingPeriod, billingAccounts) {
+async function go(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {
@@ -91,7 +91,7 @@ async function go (billRun, billingPeriod, billingAccounts) {
  *
  * @private
  */
-async function _createBillLicencesAndTransactions (billId, billingAccount, billRunExternalId, billingPeriod) {
+async function _createBillLicencesAndTransactions(billId, billingAccount, billRunExternalId, billingPeriod) {
   const allBillLicences = []
   const transactions = []
 
@@ -122,7 +122,7 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
  *
  * @private
  */
-async function _createTransactions (billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
+async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
   const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
   if (!chargePeriod.startDate) {
@@ -144,7 +144,7 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
  *
  * @private
  */
-function _extractBillableLicences (allBillLicences) {
+function _extractBillableLicences(allBillLicences) {
   const billableBillLicences = []
 
   allBillLicences.forEach((billLicence) => {
@@ -184,7 +184,7 @@ function _extractBillableLicences (allBillLicences) {
  *
  * @private
  */
-function _findOrCreateBillLicence (billLicences, licence, billId) {
+function _findOrCreateBillLicence(billLicences, licence, billId) {
   const { id: licenceId, licenceRef } = licence
 
   let billLicence = billLicences.find((existingBillLicence) => {
@@ -221,7 +221,7 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
  *
  * @private
  */
-function _generateTransactionData (billLicenceId, billingPeriod, chargePeriod, chargeVersion) {
+function _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion) {
   try {
     const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
@@ -255,7 +255,7 @@ function _generateTransactionData (billLicenceId, billingPeriod, chargePeriod, c
  *
  * @private
  */
-async function _processBillingAccount (billingAccount, billRun, billingPeriod) {
+async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
   const { id: billingAccountId, accountNumber } = billingAccount
   const { id: billRunId, externalId: billRunExternalId } = billRun
 
@@ -281,7 +281,7 @@ async function _processBillingAccount (billingAccount, billRun, billingPeriod) {
   return _persistBillData(bill, billLicences, transactions)
 }
 
-async function _persistBillData (bill, billLicences, transactions) {
+async function _persistBillData(bill, billLicences, transactions) {
   await BillModel.query().insert(bill)
   await BillLicenceModel.query().insert(billLicences)
   await TransactionModel.query().insert(transactions)

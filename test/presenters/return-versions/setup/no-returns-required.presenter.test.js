@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -61,7 +61,9 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
       it('returns a link back to the "start-date" page', () => {
         const result = NoReturnsRequiredPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date')
+        expect(result.backLink).to.equal(
+          '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date'
+        )
       })
     })
   })

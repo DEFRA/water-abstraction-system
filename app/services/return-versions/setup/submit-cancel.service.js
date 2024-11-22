@@ -15,7 +15,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID for the return requirement setup session record
  */
-async function go (sessionId) {
+async function go(sessionId) {
   await SessionModel.query().deleteById(sessionId)
 }
 

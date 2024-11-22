@@ -18,7 +18,7 @@ const PREVIOUS_SIX_YEARS = 6
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (licence) {
+function go(licence) {
   return {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
@@ -31,12 +31,12 @@ function go (licence) {
  * The financial year end is the end of March, so if the current month is April or later the end of the financial year
  * is the next calendar year. Otherwise it is the current year.
  */
-function _determineCurrentFinancialYearEnd () {
+function _determineCurrentFinancialYearEnd() {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
   const currentMonth = currentDate.getMonth()
 
-  const currentFinancialYearEnd = (currentMonth >= APRIL) ? currentYear + 1 : currentYear
+  const currentFinancialYearEnd = currentMonth >= APRIL ? currentYear + 1 : currentYear
 
   return currentFinancialYearEnd
 }
@@ -49,7 +49,7 @@ function _determineCurrentFinancialYearEnd () {
  * meaning that marking the licence for supplementary billing will apply to all previous years
  * covered by pre-SROC (up to six years).
  */
-function _yearsToDisplay () {
+function _yearsToDisplay() {
   const currentFinancialYearEnd = _determineCurrentFinancialYearEnd()
   const lastSixFinancialYears = []
 

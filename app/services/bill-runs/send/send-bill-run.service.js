@@ -23,7 +23,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status === 'ready') {
@@ -48,24 +48,14 @@ async function go (billRunId) {
  *
  * @private
  */
-async function _fetchBillRun (id) {
+async function _fetchBillRun(id) {
   return BillRunModel.query()
     .findById(id)
-    .select([
-      'id',
-      'batchType',
-      'createdAt',
-      'externalId',
-      'regionId',
-      'scheme',
-      'status'
-    ])
+    .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status'])
 }
 
-async function _updateStatus (billRunId) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status: 'sending', updatedAt: timestampForPostgres() })
+async function _updateStatus(billRunId) {
+  return BillRunModel.query().findById(billRunId).patch({ status: 'sending', updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,16 +49,13 @@ describe('Change Reason model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChangeReasonModel.query()
-          .innerJoinRelated('chargeVersions')
+        const query = await ChangeReasonModel.query().innerJoinRelated('chargeVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge versions', async () => {
-        const result = await ChangeReasonModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersions')
+        const result = await ChangeReasonModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
         expect(result).to.be.instanceOf(ChangeReasonModel)
         expect(result.id).to.equal(testRecord.id)

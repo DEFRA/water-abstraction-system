@@ -25,7 +25,7 @@ const DeDuplicateService = require('./de-duplicate-licence.service.js')
  * @returns {Promise<object>} an object containing a parsed version of the licence reference submitted else an error
  * message if nothing was entered
  */
-async function go (payload) {
+async function go(payload) {
   const licenceRef = payload['licence-ref']
 
   if (!licenceRef || licenceRef.trim() === '') {

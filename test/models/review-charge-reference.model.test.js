@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -45,8 +45,7 @@ describe('Review Charge reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeReferenceModel.query()
-          .innerJoinRelated('reviewChargeElements')
+        const query = await ReviewChargeReferenceModel.query().innerJoinRelated('reviewChargeElements')
 
         expect(query).to.exist()
       })
@@ -75,8 +74,7 @@ describe('Review Charge reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeReferenceModel.query()
-          .innerJoinRelated('reviewChargeVersion')
+        const query = await ReviewChargeReferenceModel.query().innerJoinRelated('reviewChargeVersion')
 
         expect(query).to.exist()
       })
@@ -103,8 +101,7 @@ describe('Review Charge reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeReferenceModel.query()
-          .innerJoinRelated('chargeReference')
+        const query = await ReviewChargeReferenceModel.query().innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })

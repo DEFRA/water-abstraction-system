@@ -25,7 +25,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go (sessionId, payload, yar) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -55,19 +55,19 @@ async function go (sessionId, payload, yar) {
 }
 
 /**
-* When a single additional submission option is checked by the user, it returns as a string. When multiple options are
+ * When a single additional submission option is checked by the user, it returns as a string. When multiple options are
  * checked, the 'additionalSubmissionOptions' is returned as an array.
  * This function works to make those single selected string 'additionalSubmissionOptions' into an array for uniformity.
  *
  * @private
  */
-function _handleOneOptionSelected (payload) {
+function _handleOneOptionSelected(payload) {
   if (!Array.isArray(payload.additionalSubmissionOptions)) {
     payload.additionalSubmissionOptions = [payload.additionalSubmissionOptions]
   }
 }
 
-function _notification (session, payload) {
+function _notification(session, payload) {
   const { additionalSubmissionOptions } = session ?? {}
 
   if (additionalSubmissionOptions !== payload.additionalSubmissionOptions) {
@@ -80,7 +80,7 @@ function _notification (session, payload) {
   return null
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.multipleUpload = payload.additionalSubmissionOptions.includes('multiple-upload')
 
   session.quarterlyReturns = payload.additionalSubmissionOptions.includes('quarterly-returns')
@@ -90,13 +90,13 @@ async function _save (session, payload) {
   return session.$update()
 }
 
-function _submittedSessionData (session, payload) {
+function _submittedSessionData(session, payload) {
   session.additionalSubmissionOptions = payload.additionalSubmissionOptions ?? []
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = AdditionalSubmissionOptionsValidator.go(payload)
 
   if (!validation.error) {

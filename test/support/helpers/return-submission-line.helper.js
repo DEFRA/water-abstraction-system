@@ -27,7 +27,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
  *
  * @returns {Promise<module:ReturnSubmissionLineModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnSubmissionLineModel.query()
@@ -45,7 +45,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     returnSubmissionId: generateUUID(),

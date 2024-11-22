@@ -13,7 +13,7 @@
  * @returns {object} the NALD company address data transformed into the WRLS format for a company address
  * ready for validation and persisting
  */
-function go (address) {
+function go(address) {
   return {
     addressId: address.external_id,
     companyId: address.company_external_id,
@@ -37,15 +37,12 @@ function go (address) {
  * @returns {date | null} the end date for a licence holder
  * @private
  */
-function _endDate (address) {
-  const endDates = [
-    address.end_date,
-    address.lapsed_date,
-    address.expired_date,
-    address.revoked_date
-  ].filter((endDate) => {
-    return endDate
-  })
+function _endDate(address) {
+  const endDates = [address.end_date, address.lapsed_date, address.expired_date, address.revoked_date].filter(
+    (endDate) => {
+      return endDate
+    }
+  )
 
   const oldestDate = new Date(Math.max(...endDates))
 

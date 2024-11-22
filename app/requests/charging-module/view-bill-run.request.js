@@ -17,7 +17,7 @@ const ChargingModuleRequest = require('../../requests/charging-module.request.js
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (billRunId) {
+async function send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
   const result = await ChargingModuleRequest.get(path)
 

@@ -16,7 +16,7 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go (returnLogs, hasRequirements, auth) {
+function go(returnLogs, hasRequirements, auth) {
   const canManageReturns = auth.credentials.scope.includes('returns')
   const returns = _returns(returnLogs, canManageReturns)
 
@@ -28,7 +28,7 @@ function go (returnLogs, hasRequirements, auth) {
   }
 }
 
-function _link (status, returnLogId, canManageReturns) {
+function _link(status, returnLogId, canManageReturns) {
   if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }
@@ -40,7 +40,7 @@ function _link (status, returnLogId, canManageReturns) {
   return null
 }
 
-function _noReturnsMessage (hasReturns, hasRequirements) {
+function _noReturnsMessage(hasReturns, hasRequirements) {
   if (!hasReturns && !hasRequirements) {
     return 'No requirements for returns have been set up for this licence.'
   }
@@ -52,13 +52,13 @@ function _noReturnsMessage (hasReturns, hasRequirements) {
   return null
 }
 
-function _purpose (purpose) {
+function _purpose(purpose) {
   const [firstPurpose] = purpose
 
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
 }
 
-function _returns (returns, canManageReturns) {
+function _returns(returns, canManageReturns) {
   return returns.map((returnLog) => {
     const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate, status } = returnLog
 
@@ -75,7 +75,7 @@ function _returns (returns, canManageReturns) {
   })
 }
 
-function _status (returnLog) {
+function _status(returnLog) {
   const { status, dueDate } = returnLog
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other

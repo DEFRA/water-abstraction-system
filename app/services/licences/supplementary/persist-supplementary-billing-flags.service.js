@@ -24,7 +24,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  * sroc billing
  * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
  */
-async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
+async function go(twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
   const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
   await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
@@ -36,7 +36,7 @@ async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagF
  * Persists two-part tariff financial years in the LicenceSupplementaryYears table.
  * @private
  */
-async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, licenceId) {
+async function _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, licenceId) {
   if (twoPartTariffBillingYears.length === 0) {
     return
   }
@@ -46,7 +46,7 @@ async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, lic
   await CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
 }
 
-async function _updateLicenceFlags (includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
+async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
   return LicenceModel.query()
     .patch({ includeInPresrocBilling, includeInSrocBilling: flagForSrocSupplementary })
     .where('id', licenceId)

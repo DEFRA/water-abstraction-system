@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -220,7 +220,7 @@ describe('Import Licence Version validator', () => {
   })
 })
 
-function _transformedLicenceVersion () {
+function _transformedLicenceVersion() {
   return {
     endDate: new Date('2052-06-23'),
     externalId: '6:2113:100:0',

@@ -14,13 +14,13 @@ const { formatLongDate, sentenceCase } = require('../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go (communications) {
+function go(communications) {
   return {
     communications: _communications(communications)
   }
 }
 
-function _communications (communications) {
+function _communications(communications) {
   return communications.map((communication) => {
     return {
       id: communication.id,
@@ -32,7 +32,7 @@ function _communications (communications) {
   })
 }
 
-function _type (communication) {
+function _type(communication) {
   return {
     label: _typeLabel(communication),
     sentVia: `sent ${formatLongDate(new Date(communication.event.createdAt))} via ${communication.messageType}`,
@@ -40,10 +40,12 @@ function _type (communication) {
   }
 }
 
-function _typeLabel (communication) {
+function _typeLabel(communication) {
   if (communication.event.metadata.name === 'Water abstraction alert') {
-    return `${sentenceCase(communication.event.metadata.options.sendingAlertType)}` +
+    return (
+      `${sentenceCase(communication.event.metadata.options.sendingAlertType)}` +
       ` - ${communication.event.metadata.name}`
+    )
   }
 
   return communication.event.metadata.name

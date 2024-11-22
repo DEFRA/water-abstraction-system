@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 const BillHelper = require('../../../support/helpers/bill.helper.js')
@@ -103,9 +103,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(
-          notifierStub.omg.calledWith('Delete bill run complete')
-        ).to.be.true()
+        expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.billRun).to.equal(billRun)
@@ -171,9 +169,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Delete bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -195,9 +191,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Delete bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -223,9 +217,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Delete bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -251,9 +243,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Delete bill run failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -277,9 +267,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
       const logDataArg = notifierStub.omg.args[0][1]
 
-      expect(
-        notifierStub.omg.calledWith('Delete bill run complete')
-      ).to.be.true()
+      expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.billRun).to.equal(billRun)
@@ -291,7 +279,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
   })
 })
 
-function _billRun () {
+function _billRun() {
   return {
     id: 'dafe5048-24b1-485a-8289-2e584bb7ba68',
     externalId: 'ef6a17f2-412f-4502-a73d-b74c8b92ff19',

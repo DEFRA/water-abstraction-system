@@ -52,7 +52,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * @returns {Promise<object>} contains a copy of the persisted address, agent company and contact if they were also
  * changed
  */
-async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
+async function go(billingAccountId, address, agentCompany = {}, contact = {}) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the
@@ -82,14 +82,12 @@ async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
   return _response(persistedData)
 }
 
-async function _fetchBillingAccount (billingAccountId) {
+async function _fetchBillingAccount(billingAccountId) {
   return BillingAccountModel.query()
     .findById(billingAccountId)
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
-      builder.select([
-        'name'
-      ])
+      builder.select(['name'])
     })
 }
 
@@ -122,7 +120,7 @@ async function _fetchBillingAccount (billingAccountId) {
  * @returns {Promise<object>} a single object that contains the persisted billingAccountAddress, plus address, agent
  * company and contact
  */
-async function _persist (timestamp, billingAccount, address, company, contact) {
+async function _persist(timestamp, billingAccount, address, company, contact) {
   const persistedData = {}
 
   await BillingAccountModel.transaction(async (trx) => {
@@ -148,7 +146,7 @@ async function _persist (timestamp, billingAccount, address, company, contact) {
   return persistedData
 }
 
-async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId, timestamp) {
+async function _patchExistingBillingAccountAddressEndDate(trx, billingAccountId, timestamp) {
   // The timestamp represents the current date and time we're making this change, i.e. today. So, the new billing
   // account address will start from today. To show that the old record is no longer current, we need to set its
   // `endDate` to be today - 1 (yesterday). The following works it all out even if we're over a month or year boundary
@@ -178,18 +176,15 @@ async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId
  *
  * @private
  */
-async function _persistBillingAccountAddress (trx, billingAccountAddress) {
-  return billingAccountAddress.$query(trx)
-    .insert()
-    .onConflict(['billingAccountId', 'startDate'])
-    // If a conflict is found this specifies what fields should get updated
-    .merge([
-      'addressId',
-      'companyId',
-      'contactId',
-      'endDate',
-      'updatedAt'
-    ])
+async function _persistBillingAccountAddress(trx, billingAccountAddress) {
+  return (
+    billingAccountAddress
+      .$query(trx)
+      .insert()
+      .onConflict(['billingAccountId', 'startDate'])
+      // If a conflict is found this specifies what fields should get updated
+      .merge(['addressId', 'companyId', 'contactId', 'endDate', 'updatedAt'])
+  )
 }
 
 /**
@@ -216,29 +211,30 @@ async function _persistBillingAccountAddress (trx, billingAccountAddress) {
  *
  * @private
  */
-async function _persistAddress (trx, address) {
+async function _persistAddress(trx, address) {
   if (address.id) {
     return address
   }
 
-  return address.$query(trx)
-    .insert()
-    .onConflict('uprn')
-    // If a conflict is found this specifies what fields should get updated
-    .merge([
-      'address1',
-      'address2',
-      'address3',
-      'address4',
-      'address5',
-      'address6',
-      'country',
-      'postcode',
-      'updatedAt'
-    ])
-    .returning([
-      'id'
-    ])
+  return (
+    address
+      .$query(trx)
+      .insert()
+      .onConflict('uprn')
+      // If a conflict is found this specifies what fields should get updated
+      .merge([
+        'address1',
+        'address2',
+        'address3',
+        'address4',
+        'address5',
+        'address6',
+        'country',
+        'postcode',
+        'updatedAt'
+      ])
+      .returning(['id'])
+  )
 }
 
 /**
@@ -267,22 +263,20 @@ async function _persistAddress (trx, address) {
  *
  * @private
  */
-async function _persistCompany (trx, company) {
+async function _persistCompany(trx, company) {
   if (company.id || !company.name) {
     return company
   }
 
-  return company.$query(trx)
-    .insert()
-    .onConflict('companyNumber')
-    // If a conflict is found this specifies what fields should get updated
-    .merge([
-      'name',
-      'updatedAt'
-    ])
-    .returning([
-      'id'
-    ])
+  return (
+    company
+      .$query(trx)
+      .insert()
+      .onConflict('companyNumber')
+      // If a conflict is found this specifies what fields should get updated
+      .merge(['name', 'updatedAt'])
+      .returning(['id'])
+  )
 }
 
 /**
@@ -293,18 +287,14 @@ async function _persistCompany (trx, company) {
  *
  * @private
  */
-async function _persistContact (trx, contact) {
+async function _persistContact(trx, contact) {
   if (!contact.contactType) {
     return contact
   }
 
   // NOTE: The only constraint in contacts which would lead to a conflict is email. But it is not collected as part of
   // the journey. So, we don't have to include `onConflict()` and `merge()`
-  return contact.$query(trx)
-    .insert()
-    .returning([
-      'id'
-    ])
+  return contact.$query(trx).insert().returning(['id'])
 }
 
 /**
@@ -322,7 +312,7 @@ async function _persistContact (trx, contact) {
  *
  * @private
  */
-function _response (persistedData) {
+function _response(persistedData) {
   const { address, company, contact, billingAccountAddress } = persistedData
 
   return {
@@ -333,7 +323,7 @@ function _response (persistedData) {
   }
 }
 
-function _transformAddress (timestamp, address) {
+function _transformAddress(timestamp, address) {
   return AddressModel.fromJson({
     id: address.addressId,
     address1: address.addressLine1,
@@ -351,7 +341,7 @@ function _transformAddress (timestamp, address) {
   })
 }
 
-function _transformCompany (timestamp, company) {
+function _transformCompany(timestamp, company) {
   return CompanyModel.fromJson({
     id: company.companyId,
     type: company.type,
@@ -363,7 +353,7 @@ function _transformCompany (timestamp, company) {
   })
 }
 
-function _transformContact (timestamp, contact) {
+function _transformContact(timestamp, contact) {
   return ContactModel.fromJson({
     contactType: contact.type,
     salutation: contact.salutation,

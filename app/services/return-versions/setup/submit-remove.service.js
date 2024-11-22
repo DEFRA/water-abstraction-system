@@ -17,7 +17,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {number} requirementIndex - The index of the requirement being removed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go (sessionId, requirementIndex, yar) {
+async function go(sessionId, requirementIndex, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const notification = {
@@ -30,7 +30,7 @@ async function go (sessionId, requirementIndex, yar) {
   await _removeRequirementFromSession(session, requirementIndex)
 }
 
-async function _removeRequirementFromSession (session, requirementIndex) {
+async function _removeRequirementFromSession(session, requirementIndex) {
   session.requirements.splice(requirementIndex, 1)
 
   await session.$update()

@@ -37,7 +37,7 @@ const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-
  *
  * @returns {Promise<object>} all the named IDs for then seeded records in an object
  */
-async function seed (optionalLicenceRef = undefined) {
+async function seed(optionalLicenceRef = undefined) {
   const records = {}
 
   let licenceRef = generateLicenceRef()
@@ -63,14 +63,14 @@ async function seed (optionalLicenceRef = undefined) {
   return records
 }
 
-async function _financialAgreements () {
+async function _financialAgreements() {
   const section126 = FinancialAgreementHelper.select(2)
   const twoPartTariff = FinancialAgreementHelper.select(3)
 
   return { section126Id: section126.id, twoPartTariffId: twoPartTariff.id }
 }
 
-async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
+async function _licenceFinancialAgreement(licenceRef, financialAgreements) {
   const { id: currentNonTwoPartId } = await LicenceFinancialAgreement.add({
     financialAgreementId: financialAgreements.section126Id,
     licenceRef
@@ -85,7 +85,7 @@ async function _licenceFinancialAgreement (licenceRef, financialAgreements) {
   return { currentNonTwoPartId, endedTwoPartId }
 }
 
-async function _licenceVersions (licenceId) {
+async function _licenceVersions(licenceId) {
   const { id: supersededId } = await LicenceVersionHelper.add({
     endDate: new Date('2022-04-31'),
     externalId: generateLicenceVersionExternalId(),
@@ -106,7 +106,7 @@ async function _licenceVersions (licenceId) {
   return { currentId, supersededId }
 }
 
-async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
+async function _licenceVersionPurposes(licenceVersionId, allPurposes) {
   const electricity = await LicenceVersionPurposeHelper.add({
     dailyQuantity: 455,
     externalId: generateLicenceVersionPurposeExternalId(),
@@ -137,7 +137,7 @@ async function _licenceVersionPurposes (licenceVersionId, allPurposes) {
   return { electricity, standard, twoPartTariff }
 }
 
-async function _points (licenceVersionPurposes) {
+async function _points(licenceVersionPurposes) {
   const {
     electricity: electricityPurpose,
     standard: standardPurpose,
@@ -150,35 +150,53 @@ async function _points (licenceVersionPurposes) {
   const twoPartTariff = await PointHelper.add({ description: 'MAIN INTAKE' })
 
   await LicenceVersionPurposePointHelper.add({
-    licenceVersionPurposeId: electricityPurpose.id, pointId: electricity1.id
+    licenceVersionPurposeId: electricityPurpose.id,
+    pointId: electricity1.id
   })
   await LicenceVersionPurposePointHelper.add({
-    licenceVersionPurposeId: electricityPurpose.id, pointId: electricity2.id
+    licenceVersionPurposeId: electricityPurpose.id,
+    pointId: electricity2.id
   })
   await LicenceVersionPurposePointHelper.add({
-    licenceVersionPurposeId: standardPurpose.id, pointId: standard.id
+    licenceVersionPurposeId: standardPurpose.id,
+    pointId: standard.id
   })
   await LicenceVersionPurposePointHelper.add({
-    licenceVersionPurposeId: twoPartTariffPurpose.id, pointId: twoPartTariff.id
+    licenceVersionPurposeId: twoPartTariffPurpose.id,
+    pointId: twoPartTariff.id
   })
 
   return { electricity1, electricity2, standard, twoPartTariff }
 }
 
-async function _purposes () {
-  const { id: heatPumpId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '200' })
+async function _purposes() {
+  const { id: heatPumpId } = PurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === '200'
+  })
 
-  const { id: sprayIrrigationDirectId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '400' })
+  const { id: sprayIrrigationDirectId } = PurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === '400'
+  })
 
-  const { id: vegetableWashingId } = PurposeHelper.data.find((purpose) => { return purpose.legacyId === '460' })
+  const { id: vegetableWashingId } = PurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === '460'
+  })
 
-  const { id: primaryAgricultureId } = PrimaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'A' })
+  const { id: primaryAgricultureId } = PrimaryPurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === 'A'
+  })
 
-  const { id: primaryElectricityId } = PrimaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'P' })
+  const { id: primaryElectricityId } = PrimaryPurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === 'P'
+  })
 
-  const { id: secondaryAgricultureId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'AGR' })
+  const { id: secondaryAgricultureId } = SecondaryPurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === 'AGR'
+  })
 
-  const { id: secondaryElectricityId } = SecondaryPurposeHelper.data.find((purpose) => { return purpose.legacyId === 'ELC' })
+  const { id: secondaryElectricityId } = SecondaryPurposeHelper.data.find((purpose) => {
+    return purpose.legacyId === 'ELC'
+  })
 
   return {
     purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },

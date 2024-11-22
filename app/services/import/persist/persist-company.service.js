@@ -17,34 +17,24 @@ const { db } = require('../../../../db/db.js')
  * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
  * @param {object} transformedCompanies - An object representing a valid WRLS Company.
  */
-async function go (trx, updatedAt, transformedCompanies) {
+async function go(trx, updatedAt, transformedCompanies) {
   await _persistCompanies(trx, updatedAt, transformedCompanies)
 }
 
-async function _persistAddress (trx, updatedAt, address) {
+async function _persistAddress(trx, updatedAt, address) {
   await AddressModel.query(trx)
     .insert({ ...address, updatedAt })
     .onConflict('externalId')
-    .merge([
-      'address1',
-      'address2',
-      'address3',
-      'address4',
-      'address5',
-      'address6',
-      'country',
-      'postcode',
-      'updatedAt'
-    ])
+    .merge(['address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'country', 'postcode', 'updatedAt'])
 }
 
-async function _persistAddresses (trx, updatedAt, addresses) {
+async function _persistAddresses(trx, updatedAt, addresses) {
   for (const address of addresses) {
     await _persistAddress(trx, updatedAt, address)
   }
 }
 
-async function _persistCompanies (trx, updatedAt, companies) {
+async function _persistCompanies(trx, updatedAt, companies) {
   for (const company of companies) {
     await _persistCompany(trx, updatedAt, company)
 
@@ -62,29 +52,27 @@ async function _persistCompanies (trx, updatedAt, companies) {
   }
 }
 
-async function _persistCompany (trx, updatedAt, company) {
+async function _persistCompany(trx, updatedAt, company) {
   const { contact, companyContact, addresses, companyAddresses, ...propertiesToPersist } = company
 
   await CompanyModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('externalId')
-    .merge([
-      'name',
-      'type',
-      'updatedAt'
-    ])
+    .merge(['name', 'type', 'updatedAt'])
 }
 
-async function _persistCompanyAddresses (trx, updatedAt, companyAddresses) {
+async function _persistCompanyAddresses(trx, updatedAt, companyAddresses) {
   for (const companyAddress of companyAddresses) {
     await _persistCompanyAddress(trx, updatedAt, companyAddress)
   }
 }
 
-async function _persistCompanyAddress (trx, updatedAt, companyAddress) {
+async function _persistCompanyAddress(trx, updatedAt, companyAddress) {
   const { companyId, startDate, endDate, licenceRoleId, addressId } = companyAddress
 
-  await db.raw(`
+  await db
+    .raw(
+      `
     INSERT INTO public."company_addresses" (company_id, address_id, licence_role_id, start_date, end_date, "default", created_at, updated_at)
     SELECT com.id, add.id, lr.id, ? ,?, true, NOW(), ?
     FROM public.companies com
@@ -97,14 +85,18 @@ async function _persistCompanyAddress (trx, updatedAt, companyAddress) {
         "default" = EXCLUDED."default",
         end_date = EXCLUDED.end_date,
         updated_at = EXCLUDED.updated_at
-  `, [startDate, endDate, updatedAt, licenceRoleId, addressId, companyId])
+  `,
+      [startDate, endDate, updatedAt, licenceRoleId, addressId, companyId]
+    )
     .transacting(trx)
 }
 
-async function _persistsCompanyContact (trx, updatedAt, companyContact) {
+async function _persistsCompanyContact(trx, updatedAt, companyContact) {
   const { externalId, startDate, licenceRoleId } = companyContact
 
-  await db.raw(`
+  await db
+    .raw(
+      `
     INSERT INTO public."company_contacts" (company_id, contact_id, licence_role_id, start_date, "default", created_at, updated_at)
     SELECT com.id, con.id, lr.id, ?, true, NOW(), ?
     FROM public.companies com
@@ -116,21 +108,17 @@ async function _persistsCompanyContact (trx, updatedAt, companyContact) {
         contact_id = EXCLUDED.contact_id,
         "default" = EXCLUDED."default",
         updated_at = EXCLUDED.updated_at
-  `, [startDate, updatedAt, licenceRoleId, externalId, externalId])
+  `,
+      [startDate, updatedAt, licenceRoleId, externalId, externalId]
+    )
     .transacting(trx)
 }
 
-async function _persistContact (trx, updatedAt, contact) {
+async function _persistContact(trx, updatedAt, contact) {
   await ContactModel.query(trx)
     .insert({ ...contact, updatedAt })
     .onConflict('externalId')
-    .merge([
-      'salutation',
-      'initials',
-      'firstName',
-      'lastName',
-      'updatedAt'
-    ])
+    .merge(['salutation', 'initials', 'firstName', 'lastName', 'updatedAt'])
 }
 
 module.exports = {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,12 +31,14 @@ describe('Return Versions Setup - Submit Start Date service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01',
           waterUndertaker: true
         },
@@ -171,18 +173,21 @@ describe('Return Versions Setup - Submit Start Date service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Select the start date for the requirements for returns',
-          anotherStartDateDay: null,
-          anotherStartDateMonth: null,
-          anotherStartDateYear: null,
-          backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licenceVersionStartDate: '1 January 2023',
-          startDateOption: null
-        }, { skip: ['sessionId', 'error'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            pageTitle: 'Select the start date for the requirements for returns',
+            anotherStartDateDay: null,
+            anotherStartDateMonth: null,
+            anotherStartDateYear: null,
+            backLink: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            licenceRef: '01/ABC',
+            licenceVersionStartDate: '1 January 2023',
+            startDateOption: null
+          },
+          { skip: ['sessionId', 'error'] }
+        )
       })
 
       describe('because the user has not selected anything', () => {

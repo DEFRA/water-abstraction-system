@@ -59,7 +59,7 @@
  *
  * @returns {object} The start and end date of the calculated charge period
  */
-function go (chargeVersion, billingPeriod) {
+function go(chargeVersion, billingPeriod) {
   const latestStartDateTimestamp = Math.max(
     billingPeriod.startDate,
     chargeVersion.startDate,
@@ -94,7 +94,7 @@ function go (chargeVersion, billingPeriod) {
   return chargePeriod
 }
 
-function _periodIsIncompatible (chargePeriod, billingPeriod) {
+function _periodIsIncompatible(chargePeriod, billingPeriod) {
   const startsAfterBillingPeriod = chargePeriod.startDate > billingPeriod.endDate
   const endsBeforeBillingPeriod = chargePeriod.endDate < billingPeriod.startDate
   const startsAfterItEnds = chargePeriod.startDate > chargePeriod.endDate

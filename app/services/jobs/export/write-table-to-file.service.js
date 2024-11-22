@@ -21,7 +21,7 @@ const ConvertToCSVService = require('./convert-to-csv.service.js')
  * @param {string} schemaFolderPath - The folder path of the schema
  * @param {string} tableName - The name of the table
  */
-async function go (headers, rows, schemaFolderPath, tableName) {
+async function go(headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)
   const writeToFileStream = fs.createWriteStream(filePath, { flags: 'a' })
   const promisifiedPipeline = util.promisify(pipeline)
@@ -44,7 +44,7 @@ async function go (headers, rows, schemaFolderPath, tableName) {
  *
  * @private
  */
-function _transformDataStream () {
+function _transformDataStream() {
   return new Transform({
     objectMode: true,
     transform: function (row, _encoding, callback) {
@@ -66,7 +66,7 @@ function _transformDataStream () {
  *
  * @private
  */
-async function _filenameWithPath (tableName, schemaFolderPath) {
+async function _filenameWithPath(tableName, schemaFolderPath) {
   await fsPromises.mkdir(schemaFolderPath, { recursive: true })
 
   return path.normalize(

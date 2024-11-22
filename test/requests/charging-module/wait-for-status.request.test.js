@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -148,7 +148,7 @@ describe('Charging Module Wait For Status request', () => {
   })
 })
 
-function _testResponse (status = 'processing') {
+function _testResponse(status = 'processing') {
   return {
     succeeded: true,
     response: {

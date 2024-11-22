@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -56,7 +56,9 @@ describe('Bill Runs - View Cancel Bill Run presenter', () => {
           it('returns a link to the PRESROC review page', () => {
             const result = ViewCancelBillRunPresenter.go(billRun)
 
-            expect(result.backLink).to.equal('/billing/batch/420e948f-1992-437e-8a47-74c0066cb017/two-part-tariff-review')
+            expect(result.backLink).to.equal(
+              '/billing/batch/420e948f-1992-437e-8a47-74c0066cb017/two-part-tariff-review'
+            )
           })
         })
       })
@@ -72,7 +74,7 @@ describe('Bill Runs - View Cancel Bill Run presenter', () => {
   })
 })
 
-function _testBillRun () {
+function _testBillRun() {
   return {
     id: '420e948f-1992-437e-8a47-74c0066cb017',
     batchType: 'supplementary',

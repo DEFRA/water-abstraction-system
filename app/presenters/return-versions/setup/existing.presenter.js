@@ -15,7 +15,7 @@ const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js
  *
  * @returns {object} The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const { id: sessionId, licence } = session
 
   return {
@@ -26,7 +26,7 @@ function go (session) {
   }
 }
 
-function _existingOptions (returnVersions) {
+function _existingOptions(returnVersions) {
   return returnVersions.map((returnVersion) => {
     const { id, startDate } = returnVersion
     const reason = _reason(returnVersion)
@@ -43,7 +43,7 @@ function _existingOptions (returnVersions) {
   })
 }
 
-function _reason (returnVersion) {
+function _reason(returnVersion) {
   const { modLogs, reason } = returnVersion
 
   // The return version was created in WRLS or we were able to map the NALD reason during import

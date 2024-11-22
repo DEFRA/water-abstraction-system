@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -70,9 +70,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewSendBillRunService.go('testId'))
-        .to
-        .reject()
+      await expect(ViewSendBillRunService.go('testId')).to.reject()
     })
   })
 })

@@ -14,7 +14,7 @@
  * @returns {object} the NALD licence data transformed into the WRLS licence document role format
  * ready for validation and persisting
  */
-function go (licenceDocumentRole, licenceRef) {
+function go(licenceDocumentRole, licenceRef) {
   return {
     addressId: licenceDocumentRole.address_id,
     companyId: licenceDocumentRole.company_id,

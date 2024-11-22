@@ -36,7 +36,7 @@ class BaseModel extends Model {
    *
    * @returns {string[]} An array of paths
    */
-  static get modelPaths () {
+  static get modelPaths() {
     return [__dirname]
   }
 }

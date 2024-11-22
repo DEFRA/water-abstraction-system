@@ -32,7 +32,7 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * @returns {Promise<object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected page in the data. Also included is any data that has been used to filter the results
  */
-async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page) {
+async function go(id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page) {
   const billRun = await _fetchBillRun(id)
   const licences = await _fetchBillRunLicences(
     id,
@@ -46,8 +46,12 @@ async function go (id, filterIssues, filterLicenceHolderNumber, filterLicenceSta
   return { billRun, licences }
 }
 
-function _applyFilters (
-  reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress
+function _applyFilters(
+  reviewLicenceQuery,
+  filterIssues,
+  filterLicenceHolderNumber,
+  filterLicenceStatus,
+  filterProgress
 ) {
   if (filterIssues) {
     _filterIssues(filterIssues, reviewLicenceQuery)
@@ -70,7 +74,7 @@ function _applyFilters (
   }
 }
 
-async function _fetchBillRun (id) {
+async function _fetchBillRun(id) {
   return BillRunModel.query()
     .findById(id)
     .select('id', 'createdAt', 'status', 'toFinancialYearEnding', 'batchType')
@@ -80,14 +84,20 @@ async function _fetchBillRun (id) {
     })
     .withGraphFetched('reviewLicences')
     .modifyGraph('reviewLicences', (builder) => {
-      builder.count('licenceId as totalNumberOfLicences')
+      builder
+        .count('licenceId as totalNumberOfLicences')
         .count({ numberOfLicencesToReview: ReviewLicenceModel.raw("CASE WHEN status = 'review' THEN 1 END") })
         .groupBy('billRunId')
     })
 }
 
-async function _fetchBillRunLicences (
-  id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = 1
+async function _fetchBillRunLicences(
+  id,
+  filterIssues,
+  filterLicenceHolderNumber,
+  filterLicenceStatus,
+  filterProgress,
+  page = 1
 ) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('id', 'licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
@@ -103,37 +113,38 @@ async function _fetchBillRunLicences (
   return reviewLicenceQuery
 }
 
-function _filterIssues (filterIssues, reviewLicenceQuery) {
+function _filterIssues(filterIssues, reviewLicenceQuery) {
   // When only one issue is selected in the filter, a string is returned; otherwise, an array is returned.
   // The "no issues" filter can only be selected exclusively, so it will always be a string.
   if (typeof filterIssues === 'string') {
-    filterIssues === 'no-issues' ? _handleNoIssues(reviewLicenceQuery) : _handleSingleIssue(filterIssues, reviewLicenceQuery)
+    filterIssues === 'no-issues'
+      ? _handleNoIssues(reviewLicenceQuery)
+      : _handleSingleIssue(filterIssues, reviewLicenceQuery)
   } else {
     _handleMultipleIssues(filterIssues, reviewLicenceQuery)
   }
 }
 
-function _handleMultipleIssues (filterIssues, reviewLicenceQuery) {
+function _handleMultipleIssues(filterIssues, reviewLicenceQuery) {
   const lookupIssues = filterIssues.map((filterIssue) => {
     return twoPartTariffReviewIssues[filterIssue]
   })
 
   // Construct a query that checks for multiple issues. There will always be at least two issues to check for.
   reviewLicenceQuery.where((builder) => {
-    builder
-      .whereLike('issues', `%${lookupIssues[0]}%`)
+    builder.whereLike('issues', `%${lookupIssues[0]}%`)
     for (let i = 1; i < lookupIssues.length; i++) {
       builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
     }
   })
 }
 
-function _handleNoIssues (reviewLicenceQuery) {
+function _handleNoIssues(reviewLicenceQuery) {
   // To search for no issues, check if the issues column is empty
   reviewLicenceQuery.where('issues', '')
 }
 
-function _handleSingleIssue (filterIssues, reviewLicenceQuery) {
+function _handleSingleIssue(filterIssues, reviewLicenceQuery) {
   const lookupIssue = twoPartTariffReviewIssues[filterIssues]
 
   reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)

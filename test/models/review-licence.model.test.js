@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,16 +48,13 @@ describe('Review Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewLicenceModel.query()
-          .innerJoinRelated('billRun')
+        const query = await ReviewLicenceModel.query().innerJoinRelated('billRun')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill run', async () => {
-        const result = await ReviewLicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRun')
+        const result = await ReviewLicenceModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
         expect(result).to.be.instanceOf(ReviewLicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -77,16 +74,13 @@ describe('Review Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewLicenceModel.query()
-          .innerJoinRelated('licence')
+        const query = await ReviewLicenceModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await ReviewLicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await ReviewLicenceModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(ReviewLicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -112,16 +106,13 @@ describe('Review Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewLicenceModel.query()
-          .innerJoinRelated('reviewChargeVersions')
+        const query = await ReviewLicenceModel.query().innerJoinRelated('reviewChargeVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review charge version', async () => {
-        const result = await ReviewLicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewChargeVersions')
+        const result = await ReviewLicenceModel.query().findById(testRecord.id).withGraphFetched('reviewChargeVersions')
 
         expect(result).to.be.instanceOf(ReviewLicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -149,16 +140,13 @@ describe('Review Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewLicenceModel.query()
-          .innerJoinRelated('reviewReturns')
+        const query = await ReviewLicenceModel.query().innerJoinRelated('reviewReturns')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review returns', async () => {
-        const result = await ReviewLicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewReturns')
+        const result = await ReviewLicenceModel.query().findById(testRecord.id).withGraphFetched('reviewReturns')
 
         expect(result).to.be.instanceOf(ReviewLicenceModel)
         expect(result.id).to.equal(testRecord.id)

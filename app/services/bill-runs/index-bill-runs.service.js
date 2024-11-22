@@ -19,7 +19,7 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  * summary details for each bill run for the page selected, the template's pagination control, the title and the
  * status of any busy bill runs
  */
-async function go (page) {
+async function go(page) {
   const selectedPageNumber = _selectedPageNumber(page)
 
   // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
@@ -43,7 +43,7 @@ async function go (page) {
   }
 }
 
-function _pageTitle (numberOfPages, selectedPageNumber) {
+function _pageTitle(numberOfPages, selectedPageNumber) {
   if (numberOfPages === 1) {
     return 'Bill runs'
   }
@@ -51,7 +51,7 @@ function _pageTitle (numberOfPages, selectedPageNumber) {
   return `Bill runs (page ${selectedPageNumber} of ${numberOfPages})`
 }
 
-function _selectedPageNumber (page) {
+function _selectedPageNumber(page) {
   if (!page) {
     return 1
   }

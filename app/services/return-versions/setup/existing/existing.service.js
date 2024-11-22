@@ -18,7 +18,7 @@ const SessionModel = require('../../../../models/session.model.js')
  *
  * @returns {Promise<object>} The view data for the purpose page
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const formattedData = ExistingPresenter.go(session)

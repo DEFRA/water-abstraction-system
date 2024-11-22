@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class BillingAccountModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'billingAccounts'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
@@ -65,70 +65,54 @@ class BillingAccountModel extends BaseModel {
    *
    * @returns {object}
    */
-  static get modifiers () {
+  static get modifiers() {
     return {
       // fetches all related records need to display contact name and address for the billing account
-      contactDetails (query) {
+      contactDetails(query) {
         query
-          .select([
-            'id',
-            'accountNumber'
-          ])
+          .select(['id', 'accountNumber'])
           .withGraphFetched('company')
           .modifyGraph('company', (builder) => {
-            builder.select([
-              'id',
-              'name',
-              'type'
-            ])
+            builder.select(['id', 'name', 'type'])
           })
           .withGraphFetched('billingAccountAddresses')
           // The current billing account address is denoted by the fact it is the only one with a null end date
           .modifyGraph('billingAccountAddresses', (builder) => {
             builder
-              .select([
-                'id'
-              ])
+              .select(['id'])
               .whereNull('endDate')
               .withGraphFetched('address')
               .modifyGraph('address', (builder) => {
-                builder
-                  .select([
-                    'id',
-                    'address1',
-                    'address2',
-                    'address3',
-                    'address4',
-                    'address5',
-                    'address6',
-                    'postcode',
-                    'country'
-                  ])
+                builder.select([
+                  'id',
+                  'address1',
+                  'address2',
+                  'address3',
+                  'address4',
+                  'address5',
+                  'address6',
+                  'postcode',
+                  'country'
+                ])
               })
               .withGraphFetched('company')
               .modifyGraph('company', (builder) => {
-                builder
-                  .select([
-                    'id',
-                    'name',
-                    'type'
-                  ])
+                builder.select(['id', 'name', 'type'])
               })
               .withGraphFetched('contact')
               .modifyGraph('contact', (builder) => {
-                builder
-                  .select([
-                    'id',
-                    'contactType',
-                    'dataSource',
-                    'department',
-                    'firstName',
-                    'initials',
-                    'lastName',
-                    'middleInitials',
-                    'salutation',
-                    'suffix'
-                  ])
+                builder.select([
+                  'id',
+                  'contactType',
+                  'dataSource',
+                  'department',
+                  'firstName',
+                  'initials',
+                  'lastName',
+                  'middleInitials',
+                  'salutation',
+                  'suffix'
+                ])
               })
           })
       }
@@ -148,7 +132,7 @@ class BillingAccountModel extends BaseModel {
    *
    * @returns {string|null} the account name to use for the billing account or null if it cannot be determined
    */
-  $accountName () {
+  $accountName() {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     if (currentBillingAccountAddress?.company) {
@@ -169,7 +153,7 @@ class BillingAccountModel extends BaseModel {
    *
    * @returns {string[]} the address lines to use for the billing account
    */
-  $addressLines () {
+  $addressLines() {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     // Guard clause in case modifier has not been used
@@ -205,7 +189,7 @@ class BillingAccountModel extends BaseModel {
    *
    * @returns {string|null} the contact name to use for the billing account or null if it cannot be determined
    */
-  $contactName () {
+  $contactName() {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     if (currentBillingAccountAddress?.contact) {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -91,12 +91,11 @@ describe('Reissue Bills service', () => {
       it('persists all bills', async () => {
         await ReissueBillsService.go(reissueBillRun)
 
-        const result = await BillModel.query()
-          .whereIn('billRunId', [
-            reissueBillOne.bills[0].billRunId,
-            reissueBillTwo.bills[0].billRunId,
-            reissueBillThree.bills[0].billRunId
-          ])
+        const result = await BillModel.query().whereIn('billRunId', [
+          reissueBillOne.bills[0].billRunId,
+          reissueBillTwo.bills[0].billRunId,
+          reissueBillThree.bills[0].billRunId
+        ])
 
         expect(result).to.have.length(3)
       })
@@ -104,12 +103,11 @@ describe('Reissue Bills service', () => {
       it('persists all bill licences', async () => {
         await ReissueBillsService.go(reissueBillRun)
 
-        const result = await BillLicenceModel.query()
-          .whereIn('billId', [
-            reissueBillOne.billLicences[0].billId,
-            reissueBillTwo.billLicences[0].billId,
-            reissueBillThree.billLicences[0].billId
-          ])
+        const result = await BillLicenceModel.query().whereIn('billId', [
+          reissueBillOne.billLicences[0].billId,
+          reissueBillTwo.billLicences[0].billId,
+          reissueBillThree.billLicences[0].billId
+        ])
 
         expect(result).to.have.length(3)
       })
@@ -117,12 +115,11 @@ describe('Reissue Bills service', () => {
       it('persists all transactions', async () => {
         await ReissueBillsService.go(reissueBillRun)
 
-        const result = await TransactionModel.query()
-          .whereIn('billLicenceId', [
-            reissueBillOne.transactions[0].billLicenceId,
-            reissueBillTwo.transactions[0].billLicenceId,
-            reissueBillThree.transactions[0].billLicenceId
-          ])
+        const result = await TransactionModel.query().whereIn('billLicenceId', [
+          reissueBillOne.transactions[0].billLicenceId,
+          reissueBillTwo.transactions[0].billLicenceId,
+          reissueBillThree.transactions[0].billLicenceId
+        ])
 
         expect(result).to.have.length(3)
       })
@@ -130,19 +127,23 @@ describe('Reissue Bills service', () => {
   })
 })
 
-function _reissueBillServiceResponse () {
+function _reissueBillServiceResponse() {
   return {
     bills: [BillModel.fromJson(BillHelper.defaults())],
     billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
-    transactions: [TransactionModel.fromJson({
-      ...TransactionHelper.defaults(),
-      purposes: [{
-        id: '01adfc33-4ba9-4215-bbe0-97014730991b',
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 3,
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4
-      }]
-    })]
+    transactions: [
+      TransactionModel.fromJson({
+        ...TransactionHelper.defaults(),
+        purposes: [
+          {
+            id: '01adfc33-4ba9-4215-bbe0-97014730991b',
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4
+          }
+        ]
+      })
+    ]
   }
 }

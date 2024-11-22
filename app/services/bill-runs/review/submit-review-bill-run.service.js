@@ -12,7 +12,7 @@
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go (billRunId, payload, yar) {
+async function go(billRunId, payload, yar) {
   const clearFilters = payload?.clearFilters
   const filterIssues = payload?.filterIssues
   const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber

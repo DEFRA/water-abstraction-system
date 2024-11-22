@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -55,16 +55,13 @@ describe('Address model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('billingAccountAddresses')
+        const query = await AddressModel.query().innerJoinRelated('billingAccountAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account addresses', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccountAddresses')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('billingAccountAddresses')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -93,16 +90,13 @@ describe('Address model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('companyAddresses')
+        const query = await AddressModel.query().innerJoinRelated('companyAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company addresses', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('companyAddresses')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('companyAddresses')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -131,16 +125,13 @@ describe('Address model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('licenceDocumentRoles')
+        const query = await AddressModel.query().innerJoinRelated('licenceDocumentRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence document roles', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceDocumentRoles')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)

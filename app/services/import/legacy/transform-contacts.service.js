@@ -18,7 +18,7 @@ const ImportContactValidator = require('../../../validators/import/contact.valid
  * @param {object[]} transformedCompanies
  *
  */
-async function go (regionCode, licenceId, transformedCompanies) {
+async function go(regionCode, licenceId, transformedCompanies) {
   const naldContacts = await FetchContactsService.go(regionCode, licenceId)
 
   naldContacts.forEach((naldContact) => {
@@ -34,7 +34,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
   })
 }
 
-function _matchingCompany (transformedCompanies, naldContact) {
+function _matchingCompany(transformedCompanies, naldContact) {
   return transformedCompanies.find((company) => {
     return company.externalId === naldContact.external_id
   })

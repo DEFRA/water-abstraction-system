@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,16 +48,13 @@ describe('Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
-          .innerJoinRelated('chargeReference')
+        const query = await ChargeElementModel.query().innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge reference', async () => {
-        const result = await ChargeElementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReference')
+        const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.id).to.equal(testRecord.id)
@@ -79,16 +76,13 @@ describe('Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
-          .innerJoinRelated('purpose')
+        const query = await ChargeElementModel.query().innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purposes use', async () => {
-        const result = await ChargeElementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purpose')
+        const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.id).to.equal(testRecord.id)
@@ -113,16 +107,13 @@ describe('Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
-          .innerJoinRelated('reviewChargeElements')
+        const query = await ChargeElementModel.query().innerJoinRelated('reviewChargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review charge elements', async () => {
-        const result = await ChargeElementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewChargeElements')
+        const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('reviewChargeElements')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.id).to.equal(testRecord.id)

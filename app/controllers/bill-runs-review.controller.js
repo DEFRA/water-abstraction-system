@@ -21,7 +21,7 @@ const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
 
-async function authorised (request, h) {
+async function authorised(request, h) {
   const { reviewChargeReferenceId } = request.params
 
   const pageData = await AuthorisedService.go(reviewChargeReferenceId)
@@ -32,7 +32,7 @@ async function authorised (request, h) {
   })
 }
 
-async function edit (request, h) {
+async function edit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
   const pageData = await EditService.go(reviewChargeElementId, elementIndex)
@@ -43,7 +43,7 @@ async function edit (request, h) {
   })
 }
 
-async function factors (request, h) {
+async function factors(request, h) {
   const { reviewChargeReferenceId } = request.params
 
   const pageData = await FactorsService.go(reviewChargeReferenceId)
@@ -54,7 +54,7 @@ async function factors (request, h) {
   })
 }
 
-async function preview (request, h) {
+async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
 
   await PreviewService.go(reviewChargeReferenceId, request.yar)
@@ -62,7 +62,7 @@ async function preview (request, h) {
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function remove (request, h) {
+async function remove(request, h) {
   const { reviewLicenceId } = request.params
 
   const pageData = await RemoveService.go(reviewLicenceId)
@@ -73,7 +73,7 @@ async function remove (request, h) {
   })
 }
 
-async function reviewBillRun (request, h) {
+async function reviewBillRun(request, h) {
   const { billRunId } = request.params
   const { page } = request.query
 
@@ -85,7 +85,7 @@ async function reviewBillRun (request, h) {
   })
 }
 
-async function reviewChargeElement (request, h) {
+async function reviewChargeElement(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
   const pageData = await ReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
@@ -96,7 +96,7 @@ async function reviewChargeElement (request, h) {
   })
 }
 
-async function reviewChargeReference (request, h) {
+async function reviewChargeReference(request, h) {
   const { reviewChargeReferenceId } = request.params
 
   const pageData = await ReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
@@ -107,7 +107,7 @@ async function reviewChargeReference (request, h) {
   })
 }
 
-async function reviewLicence (request, h) {
+async function reviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
   const pageData = await ReviewLicenceService.go(reviewLicenceId, request.yar)
@@ -118,7 +118,7 @@ async function reviewLicence (request, h) {
   })
 }
 
-async function submitAuthorised (request, h) {
+async function submitAuthorised(request, h) {
   const { reviewChargeReferenceId } = request.params
   const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
 
@@ -132,12 +132,10 @@ async function submitAuthorised (request, h) {
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function submitEdit (request, h) {
+async function submitEdit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitEditService.go(
-    reviewChargeElementId, elementIndex, request.yar, request.payload
-  )
+  const pageData = await SubmitEditService.go(reviewChargeElementId, elementIndex, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/edit.njk', {
@@ -149,7 +147,7 @@ async function submitEdit (request, h) {
   return h.redirect(`/system/bill-runs/review/charge-element/${reviewChargeElementId}/${elementIndex}`)
 }
 
-async function submitFactors (request, h) {
+async function submitFactors(request, h) {
   const { reviewChargeReferenceId } = request.params
   const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
 
@@ -163,7 +161,7 @@ async function submitFactors (request, h) {
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function submitRemove (request, h) {
+async function submitRemove(request, h) {
   const { reviewLicenceId } = request.params
 
   const result = await SubmitRemoveService.go(reviewLicenceId, request.yar)
@@ -175,7 +173,7 @@ async function submitRemove (request, h) {
   return h.redirect(`/system/bill-runs/review/${result.billRunId}`)
 }
 
-async function submitReviewBillRun (request, h) {
+async function submitReviewBillRun(request, h) {
   const { billRunId } = request.params
 
   await SubmitReviewBillRunService.go(billRunId, request.payload, request.yar)
@@ -183,7 +181,7 @@ async function submitReviewBillRun (request, h) {
   return h.redirect(`/system/bill-runs/review/${billRunId}`)
 }
 
-async function submitReviewLicence (request, h) {
+async function submitReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
   await SubmitReviewLicenceService.go(reviewLicenceId, request.yar, request.payload)
