@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the send bill run confirmation page
- * @module SendBillRunService
+ * @module ViewSendBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const SendBillRunPresenter = require('../../presenters/bill-runs/send-bill-run.presenter.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
+const ViewSendBillRunPresenter = require('../../../presenters/bill-runs/view-send-bill-run.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the send bill run confirmation page
@@ -19,7 +19,7 @@ const SendBillRunPresenter = require('../../presenters/bill-runs/send-bill-run.p
 async function go (id) {
   const billRun = await _fetchBillRun(id)
 
-  const pageData = SendBillRunPresenter.go(billRun)
+  const pageData = ViewSendBillRunPresenter.go(billRun)
 
   return pageData
 }

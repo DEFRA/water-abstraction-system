@@ -18,7 +18,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 const ReviewReturnModel = require('../../../models/review-return.model.js')
 
 /**
- * Deletes a bill run, all its associated records and the its match in the Charging Module API
+ * Deletes a bill run, all its associated records and its match in the Charging Module API
  *
  * We first send a request to the Charging Module API to delete the bill run there. Then we delete all details of the
  * bill run from our tables.
@@ -62,7 +62,7 @@ async function go (billRun) {
 }
 
 /**
- * These deals with all the tables that may be populated for a bill run. Because we have to deal with bills created
+ * This deals with all the tables that may be populated for a bill run. Because we have to deal with bills created
  * using the legacy engine and the new engine there will be times where a table won't have any records. But as this
  * won't effect the outcome we dispense with checking the scheme or type and just get on with clearing all tables to
  * keep the process simpler.
