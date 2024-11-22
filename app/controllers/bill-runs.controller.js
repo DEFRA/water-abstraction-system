@@ -63,16 +63,12 @@ async function submitCancel (request, h) {
 async function submitSend (request, h) {
   const { id } = request.params
 
-  try {
-    // NOTE: What we are awaiting here is for the SubmitSendBillRunService to update the status of the bill run to
-    // `sending'.
-    await SubmitSendBillRunService.go(id)
+  // NOTE: What we are awaiting here is for the SubmitSendBillRunService to update the status of the bill run to
+  // `sending'.
+  await SubmitSendBillRunService.go(id)
 
-    // Redirect to the legacy processing page
-    return h.redirect(`/billing/batch/${id}/processing`)
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  // Redirect to the legacy processing page
+  return h.redirect(`/billing/batch/${id}/processing`)
 }
 
 async function twoPartTariff (request, h) {
