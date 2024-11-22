@@ -47,7 +47,7 @@ async function go(payload) {
   }
 }
 
-async function _determineFlags (payload) {
+async function _determineFlags(payload) {
   if (payload.importedLicence) {
     return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
   } else if (payload.chargeVersionId) {

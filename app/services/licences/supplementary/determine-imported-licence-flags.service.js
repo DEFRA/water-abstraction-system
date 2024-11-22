@@ -37,7 +37,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (importedLicence, licenceId) {
+async function go(importedLicence, licenceId) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
   const { endDate } = determineCurrentFinancialYear()
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails, endDate)
@@ -73,17 +73,19 @@ async function go (importedLicence, licenceId) {
  *
  * @private
  */
-function _determineExistingFlags (existingLicenceDetails) {
-  const flagForSrocSupplementary =
-  existingLicenceDetails.flagged_for_sroc ? existingLicenceDetails.sroc_charge_versions : false
+function _determineExistingFlags(existingLicenceDetails) {
+  const flagForSrocSupplementary = existingLicenceDetails.flagged_for_sroc
+    ? existingLicenceDetails.sroc_charge_versions
+    : false
 
-  const flagForPreSrocSupplementary =
-  existingLicenceDetails.flagged_for_presroc ? existingLicenceDetails.pre_sroc_charge_versions : false
+  const flagForPreSrocSupplementary = existingLicenceDetails.flagged_for_presroc
+    ? existingLicenceDetails.pre_sroc_charge_versions
+    : false
 
   return { flagForSrocSupplementary, flagForPreSrocSupplementary }
 }
 
-function _earliestChangedDate (importedLicence, existingLicenceDetails, currentFinancialYearEndDate) {
+function _earliestChangedDate(importedLicence, existingLicenceDetails, currentFinancialYearEndDate) {
   const changedDates = []
 
   let date
@@ -109,7 +111,7 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails, currentF
 
   // Filter out those greater than the current financial year end date
   const filteredDates = changedDates.filter((changedDate) => {
-    return (changedDate < currentFinancialYearEndDate)
+    return changedDate < currentFinancialYearEndDate
   })
 
   // Now work out the earliest end date from those that have changed
@@ -135,7 +137,7 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails, currentF
  *
  * @private
  */
-function _updateFlags (earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result) {
+function _updateFlags(earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result) {
   if (!flagForPreSrocSupplementary) {
     const { pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
 

@@ -24,8 +24,8 @@ async function go(importedLicence, licenceId) {
   try {
     const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
-    if (licenceChanged) {
-      await ProcessImportedLicenceService.go(importedLicence, licenceId)
+    if (!licenceChanged) {
+      return
     }
 
     const payload = {
