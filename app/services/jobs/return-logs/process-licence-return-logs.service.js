@@ -15,7 +15,7 @@ const VoidReturnLogsService = require('./void-return-logs.service.js')
 /**
  * Voids and reiusses the return logs for the given licence from the date provided
  *
- * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
+ * @param {string} [licenceReference] - The licence to create return logs for
  * @param {Date} [endDate] - An optional argument to void existing returns and reissue them
  */
 async function go (licenceReference, endDate) {
