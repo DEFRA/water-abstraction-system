@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CancelBillRunPresenter = require('../../../app/presenters/bill-runs/cancel-bill-run.presenter.js')
+const ViewCancelBillRunPresenter = require('../../../app/presenters/bill-runs/view-cancel-bill-run.presenter.js')
 
-describe('Cancel Bill Run presenter', () => {
+describe('Bill Runs - View Cancel Bill Run presenter', () => {
   let billRun
 
   describe('when provided with a populated bill run', () => {
@@ -19,7 +19,7 @@ describe('Cancel Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CancelBillRunPresenter.go(billRun)
+      const result = ViewCancelBillRunPresenter.go(billRun)
 
       expect(result).to.equal({
         backLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017',
@@ -42,7 +42,7 @@ describe('Cancel Bill Run presenter', () => {
 
         describe('and the scheme is SROC', () => {
           it('returns a link to the SROC review page', () => {
-            const result = CancelBillRunPresenter.go(billRun)
+            const result = ViewCancelBillRunPresenter.go(billRun)
 
             expect(result.backLink).to.equal('/system/bill-runs/review/420e948f-1992-437e-8a47-74c0066cb017')
           })
@@ -54,7 +54,7 @@ describe('Cancel Bill Run presenter', () => {
           })
 
           it('returns a link to the PRESROC review page', () => {
-            const result = CancelBillRunPresenter.go(billRun)
+            const result = ViewCancelBillRunPresenter.go(billRun)
 
             expect(result.backLink).to.equal('/billing/batch/420e948f-1992-437e-8a47-74c0066cb017/two-part-tariff-review')
           })
@@ -63,7 +63,7 @@ describe('Cancel Bill Run presenter', () => {
 
       describe('when the bill run status is not review', () => {
         it('returns a link to the bill run page', () => {
-          const result = CancelBillRunPresenter.go(billRun)
+          const result = ViewCancelBillRunPresenter.go(billRun)
 
           expect(result.backLink).to.equal('/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017')
         })

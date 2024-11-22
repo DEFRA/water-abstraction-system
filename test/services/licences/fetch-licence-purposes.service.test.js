@@ -44,6 +44,7 @@ describe('Fetch Licence Purposes service', () => {
       point = await PointHelper.add({ sourceId: source.id })
 
       await LicenceVersionPurposePointHelper.add({
+        abstractionMethod: 'Unspecified Pump',
         licenceVersionPurposeId: licenceVersionPurpose.id,
         pointId: point.id
       })
@@ -69,6 +70,11 @@ describe('Fetch Licence Purposes service', () => {
               dailyQuantity: null,
               hourlyQuantity: null,
               instantQuantity: null,
+              licenceVersionPurposePoints: [
+                {
+                  abstractionMethod: 'Unspecified Pump'
+                }
+              ],
               points: [
                 {
                   description: point.description,

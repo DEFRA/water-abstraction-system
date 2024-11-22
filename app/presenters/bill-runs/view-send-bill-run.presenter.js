@@ -2,7 +2,7 @@
 
 /**
  * Formats the bill run data ready for presenting in the send bill run confirmation page
- * @module SendBillRunPresenter
+ * @module ViewSendBillRunPresenter
  */
 
 const {
