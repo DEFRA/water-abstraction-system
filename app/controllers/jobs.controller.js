@@ -30,7 +30,7 @@ async function exportDb(_request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
-async function ImportLicences (_request, h) {
+async function ImportLicences(_request, h) {
   ImportLicence.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)

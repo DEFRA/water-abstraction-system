@@ -5,9 +5,8 @@
  * @module ImportLicenceService
  */
 
-let pMap;
-
-(async () => {
+let pMap
+;(async () => {
   pMap = (await import('p-map')).default
 })()
 
@@ -43,7 +42,7 @@ const { batchSize } = config.importLicence
  * excluded
  *
  */
-async function go () {
+async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -67,7 +66,7 @@ async function go () {
  *
  * @private
  */
-async function _processLicences (licences) {
+async function _processLicences(licences) {
   if (!pMap) {
     throw new Error('pMap is not yet loaded.')
   }

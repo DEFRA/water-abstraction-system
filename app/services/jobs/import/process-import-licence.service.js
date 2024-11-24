@@ -18,7 +18,7 @@ const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-
  *
  * @param {object} licence - a licence
  */
-async function go (licence) {
+async function go(licence) {
   try {
     const endDates = {
       expiredDate: licence.expired_date,

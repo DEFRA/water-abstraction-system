@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -118,7 +118,7 @@ describe('Import Licence Service', () => {
   })
 })
 
-function _licences () {
+function _licences() {
   const licences = []
 
   for (let i = 0; i < 100; i++) {

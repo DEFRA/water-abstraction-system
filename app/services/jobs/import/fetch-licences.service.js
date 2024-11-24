@@ -14,7 +14,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object[]>} - An array of licences
  */
-async function go () {
+async function go() {
   const query = `
     SELECT DISTINCT ON (nal."LIC_NO")
       l.id as id,

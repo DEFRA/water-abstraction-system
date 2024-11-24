@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -37,7 +37,10 @@ describe('Process Import Licence Service', () => {
 
   describe('when a licence has been process successfully', () => {
     beforeEach(() => {
-      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
+      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(
+        DetermineSupplementaryBillingFlagsService,
+        'go'
+      ).resolves()
       stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
@@ -56,28 +59,31 @@ describe('Process Import Licence Service', () => {
         revokedDate: licence.revoked_date
       }
 
-      expect(stubDetermineSupplementaryBillingFlagsService
-        .calledWithExactly(licenceFormattedForSupplementary, licence.id))
-        .to.be.true()
+      expect(
+        stubDetermineSupplementaryBillingFlagsService.calledWithExactly(licenceFormattedForSupplementary, licence.id)
+      ).to.be.true()
     })
 
     it('should format the licence for the Determine Supplementary Billing Flags Service', async () => {
       await ProcessImportLicence.go(licence)
 
-      expect(stubDetermineSupplementaryBillingFlagsService
-        .getCall(0)
-        .calledWithExactly({
-          expiredDate: licence.expired_date,
-          lapsedDate: licence.lapsed_date,
-          revokedDate: licence.revoked_date
-        }, licence.id))
-        .to.be.true()
+      expect(
+        stubDetermineSupplementaryBillingFlagsService
+          .getCall(0)
+          .calledWithExactly(
+            { expiredDate: licence.expired_date, lapsedDate: licence.lapsed_date, revokedDate: licence.revoked_date },
+            licence.id
+          )
+      ).to.be.true()
     })
   })
 
   describe('when processing a licence fails', () => {
     beforeEach(() => {
-      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').rejects(new Error('Test error'))
+      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(
+        DetermineSupplementaryBillingFlagsService,
+        'go'
+      ).rejects(new Error('Test error'))
       stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
@@ -93,6 +99,6 @@ describe('Process Import Licence Service', () => {
   })
 })
 
-function _licence () {
+function _licence() {
   return { id: generateUUID(), expired_date: null, lapsed_date: null, revoked_date: null }
 }

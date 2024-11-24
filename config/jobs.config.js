@@ -13,7 +13,6 @@ const config = {
   importLicence: {
     batchSize: parseInt(process.env.IMORT_LICENCE_BATCH_SIZE) || 10
   }
-
 }
 
 module.exports = config
