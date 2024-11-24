@@ -18,7 +18,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   let years = payload.supplementaryYears
 
   if (!Array.isArray(years)) {
@@ -28,13 +28,10 @@ function go (payload) {
   const errorMessage = 'Select at least one financial year'
 
   const schema = Joi.object({
-    years: Joi.array()
-      .items(Joi.string())
-      .required()
-      .messages({
-        'any.required': errorMessage,
-        'array.sparse': errorMessage
-      })
+    years: Joi.array().items(Joi.string()).required().messages({
+      'any.required': errorMessage,
+      'array.sparse': errorMessage
+    })
   })
 
   return schema.validate({ years }, { abortEarly: true })

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,8 +49,7 @@ describe('Review Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeElementModel.query()
-          .innerJoinRelated('reviewChargeReference')
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewChargeReference')
 
         expect(query).to.exist()
       })
@@ -89,16 +88,13 @@ describe('Review Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeElementModel.query()
-          .innerJoinRelated('reviewReturns')
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewReturns')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review returns', async () => {
-        const result = await ReviewChargeElementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewReturns')
+        const result = await ReviewChargeElementModel.query().findById(testRecord.id).withGraphFetched('reviewReturns')
 
         expect(result).to.be.instanceOf(ReviewChargeElementModel)
         expect(result.id).to.equal(testRecord.id)
@@ -122,16 +118,13 @@ describe('Review Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewChargeElementModel.query()
-          .innerJoinRelated('chargeElement')
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('chargeElement')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge element', async () => {
-        const result = await ReviewChargeElementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeElement')
+        const result = await ReviewChargeElementModel.query().findById(testRecord.id).withGraphFetched('chargeElement')
 
         expect(result).to.be.instanceOf(ReviewChargeElementModel)
         expect(result.id).to.equal(testRecord.id)

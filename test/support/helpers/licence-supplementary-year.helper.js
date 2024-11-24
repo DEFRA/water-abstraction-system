@@ -19,7 +19,7 @@ const LicenceSupplementaryYearModel = require('../../../app/models/licence-suppl
  *
  * @returns {Promise<module:LicenceSupplementaryYearModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceSupplementaryYearModel.query()
@@ -37,7 +37,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     licenceId: generateUUID(),
     financialYearEnd: 2023

@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ScheduledNotificationModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'scheduledNotifications'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       event: {
         relation: Model.HasOneRelation,

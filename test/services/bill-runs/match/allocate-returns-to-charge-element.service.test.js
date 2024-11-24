@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -476,7 +476,7 @@ describe('Allocate Returns to Charge Element Service', () => {
   })
 })
 
-function _generateTestData (returnStatus = 'completed') {
+function _generateTestData(returnStatus = 'completed') {
   // Data not required for the tests has been excluded from the generated data
   const chargeElement = {
     authorisedAnnualQuantity: 32,

@@ -23,13 +23,13 @@ const FetchExistingRequirementsService = require('./fetch-existing-requirements.
  * @returns {Promise<object[]>} an array of return requirements generated from the existing return version and ready to
  * be persisted to the setup session
  */
-async function go (returnVersionId) {
+async function go(returnVersionId) {
   const returnVersion = await FetchExistingRequirementsService.go(returnVersionId)
 
   return _transformForSetup(returnVersion)
 }
 
-function _agreementExceptions (returnRequirement) {
+function _agreementExceptions(returnRequirement) {
   const { fiftySixException, gravityFill, reabstraction, twoPartTariff } = returnRequirement
   const agreementsExceptions = []
 
@@ -56,13 +56,13 @@ function _agreementExceptions (returnRequirement) {
   return agreementsExceptions
 }
 
-function _points (points) {
+function _points(points) {
   return points.map((point) => {
     return point.id
   })
 }
 
-function _purposes (returnRequirementPurposes) {
+function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     const { description, id } = returnRequirementPurpose.purpose
 
@@ -74,7 +74,7 @@ function _purposes (returnRequirementPurposes) {
   })
 }
 
-function _siteDescription (siteDescription, points) {
+function _siteDescription(siteDescription, points) {
   if (siteDescription) {
     return siteDescription
   }
@@ -82,7 +82,7 @@ function _siteDescription (siteDescription, points) {
   return points[0].description
 }
 
-function _transformForSetup (returnVersion) {
+function _transformForSetup(returnVersion) {
   const { returnRequirements } = returnVersion
 
   return returnRequirements.map((returnRequirement) => {

@@ -69,6 +69,20 @@
 
     {% set tableRows = (tableRows.push(abstractionPeriodRow), tableRows) %}
 
+    {# Abstraction method cell #}
+    {% set abstractionMethodsRow = {
+      key: {
+        text: licencePurpose.abstractionMethodsTitle,
+        attributes: { 'data-test': 'abstraction-method-title-' + rowIndex }
+      },
+      value: {
+        text: licencePurpose.abstractionMethods,
+        attributes: { 'data-test': 'abstraction-method-' + rowIndex },
+        classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(abstractionMethodsRow), tableRows) %}
     {# Abstraction amount cell #}
     {% set abstractionAmountsRow = {
       key: {

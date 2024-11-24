@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -248,7 +248,7 @@ describe('Import Licence Document role validator', () => {
   })
 })
 
-function _transformedLicenceDocumentRoleRole () {
+function _transformedLicenceDocumentRoleRole() {
   return {
     addressId: '1:007',
     companyId: '1:007',

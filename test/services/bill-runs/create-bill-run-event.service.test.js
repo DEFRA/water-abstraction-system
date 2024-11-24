@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,9 +40,7 @@ describe('Create Bill Run Event service', () => {
       const region = RegionHelper.select()
       const testBillRun = await BillRunHelper.add({ regionId: region.id })
 
-      billRun = await BillRunModel.query()
-        .findById(testBillRun.id)
-        .withGraphFetched('region')
+      billRun = await BillRunModel.query().findById(testBillRun.id).withGraphFetched('region')
     })
 
     it('creates an event record', async () => {

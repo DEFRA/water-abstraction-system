@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,16 +49,13 @@ describe('Licence Entity model', () => {
   describe('Relationships', () => {
     describe('when linking to licence entity roles', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityModel.query()
-          .innerJoinRelated('licenceEntityRoles')
+        const query = await LicenceEntityModel.query().innerJoinRelated('licenceEntityRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence entity roles', async () => {
-        const result = await LicenceEntityModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceEntityRoles')
+        const result = await LicenceEntityModel.query().findById(testRecord.id).withGraphFetched('licenceEntityRoles')
 
         expect(result).to.be.instanceOf(LicenceEntityModel)
         expect(result.id).to.equal(testRecord.id)
@@ -72,16 +69,13 @@ describe('Licence Entity model', () => {
 
     describe('when linking to user', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceEntityModel.query()
-          .innerJoinRelated('user')
+        const query = await LicenceEntityModel.query().innerJoinRelated('user')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user', async () => {
-        const result = await LicenceEntityModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('user')
+        const result = await LicenceEntityModel.query().findById(testRecord.id).withGraphFetched('user')
 
         expect(result).to.be.instanceOf(LicenceEntityModel)
         expect(result.id).to.equal(testRecord.id)

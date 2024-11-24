@@ -19,7 +19,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  *
  * @returns {object[]} Array of reversed transactions with `billLicenceId` set to the id of the supplied `billLicence`
  */
-function go (transactions, billLicenceId) {
+function go(transactions, billLicenceId) {
   return _reverseTransactions(transactions, billLicenceId)
 }
 
@@ -30,7 +30,7 @@ function go (transactions, billLicenceId) {
  *
  * @private
  */
-function _reverseTransactions (transactions, billLicenceId) {
+function _reverseTransactions(transactions, billLicenceId) {
   return transactions.map((transaction) => {
     return {
       ...transaction,

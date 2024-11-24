@@ -17,7 +17,7 @@ const { formatLongDate, formatMoney } = require('../base.presenter.js')
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-function go (transaction) {
+function go(transaction) {
   if (transaction.scheme === 'sroc') {
     return _srocContent(transaction)
   }
@@ -25,7 +25,7 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _agreement (section127Agreement) {
+function _agreement(section127Agreement) {
   if (section127Agreement) {
     return 'Two-part tariff'
   }
@@ -33,7 +33,7 @@ function _agreement (section127Agreement) {
   return null
 }
 
-function _presrocContent (transaction) {
+function _presrocContent(transaction) {
   const {
     authorisedDays,
     billableDays,
@@ -58,17 +58,8 @@ function _presrocContent (transaction) {
   }
 }
 
-function _srocContent (transaction) {
-  const {
-    authorisedDays,
-    billableDays,
-    chargeType,
-    endDate,
-    credit,
-    netAmount,
-    startDate,
-    volume
-  } = transaction
+function _srocContent(transaction) {
+  const { authorisedDays, billableDays, chargeType, endDate, credit, netAmount, startDate, volume } = transaction
 
   return {
     billableDays: `${billableDays}/${authorisedDays}`,

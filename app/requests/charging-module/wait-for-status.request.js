@@ -45,7 +45,7 @@ const billingConfig = require('../../../config/billing.config.js')
  *
  * @returns {Promise<object>} returns the results of the wait
  */
-async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
+async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
   let status
 
@@ -81,15 +81,15 @@ async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
  *
  * @private
  */
-function _pause () {
+function _pause() {
   return setTimeout(billingConfig.waitForStatusPauseInMs)
 }
 
-function _requestFailed (billRunId, result) {
-  const error = new ExpandedError(
-    'Charging Module wait for status request failed',
-    { billRunExternalId: billRunId, responseBody: result.response.body }
-  )
+function _requestFailed(billRunId, result) {
+  const error = new ExpandedError('Charging Module wait for status request failed', {
+    billRunExternalId: billRunId,
+    responseBody: result.response.body
+  })
 
   throw error
 }

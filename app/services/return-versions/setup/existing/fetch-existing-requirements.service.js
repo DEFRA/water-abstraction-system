@@ -18,16 +18,14 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  *
  * @returns {Promise<module:ReturnVersionModel>} the matching return version and related return requirements
  */
-async function go (returnVersionId) {
+async function go(returnVersionId) {
   return _fetch(returnVersionId)
 }
 
-async function _fetch (returnVersionId) {
+async function _fetch(returnVersionId) {
   return ReturnVersionModel.query()
     .findById(returnVersionId)
-    .select([
-      'id'
-    ])
+    .select(['id'])
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
       returnRequirementsBuilder
@@ -49,27 +47,15 @@ async function _fetch (returnVersionId) {
         .orderBy('siteDescription', 'asc')
         .withGraphFetched('points')
         .modifyGraph('points', (pointsBuilder) => {
-          pointsBuilder
-            .select([
-              'points.id',
-              'points.description'
-            ])
+          pointsBuilder.select(['points.id', 'points.description'])
         })
         .withGraphFetched('returnRequirementPurposes')
         .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
           returnRequirementPurposesBuilder
-            .select([
-              'id',
-              'alias',
-              'purposeId'
-            ])
+            .select(['id', 'alias', 'purposeId'])
             .withGraphFetched('purpose')
             .modifyGraph('purpose', (purposeBuilder) => {
-              purposeBuilder
-                .select([
-                  'id',
-                  'description'
-                ])
+              purposeBuilder.select(['id', 'description'])
             })
         })
     })

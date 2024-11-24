@@ -16,7 +16,7 @@ const FetchCompanyAddressesService = require('./fetch-company-address.service.js
  * @param {object[]} transformedCompanies
  *
  */
-async function go (regionCode, licenceId, transformedCompanies) {
+async function go(regionCode, licenceId, transformedCompanies) {
   const naldAddresses = await FetchCompanyAddressesService.go(regionCode, licenceId)
 
   naldAddresses.forEach((naldAddress) => {
@@ -28,7 +28,7 @@ async function go (regionCode, licenceId, transformedCompanies) {
   })
 }
 
-function _matchingCompany (transformedCompanies, naldAddress) {
+function _matchingCompany(transformedCompanies, naldAddress) {
   return transformedCompanies.find((company) => {
     return company.externalId === naldAddress.company_external_id
   })

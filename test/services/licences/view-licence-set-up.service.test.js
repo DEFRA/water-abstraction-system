@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -142,7 +142,8 @@ describe('View Licence Set Up service', () => {
         links: {
           agreements: {},
           chargeInformation: {
-            makeLicenceNonChargeable: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
+            makeLicenceNonChargeable:
+              '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
             setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
           },
           recalculateBills: {},

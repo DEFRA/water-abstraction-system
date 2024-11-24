@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -83,9 +83,7 @@ describe('Process Time Limited Licences service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(
-        notifierStub.omg.calledWith('Time limited job complete')
-      ).to.be.true()
+      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -115,9 +113,7 @@ describe('Process Time Limited Licences service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(
-        notifierStub.omg.calledWith('Time limited job complete')
-      ).to.be.true()
+      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()

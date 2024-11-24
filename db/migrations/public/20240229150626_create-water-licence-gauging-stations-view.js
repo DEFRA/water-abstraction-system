@@ -3,10 +3,9 @@
 const viewName = 'licence_gauging_stations'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      view.as(knex('licence_gauging_stations').withSchema('water').select([
+  return knex.schema.createView(viewName, (view) => {
+    view.as(
+      knex('licence_gauging_stations').withSchema('water').select([
         'licence_gauging_station_id AS id',
         'licence_id',
         'gauging_station_id',
@@ -26,12 +25,11 @@ exports.up = function (knex) {
         // 'is_test',
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

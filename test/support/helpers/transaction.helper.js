@@ -41,7 +41,7 @@ const TransactionModel = require('../../../app/models/transaction.model.js')
  *
  * @returns {Promise<module:TransactionModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return TransactionModel.query()
@@ -59,7 +59,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { startDate, endDate } = determineCurrentFinancialYear()
   const { reference, shortDescription } = ChargeCategoryHelper.select()
 

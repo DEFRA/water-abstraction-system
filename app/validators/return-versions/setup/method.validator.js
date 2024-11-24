@@ -7,11 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = [
-  'use-abstraction-data',
-  'use-existing-requirements',
-  'set-up-manually'
-]
+const VALID_VALUES = ['use-abstraction-data', 'use-existing-requirements', 'set-up-manually']
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/method` page
@@ -21,7 +17,7 @@ const VALID_VALUES = [
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   const errorMessage = 'Select how you want to set up the requirements for returns'
   const schema = Joi.object({
     method: Joi.string()

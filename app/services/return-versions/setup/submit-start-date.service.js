@@ -28,7 +28,7 @@ const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
  * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-async function go (sessionId, payload, yar) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { endDate, startDate } = session.licence
@@ -70,15 +70,17 @@ async function go (sessionId, payload, yar) {
  *
  * @private
  */
-function _defaultQuarterlyReturns (session) {
-  if (!session.checkPageVisited &&
+function _defaultQuarterlyReturns(session) {
+  if (
+    !session.checkPageVisited &&
     isQuarterlyReturnSubmissions(session.returnVersionStartDate) &&
-    session.licence.waterUndertaker) {
+    session.licence.waterUndertaker
+  ) {
     session.quarterlyReturns = true
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   const selectedOption = payload['start-date-options']
 
   session.startDateOptions = selectedOption
@@ -87,7 +89,9 @@ async function _save (session, payload) {
     session.startDateDay = payload['start-date-day']
     session.startDateMonth = payload['start-date-month']
     session.startDateYear = payload['start-date-year']
-    session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`)
+    session.returnVersionStartDate = new Date(
+      `${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`
+    )
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
   }
@@ -97,7 +101,7 @@ async function _save (session, payload) {
   return session.$update()
 }
 
-function _submittedSessionData (session, payload) {
+function _submittedSessionData(session, payload) {
   session.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
   session.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
   session.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
@@ -106,7 +110,7 @@ function _submittedSessionData (session, payload) {
   return StartDatePresenter.go(session, payload)
 }
 
-function _validate (payload, licenceStartDate, licenceEndDate) {
+function _validate(payload, licenceStartDate, licenceEndDate) {
   const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
   if (!validation.error) {

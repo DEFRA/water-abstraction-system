@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -21,11 +21,7 @@ describe('Monitoring Stations - View service', () => {
   beforeEach(() => {
     auth = auth = {
       credentials: {
-        scope: [
-          'billing',
-          'hof_notifications',
-          'manage_gauging_station_licence_links'
-        ]
+        scope: ['billing', 'hof_notifications', 'manage_gauging_station_licence_links']
       }
     }
 

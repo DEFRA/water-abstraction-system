@@ -21,7 +21,7 @@ const UserRoleModel = require('../../../app/models/user-role.model.js')
  *
  * @returns {Promise<module:UserRoleModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return UserRoleModel.query()
@@ -39,7 +39,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: roleId } = RoleHelper.select()
 
   const defaults = {

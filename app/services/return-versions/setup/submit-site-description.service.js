@@ -27,7 +27,7 @@ const SiteDescriptionValidator = require('../../../validators/return-versions/se
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the site description page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload, yar) {
+async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -54,7 +54,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
   }
 }
 
-async function _save (session, requirementIndex, payload) {
+async function _save(session, requirementIndex, payload) {
   session.requirements[requirementIndex].siteDescription = payload.siteDescription
 
   return session.$update()
@@ -66,13 +66,13 @@ async function _save (session, requirementIndex, payload) {
  *
  * @private
  */
-function _submittedSessionData (session, requirementIndex, payload) {
+function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null
 
   return SiteDescriptionPresenter.go(session, requirementIndex)
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = SiteDescriptionValidator.go(payload)
 
   if (!validation.error) {

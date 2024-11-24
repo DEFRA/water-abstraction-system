@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,16 +48,13 @@ describe('Bill model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillModel.query()
-          .innerJoinRelated('billingAccount')
+        const query = await BillModel.query().innerJoinRelated('billingAccount')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account', async () => {
-        const result = await BillModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccount')
+        const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billingAccount')
 
         expect(result).to.be.instanceOf(BillModel)
         expect(result.id).to.equal(testRecord.id)
@@ -76,16 +73,13 @@ describe('Bill model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillModel.query()
-          .innerJoinRelated('billRun')
+        const query = await BillModel.query().innerJoinRelated('billRun')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill run', async () => {
-        const result = await BillModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRun')
+        const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
         expect(result).to.be.instanceOf(BillModel)
         expect(result.id).to.equal(testRecord.id)
@@ -111,16 +105,13 @@ describe('Bill model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillModel.query()
-          .innerJoinRelated('billLicences')
+        const query = await BillModel.query().innerJoinRelated('billLicences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill licences', async () => {
-        const result = await BillModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billLicences')
+        const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billLicences')
 
         expect(result).to.be.instanceOf(BillModel)
         expect(result.id).to.equal(testRecord.id)

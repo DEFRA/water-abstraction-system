@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -170,12 +170,10 @@ describe('Return Versions Setup - Generate Return Version Requirements service',
   })
 })
 
-function _generateRequirements (purposeOneId, purposeTwoId) {
+function _generateRequirements(purposeOneId, purposeTwoId) {
   const requirements = [
     {
-      points: [
-        '796f83bb-d50d-446f-bc47-28daff6bcb78'
-      ],
+      points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
       purposes: [
         {
           id: purposeOneId,
@@ -192,17 +190,12 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
       },
       frequencyReported: 'month',
       frequencyCollected: 'week',
-      agreementsExceptions: [
-        'none'
-      ]
+      agreementsExceptions: ['none']
     }
   ]
 
   const additionalRequirements = {
-    points: [
-      '30070341-ef94-4df8-87dd-31d51a046b8b',
-      '916a1320-0f57-43b2-bddc-b609218abf1c'
-    ],
+    points: ['30070341-ef94-4df8-87dd-31d51a046b8b', '916a1320-0f57-43b2-bddc-b609218abf1c'],
     purposes: [
       {
         id: purposeOneId,
@@ -225,12 +218,7 @@ function _generateRequirements (purposeOneId, purposeTwoId) {
     },
     frequencyReported: 'day',
     frequencyCollected: 'day',
-    agreementsExceptions: [
-      'gravity-fill',
-      'transfer-re-abstraction-scheme',
-      'two-part-tariff',
-      '56-returns-exception'
-    ]
+    agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception']
   }
 
   if (purposeTwoId) {

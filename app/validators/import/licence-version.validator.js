@@ -15,7 +15,7 @@ const WRLS_STATUSES = ['current', 'superseded']
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licenceVersion) {
+function go(licenceVersion) {
   const schema = Joi.object({
     endDate: Joi.date().required().allow(null),
     externalId: Joi.string().required(),
@@ -23,7 +23,9 @@ function go (licenceVersion) {
     issue: Joi.number().required(),
     licenceVersionPurposes: Joi.array().required(),
     startDate: Joi.date().required(),
-    status: Joi.string().required().valid(...WRLS_STATUSES)
+    status: Joi.string()
+      .required()
+      .valid(...WRLS_STATUSES)
   })
 
   const result = schema.validate(licenceVersion, { convert: false })

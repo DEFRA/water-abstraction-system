@@ -11,7 +11,7 @@ const RemoveBillLicenceService = require('../services/bill-licences/remove-bill-
 const SubmitRemoveBillLicenceService = require('../services/bill-licences/submit-remove-bill-licence.service.js')
 const ViewBillLicenceService = require('../services/bill-licences/view-bill-licence.service.js')
 
-async function remove (request, h) {
+async function remove(request, h) {
   const { id } = request.params
 
   const pageData = await RemoveBillLicenceService.go(id)
@@ -22,7 +22,7 @@ async function remove (request, h) {
   })
 }
 
-async function submitRemove (request, h) {
+async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
@@ -34,7 +34,7 @@ async function submitRemove (request, h) {
   }
 }
 
-async function view (request, h) {
+async function view(request, h) {
   const { id } = request.params
 
   const pageData = await ViewBillLicenceService.go(id)

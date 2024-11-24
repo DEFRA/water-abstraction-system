@@ -30,7 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the region page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
   const regions = await FetchRegionsService.go()
 
@@ -51,7 +51,7 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   const currentData = session
 
   currentData.region = payload.region
@@ -59,7 +59,7 @@ async function _save (session, payload) {
   return session.$query().patch({ data: currentData })
 }
 
-function _validate (payload, regions) {
+function _validate(payload, regions) {
   const validation = RegionValidator.go(payload, regions)
 
   if (!validation.error) {

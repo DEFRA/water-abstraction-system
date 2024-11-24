@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helper
@@ -29,7 +29,9 @@ describe('Bill Runs Setup - Fetch Regions service', () => {
 
       // This should be removed and do an exact check when the others tests have been migrated to use the seeded regions
       expectedRegions.forEach((expectedRegion) => {
-        const region = results.find((region) => { return region.id === expectedRegion.id })
+        const region = results.find((region) => {
+          return region.id === expectedRegion.id
+        })
 
         expect(region).to.equal(expectedRegion)
       })

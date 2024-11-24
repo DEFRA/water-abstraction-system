@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -59,29 +59,32 @@ describe('Return Versions Setup - Check service', () => {
     it('returns page data for the view', async () => {
       const result = await CheckService.go(session.id, yarStub)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        licenceRef: '01/ABC',
-        multipleUpload: false,
-        note: {
-          actions: [
-            {
-              href: 'note',
-              text: 'Add a note'
-            }
-          ],
-          text: 'No notes added'
+      expect(result).to.equal(
+        {
+          activeNavBar: 'search',
+          licenceRef: '01/ABC',
+          multipleUpload: false,
+          note: {
+            actions: [
+              {
+                href: 'note',
+                text: 'Add a note'
+              }
+            ],
+            text: 'No notes added'
+          },
+          notification: undefined,
+          pageTitle: 'Check the requirements for returns for Turbo Kid',
+          quarterlyReturnSubmissions: false,
+          quarterlyReturns: undefined,
+          reason: 'Major change',
+          reasonLink: `/system/return-versions/setup/${session.id}/reason`,
+          requirements: [],
+          returnsRequired: true,
+          startDate: '1 January 2023'
         },
-        notification: undefined,
-        pageTitle: 'Check the requirements for returns for Turbo Kid',
-        quarterlyReturnSubmissions: false,
-        quarterlyReturns: undefined,
-        reason: 'Major change',
-        reasonLink: `/system/return-versions/setup/${session.id}/reason`,
-        requirements: [],
-        returnsRequired: true,
-        startDate: '1 January 2023'
-      }, { skip: ['sessionId'] })
+        { skip: ['sessionId'] }
+      )
     })
 
     it('updates the session record to indicate user has visited the "check" page', async () => {

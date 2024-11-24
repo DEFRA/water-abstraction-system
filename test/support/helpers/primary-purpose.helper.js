@@ -21,7 +21,7 @@ const { data: primaryPurposes } = require('../../../db/seeds/data/primary-purpos
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return primaryPurposes[index]
   }

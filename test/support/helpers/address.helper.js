@@ -25,7 +25,7 @@ const { randomInteger } = require('../general.js')
  *
  * @returns {module:AddressModel} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return AddressModel.query()
@@ -43,7 +43,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     address1: 'ENVIRONMENT AGENCY',
     address2: 'HORIZON HOUSE',
@@ -66,7 +66,7 @@ function defaults (data = {}) {
  *
  * @returns {string} - A random UPRN
  */
-function generateUprn () {
+function generateUprn() {
   return randomInteger(100, 999999)
 }
 
@@ -77,7 +77,7 @@ function generateUprn () {
  *
  * @returns {string} - A random external id
  */
-function generateExternalId () {
+function generateExternalId() {
   const regionCode = randomInteger(1, 9)
   const addressId = randomInteger(100, 99998)
 

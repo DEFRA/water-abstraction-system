@@ -25,7 +25,7 @@ const ReverseTransactionsService = require('./reverse-transactions.service.js')
  * @returns {Promise<object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
  * out by a previous matching credit)
  */
-async function go (calculatedTransactions, billingAccountId, billLicence, billingPeriod) {
+async function go(calculatedTransactions, billingAccountId, billLicence, billingPeriod) {
   const { id: billLicenceId, licenceId } = billLicence
   const previousTransactions = await _fetchPreviousTransactions(billingAccountId, licenceId, billingPeriod)
 
@@ -50,7 +50,7 @@ async function go (calculatedTransactions, billingAccountId, billLicence, billin
  *
  * @private
  */
-function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactions) {
+function _cancelCalculatedTransaction(calculatedTransaction, reversedTransactions) {
   const result = reversedTransactions.findIndex((reversedTransaction) => {
     return transactionsMatch(reversedTransaction, calculatedTransaction)
   })
@@ -72,7 +72,7 @@ function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactio
  *
  * @private
  */
-function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
+function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   const cleansedTransactionLines = []
 
   // Iterate over each calculated transaction to see if a transaction in the reverse transactions would form a
@@ -91,7 +91,7 @@ function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   return cleansedTransactionLines
 }
 
-async function _fetchPreviousTransactions (billingAccountId, licenceId, billingPeriod) {
+async function _fetchPreviousTransactions(billingAccountId, licenceId, billingPeriod) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
 
   const transactions = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)

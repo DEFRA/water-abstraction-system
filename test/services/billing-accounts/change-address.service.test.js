@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -265,7 +265,8 @@ describe('Change address service', () => {
       describe('is a department', () => {
         beforeEach(() => {
           contact = {
-            type: 'department', department: 'Humanoid Risk Assessment'
+            type: 'department',
+            department: 'Humanoid Risk Assessment'
           }
         })
 
@@ -289,7 +290,9 @@ describe('Change address service', () => {
       describe('is an individual', () => {
         beforeEach(() => {
           contact = {
-            type: 'person', firstName: 'Margarita', lastName: 'Villa'
+            type: 'person',
+            firstName: 'Margarita',
+            lastName: 'Villa'
           }
         })
 
@@ -345,8 +348,9 @@ describe('Change address service', () => {
         it('overwrites the existing record and ensures the end date is null', async () => {
           const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-          const newBillingAccountAddress = await BillingAccountAddressModel.query()
-            .findById(result.billingAccountAddress.id)
+          const newBillingAccountAddress = await BillingAccountAddressModel.query().findById(
+            result.billingAccountAddress.id
+          )
 
           expect(newBillingAccountAddress.id).to.equal(existingBillingAccountAddress.id)
           expect(newBillingAccountAddress.addressId).not.to.equal(existingBillingAccountAddress.addressId)
@@ -372,8 +376,9 @@ describe('Change address service', () => {
         it('creates a new billing account record with a null end date', async () => {
           const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-          const newBillingAccountAddress = await BillingAccountAddressModel.query()
-            .findById(result.billingAccountAddress.id)
+          const newBillingAccountAddress = await BillingAccountAddressModel.query().findById(
+            result.billingAccountAddress.id
+          )
 
           expect(newBillingAccountAddress.id).not.to.equal(existingBillingAccountAddress.id)
           expect(newBillingAccountAddress.addressId).not.to.equal(existingBillingAccountAddress.addressId)
@@ -415,7 +420,8 @@ describe('Change address service', () => {
         organisationType: 'limitedCompany'
       }
       contact = {
-        type: 'department', department: 'Bean Counting'
+        type: 'department',
+        department: 'Bean Counting'
       }
 
       // We just need something within the transaction to go bang. `fromJson() is ideal because a) we can stub it!, and

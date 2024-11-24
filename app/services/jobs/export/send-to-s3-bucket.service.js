@@ -19,7 +19,7 @@ const S3Config = require('../../../../config/s3.config.js')
  *
  * @param {string} filePath - A string containing the path of the file to send to the S3 bucket
  */
-async function go (filePath) {
+async function go(filePath) {
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
   const fileContent = await fsPromises.readFile(filePath)
@@ -40,11 +40,11 @@ async function go (filePath) {
  *
  * @private
  */
-function _customConfig () {
+function _customConfig() {
   return {
     requestHandler: new NodeHttpHandler({
-    // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread
-    // operator to bring the result back into the top level of the `customConfig` object.
+      // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread
+      // operator to bring the result back into the top level of the `customConfig` object.
       ...(requestConfig.httpProxy
         ? {
             httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
@@ -56,7 +56,7 @@ function _customConfig () {
   }
 }
 
-async function _uploadFileToS3Bucket (params) {
+async function _uploadFileToS3Bucket(params) {
   const customConfig = _customConfig()
   const s3Client = new S3Client(customConfig)
   const command = new PutObjectCommand(params)

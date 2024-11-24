@@ -1,27 +1,12 @@
 'use strict'
 
-const billRunTypes = [
-  'annual',
-  'supplementary',
-  'two_part_tariff'
-]
+const billRunTypes = ['annual', 'supplementary', 'two_part_tariff']
 
-const companyTypes = [
-  'person',
-  'organisation'
-]
+const companyTypes = ['person', 'organisation']
 
-const contactTypes = [
-  'person',
-  'department'
-]
+const contactTypes = ['person', 'department']
 
-const organisationTypes = [
-  'individual',
-  'limitedCompany',
-  'limitedLiabilityPartnership',
-  'publicLimitedCompany'
-]
+const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 const returnCycleDates = {
   allYear: {
@@ -60,7 +45,8 @@ const returnRequirementReasons = {
   'new-special-agreement': 'New special agreement',
   'returns-exception': 'Returns exception',
   'succession-or-transfer-of-licence': 'Succession or transfer of licence',
-  'succession-to-remainder-licence-or-licence-apportionment': 'Succession to remainder licence or licence apportionment',
+  'succession-to-remainder-licence-or-licence-apportionment':
+    'Succession to remainder licence or licence apportionment',
   'temporary-trade': 'Temporary trade',
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
@@ -81,10 +67,7 @@ const naldRegions = {
   YO: 'Yorkshire'
 }
 
-const sources = [
-  'nald',
-  'wrls'
-]
+const sources = ['nald', 'wrls']
 
 const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',

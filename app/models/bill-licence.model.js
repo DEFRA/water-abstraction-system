@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class BillLicenceModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'billLicences'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       bill: {
         relation: Model.BelongsToOneRelation,

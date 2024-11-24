@@ -20,7 +20,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   const { quantityOptions } = payload
 
   if (quantityOptions === 'customQuantity') {
@@ -45,7 +45,7 @@ function go (payload) {
  * @returns {number|object} if valid the original value else a Joi 'any.invalid' error. Knowing we return this means
  * you can assign what error message to use when a number has too many decimals.
  */
-function _maxDecimals (value, helpers) {
+function _maxDecimals(value, helpers) {
   // Guard clause to ensure we don't try and interact with a null or undefined value
   if (!value) {
     return value
@@ -60,32 +60,23 @@ function _maxDecimals (value, helpers) {
   return helpers.error('any.invalid')
 }
 
-function _validateCustomQuantity (customQuantity, authorisedVolume) {
-  const schema = Joi
-    .number()
-    .min(0)
-    .max(authorisedVolume)
-    .custom(_maxDecimals, 'Max decimals')
-    .required()
-    .messages({
-      'number.unsafe': 'The quantity must be a number',
-      'number.base': 'The quantity must be a number',
-      'number.min': 'The quantity must be zero or higher',
-      'number.max': 'The quantity must be the same as or less than the authorised amount',
-      'any.required': 'Enter the billable quantity',
-      'any.invalid': 'The quantity must contain no more than 6 decimal places'
-    })
+function _validateCustomQuantity(customQuantity, authorisedVolume) {
+  const schema = Joi.number().min(0).max(authorisedVolume).custom(_maxDecimals, 'Max decimals').required().messages({
+    'number.unsafe': 'The quantity must be a number',
+    'number.base': 'The quantity must be a number',
+    'number.min': 'The quantity must be zero or higher',
+    'number.max': 'The quantity must be the same as or less than the authorised amount',
+    'any.required': 'Enter the billable quantity',
+    'any.invalid': 'The quantity must contain no more than 6 decimal places'
+  })
 
   return schema.validate(customQuantity, { abortEarly: true })
 }
 
-function _validateAuthorisedQuantity (quantityOptions) {
-  const schema = Joi
-    .number()
-    .required()
-    .messages({
-      'any.required': 'Select the billable quantity'
-    })
+function _validateAuthorisedQuantity(quantityOptions) {
+  const schema = Joi.number().required().messages({
+    'any.required': 'Select the billable quantity'
+  })
 
   return schema.validate(quantityOptions, { abortEarly: true })
 }

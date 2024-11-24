@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -36,9 +36,10 @@ describe('Return Requirement model', () => {
 
     testReturnRequirementPurposes = []
     for (let i = 0; i < 2; i++) {
-      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add(
-        { alias: `TEST RET REQ ${i}`, returnRequirementId: testRecord.id }
-      )
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        alias: `TEST RET REQ ${i}`,
+        returnRequirementId: testRecord.id
+      })
 
       testReturnRequirementPurposes.push(returnRequirementPurpose)
     }
@@ -56,16 +57,13 @@ describe('Return Requirement model', () => {
   describe('Relationships', () => {
     describe('when linking through return requirement points to points', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementModel.query()
-          .innerJoinRelated('points')
+        const query = await ReturnRequirementModel.query().innerJoinRelated('points')
 
         expect(query).to.exist()
       })
 
       it('can eager load the points', async () => {
-        const result = await ReturnRequirementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('points')
+        const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('points')
 
         expect(result).to.be.instanceOf(ReturnRequirementModel)
         expect(result.id).to.equal(testRecord.id)
@@ -79,8 +77,7 @@ describe('Return Requirement model', () => {
 
     describe('when linking to return requirement purposes', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementModel.query()
-          .innerJoinRelated('returnRequirementPurposes')
+        const query = await ReturnRequirementModel.query().innerJoinRelated('returnRequirementPurposes')
 
         expect(query).to.exist()
       })
@@ -102,16 +99,13 @@ describe('Return Requirement model', () => {
 
     describe('when linking to return version', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementModel.query()
-          .innerJoinRelated('returnVersion')
+        const query = await ReturnRequirementModel.query().innerJoinRelated('returnVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version', async () => {
-        const result = await ReturnRequirementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnVersion')
+        const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('returnVersion')
 
         expect(result).to.be.instanceOf(ReturnRequirementModel)
         expect(result.id).to.equal(testRecord.id)

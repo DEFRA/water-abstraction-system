@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -203,19 +203,18 @@ describe('Fetch Billing Accounts service', () => {
       licence = await LicenceHelper.add({ regionId: region.id })
       billingAccount = await BillingAccountHelper.add()
 
-      chargeVersion = await ChargeVersionHelper.add(
-        {
-          startDate: new Date('2023-11-01'),
-          changeReasonId: minimumChargeChangeReason.id,
-          billingAccountId: billingAccount.id,
-          licenceId: licence.id,
-          licenceRef: licence.licenceRef
-        }
-      )
+      chargeVersion = await ChargeVersionHelper.add({
+        startDate: new Date('2023-11-01'),
+        changeReasonId: minimumChargeChangeReason.id,
+        billingAccountId: billingAccount.id,
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef
+      })
 
       chargeCategory = ChargeCategoryHelper.select()
       chargeReference = await ChargeReferenceHelper.add({
-        chargeVersionId: chargeVersion.id, chargeCategoryId: chargeCategory.id
+        chargeVersionId: chargeVersion.id,
+        chargeCategoryId: chargeCategory.id
       })
       chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
     })
@@ -297,7 +296,12 @@ describe('Fetch Billing Accounts service', () => {
           loss: 'low',
           volume: 6.819,
           adjustments: {
-            s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+            s126: null,
+            s127: false,
+            s130: false,
+            charge: null,
+            winter: false,
+            aggregate: '0.562114443'
           },
           additionalCharges: { isSupplyPublicWater: true },
           description: 'Mineral washing',
@@ -306,13 +310,15 @@ describe('Fetch Billing Accounts service', () => {
             reference: chargeCategory.reference,
             shortDescription: chargeCategory.shortDescription
           },
-          chargeElements: [{
-            id: chargeElement.id,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3
-          }]
+          chargeElements: [
+            {
+              id: chargeElement.id,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3
+            }
+          ]
         })
       })
     })

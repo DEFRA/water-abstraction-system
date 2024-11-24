@@ -12,7 +12,7 @@
  *
  * @returns {object} - the formatted content
  */
-function go (billRun) {
+function go(billRun) {
   const {
     batchType,
     creditNoteCount,
