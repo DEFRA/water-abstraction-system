@@ -25,11 +25,11 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<module:BillRunModel[]>} an array of bill runs that match the selected 'page in the data
  */
-async function go (page = 1) {
+async function go(page = 1) {
   return _fetch(page)
 }
 
-async function _fetch (page) {
+async function _fetch(page) {
   return BillRunModel.query()
     .select([
       'billRuns.id',
@@ -46,9 +46,7 @@ async function _fetch (page) {
       'region.displayName AS region'
     ])
     .innerJoinRelated('region')
-    .orderBy([
-      { column: 'createdAt', order: 'desc' }
-    ])
+    .orderBy([{ column: 'createdAt', order: 'desc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 

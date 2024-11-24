@@ -32,7 +32,7 @@ const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620'
  * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction and ready to
  * be persisted to the setup session
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const licence = await FetchAbstractionDataService.go(licenceId)
 
   const returnRequirements = _transformForSetup(licence)
@@ -60,7 +60,7 @@ async function go (licenceId) {
  *
  * @private
  */
-function _agreementExceptions (purpose) {
+function _agreementExceptions(purpose) {
   const { twoPartTariff } = purpose
 
   if (twoPartTariff) {
@@ -80,7 +80,7 @@ function _agreementExceptions (purpose) {
  *
  * @private
  */
-function _returnsCycle (startMonth, endMonth) {
+function _returnsCycle(startMonth, endMonth) {
   const summerMonths = [4, 5, 6, 7, 8, 9, 10]
 
   // If the start month is after the end month it can't be within April to October
@@ -134,7 +134,7 @@ function _returnsCycle (startMonth, endMonth) {
  *
  * @private
  */
-function _frequencyCollected (licence, licenceVersionPurpose) {
+function _frequencyCollected(licence, licenceVersionPurpose) {
   const { twoPartTariffAgreement, waterUndertaker } = licence
   const { dailyQuantity, purpose } = licenceVersionPurpose
 
@@ -165,7 +165,7 @@ function _frequencyCollected (licence, licenceVersionPurpose) {
  *
  * @private
  */
-function _frequencyReported (licence, licenceVersionPurpose) {
+function _frequencyReported(licence, licenceVersionPurpose) {
   const { waterUndertaker } = licence
   const { dailyQuantity } = licenceVersionPurpose
 
@@ -189,7 +189,7 @@ function _frequencyReported (licence, licenceVersionPurpose) {
  *
  * @private
  */
-function _points (points) {
+function _points(points) {
   return points.map((point) => {
     return point.id
   })
@@ -205,7 +205,7 @@ function _points (points) {
  *
  * @private
  */
-function _siteDescription (points) {
+function _siteDescription(points) {
   const descriptions = points.map((point) => {
     return point.description
   })
@@ -225,7 +225,7 @@ function _siteDescription (points) {
  *
  * @private
  */
-function _transformForSetup (licence) {
+function _transformForSetup(licence) {
   const { licenceVersionPurposes } = licence.$currentVersion()
 
   return licenceVersionPurposes.map((licenceVersionPurpose) => {

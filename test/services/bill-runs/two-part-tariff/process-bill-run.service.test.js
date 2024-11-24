@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,9 +20,7 @@ const MatchAndAllocateService = require('../../../../app/services/bill-runs/matc
 const TwoPartTariffProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
 
 describe('Two Part Tariff Process Bill Run service', () => {
-  const billingPeriods = [
-    { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
-  ]
+  const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
 
   let billRun
   let notifierStub

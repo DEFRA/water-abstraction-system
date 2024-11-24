@@ -28,7 +28,7 @@ const TypeValidator = require('../../../validators/bill-runs/setup/type.validato
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -47,13 +47,13 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.type = payload.type
 
   return session.$update()
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = TypeValidator.go(payload)
 
   if (!validation.error) {

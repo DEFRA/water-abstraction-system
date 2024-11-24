@@ -19,7 +19,7 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-async function go (billingAccountId, licenceId, financialYearEnding) {
+async function go(billingAccountId, licenceId, financialYearEnding) {
   const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding)
 
   return _cleanse(transactions)
@@ -33,7 +33,7 @@ async function go (billingAccountId, licenceId, financialYearEnding) {
  *
  * @private
  */
-function _cleanse (transactions) {
+function _cleanse(transactions) {
   const credits = transactions.filter((transaction) => {
     return transaction.credit
   })
@@ -54,7 +54,7 @@ function _cleanse (transactions) {
   return debits
 }
 
-async function _fetch (billingAccountId, licenceId, financialYearEnding) {
+async function _fetch(billingAccountId, licenceId, financialYearEnding) {
   return TransactionModel.query()
     .select([
       'transactions.authorisedDays',

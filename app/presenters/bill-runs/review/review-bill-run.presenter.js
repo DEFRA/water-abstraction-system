@@ -24,7 +24,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {object} The prepared bill run,licence and filter data to be passed to the review page
  */
-function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, licences) {
+function go(billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, licences) {
   const preparedLicences = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences)
@@ -50,7 +50,7 @@ function go (billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStat
  *
  * @private
  */
-function _prepareIssues (filterIssues) {
+function _prepareIssues(filterIssues) {
   return {
     absOutsidePeriod: filterIssues.includes('abs-outside-period'),
     aggregateFactor: filterIssues.includes('aggregate-factor'),
@@ -68,7 +68,7 @@ function _prepareIssues (filterIssues) {
   }
 }
 
-function _prepareLicences (licences) {
+function _prepareLicences(licences) {
   const preparedLicences = []
 
   for (const licence of licences) {
@@ -85,7 +85,7 @@ function _prepareLicences (licences) {
   return preparedLicences
 }
 
-function _prepareBillRun (billRun, preparedLicences) {
+function _prepareBillRun(billRun, preparedLicences) {
   return {
     billRunId: billRun.id,
     region: billRun.region.displayName,
@@ -100,7 +100,7 @@ function _prepareBillRun (billRun, preparedLicences) {
   }
 }
 
-function _prepareReviewMessage (numberOfLicencesToReview) {
+function _prepareReviewMessage(numberOfLicencesToReview) {
   let numberOfLicences
 
   if (numberOfLicencesToReview === 0) {
@@ -114,14 +114,14 @@ function _prepareReviewMessage (numberOfLicencesToReview) {
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
 }
 
-function _financialYear (financialYearEnding) {
+function _financialYear(financialYearEnding) {
   const startYear = financialYearEnding - 1
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
 }
 
-function _getIssueOnLicence (issues) {
+function _getIssueOnLicence(issues) {
   // if there is more than one issue the issues will be separated by a comma
   if (issues.includes(',')) {
     return 'Multiple Issues'

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -55,12 +55,7 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [],
-            true,
-            false,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([], true, false, licence.id)).to.be.true()
         })
       })
 
@@ -74,12 +69,7 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [],
-            true,
-            false,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([], true, false, licence.id)).to.be.true()
         })
       })
 
@@ -93,12 +83,9 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [2023, 2024, 2025],
-            false,
-            true,
-            licence.id
-          )).to.be.true()
+          expect(
+            PersistSupplementaryBillingFlagsServiceStub.calledWith([2023, 2024, 2025], false, true, licence.id)
+          ).to.be.true()
         })
       })
 
@@ -111,12 +98,7 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [],
-            false,
-            true,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([], false, true, licence.id)).to.be.true()
         })
       })
 
@@ -130,30 +112,22 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [],
-            false,
-            true,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([], false, true, licence.id)).to.be.true()
         })
       })
 
       describe('with null revoked date and two-part tariff charge versions', () => {
         beforeEach(() => {
-          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_srocTwoPartTariffLicence(licence.id, '2024-04-01'))
+          Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(
+            _srocTwoPartTariffLicence(licence.id, '2024-04-01')
+          )
         })
 
         it('flags the licence for sroc supplementary billing', async () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [2025],
-            false,
-            true,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([2025], false, true, licence.id)).to.be.true()
         })
       })
 
@@ -167,12 +141,7 @@ describe('Process Imported Licence Service', () => {
           await ProcessImportedLicenceService.go(importedLicence, licence.id)
 
           expect(PersistSupplementaryBillingFlagsServiceStub.called).to.be.true()
-          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith(
-            [2025],
-            false,
-            true,
-            licence.id
-          )).to.be.true()
+          expect(PersistSupplementaryBillingFlagsServiceStub.calledWith([2025], false, true, licence.id)).to.be.true()
         })
       })
 
@@ -192,7 +161,7 @@ describe('Process Imported Licence Service', () => {
   })
 })
 
-function _flaggedPreSrocLicence (id) {
+function _flaggedPreSrocLicence(id) {
   return {
     id,
     expired_date: null,
@@ -206,7 +175,7 @@ function _flaggedPreSrocLicence (id) {
   }
 }
 
-function _futureRevokedDate () {
+function _futureRevokedDate() {
   return {
     expired_date: null,
     lapsed_date: null,
@@ -214,7 +183,7 @@ function _futureRevokedDate () {
   }
 }
 
-function _preSrocLicence (id) {
+function _preSrocLicence(id) {
   return {
     id,
     expired_date: new Date('2021-04-01'),
@@ -228,7 +197,7 @@ function _preSrocLicence (id) {
   }
 }
 
-function _preSrocTwoPartTariffLicence (id) {
+function _preSrocTwoPartTariffLicence(id) {
   return {
     id,
     expired_date: null,
@@ -242,7 +211,7 @@ function _preSrocTwoPartTariffLicence (id) {
   }
 }
 
-function _srocLicence (id, date) {
+function _srocLicence(id, date) {
   return {
     id,
     expired_date: null,
@@ -256,7 +225,7 @@ function _srocLicence (id, date) {
   }
 }
 
-function _srocTwoPartTariffLicence (id, date) {
+function _srocTwoPartTariffLicence(id, date) {
   return {
     id,
     expired_date: null,

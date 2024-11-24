@@ -12,11 +12,11 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>}
  */
-async function go () {
+async function go() {
   return _deleteAllTestData()
 }
 
-async function _deleteAllTestData () {
+async function _deleteAllTestData() {
   return db.raw(`
   ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL;
   ALTER TABLE water.billing_batches DISABLE TRIGGER ALL;

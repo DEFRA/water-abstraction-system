@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -91,16 +91,11 @@ describe('Persist licence service', () => {
   })
 })
 
-async function _fetchPersistedLicence (licenceRef) {
-  return LicenceModel
-    .query()
-    .where('licenceRef', licenceRef)
-    .select('*')
-    .limit(1)
-    .first()
+async function _fetchPersistedLicence(licenceRef) {
+  return LicenceModel.query().where('licenceRef', licenceRef).select('*').limit(1).first()
 }
 
-function _transformedLicence (regionId) {
+function _transformedLicence(regionId) {
   return {
     expiredDate: null,
     lapsedDate: null,
@@ -119,7 +114,7 @@ function _transformedLicence (regionId) {
   }
 }
 
-async function _createExistingRecords (region) {
+async function _createExistingRecords(region) {
   const licence = await LicenceHelper.add({
     expiredDate: new Date('2052-06-23'),
     lapsedDate: new Date('2050-07-24'),

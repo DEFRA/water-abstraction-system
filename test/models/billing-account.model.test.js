@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -42,7 +42,9 @@ describe('Billing Account model', () => {
       const startDate = i === 0 ? new Date(2023, 8, 1) : new Date(2023, 9, 1)
       const endDate = i === 0 ? new Date(2023, 8, 31) : null
       const billingAccountAddress = await BillingAccountAddressHelper.add({
-        billingAccountId: testRecord.id, endDate, startDate
+        billingAccountId: testRecord.id,
+        endDate,
+        startDate
       })
 
       testBillingAccountAddresses.push(billingAccountAddress)
@@ -75,8 +77,7 @@ describe('Billing Account model', () => {
   describe('Relationships', () => {
     describe('when linking to billing account addresses', () => {
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountModel.query()
-          .innerJoinRelated('billingAccountAddresses')
+        const query = await BillingAccountModel.query().innerJoinRelated('billingAccountAddresses')
 
         expect(query).to.exist()
       })
@@ -98,16 +99,13 @@ describe('Billing Account model', () => {
 
     describe('when linking to bills', () => {
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountModel.query()
-          .innerJoinRelated('bills')
+        const query = await BillingAccountModel.query().innerJoinRelated('bills')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bills', async () => {
-        const result = await BillingAccountModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('bills')
+        const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('bills')
 
         expect(result).to.be.instanceOf(BillingAccountModel)
         expect(result.id).to.equal(testRecord.id)
@@ -121,16 +119,13 @@ describe('Billing Account model', () => {
 
     describe('when linking to charge versions', () => {
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountModel.query()
-          .innerJoinRelated('chargeVersions')
+        const query = await BillingAccountModel.query().innerJoinRelated('chargeVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge versions', async () => {
-        const result = await BillingAccountModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersions')
+        const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
         expect(result).to.be.instanceOf(BillingAccountModel)
         expect(result.id).to.equal(testRecord.id)
@@ -144,16 +139,13 @@ describe('Billing Account model', () => {
 
     describe('when linking to company', () => {
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountModel.query()
-          .innerJoinRelated('company')
+        const query = await BillingAccountModel.query().innerJoinRelated('company')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company', async () => {
-        const result = await BillingAccountModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('company')
+        const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('company')
 
         expect(result).to.be.instanceOf(BillingAccountModel)
         expect(result.id).to.equal(testRecord.id)
@@ -210,7 +202,9 @@ describe('Billing Account model', () => {
 
       describe("when the 'current' billing account address is linked to a company", () => {
         it('uses the name of the company linked to the billing account address', async () => {
-          fetchedRecord = await BillingAccountModel.query().findById(alternateBillingAccount.id).modify('contactDetails')
+          fetchedRecord = await BillingAccountModel.query()
+            .findById(alternateBillingAccount.id)
+            .modify('contactDetails')
 
           const result = fetchedRecord.$accountName()
 
@@ -252,8 +246,7 @@ describe('Billing Account model', () => {
 
         describe('and it is linked to an address', () => {
           it('returns an array of just the populated address lines', async () => {
-            fetchedRecord = await BillingAccountModel
-              .query()
+            fetchedRecord = await BillingAccountModel.query()
               .findById(alternateBillingAccount.id)
               .modify('contactDetails')
 
@@ -294,7 +287,9 @@ describe('Billing Account model', () => {
 
       describe("when the 'current' billing account address is linked to a contact", () => {
         it('returns the contact name', async () => {
-          fetchedRecord = await BillingAccountModel.query().findById(alternateBillingAccount.id).modify('contactDetails')
+          fetchedRecord = await BillingAccountModel.query()
+            .findById(alternateBillingAccount.id)
+            .modify('contactDetails')
 
           const result = fetchedRecord.$contactName()
 

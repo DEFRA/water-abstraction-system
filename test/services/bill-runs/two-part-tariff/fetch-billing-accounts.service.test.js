@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -130,7 +130,12 @@ describe('Fetch Billing Accounts service', () => {
             expect(chargeReferences[0].loss).to.equal('low')
             expect(chargeReferences[0].volume).to.equal(6.819)
             expect(chargeReferences[0].adjustments).to.equal({
-              s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+              s126: null,
+              s127: false,
+              s130: false,
+              charge: null,
+              winter: false,
+              aggregate: '0.562114443'
             })
             expect(chargeReferences[0].additionalCharges).to.equal({ isSupplyPublicWater: true })
             expect(chargeReferences[0].description).to.equal('Mineral washing')
@@ -174,10 +179,8 @@ describe('Fetch Billing Accounts service', () => {
               it('includes the review charge elements', async () => {
                 const results = await FetchBillingAccountsService.go(billRun.id)
 
-                const { reviewChargeElements: result } = results[0]
-                  .chargeVersions[0]
-                  .chargeReferences[0]
-                  .chargeElements[0]
+                const { reviewChargeElements: result } =
+                  results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
 
                 expect(result[0].id).to.equal(reviewChargeElement.id)
                 expect(result[0].amendedAllocated).to.equal(reviewChargeElement.amendedAllocated)

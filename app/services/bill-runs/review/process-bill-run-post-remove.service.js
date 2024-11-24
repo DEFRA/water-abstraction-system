@@ -16,7 +16,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {Promise<boolean>} true if it was the last review licence in the bill run, so the bill run is now empty,
  * else false
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const empty = await _empty(billRunId)
 
   if (empty) {
@@ -26,13 +26,13 @@ async function go (billRunId) {
   return empty
 }
 
-async function _empty (billRunId) {
+async function _empty(billRunId) {
   const resultSize = await ReviewLicenceModel.query().select('id').where('billRunId', billRunId).resultSize()
 
   return resultSize === 0
 }
 
-async function _updateStatus (billRunId) {
+async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'empty' })
 }
 

@@ -17,23 +17,17 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the matching `licenceModel` populated with the data needed for the view
  * licence contact details page
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef'
-    ])
+    .select(['id', 'licenceRef'])
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'id',
-        'metadata'
-      ])
+      builder.select(['id', 'metadata'])
     })
 }
 

@@ -20,7 +20,7 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  * @returns {Promise<Date>} The calculated `endDate` for the new return version if there is one. Null will be returned
  * if there is no `endDate`
  */
-async function go (licenceId, newVersionStartDate) {
+async function go(licenceId, newVersionStartDate) {
   const previousVersions = await _previousVersions(licenceId)
   const previousVersionEndDate = _previousVersionEndDate(newVersionStartDate)
 
@@ -74,10 +74,9 @@ async function go (licenceId, newVersionStartDate) {
  *
  * @private
  */
-async function _endLatestVersion (previousVersions, newVersionStartDate, endDate) {
+async function _endLatestVersion(previousVersions, newVersionStartDate, endDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return previousVersion.startDate < newVersionStartDate &&
-      previousVersion.endDate === null
+    return previousVersion.startDate < newVersionStartDate && previousVersion.endDate === null
   })
 
   if (!matchedReturnVersion) {
@@ -113,10 +112,9 @@ async function _endLatestVersion (previousVersions, newVersionStartDate, endDate
  *
  * @private
  */
-async function _insertBetweenVersions (previousVersions, newVersionStartDate, endDate) {
+async function _insertBetweenVersions(previousVersions, newVersionStartDate, endDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return previousVersion.startDate < newVersionStartDate &&
-      previousVersion.endDate > newVersionStartDate
+    return previousVersion.startDate < newVersionStartDate && previousVersion.endDate > newVersionStartDate
   })
 
   if (!matchedReturnVersion) {
@@ -130,7 +128,7 @@ async function _insertBetweenVersions (previousVersions, newVersionStartDate, en
   return newVersionEndDate
 }
 
-function _previousVersionEndDate (newVersionStartDate) {
+function _previousVersionEndDate(newVersionStartDate) {
   // NOTE: You have to create a new date from newVersionStartDate else when we call setDate we amend the source
   // newVersionStartDate passed to the service.
   const previousVersionEndDate = new Date(newVersionStartDate)
@@ -140,7 +138,7 @@ function _previousVersionEndDate (newVersionStartDate) {
   return previousVersionEndDate
 }
 
-function _previousVersions (licenceId) {
+function _previousVersions(licenceId) {
   return ReturnVersionModel.query()
     .select(['endDate', 'id', 'startDate'])
     .where('licenceId', licenceId)
@@ -173,14 +171,13 @@ function _previousVersions (licenceId) {
  *
  * @private
  */
-async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
+async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     // NOTE: When you use the equality operator JavaScript will check for reference equality. Dates being objects this
     // will always return false, even though they refer to the exact same time. This means you need to convert them to
     // a more primitive value like a string or number first. `getTime()` seems to be the winner according to
     // stack overflow https://stackoverflow.com/a/4587089/6117745
-    return previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
-      previousVersion.endDate === null
+    return previousVersion.startDate.getTime() === newVersionStartDate.getTime() && previousVersion.endDate === null
   })
 
   if (!matchedReturnVersion) {
@@ -216,10 +213,12 @@ async function _replaceLatestVersion (previousVersions, newVersionStartDate) {
  *
  * @private
  */
-async function _replacePreviousVersion (previousVersions, newVersionStartDate) {
+async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
-    return previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
+    return (
+      previousVersion.startDate.getTime() === newVersionStartDate.getTime() &&
       previousVersion.endDate >= newVersionStartDate
+    )
   })
 
   if (!matchedReturnVersion) {

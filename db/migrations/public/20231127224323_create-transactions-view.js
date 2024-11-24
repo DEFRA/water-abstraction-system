@@ -3,11 +3,10 @@
 const viewName = 'transactions'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex('billing_transactions').withSchema('water').select([
+  return knex.schema.createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex('billing_transactions').withSchema('water').select([
         'billing_transaction_id AS id',
         'billing_invoice_licence_id as bill_licence_id',
         'charge_element_id AS charge_reference_id',
@@ -64,12 +63,11 @@ exports.up = function (knex) {
         'calc_s_130_factor',
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

@@ -14,7 +14,7 @@ const { naldRegions } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {object} the NALD licence data transformed into the WRLS format ready for validation and persisting
  */
-function go (licence) {
+function go(licence) {
   return {
     expiredDate: licence.expiry_date,
     lapsedDate: licence.lapsed_date,
@@ -44,7 +44,7 @@ const _regions = (licence) => {
   return { historicalAreaCode, regionalChargeArea, standardUnitChargeCode, localEnvironmentAgencyPlanCode }
 }
 
-function _startDate (licence) {
+function _startDate(licence) {
   if (licence.original_effective_date) {
     return licence.original_effective_date
   }

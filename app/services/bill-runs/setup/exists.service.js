@@ -35,7 +35,7 @@ const SessionModel = require('../../../models/session.model.js')
  * If the bill run is supplementary and 2 matches are found it returns the most recent match formatted for use in the
  * '/exists' page.
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { region, type, year } = session
@@ -53,13 +53,13 @@ async function go (sessionId) {
   }
 }
 
-async function _fetchMatchingBillRun (session, year) {
+async function _fetchMatchingBillRun(session, year) {
   const { region, season, type } = session
 
   return DetermineBlockingBillRunService.go(region, type, year, season)
 }
 
-function _pageData (session, matchResults) {
+function _pageData(session, matchResults) {
   const { type } = session
 
   // No matches so we can create the bill run

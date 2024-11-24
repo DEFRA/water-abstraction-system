@@ -15,7 +15,7 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  *
  * @returns {Promise<object[]>} An array of distinct years flagged for supplementary billing in descending order
  */
-async function go (regionId, twoPartTariff) {
+async function go(regionId, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .distinct('financialYearEnd')
     .innerJoinRelated('licence')

@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ModLogModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'modLogs'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       chargeVersion: {
         relation: Model.BelongsToOneRelation,

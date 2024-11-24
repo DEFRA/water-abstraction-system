@@ -20,7 +20,7 @@ const SubmitYearService = require('../services/bill-runs/setup/submit-year.servi
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 const YearService = require('../services/bill-runs/setup/year.service.js')
 
-async function create (request, h) {
+async function create(request, h) {
   const { sessionId } = request.params
 
   const results = await ExistsService.go(sessionId)
@@ -45,7 +45,7 @@ async function create (request, h) {
   }
 }
 
-async function noLicences (request, h) {
+async function noLicences(request, h) {
   const { sessionId } = request.params
 
   const regionName = await NoLicencesService.go(sessionId)
@@ -57,7 +57,7 @@ async function noLicences (request, h) {
   })
 }
 
-async function region (request, h) {
+async function region(request, h) {
   const { sessionId } = request.params
 
   const pageData = await RegionService.go(sessionId)
@@ -69,7 +69,7 @@ async function region (request, h) {
   })
 }
 
-async function season (request, h) {
+async function season(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SeasonService.go(sessionId)
@@ -81,13 +81,13 @@ async function season (request, h) {
   })
 }
 
-async function setup (_request, h) {
+async function setup(_request, h) {
   const session = await InitiateSessionService.go()
 
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
 
-async function submitRegion (request, h) {
+async function submitRegion(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitRegionService.go(sessionId, request.payload)
@@ -107,7 +107,7 @@ async function submitRegion (request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
 }
 
-async function submitSeason (request, h) {
+async function submitSeason(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitSeasonService.go(sessionId, request.payload)
@@ -123,7 +123,7 @@ async function submitSeason (request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
 }
 
-async function submitType (request, h) {
+async function submitType(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitTypeService.go(sessionId, request.payload)
@@ -139,7 +139,7 @@ async function submitType (request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
 }
 
-async function submitYear (request, h) {
+async function submitYear(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitYearService.go(sessionId, request.payload)
@@ -165,7 +165,7 @@ async function submitYear (request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
 }
 
-async function type (request, h) {
+async function type(request, h) {
   const { sessionId } = request.params
 
   const pageData = await TypeService.go(sessionId)
@@ -177,7 +177,7 @@ async function type (request, h) {
   })
 }
 
-async function year (request, h) {
+async function year(request, h) {
   const { sessionId } = request.params
 
   const pageData = await YearService.go(sessionId)

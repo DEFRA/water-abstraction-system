@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -30,8 +30,10 @@ describe('Return Versions Setup - Persist Return Version service', () => {
     it('persists the data to the tables required to create a new Return Version', async () => {
       await PersistReturnVersionService.go(returnVersionData)
 
-      const returnVersion = await ReturnVersionModel.query()
-        .where('licenceId', returnVersionData.returnVersion.licenceId)
+      const returnVersion = await ReturnVersionModel.query().where(
+        'licenceId',
+        returnVersionData.returnVersion.licenceId
+      )
 
       expect(returnVersion).to.have.length(1)
       expect(returnVersion[0].createdBy).to.equal(returnVersionData.returnVersion.createdBy)
@@ -65,15 +67,19 @@ describe('Return Versions Setup - Persist Return Version service', () => {
       expect(returnRequirement[0].summer).to.equal(requirementData.summer)
       expect(returnRequirement[0].twoPartTariff).to.equal(requirementData.twoPartTariff)
 
-      const returnRequirementPoint = await ReturnRequirementPointModel.query()
-        .where('returnRequirementId', returnRequirement[0].id)
+      const returnRequirementPoint = await ReturnRequirementPointModel.query().where(
+        'returnRequirementId',
+        returnRequirement[0].id
+      )
       const pointData = returnVersionData.returnRequirements[0].points[0]
 
       expect(returnRequirementPoint).to.have.length(1)
       expect(returnRequirementPoint[0].pointId).to.equal(pointData)
 
-      const returnRequirementPurpose = await ReturnRequirementPurposeModel.query()
-        .where('returnRequirementId', returnRequirement[0].id)
+      const returnRequirementPurpose = await ReturnRequirementPurposeModel.query().where(
+        'returnRequirementId',
+        returnRequirement[0].id
+      )
       const purposeData = returnVersionData.returnRequirements[0].returnRequirementPurposes[0]
 
       expect(returnRequirementPurpose).to.have.length(1)
@@ -85,7 +91,7 @@ describe('Return Versions Setup - Persist Return Version service', () => {
   })
 })
 
-function _generateReturnVersionData () {
+function _generateReturnVersionData() {
   return {
     returnRequirements: [
       {

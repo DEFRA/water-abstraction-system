@@ -20,15 +20,14 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (payload) {
+function go(payload) {
   const { amendedAuthorisedVolume, totalBillableReturns } = payload
 
   return _validate(amendedAuthorisedVolume, Number(totalBillableReturns))
 }
 
-function _validate (amendedAuthorisedVolume, totalBillableReturns) {
-  const schema = Joi
-    .number()
+function _validate(amendedAuthorisedVolume, totalBillableReturns) {
+  const schema = Joi.number()
     .min(totalBillableReturns)
     .required()
     .custom(_maxDecimals, 'Max decimals')
@@ -58,7 +57,7 @@ function _validate (amendedAuthorisedVolume, totalBillableReturns) {
  * @returns {number|object} if valid the original value else a Joi 'any.invalid' error. Knowing we return this means
  * you can assign what error message to use when a number has too many decimals.
  */
-function _maxDecimals (value, helpers) {
+function _maxDecimals(value, helpers) {
   // Guard clause to ensure we don't try and interact with a null or undefined value
   if (!value) {
     return value

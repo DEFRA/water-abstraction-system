@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -60,16 +60,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('billRunVolumes')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('billRunVolumes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bills', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRunVolumes')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('billRunVolumes')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -93,16 +90,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeCategory')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeCategory')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge category', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeCategory')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeCategory')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -127,16 +121,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeElements')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge elements', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeElements')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -160,16 +151,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeVersion')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersion')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -191,16 +179,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('purpose')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purpose', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purpose')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
@@ -225,8 +210,7 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('reviewChargeReferences')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('reviewChargeReferences')
 
         expect(query).to.exist()
       })
@@ -261,16 +245,13 @@ describe('Charge Reference model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('transactions')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('transactions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the transactions', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('transactions')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('transactions')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)

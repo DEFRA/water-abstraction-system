@@ -4,15 +4,14 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchWorkflowsService =
-  require('../../../app/services/licences/fetch-workflows.service.js')
+const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
 
 describe('Fetch Workflows service', () => {
   let testRecord
@@ -39,8 +38,8 @@ describe('Fetch Workflows service', () => {
           id: testRecord.id,
           licenceId: testRecord.licenceId,
           status: 'to_setup'
-        }]
-      )
+        }
+      ])
     })
   })
 })

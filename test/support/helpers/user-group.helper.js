@@ -25,7 +25,7 @@ const DEFAULT_INDEX = 4
  *
  * @returns {Promise<module:UserGroupModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return UserGroupModel.query()
@@ -43,7 +43,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: groupId } = GroupHelper.select()
 
   const defaults = {
@@ -73,7 +73,7 @@ function defaults (data = {}) {
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return userGroups[index]
   }

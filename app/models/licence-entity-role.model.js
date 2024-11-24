@@ -22,11 +22,11 @@ const BaseModel = require('./base.model.js')
  * From it we can identify the 'entity' which has the role of primary user.
  */
 class LicenceEntityRoleModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceEntityRoles'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       companyEntity: {
         relation: Model.BelongsToOneRelation,

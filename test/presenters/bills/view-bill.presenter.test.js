@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -295,7 +295,7 @@ describe('View Bill presenter', () => {
   })
 })
 
-function _testBill () {
+function _testBill() {
   return {
     id: '64924759-8142-4a08-9d1e-1e902cd9d316',
     creditNoteValue: 0,
@@ -327,7 +327,7 @@ function _testBill () {
   }
 }
 
-function _testBillingAccount () {
+function _testBillingAccount() {
   const data = {
     id: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     accountNumber: 'E88888888A',

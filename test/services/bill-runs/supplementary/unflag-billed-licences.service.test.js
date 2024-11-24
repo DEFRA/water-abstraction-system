@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -33,18 +33,26 @@ describe('Unflag Billed Licences service', () => {
       const updatedAt = new Date('2024-02-02')
 
       licenceNotInRegion = await LicenceHelper.add({
-        includeInPresrocBilling: 'yes', regionId: otherRegionId, updatedAt
+        includeInPresrocBilling: 'yes',
+        regionId: otherRegionId,
+        updatedAt
       })
       licenceInWorkflow = await LicenceHelper.add({
-        includeInPresrocBilling: 'yes', regionId, updatedAt
+        includeInPresrocBilling: 'yes',
+        regionId,
+        updatedAt
       })
       await WorkflowHelper.add({ licenceId: licenceInWorkflow.id, deletedAt: null })
 
       licenceFlaggedAfterBillRunCreated = await LicenceHelper.add({
-        includeInPresrocBilling: 'yes', regionId, updatedAt: new Date('2099-01-01')
+        includeInPresrocBilling: 'yes',
+        regionId,
+        updatedAt: new Date('2099-01-01')
       })
       licenceFlaggedBeforeBillRunCreated = await LicenceHelper.add({
-        includeInPresrocBilling: 'yes', regionId, updatedAt
+        includeInPresrocBilling: 'yes',
+        regionId,
+        updatedAt
       })
 
       billRun = {
@@ -93,7 +101,8 @@ describe('Unflag Billed Licences service', () => {
       await WorkflowHelper.add({ licenceId: licenceInBillRunAndWorkflow.id, deletedAt: null })
 
       licenceInBillRunAndFlaggedAfterBillRunCreated = await LicenceHelper.add({
-        includeInSrocBilling: true, updatedAt: new Date('2099-01-01')
+        includeInSrocBilling: true,
+        updatedAt: new Date('2099-01-01')
       })
 
       billRun = {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -52,7 +52,12 @@ describe('Return Versions Setup - Purpose presenter', () => {
         licenceRef: '01/ABC',
         purposes: [
           { alias: '', checked: false, description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
-          { alias: '', checked: false, description: 'Horticultural Watering', id: '49088608-ee9f-491a-8070-6831240945ac' },
+          {
+            alias: '',
+            checked: false,
+            description: 'Horticultural Watering',
+            id: '49088608-ee9f-491a-8070-6831240945ac'
+          },
           { alias: '', checked: false, description: 'Hydraulic Rams', id: '1d03c79b-da97-4838-a68c-ccb613d54367' },
           { alias: '', checked: false, description: 'Hydraulic Testing', id: '02036782-81d2-43be-b6af-bf20898653e1' }
         ],

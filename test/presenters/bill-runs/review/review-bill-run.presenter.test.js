@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { beforeEach, describe, it } = exports.lab = Lab.script()
+const { beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -51,7 +51,8 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
           billRunType: 'two-part tariff',
           numberOfLicencesDisplayed: 3,
           numberOfLicencesToReview: 1,
-          reviewMessage: 'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+          reviewMessage:
+            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
           totalNumberOfLicences: 3,
           preparedLicences: [
             {
@@ -174,7 +175,7 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
   })
 })
 
-function _testBillRun () {
+function _testBillRun() {
   return {
     id: 'b21bd372-cd04-405d-824e-5180d854121c',
     createdAt: new Date('2024-01-17'),
@@ -188,7 +189,7 @@ function _testBillRun () {
   }
 }
 
-function _testLicences () {
+function _testLicences() {
   return [
     // Licence with no issues
     {

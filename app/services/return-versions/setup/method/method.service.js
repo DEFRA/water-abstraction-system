@@ -18,7 +18,7 @@ const SessionModel = require('../../../../models/session.model.js')
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const formattedData = MethodPresenter.go(session)

@@ -18,11 +18,11 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @returns {Promise<object>} Contains an array of `returnLogs` and the associated current `returnSubmissions`, and
  * `returnSubmissionLines` if they exist
  */
-async function go (licenceRef, billingPeriod) {
+async function go(licenceRef, billingPeriod) {
   return _fetch(licenceRef, billingPeriod)
 }
 
-async function _fetch (licenceRef, billingPeriod) {
+async function _fetch(licenceRef, billingPeriod) {
   const returnLogs = await ReturnLogModel.query()
     .select([
       'id',
@@ -52,22 +52,12 @@ async function _fetch (licenceRef, billingPeriod) {
     .orderBy('returnReference', 'ASC')
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (builder) => {
-      builder
-        .select([
-          'id',
-          'nilReturn'
-        ])
-        .where('returnSubmissions.current', true)
+      builder.select(['id', 'nilReturn']).where('returnSubmissions.current', true)
     })
     .withGraphFetched('returnSubmissions.returnSubmissionLines')
     .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
       builder
-        .select([
-          'id',
-          'startDate',
-          'endDate',
-          'quantity'
-        ])
+        .select(['id', 'startDate', 'endDate', 'quantity'])
         .where('returnSubmissionLines.quantity', '>', 0)
         .where('returnSubmissionLines.startDate', '<=', billingPeriod.endDate)
         .where('returnSubmissionLines.endDate', '>=', billingPeriod.startDate)

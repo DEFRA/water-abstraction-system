@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,7 +48,12 @@ describe('Determine Existing Bill Run Years Service', () => {
       describe('when an annual two-part tariff bill run has been created for those years', () => {
         beforeEach(async () => {
           billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId })
-          billRunTwo = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'review', regionId, toFinancialYearEnding: 2024 })
+          billRunTwo = await BillRunHelper.add({
+            batchType: 'two_part_tariff',
+            status: 'review',
+            regionId,
+            toFinancialYearEnding: 2024
+          })
         })
 
         afterEach(async () => {
@@ -89,7 +94,12 @@ describe('Determine Existing Bill Run Years Service', () => {
       describe('when an annual bill run has been created for those years', () => {
         beforeEach(async () => {
           billRun = await BillRunHelper.add({ batchType: 'annual', status: 'sent', regionId })
-          billRunTwo = await BillRunHelper.add({ batchType: 'annual', status: 'review', regionId, toFinancialYearEnding: 2024 })
+          billRunTwo = await BillRunHelper.add({
+            batchType: 'annual',
+            status: 'review',
+            regionId,
+            toFinancialYearEnding: 2024
+          })
         })
 
         afterEach(async () => {

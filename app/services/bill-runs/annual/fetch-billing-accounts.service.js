@@ -30,33 +30,27 @@ const Workflow = require('../../../models/workflow.model.js')
  * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
  */
-async function go (regionId, billingPeriod) {
+async function go(regionId, billingPeriod) {
   const allBillingAccounts = await _fetchNew(regionId, billingPeriod)
 
   return allBillingAccounts
 }
 
-async function _fetchNew (regionId, billingPeriod) {
+async function _fetchNew(regionId, billingPeriod) {
   return BillingAccountModel.query()
-    .select([
-      'billingAccounts.id',
-      'billingAccounts.accountNumber'
-    ])
+    .select(['billingAccounts.id', 'billingAccounts.accountNumber'])
     .whereExists(_whereExistsClause(regionId, billingPeriod))
-    .orderBy([
-      { column: 'billingAccounts.accountNumber' }
-    ])
+    .orderBy([{ column: 'billingAccounts.accountNumber' }])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder
-        .select([
-          'chargeVersions.id',
-          'chargeVersions.scheme',
-          'chargeVersions.startDate',
-          'chargeVersions.endDate',
-          'chargeVersions.billingAccountId',
-          'chargeVersions.status'
-        ])
+      builder.select([
+        'chargeVersions.id',
+        'chargeVersions.scheme',
+        'chargeVersions.startDate',
+        'chargeVersions.endDate',
+        'chargeVersions.billingAccountId',
+        'chargeVersions.status'
+      ])
 
       _whereClauseForChargeVersions(builder, regionId, billingPeriod)
 
@@ -81,37 +75,19 @@ async function _fetchNew (regionId, billingPeriod) {
     })
     .withGraphFetched('chargeVersions.licence.region')
     .modifyGraph('chargeVersions.licence.region', (builder) => {
-      builder.select([
-        'id',
-        'chargeRegionId'
-      ])
+      builder.select(['id', 'chargeRegionId'])
     })
     .withGraphFetched('chargeVersions.changeReason')
     .modifyGraph('chargeVersions.changeReason', (builder) => {
-      builder.select([
-        'id',
-        'triggersMinimumCharge'
-      ])
+      builder.select(['id', 'triggersMinimumCharge'])
     })
     .withGraphFetched('chargeVersions.chargeReferences')
     .modifyGraph('chargeVersions.chargeReferences', (builder) => {
-      builder.select([
-        'id',
-        'source',
-        'loss',
-        'volume',
-        'adjustments',
-        'additionalCharges',
-        'description'
-      ])
+      builder.select(['id', 'source', 'loss', 'volume', 'adjustments', 'additionalCharges', 'description'])
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeCategory')
     .modifyGraph('chargeVersions.chargeReferences.chargeCategory', (builder) => {
-      builder.select([
-        'id',
-        'reference',
-        'shortDescription'
-      ])
+      builder.select(['id', 'reference', 'shortDescription'])
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeElements')
     .modifyGraph('chargeVersions.chargeReferences.chargeElements', (builder) => {
@@ -141,7 +117,7 @@ async function _fetchNew (regionId, billingPeriod) {
  *
  * @private
  */
-function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
+function _whereClauseForChargeVersions(query, regionId, billingPeriod) {
   return query
     .innerJoinRelated('licence')
     .where('licence.regionId', regionId)
@@ -149,24 +125,16 @@ function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
     .where((builder) => {
-      builder
-        .whereNull('chargeVersions.endDate')
-        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+      builder.whereNull('chargeVersions.endDate').orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.expiredDate')
-        .orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.lapsedDate')
-        .orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.revokedDate')
-        .orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
     })
     .whereNotExists(
       Workflow.query()
@@ -183,7 +151,7 @@ function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
  *
  * @private
  */
-function _whereExistsClause (regionId, billingPeriod) {
+function _whereExistsClause(regionId, billingPeriod) {
   let query = ChargeVersionModel.query().select(1)
 
   query = _whereClauseForChargeVersions(query, regionId, billingPeriod)

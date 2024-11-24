@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -44,16 +44,13 @@ describe('Licence Supplementary Year model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceSupplementaryYearModel.query()
-          .innerJoinRelated('licence')
+        const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await LicenceSupplementaryYearModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(LicenceSupplementaryYearModel)
         expect(result.id).to.equal(testRecord.id)
@@ -73,16 +70,13 @@ describe('Licence Supplementary Year model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceSupplementaryYearModel.query()
-          .innerJoinRelated('billRun')
+        const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('billRun')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill run', async () => {
-        const result = await LicenceSupplementaryYearModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRun')
+        const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
         expect(result).to.be.instanceOf(LicenceSupplementaryYearModel)
         expect(result.id).to.equal(testRecord.id)

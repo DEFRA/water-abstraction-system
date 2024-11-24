@@ -19,7 +19,7 @@ const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-t
  * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
  * view bill-licence page
  */
-function go (billLicence) {
+function go(billLicence) {
   const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
   const displayCreditDebitTotals = _displayCreditDebitTotals(bill.billRun)
@@ -42,13 +42,13 @@ function go (billLicence) {
   }
 }
 
-function _displayCreditDebitTotals (billRun) {
+function _displayCreditDebitTotals(billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'
 }
 
-function _removeLicenceLink (billRun, billLicenceId) {
+function _removeLicenceLink(billRun, billLicenceId) {
   const { status } = billRun
 
   if (status !== 'ready') {
@@ -58,7 +58,7 @@ function _removeLicenceLink (billRun, billLicenceId) {
   return `/system/bill-licences/${billLicenceId}/remove`
 }
 
-function _tableCaption (transactions) {
+function _tableCaption(transactions) {
   const numberOfTransactions = transactions.length
 
   if (numberOfTransactions === 1) {
@@ -68,7 +68,7 @@ function _tableCaption (transactions) {
   return `${numberOfTransactions} transactions`
 }
 
-function _totals (transactions) {
+function _totals(transactions) {
   let creditTotal = 0
   let debitTotal = 0
   let total = 0
@@ -91,7 +91,7 @@ function _totals (transactions) {
   }
 }
 
-function _transactions (transactions) {
+function _transactions(transactions) {
   return transactions.map((transaction) => {
     const { chargeType } = transaction
 

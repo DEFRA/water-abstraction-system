@@ -18,7 +18,7 @@
  *
  * @returns {boolean} true if minimum charge applies else false
  */
-function go (chargeVersion, chargePeriod) {
+function go(chargeVersion, chargePeriod) {
   const chargePeriodStartTimestamp = chargePeriod.startDate.getTime()
   const chargeVersionStartTimestamp = chargeVersion.startDate.getTime()
 

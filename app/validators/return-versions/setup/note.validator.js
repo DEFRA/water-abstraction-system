@@ -15,22 +15,19 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go (data) {
+function go(payload) {
   const errorMessage = 'Enter details'
   const maxErrorMessage = 'Enter no more than 500 characters'
   const schema = Joi.object({
-    note: Joi.string()
-      .required()
-      .max(500)
-      .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage,
-        'string.max': maxErrorMessage
-      })
+    note: Joi.string().required().max(500).messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage,
+      'string.empty': errorMessage,
+      'string.max': maxErrorMessage
+    })
   })
 
-  return schema.validate(data, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {

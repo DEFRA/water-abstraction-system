@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -424,7 +424,7 @@ describe('Fetch Time Limited Licences service', () => {
   })
 })
 
-function _offSetCurrentDateByDays (days) {
+function _offSetCurrentDateByDays(days) {
   const date = new Date()
 
   date.setDate(date.getDate() + days)

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -75,7 +75,9 @@ describe('Bill Runs Review - Authorised validator', () => {
         const result = AuthorisedValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The authorised volume must not have more than 6 decimal places')
+        expect(result.error.details[0].message).to.equal(
+          'The authorised volume must not have more than 6 decimal places'
+        )
       })
     })
   })

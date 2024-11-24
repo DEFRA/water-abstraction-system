@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -55,7 +55,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom500Response,
-        route: { settings: { } },
+        route: { settings: {} },
         path
       }
     })
@@ -103,7 +103,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom404Response,
-        route: { settings: { } },
+        route: { settings: {} },
         path
       }
     })
@@ -145,7 +145,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom403Response,
-        route: { settings: { } },
+        route: { settings: {} },
         path
       }
     })
@@ -193,7 +193,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: standardResponse,
-        route: { settings: { } },
+        route: { settings: {} },
         path
       }
     })

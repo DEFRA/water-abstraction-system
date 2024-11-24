@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -27,7 +27,8 @@ describe('Licence Version Purpose Point model', () => {
     testPoint = await PointHelper.add()
 
     testRecord = await LicenceVersionPurposePointHelper.add({
-      licenceVersionPurposeId: testLicenceVersionPurpose.id, pointId: testPoint.id
+      licenceVersionPurposeId: testLicenceVersionPurpose.id,
+      pointId: testPoint.id
     })
   })
 
@@ -43,8 +44,7 @@ describe('Licence Version Purpose Point model', () => {
   describe('Relationships', () => {
     describe('when linking to licence version purpose', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposePointModel.query()
-          .innerJoinRelated('licenceVersionPurpose')
+        const query = await LicenceVersionPurposePointModel.query().innerJoinRelated('licenceVersionPurpose')
 
         expect(query).to.exist()
       })
@@ -64,16 +64,13 @@ describe('Licence Version Purpose Point model', () => {
 
     describe('when linking to point', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceVersionPurposePointModel.query()
-          .innerJoinRelated('point')
+        const query = await LicenceVersionPurposePointModel.query().innerJoinRelated('point')
 
         expect(query).to.exist()
       })
 
       it('can eager load the point', async () => {
-        const result = await LicenceVersionPurposePointModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('point')
+        const result = await LicenceVersionPurposePointModel.query().findById(testRecord.id).withGraphFetched('point')
 
         expect(result).to.be.instanceOf(LicenceVersionPurposePointModel)
         expect(result.id).to.equal(testRecord.id)

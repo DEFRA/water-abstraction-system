@@ -22,7 +22,7 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
  * @param {module:BillRunModel} billRun
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  */
-async function go (billRun, billingPeriods) {
+async function go(billRun, billingPeriods) {
   const { id: billRunId } = billRun
 
   try {
@@ -39,7 +39,7 @@ async function go (billRun, billingPeriods) {
   }
 }
 
-async function _processBillingPeriods (billingPeriods, billRun) {
+async function _processBillingPeriods(billingPeriods, billRun) {
   const accumulatedLicenceIds = []
 
   // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed
@@ -57,7 +57,7 @@ async function _processBillingPeriods (billingPeriods, billRun) {
   await _finaliseBillRun(billRun, accumulatedLicenceIds, results)
 }
 
-async function _fetchChargeVersions (billRun, billingPeriod) {
+async function _fetchChargeVersions(billRun, billingPeriod) {
   try {
     const chargeVersionData = await FetchChargeVersionsService.go(billRun.regionId, billingPeriod)
 
@@ -76,7 +76,7 @@ async function _fetchChargeVersions (billRun, billingPeriod) {
  *
  * @private
  */
-async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProcessing) {
+async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcessing) {
   // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
@@ -103,14 +103,12 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   await LegacyRefreshBillRunRequest.send(billRun.id)
 }
 
-function _logError (billRun, error) {
+function _logError(billRun, error) {
   global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
 }
 
-async function _updateStatus (billRunId, status) {
-  await BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status })
+async function _updateStatus(billRunId, status) {
+  await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
 module.exports = {

@@ -21,7 +21,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {module:ChargeVersionModel} chargePeriod - The charge period taken from the charge version
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
-function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
+function go(chargeElement, matchingReturns, chargePeriod, chargeReference) {
   _processCompletedReturns(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
   const hasDueReturns = matchingReturns.some((matchedReturn) => {
@@ -34,7 +34,7 @@ function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
   }
 }
 
-function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
+function _allocateReturns(chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
   matchedLines.forEach((matchedLine) => {
     const chargeElementRemainingAllocation = Big(chargeElement.authorisedAnnualQuantity)
       .minus(chargeElement.allocatedQuantity)
@@ -77,7 +77,7 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
   })
 }
 
-function _allocateDueReturns (chargeElement, matchedReturn, chargeReference, i) {
+function _allocateDueReturns(chargeElement, matchedReturn, chargeReference, i) {
   const chargeElementRemainingAllocation = Big(chargeElement.authorisedAnnualQuantity)
     .minus(chargeElement.allocatedQuantity)
     .toNumber()
@@ -104,7 +104,7 @@ function _allocateDueReturns (chargeElement, matchedReturn, chargeReference, i) 
   }
 }
 
-function _chargeDatesOverlap (matchedLine, chargePeriod) {
+function _chargeDatesOverlap(matchedLine, chargePeriod) {
   const { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate } = chargePeriod
   const { startDate: lineStartDate, endDate: lineEndDate } = matchedLine
 
@@ -112,10 +112,10 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
     return true
   }
 
-  return (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate)
+  return lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate
 }
 
-function _checkLineEndDate (lineEndDate, abstractionPeriods) {
+function _checkLineEndDate(lineEndDate, abstractionPeriods) {
   // If the endDate of the return submission line is after the end date of the charge elements abstraction period then
   // we do not want to allocate this. Here we are creating an array of the abstraction periods endDates (since there
   // can be more than 1), then by doing Math.max we can compare the end of the abstraction period to the end date of
@@ -129,7 +129,7 @@ function _checkLineEndDate (lineEndDate, abstractionPeriods) {
   return lineEndDate <= abstractionEndDate
 }
 
-function _fullyAllocated (chargeElement, chargeReference) {
+function _fullyAllocated(chargeElement, chargeReference) {
   // We can only allocate up to the authorised volume on the charge reference, even if there is charge elements
   // unallocated and returns to be allocated
   if (chargeReference.allocatedQuantity >= chargeReference.volume) {
@@ -137,10 +137,10 @@ function _fullyAllocated (chargeElement, chargeReference) {
   }
 
   // Finally, we can only allocate to the charge element if there is unallocated volume left!
-  return (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity)
+  return chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity
 }
 
-function _matchLines (chargeElement, returnSubmissionLines) {
+function _matchLines(chargeElement, returnSubmissionLines) {
   return returnSubmissionLines.filter((returnSubmissionLine) => {
     if (returnSubmissionLine.unallocated === 0) {
       return false
@@ -157,7 +157,7 @@ function _matchLines (chargeElement, returnSubmissionLines) {
  *
  * @private
  */
-function _checkReturnForIssues (matchedReturn) {
+function _checkReturnForIssues(matchedReturn) {
   if (matchedReturn.nilReturn) {
     return true
   }
@@ -170,15 +170,17 @@ function _checkReturnForIssues (matchedReturn) {
     return true
   }
 
-  if (matchedReturn.returnSubmissions.length === 0 ||
-    matchedReturn.returnSubmissions[0].returnSubmissionLines.length === 0) {
+  if (
+    matchedReturn.returnSubmissions.length === 0 ||
+    matchedReturn.returnSubmissions[0].returnSubmissionLines.length === 0
+  ) {
     return true
   }
 
   return false
 }
 
-function _processCompletedReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {
+function _processCompletedReturns(chargeElement, matchingReturns, chargePeriod, chargeReference) {
   matchingReturns.forEach((matchedReturn, i) => {
     // We don't allocate returns with issues
     if (_checkReturnForIssues(matchedReturn)) {
@@ -198,7 +200,7 @@ function _processCompletedReturns (chargeElement, matchingReturns, chargePeriod,
   })
 }
 
-function _processDueReturns (chargeElement, matchingReturns, chargeReference) {
+function _processDueReturns(chargeElement, matchingReturns, chargeReference) {
   matchingReturns.forEach((matchedReturn, i) => {
     // We are only interested in due returns
     if (matchedReturn.status !== 'due') {

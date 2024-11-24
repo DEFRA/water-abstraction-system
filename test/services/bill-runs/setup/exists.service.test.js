@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -71,17 +71,19 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and a matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
-            id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1',
-            batchType: 'two_part_tariff',
-            billRunNumber: 12345,
-            createdAt: new Date('2022-05-01'),
-            region,
-            scheme: 'alcs',
-            status: 'sent',
-            summer: true,
-            toFinancialYearEnding: 2022
-          }])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
+            {
+              id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1',
+              batchType: 'two_part_tariff',
+              billRunNumber: 12345,
+              createdAt: new Date('2022-05-01'),
+              region,
+              scheme: 'alcs',
+              status: 'sent',
+              summer: true,
+              toFinancialYearEnding: 2022
+            }
+          ])
         })
 
         it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
@@ -133,17 +135,19 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and a matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
-            id: '5612815f-9f67-4ac1-b697-d9ab7789274c',
-            batchType: 'annual',
-            billRunNumber: 12345,
-            createdAt: new Date('2023-05-01'),
-            region,
-            scheme: 'sroc',
-            status: 'sent',
-            summer: false,
-            toFinancialYearEnding: 2024
-          }])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
+            {
+              id: '5612815f-9f67-4ac1-b697-d9ab7789274c',
+              batchType: 'annual',
+              billRunNumber: 12345,
+              createdAt: new Date('2023-05-01'),
+              region,
+              scheme: 'sroc',
+              status: 'sent',
+              summer: false,
+              toFinancialYearEnding: 2024
+            }
+          ])
         })
 
         it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
@@ -195,17 +199,19 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and one matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
-            id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
-            batchType: 'supplementary',
-            billRunNumber: 12345,
-            createdAt: new Date('2023-05-01'),
-            region,
-            scheme: 'sroc',
-            status: 'ready',
-            summer: false,
-            toFinancialYearEnding: 2024
-          }])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
+            {
+              id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
+              batchType: 'supplementary',
+              billRunNumber: 12345,
+              createdAt: new Date('2023-05-01'),
+              region,
+              scheme: 'sroc',
+              status: 'ready',
+              summer: false,
+              toFinancialYearEnding: 2024
+            }
+          ])
         })
 
         // NOTE: If there is only one match for supplementary we don't populate the pageData because we won't show the
@@ -258,8 +264,12 @@ describe('Bill Runs Setup Exists service', () => {
 
           const { matchResults, pageData, session, yearToUse } = result
 
-          expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(matchResults[0].id)
-          expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(matchResults[1].id)
+          expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(
+            matchResults[0].id
+          )
+          expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(
+            matchResults[1].id
+          )
           expect(pageData.billRunId).to.equal(matchResults[0].id)
           expect(session).to.equal(session)
           expect(yearToUse).to.equal(currentFinancialEndYear)

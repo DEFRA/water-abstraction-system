@@ -21,7 +21,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * The pagination component is the thing seen at the bottom of pages which have to display dynamic results, for example,
  * search results or all bill runs. For example,
  *
- *  `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
+ * `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
  *
  * The first step is to take the number of records and divide them by our page size config (defaults to 25) to determine
  * how many pages are needed. If only 1 page is required (`numberOfRecords` is less then or equal to 25) no pagination
@@ -58,7 +58,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * This applies for any scenario where the number of pages is 7 or less. In this case we simply iterate from 1 up to the
  * number of pages creating a page item for each one. No ellipses are used.
  *
- *  `[1] 2 3 4 5 6 7 Next -->`
+ * `[1] 2 3 4 5 6 7 Next -->`
  *
  * ### Complex
  *
@@ -109,7 +109,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go (numberOfRecords, selectedPageNumber, path) {
+function go(numberOfRecords, selectedPageNumber, path) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
 
   if (numberOfPages < 2) {
@@ -124,7 +124,7 @@ function go (numberOfRecords, selectedPageNumber, path) {
   }
 }
 
-function _component (selectedPageNumber, numberOfPages, path) {
+function _component(selectedPageNumber, numberOfPages, path) {
   const items = _items(selectedPageNumber, numberOfPages, path)
 
   const component = { items }
@@ -140,7 +140,7 @@ function _component (selectedPageNumber, numberOfPages, path) {
   return component
 }
 
-function _complexPaginatorEnd (selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorEnd(selectedPageNumber, numberOfPages, path) {
   const items = []
 
   items.push(_item(1, selectedPageNumber, path))
@@ -154,7 +154,7 @@ function _complexPaginatorEnd (selectedPageNumber, numberOfPages, path) {
   return items
 }
 
-function _complexPaginatorMiddle (selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path) {
   const items = []
 
   items.push(_item(1, selectedPageNumber, path))
@@ -168,7 +168,7 @@ function _complexPaginatorMiddle (selectedPageNumber, numberOfPages, path) {
   return items
 }
 
-function _complexPaginatorStart (selectedPageNumber, numberOfPages, path) {
+function _complexPaginatorStart(selectedPageNumber, numberOfPages, path) {
   const items = []
 
   items.push(_item(1, selectedPageNumber, path))
@@ -182,7 +182,7 @@ function _complexPaginatorStart (selectedPageNumber, numberOfPages, path) {
   return items
 }
 
-function _item (pageNumber, selectedPageNumber, path) {
+function _item(pageNumber, selectedPageNumber, path) {
   return {
     number: pageNumber,
     visuallyHiddenText: `Page ${pageNumber}`,
@@ -191,7 +191,7 @@ function _item (pageNumber, selectedPageNumber, path) {
   }
 }
 
-function _items (selectedPageNumber, numberOfPages, path) {
+function _items(selectedPageNumber, numberOfPages, path) {
   const paginatorType = _paginatorType(selectedPageNumber, numberOfPages)
 
   let items
@@ -213,7 +213,7 @@ function _items (selectedPageNumber, numberOfPages, path) {
   return items
 }
 
-function _paginatorType (selectedPageNumber, numberOfPages) {
+function _paginatorType(selectedPageNumber, numberOfPages) {
   if (numberOfPages <= 7) {
     return SIMPLE_PAGINATOR
   }
@@ -222,14 +222,14 @@ function _paginatorType (selectedPageNumber, numberOfPages) {
     return COMPLEX_START_PAGINATOR
   }
 
-  if (selectedPageNumber >= (numberOfPages - 3)) {
+  if (selectedPageNumber >= numberOfPages - 3) {
     return COMPLEX_END_PAGINATOR
   }
 
   return COMPLEX_MIDDLE_PAGINATOR
 }
 
-function _simplePaginator (selectedPageNumber, numberOfPages, path) {
+function _simplePaginator(selectedPageNumber, numberOfPages, path) {
   const items = []
 
   for (let i = 1; i <= numberOfPages; i++) {

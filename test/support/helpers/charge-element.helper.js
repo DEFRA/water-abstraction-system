@@ -36,7 +36,7 @@ const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
  *
  * @returns {Promise<module:ChargeElementModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeElementModel.query()
@@ -54,7 +54,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: purposeId } = PurposeHelper.select()
   const { id: purposePrimaryId } = PrimaryPurposeHelper.select()
   const { id: purposeSecondaryId } = SecondaryPurposeHelper.select()

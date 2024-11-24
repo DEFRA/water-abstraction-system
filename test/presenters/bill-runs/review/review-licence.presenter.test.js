@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -165,11 +165,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
 
           describe("when the sum allocated to a charge reference's charge elements equal to its authorised volume", () => {
             beforeEach(() => {
-              reviewLicence
-                .reviewChargeVersions[0]
-                .reviewChargeReferences[0]
-                .reviewChargeElements[0]
-                .amendedAllocated = 9.092
+              reviewLicence.reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].amendedAllocated = 9.092
             })
 
             it('returns false', () => {
@@ -181,11 +177,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
 
           describe("when the sum allocated to a charge reference's charge elements is greater than its authorised volume", () => {
             beforeEach(() => {
-              reviewLicence
-                .reviewChargeVersions[0]
-                .reviewChargeReferences[0]
-                .reviewChargeElements[0]
-                .amendedAllocated = 10
+              reviewLicence.reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].amendedAllocated = 10
             })
 
             it('returns true', () => {

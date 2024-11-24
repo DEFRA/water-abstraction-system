@@ -14,30 +14,20 @@ const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go (licenceRef) {
+async function go(licenceRef) {
   return _fetch(licenceRef)
 }
 
-async function _fetch (licenceRef) {
+async function _fetch(licenceRef) {
   return LicenceAgreementModel.query()
     .where('licenceRef', licenceRef)
     .whereNull('deletedAt')
-    .select([
-      'id',
-      'startDate',
-      'endDate',
-      'signedOn'
-    ])
+    .select(['id', 'startDate', 'endDate', 'signedOn'])
     .withGraphFetched('financialAgreement')
     .modifyGraph('financialAgreement', (builder) => {
-      builder.select([
-        'id',
-        'code'
-      ])
+      builder.select(['id', 'code'])
     })
-    .orderBy([
-      { column: 'createdAt', order: 'asc' }
-    ])
+    .orderBy([{ column: 'createdAt', order: 'asc' }])
 }
 
 module.exports = {

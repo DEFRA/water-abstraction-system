@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -79,7 +79,7 @@ describe('Remove Bill Licence presenter', () => {
   })
 })
 
-function _billLicenceSummary () {
+function _billLicenceSummary() {
   return {
     id: 'a4fbaa27-a91c-4328-a1b8-774ade11027b',
     licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
@@ -95,22 +95,24 @@ function _billLicenceSummary () {
           name: 'Example Trading Ltd',
           type: 'organisation'
         },
-        billingAccountAddresses: [{
-          id: '1d440029-745a-47ec-a43e-9f4a36014126',
-          company: null,
-          contact: {
-            id: '95ba53be-543f-415b-90b1-08f58f63ff74',
-            contactType: 'person',
-            dataSource: 'wrls',
-            department: null,
-            firstName: 'Amara',
-            initials: null,
-            lastName: 'Gupta',
-            middleInitials: null,
-            salutation: null,
-            suffix: null
+        billingAccountAddresses: [
+          {
+            id: '1d440029-745a-47ec-a43e-9f4a36014126',
+            company: null,
+            contact: {
+              id: '95ba53be-543f-415b-90b1-08f58f63ff74',
+              contactType: 'person',
+              dataSource: 'wrls',
+              department: null,
+              firstName: 'Amara',
+              initials: null,
+              lastName: 'Gupta',
+              middleInitials: null,
+              salutation: null,
+              suffix: null
+            }
           }
-        }]
+        ]
       },
       billRun: {
         id: '0e61c36f-f22f-4534-8247-b73a97f551b5',

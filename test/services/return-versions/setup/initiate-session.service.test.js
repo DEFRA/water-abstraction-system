@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,10 +40,13 @@ describe('Return Versions Setup - Initiate Session service', () => {
 
         // Create two licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
-          licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+          licenceId: licence.id,
+          startDate: new Date('2021-10-11'),
+          status: 'superseded'
         })
         await LicenceVersionHelper.add({
-          licenceId: licence.id, startDate: new Date('2022-05-01')
+          licenceId: licence.id,
+          startDate: new Date('2022-05-01')
         })
 
         // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
@@ -55,28 +58,32 @@ describe('Return Versions Setup - Initiate Session service', () => {
 
         const { data } = result
 
-        expect(data).to.equal({
-          checkPageVisited: false,
-          licence: {
-            id: licence.id,
-            currentVersionStartDate: new Date('2022-05-01'),
-            endDate: new Date('2024-08-10'),
-            licenceRef,
-            licenceHolder: 'Licence Holder Ltd',
-            returnVersions: [],
-            startDate: new Date('2022-01-01'),
-            waterUndertaker: false
+        expect(data).to.equal(
+          {
+            checkPageVisited: false,
+            licence: {
+              id: licence.id,
+              currentVersionStartDate: new Date('2022-05-01'),
+              endDate: new Date('2024-08-10'),
+              licenceRef,
+              licenceHolder: 'Licence Holder Ltd',
+              returnVersions: [],
+              startDate: new Date('2022-01-01'),
+              waterUndertaker: false
+            },
+            multipleUpload: false,
+            journey: 'returns-required',
+            requirements: [{}]
           },
-          multipleUpload: false,
-          journey: 'returns-required',
-          requirements: [{}]
-        }, { skip: ['id'] })
+          { skip: ['id'] }
+        )
       })
 
       describe('and has return versions with return requirements to copy from', () => {
         beforeEach(async () => {
           const returnVersion = await ReturnVersionHelper.add({
-            licenceId: licence.id, startDate: new Date('2022-05-01')
+            licenceId: licence.id,
+            startDate: new Date('2022-05-01')
           })
 
           returnVersionId = returnVersion.id
@@ -90,19 +97,23 @@ describe('Return Versions Setup - Initiate Session service', () => {
 
           const { returnVersions } = result.data.licence
 
-          expect(returnVersions).to.equal([{
-            id: returnVersionId,
-            reason: 'new-licence',
-            startDate: new Date('2022-05-01'),
-            modLogs: [{ id: modLog.id, reasonDescription: modLog.reasonDescription }]
-          }])
+          expect(returnVersions).to.equal([
+            {
+              id: returnVersionId,
+              reason: 'new-licence',
+              startDate: new Date('2022-05-01'),
+              modLogs: [{ id: modLog.id, reasonDescription: modLog.reasonDescription }]
+            }
+          ])
         })
       })
 
       describe('and has return versions but they are not "current" (so cannot be copied from)', () => {
         beforeEach(async () => {
           const returnVersion = await ReturnVersionHelper.add({
-            licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+            licenceId: licence.id,
+            startDate: new Date('2021-10-11'),
+            status: 'superseded'
           })
 
           returnVersionId = returnVersion.id
@@ -122,7 +133,10 @@ describe('Return Versions Setup - Initiate Session service', () => {
       describe('and has return versions but they do not have requirements (so cannot be copied from)', () => {
         beforeEach(async () => {
           await ReturnVersionHelper.add({
-            licenceId: licence.id, reason: 'returns-exception', startDate: new Date('2021-10-11'), status: 'current'
+            licenceId: licence.id,
+            reason: 'returns-exception',
+            startDate: new Date('2021-10-11'),
+            status: 'current'
           })
         })
 
@@ -148,7 +162,9 @@ describe('Return Versions Setup - Initiate Session service', () => {
 
     describe('but the licence does not exist', () => {
       it('throws a Boom not found error', async () => {
-        const error = await expect(InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')).to.reject()
+        const error = await expect(
+          InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')
+        ).to.reject()
 
         expect(error.isBoom).to.be.true()
         expect(error.data).to.equal({ id: 'e456e538-4d55-4552-84f7-6a7636eb1945' })

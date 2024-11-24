@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -30,8 +30,7 @@ describe('Charge Version Note model', () => {
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await ChargeVersionNoteModel.query()
-        .findById(testRecord.id)
+      const result = await ChargeVersionNoteModel.query().findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(ChargeVersionNoteModel)
       expect(result.id).to.be.equal(testRecord.id)
@@ -41,16 +40,13 @@ describe('Charge Version Note model', () => {
   describe('Relationships', () => {
     describe('when linking to charge version', () => {
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionNoteModel.query()
-          .innerJoinRelated('chargeVersion')
+        const query = await ChargeVersionNoteModel.query().innerJoinRelated('chargeVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version', async () => {
-        const result = await ChargeVersionNoteModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersion')
+        const result = await ChargeVersionNoteModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
         expect(result).to.be.instanceOf(ChargeVersionNoteModel)
         expect(result.id).to.equal(testRecord.id)
@@ -62,16 +58,13 @@ describe('Charge Version Note model', () => {
 
     describe('when linking to user', () => {
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionNoteModel.query()
-          .innerJoinRelated('user')
+        const query = await ChargeVersionNoteModel.query().innerJoinRelated('user')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user', async () => {
-        const result = await ChargeVersionNoteModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('user')
+        const result = await ChargeVersionNoteModel.query().findById(testRecord.id).withGraphFetched('user')
 
         expect(result).to.be.instanceOf(ChargeVersionNoteModel)
         expect(result.id).to.equal(testRecord.id)

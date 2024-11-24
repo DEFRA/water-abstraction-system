@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -116,7 +116,9 @@ describe('Bill Runs Review - Edit validator', () => {
           const result = EditValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The quantity must be the same as or less than the authorised amount')
+          expect(result.error.details[0].message).to.equal(
+            'The quantity must be the same as or less than the authorised amount'
+          )
         })
       })
     })

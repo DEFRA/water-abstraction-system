@@ -16,7 +16,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} The headers, query and table name from the table
  */
-async function go (tableName, schemaName) {
+async function go(tableName, schemaName) {
   const data = {
     headers: await _headers(tableName, schemaName),
     rows: _rows(tableName, schemaName)
@@ -25,16 +25,12 @@ async function go (tableName, schemaName) {
   return data
 }
 
-async function _rows (tableName, schemaName) {
+async function _rows(tableName, schemaName) {
   // Retrieves the input streams query
-  return db
-    .withSchema(schemaName)
-    .select('*')
-    .from(tableName)
-    .stream()
+  return db.withSchema(schemaName).select('*').from(tableName).stream()
 }
 
-async function _headers (tableName, schemaName) {
+async function _headers(tableName, schemaName) {
   const columns = await db(tableName).withSchema(schemaName).columnInfo()
 
   // We are only interested in the column names

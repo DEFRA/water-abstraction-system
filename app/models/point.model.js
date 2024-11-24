@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class PointModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'points'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceVersionPurposes: {
         relation: Model.ManyToManyRelation,
@@ -66,7 +66,7 @@ class PointModel extends BaseModel {
    *
    * @returns {string} the description of this abstraction point
    */
-  $describe () {
+  $describe() {
     let abstractionPoint
 
     // If ng4 is populated then we know this point is an 'area'

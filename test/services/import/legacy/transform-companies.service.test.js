@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
@@ -55,7 +55,6 @@ describe('Import Legacy Transform Companies service', () => {
             type: 'organisation',
             addresses: [],
             companyAddresses: []
-
           }
         ]
       })
@@ -81,7 +80,7 @@ describe('Import Legacy Transform Companies service', () => {
   })
 })
 
-function _legacyCompany () {
+function _legacyCompany() {
   return {
     name: 'ACME',
     type: 'organisation',

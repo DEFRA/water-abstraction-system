@@ -15,10 +15,8 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The id of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (sessionId, yar) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const notification = {
     title: 'Removed',
@@ -27,10 +25,10 @@ async function go (sessionId, yar) {
 
   yar.flash('notification', notification)
 
-  return _save(session)
+  await _save(session)
 }
 
-async function _save (session) {
+async function _save(session) {
   delete session.note
 
   return session.$update()

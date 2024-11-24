@@ -15,15 +15,8 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go (session) {
-  const {
-    id: sessionId,
-    licence,
-    startDateOptions,
-    startDateDay,
-    startDateMonth,
-    startDateYear
-  } = session
+function go(session) {
+  const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
     anotherStartDateDay: startDateDay ?? null,
@@ -38,7 +31,7 @@ function go (session) {
   }
 }
 
-function _backLink (session) {
+function _backLink(session) {
   const { checkPageVisited, id, licence } = session
 
   if (checkPageVisited) {
@@ -52,7 +45,7 @@ function _backLink (session) {
   }
 }
 
-function _licenceVersionStartDate (licence) {
+function _licenceVersionStartDate(licence) {
   const { currentVersionStartDate } = licence
 
   // NOTE: because the session data is stored in a JSONB field when we get the instance from the DB the date values are

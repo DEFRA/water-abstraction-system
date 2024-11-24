@@ -15,7 +15,7 @@ const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js
  *
  * @returns {object} page date needed for the remove review licence confirmation page
  */
-function go (reviewLicence) {
+function go(reviewLicence) {
   const { billRun, id: reviewLicenceId, licenceRef } = reviewLicence
   const { billRunNumber, createdAt, region, status, toFinancialYearEnding } = billRun
 

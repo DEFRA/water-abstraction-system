@@ -14,7 +14,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex, licencePurposes) {
+function go(session, requirementIndex, licencePurposes) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -27,7 +27,7 @@ function go (session, requirementIndex, licencePurposes) {
   }
 }
 
-function _backLink (session) {
+function _backLink(session) {
   const { checkPageVisited, id, requirements } = session
 
   // NOTE: Purpose is the first page in the manual setup journey. So, when a user first comes through, we want to allow
@@ -46,7 +46,7 @@ function _backLink (session) {
   return `/system/return-versions/setup/${id}/method`
 }
 
-function _purposes (licencePurposes, requirementPurposes) {
+function _purposes(licencePurposes, requirementPurposes) {
   return licencePurposes.map((licencePurpose) => {
     const matchedRequirementPurpose = requirementPurposes?.find((requirementPurpose) => {
       return requirementPurpose.id === licencePurpose.id

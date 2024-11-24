@@ -24,7 +24,7 @@ const RegionHelper = require('./region.helper.js')
  *
  * @returns {Promise<module:BillRunModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return BillRunModel.query()
@@ -42,7 +42,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: regionId } = RegionHelper.select()
 
   const defaults = {

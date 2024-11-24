@@ -31,9 +31,13 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
  *
  * If it doesn't, we 'bump' the financial end year to back to the year of the last annual bill run.
  *
+ * @param {string} regionId - UUID of the region to determine the financial end year for
+ * @param {string} billRunType - The type of bill run to determine the end year for, for example, 'annual'
+ * @param {number} [year] - The year selected by the user
+ *
  * @returns {Promise<number>} The financial end year to use for selected bill run type and region
  */
-async function go (regionId, billRunType, year = null) {
+async function go(regionId, billRunType, year = null) {
   const currentFinancialYear = determineCurrentFinancialYear()
   const currentFinancialYearEnd = currentFinancialYear.endDate.getFullYear()
 
@@ -48,12 +52,9 @@ async function go (regionId, billRunType, year = null) {
   return currentFinancialYearEnd
 }
 
-async function _determineSupplementaryEndYear (regionId, currentFinancialYearEnd) {
+async function _determineSupplementaryEndYear(regionId, currentFinancialYearEnd) {
   const billRun = await BillRunModel.query()
-    .select([
-      'id',
-      'toFinancialYearEnding'
-    ])
+    .select(['id', 'toFinancialYearEnding'])
     .where('regionId', regionId)
     .where('batchType', 'annual')
     .where('status', 'sent')

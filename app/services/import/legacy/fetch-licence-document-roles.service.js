@@ -19,14 +19,14 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<ImportLegacyLicenceDocumentRoleType[]>}
  */
-async function go (regionCode, licenceId) {
+async function go(regionCode, licenceId) {
   const returnsToData = await _getReturnsTo(regionCode, licenceId)
   const licenceHolderData = await _getLicenceHolder(regionCode, licenceId)
 
   return [...returnsToData, ...licenceHolderData]
 }
 
-async function _getReturnsTo (regionCode, licenceId) {
+async function _getReturnsTo(regionCode, licenceId) {
   const query = `
     SELECT
       lr.id as licence_role_id,
@@ -57,7 +57,7 @@ async function _getReturnsTo (regionCode, licenceId) {
   return rows
 }
 
-async function _getLicenceHolder (regionCode, licenceId) {
+async function _getLicenceHolder(regionCode, licenceId) {
   const query = `
     SELECT DISTINCT ON (start_date, nalv."ISSUE_NO")
       lr.id as licence_role_id,

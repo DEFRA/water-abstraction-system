@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -73,24 +73,31 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     returnLog = await ReturnLogHelper.add()
 
     chargeVersion = await ChargeVersionHelper.add({
-      billingAccountId: billingAccount.id, licenceId: licence.id, licenceRef: licence.licenceRef
+      billingAccountId: billingAccount.id,
+      licenceId: licence.id,
+      licenceRef: licence.licenceRef
     })
     chargeCategory = ChargeCategoryHelper.select()
     chargeReference = await ChargeReferenceHelper.add({
-      chargeCategoryId: chargeCategory.id, chargeVersionId: chargeVersion.id
+      chargeCategoryId: chargeCategory.id,
+      chargeVersionId: chargeVersion.id
     })
     purpose = PurposeHelper.select()
     chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id, purposeId: purpose.id })
 
     reviewLicence = await ReviewLicenceHelper.add({
-      billRunId: billRun.id, licenceId: licence.id, licenceRef: licence.licenceRef
+      billRunId: billRun.id,
+      licenceId: licence.id,
+      licenceRef: licence.licenceRef
     })
     reviewReturn = await ReviewReturnHelper.add({
-      purposes: [{
-        primary: { code: 'A', description: 'Agriculture' },
-        tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-        secondary: { code: 'AGR', description: 'General Agriculture' }
-      }],
+      purposes: [
+        {
+          primary: { code: 'A', description: 'Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
+        }
+      ],
       returnId: returnLog.id,
       reviewLicenceId: reviewLicence.id
     })
@@ -109,7 +116,8 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     })
 
     await ReviewChargeElementReturnHelper.add({
-      reviewChargeElementId: reviewChargeElement.id, reviewReturnId: reviewReturn.id
+      reviewChargeElementId: reviewChargeElement.id,
+      reviewReturnId: reviewReturn.id
     })
   })
 

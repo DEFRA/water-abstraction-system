@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReviewChargeReferenceModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'reviewChargeReferences'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       reviewChargeVersion: {
         relation: Model.BelongsToOneRelation,

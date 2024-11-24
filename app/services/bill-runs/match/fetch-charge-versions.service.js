@@ -31,42 +31,29 @@ const Workflow = require('../../../models/workflow.model.js')
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-async function go (regionId, billingPeriod) {
+async function go(regionId, billingPeriod) {
   return _fetch(regionId, billingPeriod)
 }
 
-async function _fetch (regionId, billingPeriod) {
+async function _fetch(regionId, billingPeriod) {
   const chargeVersions = await ChargeVersionModel.query()
-    .select([
-      'chargeVersions.id',
-      'chargeVersions.startDate',
-      'chargeVersions.endDate',
-      'chargeVersions.status'
-    ])
+    .select(['chargeVersions.id', 'chargeVersions.startDate', 'chargeVersions.endDate', 'chargeVersions.status'])
     .innerJoinRelated('licence')
     .where('licence.regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
     .where((builder) => {
-      builder
-        .whereNull('chargeVersions.endDate')
-        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+      builder.whereNull('chargeVersions.endDate').orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.expiredDate')
-        .orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.lapsedDate')
-        .orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.revokedDate')
-        .orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
+      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
     })
     .whereNotExists(
       Workflow.query()
@@ -86,20 +73,12 @@ async function _fetch (regionId, billingPeriod) {
     .orderBy('chargeVersions.licenceRef', 'asc')
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {
-      builder.select([
-        'description'
-      ])
+      builder.select(['description'])
     })
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef',
-        'startDate',
-        'expiredDate',
-        'lapsedDate',
-        'revokedDate'
-      ])
+      builder
+        .select(['id', 'licenceRef', 'startDate', 'expiredDate', 'lapsedDate', 'revokedDate'])
         .modify('licenceHolder')
     })
     .withGraphFetched('chargeReferences')
@@ -120,12 +99,7 @@ async function _fetch (regionId, billingPeriod) {
     })
     .withGraphFetched('chargeReferences.chargeCategory')
     .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder
-        .select([
-          'reference',
-          'shortDescription',
-          'subsistenceCharge'
-        ])
+      builder.select(['reference', 'shortDescription', 'subsistenceCharge'])
     })
     .withGraphFetched('chargeReferences.chargeElements')
     .modifyGraph('chargeReferences.chargeElements', (builder) => {
@@ -144,12 +118,7 @@ async function _fetch (regionId, billingPeriod) {
     })
     .withGraphFetched('chargeReferences.chargeElements.purpose')
     .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
-      builder
-        .select([
-          'id',
-          'legacyId',
-          'description'
-        ])
+      builder.select(['id', 'legacyId', 'description'])
     })
 
   return chargeVersions

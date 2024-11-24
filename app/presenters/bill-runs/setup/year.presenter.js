@@ -14,7 +14,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (licenceSupplementaryYears, session) {
+function go(licenceSupplementaryYears, session) {
   const selectedYear = session.year ? session.year : null
 
   let financialYearsData = []
@@ -35,7 +35,7 @@ function go (licenceSupplementaryYears, session) {
   }
 }
 
-function _financialYearsData (licenceSupplementaryYears, selectedYear) {
+function _financialYearsData(licenceSupplementaryYears, selectedYear) {
   const financialYearsData = []
 
   if (licenceSupplementaryYears.length > 0) {
@@ -53,7 +53,7 @@ function _financialYearsData (licenceSupplementaryYears, selectedYear) {
   return financialYearsData
 }
 
-function _tptAnnualFinancialYearsData (selectedYear) {
+function _tptAnnualFinancialYearsData(selectedYear) {
   return [
     { text: '2023 to 2024', value: 2024, checked: selectedYear === '2024' },
     { text: '2022 to 2023', value: 2023, checked: selectedYear === '2023' },

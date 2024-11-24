@@ -237,9 +237,19 @@
                 classes: "govuk-body "
               },
               value: {
-                text: additionalSubmissionOptions.multipleUpload
+                text: multipleUpload
             }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+              text: 'Quarterly return submissions',
+              classes: "govuk-body "
+            },
+              value: {
+              text: quarterlyReturns
             }
+            } if quarterlyReturnSubmissions
           ]
         }) }}
     </div>

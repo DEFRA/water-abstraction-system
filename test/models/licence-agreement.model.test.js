@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,8 +48,7 @@ describe('Licence Agreement model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceAgreementModel.query()
-          .innerJoinRelated('financialAgreement')
+        const query = await LicenceAgreementModel.query().innerJoinRelated('financialAgreement')
 
         expect(query).to.exist()
       })
@@ -79,16 +78,13 @@ describe('Licence Agreement model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceAgreementModel.query()
-          .innerJoinRelated('licence')
+        const query = await LicenceAgreementModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await LicenceAgreementModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await LicenceAgreementModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(LicenceAgreementModel)
         expect(result.id).to.equal(testRecord.id)

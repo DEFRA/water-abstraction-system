@@ -38,7 +38,6 @@ const routes = [
         }
       }
     }
-
   },
   {
     method: 'GET',
@@ -459,7 +458,8 @@ const routes = [
         }
       }
     }
-  }, {
+  },
+  {
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/start-date',
     options: {

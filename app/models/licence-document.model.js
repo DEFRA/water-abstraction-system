@@ -26,11 +26,11 @@ const BaseModel = require('./base.model.js')
  * called `licences`, nor can we think of a better name. So, LicenceDocument it is! ¯\_(ツ)_/¯
  */
 class LicenceDocumentModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceDocuments'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,

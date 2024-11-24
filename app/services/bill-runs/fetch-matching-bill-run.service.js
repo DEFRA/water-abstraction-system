@@ -39,18 +39,9 @@ const LAST_PRESROC_YEAR = 2022
  * instance will be returned. For supplementary 2 bill runs may be returned depending on whether there is both an SROC
  * and PRESROC in progress.
  */
-async function go (regionId, batchType, financialYearEnding, summer = false) {
+async function go(regionId, batchType, financialYearEnding, summer = false) {
   const baseQuery = BillRunModel.query()
-    .select([
-      'id',
-      'batchType',
-      'billRunNumber',
-      'createdAt',
-      'scheme',
-      'status',
-      'summer',
-      'toFinancialYearEnding'
-    ])
+    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
     .where('regionId', regionId)
     .where('batchType', batchType)
 
@@ -59,19 +50,15 @@ async function go (regionId, batchType, financialYearEnding, summer = false) {
   return _fetch(baseQuery)
 }
 
-function _applyAnnualWhereClauses (query, year) {
-  return query
-    .where('toFinancialYearEnding', year)
-    .whereNotIn('status', ['cancel', 'empty', 'error'])
-    .limit(1)
+function _applyAnnualWhereClauses(query, year) {
+  return query.where('toFinancialYearEnding', year).whereNotIn('status', ['cancel', 'empty', 'error']).limit(1)
 }
 
-function _applySupplementaryWhereClauses (query) {
-  return query
-    .whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
+function _applySupplementaryWhereClauses(query) {
+  return query.whereNotIn('status', ['cancel', 'empty', 'error', 'sending', 'sent'])
 }
 
-function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
+function _applyTwoPartTariffWhereClauses(query, financialYearEnding, summer) {
   if (financialYearEnding <= LAST_PRESROC_YEAR) {
     query.where('summer', summer)
   }
@@ -82,7 +69,7 @@ function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
     .limit(1)
 }
 
-function _applyWhereClauses (baseQuery, batchType, financialYearEnding, summer) {
+function _applyWhereClauses(baseQuery, batchType, financialYearEnding, summer) {
   if (batchType === 'annual') {
     _applyAnnualWhereClauses(baseQuery, financialYearEnding)
   } else if (batchType === 'supplementary') {
@@ -92,7 +79,7 @@ function _applyWhereClauses (baseQuery, batchType, financialYearEnding, summer) 
   }
 }
 
-async function _fetch (baseQuery) {
+async function _fetch(baseQuery) {
   return baseQuery
     .orderBy([
       { column: 'toFinancialYearEnding', order: 'desc' },
@@ -100,10 +87,7 @@ async function _fetch (baseQuery) {
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 }
 

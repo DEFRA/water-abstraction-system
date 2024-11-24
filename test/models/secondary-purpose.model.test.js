@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -37,7 +37,8 @@ describe('Secondary Purpose model', () => {
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
           const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-            notes: `TEST licence Version purpose ${i}`, secondaryPurposeId: testRecordId
+            notes: `TEST licence Version purpose ${i}`,
+            secondaryPurposeId: testRecordId
           })
 
           testLicenceVersionPurposes.push(licenceVersionPurpose)
@@ -45,8 +46,7 @@ describe('Secondary Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await SecondaryPurposeModel.query()
-          .innerJoinRelated('licenceVersionPurposes')
+        const query = await SecondaryPurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
         expect(query).to.exist()
       })
@@ -73,7 +73,8 @@ describe('Secondary Purpose model', () => {
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-            alias: `TEST return requirement purpose ${i}`, secondaryPurposeId: testRecordId
+            alias: `TEST return requirement purpose ${i}`,
+            secondaryPurposeId: testRecordId
           })
 
           testReturnRequirementPurposes.push(returnRequirementPurpose)
@@ -81,8 +82,7 @@ describe('Secondary Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await SecondaryPurposeModel.query()
-          .innerJoinRelated('returnRequirementPurposes')
+        const query = await SecondaryPurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 
         expect(query).to.exist()
       })

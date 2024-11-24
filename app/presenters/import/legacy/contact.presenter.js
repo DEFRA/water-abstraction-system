@@ -13,7 +13,7 @@
  * @returns {object} the NALD contact data transformed into the WRLS format for a contact
  * ready for validation and persisting
  */
-function go (contact) {
+function go(contact) {
   return {
     externalId: contact.external_id,
     salutation: contact.salutation,

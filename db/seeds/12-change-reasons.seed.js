@@ -4,7 +4,7 @@ const { timestampForPostgres } = require('../../app/lib/general.lib.js')
 const { data: changeReasons } = require('./data/change-reasons.js')
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 
-async function seed () {
+async function seed() {
   for (const changeReason of changeReasons) {
     const exists = await _exists(changeReason)
 
@@ -16,7 +16,7 @@ async function seed () {
   }
 }
 
-async function _exists (changeReason) {
+async function _exists(changeReason) {
   const { description, type } = changeReason
 
   const result = await ChangeReasonModel.query()
@@ -29,7 +29,7 @@ async function _exists (changeReason) {
   return !!result
 }
 
-async function _insert (changeReason) {
+async function _insert(changeReason) {
   // NOTE: The table does not auto populate the created and updated at fields, but does define them as not nullable!
   return ChangeReasonModel.query().insert({
     ...changeReason,
@@ -38,7 +38,7 @@ async function _insert (changeReason) {
   })
 }
 
-async function _update (changeReason) {
+async function _update(changeReason) {
   const { description, enabledForNewChargeVersions, triggersMinimumCharge, type } = changeReason
 
   return ChangeReasonModel.query()

@@ -10,18 +10,16 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class PermitLicenceModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'permitLicences'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'licence_value_data'
-    ]
+  static get jsonAttributes() {
+    return ['licence_value_data']
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       permitLicence: {
         relation: Model.HasOneRelation,

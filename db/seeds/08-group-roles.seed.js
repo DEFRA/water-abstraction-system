@@ -6,7 +6,7 @@ const { data: groupRoles } = require('./data/group-roles.js')
 const { data: groups } = require('./data/groups.js')
 const { data: roles } = require('./data/roles.js')
 
-async function seed () {
+async function seed() {
   for (const groupRole of groupRoles) {
     const { group, role } = _names(groupRole)
 
@@ -18,7 +18,7 @@ async function seed () {
   }
 }
 
-async function _exists (group, role) {
+async function _exists(group, role) {
   const result = await GroupRoleModel.query()
     .select('groupRoles.id')
     .innerJoinRelated('group')
@@ -31,17 +31,20 @@ async function _exists (group, role) {
   return !!result
 }
 
-async function _insert (id, group, role) {
-  return db.raw(`
+async function _insert(id, group, role) {
+  return db.raw(
+    `
     INSERT INTO public.group_roles (id, group_id, role_id)
     SELECT
       (?) AS id,
       (SELECT id FROM public."groups" g WHERE g."group" = ?) AS group_id,
       (SELECT id FROM public.roles r WHERE r.role = ?) AS role_id;
-    `, [id, group, role])
+    `,
+    [id, group, role]
+  )
 }
 
-function _names (groupRole) {
+function _names(groupRole) {
   const { group } = groups.find((group) => {
     return group.id === groupRole.groupId
   })

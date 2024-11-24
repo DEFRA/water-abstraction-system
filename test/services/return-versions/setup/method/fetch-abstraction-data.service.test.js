@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -44,8 +44,16 @@ describe('Return Versions Setup - Fetch Abstraction Data service', () => {
                 dailyQuantity: 455,
                 externalId: seedData.licenceVersionPurposes.electricity.externalId,
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryElectricityId, legacyId: 'P' },
-                purpose: { description: 'Heat Pump', id: seedData.allPurposes.purposes.heatPumpId, legacyId: '200', twoPartTariff: false },
-                secondaryPurpose: { id: seedData.allPurposes.secondaryPurposes.secondaryElectricityId, legacyId: 'ELC' },
+                purpose: {
+                  description: 'Heat Pump',
+                  id: seedData.allPurposes.purposes.heatPumpId,
+                  legacyId: '200',
+                  twoPartTariff: false
+                },
+                secondaryPurpose: {
+                  id: seedData.allPurposes.secondaryPurposes.secondaryElectricityId,
+                  legacyId: 'ELC'
+                },
                 points: [
                   {
                     description: 'INTAKE POINT',
@@ -66,8 +74,16 @@ describe('Return Versions Setup - Fetch Abstraction Data service', () => {
                 dailyQuantity: 2675,
                 externalId: seedData.licenceVersionPurposes.standard.externalId,
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { description: 'Vegetable Washing', id: seedData.allPurposes.purposes.vegetableWashingId, legacyId: '460', twoPartTariff: false },
-                secondaryPurpose: { id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
+                purpose: {
+                  description: 'Vegetable Washing',
+                  id: seedData.allPurposes.purposes.vegetableWashingId,
+                  legacyId: '460',
+                  twoPartTariff: false
+                },
+                secondaryPurpose: {
+                  id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId,
+                  legacyId: 'AGR'
+                },
                 points: [
                   {
                     description: 'SOUTH BOREHOLE',
@@ -84,8 +100,16 @@ describe('Return Versions Setup - Fetch Abstraction Data service', () => {
                 dailyQuantity: 300,
                 externalId: seedData.licenceVersionPurposes.twoPartTariff.externalId,
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
-                purpose: { description: 'Spray Irrigation - Direct', id: seedData.allPurposes.purposes.sprayIrrigationDirectId, legacyId: '400', twoPartTariff: true },
-                secondaryPurpose: { id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId, legacyId: 'AGR' },
+                purpose: {
+                  description: 'Spray Irrigation - Direct',
+                  id: seedData.allPurposes.purposes.sprayIrrigationDirectId,
+                  legacyId: '400',
+                  twoPartTariff: true
+                },
+                secondaryPurpose: {
+                  id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId,
+                  legacyId: 'AGR'
+                },
                 points: [
                   {
                     description: 'MAIN INTAKE',

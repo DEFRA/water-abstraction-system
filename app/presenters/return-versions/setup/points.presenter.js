@@ -15,7 +15,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex, points) {
+function go(session, requirementIndex, points) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -29,7 +29,7 @@ function go (session, requirementIndex, points) {
   }
 }
 
-function _backLink (session, requirementIndex) {
+function _backLink(session, requirementIndex) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
@@ -39,7 +39,7 @@ function _backLink (session, requirementIndex) {
   return `/system/return-versions/setup/${id}/purpose/${requirementIndex}`
 }
 
-function _licencePoints (points) {
+function _licencePoints(points) {
   // First extract our points from the data, including generating the descriptions
   const licencePoints = points.map((point) => {
     return {

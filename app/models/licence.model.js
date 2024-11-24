@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class LicenceModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licences'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billLicences: {
         relation: Model.HasManyRelation,
@@ -152,50 +152,32 @@ class LicenceModel extends BaseModel {
    *
    * @returns {object}
    */
-  static get modifiers () {
+  static get modifiers() {
     return {
       // currentVersion modifier fetches only the current licence version record for this licence
-      currentVersion (query) {
-        query
-          .withGraphFetched('licenceVersions')
-          .modifyGraph('licenceVersions', (builder) => {
-            builder
-              .select([
-                'id',
-                'startDate',
-                'status'
-              ])
-              .where('status', 'current')
-              .orderBy('startDate', 'desc')
-              .limit(1)
-          })
+      currentVersion(query) {
+        query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
+          builder.select(['id', 'startDate', 'status']).where('status', 'current').orderBy('startDate', 'desc').limit(1)
+        })
       },
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
-      licenceHolder (query) {
+      licenceHolder(query) {
         query
           .withGraphFetched('licenceDocument')
           .modifyGraph('licenceDocument', (builder) => {
-            builder.select([
-              'id'
-            ])
+            builder.select(['id'])
           })
           .withGraphFetched('licenceDocument.licenceDocumentRoles')
           .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
             builder
-              .select([
-                'licenceDocumentRoles.id'
-              ])
+              .select(['licenceDocumentRoles.id'])
               .innerJoinRelated('licenceRole')
               .where('licenceRole.name', 'licenceHolder')
               .orderBy('licenceDocumentRoles.startDate', 'desc')
           })
           .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
           .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
-            builder.select([
-              'id',
-              'name',
-              'type'
-            ])
+            builder.select(['id', 'name', 'type'])
           })
           .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
           .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
@@ -219,15 +201,10 @@ class LicenceModel extends BaseModel {
       //
       // The value itself is stored in `crm.document_header` not `water.licences` which is why we have to pull the
       // related record.
-      licenceName (query) {
-        query
-          .withGraphFetched('licenceDocumentHeader')
-          .modifyGraph('licenceDocumentHeader', (builder) => {
-            builder.select([
-              'id',
-              'licenceName'
-            ])
-          })
+      licenceName(query) {
+        query.withGraphFetched('licenceDocumentHeader').modifyGraph('licenceDocumentHeader', (builder) => {
+          builder.select(['id', 'licenceName'])
+        })
       },
       // An external user with an account can register a licence via the external UI. The legacy service will generate a
       // letter with a code which gets sent to the licence's address. Once they receive it they can enter the code in
@@ -244,36 +221,23 @@ class LicenceModel extends BaseModel {
       // We know, this is mad! It explains why even the previous team were trying to move away from this and had created
       // `crm_v2`. Unfortunately, this never got sorted so it remains the only means to get from a licence to the user
       // record which holds the ID of the primary user.
-      primaryUser (query) {
+      primaryUser(query) {
         query
           .withGraphFetched('licenceDocumentHeader')
           .modifyGraph('licenceDocumentHeader', (builder) => {
-            builder.select([
-              'id'
-            ])
+            builder.select(['id'])
           })
           .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
           .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
-            builder
-              .select([
-                'id'
-              ])
-              .where('role', 'primary_user')
+            builder.select(['id']).where('role', 'primary_user')
           })
           .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
           .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
-            builder
-              .select([
-                'id'
-              ])
+            builder.select(['id'])
           })
           .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity.user')
           .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity.user', (builder) => {
-            builder
-              .select([
-                'id',
-                'username'
-              ])
+            builder.select(['id', 'username'])
           })
       }
     }
@@ -296,7 +260,7 @@ class LicenceModel extends BaseModel {
    * are none (we've found a couple of examples!). Else a `LicenceVersionModel` that is the 'current' version for this
    * licence
    */
-  $currentVersion () {
+  $currentVersion() {
     if (!this.licenceVersions || this.licenceVersions.length === 0) {
       return null
     }
@@ -328,7 +292,7 @@ class LicenceModel extends BaseModel {
    * @returns `null` if no 'end' dates are set else an object containing the date, priority and reason for either the
    * earliest or highest priority end date
    */
-  $ends () {
+  $ends() {
     const endDates = [
       { date: this.revokedDate, priority: 1, reason: 'revoked' },
       { date: this.lapsedDate, priority: 2, reason: 'lapsed' },
@@ -386,7 +350,7 @@ class LicenceModel extends BaseModel {
    * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine the
    * licence holder else the licence holder's name
    */
-  $licenceHolder () {
+  $licenceHolder() {
     // Extract the company and contact from the last licenceDocumentRole created. It is assumed that the
     // `licenceHolder` modifier has been used to get the additional records needed for this. It also ensures in the case
     // that there is more than one that they are ordered by their start date (DESC)
@@ -421,7 +385,7 @@ class LicenceModel extends BaseModel {
    * @returns {(string|null)} the licence name set by the primary user for the licence if the licence has one and the
    * additional properties needed to to determine it have been set, else `null`
    */
-  $licenceName () {
+  $licenceName() {
     const licenceName = this?.licenceDocumentHeader?.licenceName
 
     return licenceName || null
@@ -442,7 +406,7 @@ class LicenceModel extends BaseModel {
    * @returns {(module:UserModel|null)} the primary user if the licence has one and the additional properties needed to
    * to determine it have been set, else `null`
    */
-  $primaryUser () {
+  $primaryUser() {
     const primaryUser = this?.licenceDocumentHeader?.licenceEntityRole?.licenceEntity?.user
 
     return primaryUser || null

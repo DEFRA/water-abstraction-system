@@ -6,7 +6,11 @@
  */
 
 const FetchLicenceUpdatesService = require('./fetch-licence-updates.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../../lib/general.lib.js')
+const {
+  calculateAndLogTimeTaken,
+  currentTimeInNanoseconds,
+  timestampForPostgres
+} = require('../../../lib/general.lib.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
@@ -30,7 +34,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * in future bill runs until Billing & Data have had a chance to review the existing charge versions. This is because
  * the change to the licence might require changes to the charge versions.
  */
-async function go () {
+async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -44,7 +48,7 @@ async function go () {
   }
 }
 
-async function _addWorkflowRecords (licenceVersions) {
+async function _addWorkflowRecords(licenceVersions) {
   const timestamp = timestampForPostgres()
 
   for (const licenceVersion of licenceVersions) {

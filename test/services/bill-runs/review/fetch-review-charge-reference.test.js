@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -47,7 +47,9 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
     licence = await LicenceHelper.add()
 
     reviewLicence = await ReviewLicenceHelper.add({
-      billRunId: billRun.id, licenceId: licence.id, licenceRef: licence.licenceRef
+      billRunId: billRun.id,
+      licenceId: licence.id,
+      licenceRef: licence.licenceRef
     })
 
     reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id })
@@ -56,7 +58,8 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
       reviewChargeVersionId: reviewChargeVersion.id
     })
     reviewChargeElement = await ReviewChargeElementHelper.add({
-      chargeElementId: chargeElement.id, reviewChargeReferenceId: reviewChargeReference.id
+      chargeElementId: chargeElement.id,
+      reviewChargeReferenceId: reviewChargeReference.id
     })
   })
 

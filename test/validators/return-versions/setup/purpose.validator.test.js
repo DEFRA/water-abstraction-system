@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -105,9 +105,7 @@ describe('Return Versions Setup - Purpose validator', () => {
   describe('when invalid data is provided', () => {
     describe('because it contains an invalid purpose id', () => {
       beforeEach(() => {
-        purposes = [
-          { id: 'c73399a6-2194-4d50-b4c8-c4fcf225c711', alias: '', description: 'Spray irrigation - direct' }
-        ]
+        purposes = [{ id: 'c73399a6-2194-4d50-b4c8-c4fcf225c711', alias: '', description: 'Spray irrigation - direct' }]
       })
 
       it('fails validation', () => {
@@ -121,9 +119,7 @@ describe('Return Versions Setup - Purpose validator', () => {
 
     describe('because it does not contain a purpose id', () => {
       beforeEach(() => {
-        purposes = [
-          { alias: 'Spray irrigation indiscreet', description: 'Spray irrigation - direct' }
-        ]
+        purposes = [{ alias: 'Spray irrigation indiscreet', description: 'Spray irrigation - direct' }]
       })
 
       it('fails validation', () => {
@@ -141,7 +137,8 @@ describe('Return Versions Setup - Purpose validator', () => {
         purposes = [
           {
             id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
-            alias: 'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz',
+            alias:
+              'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz',
             description: 'Spray irrigation - direct'
           }
         ]

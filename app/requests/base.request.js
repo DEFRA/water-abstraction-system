@@ -23,7 +23,7 @@ const requestConfig = require('../../config/request.config.js')
  *
  * @returns {object} default options to pass to Got when making a request
  */
-function defaultOptions () {
+function defaultOptions() {
   return {
     // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
     // bring the result back into the top level of the `defaultOptions` object.
@@ -61,9 +61,7 @@ function defaultOptions () {
       request: requestConfig.timeout
     },
     hooks: {
-      beforeRetry: [
-        _beforeRetryHook
-      ]
+      beforeRetry: [_beforeRetryHook]
     }
   }
 }
@@ -78,7 +76,7 @@ function defaultOptions () {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function deleteRequest (url, additionalOptions = {}) {
+async function deleteRequest(url, additionalOptions = {}) {
   return _sendRequest('delete', url, additionalOptions)
 }
 
@@ -103,23 +101,65 @@ async function deleteRequest (url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function get (url, additionalOptions = {}) {
+async function get(url, additionalOptions = {}) {
   return _sendRequest('get', url, additionalOptions)
 }
 
-async function patch (url, additionalOptions = {}) {
+/**
+ * Make a PATCH request to the specified URL
+ *
+ * Use when you need to make a PATCH request. It returns a result tuple:
+ *
+ * ```javascript
+ * {
+ *  succeeded: true,
+ *  response: {} // The full response from Got
+ * }
+ * ```
+ *
+ * Any 2xx or 3xx will be flagged as succeeded. Anything else and `succeeded:` will be false. As long as the other
+ * service responds, `response:` will be the full response Got returns. In the event of a network error `response:`
+ * will be a Got error instance.
+ *
+ * @param {string} url - The full URL that you wish to connect to
+ * @param {object} additionalOptions - Append to or replace the options passed to Got when making the request
+ *
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
+ */
+async function patch(url, additionalOptions = {}) {
   return _sendRequest('patch', url, additionalOptions)
 }
 
-async function post (url, additionalOptions = {}) {
+/**
+ * Make a POST request to the specified URL
+ *
+ * Use when you need to make a POST request. It returns a result tuple:
+ *
+ * ```javascript
+ * {
+ *  succeeded: true,
+ *  response: {} // The full response from Got
+ * }
+ * ```
+ *
+ * Any 2xx or 3xx will be flagged as succeeded. Anything else and `succeeded:` will be false. As long as the other
+ * service responds, `response:` will be the full response Got returns. In the event of a network error `response:`
+ * will be a Got error instance.
+ *
+ * @param {string} url - The full URL that you wish to connect to
+ * @param {object} additionalOptions - Append to or replace the options passed to Got when making the request
+ *
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
+ */
+async function post(url, additionalOptions = {}) {
   return _sendRequest('post', url, additionalOptions)
 }
 
-function _beforeRetryHook (error, retryCount) {
+function _beforeRetryHook(error, retryCount) {
   global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
 }
 
-async function _importGot () {
+async function _importGot() {
   // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
   // using these for the time being. Some workarounds are provided here:
   // https://github.com/sindresorhus/got/issues/1789 We have gone the route of using await import('got'). We cannot do
@@ -146,7 +186,7 @@ async function _importGot () {
  *
  * @private
  */
-function _logFailure (method, result, url, additionalOptions) {
+function _logFailure(method, result, url, additionalOptions) {
   const data = {
     method,
     url,
@@ -180,11 +220,11 @@ function _logFailure (method, result, url, additionalOptions) {
  *
  * @private
  */
-function _requestOptions (additionalOptions) {
+function _requestOptions(additionalOptions) {
   return { ...defaultOptions(), ...additionalOptions }
 }
 
-async function _sendRequest (method, url, additionalOptions) {
+async function _sendRequest(method, url, additionalOptions) {
   const got = await _importGot()
   const result = {
     succeeded: false,

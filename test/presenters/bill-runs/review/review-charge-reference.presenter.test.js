@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -66,10 +66,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         it('adds it to the ""adjustments" property and displays both amended and original values', () => {
           const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
-          expect(result.adjustments).to.equal([
-            'Aggregate factor (0.6 / 0.5)',
-            'Charge adjustment (1 / 1)'
-          ])
+          expect(result.adjustments).to.equal(['Aggregate factor (0.6 / 0.5)', 'Charge adjustment (1 / 1)'])
         })
       })
 
@@ -82,10 +79,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         it('adds it to the ""adjustments" property and displays both amended and original values', () => {
           const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
-          expect(result.adjustments).to.equal([
-            'Aggregate factor (1 / 1)',
-            'Charge adjustment (0.8 / 0.7)'
-          ])
+          expect(result.adjustments).to.equal(['Aggregate factor (1 / 1)', 'Charge adjustment (0.8 / 0.7)'])
         })
       })
 

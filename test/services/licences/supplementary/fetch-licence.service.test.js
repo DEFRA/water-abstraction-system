@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -32,9 +32,10 @@ describe('Fetch Licence Service', () => {
       const chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
 
       // two-part tariff indicators
-      const chargeReference = await ChargeReferenceHelper.add(
-        { chargeVersionId: chargeVersion.id, adjustments: { s127: true } }
-      )
+      const chargeReference = await ChargeReferenceHelper.add({
+        chargeVersionId: chargeVersion.id,
+        adjustments: { s127: true }
+      })
 
       await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
     })
@@ -45,6 +46,7 @@ describe('Fetch Licence Service', () => {
       expect(result.id).to.equal(licence.id)
       expect(result.region_id).to.equal(licence.regionId)
       expect(result.include_in_sroc_billing).to.equal(licence.includeInSrocBilling)
+      expect(result.include_in_presroc_billing).to.equal(licence.includeInPresrocBilling)
       expect(result.created_at).to.equal(workflow.createdAt)
     })
 

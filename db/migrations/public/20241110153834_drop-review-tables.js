@@ -1,45 +1,23 @@
 'use strict'
 
 exports.up = async function (knex) {
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_returns')
+  await knex.schema.withSchema('public').dropTableIfExists('review_returns')
 
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_licences')
+  await knex.schema.withSchema('public').dropTableIfExists('review_licences')
 
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_charge_versions')
+  await knex.schema.withSchema('public').dropTableIfExists('review_charge_versions')
 
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_charge_references')
+  await knex.schema.withSchema('public').dropTableIfExists('review_charge_references')
 
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_charge_elements_returns')
+  await knex.schema.withSchema('public').dropTableIfExists('review_charge_elements_returns')
 
-  await knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('review_charge_elements')
+  await knex.schema.withSchema('public').dropTableIfExists('review_charge_elements')
 
-  return knex
-    .schema
-    .withSchema('public')
-    .dropTableIfExists('licence_supplementary_years')
+  return knex.schema.withSchema('public').dropTableIfExists('licence_supplementary_years')
 }
 
 exports.down = async function (knex) {
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_returns', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -71,8 +49,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_licences', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -95,8 +72,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_charge_versions', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -117,8 +93,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_charge_references', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -146,8 +121,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_charge_elements_returns', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -165,8 +139,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  await knex
-    .schema
+  await knex.schema
     .withSchema('public')
     .createTable('review_charge_elements', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -189,8 +162,7 @@ exports.down = async function (knex) {
       `)
     })
 
-  return knex
-    .schema
+  return knex.schema
     .withSchema('public')
     .createTable('licence_supplementary_years', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))

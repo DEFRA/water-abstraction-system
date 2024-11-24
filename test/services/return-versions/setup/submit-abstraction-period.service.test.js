@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -32,12 +32,14 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -118,14 +120,17 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Enter the abstraction period for the requirements for returns',
-          abstractionPeriod: null,
-          backLink: `/system/return-versions/setup/${session.id}/points/0`,
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC'
-        }, { skip: ['sessionId', 'error'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
+            abstractionPeriod: null,
+            backLink: `/system/return-versions/setup/${session.id}/points/0`,
+            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            licenceRef: '01/ABC'
+          },
+          { skip: ['sessionId', 'error'] }
+        )
       })
 
       describe('because the user has not submitted anything', () => {

@@ -22,7 +22,7 @@ const PointHelper = require('./point.helper.js')
  *
  * @returns {Promise<module:LicenceVersionPurposePointModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposePointModel.query()
@@ -40,7 +40,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     externalId: generateLicenceVersionPurposePointExternalId(),
     licenceVersionPurposeId: generateUUID(),
@@ -62,7 +62,7 @@ function defaults (data = {}) {
  *
  * @returns {string} - A randomly generated licence version purpose point external ID
  */
-function generateLicenceVersionPurposePointExternalId () {
+function generateLicenceVersionPurposePointExternalId() {
   const naldPointId = PointHelper.generateNaldPointId()
 
   return `9:${randomInteger(100, 99999)}:${naldPointId}`

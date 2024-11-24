@@ -71,7 +71,7 @@ const services = {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function deleteRequest (serviceName, path, userId = null, apiRequest = true) {
+async function deleteRequest(serviceName, path, userId = null, apiRequest = true) {
   return _sendRequest(BaseRequest.delete, serviceName, path, userId, apiRequest)
 }
 
@@ -88,7 +88,7 @@ async function deleteRequest (serviceName, path, userId = null, apiRequest = tru
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get (serviceName, path, userId = null, apiRequest = true) {
+async function get(serviceName, path, userId = null, apiRequest = true) {
   return _sendRequest(BaseRequest.get, serviceName, path, userId, apiRequest)
 }
 
@@ -106,7 +106,7 @@ async function get (serviceName, path, userId = null, apiRequest = true) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post (serviceName, path, userId = null, apiRequest = true, body = {}) {
+async function post(serviceName, path, userId = null, apiRequest = true, body = {}) {
   return _sendRequest(BaseRequest.post, serviceName, path, userId, apiRequest, body)
 }
 
@@ -115,7 +115,7 @@ async function post (serviceName, path, userId = null, apiRequest = true, body =
  *
  * @private
  */
-async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
+async function _sendRequest(method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
   const options = _requestOptions(service, userId, apiRequest, body)
 
@@ -124,7 +124,7 @@ async function _sendRequest (method, serviceName, path, userId, apiRequest, body
   return _parseResult(result)
 }
 
-function _service (serviceName) {
+function _service(serviceName) {
   const service = services[serviceName.trim().toLowerCase()]
 
   if (!service) {
@@ -147,7 +147,7 @@ function _service (serviceName) {
  *
  * @private
  */
-function _requestOptions (service, userId, apiRequest, body) {
+function _requestOptions(service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
 
   const headers = {
@@ -183,7 +183,7 @@ function _requestOptions (service, userId, apiRequest, body) {
  *
  * @private
  */
-function _parseResult (result) {
+function _parseResult(result) {
   const { body, statusCode } = result.response
 
   if (body) {

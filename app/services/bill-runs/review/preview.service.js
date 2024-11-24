@@ -24,7 +24,7 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  * @param {string} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge for
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go (reviewChargeReferenceId, yar) {
+async function go(reviewChargeReferenceId, yar) {
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
   const transaction = _transaction(reviewChargeReference)
 
@@ -37,7 +37,7 @@ async function go (reviewChargeReferenceId, yar) {
   yar.flash('charge', `Could not calculate a charge. ${result.message}.`)
 }
 
-function _actualVolume (reviewChargeElements) {
+function _actualVolume(reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
     total += reviewChargeElement.amendedAllocated
 
@@ -45,7 +45,7 @@ function _actualVolume (reviewChargeElements) {
   }, 0)
 }
 
-async function _calculateCharge (transaction) {
+async function _calculateCharge(transaction) {
   if (transaction.actualVolume === 0) {
     return { charge: 0 }
   }
@@ -59,7 +59,7 @@ async function _calculateCharge (transaction) {
   return { message: result.response.body.message }
 }
 
-function _transaction (reviewChargeReference) {
+function _transaction(reviewChargeReference) {
   const {
     abatementAgreement: abatementFactor,
     amendedAggregate: aggregateProportion,

@@ -20,7 +20,7 @@ const ReviewChargeElementModel = require('../../../app/models/review-charge-elem
  *
  * @returns {Promise<module:ReviewChargeElementModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewChargeElementModel.query()
@@ -38,7 +38,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     chargeElementId: generateUUID(),
     reviewChargeReferenceId: generateUUID(),

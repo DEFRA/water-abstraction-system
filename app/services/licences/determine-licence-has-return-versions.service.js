@@ -14,20 +14,14 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<boolean>} true if the licence has return versions else false
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const requirement = await _fetch(licenceId)
 
   return !!requirement
 }
 
-async function _fetch (licenceId) {
-  return ReturnVersionModel.query()
-    .select([
-      'id'
-    ])
-    .where('licenceId', licenceId)
-    .limit(1)
-    .first()
+async function _fetch(licenceId) {
+  return ReturnVersionModel.query().select(['id']).where('licenceId', licenceId).limit(1).first()
 }
 
 module.exports = {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -59,21 +59,22 @@ describe('Submit Mark For Supplementary Billing Service', () => {
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
           expect(result).to.equal({ error: null })
-          expect(licenceSupplementaryYears[0]).to.equal({
-            licenceId: licence.id,
-            billRunId: null,
-            twoPartTariff: true,
-            financialYearEnd: 2023
-          }, { skip: ['id', 'createdAt', 'updatedAt'] })
+          expect(licenceSupplementaryYears[0]).to.equal(
+            {
+              licenceId: licence.id,
+              billRunId: null,
+              twoPartTariff: true,
+              financialYearEnd: 2023
+            },
+            { skip: ['id', 'createdAt', 'updatedAt'] }
+          )
         })
 
         it('flags the licence for supplementary billing for the pre sroc years', async () => {
           await SubmitMarkForSupplementaryBillingService.go(licence.id, payload, user)
 
-          expect(LegacyRequest.post.calledWith(
-            'water',
-            `licences/${licence.id}/mark-for-supplementary-billing`,
-            user.id)
+          expect(
+            LegacyRequest.post.calledWith('water', `licences/${licence.id}/mark-for-supplementary-billing`, user.id)
           ).to.be.true()
         })
       })
@@ -91,10 +92,8 @@ describe('Submit Mark For Supplementary Billing Service', () => {
           const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload, user)
 
           expect(result).to.equal({ error: null })
-          expect(LegacyRequest.post.calledWith(
-            'water',
-            `licences/${licence.id}/mark-for-supplementary-billing`,
-            user.id)
+          expect(
+            LegacyRequest.post.calledWith('water', `licences/${licence.id}/mark-for-supplementary-billing`, user.id)
           ).to.be.true()
         })
       })
@@ -114,12 +113,15 @@ describe('Submit Mark For Supplementary Billing Service', () => {
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
           expect(result).to.equal({ error: null })
-          expect(licenceSupplementaryYears[0]).to.equal({
-            licenceId: licence.id,
-            billRunId: null,
-            twoPartTariff: true,
-            financialYearEnd: 2023
-          }, { skip: ['id', 'createdAt', 'updatedAt'] })
+          expect(licenceSupplementaryYears[0]).to.equal(
+            {
+              licenceId: licence.id,
+              billRunId: null,
+              twoPartTariff: true,
+              financialYearEnd: 2023
+            },
+            { skip: ['id', 'createdAt', 'updatedAt'] }
+          )
         })
 
         it('does not flag the licence for supplementary billing for the pre sroc years', async () => {
@@ -155,9 +157,14 @@ describe('Submit Mark For Supplementary Billing Service', () => {
             licenceId: licence.id,
             licenceRef: licence.licenceRef,
             financialYears: [
-              { text: '2023 to 2024', value: 2024 },
-              { text: '2022 to 2023', value: 2023 },
-              { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+              { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
+              { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
+              {
+                text: 'Before 2022',
+                value: 'preSroc',
+                hint: { text: 'Old charge scheme' },
+                attributes: { 'data-test': 'pre-sroc-years' }
+              }
             ]
           })
         })

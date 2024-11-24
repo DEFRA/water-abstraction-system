@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -29,7 +29,12 @@ describe('Fetch Matching Bill Run service', () => {
       describe('and the batch type is "annual"', () => {
         describe('and a bill run for the same financial year exists', () => {
           beforeEach(async () => {
-            const billRun = await BillRunHelper.add({ regionId, batchType: 'annual', status: 'sent', toFinancialYearEnding: 2024 })
+            const billRun = await BillRunHelper.add({
+              regionId,
+              batchType: 'annual',
+              status: 'sent',
+              toFinancialYearEnding: 2024
+            })
 
             matchingBillRunId = billRun.id
           })
@@ -49,10 +54,18 @@ describe('Fetch Matching Bill Run service', () => {
           beforeEach(async () => {
             const billRuns = await Promise.all([
               BillRunHelper.add({
-                regionId, batchType: 'supplementary', status: 'ready', toFinancialYearEnding: 2024, scheme: 'alcs'
+                regionId,
+                batchType: 'supplementary',
+                status: 'ready',
+                toFinancialYearEnding: 2024,
+                scheme: 'alcs'
               }),
               BillRunHelper.add({
-                regionId, batchType: 'supplementary', status: 'queued', toFinancialYearEnding: 2024, scheme: 'sroc'
+                regionId,
+                batchType: 'supplementary',
+                status: 'queued',
+                toFinancialYearEnding: 2024,
+                scheme: 'sroc'
               })
             ])
 
@@ -74,7 +87,10 @@ describe('Fetch Matching Bill Run service', () => {
           describe('and a bill run for the same financial year exists', () => {
             beforeEach(async () => {
               const billRun = await BillRunHelper.add({
-                regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2023
+                regionId,
+                batchType: 'two_part_tariff',
+                status: 'sent',
+                toFinancialYearEnding: 2023
               })
 
               matchingBillRunId = billRun.id
@@ -94,13 +110,21 @@ describe('Fetch Matching Bill Run service', () => {
 
           beforeEach(async () => {
             let billRun = await BillRunHelper.add({
-              regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: true
+              regionId,
+              batchType: 'two_part_tariff',
+              status: 'sent',
+              toFinancialYearEnding: 2022,
+              summer: true
             })
 
             matchingSummerBillRunId = billRun.id
 
             billRun = await BillRunHelper.add({
-              regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: false
+              regionId,
+              batchType: 'two_part_tariff',
+              status: 'sent',
+              toFinancialYearEnding: 2022,
+              summer: false
             })
             matchingWinterBillRunId = billRun.id
           })

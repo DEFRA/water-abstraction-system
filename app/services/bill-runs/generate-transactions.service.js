@@ -33,7 +33,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
-function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
+function go(billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
     chargePeriod,
     billingPeriod,
@@ -73,16 +73,17 @@ function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLic
  *
  * @private
  */
-function _compensationTransaction (standardTransaction) {
+function _compensationTransaction(standardTransaction) {
   return {
     ...standardTransaction,
     id: generateUUID(),
     chargeType: 'compensation',
-    description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+    description:
+      'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
   }
 }
 
-function _description (chargeReference) {
+function _description(chargeReference) {
   // If the value is false, undefined, null or simply doesn't exist we return the standard description
   if (!chargeReference.adjustments.s127) {
     return `Water abstraction charge: ${chargeReference.description}`
@@ -96,7 +97,7 @@ function _description (chargeReference) {
  *
  * @private
  */
-function _generateElements (chargeReference) {
+function _generateElements(chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
     return chargeElement.toJSON()
   })
@@ -109,7 +110,7 @@ function _generateElements (chargeReference) {
  *
  * @private
  */
-function _standardTransaction (
+function _standardTransaction(
   billLicenceId,
   authorisedDays,
   billableDays,

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -105,7 +105,13 @@ describe('Determine Licence Issues Service', () => {
         it('sets all the issues on the returns object', () => {
           DetermineLicenceIssuesService.go(licence)
 
-          expect(licence.returnLogs[0].issues).to.equal(['Abstraction outside period', 'Checking query', 'Over abstraction', 'Returns received late', 'Return split over charge references'])
+          expect(licence.returnLogs[0].issues).to.equal([
+            'Abstraction outside period',
+            'Checking query',
+            'Over abstraction',
+            'Returns received late',
+            'Return split over charge references'
+          ])
           expect(licence.returnLogs[1].issues).to.equal(['No returns received'])
           expect(licence.returnLogs[2].issues).to.equal(['Returns received but not processed'])
         })
@@ -115,8 +121,15 @@ describe('Determine Licence Issues Service', () => {
         it('sets all the issues on the element object', () => {
           DetermineLicenceIssuesService.go(licence)
 
-          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Aggregate', 'Overlap of charge dates', 'Some returns not received'])
-          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[1].issues).to.equal(['Aggregate', 'Unable to match return'])
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal([
+            'Aggregate',
+            'Overlap of charge dates',
+            'Some returns not received'
+          ])
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[1].issues).to.equal([
+            'Aggregate',
+            'Unable to match return'
+          ])
         })
 
         it('sets the status of the charge element to "review"', () => {
@@ -138,7 +151,9 @@ describe('Determine Licence Issues Service', () => {
           it('sets the issue "No returns received" on the charge element', () => {
             DetermineLicenceIssuesService.go(licence)
 
-            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['No returns received'])
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal([
+              'No returns received'
+            ])
           })
         })
       })
@@ -166,7 +181,9 @@ describe('Determine Licence Issues Service', () => {
           it('sets the issue "Some returns not received" on the charge element', () => {
             DetermineLicenceIssuesService.go(licence)
 
-            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Some returns not received'])
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal([
+              'Some returns not received'
+            ])
           })
         })
 
@@ -178,7 +195,9 @@ describe('Determine Licence Issues Service', () => {
           it('sets the issue "No returns received" on the charge element', () => {
             DetermineLicenceIssuesService.go(licence)
 
-            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['No returns received'])
+            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal([
+              'No returns received'
+            ])
           })
         })
       })
@@ -246,7 +265,7 @@ describe('Determine Licence Issues Service', () => {
   })
 })
 
-function _generateNoIssuesLicenceData () {
+function _generateNoIssuesLicenceData() {
   return {
     chargeVersions: [
       {
@@ -282,7 +301,7 @@ function _generateNoIssuesLicenceData () {
   }
 }
 
-function _generateOneIssueLicenceData (status) {
+function _generateOneIssueLicenceData(status) {
   if (status === 'review') {
     return {
       chargeVersions: [
@@ -354,7 +373,7 @@ function _generateOneIssueLicenceData (status) {
   }
 }
 
-function _generateMultipleIssuesLicenceData () {
+function _generateMultipleIssuesLicenceData() {
   return {
     chargeVersions: [
       {
@@ -430,7 +449,7 @@ function _generateMultipleIssuesLicenceData () {
   }
 }
 
-function _generateMultipleReadyIssuesLicenceData () {
+function _generateMultipleReadyIssuesLicenceData() {
   return {
     chargeVersions: [
       {
@@ -479,7 +498,7 @@ function _generateMultipleReadyIssuesLicenceData () {
   }
 }
 
-function _generateMultipleReviewIssuesLicenceData () {
+function _generateMultipleReviewIssuesLicenceData() {
   return {
     chargeVersions: [
       {

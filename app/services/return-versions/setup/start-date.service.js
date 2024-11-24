@@ -18,7 +18,7 @@ const StartDatePresenter = require('../../../presenters/return-versions/setup/st
  *
  * @returns {Promise<object>} The view data for the start date page
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const formattedData = StartDatePresenter.go(session)

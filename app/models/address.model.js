@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class AddressModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'addresses'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -53,16 +53,13 @@ describe('Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PurposeModel.query()
-          .innerJoinRelated('chargeElements')
+        const query = await PurposeModel.query().innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge elements', async () => {
-        const result = await PurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeElements')
+        const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -89,16 +86,13 @@ describe('Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PurposeModel.query()
-          .innerJoinRelated('chargeReferences')
+        const query = await PurposeModel.query().innerJoinRelated('chargeReferences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge references', async () => {
-        const result = await PurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReferences')
+        const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('chargeReferences')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -125,16 +119,13 @@ describe('Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PurposeModel.query()
-          .innerJoinRelated('licenceVersionPurposes')
+        const query = await PurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence version purposes', async () => {
-        const result = await PurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceVersionPurposes')
+        const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('licenceVersionPurposes')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -161,16 +152,13 @@ describe('Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PurposeModel.query()
-          .innerJoinRelated('returnRequirementPurposes')
+        const query = await PurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return requirement purposes', async () => {
-        const result = await PurposeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnRequirementPurposes')
+        const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('returnRequirementPurposes')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.id).to.equal(testRecord.id)

@@ -19,7 +19,7 @@ const YearPresenter = require('../../../presenters/bill-runs/setup/year.presente
  *
  * @returns {Promise<object>} The view data for the year page
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const regionId = session.region

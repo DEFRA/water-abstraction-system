@@ -25,7 +25,7 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
  *
  * @param {module:LicenceModel} licence - The two-part tariff licence to determine issues for
  */
-function go (licence) {
+function go(licence) {
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
   const allReturnIssues = _determineReturnLogsIssues(licenceReturnLogs, licence)
@@ -35,7 +35,7 @@ function go (licence) {
   licence.issues = _licenceIssues(allElementIssues, allReturnIssues)
 }
 
-function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
+function _determineChargeElementsIssues(chargeVersions, licenceReturnLogs) {
   const allElementIssues = []
 
   chargeVersions.forEach((chargeVersion) => {
@@ -59,7 +59,7 @@ function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
   return allElementIssues
 }
 
-function _determineLicenceStatus (allElementIssues, allReturnIssues) {
+function _determineLicenceStatus(allElementIssues, allReturnIssues) {
   const allLicenceIssues = [...allElementIssues, ...allReturnIssues]
   const reviewStatuses = _getReviewStatuses()
 
@@ -72,7 +72,7 @@ function _determineLicenceStatus (allElementIssues, allReturnIssues) {
   return hasReviewIssue ? 'review' : 'ready'
 }
 
-function _determineReturnLogsIssues (returnLogs, licence) {
+function _determineReturnLogsIssues(returnLogs, licence) {
   const allReturnsIssues = []
 
   returnLogs.forEach((returnLog) => {
@@ -85,7 +85,7 @@ function _determineReturnLogsIssues (returnLogs, licence) {
   return allReturnsIssues
 }
 
-function _determineReturnSplitOverChargeReference (licence, returnLog) {
+function _determineReturnSplitOverChargeReference(licence, returnLog) {
   let chargeReferenceCounter = 0
   const { chargeVersions } = licence
 
@@ -115,7 +115,7 @@ function _determineReturnSplitOverChargeReference (licence, returnLog) {
   return chargeReferenceCounter > 1
 }
 
-function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, returnLogs) {
+function _elementIssues(chargeReference, chargeElement, licenceReturnLogs, returnLogs) {
   let status = 'ready'
   const elementIssues = []
 
@@ -151,7 +151,7 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   return { elementIssues, status }
 }
 
-function _getMatchingReturns (returnLogs, licenceReturnLogs) {
+function _getMatchingReturns(returnLogs, licenceReturnLogs) {
   const returnLogIds = returnLogs.map((returnLog) => {
     return returnLog.returnId
   })
@@ -171,7 +171,7 @@ function _getMatchingReturns (returnLogs, licenceReturnLogs) {
  *
  * @private
  */
-function _getReviewStatuses () {
+function _getReviewStatuses() {
   // the keys for the issues that will put the licence into review status
   const reviewStatusKeys = [
     'aggregate-factor',
@@ -189,7 +189,7 @@ function _getReviewStatuses () {
   return reviewStatuses
 }
 
-function _licenceIssues (allElementIssues, allReturnIssues) {
+function _licenceIssues(allElementIssues, allReturnIssues) {
   const allIssues = [...allElementIssues, ...allReturnIssues]
   const uniqueIssues = new Set(allIssues)
 
@@ -200,7 +200,7 @@ function _licenceIssues (allElementIssues, allReturnIssues) {
   return [...uniqueIssues].sort()
 }
 
-function _returnLogIssues (returnLog, licence) {
+function _returnLogIssues(returnLog, licence) {
   const returnLogIssues = []
 
   // Abstraction outside period issue
@@ -250,7 +250,7 @@ function _returnLogIssues (returnLog, licence) {
  *
  * @private
  */
-function _returnsReceivedStatus (returnLogs, licenceReturnLogs) {
+function _returnsReceivedStatus(returnLogs, licenceReturnLogs) {
   const matchingReturnLogs = _getMatchingReturns(returnLogs, licenceReturnLogs)
 
   const someReturnsNotReceived = matchingReturnLogs.some((matchingReturnLog) => {

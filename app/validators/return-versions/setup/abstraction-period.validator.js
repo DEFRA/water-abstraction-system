@@ -21,7 +21,7 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * @returns {object} - The result from calling Joi's schema.validate(). If any errors are found the 'error: ' property
  * will also exist, detailing what the issue is.
  */
-function go (payload) {
+function go(payload) {
   const {
     'start-abstraction-period-day': startDay,
     'start-abstraction-period-month': startMonth,
@@ -42,7 +42,7 @@ function go (payload) {
   return result
 }
 
-function _parsePayload (startDay, startMonth, endDay, endMonth) {
+function _parsePayload(startDay, startMonth, endDay, endMonth) {
   const parsedStartDay = startDay ? leftPadZeroes(startDay, 2) : ''
   const parsedStartMonth = startMonth ? leftPadZeroes(startMonth, 2) : ''
   const parsedEndDay = endDay ? leftPadZeroes(endDay, 2) : ''
@@ -62,39 +62,29 @@ function _parsePayload (startDay, startMonth, endDay, endMonth) {
   return parsePayload
 }
 
-function _validateAbstractionStartDate (startDate) {
+function _validateAbstractionStartDate(startDate) {
   const schema = Joi.object({
-    entry: Joi.string()
-      .required()
-      .messages({
-        'string.empty': 'Select the start date of the abstraction period'
-      }),
-    fullDate: Joi.date()
-      .format(['YYYY-MM-DD'])
-      .required()
-      .messages({
-        'date.base': 'Enter a real start date',
-        'date.format': 'Enter a real start date'
-      })
+    entry: Joi.string().required().messages({
+      'string.empty': 'Select the start date of the abstraction period'
+    }),
+    fullDate: Joi.date().format(['YYYY-MM-DD']).required().messages({
+      'date.base': 'Enter a real start date',
+      'date.format': 'Enter a real start date'
+    })
   })
 
   return schema.validate(startDate, { abortEarly: true })
 }
 
-function _validateAbstractionEndDate (endDate) {
+function _validateAbstractionEndDate(endDate) {
   const schema = Joi.object({
-    entry: Joi.string()
-      .required()
-      .messages({
-        'string.empty': 'Select the end date of the abstraction period'
-      }),
-    fullDate: Joi.date()
-      .format(['YYYY-MM-DD'])
-      .required()
-      .messages({
-        'date.base': 'Enter a real end date',
-        'date.format': 'Enter a real end date'
-      })
+    entry: Joi.string().required().messages({
+      'string.empty': 'Select the end date of the abstraction period'
+    }),
+    fullDate: Joi.date().format(['YYYY-MM-DD']).required().messages({
+      'date.base': 'Enter a real end date',
+      'date.format': 'Enter a real end date'
+    })
   })
 
   return schema.validate(endDate, { abortEarly: true })

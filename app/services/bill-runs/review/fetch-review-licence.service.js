@@ -17,35 +17,21 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff review licence page
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 
-async function _fetch (reviewLicenceId) {
+async function _fetch(reviewLicenceId) {
   return ReviewLicenceModel.query()
     .findById(reviewLicenceId)
-    .select([
-      'id',
-      'billRunId',
-      'licenceId',
-      'licenceRef',
-      'licenceHolder',
-      'status',
-      'progress'
-    ])
+    .select(['id', 'billRunId', 'licenceId', 'licenceRef', 'licenceHolder', 'status', 'progress'])
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (billRunBuilder) => {
       billRunBuilder
-        .select([
-          'id',
-          'toFinancialYearEnding'
-        ])
+        .select(['id', 'toFinancialYearEnding'])
         .withGraphFetched('region')
         .modifyGraph('region', (regionBuilder) => {
-          regionBuilder.select([
-            'id',
-            'displayName'
-          ])
+          regionBuilder.select(['id', 'displayName'])
         })
     })
     .withGraphFetched('reviewReturns')
@@ -68,55 +54,35 @@ async function _fetch (reviewLicenceId) {
         .orderBy('reviewReturns.startDate', 'asc')
         .withGraphFetched('returnLog')
         .modifyGraph('returnLog', (returnLogBuilder) => {
-          returnLogBuilder
-            .select([
-              'id',
-              ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-              ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-              ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-              ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
-            ])
+          returnLogBuilder.select([
+            'id',
+            ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
+            ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
+            ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
+            ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
+          ])
         })
         .withGraphFetched('reviewChargeElements')
         .modifyGraph('reviewChargeElements', (reviewChargeElementsBuilder) => {
-          reviewChargeElementsBuilder
-            .select([
-              'reviewChargeElements.id'
-            ])
+          reviewChargeElementsBuilder.select(['reviewChargeElements.id'])
         })
     })
     .withGraphFetched('reviewChargeVersions')
     .modifyGraph('reviewChargeVersions', (reviewChargeVersions) => {
       reviewChargeVersions
-        .select([
-          'id',
-          'chargePeriodEndDate',
-          'chargePeriodStartDate'
-        ])
+        .select(['id', 'chargePeriodEndDate', 'chargePeriodStartDate'])
         .orderBy('chargePeriodStartDate', 'asc')
         .withGraphFetched('reviewChargeReferences')
         .modifyGraph('reviewChargeReferences', (reviewChargeReferencesBuilder) => {
           reviewChargeReferencesBuilder
-            .select([
-              'id',
-              'aggregate',
-              'amendedAuthorisedVolume',
-              'chargeAdjustment'
-            ])
+            .select(['id', 'aggregate', 'amendedAuthorisedVolume', 'chargeAdjustment'])
             .withGraphFetched('chargeReference')
             .modifyGraph('chargeReference', (chargeReferenceBuilder) => {
               chargeReferenceBuilder
-                .select([
-                  'id'
-                ])
+                .select(['id'])
                 .withGraphFetched('chargeCategory')
                 .modifyGraph('chargeCategory', (chargeCategoryBuilder) => {
-                  chargeCategoryBuilder
-                    .select([
-                      'id',
-                      'reference',
-                      'shortDescription'
-                    ])
+                  chargeCategoryBuilder.select(['id', 'reference', 'shortDescription'])
                 })
             })
             .withGraphFetched('reviewChargeElements')
@@ -144,31 +110,24 @@ async function _fetch (reviewLicenceId) {
                     ])
                     .withGraphFetched('purpose')
                     .modifyGraph('purpose', (purposeBuilder) => {
-                      purposeBuilder
-                        .select([
-                          'id',
-                          'description'
-                        ])
+                      purposeBuilder.select(['id', 'description'])
                     })
                 })
                 .withGraphFetched('reviewReturns')
                 .modifyGraph('reviewReturns', (reviewReturnsBuilder) => {
-                  reviewReturnsBuilder
-                    .select([
-                      'reviewReturns.id',
-                      'reviewReturns.quantity',
-                      'reviewReturns.returnReference',
-                      'reviewReturns.returnStatus'
-                    ])
+                  reviewReturnsBuilder.select([
+                    'reviewReturns.id',
+                    'reviewReturns.quantity',
+                    'reviewReturns.returnReference',
+                    'reviewReturns.returnStatus'
+                  ])
                 })
             })
         })
         .withGraphFetched('chargeVersion')
         .modifyGraph('chargeVersion', (chargeVersionBuilder) => {
           chargeVersionBuilder
-            .select([
-              'id'
-            ])
+            .select(['id'])
             .withGraphFetched('billingAccount')
             .modifyGraph('billingAccount', (billingAccountBuilder) => {
               billingAccountBuilder.modify('contactDetails')

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -47,8 +47,7 @@ describe('Financial Agreement model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await FinancialAgreementModel.query()
-          .innerJoinRelated('licenceAgreements')
+        const query = await FinancialAgreementModel.query().innerJoinRelated('licenceAgreements')
 
         expect(query).to.exist()
       })

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -114,7 +114,7 @@ describe('Bill Runs Setup Year presenter', () => {
   })
 })
 
-function _financialYearsData (selectedYear) {
+function _financialYearsData(selectedYear) {
   return [
     {
       text: '2023 to 2024',

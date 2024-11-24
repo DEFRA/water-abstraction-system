@@ -14,13 +14,13 @@ const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licenc
  * Public table name - public.licence_version_purpose_condition_types
  *
  */
-async function seed () {
+async function seed() {
   for (const licenceVersionPurposeConditionType of licenceVersionPurposeConditionTypes) {
     await _upsert(licenceVersionPurposeConditionType)
   }
 }
 
-async function _upsert (licenceVersionPurposeConditionType) {
+async function _upsert(licenceVersionPurposeConditionType) {
   return LicenceVersionPurposeConditionTypeModel.query()
     .insert({ ...licenceVersionPurposeConditionType, updatedAt: timestampForPostgres() })
     .onConflict(['code', 'subcode'])

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,6 +25,7 @@ describe('View Licence Summary service', () => {
   let fetchLicenceResult
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableLicencePointsView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableLicencePurposesView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
@@ -55,15 +56,18 @@ describe('View Licence Summary service', () => {
           abstractionPointsLinkText: 'View details of the abstraction point',
           activeTab: 'summary',
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+          enableLicencePointsView: true,
           enableLicencePurposesView: true,
           enableMonitoringStationsView: true,
           endDate: null,
           licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
           licenceHolder: 'Unregistered licence',
-          monitoringStations: [{
-            id: 'ac075651-4781-4e24-a684-b943b98607ca',
-            label: 'MEVAGISSEY FIRE STATION'
-          }],
+          monitoringStations: [
+            {
+              id: 'ac075651-4781-4e24-a684-b943b98607ca',
+              label: 'MEVAGISSEY FIRE STATION'
+            }
+          ],
           licenceName: 'fake licence',
           purposes: null,
           purposesCount: 0,
@@ -76,7 +80,7 @@ describe('View Licence Summary service', () => {
   })
 })
 
-function _testLicence () {
+function _testLicence() {
   return LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
@@ -86,13 +90,15 @@ function _testLicence () {
       displayName: 'Avalon'
     },
     licenceVersions: [],
-    licenceMonitoringStations: [{
-      id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
-      monitoringStation: {
-        id: 'ac075651-4781-4e24-a684-b943b98607ca',
-        label: 'MEVAGISSEY FIRE STATION'
+    licenceMonitoringStations: [
+      {
+        id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
+        monitoringStation: {
+          id: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }
       }
-    }],
+    ],
     licenceDocument: null,
     licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
   })

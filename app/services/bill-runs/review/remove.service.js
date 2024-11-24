@@ -16,7 +16,7 @@ const RemovePresenter = require('../../../presenters/bill-runs/review/remove.pre
  * @returns {Promise<object>} an object representing the `pageData` needed by the remove licence template. It contains
  * details of the bill run & the licence reference.
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   const reviewLicence = await FetchRemoveReviewLicenceService.go(reviewLicenceId)
 
   return RemovePresenter.go(reviewLicence)

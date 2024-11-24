@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -13,10 +13,14 @@ const ExistingValidator = require('../../../../app/validators/return-versions/se
 describe('Return Versions Setup - Existing validator', () => {
   const returnVersions = [
     {
-      id: '60b5d10d-1372-4fb2-b222-bfac81da69ab', reason: null, startDate: '2023-01-01T00:00:00.000Z'
+      id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+      reason: null,
+      startDate: '2023-01-01T00:00:00.000Z'
     },
     {
-      id: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', reason: 'major-change', startDate: '2024-05-07T00:00:00.000Z'
+      id: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5',
+      reason: 'major-change',
+      startDate: '2024-05-07T00:00:00.000Z'
     }
   ]
 

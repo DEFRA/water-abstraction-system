@@ -31,7 +31,7 @@ const { generateLegacyId } = require('./return-requirement.helper.js')
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnLogModel.query()
@@ -49,7 +49,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
   const timestamp = timestampForPostgres()
@@ -115,7 +115,7 @@ function defaults (data = {}) {
  *
  * @returns {string} the generated return log ID
  */
-function generateReturnLogId (
+function generateReturnLogId(
   startDate = '2022-04-01',
   endDate = '2023-03-31',
   version = 1,

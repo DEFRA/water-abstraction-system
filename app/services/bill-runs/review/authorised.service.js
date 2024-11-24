@@ -16,7 +16,7 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  *
  * @returns {Promise<object>} the 'pageData' needed to view the amend authorised volume page
  */
-async function go (reviewChargeReferenceId) {
+async function go(reviewChargeReferenceId) {
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
 
   const pageData = AuthorisedPresenter.go(reviewChargeReference)

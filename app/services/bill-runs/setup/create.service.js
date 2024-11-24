@@ -20,10 +20,8 @@ const StartBillRunProcessService = require('../start-bill-run-process.service.js
  *
  * @param {object} user - Instance of `UserModel` that represents the user making the request
  * @param {object} existsResults - Results of `ExistsService` returned in the controller and passed on to this service
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (user, existsResults) {
+async function go(user, existsResults) {
   const { matchResults, session, yearToUse } = existsResults
   const { region: regionId, type, summer } = session
 
@@ -32,10 +30,10 @@ async function go (user, existsResults) {
   await _triggerBillRun(regionId, type, user, yearToUse, existingBillRun)
   await _triggerLegacyBillRun(regionId, type, user, yearToUse, summer, existingBillRun)
 
-  return session.$query().delete()
+  await session.$query().delete()
 }
 
-async function _triggerBillRun (regionId, batchType, user, year, existingBillRun = null) {
+async function _triggerBillRun(regionId, batchType, user, year, existingBillRun = null) {
   const { username: userEmail } = user
 
   // The one case we have to handle is where the user selected supplementary and a match was found, but it was to an
@@ -53,7 +51,7 @@ async function _triggerBillRun (regionId, batchType, user, year, existingBillRun
   return StartBillRunProcessService.go(regionId, batchType, userEmail, year)
 }
 
-async function _triggerLegacyBillRun (regionId, batchType, user, year, summer, existingBillRun = null) {
+async function _triggerLegacyBillRun(regionId, batchType, user, year, summer, existingBillRun = null) {
   // The legacy service no longer handles annual billing
   if (batchType === 'annual') {
     return null

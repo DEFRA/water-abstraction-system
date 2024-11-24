@@ -26,7 +26,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go (licenceId, journey) {
+async function go(licenceId, journey) {
   const licence = await _fetchLicence(licenceId)
 
   const data = _data(licence, journey)
@@ -34,7 +34,7 @@ async function go (licenceId, journey) {
   return _createSession(data)
 }
 
-async function _createSession (data) {
+async function _createSession(data) {
   const session = await SessionModel.query()
     .insert({
       data
@@ -44,7 +44,7 @@ async function _createSession (data) {
   return session
 }
 
-function _data (licence, journey) {
+function _data(licence, journey) {
   const { id, licenceRef, licenceVersions, returnVersions, startDate, waterUndertaker } = licence
   const ends = licence.$ends()
 
@@ -66,36 +66,18 @@ function _data (licence, journey) {
   }
 }
 
-async function _fetchLicence (licenceId) {
+async function _fetchLicence(licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
-    .select([
-      'id',
-      'expiredDate',
-      'lapsedDate',
-      'licenceRef',
-      'revokedDate',
-      'startDate',
-      'waterUndertaker'
-    ])
+    .select(['id', 'expiredDate', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate', 'waterUndertaker'])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
-      builder
-        .select([
-          'id',
-          'startDate'
-        ])
-        .where('status', 'current')
-        .orderBy('startDate', 'desc')
+      builder.select(['id', 'startDate']).where('status', 'current').orderBy('startDate', 'desc')
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
       builder
-        .select([
-          'id',
-          'startDate',
-          'reason'
-        ])
+        .select(['id', 'startDate', 'reason'])
         .where('status', 'current')
         // A return version must include return requirements in order for us to be able to copy from it
         .whereExists(
@@ -107,12 +89,7 @@ async function _fetchLicence (licenceId) {
     })
     .withGraphFetched('returnVersions.modLogs')
     .modifyGraph('returnVersions.modLogs', (builder) => {
-      builder
-        .select([
-          'id',
-          'reasonDescription'
-        ])
-        .orderBy('externalId', 'asc')
+      builder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
     })
     // See licence.model.js `static get modifiers` if you are unsure about what this is doing
     .modify('licenceHolder')
@@ -124,7 +101,7 @@ async function _fetchLicence (licenceId) {
   return licence
 }
 
-function _currentVersionStartDate (licenceVersions) {
+function _currentVersionStartDate(licenceVersions) {
   // Extract the start date from the most 'current' licence version. _fetchLicence() ensures in the case
   // that there is more than one that they are ordered by their start date (DESC)
   const { startDate } = licenceVersions[0]

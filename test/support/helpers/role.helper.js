@@ -21,7 +21,7 @@ const { data: roles } = require('../../../db/seeds/data/roles.js')
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return roles[index]
   }

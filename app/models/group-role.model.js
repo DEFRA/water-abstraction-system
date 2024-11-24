@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class GroupRoleModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'groupRoles'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       role: {
         relation: Model.BelongsToOneRelation,

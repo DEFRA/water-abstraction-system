@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -61,9 +61,10 @@ describe('Fetch Existing Licence Details Service', () => {
         const chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id })
 
         // two-part tariff indicators
-        const chargeReference = await ChargeReferenceHelper.add(
-          { chargeVersionId: chargeVersion.id, adjustments: { s127: true } }
-        )
+        const chargeReference = await ChargeReferenceHelper.add({
+          chargeVersionId: chargeVersion.id,
+          adjustments: { s127: true }
+        })
 
         await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
       })

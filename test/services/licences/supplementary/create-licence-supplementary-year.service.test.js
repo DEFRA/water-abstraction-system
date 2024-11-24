@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -34,12 +34,15 @@ describe('Create Licence Supplementary Years Service', () => {
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
         expect(result).to.have.length(1)
-        expect(result[0]).to.equal({
-          licenceId,
-          billRunId: null,
-          financialYearEnd: financialYearEnds[0],
-          twoPartTariff
-        }, { skip: ['id'] })
+        expect(result[0]).to.equal(
+          {
+            licenceId,
+            billRunId: null,
+            financialYearEnd: financialYearEnds[0],
+            twoPartTariff
+          },
+          { skip: ['id'] }
+        )
       })
     })
 
@@ -85,14 +88,8 @@ describe('Create Licence Supplementary Years Service', () => {
   })
 })
 
-function _fetchLicenceSupplementaryYears (licenceId) {
+function _fetchLicenceSupplementaryYears(licenceId) {
   return LicenceSupplementaryYearModel.query()
-    .select([
-      'id',
-      'licenceId',
-      'billRunId',
-      'financialYearEnd',
-      'twoPartTariff'
-    ])
+    .select(['id', 'licenceId', 'billRunId', 'financialYearEnd', 'twoPartTariff'])
     .where('licenceId', licenceId)
 }

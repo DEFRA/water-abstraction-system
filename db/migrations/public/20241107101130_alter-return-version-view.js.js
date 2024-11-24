@@ -3,11 +3,9 @@
 const viewName = 'return_versions'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
-    .createView(viewName, (view) => {
-      view.as(knex(viewName).withSchema('water').select([
+  return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
+    view.as(
+      knex(viewName).withSchema('water').select([
         'return_version_id AS id',
         'licence_id',
         'version_number AS version',
@@ -22,16 +20,15 @@ exports.up = function (knex) {
         'created_by',
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
-    .createView(viewName, (view) => {
-      view.as(knex(viewName).withSchema('water').select([
+  return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
+    view.as(
+      knex(viewName).withSchema('water').select([
         'return_version_id AS id',
         'licence_id',
         'version_number AS version',
@@ -46,6 +43,7 @@ exports.down = function (knex) {
         'created_by',
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }

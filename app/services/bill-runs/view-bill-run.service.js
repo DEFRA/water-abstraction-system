@@ -19,7 +19,7 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
  * @returns {Promise<object>} an object representing the `pageData` needed by the view bill run template. It contains
  * details of the bill run and the bills linked to it plus the page title.
  */
-async function go (id) {
+async function go(id) {
   const result = await FetchBillRunService.go(id)
 
   const pageData = _pageData(result)
@@ -27,7 +27,7 @@ async function go (id) {
   return pageData
 }
 
-function _pageData (fetchResult) {
+function _pageData(fetchResult) {
   const { billRun, billSummaries } = fetchResult
 
   if (billRun.status === 'empty') {

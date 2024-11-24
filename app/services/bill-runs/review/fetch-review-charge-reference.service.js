@@ -20,11 +20,11 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * @returns {module:ReviewChargeReferenceModel} the matching `ReviewChargeReferenceModel` instance and related data
  * needed for the two-part tariff review charge reference page and sub-pages
  */
-async function go (reviewChargeReferenceId) {
+async function go(reviewChargeReferenceId) {
   return _fetch(reviewChargeReferenceId)
 }
 
-async function _fetch (reviewChargeReferenceId) {
+async function _fetch(reviewChargeReferenceId) {
   return ReviewChargeReferenceModel.query()
     .findById(reviewChargeReferenceId)
     .select([
@@ -42,42 +42,24 @@ async function _fetch (reviewChargeReferenceId) {
     .withGraphFetched('reviewChargeVersion')
     .modifyGraph('reviewChargeVersion', (reviewChargeVersionBuilder) => {
       reviewChargeVersionBuilder
-        .select([
-          'id',
-          'chargePeriodStartDate',
-          'chargePeriodEndDate'
-        ])
+        .select(['id', 'chargePeriodStartDate', 'chargePeriodEndDate'])
         .withGraphFetched('reviewLicence')
         .modifyGraph('reviewLicence', (reviewLicenceBuilder) => {
           reviewLicenceBuilder
-            .select([
-              'id'
-            ])
+            .select(['id'])
             .withGraphFetched('billRun')
             .modifyGraph('billRun', (billRunBuilder) => {
-              billRunBuilder
-                .select([
-                  'id',
-                  'toFinancialYearEnding'
-                ])
+              billRunBuilder.select(['id', 'toFinancialYearEnding'])
             })
             .withGraphFetched('licence')
             .modifyGraph('licence', (licenceBuilder) => {
-              licenceBuilder
-                .select([
-                  'id',
-                  'waterUndertaker'
-                ])
+              licenceBuilder.select(['id', 'waterUndertaker'])
             })
         })
     })
     .withGraphFetched('reviewChargeElements')
     .modifyGraph('reviewChargeElements', (reviewChargeElementsBuilder) => {
-      reviewChargeElementsBuilder
-        .select([
-          'id',
-          'amendedAllocated'
-        ])
+      reviewChargeElementsBuilder.select(['id', 'amendedAllocated'])
     })
     .withGraphFetched('chargeReference')
     .modifyGraph('chargeReference', (chargeReferenceBuilder) => {
@@ -91,12 +73,7 @@ async function _fetch (reviewChargeReferenceId) {
         ])
         .withGraphFetched('chargeCategory')
         .modifyGraph('chargeCategory', (chargeCategoryBuilder) => {
-          chargeCategoryBuilder
-            .select([
-              'id',
-              'reference',
-              'shortDescription'
-            ])
+          chargeCategoryBuilder.select(['id', 'reference', 'shortDescription'])
         })
     })
 }

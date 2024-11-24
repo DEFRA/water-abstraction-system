@@ -13,7 +13,7 @@ const BaseNotifierLib = require('./base-notifier.lib.js')
  * Created for use with the `app/plugins/global-notifier.plugin.js`.
  */
 class GlobalNotifierLib extends BaseNotifierLib {
-  constructor (logger, notifier) {
+  constructor(logger, notifier) {
     // This is here more to make it clear that we expect these args to be provided. BaseNotifierLib has the built-in
     // ability to instantiate them if not provided. But for our use case in global-notifier.plugin.js we want to ensure
     // we are using the existing instances.

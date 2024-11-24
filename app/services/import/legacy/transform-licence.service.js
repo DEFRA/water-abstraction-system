@@ -16,7 +16,7 @@ const LicenceValidator = require('../../../validators/import/licence.validator.j
  *
  * @returns {Promise<object>} an object representing a valid WRLS licence
  */
-async function go (licenceRef) {
+async function go(licenceRef) {
   const naldLicence = await FetchLicenceService.go(licenceRef)
 
   const transformedLicence = LicencePresenter.go(naldLicence)

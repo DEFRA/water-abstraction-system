@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,9 +40,7 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(
-          notifierStub.omg.calledWith('I am the test with no data')
-        ).to.be.true()
+        expect(notifierStub.omg.calledWith('I am the test with no data')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.name).not.to.exist()
@@ -55,9 +53,7 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(
-          notifierStub.omg.calledWith('I am the test with data')
-        ).to.be.true()
+        expect(notifierStub.omg.calledWith('I am the test with data')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.name).to.exist()
       })
@@ -167,15 +163,19 @@ describe('GeneralLib', () => {
 
     describe('when given periods that do not overlap', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-02')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-02')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-01-31')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-01-31')
+          }
+        ]
       })
 
       it('returns false', () => {
@@ -187,15 +187,19 @@ describe('GeneralLib', () => {
 
     describe('when a check period overlaps the start of a reference period', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-28')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-28')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-01-15'),
-          endDate: new Date('2023-02-15')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-01-15'),
+            endDate: new Date('2023-02-15')
+          }
+        ]
       })
 
       it('returns true', () => {
@@ -207,15 +211,19 @@ describe('GeneralLib', () => {
 
     describe('when a check period overlaps the end of a reference period', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-01-31')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-01-31')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-01-15'),
-          endDate: new Date('2023-02-15')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-01-15'),
+            endDate: new Date('2023-02-15')
+          }
+        ]
       })
 
       it('returns true', () => {
@@ -227,15 +235,19 @@ describe('GeneralLib', () => {
 
     describe('when a reference period is completely inside a check period', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-15')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-15')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-02-28')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-02-28')
+          }
+        ]
       })
 
       it('returns true', () => {
@@ -247,15 +259,19 @@ describe('GeneralLib', () => {
 
     describe('when a check period is completely inside a reference period', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-02-28')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-02-28')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-15')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-15')
+          }
+        ]
       })
 
       it('returns true', () => {
@@ -267,15 +283,19 @@ describe('GeneralLib', () => {
 
     describe('when the periods are the same', () => {
       beforeEach(() => {
-        referencePeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-28')
-        }]
+        referencePeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-28')
+          }
+        ]
 
-        checkPeriod = [{
-          startDate: new Date('2023-02-01'),
-          endDate: new Date('2023-02-28')
-        }]
+        checkPeriod = [
+          {
+            startDate: new Date('2023-02-01'),
+            endDate: new Date('2023-02-28')
+          }
+        ]
       })
 
       it('returns true', () => {

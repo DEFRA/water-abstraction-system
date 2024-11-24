@@ -18,7 +18,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:ReturnLogModel[]>} Return logs that matched the charge element
  */
-function go (chargeElement, returnLogs) {
+function go(chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchingReturns.length > 0) {
@@ -28,7 +28,7 @@ function go (chargeElement, returnLogs) {
   return matchingReturns
 }
 
-function _addMatchingReturnsToElement (matchingReturns, chargeElement) {
+function _addMatchingReturnsToElement(matchingReturns, chargeElement) {
   matchingReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
       allocatedQuantity: 0,
@@ -45,7 +45,7 @@ function _addMatchingReturnsToElement (matchingReturns, chargeElement) {
  *
  * @private
  */
-function _matchReturns (chargeElement, returnLogs) {
+function _matchReturns(chargeElement, returnLogs) {
   const elementCode = chargeElement.purpose.legacyId
   const elementPeriods = chargeElement.abstractionPeriods
 

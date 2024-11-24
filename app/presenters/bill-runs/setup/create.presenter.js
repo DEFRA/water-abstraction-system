@@ -23,18 +23,8 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    id,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function go(session, billRun) {
+  const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   const billRunType = formatBillRunType(batchType, scheme, summer)
 
@@ -53,7 +43,7 @@ function go (session, billRun) {
   }
 }
 
-function _backLink (session) {
+function _backLink(session) {
   const { type, year } = session
 
   if (!type.startsWith('two_part')) {
@@ -67,7 +57,7 @@ function _backLink (session) {
   return `/system/bill-runs/setup/${session.id}/season`
 }
 
-function _billRunLink (billRun) {
+function _billRunLink(billRun) {
   const { id: billRunId, status, toFinancialYearEnding } = billRun
 
   if (status !== 'review') {
@@ -81,7 +71,7 @@ function _billRunLink (billRun) {
   return `/billing/batch/${billRunId}/two-part-tariff-review`
 }
 
-function _warningMessage (billRunType, status) {
+function _warningMessage(billRunType, status) {
   if (billRunType === 'Supplementary') {
     return 'You need to confirm or cancel this bill run before you can create a new one'
   }

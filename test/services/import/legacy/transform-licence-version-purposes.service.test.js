@@ -5,26 +5,26 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
-const FetchLicenceVersionPurposesService =
-  require('../../../../app/services/import/legacy/fetch-licence-version-purposes.service.js')
+const FetchLicenceVersionPurposesService = require('../../../../app/services/import/legacy/fetch-licence-version-purposes.service.js')
 
 // Thing under test
-const TransformLicenceVersionPurposesService =
-  require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
+const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
 
 describe('Import Legacy Transform Licence Version Purposes service', () => {
   // NOTE: Clearly this is an incomplete representation of the licence returned from TransformedLicenceService. But for
   // the purposes of this service it is all that is needed. The externalId is used to match the licence version to the
   // fetched purpose
   const transformedLicence = {
-    licenceVersions: [{
-      externalId: '6:2113:100:0',
-      licenceVersionPurposes: []
-    }]
+    licenceVersions: [
+      {
+        externalId: '6:2113:100:0',
+        licenceVersionPurposes: []
+      }
+    ]
   }
 
   const naldLicenceId = '2113'
@@ -104,7 +104,7 @@ describe('Import Legacy Transform Licence Version Purposes service', () => {
   })
 })
 
-function _legacyLicenceVersionPurpose () {
+function _legacyLicenceVersionPurpose() {
   return {
     abstraction_period_end_day: 31,
     abstraction_period_end_month: 3,

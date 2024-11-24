@@ -12,7 +12,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const { id: sessionId, licence, reason } = session
 
   return {
@@ -23,7 +23,7 @@ function go (session) {
   }
 }
 
-function _backLink (session) {
+function _backLink(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

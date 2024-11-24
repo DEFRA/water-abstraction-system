@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../../../base.presenter.js')
+const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
 const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib.js')
 
 /**
@@ -15,16 +16,27 @@ const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib
  *
  * @returns {object} The data formatted for the view template
  */
-function go (session) {
-  const { multipleUpload, id: sessionId, journey, licence, note, reason } = session
+function go(session) {
+  const {
+    id: sessionId,
+    journey,
+    licence,
+    multipleUpload,
+    note,
+    reason,
+    returnVersionStartDate,
+    quarterlyReturns
+  } = session
 
   const returnsRequired = journey === 'returns-required'
 
   return {
-    multipleUpload,
     licenceRef: licence.licenceRef,
+    multipleUpload,
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
+    quarterlyReturns,
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
@@ -32,7 +44,7 @@ function go (session) {
   }
 }
 
-function _note (note) {
+function _note(note) {
   if (note?.content) {
     return {
       actions: [
@@ -43,15 +55,13 @@ function _note (note) {
     }
   } else {
     return {
-      actions: [
-        { text: 'Add a note', href: 'note' }
-      ],
+      actions: [{ text: 'Add a note', href: 'note' }],
       text: 'No notes added'
     }
   }
 }
 
-function _reasonLink (sessionId, returnsRequired) {
+function _reasonLink(sessionId, returnsRequired) {
   if (returnsRequired) {
     return `/system/return-versions/setup/${sessionId}/reason`
   }
@@ -59,7 +69,7 @@ function _reasonLink (sessionId, returnsRequired) {
   return `/system/return-versions/setup/${sessionId}/no-returns-required`
 }
 
-function _startDate (session) {
+function _startDate(session) {
   return formatLongDate(new Date(session.returnVersionStartDate))
 }
 

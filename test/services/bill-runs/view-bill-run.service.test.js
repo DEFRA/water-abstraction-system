@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -109,28 +109,32 @@ describe('View Bill Run service', () => {
               {
                 type: 'water-companies',
                 caption: '1 water company',
-                bills: [{
-                  id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-                  accountNumber: 'E22288888A',
-                  billingContact: 'Acme Water Services Ltd',
-                  licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
-                  licencesCount: 3,
-                  financialYear: 2023,
-                  total: '£213,178.00'
-                }]
+                bills: [
+                  {
+                    id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+                    accountNumber: 'E22288888A',
+                    billingContact: 'Acme Water Services Ltd',
+                    licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
+                    licencesCount: 3,
+                    financialYear: 2023,
+                    total: '£213,178.00'
+                  }
+                ]
               },
               {
                 type: 'other-abstractors',
                 caption: '1 other abstractor',
-                bills: [{
-                  id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-                  accountNumber: 'E11101999A',
-                  billingContact: 'Geordie Leforge',
-                  licences: ['17/53/001/G/782'],
-                  licencesCount: 1,
-                  financialYear: 2023,
-                  total: '£97.00'
-                }]
+                bills: [
+                  {
+                    id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+                    accountNumber: 'E11101999A',
+                    billingContact: 'Geordie Leforge',
+                    licences: ['17/53/001/G/782'],
+                    licencesCount: 1,
+                    financialYear: 2023,
+                    total: '£97.00'
+                  }
+                ]
               }
             ],
             view: 'bill-runs/view.njk'
@@ -170,15 +174,17 @@ describe('View Bill Run service', () => {
               {
                 type: 'other-abstractors',
                 caption: '1 other abstractor',
-                bills: [{
-                  id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-                  accountNumber: 'E11101999A',
-                  billingContact: 'Geordie Leforge',
-                  licences: ['17/53/001/G/782'],
-                  licencesCount: 1,
-                  financialYear: 2023,
-                  total: '£97.00'
-                }]
+                bills: [
+                  {
+                    id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+                    accountNumber: 'E11101999A',
+                    billingContact: 'Geordie Leforge',
+                    licences: ['17/53/001/G/782'],
+                    licencesCount: 1,
+                    financialYear: 2023,
+                    total: '£97.00'
+                  }
+                ]
               }
             ],
             view: 'bill-runs/view.njk'
@@ -190,23 +196,19 @@ describe('View Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillRunService, 'go').resolves(
-        {
-          billRun: undefined,
-          billSummaries: []
-        }
-      )
+      Sinon.stub(FetchBillRunService, 'go').resolves({
+        billRun: undefined,
+        billSummaries: []
+      })
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillRunService.go('testId'))
-        .to
-        .reject()
+      await expect(ViewBillRunService.go('testId')).to.reject()
     })
   })
 })
 
-function _multipleGroupBillRun () {
+function _multipleGroupBillRun() {
   const billSummaries = _billSummariesData()
 
   return {
@@ -236,7 +238,7 @@ function _multipleGroupBillRun () {
   }
 }
 
-function _singleGroupBillRun () {
+function _singleGroupBillRun() {
   const billSummaries = _billSummariesData()
 
   delete billSummaries[1]
@@ -268,7 +270,7 @@ function _singleGroupBillRun () {
   }
 }
 
-function _billSummariesData () {
+function _billSummariesData() {
   return [
     {
       id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',

@@ -16,14 +16,14 @@ const BillRunModel = require('../../models/bill-run.model.js')
  * @param {string} [options.batchType=supplementary] - The type of bill run to create. Defaults to 'supplementary'
  * @param {string} [options.scheme=sroc] - The applicable charging scheme. Defaults to 'sroc'
  * @param {string} [options.source=wrls] - Where the bill run originated from. Records imported from NALD have the
- *  source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
+ * source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
  * @param {string} [options.externalId=null] - The id of the bill run as created in the Charging Module
  * @param {string} [options.status=queued] - The status that the bill run should be created with
  * @param {number} [options.errorCode=null] - Numeric error code
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
-async function go (regionId, financialYearEndings, options) {
+async function go(regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
   const optionsData = _defaultOptions(options)
 
@@ -40,7 +40,7 @@ async function go (regionId, financialYearEndings, options) {
   return billRun
 }
 
-function _defaultOptions (option) {
+function _defaultOptions(option) {
   const defaults = {
     batchType: 'supplementary',
     scheme: 'sroc',

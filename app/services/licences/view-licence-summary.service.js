@@ -17,7 +17,7 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go (licenceId, auth) {
+async function go(licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const summaryLicenceData = await FetchLicenceSummaryService.go(licenceId)

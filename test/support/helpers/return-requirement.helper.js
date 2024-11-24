@@ -27,7 +27,7 @@ const ReturnRequirementModel = require('../../../app/models/return-requirement.m
  *
  * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementModel.query()
@@ -45,7 +45,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const legacyId = data.legacyId ? data.legacyId : generateLegacyId()
 
   const defaults = {
@@ -71,7 +71,7 @@ function defaults (data = {}) {
  *
  * @returns {number}
  */
-function generateLegacyId () {
+function generateLegacyId() {
   return randomInteger(100, 19999999)
 }
 

@@ -21,23 +21,23 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-async function go (licence, billingPeriod) {
+async function go(licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)
 }
 
-function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
+function _abstractionOutsidePeriod(returnAbstractionPeriods, returnLine) {
   const { startDate, endDate } = returnLine
 
   return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
 }
 
-async function _prepareReturnLogs (licence, billingPeriod) {
+async function _prepareReturnLogs(licence, billingPeriod) {
   licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
 
   _prepReturnsForMatching(licence.returnLogs, billingPeriod)
 }
 
-function _prepReturnsForMatching (returnLogs, billingPeriod) {
+function _prepReturnsForMatching(returnLogs, billingPeriod) {
   returnLogs.forEach((returnLog) => {
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, returnSubmissions } = returnLog
     const abstractionPeriods = DetermineAbstractionPeriodService.go(

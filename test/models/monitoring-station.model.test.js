@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,9 +24,7 @@ describe('Monitoring Station model', () => {
 
     testLicenceMonitoringStations = []
     for (let i = 0; i < 2; i++) {
-      const licenceMonitoringStation = await LicenceMonitoringStationHelper.add(
-        { monitoringStationId: testRecord.id }
-      )
+      const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ monitoringStationId: testRecord.id })
 
       testLicenceMonitoringStations.push(licenceMonitoringStation)
     }
@@ -44,8 +42,7 @@ describe('Monitoring Station model', () => {
   describe('Relationships', () => {
     describe('when linking to licence monitoring stations', () => {
       it('can successfully run a related query', async () => {
-        const query = await MonitoringStationModel.query()
-          .innerJoinRelated('licenceMonitoringStations')
+        const query = await MonitoringStationModel.query().innerJoinRelated('licenceMonitoringStations')
 
         expect(query).to.exist()
       })

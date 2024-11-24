@@ -19,7 +19,7 @@ const { db } = require('../../../../db/db.js')
  *
  * Credit to {@link https://stackoverflow.com/a/53169879 | Programmatically run knex seed:run}
  */
-async function go () {
+async function go() {
   await db.seed.run()
 }
 

@@ -27,7 +27,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the agreements exceptions page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload, yar) {
+async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -65,19 +65,19 @@ async function go (sessionId, requirementIndex, payload, yar) {
  *
  * @private
  */
-function _handleOneOptionSelected (payload) {
+function _handleOneOptionSelected(payload) {
   if (!Array.isArray(payload.agreementsExceptions)) {
     payload.agreementsExceptions = [payload.agreementsExceptions]
   }
 }
 
-async function _save (session, requirementIndex, payload) {
+async function _save(session, requirementIndex, payload) {
   session.requirements[requirementIndex].agreementsExceptions = payload.agreementsExceptions
 
   return session.$update()
 }
 
-function _validate (payload) {
+function _validate(payload) {
   const validation = AgreementsExceptionsValidator.go(payload)
 
   if (!validation.error) {

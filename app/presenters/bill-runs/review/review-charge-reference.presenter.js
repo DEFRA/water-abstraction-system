@@ -21,7 +21,7 @@ const {
  *
  * @returns {object} page date needed for the review charge reference page
  */
-function go (reviewChargeReference) {
+function go(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,
@@ -49,13 +49,8 @@ function go (reviewChargeReference) {
   }
 }
 
-function _factors (reviewChargeReference, canAmend) {
-  const {
-    aggregate,
-    amendedAggregate,
-    amendedChargeAdjustment,
-    chargeAdjustment
-  } = reviewChargeReference
+function _factors(reviewChargeReference, canAmend) {
+  const { aggregate, amendedAggregate, amendedChargeAdjustment, chargeAdjustment } = reviewChargeReference
 
   const factors = []
 
@@ -67,10 +62,10 @@ function _factors (reviewChargeReference, canAmend) {
   return factors
 }
 
-function _canAmend (reviewChargeReference) {
+function _canAmend(reviewChargeReference) {
   const { aggregate, chargeAdjustment } = reviewChargeReference
 
-  return (aggregate !== 1 || chargeAdjustment !== 1)
+  return aggregate !== 1 || chargeAdjustment !== 1
 }
 
 module.exports = {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -203,7 +203,7 @@ describe('View Bill Run presenter', () => {
   })
 })
 
-function _testBillRun () {
+function _testBillRun() {
   return {
     id: '420e948f-1992-437e-8a47-74c0066cb017',
     batchType: 'supplementary',
@@ -227,7 +227,7 @@ function _testBillRun () {
   }
 }
 
-function _testBillSummaries () {
+function _testBillSummaries() {
   return [
     {
       id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',

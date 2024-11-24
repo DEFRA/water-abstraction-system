@@ -20,7 +20,7 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence set up template.
  */
-async function go (licenceId, auth) {
+async function go(licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const agreements = await FetchAgreementsService.go(commonData.licenceRef)
@@ -29,7 +29,12 @@ async function go (licenceId, auth) {
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
   const licenceSetUpData = ViewLicenceSetUpPresenter.go(
-    chargeVersions, workflows, agreements, returnVersions, auth, commonData
+    chargeVersions,
+    workflows,
+    agreements,
+    returnVersions,
+    auth,
+    commonData
   )
 
   return {

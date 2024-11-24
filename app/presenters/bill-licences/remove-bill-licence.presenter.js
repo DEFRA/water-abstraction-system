@@ -21,18 +21,11 @@ const {
  *
  * @returns {object} - the prepared bill licence summary data to be passed to the confirm remove a bill licence page
  */
-function go (billLicence) {
+function go(billLicence) {
   const { id: billLicenceId, bill, licenceRef, transactions } = billLicence
 
-  const {
-    billRunNumber,
-    billRunStatus,
-    billRunType,
-    chargeScheme,
-    dateCreated,
-    financialYear,
-    region
-  } = _billRunSummary(bill.billRun)
+  const { billRunNumber, billRunStatus, billRunType, chargeScheme, dateCreated, financialYear, region } =
+    _billRunSummary(bill.billRun)
 
   return {
     accountName: _accountName(bill.billingAccount),
@@ -51,7 +44,7 @@ function go (billLicence) {
   }
 }
 
-function _accountName (billingAccount) {
+function _accountName(billingAccount) {
   const accountAddress = billingAccount.billingAccountAddresses[0]
 
   if (accountAddress.company) {
@@ -61,17 +54,8 @@ function _accountName (billingAccount) {
   return billingAccount.company.name
 }
 
-function _billRunSummary (billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function _billRunSummary(billRun) {
+  const { batchType, billRunNumber, createdAt, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
     billRunNumber,
@@ -84,11 +68,11 @@ function _billRunSummary (billRun) {
   }
 }
 
-function _pageTitle (licenceRef) {
+function _pageTitle(licenceRef) {
   return `You're about to remove ${licenceRef} from the bill run`
 }
 
-function _total (transactions) {
+function _total(transactions) {
   const transactionTotal = transactions.reduce((total, transaction) => {
     total += transaction.netAmount
 

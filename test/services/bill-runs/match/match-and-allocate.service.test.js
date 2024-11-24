@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -161,7 +161,7 @@ describe('Match And Allocate Service', () => {
   })
 })
 
-function _generateMatchingReturnsData () {
+function _generateMatchingReturnsData() {
   return [
     {
       id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
@@ -220,7 +220,7 @@ function _generateMatchingReturnsData () {
   ]
 }
 
-function _generateLicencesData () {
+function _generateLicencesData() {
   return [
     {
       id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
@@ -255,13 +255,15 @@ function _generateLicencesData () {
               s127: 'true',
               chargeCategory: {
                 reference: '4.6.12',
-                shortDescription: 'High loss, non-tidal, restricted water, greater than 15 up to and including 50 ML/yr, Tier 2 model',
+                shortDescription:
+                  'High loss, non-tidal, restricted water, greater than 15 up to and including 50 ML/yr, Tier 2 model',
                 subsistenceCharge: 68400
               },
               chargeElements: [
                 {
                   id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-                  description: 'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  description:
+                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
                   abstractionPeriodStartDay: 1,
                   abstractionPeriodStartMonth: 3,
                   abstractionPeriodEndDay: 31,
@@ -275,7 +277,8 @@ function _generateLicencesData () {
                 },
                 {
                   id: '5713d337-0d52-4d7f-8ecc-0e77d8d63444',
-                  description: 'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  description:
+                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
                   abstractionPeriodStartDay: 1,
                   abstractionPeriodStartMonth: 3,
                   abstractionPeriodEndDay: 31,

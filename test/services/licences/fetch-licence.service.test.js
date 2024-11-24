@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -52,13 +52,17 @@ describe('Fetch Licence service', () => {
         revokedDate: null,
         lapsedDate: null,
         licenceDocumentHeader: null,
-        licenceSupplementaryYears: [{
-          id: licenceSupplementaryYearId
-        }],
-        workflows: [{
-          id: workflow.id,
-          status: workflow.status
-        }]
+        licenceSupplementaryYears: [
+          {
+            id: licenceSupplementaryYearId
+          }
+        ],
+        workflows: [
+          {
+            id: workflow.id,
+            status: workflow.status
+          }
+        ]
       })
     })
   })

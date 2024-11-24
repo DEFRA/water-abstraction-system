@@ -19,7 +19,7 @@ const { data: licenceRoles } = require('../../../db/seeds/data/licence-roles.js'
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (name = 'licenceHolder') {
+function select(name = 'licenceHolder') {
   return licenceRoles.find((licenceRole) => {
     return licenceRole.name === name
   })

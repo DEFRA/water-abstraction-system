@@ -28,7 +28,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the purpose page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload, yar) {
+async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const licencePurposes = await FetchPurposesService.go(session.licence.id)
 
@@ -60,7 +60,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
   }
 }
 
-function _combinePurposeDetails (payload, licencePurposes) {
+function _combinePurposeDetails(payload, licencePurposes) {
   const combinedValues = []
 
   for (const purpose of payload.purposes) {
@@ -86,7 +86,7 @@ function _combinePurposeDetails (payload, licencePurposes) {
  *
  * @private
  */
-function _handleOneOptionSelected (payload) {
+function _handleOneOptionSelected(payload) {
   if (!payload.purposes) {
     payload.purposes = []
   }
@@ -96,7 +96,7 @@ function _handleOneOptionSelected (payload) {
   }
 }
 
-async function _save (session, requirementIndex, purposes) {
+async function _save(session, requirementIndex, purposes) {
   session.requirements[requirementIndex].purposes = purposes
 
   return session.$update()
@@ -107,13 +107,13 @@ async function _save (session, requirementIndex, purposes) {
  *
  * @private
  */
-function _submittedSessionData (session, requirementIndex, purposes, licencePurposes) {
+function _submittedSessionData(session, requirementIndex, purposes, licencePurposes) {
   session.requirements[requirementIndex].purposes = purposes
 
   return PurposePresenter.go(session, requirementIndex, licencePurposes)
 }
 
-async function _validate (payload, purposesData) {
+async function _validate(payload, purposesData) {
   const purposeIds = purposesData.map((purpose) => {
     return purpose.id
   })

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -57,13 +57,17 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef: licence.licenceRef, scheme: 'alcs' }
-        )
+        chargeVersion = await ChargeVersionHelper.add({
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          scheme: 'alcs'
+        })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -83,13 +87,17 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef: licence.licenceRef, startDate: new Date('2024-04-01') }
-        )
+        chargeVersion = await ChargeVersionHelper.add({
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          startDate: new Date('2024-04-01')
+        })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -109,13 +117,17 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { endDate: new Date('2023-03-31'), licenceId: licence.id, licenceRef: licence.licenceRef }
-        )
+        chargeVersion = await ChargeVersionHelper.add({
+          endDate: new Date('2023-03-31'),
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef
+        })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -135,13 +147,17 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef: licence.licenceRef, status: 'superseded' }
-        )
+        chargeVersion = await ChargeVersionHelper.add({
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          status: 'superseded'
+        })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -163,9 +179,11 @@ describe('Fetch Charge Versions service', () => {
 
         chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -185,13 +203,13 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         licence = await LicenceHelper.add({ regionId: region.id })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef: licence.licenceRef }
-        )
+        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
 
         await WorkflowHelper.add({ licenceId: licence.id })
       })
@@ -214,17 +232,19 @@ describe('Fetch Charge Versions service', () => {
         // NOTE: To make things spicy (!) we have the licence expire _after_ the billing period starts but revoked
         // before it. Where the licence has dates in more than one of these fields, it is considered ended on the
         // earliest of them (we have found real examples that confirm this is possible)
-        licence = await LicenceHelper.add(
-          { expiredDate: new Date('2019-05-01'), regionId: region.id, revokedDate: new Date('2022-06-01') }
-        )
+        licence = await LicenceHelper.add({
+          expiredDate: new Date('2019-05-01'),
+          regionId: region.id,
+          revokedDate: new Date('2022-06-01')
+        })
 
-        chargeVersion = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef: licence.licenceRef }
-        )
+        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
 
-        chargeReference = await ChargeReferenceHelper.add(
-          { adjustments: { s127: true }, chargeVersionId: chargeVersion.id, chargeCategory: chargeCategory.id }
-        )
+        chargeReference = await ChargeReferenceHelper.add({
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id,
+          chargeCategory: chargeCategory.id
+        })
       })
 
       afterEach(async () => {
@@ -249,7 +269,9 @@ describe('Fetch Charge Versions service', () => {
       // second part is to create another charge version with a different licence ref so we can test the order of the
       // results
       chargeVersion = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id, licenceId: licence.id, licenceRef: licence.licenceRef
+        changeReasonId: changeReason.id,
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef
       })
 
       chargeReference = await ChargeReferenceHelper.add({
@@ -275,9 +297,11 @@ describe('Fetch Charge Versions service', () => {
 
       // Second charge version to test ordering
       otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId: region.id })
-      otherChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.id, licenceId: otherLicence.id, licenceRef: otherLicence.licenceRef }
-      )
+      otherChargeVersion = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        licenceId: otherLicence.id,
+        licenceRef: otherLicence.licenceRef
+      })
       otherChargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: otherChargeVersion.id,
         chargeCategoryId: chargeCategory.id,
@@ -331,52 +355,54 @@ describe('Fetch Charge Versions service', () => {
             ]
           }
         },
-        chargeReferences: [{
-          id: chargeReference.id,
-          volume: 6.819,
-          description: 'Mineral washing',
-          aggregate: 0.562114443,
-          s126: null,
-          s127: 'true',
-          s130: null,
-          winter: null,
-          charge: null,
-          chargeCategory: {
-            reference: chargeCategory.reference,
-            shortDescription: chargeCategory.shortDescription,
-            subsistenceCharge: chargeCategory.subsistenceCharge
-          },
-          chargeElements: [
-            {
-              id: chargeElement2.id,
-              description: 'Trickle Irrigation - Direct',
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              authorisedAnnualQuantity: 200,
-              purpose: {
-                id: purpose.id,
-                legacyId: purpose.legacyId,
-                description: purpose.description
-              }
+        chargeReferences: [
+          {
+            id: chargeReference.id,
+            volume: 6.819,
+            description: 'Mineral washing',
+            aggregate: 0.562114443,
+            s126: null,
+            s127: 'true',
+            s130: null,
+            winter: null,
+            charge: null,
+            chargeCategory: {
+              reference: chargeCategory.reference,
+              shortDescription: chargeCategory.shortDescription,
+              subsistenceCharge: chargeCategory.subsistenceCharge
             },
-            {
-              id: chargeElement1.id,
-              description: 'Trickle Irrigation - Direct',
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              authorisedAnnualQuantity: 100,
-              purpose: {
-                id: purpose.id,
-                legacyId: purpose.legacyId,
-                description: purpose.description
+            chargeElements: [
+              {
+                id: chargeElement2.id,
+                description: 'Trickle Irrigation - Direct',
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                authorisedAnnualQuantity: 200,
+                purpose: {
+                  id: purpose.id,
+                  legacyId: purpose.legacyId,
+                  description: purpose.description
+                }
+              },
+              {
+                id: chargeElement1.id,
+                description: 'Trickle Irrigation - Direct',
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                authorisedAnnualQuantity: 100,
+                purpose: {
+                  id: purpose.id,
+                  legacyId: purpose.legacyId,
+                  description: purpose.description
+                }
               }
-            }
-          ]
-        }],
+            ]
+          }
+        ],
         changeReason: {
           description: changeReason.description
         }

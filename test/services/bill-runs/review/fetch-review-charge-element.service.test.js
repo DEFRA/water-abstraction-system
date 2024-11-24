@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -42,11 +42,13 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
     reviewLicence = await ReviewLicenceHelper.add({ billRunId: billRun.id })
     reviewReturn = await ReviewReturnHelper.add({
-      purposes: [{
-        primary: { code: 'A', description: 'Agriculture' },
-        tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-        secondary: { code: 'AGR', description: 'General Agriculture' }
-      }],
+      purposes: [
+        {
+          primary: { code: 'A', description: 'Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
+        }
+      ],
       returnId: returnLog.id,
       returnReference: returnLog.returnReference,
       reviewLicenceId: reviewLicence.id
@@ -55,11 +57,13 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
     reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id })
     reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id })
     reviewChargeElement = await ReviewChargeElementHelper.add({
-      chargeElementId: chargeElement.id, reviewChargeReferenceId: reviewChargeReference.id
+      chargeElementId: chargeElement.id,
+      reviewChargeReferenceId: reviewChargeReference.id
     })
 
     await ReviewChargeElementReturnHelper.add({
-      reviewChargeElementId: reviewChargeElement.id, reviewReturnId: reviewReturn.id
+      reviewChargeElementId: reviewChargeElement.id,
+      reviewReturnId: reviewReturn.id
     })
   })
 

@@ -15,15 +15,17 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<ImportLegacyLicenceDocumentType>}
  */
-async function go (regionCode, licenceId) {
+async function go(regionCode, licenceId) {
   const query = _query()
 
-  const { rows: [row] } = await db.raw(query, [regionCode, licenceId])
+  const {
+    rows: [row]
+  } = await db.raw(query, [regionCode, licenceId])
 
   return row
 }
 
-function _query () {
+function _query() {
   return `
     SELECT
       CASE

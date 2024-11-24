@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -47,16 +47,22 @@ describe('Return Versions Setup - Points presenter', () => {
       expect(result).to.equal({
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePoints: [{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-        }, {
-          id: '07820640-c95a-497b-87d6-9e0d3ef322db',
-          description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
-        }, {
-          id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
-        }],
+        licencePoints: [
+          {
+            id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          },
+          {
+            id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+            description:
+              'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
+          },
+          {
+            id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+            description:
+              'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
+          }
+        ],
         licenceRef: '01/ABC',
         selectedPointIds: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -95,10 +101,12 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a At "National Grid Reference ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([{
-          id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-        }])
+        expect(result.licencePoints).to.equal([
+          {
+            id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          }
+        ])
       })
     })
 
@@ -110,10 +118,13 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a "Between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([{
-          id: '07820640-c95a-497b-87d6-9e0d3ef322db',
-          description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
-        }])
+        expect(result.licencePoints).to.equal([
+          {
+            id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+            description:
+              'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
+          }
+        ])
       })
     })
 
@@ -125,10 +136,13 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a "Within the area formed by the straight lines running between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([{
-          id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
-        }])
+        expect(result.licencePoints).to.equal([
+          {
+            id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+            description:
+              'Within the area formed by the straight lines running between National Grid References NZ 892 055, NZ 895 054, NZ 893 053 and NZ 892 053 (AREA D)'
+          }
+        ])
       })
     })
   })
@@ -161,35 +175,41 @@ describe('Return Versions Setup - Points presenter', () => {
   })
 })
 
-function _points () {
+function _points() {
   const points = []
 
-  points.push(PointModel.fromJson({
-    description: 'RIVER MEDWAY AT YALDING INTAKE',
-    id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-    ngr1: 'TQ 69212 50394',
-    ngr2: null,
-    ngr3: null,
-    ngr4: null
-  }))
+  points.push(
+    PointModel.fromJson({
+      description: 'RIVER MEDWAY AT YALDING INTAKE',
+      id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+      ngr1: 'TQ 69212 50394',
+      ngr2: null,
+      ngr3: null,
+      ngr4: null
+    })
+  )
 
-  points.push(PointModel.fromJson({
-    description: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
-    id: '07820640-c95a-497b-87d6-9e0d3ef322db',
-    ngr1: 'SO 524 692',
-    ngr2: 'SO 531 689',
-    ngr3: null,
-    ngr4: null
-  }))
+  points.push(
+    PointModel.fromJson({
+      description: 'KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME',
+      id: '07820640-c95a-497b-87d6-9e0d3ef322db',
+      ngr1: 'SO 524 692',
+      ngr2: 'SO 531 689',
+      ngr3: null,
+      ngr4: null
+    })
+  )
 
-  points.push(PointModel.fromJson({
-    description: 'AREA D',
-    id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
-    ngr1: 'NZ 892 055',
-    ngr2: 'NZ 895 054',
-    ngr3: 'NZ 893 053',
-    ngr4: 'NZ 892 053'
-  }))
+  points.push(
+    PointModel.fromJson({
+      description: 'AREA D',
+      id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
+      ngr1: 'NZ 892 055',
+      ngr2: 'NZ 895 054',
+      ngr3: 'NZ 893 053',
+      ngr4: 'NZ 892 053'
+    })
+  )
 
   return points
 }

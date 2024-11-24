@@ -17,7 +17,7 @@ const { returnCycleDates } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<string>} the id of the return cycle
  */
-async function go (date, summer) {
+async function go(date, summer) {
   const _date = new Date(date)
   const cycleStartDate = _cycleStartDateByDate(_date, summer)
   const cycleEndDate = _cycleEndDateByDate(_date, summer)
@@ -30,7 +30,7 @@ async function go (date, summer) {
   return undefined
 }
 
-function _cycleEndDateByDate (date, summer) {
+function _cycleEndDateByDate(date, summer) {
   const year = date.getFullYear()
   const month = date.getMonth()
 
@@ -49,7 +49,7 @@ function _cycleEndDateByDate (date, summer) {
   return `${year}-03-31`
 }
 
-function _cycleStartDateByDate (date, summer) {
+function _cycleStartDateByDate(date, summer) {
   const year = date.getFullYear()
   const month = date.getMonth()
 
@@ -68,7 +68,7 @@ function _cycleStartDateByDate (date, summer) {
   return `${year}-04-01`
 }
 
-async function _fetchReturnCycle (startDate, endDate, summer) {
+async function _fetchReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
     .select(['id'])
     .where('startDate', '>=', startDate)

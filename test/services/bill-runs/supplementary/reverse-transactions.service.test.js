@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -16,13 +16,15 @@ describe('Reverse Transactions service', () => {
       name: 'DEBIT',
       credit: false,
       status: 'TO_BE_OVERWRITTEN',
-      purposes: [{
-        id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 3
-      }]
+      purposes: [
+        {
+          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3
+        }
+      ]
     }
   ]
 
@@ -42,13 +44,15 @@ describe('Reverse Transactions service', () => {
       expect(result[0].status).to.equal('candidate')
       expect(result[0].billLicenceId).to.equal('8affaa71-c185-4b6c-9814-4c615c235611')
       expect(result[0].id).to.exist().and.to.be.a.string()
-      expect(result[0].purposes).to.equal([{
-        id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 3
-      }])
+      expect(result[0].purposes).to.equal([
+        {
+          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3
+        }
+      ])
     })
   })
 })

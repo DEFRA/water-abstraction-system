@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,8 +16,7 @@ const FetchLicenceDocumentRolesService = require('../../../../app/services/impor
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const TransformLicenceDocumentRolesService =
-  require('../../../../app/services/import/legacy/transform-licence-document-roles.service.js')
+const TransformLicenceDocumentRolesService = require('../../../../app/services/import/legacy/transform-licence-document-roles.service.js')
 
 describe('Import Legacy Transform Licence Document Role service', () => {
   // NOTE: Clearly this is an incomplete representation of the licence returned from TransformedLicenceService. But for
@@ -70,13 +69,14 @@ describe('Import Legacy Transform Licence Document Role service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(TransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef))
-        .to.reject()
+      await expect(
+        TransformLicenceDocumentRolesService.go(regionCode, naldLicenceId, transformedLicence, licenceRef)
+      ).to.reject()
     })
   })
 })
 
-function _legacyLicenceDocumentRole (licenceRoleId) {
+function _legacyLicenceDocumentRole(licenceRoleId) {
   return {
     address_id: '1:007',
     company_id: '1:007',

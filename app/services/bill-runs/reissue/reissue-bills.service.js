@@ -24,7 +24,7 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
  */
-async function go (reissueBillRun) {
+async function go(reissueBillRun) {
   const sourceBills = await FetchBillsToBeReissuedService.go(reissueBillRun.regionId)
 
   if (sourceBills.length === 0) {
@@ -49,13 +49,13 @@ async function go (reissueBillRun) {
 }
 
 // Adds the data held in each key of `newData` to the corresponding keys in `dataToPersist`
-function _addNewDataToDataToPersist (dataToPersist, newData) {
+function _addNewDataToDataToPersist(dataToPersist, newData) {
   dataToPersist.bills.push(...newData.bills)
   dataToPersist.billLicences.push(...newData.billLicences)
   dataToPersist.transactions.push(...newData.transactions)
 }
 
-async function _persistData (dataToPersist) {
+async function _persistData(dataToPersist) {
   await BillModel.query().insert(dataToPersist.bills)
   await BillLicenceModel.query().insert(dataToPersist.billLicences)
   await TransactionModel.query().insert(dataToPersist.transactions)

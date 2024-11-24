@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -27,7 +27,8 @@ describe('Return Requirement Point model', () => {
     testReturnRequirement = await ReturnRequirementHelper.add()
 
     testRecord = await ReturnRequirementPointHelper.add({
-      pointId: testPoint.id, returnRequirementId: testReturnRequirement.id
+      pointId: testPoint.id,
+      returnRequirementId: testReturnRequirement.id
     })
   })
 
@@ -43,16 +44,13 @@ describe('Return Requirement Point model', () => {
   describe('Relationships', () => {
     describe('when linking to point', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementPointModel.query()
-          .innerJoinRelated('point')
+        const query = await ReturnRequirementPointModel.query().innerJoinRelated('point')
 
         expect(query).to.exist()
       })
 
       it('can eager load the point', async () => {
-        const result = await ReturnRequirementPointModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('point')
+        const result = await ReturnRequirementPointModel.query().findById(testRecord.id).withGraphFetched('point')
 
         expect(result).to.be.instanceOf(ReturnRequirementPointModel)
         expect(result.id).to.equal(testRecord.id)
@@ -64,8 +62,7 @@ describe('Return Requirement Point model', () => {
 
     describe('when linking to return requirement', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnRequirementPointModel.query()
-          .innerJoinRelated('returnRequirement')
+        const query = await ReturnRequirementPointModel.query().innerJoinRelated('returnRequirement')
 
         expect(query).to.exist()
       })

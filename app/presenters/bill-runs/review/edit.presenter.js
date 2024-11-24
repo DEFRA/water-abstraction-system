@@ -18,7 +18,7 @@ const { formatChargePeriod, formatChargePeriods } = require('./base-review.prese
  *
  * @returns {object} the prepared bill run and charge element data to be passed to the edit billable returns page
  */
-function go (reviewChargeElement, elementIndex) {
+function go(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,
@@ -47,7 +47,7 @@ function go (reviewChargeElement, elementIndex) {
  *
  * @private
  */
-function _authorisedQuantity (reviewChargeElement) {
+function _authorisedQuantity(reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
 
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)

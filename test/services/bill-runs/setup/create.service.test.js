@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -76,12 +76,7 @@ describe('Bill Runs Setup Create service', () => {
       await CreateService.go(user, existsResults)
 
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
-      expect(startBillRunProcessServiceStub.calledWith(
-        region.id,
-        'annual',
-        'carol.shaw@atari.com',
-        2024)
-      ).to.be.true()
+      expect(startBillRunProcessServiceStub.calledWith(region.id, 'annual', 'carol.shaw@atari.com', 2024)).to.be.true()
     })
   })
 
@@ -102,11 +97,8 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
-        expect(startBillRunProcessServiceStub.calledWith(
-          region.id,
-          'supplementary',
-          'carol.shaw@atari.com',
-          2024)
+        expect(
+          startBillRunProcessServiceStub.calledWith(region.id, 'supplementary', 'carol.shaw@atari.com', 2024)
         ).to.be.true()
       })
     })
@@ -120,11 +112,8 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
-        expect(startBillRunProcessServiceStub.calledWith(
-          region.id,
-          'supplementary',
-          'carol.shaw@atari.com',
-          2024)
+        expect(
+          startBillRunProcessServiceStub.calledWith(region.id, 'supplementary', 'carol.shaw@atari.com', 2024)
         ).to.be.true()
       })
     })
@@ -185,11 +174,8 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
-        expect(startBillRunProcessServiceStub.calledWith(
-          region.id,
-          'two_part_tariff',
-          'carol.shaw@atari.com',
-          2023)
+        expect(
+          startBillRunProcessServiceStub.calledWith(region.id, 'two_part_tariff', 'carol.shaw@atari.com', 2023)
         ).to.be.true()
       })
     })

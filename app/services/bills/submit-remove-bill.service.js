@@ -16,7 +16,7 @@ const LegacyDeleteBillRequest = require('../../requests/legacy/delete-bill.reque
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go (billId, user) {
+async function go(billId, user) {
   const { billRunId } = await _fetchBill(billId)
 
   await LegacyDeleteBillRequest.send(billRunId, billId, user)
@@ -24,13 +24,8 @@ async function go (billId, user) {
   return `/billing/batch/${billRunId}/processing`
 }
 
-async function _fetchBill (billId) {
-  return BillModel.query()
-    .findById(billId)
-    .select([
-      'id',
-      'billRunId'
-    ])
+async function _fetchBill(billId) {
+  return BillModel.query().findById(billId).select(['id', 'billRunId'])
 }
 
 module.exports = {

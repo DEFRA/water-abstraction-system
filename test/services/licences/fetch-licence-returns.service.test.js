@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -59,28 +59,26 @@ describe('Fetch licence returns service', () => {
         total: 2
       })
       //  This should be ordered by due date
-      expect(result.returns).to.equal(
-        [
-          {
-            dueDate: latestDueDate,
-            endDate,
-            id: latestReturn.id,
-            metadata: 323,
-            returnReference: '123',
-            startDate,
-            status: '32'
-          },
-          {
-            dueDate,
-            endDate,
-            id: firstReturn.id,
-            metadata: 323,
-            returnReference: '32',
-            startDate,
-            status: '32'
-          }
-        ]
-      )
+      expect(result.returns).to.equal([
+        {
+          dueDate: latestDueDate,
+          endDate,
+          id: latestReturn.id,
+          metadata: 323,
+          returnReference: '123',
+          startDate,
+          status: '32'
+        },
+        {
+          dueDate,
+          endDate,
+          id: firstReturn.id,
+          metadata: 323,
+          returnReference: '32',
+          startDate,
+          status: '32'
+        }
+      ])
     })
   })
 })

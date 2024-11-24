@@ -15,7 +15,7 @@ const MONTHS_IN_YEAR = 12
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licenceVersionPurpose) {
+function go(licenceVersionPurpose) {
   const schema = Joi.object({
     abstractionPeriodEndDay: _daysInMonthSchema('abstractionPeriodEndMonth'),
     abstractionPeriodEndMonth: Joi.number().integer().min(1).max(MONTHS_IN_YEAR).required(),
@@ -54,18 +54,17 @@ function go (licenceVersionPurpose) {
  *
  * @private
  */
-function _daysInMonthSchema (endMonthProperty) {
-  return Joi.number()
-    .when(endMonthProperty, {
-      switch: [
-        { is: 2, then: Joi.number().integer().min(1).max(28).required() },
-        { is: 4, then: Joi.number().integer().min(1).max(30).required() },
-        { is: 6, then: Joi.number().integer().min(1).max(30).required() },
-        { is: 9, then: Joi.number().integer().min(1).max(30).required() },
-        { is: 11, then: Joi.number().integer().min(1).max(30).required() }
-      ],
-      otherwise: Joi.number().integer().min(1).max(31).required()
-    })
+function _daysInMonthSchema(endMonthProperty) {
+  return Joi.number().when(endMonthProperty, {
+    switch: [
+      { is: 2, then: Joi.number().integer().min(1).max(28).required() },
+      { is: 4, then: Joi.number().integer().min(1).max(30).required() },
+      { is: 6, then: Joi.number().integer().min(1).max(30).required() },
+      { is: 9, then: Joi.number().integer().min(1).max(30).required() },
+      { is: 11, then: Joi.number().integer().min(1).max(30).required() }
+    ],
+    otherwise: Joi.number().integer().min(1).max(31).required()
+  })
 }
 
 module.exports = {

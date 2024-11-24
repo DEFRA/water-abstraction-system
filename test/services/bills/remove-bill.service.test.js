@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -53,7 +53,7 @@ describe('Remove Bill service', () => {
   })
 })
 
-function _billSummary () {
+function _billSummary() {
   const billingAccount = BillingAccountModel.fromJson({
     id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
     accountNumber: 'T65757520A',
@@ -62,22 +62,24 @@ function _billSummary () {
       name: 'Example Trading Ltd',
       type: 'organisation'
     },
-    billingAccountAddresses: [{
-      id: '1d440029-745a-47ec-a43e-9f4a36014126',
-      company: null,
-      contact: {
-        id: '95ba53be-543f-415b-90b1-08f58f63ff74',
-        contactType: 'person',
-        dataSource: 'wrls',
-        department: null,
-        firstName: 'Amara',
-        initials: null,
-        lastName: 'Gupta',
-        middleInitials: null,
-        salutation: null,
-        suffix: null
+    billingAccountAddresses: [
+      {
+        id: '1d440029-745a-47ec-a43e-9f4a36014126',
+        company: null,
+        contact: {
+          id: '95ba53be-543f-415b-90b1-08f58f63ff74',
+          contactType: 'person',
+          dataSource: 'wrls',
+          department: null,
+          firstName: 'Amara',
+          initials: null,
+          lastName: 'Gupta',
+          middleInitials: null,
+          salutation: null,
+          suffix: null
+        }
       }
-    }]
+    ]
   })
 
   return {

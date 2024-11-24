@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -44,16 +44,13 @@ describe('Workflow model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await WorkflowModel.query()
-          .innerJoinRelated('licence')
+        const query = await WorkflowModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await WorkflowModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await WorkflowModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(WorkflowModel)
         expect(result.id).to.equal(testRecord.id)

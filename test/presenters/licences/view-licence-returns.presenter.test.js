@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -108,7 +108,9 @@ describe('View Licence returns presenter', () => {
           it('returns a link to the edit return log page', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-            expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+            expect(result.returns[1].link).to.equal(
+              '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+            )
           })
         })
 
@@ -134,7 +136,9 @@ describe('View Licence returns presenter', () => {
           it('returns a link to the edit return log page', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-            expect(result.returns[1].link).to.equal('/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01')
+            expect(result.returns[1].link).to.equal(
+              '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+            )
           })
         })
 
@@ -280,7 +284,7 @@ describe('View Licence returns presenter', () => {
   })
 })
 
-function _returnLogs () {
+function _returnLogs() {
   const returnLog = {
     id: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     dueDate: new Date('2012-11-28'),

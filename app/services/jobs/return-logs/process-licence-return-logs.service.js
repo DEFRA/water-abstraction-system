@@ -25,7 +25,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  *
  * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
  */
-async function go (licenceReference) {
+async function go(licenceReference) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -40,10 +40,9 @@ async function go (licenceReference) {
   }
 }
 
-async function _createReturnLogs (returnLogs) {
+async function _createReturnLogs(returnLogs) {
   for (const returnLog of returnLogs) {
-    await ReturnLogModel.query()
-      .insert(returnLog)
+    await ReturnLogModel.query().insert(returnLog)
   }
 }
 

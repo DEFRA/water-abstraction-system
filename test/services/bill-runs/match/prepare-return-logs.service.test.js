@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -140,7 +140,7 @@ describe('Prepare Return Logs Service', () => {
   })
 })
 
-function _testLicence () {
+function _testLicence() {
   return {
     id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
     licenceRef: '5/31/14/*S/0116A',
@@ -171,7 +171,8 @@ function _testLicence () {
             s127: 'true',
             chargeCategory: {
               reference: '4.5.12',
-              shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+              shortDescription:
+                'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
               subsistenceCharge: 68400
             },
             chargeElements: [
@@ -199,7 +200,8 @@ function _testLicence () {
             s127: 'true',
             chargeCategory: {
               reference: '4.5.12',
-              shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+              shortDescription:
+                'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
               subsistenceCharge: 70000
             },
             chargeElements: [
@@ -225,7 +227,7 @@ function _testLicence () {
   }
 }
 
-function _testReturnLog () {
+function _testReturnLog() {
   return {
     id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
     returnReference: '14959864',

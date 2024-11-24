@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const StartDatePresenter = require('../../../presenters/return-versions/setup/start-date.presenter.js')
 const StartDateValidator = require('../../../validators/return-versions/setup/start-date.validator.js')
+const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/start-date` page
@@ -27,7 +28,7 @@ const StartDateValidator = require('../../../validators/return-versions/setup/st
  * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-async function go (sessionId, payload, yar) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { endDate, startDate } = session.licence
@@ -56,7 +57,30 @@ async function go (sessionId, payload, yar) {
   }
 }
 
-async function _save (session, payload) {
+/**
+ * Default Quarterly Returns
+ *
+ * When a return version is for a water company and the start date is for quarterly returns.
+ *
+ * We need to default the quarterly returns to true.
+ *
+ * However, we only want to do this on the initial setting of the start date after that it is in the users control.
+ *
+ * @param {SessionModel} session
+ *
+ * @private
+ */
+function _defaultQuarterlyReturns(session) {
+  if (
+    !session.checkPageVisited &&
+    isQuarterlyReturnSubmissions(session.returnVersionStartDate) &&
+    session.licence.waterUndertaker
+  ) {
+    session.quarterlyReturns = true
+  }
+}
+
+async function _save(session, payload) {
   const selectedOption = payload['start-date-options']
 
   session.startDateOptions = selectedOption
@@ -65,15 +89,19 @@ async function _save (session, payload) {
     session.startDateDay = payload['start-date-day']
     session.startDateMonth = payload['start-date-month']
     session.startDateYear = payload['start-date-year']
-    session.returnVersionStartDate = new Date(`${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`)
+    session.returnVersionStartDate = new Date(
+      `${payload['start-date-year']}-${payload['start-date-month']}-${payload['start-date-day']}`
+    )
   } else {
     session.returnVersionStartDate = new Date(session.licence.currentVersionStartDate)
   }
 
+  _defaultQuarterlyReturns(session)
+
   return session.$update()
 }
 
-function _submittedSessionData (session, payload) {
+function _submittedSessionData(session, payload) {
   session.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
   session.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
   session.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
@@ -82,7 +110,7 @@ function _submittedSessionData (session, payload) {
   return StartDatePresenter.go(session, payload)
 }
 
-function _validate (payload, licenceStartDate, licenceEndDate) {
+function _validate(payload, licenceStartDate, licenceEndDate) {
   const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
   if (!validation.error) {

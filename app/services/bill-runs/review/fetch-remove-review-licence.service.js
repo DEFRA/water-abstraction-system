@@ -15,34 +15,21 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff remove review licence page
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 
-async function _fetch (reviewLicenceId) {
+async function _fetch(reviewLicenceId) {
   return ReviewLicenceModel.query()
     .findById(reviewLicenceId)
-    .select([
-      'id',
-      'licenceId',
-      'licenceRef'
-    ])
+    .select(['id', 'licenceId', 'licenceRef'])
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (billRunBuilder) => {
       billRunBuilder
-        .select([
-          'id',
-          'billRunNumber',
-          'createdAt',
-          'status',
-          'toFinancialYearEnding'
-        ])
+        .select(['id', 'billRunNumber', 'createdAt', 'status', 'toFinancialYearEnding'])
         .withGraphFetched('region')
         .modifyGraph('region', (regionBuilder) => {
-          regionBuilder.select([
-            'id',
-            'displayName'
-          ])
+          regionBuilder.select(['id', 'displayName'])
         })
     })
 }

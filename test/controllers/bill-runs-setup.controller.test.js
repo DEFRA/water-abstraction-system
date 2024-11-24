@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -159,7 +159,9 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('There are no licences marked for two-part tariff supplementary billing in the Test region')
+          expect(response.payload).to.contain(
+            'There are no licences marked for two-part tariff supplementary billing in the Test region'
+          )
         })
       })
     })
@@ -205,7 +207,9 @@ describe('Bill Runs Setup controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
+            expect(response.headers.location).to.equal(
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+            )
           })
         })
 
@@ -218,7 +222,9 @@ describe('Bill Runs Setup controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/year')
+            expect(response.headers.location).to.equal(
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/year'
+            )
           })
         })
       })
@@ -279,7 +285,9 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+          )
         })
       })
 
@@ -338,7 +346,9 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/region')
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/region'
+          )
         })
       })
 
@@ -406,7 +416,9 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/no-licences')
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/no-licences'
+          )
         })
       })
     })
@@ -426,7 +438,9 @@ describe('Bill Runs Setup controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
+            expect(response.headers.location).to.equal(
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+            )
           })
         })
 
@@ -439,7 +453,9 @@ describe('Bill Runs Setup controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season')
+            expect(response.headers.location).to.equal(
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season'
+            )
           })
         })
 
@@ -480,7 +496,7 @@ describe('Bill Runs Setup controller', () => {
   })
 })
 
-function _getOptions (path) {
+function _getOptions(path) {
   return {
     method: 'GET',
     url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`,
@@ -491,6 +507,6 @@ function _getOptions (path) {
   }
 }
 
-function _postOptions (path, payload) {
+function _postOptions(path, payload) {
   return postRequestOptions(`/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`, payload)
 }

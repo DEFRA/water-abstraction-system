@@ -23,7 +23,7 @@ const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (returnRequirements) {
+async function go(returnRequirements) {
   const { allYearReturnCycleId, summerReturnCycleId } = await _fetchReturnCycleIds()
 
   const returnLogs = returnRequirements.map(async (requirements) => {
@@ -54,7 +54,7 @@ async function go (returnRequirements) {
   return results
 }
 
-function _endDate (summer, returnVersion) {
+function _endDate(summer, returnVersion) {
   const earliestDate = _earliestDate(summer, returnVersion)
 
   const _cycleEndDate = cycleEndDate(summer)
@@ -66,7 +66,7 @@ function _endDate (summer, returnVersion) {
   return cycleEndDateAsISO(summer)
 }
 
-function _earliestDate (summer, returnVersion) {
+function _earliestDate(summer, returnVersion) {
   const dates = [
     returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
@@ -91,7 +91,7 @@ function _earliestDate (summer, returnVersion) {
   return new Date(Math.min(...dates))
 }
 
-async function _fetchReturnCycleIds () {
+async function _fetchReturnCycleIds() {
   const today = formatDateObjectToISO(new Date())
 
   let allYearReturnCycleId = await FetchReturnCycleService.go(today, false)
@@ -111,7 +111,7 @@ async function _fetchReturnCycleIds () {
   }
 }
 
-function _id (requirements, startDate, endDate) {
+function _id(requirements, startDate, endDate) {
   const regionCode = requirements.returnVersion.licence.region.naldRegionId
   const licenceReference = requirements.returnVersion.licence.licenceRef
   const legacyId = requirements.legacyId
@@ -119,13 +119,13 @@ function _id (requirements, startDate, endDate) {
   return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
 }
 
-function _isFinal (endDateString, summer) {
+function _isFinal(endDateString, summer) {
   const endDate = new Date(endDateString)
 
   return endDate < cycleEndDate(summer)
 }
 
-async function _metadata (summer, endDate, requirements) {
+async function _metadata(summer, endDate, requirements) {
   return {
     description: requirements.siteDescription,
     isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
@@ -148,7 +148,7 @@ async function _metadata (summer, endDate, requirements) {
   }
 }
 
-function _metadataPoints (points) {
+function _metadataPoints(points) {
   return points.map((point) => {
     return {
       name: point.description,
@@ -160,7 +160,7 @@ function _metadataPoints (points) {
   })
 }
 
-function _metadataPurposes (returnRequirementPurposes) {
+function _metadataPurposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
       ...(returnRequirementPurpose.alias !== null && { alias: returnRequirementPurpose.alias }),
@@ -180,7 +180,7 @@ function _metadataPurposes (returnRequirementPurposes) {
   })
 }
 
-function _startDate (summer, returnVersion) {
+function _startDate(summer, returnVersion) {
   const returnVersionStartDate = new Date(returnVersion.startDate)
 
   if (returnVersionStartDate > cycleStartDate(summer)) {

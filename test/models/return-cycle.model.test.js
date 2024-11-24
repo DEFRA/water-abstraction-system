@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -42,16 +42,13 @@ describe('Return Cycle model', () => {
   describe('Relationships', () => {
     describe('when linking to return log', () => {
       it('can successfully run a related query', async () => {
-        const query = await ReturnCycleModel.query()
-          .innerJoinRelated('returnLogs')
+        const query = await ReturnCycleModel.query().innerJoinRelated('returnLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return log', async () => {
-        const result = await ReturnCycleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnLogs')
+        const result = await ReturnCycleModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
 
         expect(result).to.be.instanceOf(ReturnCycleModel)
         expect(result.id).to.equal(testRecord.id)

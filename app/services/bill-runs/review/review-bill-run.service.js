@@ -19,7 +19,7 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/rev
  * @returns {Promise<object>} An object representing the `pageData` needed by the review bill run template. It contains
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
-async function go (id, page, yar) {
+async function go(id, page, yar) {
   const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress } = _getFilters(id, yar)
 
   const selectedPageNumber = page ? Number(page) : 1
@@ -51,7 +51,7 @@ async function go (id, page, yar) {
   return { bannerMessage, ...pageData, pageTitle, pagination }
 }
 
-function _getFilters (id, yar) {
+function _getFilters(id, yar) {
   const filters = yar.get(`review-${id}`)
   const filterIssues = filters?.filterIssues
   const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber
@@ -61,7 +61,7 @@ function _getFilters (id, yar) {
   return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
 }
 
-function _pageTitle (numberOfPages, selectedPageNumber) {
+function _pageTitle(numberOfPages, selectedPageNumber) {
   if (numberOfPages < 2) {
     return 'Review licences'
   }

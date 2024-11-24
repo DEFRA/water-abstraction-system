@@ -5,11 +5,7 @@
  * @module ViewBillPresenter
  */
 
-const {
-  formatLongDate,
-  formatMoney,
-  titleCase
-} = require('../base.presenter.js')
+const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
@@ -19,7 +15,7 @@ const {
  *
  * @returns {object} page data formatted for the view template
  */
-function go (bill, billingAccount) {
+function go(bill, billingAccount) {
   const { billRun } = bill
 
   const formattedBill = {
@@ -51,7 +47,7 @@ function go (bill, billingAccount) {
   return formattedBill
 }
 
-function _billRunType (billRun) {
+function _billRunType(billRun) {
   const { batchType, summer, scheme } = billRun
 
   if (batchType !== 'two_part_tariff') {
@@ -69,7 +65,7 @@ function _billRunType (billRun) {
   return 'Two-part tariff winter and all year'
 }
 
-function _creditsTotal (bill, billRun) {
+function _creditsTotal(bill, billRun) {
   const { creditNoteValue, netAmount } = bill
   const { source } = billRun
 
@@ -84,7 +80,7 @@ function _creditsTotal (bill, billRun) {
   return '£0.00'
 }
 
-function _debitsTotal (bill, billRun) {
+function _debitsTotal(bill, billRun) {
   const { invoiceValue, netAmount } = bill
   const { source } = billRun
 
@@ -99,19 +95,19 @@ function _debitsTotal (bill, billRun) {
   return '£0.00'
 }
 
-function _displayCreditDebitTotals (billRun) {
+function _displayCreditDebitTotals(billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'
 }
 
-function _financialYear (bill) {
+function _financialYear(bill) {
   const { financialYearEnding } = bill
 
   return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
-function _scheme (billRun) {
+function _scheme(billRun) {
   if (billRun.scheme === 'sroc') {
     return 'Current'
   }
@@ -119,7 +115,7 @@ function _scheme (billRun) {
   return 'Old'
 }
 
-function _billTotal (valueInPence, credit) {
+function _billTotal(valueInPence, credit) {
   const valueAsMoney = formatMoney(valueInPence)
 
   if (credit) {

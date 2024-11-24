@@ -4,15 +4,14 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
-const FetchLicenceHasRequirementsService =
-  require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
+const FetchLicenceHasRequirementsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 
 describe('Fetch Licence Has Requirements service', () => {
   const licenceId = 'e004c0c9-0316-42fc-a6e3-5ae9a271b3c6'

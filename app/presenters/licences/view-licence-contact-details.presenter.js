@@ -12,7 +12,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go (licence) {
+function go(licence) {
   const { id: licenceId, licenceDocumentHeader, licenceRef } = licence
 
   return {
@@ -23,7 +23,7 @@ function go (licence) {
   }
 }
 
-function _licenceContactAddress (contact) {
+function _licenceContactAddress(contact) {
   const contactAddressFields = [
     'addressLine1',
     'addressLine2',
@@ -38,25 +38,23 @@ function _licenceContactAddress (contact) {
   // NOTE:  Maps over the `contactAddressFields` array to create an array of values from the `contact` object. Each
   // `contactAddressField` corresponds to a property in the `contact` object, mapping and creating a contactAddress
   // array. The `filter(Boolean)` function then removes falsy values from the `contactAddress` array.
-  const contactAddress = contactAddressFields.map((contactAddressField) => {
-    return contact[contactAddressField]
-  }).filter(Boolean)
+  const contactAddress = contactAddressFields
+    .map((contactAddressField) => {
+      return contact[contactAddressField]
+    })
+    .filter(Boolean)
 
   return contactAddress
 }
 
-function _licenceContactName (contact) {
+function _licenceContactName(contact) {
   if (contact.type === 'Person') {
     const { salutation, forename, initials, name } = contact
 
     // NOTE: Prioritise the initials and use the contact forename if initials is null
     const initialsOrForename = initials || forename
 
-    const nameComponents = [
-      salutation,
-      initialsOrForename,
-      name
-    ]
+    const nameComponents = [salutation, initialsOrForename, name]
 
     const filteredNameComponents = nameComponents.filter((item) => {
       return item
@@ -68,7 +66,7 @@ function _licenceContactName (contact) {
   return contact.name
 }
 
-function _licenceContactDetails (licenceDocumentHeader) {
+function _licenceContactDetails(licenceDocumentHeader) {
   const licenceContactDetailsData = licenceDocumentHeader.metadata.contacts
 
   const roles = ['Licence holder', 'Returns to', 'Licence contact']

@@ -25,7 +25,7 @@ const {
  *
  * @returns {object} page date needed for the review charge element page
  */
-function go (reviewChargeElement, elementIndex) {
+function go(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,
@@ -55,7 +55,7 @@ function go (reviewChargeElement, elementIndex) {
   }
 }
 
-function _matchedReturns (reviewReturns) {
+function _matchedReturns(reviewReturns) {
   return reviewReturns.map((reviewReturn) => {
     const { description, endDate, issues, purposes, returnLog, returnId, returnReference, startDate } = reviewReturn
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog

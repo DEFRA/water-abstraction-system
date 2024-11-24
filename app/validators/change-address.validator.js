@@ -13,22 +13,22 @@ const StaticLookupsLib = require('../lib/static-lookups.lib.js')
  *
  * The JOI schema was interpreted from what we found in water-abstraction-service/src/modules/invoice-accounts/routes.js
  *
- * @param {object} data - The data to be validated (assumed to be the request payload)
+ * @param {object} payload - The payload from the request to be validated
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
-*/
-function go (data) {
+ */
+function go(payload) {
   const schema = Joi.object({
     address: _addressSchema(),
     agentCompany: _agentCompanySchema(),
     contact: _contactSchema()
   })
 
-  return schema.validate(data)
+  return schema.validate(payload)
 }
 
-function _addressSchema () {
+function _addressSchema() {
   return Joi.object({
     id: Joi.string().guid().optional(),
     addressLine1: Joi.string().optional(),
@@ -44,20 +44,26 @@ function _addressSchema () {
   }).required()
 }
 
-function _agentCompanySchema () {
+function _agentCompanySchema() {
   return Joi.object({
     id: Joi.string().guid().optional(),
-    type: Joi.string().valid(...StaticLookupsLib.companyTypes).optional(),
-    organisationType: Joi.string().valid(...StaticLookupsLib.organisationTypes).optional(),
+    type: Joi.string()
+      .valid(...StaticLookupsLib.companyTypes)
+      .optional(),
+    organisationType: Joi.string()
+      .valid(...StaticLookupsLib.organisationTypes)
+      .optional(),
     name: Joi.string().optional(),
     companyNumber: Joi.string().optional()
   }).optional()
 }
 
-function _contactSchema () {
+function _contactSchema() {
   return Joi.object({
     id: Joi.string().guid().optional(),
-    type: Joi.string().valid(...StaticLookupsLib.contactTypes).optional(),
+    type: Joi.string()
+      .valid(...StaticLookupsLib.contactTypes)
+      .optional(),
     salutation: Joi.string().optional(),
     firstName: Joi.string().optional(),
     initials: Joi.string().optional(),
@@ -65,7 +71,9 @@ function _contactSchema () {
     lastName: Joi.string().optional(),
     suffix: Joi.string().optional(),
     department: Joi.string().optional(),
-    source: Joi.string().valid(...StaticLookupsLib.sources).optional(),
+    source: Joi.string()
+      .valid(...StaticLookupsLib.sources)
+      .optional(),
     isTest: Joi.boolean().default(false).optional()
   }).optional()
 }

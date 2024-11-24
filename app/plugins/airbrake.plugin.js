@@ -55,7 +55,7 @@ const AirbrakePlugin = {
   }
 }
 
-function _notifierArgs () {
+function _notifierArgs() {
   const args = {
     host: AirbrakeConfig.host,
     projectId: AirbrakeConfig.projectId,

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -32,12 +32,14 @@ describe('Return Versions Setup - Submit Site Description service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -65,7 +67,9 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].siteDescription).to.equal('This is a valid return requirement description')
+        expect(refreshedSession.requirements[0].siteDescription).to.equal(
+          'This is a valid return requirement description'
+        )
       })
 
       describe('and the page has been not been visited', () => {
@@ -110,14 +114,17 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          pageTitle: 'Enter a site description for the requirements for returns',
-          backLink: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          siteDescription: null
-        }, { skip: ['sessionId', 'error'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            pageTitle: 'Enter a site description for the requirements for returns',
+            backLink: `/system/return-versions/setup/${session.id}/returns-cycle/0`,
+            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            licenceRef: '01/ABC',
+            siteDescription: null
+          },
+          { skip: ['sessionId', 'error'] }
+        )
       })
 
       describe('because the user has not entered anything', () => {
@@ -153,8 +160,9 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       })
 
       describe('because the user has entered a description more than 100 characters', () => {
-        const invalidSiteDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' +
-        ', sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
+        const invalidSiteDescription =
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit' +
+          ', sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
 
         beforeEach(() => {
           payload = {

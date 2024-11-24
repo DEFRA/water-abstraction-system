@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, before } = exports.lab = Lab.script()
+const { describe, it, beforeEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -48,16 +48,13 @@ describe('Return Log model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnLogModel.query()
-          .innerJoinRelated('licence')
+        const query = await ReturnLogModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await ReturnLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(ReturnLogModel)
         expect(result.id).to.equal(testRecord.id)
@@ -83,16 +80,13 @@ describe('Return Log model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnLogModel.query()
-          .innerJoinRelated('returnSubmissions')
+        const query = await ReturnLogModel.query().innerJoinRelated('returnSubmissions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return submissions', async () => {
-        const result = await ReturnLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnSubmissions')
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnSubmissions')
 
         expect(result).to.be.instanceOf(ReturnLogModel)
         expect(result.id).to.equal(testRecord.id)
@@ -114,16 +108,13 @@ describe('Return Log model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnLogModel.query()
-          .innerJoinRelated('returnCycle')
+        const query = await ReturnLogModel.query().innerJoinRelated('returnCycle')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return submissions', async () => {
-        const result = await ReturnLogModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnCycle')
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('returnCycle')
 
         expect(result).to.be.instanceOf(ReturnLogModel)
         expect(result.id).to.equal(testRecord.id)

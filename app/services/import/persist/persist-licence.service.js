@@ -16,27 +16,19 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise<string>} - The licence ID from WRLS.
  */
-async function go (trx, updatedAt, transformedLicence) {
+async function go(trx, updatedAt, transformedLicence) {
   const { id } = await _persistLicence(trx, updatedAt, transformedLicence)
 
   return id
 }
 
-async function _persistLicence (trx, updatedAt, licence) {
+async function _persistLicence(trx, updatedAt, licence) {
   const { licenceVersions, licenceDocument, ...propertiesToPersist } = licence
 
   return LicenceModel.query(trx)
     .insert({ ...propertiesToPersist, updatedAt })
     .onConflict('licenceRef')
-    .merge([
-      'expiredDate',
-      'lapsedDate',
-      'regions',
-      'revokedDate',
-      'startDate',
-      'updatedAt',
-      'waterUndertaker'
-    ])
+    .merge(['expiredDate', 'lapsedDate', 'regions', 'revokedDate', 'startDate', 'updatedAt', 'waterUndertaker'])
     .returning('id')
 }
 

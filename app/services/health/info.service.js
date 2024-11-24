@@ -29,7 +29,7 @@ const servicesConfig = require('../../../config/services.config.js')
  *
  * @returns {object} data about each service formatted for the view
  */
-async function go () {
+async function go() {
   const addressFacadeData = await _getAddressFacadeData()
   const chargingModuleData = await _getChargingModuleData()
   const legacyAppData = await _getLegacyAppData()
@@ -47,13 +47,13 @@ async function go () {
   }
 }
 
-async function _addSystemInfoToLegacyAppData (appData) {
+async function _addSystemInfoToLegacyAppData(appData) {
   const systemInfo = await FetchSystemInfoService.go()
 
   return [...appData, systemInfo]
 }
 
-async function _getAddressFacadeData () {
+async function _getAddressFacadeData() {
   const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
   const result = await BaseRequest.get(statusUrl.href)
 
@@ -64,7 +64,7 @@ async function _getAddressFacadeData () {
   return _parseFailedRequestResult(result)
 }
 
-async function _getLegacyAppData () {
+async function _getLegacyAppData() {
   const healthInfoPath = 'health/info'
 
   const services = [
@@ -94,7 +94,7 @@ async function _getLegacyAppData () {
   return services
 }
 
-async function _getChargingModuleData () {
+async function _getChargingModuleData() {
   const result = await ChargingModuleRequest.get('status')
 
   if (result.succeeded) {
@@ -104,7 +104,7 @@ async function _getChargingModuleData () {
   return _parseFailedRequestResult(result)
 }
 
-async function _getRedisConnectivityData () {
+async function _getRedisConnectivityData() {
   let redis
 
   try {
@@ -122,7 +122,7 @@ async function _getRedisConnectivityData () {
   }
 }
 
-async function _getVirusScannerData () {
+async function _getVirusScannerData() {
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
 
@@ -132,7 +132,7 @@ async function _getVirusScannerData () {
   }
 }
 
-function _parseFailedRequestResult (result) {
+function _parseFailedRequestResult(result) {
   if (result.response.statusCode) {
     return `ERROR: ${result.response.statusCode} - ${result.response.body}`
   }

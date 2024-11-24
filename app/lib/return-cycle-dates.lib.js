@@ -14,7 +14,7 @@ const { returnCycleDates } = require('./static-lookups.lib.js')
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the due date of the next cycle as an ISO string.
  */
-function cycleDueDateAsISO (summer) {
+function cycleDueDateAsISO(summer) {
   return formatDateObjectToISO(cycleDueDate(summer))
 }
 
@@ -24,7 +24,7 @@ function cycleDueDateAsISO (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the due date of the next cycle.
  */
-function cycleDueDate (summer) {
+function cycleDueDate(summer) {
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
@@ -57,7 +57,7 @@ function cycleDueDate (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the due date of the next cycle.
  */
-function cycleDueDateByDate (date, summer) {
+function cycleDueDateByDate(date, summer) {
   const year = date.getFullYear()
   const month = date.getMonth()
 
@@ -88,7 +88,7 @@ function cycleDueDateByDate (date, summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the end date of the next cycle as an ISO string.
  */
-function cycleEndDateAsISO (summer) {
+function cycleEndDateAsISO(summer) {
   return formatDateObjectToISO(cycleEndDate(summer))
 }
 
@@ -98,7 +98,7 @@ function cycleEndDateAsISO (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the end date of the next cycle.
  */
-function cycleEndDate (summer) {
+function cycleEndDate(summer) {
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
@@ -131,7 +131,7 @@ function cycleEndDate (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the start date of the next cycle.
  */
-function cycleEndDateByDate (date, summer) {
+function cycleEndDateByDate(date, summer) {
   const year = date.getFullYear()
   const month = date.getMonth()
 
@@ -162,7 +162,7 @@ function cycleEndDateByDate (date, summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {string} - the start date of the next cycle as an ISO string.
  */
-function cycleStartDateAsISO (summer) {
+function cycleStartDateAsISO(summer) {
   return formatDateObjectToISO(cycleStartDate(summer))
 }
 
@@ -172,7 +172,7 @@ function cycleStartDateAsISO (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the start date of the next cycle.
  */
-function cycleStartDate (summer) {
+function cycleStartDate(summer) {
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
@@ -205,7 +205,7 @@ function cycleStartDate (summer) {
  * @param {boolean} summer - true for summer, false for winter and all year.
  * @returns {Date} - the start date of the next cycle.
  */
-function cycleStartDateByDate (date, summer) {
+function cycleStartDateByDate(date, summer) {
   const year = date.getFullYear()
   const month = date.getMonth()
 

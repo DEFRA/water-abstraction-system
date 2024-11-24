@@ -17,7 +17,7 @@ const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/re
  * @returns {Promise<object>} the 'pageData' needed for the review charge reference page. It contains details of the
  * bill run, charge reference and the charge adjustments
  */
-async function go (reviewChargeReferenceId, yar) {
+async function go(reviewChargeReferenceId, yar) {
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
 
   const [bannerMessage] = yar.flash('banner')

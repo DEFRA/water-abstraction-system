@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReturnVersionModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'returnVersions'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
@@ -65,35 +65,20 @@ class ReturnVersionModel extends BaseModel {
    *
    * @returns {object} an object defining modifier functions for this model
    */
-  static get modifiers () {
+  static get modifiers() {
     return {
       // history modifier fetches all the related records needed to determine history properties, for example, created
       // at, created by, and notes from the record, its user, and its NALD mod logs (where they exist)
-      history (query) {
+      history(query) {
         query
-          .select([
-            'createdAt',
-            'createdBy',
-            'notes',
-            'reason'
-          ])
+          .select(['createdAt', 'createdBy', 'notes', 'reason'])
           .withGraphFetched('modLogs')
           .modifyGraph('modLogs', (builder) => {
-            builder.select([
-              'id',
-              'naldDate',
-              'note',
-              'reasonDescription',
-              'userId'
-            ])
-              .orderBy('externalId', 'asc')
+            builder.select(['id', 'naldDate', 'note', 'reasonDescription', 'userId']).orderBy('externalId', 'asc')
           })
           .withGraphFetched('user')
           .modifyGraph('user', (builder) => {
-            builder.select([
-              'id',
-              'username'
-            ])
+            builder.select(['id', 'username'])
           })
       }
     }
@@ -120,7 +105,7 @@ class ReturnVersionModel extends BaseModel {
    *
    * @returns {Date} the date the 'source' record was created
    */
-  $createdAt () {
+  $createdAt() {
     const firstModLog = this._firstModLog()
 
     return firstModLog?.naldDate ?? this.createdAt
@@ -150,7 +135,7 @@ class ReturnVersionModel extends BaseModel {
    * @returns {string} the user name of the user that created the 'source' record, else `null` if it cannot be
    * determined
    */
-  $createdBy () {
+  $createdBy() {
     if (this.user) {
       return this.user.username
     }
@@ -183,7 +168,7 @@ class ReturnVersionModel extends BaseModel {
    *
    * @returns {string[]} an array of all the notes in ascending date order taken from the record's history
    */
-  $notes () {
+  $notes() {
     const notes = []
 
     for (const modLog of this.modLogs) {
@@ -222,7 +207,7 @@ class ReturnVersionModel extends BaseModel {
    *
    * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
    */
-  $reason () {
+  $reason() {
     if (this.reason) {
       return this.reason
     }
@@ -232,7 +217,7 @@ class ReturnVersionModel extends BaseModel {
     return firstModLog?.reasonDescription ?? null
   }
 
-  _firstModLog () {
+  _firstModLog() {
     if (this.modLogs.length > 0) {
       return this.modLogs[0]
     }

@@ -19,7 +19,7 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  *
  * @param {object} returnVersionData - The return version data required to persist a new return version for a licence
  */
-async function go (returnVersionData) {
+async function go(returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
 
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
@@ -27,40 +27,39 @@ async function go (returnVersionData) {
   await _persistReturnRequirements(returnRequirements, returnVersionId)
 }
 
-async function _persistReturnRequirements (returnRequirements, returnVersionId) {
+async function _persistReturnRequirements(returnRequirements, returnVersionId) {
   for (const returnRequirement of returnRequirements) {
-    const { id: returnRequirementId } = await ReturnRequirementModel.query()
-      .insert({
-        abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-        abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-        abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-        abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-        collectionFrequency: returnRequirement.collectionFrequency,
-        externalId: returnRequirement.externalId,
-        fiftySixException: returnRequirement.fiftySixException,
-        gravityFill: returnRequirement.gravityFill,
-        legacyId: returnRequirement.legacyId,
-        reabstraction: returnRequirement.reabstraction,
-        reportingFrequency: returnRequirement.reportingFrequency,
-        returnsFrequency: returnRequirement.returnsFrequency,
-        returnVersionId,
-        siteDescription: returnRequirement.siteDescription,
-        summer: returnRequirement.summer,
-        twoPartTariff: returnRequirement.twoPartTariff
-      })
+    const { id: returnRequirementId } = await ReturnRequirementModel.query().insert({
+      abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+      abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+      abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+      collectionFrequency: returnRequirement.collectionFrequency,
+      externalId: returnRequirement.externalId,
+      fiftySixException: returnRequirement.fiftySixException,
+      gravityFill: returnRequirement.gravityFill,
+      legacyId: returnRequirement.legacyId,
+      reabstraction: returnRequirement.reabstraction,
+      reportingFrequency: returnRequirement.reportingFrequency,
+      returnsFrequency: returnRequirement.returnsFrequency,
+      returnVersionId,
+      siteDescription: returnRequirement.siteDescription,
+      summer: returnRequirement.summer,
+      twoPartTariff: returnRequirement.twoPartTariff
+    })
 
     await _persistReturnRequirementsPoints(returnRequirement.points, returnRequirementId)
     await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId)
   }
 }
 
-async function _persistReturnRequirementsPoints (points, returnRequirementId) {
+async function _persistReturnRequirementsPoints(points, returnRequirementId) {
   for (const point of points) {
     await ReturnRequirementPointModel.query().insert({ pointId: point, returnRequirementId })
   }
 }
 
-async function _persistReturnRequirementsPurposes (returnRequirementPurposes, returnRequirementId) {
+async function _persistReturnRequirementsPurposes(returnRequirementPurposes, returnRequirementId) {
   for (const returnRequirementPurpose of returnRequirementPurposes) {
     await ReturnRequirementPurposeModel.query().insert({
       alias: returnRequirementPurpose.alias,

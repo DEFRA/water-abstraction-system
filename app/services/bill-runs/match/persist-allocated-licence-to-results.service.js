@@ -27,7 +27,7 @@ const ReviewReturnModel = require('../../../models/review-return.model.js')
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */
-async function go (billRunId, licence) {
+async function go(billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
   const reviewLicenceId = await _persistLicenceData(licence, billRunId)
@@ -50,7 +50,7 @@ async function go (billRunId, licence) {
   }
 }
 
-async function _persistChargeElement (chargeElement, reviewReturnIds, reviewChargeReferenceId) {
+async function _persistChargeElement(chargeElement, reviewReturnIds, reviewChargeReferenceId) {
   const reviewChargeElementId = await _persistReviewChargeElement(chargeElement, reviewChargeReferenceId)
 
   for (const returnLog of chargeElement.returnLogs) {
@@ -67,7 +67,7 @@ async function _persistChargeElement (chargeElement, reviewReturnIds, reviewChar
   }
 }
 
-async function _persistChargeElementsReturns (reviewChargeElementId, reviewReturnId) {
+async function _persistChargeElementsReturns(reviewChargeElementId, reviewReturnId) {
   const data = {
     reviewChargeElementId,
     reviewReturnId
@@ -76,7 +76,7 @@ async function _persistChargeElementsReturns (reviewChargeElementId, reviewRetur
   await ReviewChargeElementReturnModel.query().insert(data)
 }
 
-async function _persistChargeReference (chargeReference, reviewChargeVersionId) {
+async function _persistChargeReference(chargeReference, reviewChargeVersionId) {
   const data = {
     reviewChargeVersionId,
     chargeReferenceId: chargeReference.id,
@@ -97,7 +97,7 @@ async function _persistChargeReference (chargeReference, reviewChargeVersionId) 
   return reviewChargeReferenceId
 }
 
-async function _persistChargeVersion (chargeVersion, reviewLicenceId) {
+async function _persistChargeVersion(chargeVersion, reviewLicenceId) {
   const data = {
     reviewLicenceId,
     chargeVersionId: chargeVersion.id,
@@ -111,7 +111,7 @@ async function _persistChargeVersion (chargeVersion, reviewLicenceId) {
   return reviewChargeVersionId
 }
 
-async function _persistLicenceData (licence, billRunId) {
+async function _persistLicenceData(licence, billRunId) {
   const data = {
     billRunId,
     licenceId: licence.id,
@@ -126,7 +126,7 @@ async function _persistLicenceData (licence, billRunId) {
   return reviewLicenceId
 }
 
-async function _persistReturnLogs (returnLogs, reviewLicenceId) {
+async function _persistReturnLogs(returnLogs, reviewLicenceId) {
   const reviewReturnIds = []
 
   for (const returnLog of returnLogs) {
@@ -138,7 +138,7 @@ async function _persistReturnLogs (returnLogs, reviewLicenceId) {
   return reviewReturnIds
 }
 
-async function _persistReviewChargeElement (chargeElement, reviewChargeReferenceId) {
+async function _persistReviewChargeElement(chargeElement, reviewChargeReferenceId) {
   const data = {
     reviewChargeReferenceId,
     chargeElementId: chargeElement.id,
@@ -154,7 +154,7 @@ async function _persistReviewChargeElement (chargeElement, reviewChargeReference
   return reviewChargeElementId
 }
 
-async function _persistReviewReturn (returnLog, reviewLicenceId) {
+async function _persistReviewReturn(returnLog, reviewLicenceId) {
   const data = {
     returnId: returnLog.id,
     reviewLicenceId,

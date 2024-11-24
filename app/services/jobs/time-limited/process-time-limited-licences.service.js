@@ -6,13 +6,17 @@
  */
 
 const FetchTimeLimitedLicencesService = require('./fetch-time-limited-licences.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../../lib/general.lib.js')
+const {
+  calculateAndLogTimeTaken,
+  currentTimeInNanoseconds,
+  timestampForPostgres
+} = require('../../../lib/general.lib.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
  */
-async function go () {
+async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -26,7 +30,7 @@ async function go () {
   }
 }
 
-async function _addWorkflowRecords (timeLimitedResults) {
+async function _addWorkflowRecords(timeLimitedResults) {
   const timestamp = timestampForPostgres()
 
   for (const timeLimitedResult of timeLimitedResults) {

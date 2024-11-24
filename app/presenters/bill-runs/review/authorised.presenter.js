@@ -16,7 +16,7 @@ const { calculateTotalBillableReturns, formatChargePeriod } = require('./base-re
  *
  * @returns {object} page date needed for the review charge reference factors page
  */
-function go (reviewChargeReference) {
+function go(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,

@@ -15,7 +15,7 @@ const WaterSchemaService = require('./water-schema.service.js')
 /**
  * Removes all data created for acceptance tests
  */
-async function go () {
+async function go() {
   const startTime = currentTimeInNanoseconds()
 
   await Promise.all([

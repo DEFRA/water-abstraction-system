@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, afterEach, beforeEach } = exports.lab = Lab.script()
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -124,29 +124,33 @@ describe('Persist company service', () => {
         existingCompany = existing.company
         exisitngContact = existing.contact
 
-        transformedCompanies = [{
-          ...existingCompany,
-          contact: exisitngContact,
-          companyContact: {
-            externalId: existingCompany.externalId,
-            startDate: companyContactStartDate,
-            licenceRoleId: licenceHolderRoleId
-          },
-          addresses: [{
-            address1: 'ENVIRONMENT AGENCY',
-            externalId: addressExternalId,
-            dataSource: 'nald'
-          }],
-          companyAddresses: [
-            {
-              addressId: addressExternalId,
-              companyId: existingCompany.externalId,
-              startDate: new Date('2020-03-03'),
-              endDate: new Date('2022-02-02'),
+        transformedCompanies = [
+          {
+            ...existingCompany,
+            contact: exisitngContact,
+            companyContact: {
+              externalId: existingCompany.externalId,
+              startDate: companyContactStartDate,
               licenceRoleId: licenceHolderRoleId
-            }
-          ]
-        }]
+            },
+            addresses: [
+              {
+                address1: 'ENVIRONMENT AGENCY',
+                externalId: addressExternalId,
+                dataSource: 'nald'
+              }
+            ],
+            companyAddresses: [
+              {
+                addressId: addressExternalId,
+                companyId: existingCompany.externalId,
+                startDate: new Date('2020-03-03'),
+                endDate: new Date('2022-02-02'),
+                licenceRoleId: licenceHolderRoleId
+              }
+            ]
+          }
+        ]
       })
 
       it('should return the updated company', async () => {
@@ -199,29 +203,19 @@ describe('Persist company service', () => {
   })
 })
 
-async function _fetchPersistedAddress (externalId) {
+async function _fetchPersistedAddress(externalId) {
   return AddressModel.query().where('externalId', externalId).limit(1).first().withGraphFetched('companyAddresses')
 }
 
-async function _fetchPersistedCompany (externalId) {
-  return CompanyModel
-    .query()
-    .where('externalId', externalId)
-    .withGraphFetched('companyContacts')
-    .limit(1)
-    .first()
+async function _fetchPersistedCompany(externalId) {
+  return CompanyModel.query().where('externalId', externalId).withGraphFetched('companyContacts').limit(1).first()
 }
 
-async function _fetchPersistedContact (externalId) {
-  return ContactModel
-    .query()
-    .where('externalId', externalId)
-    .withGraphFetched('companyContacts')
-    .limit(1)
-    .first()
+async function _fetchPersistedContact(externalId) {
+  return ContactModel.query().where('externalId', externalId).withGraphFetched('companyContacts').limit(1).first()
 }
 
-function _transformedCompany (licenceHolderRoleId, addressExternalId) {
+function _transformedCompany(licenceHolderRoleId, addressExternalId) {
   const externalId = CompanyHelper.generateExternalId()
 
   return {
@@ -267,7 +261,7 @@ function _transformedCompany (licenceHolderRoleId, addressExternalId) {
   }
 }
 
-async function _createExistingRecords (transformedCompany, licenceHolderRoleId, companyContactStartDate) {
+async function _createExistingRecords(transformedCompany, licenceHolderRoleId, companyContactStartDate) {
   const address = await AddressHelper.add({
     ...transformedCompany.addresses[0]
   })

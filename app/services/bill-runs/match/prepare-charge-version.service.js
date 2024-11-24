@@ -26,7 +26,7 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
  * @param {module:ChargeVersionModel} chargeVersion - The charge version to prepare
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-function go (chargeVersion, billingPeriod) {
+function go(chargeVersion, billingPeriod) {
   const { chargeReferences } = chargeVersion
 
   _sortChargeReferencesBySubsistenceCharge(chargeReferences)
@@ -39,7 +39,7 @@ function go (chargeVersion, billingPeriod) {
   })
 }
 
-function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
+function _prepareChargeElementsForMatching(chargeElements, chargePeriod) {
   chargeElements.forEach((chargeElement) => {
     const {
       abstractionPeriodStartDay,
@@ -62,7 +62,7 @@ function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
   })
 }
 
-function _sortChargeReferencesBySubsistenceCharge (chargeReferences) {
+function _sortChargeReferencesBySubsistenceCharge(chargeReferences) {
   return chargeReferences.sort((firstChargeReference, secondChargeReference) => {
     const { subsistenceCharge: subsistenceChargeFirst } = firstChargeReference.chargeCategory
     const { subsistenceCharge: subsistenceChargeSecond } = secondChargeReference.chargeCategory

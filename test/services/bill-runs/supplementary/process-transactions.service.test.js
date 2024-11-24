@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -102,12 +102,7 @@ describe('Process Transactions service', () => {
           })
 
           it('returns only the previous transactions', async () => {
-            const result = await ProcessTransactionsService.go(
-              [],
-              billingAccountId,
-              billLicence,
-              billingPeriod
-            )
+            const result = await ProcessTransactionsService.go([], billingAccountId, billLicence, billingPeriod)
 
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_1'])
@@ -165,7 +160,7 @@ describe('Process Transactions service', () => {
   })
 })
 
-function _generateCalculatedTransaction (chargeCategoryCode, billableDays, testReference, changes = {}) {
+function _generateCalculatedTransaction(chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
     id: '61abdc15-7859-4783-9622-6cb8de7f2461',
     billLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
@@ -192,7 +187,7 @@ function _generateCalculatedTransaction (chargeCategoryCode, billableDays, testR
   }
 }
 
-function _generatePreviousTransaction (chargeCategoryCode, billableDays, testReference, changes = {}) {
+function _generatePreviousTransaction(chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
     id: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
     billLicenceId: 'a76b3ab3-d70d-4fb0-8d72-2e2cdd334729',

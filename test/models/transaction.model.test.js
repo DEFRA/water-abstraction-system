@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -46,16 +46,13 @@ describe('Transaction model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await TransactionModel.query()
-          .innerJoinRelated('billLicence')
+        const query = await TransactionModel.query().innerJoinRelated('billLicence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill licence', async () => {
-        const result = await TransactionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billLicence')
+        const result = await TransactionModel.query().findById(testRecord.id).withGraphFetched('billLicence')
 
         expect(result).to.be.instanceOf(TransactionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -77,16 +74,13 @@ describe('Transaction model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await TransactionModel.query()
-          .innerJoinRelated('chargeReference')
+        const query = await TransactionModel.query().innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge reference', async () => {
-        const result = await TransactionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReference')
+        const result = await TransactionModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
         expect(result).to.be.instanceOf(TransactionModel)
         expect(result.id).to.equal(testRecord.id)

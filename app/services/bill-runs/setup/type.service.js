@@ -20,7 +20,7 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
  *
  * @returns {Promise<object>} The view data for the type page
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const formattedData = TypePresenter.go(session)
 

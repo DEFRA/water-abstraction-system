@@ -19,13 +19,17 @@ const ViewLicenceCommunicationsPresenter = require('../../presenters/licences/vi
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence communication template.
  */
-async function go (licenceId, auth, page) {
+async function go(licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const communications = await FetchCommunicationsService.go(commonData.licenceRef, page)
   const communicationsData = ViewLicenceCommunicationsPresenter.go(communications.communications)
 
-  const pagination = PaginatorPresenter.go(communications.pagination.total, Number(page), `/system/licences/${licenceId}/communications`)
+  const pagination = PaginatorPresenter.go(
+    communications.pagination.total,
+    Number(page),
+    `/system/licences/${licenceId}/communications`
+  )
 
   return {
     activeTab: 'communications',

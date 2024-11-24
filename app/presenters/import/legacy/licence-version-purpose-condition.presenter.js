@@ -14,7 +14,7 @@
  * @returns {object} the NALD licence version purpose conditions data transformed into the WRLS format ready for
  * validation and persisting
  */
-function go (licenceVersionPurposeCondition) {
+function go(licenceVersionPurposeCondition) {
   return {
     param1: licenceVersionPurposeCondition.param1,
     param2: licenceVersionPurposeCondition.param2,

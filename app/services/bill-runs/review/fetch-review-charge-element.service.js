@@ -19,65 +19,45 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
  * two-part tariff review charge element page
  */
-async function go (reviewChargeElementId) {
+async function go(reviewChargeElementId) {
   return _fetch(reviewChargeElementId)
 }
 
-async function _fetch (reviewChargeElementId) {
+async function _fetch(reviewChargeElementId) {
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
-    .select([
-      'id',
-      'amendedAllocated',
-      'issues',
-      'status'
-    ])
+    .select(['id', 'amendedAllocated', 'issues', 'status'])
     .withGraphFetched('chargeElement')
     .modifyGraph('chargeElement', (chargeElementBuilder) => {
-      chargeElementBuilder
-        .select([
-          'id',
-          'abstractionPeriodStartDay',
-          'abstractionPeriodStartMonth',
-          'abstractionPeriodEndDay',
-          'abstractionPeriodEndMonth',
-          'authorisedAnnualQuantity',
-          'description'
-        ])
+      chargeElementBuilder.select([
+        'id',
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth',
+        'authorisedAnnualQuantity',
+        'description'
+      ])
     })
     .withGraphFetched('reviewChargeReference')
     .modifyGraph('reviewChargeReference', (reviewChargeReferenceBuilder) => {
       reviewChargeReferenceBuilder
-        .select([
-          'id',
-          'amendedAuthorisedVolume'
-        ])
+        .select(['id', 'amendedAuthorisedVolume'])
         .withGraphFetched('reviewChargeElements')
         .modifyGraph('reviewChargeElements', (reviewChargeElementsBuilder) => {
-          reviewChargeElementsBuilder
-            .select(['id'])
+          reviewChargeElementsBuilder.select(['id'])
         })
         .withGraphFetched('reviewChargeVersion')
         .modifyGraph('reviewChargeVersion', (reviewChargeVersionBuilder) => {
           reviewChargeVersionBuilder
-            .select([
-              'id',
-              'chargePeriodStartDate',
-              'chargePeriodEndDate'
-            ]).withGraphFetched('reviewLicence')
+            .select(['id', 'chargePeriodStartDate', 'chargePeriodEndDate'])
+            .withGraphFetched('reviewLicence')
             .modifyGraph('reviewLicence', (reviewLicenceBuilder) => {
               reviewLicenceBuilder
-                .select([
-                  'id',
-                  'licenceId'
-                ])
+                .select(['id', 'licenceId'])
                 .withGraphFetched('billRun')
                 .modifyGraph('billRun', (billRunBuilder) => {
-                  billRunBuilder
-                    .select([
-                      'id',
-                      'toFinancialYearEnding'
-                    ])
+                  billRunBuilder.select(['id', 'toFinancialYearEnding'])
                 })
             })
         })
@@ -102,14 +82,13 @@ async function _fetch (reviewChargeElementId) {
         .orderBy('reviewReturns.startDate', 'asc')
         .withGraphFetched('returnLog')
         .modifyGraph('returnLog', (returnLogBuilder) => {
-          returnLogBuilder
-            .select([
-              'id',
-              ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-              ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-              ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-              ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
-            ])
+          returnLogBuilder.select([
+            'id',
+            ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
+            ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
+            ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
+            ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
+          ])
         })
     })
 }

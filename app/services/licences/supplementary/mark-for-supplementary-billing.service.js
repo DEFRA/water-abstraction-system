@@ -16,7 +16,7 @@ const MarkForSupplementaryBillingPresenter = require('../../../presenters/licenc
  * @returns {Promise<object>} an object representing the `pageData` needed by the mark for supplementary billing page.
  * It contains details of the last 6 years from todays date and the licence details.
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
@@ -24,13 +24,8 @@ async function go (licenceId) {
   return pageData
 }
 
-async function _fetchLicenceData (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef'
-    ])
+async function _fetchLicenceData(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
 module.exports = {

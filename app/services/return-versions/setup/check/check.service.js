@@ -18,7 +18,7 @@ const SessionModel = require('../../../../models/session.model.js')
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go (sessionId, yar) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   await _markCheckPageVisited(session)
@@ -37,13 +37,13 @@ async function go (sessionId, yar) {
   }
 }
 
-async function _markCheckPageVisited (session) {
+async function _markCheckPageVisited(session) {
   session.checkPageVisited = true
 
   return session.$update()
 }
 
-async function _returnRequirements (session) {
+async function _returnRequirements(session) {
   const { licence, requirements, journey } = session
 
   const points = await FetchPointsService.go(licence.id)

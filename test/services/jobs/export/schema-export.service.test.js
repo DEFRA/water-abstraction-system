@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -96,7 +96,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService.go('water')
 
-      expect(notifierStub.omfg.calledWith(('Error: Failed to export schema water'))).to.be.true()
+      expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).to.be.true()
       expect(SendToS3BucketServiceStub.called).to.be.false()
       expect(CompressSchemaFolderServiceStub.called).to.be.false()
     })

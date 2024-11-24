@@ -16,7 +16,7 @@ const { formatAdditionalCharges, formatChargePeriod, formatAdjustments } = requi
  *
  * @returns {object} page date needed for the review charge reference factors page
  */
-function go (reviewChargeReference) {
+function go(reviewChargeReference) {
   const {
     amendedAggregate,
     amendedChargeAdjustment,

@@ -25,7 +25,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
-async function go (financialYearEndings, regionId, batchType, userEmail) {
+async function go(financialYearEndings, regionId, batchType, userEmail) {
   await _billRunBlocked(regionId, batchType, financialYearEndings.toFinancialYearEnding)
 
   const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
@@ -38,7 +38,7 @@ async function go (financialYearEndings, regionId, batchType, userEmail) {
   return billRun
 }
 
-function _billRunOptions (chargingModuleResult, batchType) {
+function _billRunOptions(chargingModuleResult, batchType) {
   const options = {
     batchType,
     scheme: 'sroc'
@@ -57,7 +57,7 @@ function _billRunOptions (chargingModuleResult, batchType) {
   return options
 }
 
-async function _billRunBlocked (regionId, batchType, financialEndYear) {
+async function _billRunBlocked(regionId, batchType, financialEndYear) {
   const matchResults = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
   // No matches so we can create the bill run

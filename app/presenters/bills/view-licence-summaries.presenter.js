@@ -7,7 +7,14 @@
 
 const { formatMoney } = require('../base.presenter.js')
 
-function go (licenceSummaries) {
+/**
+ * Formats summary data of licences connected to a bill for the multi-licence bill page
+ *
+ * @param {object[]} licenceSummaries - an array of licence summaries
+ *
+ * @returns {object} a formatted representation of the bill's licence summaries
+ */
+function go(licenceSummaries) {
   const billLicences = _billLicences(licenceSummaries)
 
   const formattedBill = {
@@ -18,7 +25,7 @@ function go (licenceSummaries) {
   return formattedBill
 }
 
-function _billLicences (licenceSummaries) {
+function _billLicences(licenceSummaries) {
   return licenceSummaries.map((licenceSummary) => {
     const { id, licenceRef: reference, total } = licenceSummary
 
@@ -30,7 +37,7 @@ function _billLicences (licenceSummaries) {
   })
 }
 
-function _tableCaption (billLicences) {
+function _tableCaption(billLicences) {
   const numberOfRows = billLicences.length
 
   if (numberOfRows === 1) {

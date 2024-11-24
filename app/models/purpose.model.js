@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class PurposeModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'purposes'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       chargeElements: {
         relation: Model.HasManyRelation,

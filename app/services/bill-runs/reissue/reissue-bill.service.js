@@ -34,13 +34,10 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * licences and transactions
  * @param {module:BillRunModel} reissueBillRun - The bill run that the new bills should belong to
  *
- * @returns {Promise<object>} dataToReturn Data that has been generated while reissuing the bill
- * @returns {object[]} dataToReturn.bills Array of bills
- * @returns {object[]} dataToReturn.billLicences Array of bill licences
- * @returns {object[]} dataToReturn.transactions Array of transactions
+ * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
+ * properties: `bills`, `billLicences` and `transactions`.
  */
-
-async function go (sourceBill, reissueBillRun) {
+async function go(sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
     billLicences: [],
@@ -49,10 +46,7 @@ async function go (sourceBill, reissueBillRun) {
 
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
   // invoice and one to be the new version of it) and returns their IDs
-  const chargingModuleReissueInvoiceIds = await _sendReissueRequest(
-    reissueBillRun.externalId,
-    sourceBill.externalId
-  )
+  const chargingModuleReissueInvoiceIds = await _sendReissueRequest(reissueBillRun.externalId, sourceBill.externalId)
 
   // We can't get the reissue bills right away as the CM might be busy reissuing so we wait until the status
   // indicated that it's ready for us to proceed
@@ -60,17 +54,9 @@ async function go (sourceBill, reissueBillRun) {
 
   for (const chargingModuleReissueInvoiceId of chargingModuleReissueInvoiceIds) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
-    const chargingModuleReissueInvoice = await _sendViewBillRequest(
-      reissueBillRun,
-      chargingModuleReissueInvoiceId
-    )
+    const chargingModuleReissueInvoice = await _sendViewBillRequest(reissueBillRun, chargingModuleReissueInvoiceId)
 
-    const reissueBill = _retrieveOrGenerateBill(
-      dataToReturn,
-      sourceBill,
-      reissueBillRun,
-      chargingModuleReissueInvoice
-    )
+    const reissueBill = _retrieveOrGenerateBill(dataToReturn, sourceBill, reissueBillRun, chargingModuleReissueInvoice)
 
     // The bill we want to reissue will have one or more bill licences on it which we need to re-create
     for (const sourceBillLicence of sourceBill.billLicences) {
@@ -110,7 +96,7 @@ async function go (sourceBill, reissueBillRun) {
   return dataToReturn
 }
 
-function _generateBill (billingAccountId, accountNumber, billRunId, financialYearEnding) {
+function _generateBill(billingAccountId, accountNumber, billRunId, financialYearEnding) {
   return {
     id: generateUUID(),
     accountNumber,
@@ -122,7 +108,7 @@ function _generateBill (billingAccountId, accountNumber, billRunId, financialYea
   }
 }
 
-function _generateBillLicence (billId, licenceId, licenceRef) {
+function _generateBillLicence(billId, licenceId, licenceRef) {
   return {
     id: generateUUID(),
     billId,
@@ -138,8 +124,10 @@ function _generateBillLicence (billId, licenceId, licenceRef) {
  *
  * This service sends "view status" requests to the CM (every second to avoid bombarding it) until the status is not
  * `pending`, at which point it returns.
+ *
+ * @private
  */
-async function _pauseUntilNotPending (billRunExternalId) {
+async function _pauseUntilNotPending(billRunExternalId) {
   let status
 
   do {
@@ -155,10 +143,10 @@ async function _pauseUntilNotPending (billRunExternalId) {
     const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)
 
     if (!result.succeeded) {
-      const error = new ExpandedError(
-        'Charging Module reissue request failed',
-        { billRunExternalId, responseBody: result.response.body }
-      )
+      const error = new ExpandedError('Charging Module reissue request failed', {
+        billRunExternalId,
+        responseBody: result.response.body
+      })
 
       throw error
     }
@@ -169,8 +157,10 @@ async function _pauseUntilNotPending (billRunExternalId) {
 
 /**
  * Generates a new transaction using sourceTransaction as a base and amending properties as appropriate
+ *
+ * @private
  */
-function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
+function _generateTransaction(chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
   return {
     ...sourceTransaction,
     id: generateUUID(),
@@ -188,19 +178,20 @@ function _generateTransaction (chargingModuleReissueTransaction, sourceTransacti
  * The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
  * and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
  * amount should be positive or negative
+ *
+ * @private
  */
-function _determineSignOfNetAmount (chargeValue, credit) {
+function _determineSignOfNetAmount(chargeValue, credit) {
   return credit ? -chargeValue : chargeValue
 }
 
 /**
  * Maps the provided CM invoice fields to their bill equivalents
+ *
+ * @private
  */
-function _mapChargingModuleInvoice (chargingModuleInvoice) {
-  const chargingModuleRebilledTypes = new Map()
-    .set('C', 'reversal')
-    .set('R', 'rebill')
-    .set('O', null)
+function _mapChargingModuleInvoice(chargingModuleInvoice) {
+  const chargingModuleRebilledTypes = new Map().set('C', 'reversal').set('R', 'rebill').set('O', null)
 
   return {
     externalId: chargingModuleInvoice.id,
@@ -215,8 +206,10 @@ function _mapChargingModuleInvoice (chargingModuleInvoice) {
 
 /**
  * Updates the source bill's rebilling state and original bill ID
+ *
+ * @private
  */
-async function _markSourceBillAsRebilled (sourceBill) {
+async function _markSourceBillAsRebilled(sourceBill) {
   await sourceBill.$query().patch({
     rebillingState: 'rebilled',
     // If the source bill's originalBillId field is `null` then we update it with the bill's id; otherwise, we use its
@@ -226,13 +219,13 @@ async function _markSourceBillAsRebilled (sourceBill) {
   })
 }
 
-function _retrieveChargingModuleTransaction (chargingModuleLicence, id) {
+function _retrieveChargingModuleTransaction(chargingModuleLicence, id) {
   return chargingModuleLicence.transactions.find((transaction) => {
     return transaction.rebilledTransactionId === id
   })
 }
 
-function _retrieveChargingModuleLicence (chargingModuleInvoice, licenceRef) {
+function _retrieveChargingModuleLicence(chargingModuleInvoice, licenceRef) {
   return chargingModuleInvoice.licences.find((licence) => {
     return licence.licenceNumber === licenceRef
   })
@@ -241,13 +234,14 @@ function _retrieveChargingModuleLicence (chargingModuleInvoice, licenceRef) {
 /**
  * If a bill exists for this combination of source bill and CM reissue invoice then return it; otherwise,
  * generate it, store it and then return it.
+ *
+ * @private
  */
-function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, chargingModuleReissueInvoice) {
+function _retrieveOrGenerateBill(dataToReturn, sourceBill, reissueBillRun, chargingModuleReissueInvoice) {
   // Because we have nested iteration of source bill and Charging Module reissue invoice, we need to ensure we have
   // a bill for every combination of these, hence we search by both of their ids
   const existingBill = dataToReturn.bills.find((bill) => {
-    return bill.billingAccountId === sourceBill.billingAccountId &&
-      bill.externalId === chargingModuleReissueInvoice.id
+    return bill.billingAccountId === sourceBill.billingAccountId && bill.externalId === chargingModuleReissueInvoice.id
   })
 
   if (existingBill) {
@@ -279,8 +273,10 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
 /**
  * If a bill licence exists for this billing account id then return it; otherwise, generate it, store it and then return
  * it.
+ *
+ * @private
  */
-function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, sourceBillLicence) {
+function _retrieveOrGenerateBillLicence(dataToReturn, sourceBill, billingId, sourceBillLicence) {
   const existingBillLicence = dataToReturn.billLicences.find((billLicence) => {
     return billLicence.billingAccountId === sourceBill.billingAccountId
   })
@@ -298,18 +294,15 @@ function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, so
   return newBillLicence
 }
 
-async function _sendReissueRequest (billRunExternalId, billExternalId) {
+async function _sendReissueRequest(billRunExternalId, billExternalId) {
   const result = await ChargingModuleReissueBillRequest.send(billRunExternalId, billExternalId)
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module reissue request failed',
-      {
-        billRunExternalId,
-        billExternalId,
-        responseBody: result.response.body
-      }
-    )
+    const error = new ExpandedError('Charging Module reissue request failed', {
+      billRunExternalId,
+      billExternalId,
+      responseBody: result.response.body
+    })
 
     throw error
   }
@@ -320,18 +313,15 @@ async function _sendReissueRequest (billRunExternalId, billExternalId) {
   })
 }
 
-async function _sendViewBillRequest (billRun, reissueBillId) {
+async function _sendViewBillRequest(billRun, reissueBillId) {
   const result = await ChargingModuleViewBillRequest.send(billRun.externalId, reissueBillId)
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module view bill request failed',
-      {
-        billRunExternalId: billRun.externalId,
-        reissueInvoiceExternalId: reissueBillId,
-        responseBody: result.response.body
-      }
-    )
+    const error = new ExpandedError('Charging Module view bill request failed', {
+      billRunExternalId: billRun.externalId,
+      reissueInvoiceExternalId: reissueBillId,
+      responseBody: result.response.body
+    })
 
     throw error
   }

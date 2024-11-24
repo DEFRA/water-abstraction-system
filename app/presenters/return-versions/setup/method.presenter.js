@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   const { id: sessionId, licence, method } = session
 
   return {
