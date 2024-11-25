@@ -20,8 +20,6 @@ const StartBillRunProcessService = require('../start-bill-run-process.service.js
  *
  * @param {object} user - Instance of `UserModel` that represents the user making the request
  * @param {object} existsResults - Results of `ExistsService` returned in the controller and passed on to this service
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go(user, existsResults) {
   const { matchResults, session, yearToUse } = existsResults
@@ -32,7 +30,7 @@ async function go(user, existsResults) {
   await _triggerBillRun(regionId, type, user, yearToUse, existingBillRun)
   await _triggerLegacyBillRun(regionId, type, user, yearToUse, summer, existingBillRun)
 
-  return session.$query().delete()
+  await session.$query().delete()
 }
 
 async function _triggerBillRun(regionId, batchType, user, year, existingBillRun = null) {

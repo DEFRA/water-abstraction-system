@@ -46,6 +46,7 @@ describe('Fetch Licence Service', () => {
       expect(result.id).to.equal(licence.id)
       expect(result.region_id).to.equal(licence.regionId)
       expect(result.include_in_sroc_billing).to.equal(licence.includeInSrocBilling)
+      expect(result.include_in_presroc_billing).to.equal(licence.includeInPresrocBilling)
       expect(result.created_at).to.equal(workflow.createdAt)
     })
 

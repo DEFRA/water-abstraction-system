@@ -19,18 +19,14 @@ const ProcessImportedLicenceService = require('../licences/supplementary/process
  *
  * @param {object} importedLicence - The imported licence
  * @param {string} licenceId - The UUID of the licence being updated by the import
- *
- * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go(importedLicence, licenceId) {
   try {
     const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
-    if (!licenceChanged) {
-      return
+    if (licenceChanged) {
+      await ProcessImportedLicenceService.go(importedLicence, licenceId)
     }
-
-    return ProcessImportedLicenceService.go(importedLicence, licenceId)
   } catch (error) {
     global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }

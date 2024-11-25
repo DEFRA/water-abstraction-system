@@ -16,8 +16,6 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {string} sessionId - The UUID for the return requirement setup session record
  * @param {number} requirementIndex - The index of the requirement being removed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- *
- * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
 async function go(sessionId, requirementIndex, yar) {
   const session = await SessionModel.query().findById(sessionId)
@@ -29,13 +27,13 @@ async function go(sessionId, requirementIndex, yar) {
 
   yar.flash('notification', notification)
 
-  return _removeRequirementFromSession(session, requirementIndex)
+  await _removeRequirementFromSession(session, requirementIndex)
 }
 
 async function _removeRequirementFromSession(session, requirementIndex) {
   session.requirements.splice(requirementIndex, 1)
 
-  return session.$update()
+  await session.$update()
 }
 
 module.exports = {

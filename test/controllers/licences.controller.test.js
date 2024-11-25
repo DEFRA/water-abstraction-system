@@ -23,6 +23,7 @@ const ViewLicenceCommunicationsService = require('../../app/services/licences/vi
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
+const ViewLicencePointsService = require('../../app/services/licences/view-licence-points.service.js')
 const ViewLicencePurposesService = require('../../app/services/licences/view-licence-purposes.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
@@ -244,6 +245,34 @@ describe('Licences controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/points', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/points',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicencePointsService, 'go').resolves(_viewLicencePoints())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence abstraction points')
         })
       })
     })
@@ -617,6 +646,32 @@ function _viewLicenceContactDetails() {
       }
     ],
     pageTitle: 'Licence contact details'
+  }
+}
+
+function _viewLicencePoints() {
+  return {
+    id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
+    licencePoints: [
+      {
+        bgsReference: '',
+        category: 'Single Point',
+        depth: 183,
+        description: 'MIZKAN UK LTD, BURNTWOOD - BOREHOLE',
+        gridReference: 'At National Grid Reference SK 05769 08747',
+        hydroOffsetDistance: '',
+        hydroReference: '',
+        locationNote: '',
+        note: '',
+        primaryType: 'Groundwater',
+        secondaryType: 'Borehole',
+        sourceDescription: 'Groundwater Midlands Region',
+        sourceType: 'Groundwater',
+        wellReference: ''
+      }
+    ],
+    licenceRef: '03/28/07/0006',
+    pageTitle: 'Licence abstraction points'
   }
 }
 

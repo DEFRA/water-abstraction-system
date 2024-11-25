@@ -21,8 +21,6 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @param {string} reviewLicenceId - The UUID of the licence that is being reviewed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} payload - The Hapi `request.payload` object passed on by the controller
- *
- * @returns {Promise<object>} resolves to the result of the update query. Not intended to be used
  */
 async function go(reviewLicenceId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
@@ -30,7 +28,7 @@ async function go(reviewLicenceId, yar, payload) {
   // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
   _bannerMessage(yar, parsedPayload)
 
-  return _update(reviewLicenceId, parsedPayload)
+  await _update(reviewLicenceId, parsedPayload)
 }
 
 function _bannerMessage(yar, parsedPayload) {
@@ -71,7 +69,7 @@ async function _update(reviewLicenceId, parsedPayload) {
     patch.progress = progress
   }
 
-  return ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
+  await ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
 }
 
 module.exports = {

@@ -24,6 +24,7 @@ function go(licence) {
   const abstractionPeriods = _abstractionPeriods(licenceVersionPurposes)
   const abstractionPoints = _abstractionPoints(licenceVersionPurposes)
 
+  const enableLicencePointsView = FeatureFlagsConfig.enableLicencePointsView
   const enableLicencePurposesView = FeatureFlagsConfig.enableLicencePurposesView
   const enableMonitoringStationsView = FeatureFlagsConfig.enableMonitoringStationsView
 
@@ -38,6 +39,7 @@ function go(licence) {
     abstractionPointsLinkText: _abstractionPointsLinkText(abstractionPoints),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
+    enableLicencePointsView,
     enableLicencePurposesView,
     enableMonitoringStationsView,
     endDate: _endDate(expiredDate),

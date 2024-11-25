@@ -16,11 +16,9 @@ const LicenceVersionModel = require('../../../models/licence-version.model.js')
  * @param {string} updatedAt - The timestamp indicating when the entity was last updated.
  * @param {object} transformedLicence - An object representing a valid WRLS licence.
  * @param {string} licenceId - A licence id from WRLS
- *
- * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
 async function go(trx, updatedAt, transformedLicence, licenceId) {
-  return _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
+  await _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
 }
 
 async function _persistLicenceVersion(trx, updatedAt, licenceVersion, licenceId) {

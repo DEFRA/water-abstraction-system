@@ -31,7 +31,7 @@ const WaitForStatusRequest = require('./wait-for-status.request.js')
  *
  * @param {string} billRunId - UUID of the charging module API bill run to send
  *
- * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
+ * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send(billRunId) {
   await _approve(billRunId)

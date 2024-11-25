@@ -33,8 +33,6 @@ const LicenceModel = require('../../../models/licence.model.js')
  * rather than switch between different ways of querying we stick to one for the removal.
  *
  * @param {string} licenceRef - Reference for the licence with a duplicate record
- *
- * @returns {Promise} the service does not resolve to a value
  */
 async function go(licenceRef) {
   const invalidLicences = await _determineInvalidLicences(licenceRef)
