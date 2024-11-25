@@ -1,8 +1,10 @@
 'use strict'
+
 const jsdocPlugin = require('eslint-plugin-jsdoc')
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
 const neostandard = require('neostandard')
 const globals = require('globals')
+
 module.exports = [
   // Start with neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
   // governance issue https://github.com/standard/standard/issues/1948#issuecomment-2138078249). The maintainers of
@@ -41,17 +43,17 @@ module.exports = [
       'arrow-body-style': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
       strict: ['error', 'global'],
-      'jsdoc/check-alignment': 'warn',
-      'jsdoc/check-indentation': 'warn',
-      'jsdoc/check-types': 'warn',
-      'jsdoc/check-tag-names': 'warn',
-      'jsdoc/lines-before-block': 'warn',
+      'jsdoc/check-alignment': 'error',
+      'jsdoc/check-indentation': 'error',
+      'jsdoc/check-types': 'error',
+      'jsdoc/check-tag-names': 'error',
+      'jsdoc/lines-before-block': 'error',
       'jsdoc/newline-after-description': 'off', // does not work with 'use strict'
-      'jsdoc/require-description': 'warn',
-      'jsdoc/require-hyphen-before-param-description': 'warn',
-      'jsdoc/require-jsdoc': ['warn', { publicOnly: true }],
-      'jsdoc/require-param': ['warn', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['warn', { publicOnly: true }]
+      'jsdoc/require-description': 'error',
+      'jsdoc/require-hyphen-before-param-description': 'error',
+      'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
+      'jsdoc/require-param': ['error', { exemptedBy: ['private'] }],
+      'jsdoc/require-returns': ['error', { publicOnly: true }]
     },
     settings: {
       jsdoc: {
