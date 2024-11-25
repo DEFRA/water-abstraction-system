@@ -20,7 +20,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (importedLicence, licenceId) {
+async function go(importedLicence, licenceId) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
   const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails)
 
@@ -42,7 +42,7 @@ async function go (importedLicence, licenceId) {
   )
 }
 
-function _earliestChangedDate (importedLicence, existingLicenceDetails) {
+function _earliestChangedDate(importedLicence, existingLicenceDetails) {
   const { endDate: currentFinancialYearEndDate } = determineCurrentFinancialYear()
   const changedDates = []
 
@@ -69,14 +69,14 @@ function _earliestChangedDate (importedLicence, existingLicenceDetails) {
 
   // Filter out those greater than the current financial year end date
   const filteredDates = changedDates.filter((changedDate) => {
-    return (changedDate < currentFinancialYearEndDate)
+    return changedDate < currentFinancialYearEndDate
   })
 
   // Now work out the earliest end date from those that have changed
   return filteredDates.length > 0 ? new Date(Math.min(...filteredDates)) : null
 }
 
-function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDate) {
+function _flagForPresrocSupplementary(existingLicenceDetails, earliestChangedDate) {
   const { flagged_for_presroc: flagged, pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
   // If the licence has no presroc charge versions return false. We check this before the existing flag, because this
@@ -95,7 +95,7 @@ function _flagForPresrocSupplementary (existingLicenceDetails, earliestChangedDa
   return earliestChangedDate < SROC_START_DATE
 }
 
-function _flagForSrocSupplementary (existingLicenceDetails) {
+function _flagForSrocSupplementary(existingLicenceDetails) {
   const { sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
   // If the licence has no SROC charge versions, return false. We check because it's an opportunity
@@ -105,7 +105,7 @@ function _flagForSrocSupplementary (existingLicenceDetails) {
   return !!chargeVersions
 }
 
-function _flagForTwoPartTariffSupplementary (existingLicenceDetails, earliestChangedDate) {
+function _flagForTwoPartTariffSupplementary(existingLicenceDetails, earliestChangedDate) {
   const { two_part_tariff_charge_versions: chargeVersions } = existingLicenceDetails
   const billingYears = []
 

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -45,16 +45,13 @@ describe('User Group model', () => {
   describe('Relationships', () => {
     describe('when linking to group', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserGroupModel.query()
-          .innerJoinRelated('group')
+        const query = await UserGroupModel.query().innerJoinRelated('group')
 
         expect(query).to.exist()
       })
 
       it('can eager load the group', async () => {
-        const result = await UserGroupModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('group')
+        const result = await UserGroupModel.query().findById(testRecord.id).withGraphFetched('group')
 
         expect(result).to.be.instanceOf(UserGroupModel)
         expect(result.id).to.equal(testRecord.id)
@@ -66,16 +63,13 @@ describe('User Group model', () => {
 
     describe('when linking to user', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserGroupModel.query()
-          .innerJoinRelated('user')
+        const query = await UserGroupModel.query().innerJoinRelated('user')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user', async () => {
-        const result = await UserGroupModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('user')
+        const result = await UserGroupModel.query().findById(testRecord.id).withGraphFetched('user')
 
         expect(result).to.be.instanceOf(UserGroupModel)
         expect(result.id).to.equal(testRecord.id)

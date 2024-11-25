@@ -17,7 +17,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (sessionId) {
+async function go(sessionId) {
   return SessionModel.query().deleteById(sessionId)
 }
 

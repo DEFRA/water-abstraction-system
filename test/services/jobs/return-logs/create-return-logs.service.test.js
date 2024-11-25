@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -55,59 +55,65 @@ describe('Create return log service', () => {
       secondaryPurposeId: secondaryPurpose.id
     })
 
-    returnLogs = [{
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      dueDate: allYearDueDate,
-      endDate: allYearEndDate,
-      id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`,
-      licenceRef: licence.licenceRef,
-      metadata: {
-        description: 'BOREHOLE AT AVALON',
-        isCurrent: true,
-        isFinal: false,
-        isSummer: false,
-        isTwoPartTariff: false,
-        isUpload: false,
-        nald: {
-          regionCode: region.naldRegionId,
-          areaCode: licence.regions.historicalAreaCode,
-          formatId: returnRequirement.legacyId,
-          periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-          periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-          periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-          periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+    returnLogs = [
+      {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        dueDate: allYearDueDate,
+        endDate: allYearEndDate,
+        id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`,
+        licenceRef: licence.licenceRef,
+        metadata: {
+          description: 'BOREHOLE AT AVALON',
+          isCurrent: true,
+          isFinal: false,
+          isSummer: false,
+          isTwoPartTariff: false,
+          isUpload: false,
+          nald: {
+            regionCode: region.naldRegionId,
+            areaCode: licence.regions.historicalAreaCode,
+            formatId: returnRequirement.legacyId,
+            periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
+            periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
+            periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
+            periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
+          },
+          points: [
+            {
+              name: point.description,
+              ngr1: point.ngr1,
+              ngr2: point.ngr2,
+              ngr3: point.ngr3,
+              ngr4: point.ngr4
+            }
+          ],
+          purposes: [
+            {
+              primary: {
+                code: primaryPurpose.legacyId,
+                description: primaryPurpose.description
+              },
+              secondary: {
+                code: secondaryPurpose.legacyId,
+                description: secondaryPurpose.description
+              },
+              tertiary: {
+                code: purpose.legacyId,
+                description: purpose.description
+              }
+            }
+          ],
+          version: 1
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
-          }
-        }],
-        version: 1
-      },
-      returnCycleId: allYearReturnCycleId,
-      returnsFrequency: 'day',
-      returnReference: returnRequirement.legacyId.toString(),
-      startDate: allYearStartDate,
-      status: 'due',
-      source: 'WRLS'
-    }]
+        returnCycleId: allYearReturnCycleId,
+        returnsFrequency: 'day',
+        returnReference: returnRequirement.legacyId.toString(),
+        startDate: allYearStartDate,
+        status: 'due',
+        source: 'WRLS'
+      }
+    ]
   })
 
   describe('when provided an array of return logs', () => {
@@ -118,7 +124,9 @@ describe('Create return log service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(new Date(allYearDueDate))
       expect(result[0].endDate).to.equal(new Date(allYearEndDate))
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDate}:${allYearEndDate}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(new Date(allYearStartDate))

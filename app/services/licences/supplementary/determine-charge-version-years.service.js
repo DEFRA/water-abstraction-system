@@ -19,7 +19,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * @returns {object} - An object containing the related licence, charge version start and end date and if the licence
  * should be flagged for two-part tariff supplementary billing
  */
-async function go (chargeVersionId) {
+async function go(chargeVersionId) {
   const { chargeReferences, licence, endDate, startDate, scheme } = await _fetchChargeVersion(chargeVersionId)
   const result = {
     licence,
@@ -41,31 +41,21 @@ async function go (chargeVersionId) {
   return result
 }
 
-async function _fetchChargeVersion (chargeVersionId) {
+async function _fetchChargeVersion(chargeVersionId) {
   return ChargeVersionModel.query()
     .findById(chargeVersionId)
-    .select([
-      'id',
-      'scheme',
-      'startDate',
-      'endDate'])
+    .select(['id', 'scheme', 'startDate', 'endDate'])
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
-      builder.select([
-        'id',
-        'adjustments'
-      ])
+      builder.select(['id', 'adjustments'])
     })
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'regionId'
-      ])
+      builder.select(['id', 'regionId'])
     })
 }
 
-function _twoPartTariffIndicators (chargeReferences) {
+function _twoPartTariffIndicators(chargeReferences) {
   return chargeReferences.some((chargeReference) => {
     return chargeReference.adjustments?.s127
   })

@@ -18,7 +18,7 @@ const ImportCompanyValidator = require('../../../validators/import/company.valid
  * @returns {Promise<object>} an object representing an array of valid WRLS transformed companies and
  * an array of companies from the db
  */
-async function go (regionCode, licenceId) {
+async function go(regionCode, licenceId) {
   const companies = await FetchCompanyService.go(regionCode, licenceId)
 
   const transformedCompanies = []

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -74,7 +74,12 @@ describe('Import Legacy Process Licence service', () => {
 
   describe('when there is a valid NALD licence to import with an existing licence', () => {
     beforeEach(() => {
-      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
+      Sinon.stub(TransformLicenceService, 'go').resolves({
+        naldLicenceId,
+        regionCode,
+        transformedLicence,
+        wrlsLicenceId
+      })
       PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
       processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
@@ -90,9 +95,7 @@ describe('Import Legacy Process Licence service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(
-        notifierStub.omg.calledWith('Legacy licence import complete')
-      ).to.be.true()
+      expect(notifierStub.omg.calledWith('Legacy licence import complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.licenceId).to.equal(licenceId)
@@ -134,21 +137,23 @@ describe('Import Legacy Process Licence service', () => {
 
 // NOTE: This is an incomplete transformed licence. But this minimum valid structure saves us having to also stub
 // the LicenceStructureValidator
-function _transformedLicence (licenceRef) {
+function _transformedLicence(licenceRef) {
   return {
     licenceRef,
-    licenceVersions: [{
-      externalId: '6:2113:100:0',
-      licenceVersionPurposes: [
-        {
-          externalId: '6:10000004',
-          licenceVersionPurposeConditions: []
-        },
-        {
-          externalId: '6:10000005',
-          licenceVersionPurposeConditions: []
-        }
-      ]
-    }]
+    licenceVersions: [
+      {
+        externalId: '6:2113:100:0',
+        licenceVersionPurposes: [
+          {
+            externalId: '6:10000004',
+            licenceVersionPurposeConditions: []
+          },
+          {
+            externalId: '6:10000005',
+            licenceVersionPurposeConditions: []
+          }
+        ]
+      }
+    ]
   }
 }

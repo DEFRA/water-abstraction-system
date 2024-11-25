@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -58,7 +58,7 @@ describe('Prepare Charge Version Service', () => {
 })
 
 // All data not required for the tests has been excluded from the generated data
-function _testChargeVersion () {
+function _testChargeVersion() {
   return {
     id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
     startDate: new Date('2022-04-01'),
@@ -73,7 +73,8 @@ function _testChargeVersion () {
         id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
         chargeCategory: {
           reference: '4.5.12',
-          shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+          shortDescription:
+            'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
           subsistenceCharge: 68400
         },
         chargeElements: [
@@ -91,7 +92,8 @@ function _testChargeVersion () {
         id: '6e7f1824-3680-4df0-806f-c6d651ba4771',
         chargeCategory: {
           reference: '4.5.12',
-          shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+          shortDescription:
+            'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
           subsistenceCharge: 70000
         },
         chargeElements: [

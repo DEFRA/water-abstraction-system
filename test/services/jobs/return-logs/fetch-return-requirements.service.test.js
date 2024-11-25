@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -109,21 +109,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -203,21 +204,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
       expect(result[1].id).to.equal(returnRequirement2.id)
@@ -251,21 +253,24 @@ describe('Fetch return requirements service', () => {
       expect(result[1].points[0].ngr3).to.equal(point2.ngr3)
       expect(result[1].points[0].ngr4).to.equal(point2.ngr4)
       expect(result[1].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose2.id)
-      expect(result[1].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose2.returnRequirementId)
-      expect(result[1].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose2.primaryPurposeId)
-      expect(result[1].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose2.secondaryPurposeId)
+      expect(result[1].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose2.returnRequirementId
+      )
+      expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose2.primaryPurposeId
+      )
+      expect(result[1].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose2.secondaryPurposeId
+      )
       expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose2.purposeId)
       expect(result[1].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose2.alias)
       expect(result[1].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose2.externalId)
       expect(result[1].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose2.description)
+      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose2.description)
       expect(result[1].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose2.description)
+      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(
+        secondaryPurpose2.description
+      )
       expect(result[1].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose2.legacyId)
       expect(result[1].returnRequirementPurposes[0].purpose.description).to.equal(purpose2.description)
     })
@@ -348,21 +353,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
       expect(result[1].id).to.equal(returnRequirement2.id)
@@ -396,21 +402,24 @@ describe('Fetch return requirements service', () => {
       expect(result[1].points[0].ngr3).to.equal(point2.ngr3)
       expect(result[1].points[0].ngr4).to.equal(point2.ngr4)
       expect(result[1].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose2.id)
-      expect(result[1].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose2.returnRequirementId)
-      expect(result[1].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose2.primaryPurposeId)
-      expect(result[1].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose2.secondaryPurposeId)
+      expect(result[1].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose2.returnRequirementId
+      )
+      expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose2.primaryPurposeId
+      )
+      expect(result[1].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose2.secondaryPurposeId
+      )
       expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose2.purposeId)
       expect(result[1].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose2.alias)
       expect(result[1].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose2.externalId)
       expect(result[1].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose2.description)
+      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose2.description)
       expect(result[1].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose2.description)
+      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(
+        secondaryPurpose2.description
+      )
       expect(result[1].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose2.legacyId)
       expect(result[1].returnRequirementPurposes[0].purpose.description).to.equal(purpose2.description)
     })
@@ -476,21 +485,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -556,21 +566,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -637,21 +648,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -718,21 +730,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -799,21 +812,22 @@ describe('Fetch return requirements service', () => {
       expect(result[0].points[0].ngr3).to.equal(point.ngr3)
       expect(result[0].points[0].ngr4).to.equal(point.ngr4)
       expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId)
-        .to.equal(returnRequirementPurpose.returnRequirementId)
-      expect(result[0].returnRequirementPurposes[0]
-        .primaryPurposeId).to.equal(returnRequirementPurpose.primaryPurposeId)
-      expect(result[0].returnRequirementPurposes[0]
-        .secondaryPurposeId).to.equal(returnRequirementPurpose.secondaryPurposeId)
+      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
+        returnRequirementPurpose.returnRequirementId
+      )
+      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
+        returnRequirementPurpose.primaryPurposeId
+      )
+      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
+        returnRequirementPurpose.secondaryPurposeId
+      )
       expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
       expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
       expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
       expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description)
-        .to.equal(primaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description)
-        .to.equal(secondaryPurpose.description)
+      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
       expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
       expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
     })
@@ -829,7 +843,11 @@ describe('Fetch return requirements service', () => {
         return returnLog.legacyId
       })
 
-      expect(allYearReturns.every((result) => { return returnRequirementExternalId.includes(result) })).to.equal(true)
+      expect(
+        allYearReturns.every((result) => {
+          return returnRequirementExternalId.includes(result)
+        })
+      ).to.equal(true)
     })
   })
 
@@ -843,7 +861,11 @@ describe('Fetch return requirements service', () => {
         return returnLog.legacyId
       })
 
-      expect(summerReturns.every((result) => { return returnRequirementExternalId.includes(result) })).to.equal(true)
+      expect(
+        summerReturns.every((result) => {
+          return returnRequirementExternalId.includes(result)
+        })
+      ).to.equal(true)
     })
   })
 })

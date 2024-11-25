@@ -14,7 +14,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
-async function go (reviewLicenceId) {
+async function go(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)
@@ -24,7 +24,7 @@ async function go (reviewLicenceId) {
   return _removeLicence(reviewLicenceId)
 }
 
-async function _removeChargeElements (reviewLicenceId) {
+async function _removeChargeElements(reviewLicenceId) {
   return db
     .withSchema('water')
     .del()
@@ -35,7 +35,7 @@ async function _removeChargeElements (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeElementReturns (reviewLicenceId) {
+async function _removeChargeElementReturns(reviewLicenceId) {
   return db
     .withSchema('water')
     .del()
@@ -47,7 +47,7 @@ async function _removeChargeElementReturns (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeReferences (reviewLicenceId) {
+async function _removeChargeReferences(reviewLicenceId) {
   return db
     .withSchema('water')
     .del()
@@ -57,7 +57,7 @@ async function _removeChargeReferences (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeChargeVersions (reviewLicenceId) {
+async function _removeChargeVersions(reviewLicenceId) {
   return db
     .withSchema('water')
     .del()
@@ -66,15 +66,11 @@ async function _removeChargeVersions (reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-async function _removeLicence (reviewLicenceId) {
-  return db
-    .withSchema('water')
-    .del()
-    .from('reviewLicences')
-    .where('id', reviewLicenceId)
+async function _removeLicence(reviewLicenceId) {
+  return db.withSchema('water').del().from('reviewLicences').where('id', reviewLicenceId)
 }
 
-async function _removeReturns (reviewLicenceId) {
+async function _removeReturns(reviewLicenceId) {
   return db
     .withSchema('water')
     .del()

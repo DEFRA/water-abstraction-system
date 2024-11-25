@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,12 +26,14 @@ describe('Return Versions Setup - Existing service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          returnVersions: [{
-            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
-            reason: null,
-            modLogs: []
-          }],
+          returnVersions: [
+            {
+              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+              startDate: '2023-01-01T00:00:00.000Z',
+              reason: null,
+              modLogs: []
+            }
+          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
@@ -51,13 +53,16 @@ describe('Return Versions Setup - Existing service', () => {
     it('returns page data for the view', async () => {
       const result = await ExistingService.go(session.id)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        pageTitle: 'Use previous requirements for returns',
-        backLink: `/system/return-versions/setup/${session.id}/method`,
-        existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
-        licenceRef: '01/ABC'
-      }, { skip: ['sessionId'] })
+      expect(result).to.equal(
+        {
+          activeNavBar: 'search',
+          pageTitle: 'Use previous requirements for returns',
+          backLink: `/system/return-versions/setup/${session.id}/method`,
+          existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
+          licenceRef: '01/ABC'
+        },
+        { skip: ['sessionId'] }
+      )
     })
   })
 })

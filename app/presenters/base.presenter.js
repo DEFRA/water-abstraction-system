@@ -10,7 +10,7 @@
  *
  * @returns {number} the value divided by 100
  */
-function convertPenceToPounds (value) {
+function convertPenceToPounds(value) {
   return value / 100
 }
 
@@ -28,7 +28,7 @@ function convertPenceToPounds (value) {
  *
  * @returns The bill run title to use in bill run pages
  */
-function generateBillRunTitle (regionName, batchType, scheme, summer) {
+function generateBillRunTitle(regionName, batchType, scheme, summer) {
   const billRunType = formatBillRunType(batchType, scheme, summer)
 
   return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
@@ -42,7 +42,7 @@ function generateBillRunTitle (regionName, batchType, scheme, summer) {
  *
  * @returns {string} The abstraction date formatted as a 'DD MMMM' string
  */
-function formatAbstractionDate (abstractionDay, abstractionMonth) {
+function formatAbstractionDate(abstractionDay, abstractionMonth) {
   // NOTE: Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
   const abstractionDate = new Date(1970, abstractionMonth - 1, abstractionDay)
@@ -60,7 +60,7 @@ function formatAbstractionDate (abstractionDay, abstractionMonth) {
  *
  * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string
  */
-function formatAbstractionPeriod (startDay, startMonth, endDay, endMonth) {
+function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
   const startDate = formatAbstractionDate(startDay, startMonth)
   const endDate = formatAbstractionDate(endDay, endMonth)
 
@@ -76,7 +76,7 @@ function formatAbstractionPeriod (startDay, startMonth, endDay, endMonth) {
  *
  * @returns {string} The bill run type formatted for display
  */
-function formatBillRunType (batchType, scheme, summer) {
+function formatBillRunType(batchType, scheme, summer) {
   if (batchType !== 'two_part_tariff') {
     return titleCase(batchType)
   }
@@ -99,7 +99,7 @@ function formatBillRunType (batchType, scheme, summer) {
  *
  * @returns {string} The date formatted as a 'DD-MMM-YYYY' string
  */
-function formatChargingModuleDate (date) {
+function formatChargingModuleDate(date) {
   // The output date format of methods such as toLocaleString() are based on the Unicode CLDR which is subject to
   // change and cannot be relied on to be consistent: https://github.com/nodejs/node/issues/42030. We therefore
   // generate the formatted date ourselves.
@@ -121,7 +121,7 @@ function formatChargingModuleDate (date) {
  *
  * @returns {string} The scheme formatted for display
  */
-function formatChargeScheme (scheme) {
+function formatChargeScheme(scheme) {
   if (scheme === 'sroc') {
     return 'Current'
   }
@@ -138,7 +138,7 @@ function formatChargeScheme (scheme) {
  *
  * @returns {string} The financial year ending formatted for display
  */
-function formatFinancialYear (financialYearEnding) {
+function formatFinancialYear(financialYearEnding) {
   return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
@@ -149,7 +149,7 @@ function formatFinancialYear (financialYearEnding) {
  *
  * @returns {string} The date formatted as a 'DD MMMM YYYY' string
  */
-function formatLongDate (date) {
+function formatLongDate(date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
@@ -160,11 +160,15 @@ function formatLongDate (date) {
  *
  * @returns {string} The date formatted as a 'DD MMMM YYYY at HH:MM:SS' string
  */
-function formatLongDateTime (date) {
-  return date.toLocaleDateString(
-    'en-GB',
-    { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }
-  )
+function formatLongDateTime(date) {
+  return date.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
 }
 
 /**
@@ -184,7 +188,7 @@ function formatLongDateTime (date) {
  *
  * @returns {string} The value formatted as a money string with commas and currency symbol plus optional sign
  */
-function formatMoney (valueInPence, signed = false) {
+function formatMoney(valueInPence, signed = false) {
   // NOTE: The legacy DB stores values signed (which you should never do!) We always abs the valueInPence for 2 reasons
   //
   // - in most cases we display credits as £127,768.05 credit
@@ -205,7 +209,7 @@ function formatMoney (valueInPence, signed = false) {
  *
  * @returns {string} The value converted to pounds and formatted to two decimal places
  */
-function formatPounds (valueInPence) {
+function formatPounds(valueInPence) {
   const valueInPounds = convertPenceToPounds(valueInPence)
 
   return valueInPounds.toFixed(2)
@@ -219,10 +223,8 @@ function formatPounds (valueInPence) {
  *
  * @returns {string} The number padded with zeros to the specified length
  */
-function leftPadZeroes (number, length) {
-  return number
-    .toString()
-    .padStart(length, '0')
+function leftPadZeroes(number, length) {
+  return number.toString().padStart(length, '0')
 }
 
 /**
@@ -234,7 +236,7 @@ function leftPadZeroes (number, length) {
  *
  * @returns {string} The title cased string
  */
-function sentenceCase (value) {
+function sentenceCase(value) {
   const sentence = value.toLowerCase()
 
   return sentence.charAt(0).toUpperCase() + sentence.slice(1)
@@ -249,7 +251,7 @@ function sentenceCase (value) {
  *
  * @returns {string} The title cased string
  */
-function titleCase (value) {
+function titleCase(value) {
   const words = value.split(' ')
   const titleCasedWords = []
 

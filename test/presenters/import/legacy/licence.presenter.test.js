@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -103,7 +103,7 @@ describe('Import Legacy Licence presenter', () => {
   })
 })
 
-function _legacyLicence () {
+function _legacyLicence() {
   return {
     historical_area_code: 'KAEA',
     environmental_improvement_unit_charge_code: 'SOOTH',

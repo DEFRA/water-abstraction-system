@@ -24,7 +24,7 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
  * @returns {Promise<object[]>} Array of transactions which have been sent to the Charging Module and updated with its
  * response
  */
-async function go (transactions, billRunExternalId, accountNumber, licence) {
+async function go(transactions, billRunExternalId, accountNumber, licence) {
   // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
   // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
   // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If
@@ -39,7 +39,7 @@ async function go (transactions, billRunExternalId, accountNumber, licence) {
   return Promise.all(sendRequests)
 }
 
-async function _sendTransactionToChargingModule (transaction, billRunExternalId, accountNumber, licence) {
+async function _sendTransactionToChargingModule(transaction, billRunExternalId, accountNumber, licence) {
   try {
     const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(transaction, accountNumber, licence)
 

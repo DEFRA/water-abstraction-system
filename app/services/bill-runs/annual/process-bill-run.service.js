@@ -36,7 +36,7 @@ const HandleErroredBillRunService = require('../handle-errored-bill-run.service.
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
  * annual this will only ever contain a single period
  */
-async function go (billRun, billingPeriods) {
+async function go(billRun, billingPeriods) {
   const { id: billRunId, batchType } = billRun
   const billingPeriod = billingPeriods[0]
 
@@ -54,7 +54,7 @@ async function go (billRun, billingPeriods) {
   }
 }
 
-async function _fetchBillingAccounts (billRun, billingPeriod) {
+async function _fetchBillingAccounts(billRun, billingPeriod) {
   try {
     // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
     // fails
@@ -68,7 +68,7 @@ async function _fetchBillingAccounts (billRun, billingPeriod) {
   }
 }
 
-async function _finaliseBillRun (billRun, billRunPopulated) {
+async function _finaliseBillRun(billRun, billRunPopulated) {
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!billRunPopulated) {
@@ -84,7 +84,7 @@ async function _finaliseBillRun (billRun, billRunPopulated) {
   await LegacyRefreshBillRunRequest.send(billRun.id)
 }
 
-async function _processBillingPeriod (billingPeriod, billRun) {
+async function _processBillingPeriod(billingPeriod, billRun) {
   const billingAccounts = await _fetchBillingAccounts(billRun, billingPeriod)
 
   const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
@@ -92,10 +92,8 @@ async function _processBillingPeriod (billingPeriod, billRun) {
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
-async function _updateStatus (billRunId, status) {
-  await BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status })
+async function _updateStatus(billRunId, status) {
+  await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
 module.exports = {

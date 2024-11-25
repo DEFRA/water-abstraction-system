@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class BillRunModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'billRuns'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billRunVolumes: {
         relation: Model.HasManyRelation,
@@ -51,7 +51,7 @@ class BillRunModel extends BaseModel {
     }
   }
 
-  static get errorCodes () {
+  static get errorCodes() {
     return {
       failedToPopulateChargeVersions: 10,
       failedToProcessChargeVersions: 20,

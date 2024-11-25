@@ -16,7 +16,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, requirementIndex) {
+function go(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -30,20 +30,20 @@ function go (session, requirementIndex) {
   }
 }
 
-function _backLink (session) {
+function _backLink(session) {
   const { id } = session
 
   return `/system/return-versions/setup/${id}/check`
 }
 
-function _formattedReturnRequirement (requirement) {
+function _formattedReturnRequirement(requirement) {
   const { frequencyReported, returnsCycle, siteDescription } = requirement
   const cycle = returnsCycle === 'summer' ? 'Summer' : 'Winter and all year'
 
   return `${cycle} ${returnRequirementFrequencies[frequencyReported]} requirements for returns, ${siteDescription}.`
 }
 
-function _startDate (session) {
+function _startDate(session) {
   const selectedOption = session.startDateOptions
 
   let date

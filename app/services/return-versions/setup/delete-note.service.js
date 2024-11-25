@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (sessionId, yar) {
+async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const notification = {
     title: 'Removed',
@@ -30,7 +30,7 @@ async function go (sessionId, yar) {
   return _save(session)
 }
 
-async function _save (session) {
+async function _save(session) {
   delete session.note
 
   return session.$update()

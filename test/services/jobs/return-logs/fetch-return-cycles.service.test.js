@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -36,25 +36,29 @@ describe('Fetch return cycles service', () => {
 
       const result = await FetchReturnCyclesService.go(testDate)
 
-      expect(result).to.equal([{
-        dueDate: summerReturnCycle.dueDate,
-        endDate: summerReturnCycle.endDate,
-        id: summerReturnCycle.id,
-        startDate: summerReturnCycle.startDate,
-        summer: summerReturnCycle.summer
-      }, {
-        dueDate: previousSummerReturnCycle.dueDate,
-        endDate: previousSummerReturnCycle.endDate,
-        id: previousSummerReturnCycle.id,
-        startDate: previousSummerReturnCycle.startDate,
-        summer: previousSummerReturnCycle.summer
-      }, {
-        dueDate: allYearReturnCycle.dueDate,
-        endDate: allYearReturnCycle.endDate,
-        id: allYearReturnCycle.id,
-        startDate: allYearReturnCycle.startDate,
-        summer: allYearReturnCycle.summer
-      }])
+      expect(result).to.equal([
+        {
+          dueDate: summerReturnCycle.dueDate,
+          endDate: summerReturnCycle.endDate,
+          id: summerReturnCycle.id,
+          startDate: summerReturnCycle.startDate,
+          summer: summerReturnCycle.summer
+        },
+        {
+          dueDate: previousSummerReturnCycle.dueDate,
+          endDate: previousSummerReturnCycle.endDate,
+          id: previousSummerReturnCycle.id,
+          startDate: previousSummerReturnCycle.startDate,
+          summer: previousSummerReturnCycle.summer
+        },
+        {
+          dueDate: allYearReturnCycle.dueDate,
+          endDate: allYearReturnCycle.endDate,
+          id: allYearReturnCycle.id,
+          startDate: allYearReturnCycle.startDate,
+          summer: allYearReturnCycle.summer
+        }
+      ])
     })
   })
 

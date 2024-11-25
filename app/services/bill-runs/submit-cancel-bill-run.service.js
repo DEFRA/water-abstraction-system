@@ -38,7 +38,7 @@ const ReviewReturnModel = require('../../models/review-return.model.js')
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const cannotBeDeleted = _cannotBeDeleted(billRun.status)
@@ -59,7 +59,7 @@ async function go (billRunId) {
   })
 }
 
-async function _cancelBillRun (billRun) {
+async function _cancelBillRun(billRun) {
   const startTime = process.hrtime.bigint()
 
   const { id: billRunId, externalId } = billRun
@@ -83,7 +83,7 @@ async function _cancelBillRun (billRun) {
   calculateAndLogTimeTaken(startTime, 'Cancel bill run complete', { billRunId })
 }
 
-function _cannotBeDeleted (status) {
+function _cannotBeDeleted(status) {
   // NOTE: We have intentionally left 'cancel' out of the list of statuses. Arguably, you shouldn't be able to cancel
   // a bill run that is already being cancelled!
   //
@@ -108,14 +108,8 @@ function _cannotBeDeleted (status) {
  *
  * @private
  */
-async function _fetchBillRun (id) {
-  return BillRunModel.query()
-    .findById(id)
-    .select([
-      'id',
-      'externalId',
-      'status'
-    ])
+async function _fetchBillRun(id) {
+  return BillRunModel.query().findById(id).select(['id', 'externalId', 'status'])
 }
 
 /**
@@ -133,7 +127,7 @@ async function _fetchBillRun (id) {
  *
  * @private
  */
-async function _removeBillingRecords (billRunId) {
+async function _removeBillingRecords(billRunId) {
   try {
     // NOTE: This needs to run first but is also typically the one that takes the longest to complete. In production
     // deleting the transactions for an Anglian annual bill run can take more than 30 mins!!
@@ -154,17 +148,17 @@ async function _removeBillingRecords (billRunId) {
   }
 }
 
-async function _removeBills (billRunId) {
+async function _removeBills(billRunId) {
   return BillModel.query().delete().where('billRunId', billRunId)
 }
 
-async function _removeBillLicences (billRunId) {
+async function _removeBillLicences(billRunId) {
   return BillLicenceModel.query()
     .delete()
     .whereExists(BillLicenceModel.relatedQuery('bill').where('bill.billRunId', billRunId))
 }
 
-async function _removeBillRunChargeVersionYears (billRunId) {
+async function _removeBillRunChargeVersionYears(billRunId) {
   return BillRunChargeVersionYearModel.query().delete().where('billRunId', billRunId)
 }
 
@@ -174,8 +168,9 @@ async function _removeBillRunChargeVersionYears (billRunId) {
  *
  * @private
  */
-async function _removeBillRunTransactions (billRunId) {
-  return db.raw(`
+async function _removeBillRunTransactions(billRunId) {
+  return db.raw(
+    `
     DELETE FROM water.billing_transactions WHERE billing_transaction_id IN (
       SELECT bt.billing_transaction_id FROM water.billing_transactions bt
       INNER JOIN water.billing_invoice_licences bil ON bil.billing_invoice_licence_id = bt.billing_invoice_licence_id
@@ -183,15 +178,16 @@ async function _removeBillRunTransactions (billRunId) {
       WHERE
         bi.billing_batch_id = ?
     );
-  `, billRunId
+  `,
+    billRunId
   )
 }
 
-async function _removeBillRunVolumes (billRunId) {
+async function _removeBillRunVolumes(billRunId) {
   return BillRunVolumeModel.query().delete().where('billRunId', billRunId)
 }
 
-async function _removeChargeElements (billRunId) {
+async function _removeChargeElements(billRunId) {
   return db
     .del()
     .from('reviewChargeElements AS rce')
@@ -208,12 +204,12 @@ async function _removeChargeElements (billRunId) {
  *
  * @private
  */
-async function _removeChargeElementsAndReferences (billRunId) {
+async function _removeChargeElementsAndReferences(billRunId) {
   await _removeChargeElements(billRunId)
   await _removeChargeReferences(billRunId)
 }
 
-async function _removeChargeElementReturns (billRunId) {
+async function _removeChargeElementReturns(billRunId) {
   return db
     .withSchema('water')
     .del()
@@ -223,7 +219,7 @@ async function _removeChargeElementReturns (billRunId) {
     .where('rl.billRunId', billRunId)
 }
 
-async function _removeChargeReferences (billRunId) {
+async function _removeChargeReferences(billRunId) {
   return db
     .withSchema('water')
     .del()
@@ -233,14 +229,14 @@ async function _removeChargeReferences (billRunId) {
     .where('rl.billRunId', billRunId)
 }
 
-async function _removeChargeVersions (billRunId) {
+async function _removeChargeVersions(billRunId) {
   return ReviewChargeVersionModel.query()
     .delete()
     .innerJoinRelated('reviewLicence')
     .where('reviewLicence.billRunId', billRunId)
 }
 
-async function _removeReturns (billRunId) {
+async function _removeReturns(billRunId) {
   return ReviewReturnModel.query()
     .delete()
     .innerJoinRelated('reviewLicence')
@@ -253,7 +249,7 @@ async function _removeReturns (billRunId) {
  *
  * @private
  */
-async function _removeReviewResults (billRunId) {
+async function _removeReviewResults(billRunId) {
   try {
     // To help performance we allow both these processes to run in parallel. Because their where clause depends on
     // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
@@ -267,10 +263,8 @@ async function _removeReviewResults (billRunId) {
   }
 }
 
-async function _updateStatusToCancel (billRunId) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status: 'cancel', updatedAt: timestampForPostgres() })
+async function _updateStatusToCancel(billRunId) {
+  return BillRunModel.query().findById(billRunId).patch({ status: 'cancel', updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

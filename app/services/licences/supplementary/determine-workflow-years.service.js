@@ -25,7 +25,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  * @returns {object} - An object containing the related licence, charge information start and end date and if the
  * licence should be flagged for two-part tariff supplementary billing
  */
-async function go (workflowId) {
+async function go(workflowId) {
   const licence = await FetchLicenceService.go(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 
@@ -51,7 +51,7 @@ async function go (workflowId) {
   return result
 }
 
-async function _flagForSrocSupplementary (id) {
+async function _flagForSrocSupplementary(id) {
   return LicenceModel.query().patch({ includeInSrocBilling: true }).where('id', id)
 }
 

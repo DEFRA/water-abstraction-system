@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -35,7 +35,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results.find((l) => { return l.id === licenceVersion.id })
+        const result = results.find((l) => {
+          return l.id === licenceVersion.id
+        })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -51,7 +53,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns the expected result', async () => {
         const results = await FetchLicenceUpdatesService.go()
 
-        const result = results.find((l) => { return l.id === licenceVersion.id })
+        const result = results.find((l) => {
+          return l.id === licenceVersion.id
+        })
 
         expect(result.id).to.be.equal(licenceVersion.id)
         expect(result.licenceId).to.be.equal(licence.id)
@@ -69,7 +73,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns no results', async () => {
         const data = await FetchLicenceUpdatesService.go()
 
-        const results = data.filter((l) => { return l.licenceId === licence.id })
+        const results = data.filter((l) => {
+          return l.licenceId === licence.id
+        })
 
         expect(results).to.be.empty()
       })
@@ -84,7 +90,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns no results', async () => {
         const data = await FetchLicenceUpdatesService.go()
 
-        const results = data.filter((l) => { return l.licenceId === licence.id })
+        const results = data.filter((l) => {
+          return l.licenceId === licence.id
+        })
 
         expect(results).to.be.empty()
       })
@@ -95,7 +103,9 @@ describe('Fetch Licence Updates service', () => {
         licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
 
         const chargeVersion = await ChargeVersionHelper.add({
-          licenceId: licence.id, licenceRef: licence.licenceRef, scheme: 'alcs'
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          scheme: 'alcs'
         })
         const billRun = await BillRunHelper.add({ scheme: 'alcs' })
 
@@ -105,7 +115,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns no results', async () => {
         const data = await FetchLicenceUpdatesService.go()
 
-        const results = data.filter((l) => { return l.licenceId === licence.id })
+        const results = data.filter((l) => {
+          return l.licenceId === licence.id
+        })
 
         expect(results).to.be.empty()
       })
@@ -119,7 +131,9 @@ describe('Fetch Licence Updates service', () => {
       it('returns no results', async () => {
         const data = await FetchLicenceUpdatesService.go()
 
-        const results = data.filter((l) => { return l.licenceId === licence.id })
+        const results = data.filter((l) => {
+          return l.licenceId === licence.id
+        })
 
         expect(results).to.be.empty()
       })
@@ -127,7 +141,7 @@ describe('Fetch Licence Updates service', () => {
   })
 })
 
-function _threeMonthsAgo () {
+function _threeMonthsAgo() {
   const today = new Date()
 
   today.setMonth(today.getMonth() - 3)

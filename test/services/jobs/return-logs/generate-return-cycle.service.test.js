@@ -4,11 +4,15 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test Helpers
-const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../../app/lib/return-cycle-dates.lib.js')
+const {
+  cycleDueDateAsISO,
+  cycleEndDateAsISO,
+  cycleStartDateAsISO
+} = require('../../../../app/lib/return-cycle-dates.lib.js')
 
 // Thing under test
 const GenerateReturnCycleService = require('../../../../app/services/jobs/return-logs/generate-return-cycle.service.js')

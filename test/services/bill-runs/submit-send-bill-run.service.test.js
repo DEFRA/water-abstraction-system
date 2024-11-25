@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -119,9 +119,7 @@ describe('Submit Send Bill Run service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(
-            notifierStub.omg.calledWith('Send bill run complete')
-          ).to.be.true()
+          expect(notifierStub.omg.calledWith('Send bill run complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.billRunId).to.exist()
@@ -142,7 +140,9 @@ describe('Submit Send Bill Run service', () => {
 
           beforeEach(async () => {
             annualBillRun = await BillRunHelper.add({
-              batchType: 'annual', externalId: '76ed78bd-c104-4ad7-8842-4b660df02331', status: 'ready'
+              batchType: 'annual',
+              externalId: '76ed78bd-c104-4ad7-8842-4b660df02331',
+              status: 'ready'
             })
           })
 
@@ -171,9 +171,7 @@ describe('Submit Send Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(
-            notifierStub.omfg.calledWith('Charging Module view bill run request failed')
-          ).to.be.true()
+          expect(notifierStub.omfg.calledWith('Charging Module view bill run request failed')).to.be.true()
           expect(errorLogArgs[1].billRunId).to.exist()
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
           expect(errorLogArgs[2].billRunExternalId).to.equal(billRun.externalId)
@@ -187,9 +185,7 @@ describe('Submit Send Bill Run service', () => {
       })
 
       it('throws as error', async () => {
-        const result = await expect(SubmitSendBillBunService.go(billRun.id))
-          .to
-          .reject()
+        const result = await expect(SubmitSendBillBunService.go(billRun.id)).to.reject()
 
         expect(result).to.be.instanceOf(ExpandedError)
         expect(result.message).to.equal('Cannot send a bill run that is not ready')
@@ -200,9 +196,7 @@ describe('Submit Send Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws an error', async () => {
-      await expect(SubmitSendBillBunService.go('testId'))
-        .to
-        .reject()
+      await expect(SubmitSendBillBunService.go('testId')).to.reject()
     })
   })
 })

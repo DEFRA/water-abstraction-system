@@ -23,7 +23,7 @@ const ProcessLicenceReturnLogsService = require('../jobs/return-logs/process-lic
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (importedLicence, licenceId) {
+async function go(importedLicence, licenceId) {
   try {
     const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
@@ -42,10 +42,8 @@ async function go (importedLicence, licenceId) {
   }
 }
 
-async function _licenceChanged (importedLicence, licenceId) {
-  const query = LicenceModel.query()
-    .select(['id'])
-    .where('id', licenceId)
+async function _licenceChanged(importedLicence, licenceId) {
+  const query = LicenceModel.query().select(['id']).where('id', licenceId)
 
   _whereClauses(query, importedLicence)
 
@@ -70,7 +68,7 @@ async function _licenceChanged (importedLicence, licenceId) {
  *
  * @private
  */
-function _whereClauses (query, importedLicence) {
+function _whereClauses(query, importedLicence) {
   const { expiredDate, lapsedDate, revokedDate } = importedLicence
 
   if (expiredDate) {

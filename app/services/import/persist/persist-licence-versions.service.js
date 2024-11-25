@@ -19,26 +19,21 @@ const LicenceVersionModel = require('../../../models/licence-version.model.js')
  *
  * @returns {Promise<object>} the promise returned is not intended to resolve to any particular value
  */
-async function go (trx, updatedAt, transformedLicence, licenceId) {
+async function go(trx, updatedAt, transformedLicence, licenceId) {
   return _persistLicenceVersions(trx, updatedAt, transformedLicence.licenceVersions, licenceId)
 }
 
-async function _persistLicenceVersion (trx, updatedAt, licenceVersion, licenceId) {
+async function _persistLicenceVersion(trx, updatedAt, licenceVersion, licenceId) {
   const { licenceVersionPurposes, ...propertiesToPersist } = licenceVersion
 
   return LicenceVersionModel.query(trx)
     .insert({ ...propertiesToPersist, licenceId, updatedAt })
     .onConflict('externalId')
-    .merge([
-      'endDate',
-      'startDate',
-      'status',
-      'updatedAt'
-    ])
+    .merge(['endDate', 'startDate', 'status', 'updatedAt'])
     .returning('id')
 }
 
-async function _persistLicenceVersions (trx, updatedAt, licenceVersions, licenceId) {
+async function _persistLicenceVersions(trx, updatedAt, licenceVersions, licenceId) {
   for (const licenceVersion of licenceVersions) {
     const { id } = await _persistLicenceVersion(trx, updatedAt, licenceVersion, licenceId)
 
@@ -46,7 +41,7 @@ async function _persistLicenceVersions (trx, updatedAt, licenceVersions, licence
   }
 }
 
-async function _persistLicenceVersionPurpose (trx, updatedAt, licenceVersionPurpose, licenceVersionId) {
+async function _persistLicenceVersionPurpose(trx, updatedAt, licenceVersionPurpose, licenceVersionId) {
   const { ...propertiesToPersist } = licenceVersionPurpose
 
   return LicenceVersionPurposeModel.query(trx)
@@ -72,39 +67,44 @@ async function _persistLicenceVersionPurpose (trx, updatedAt, licenceVersionPurp
     .returning('id')
 }
 
-async function _persistLicenceVersionPurposes (trx, updatedAt, licenceVersionPurposes, licenceVersionId) {
+async function _persistLicenceVersionPurposes(trx, updatedAt, licenceVersionPurposes, licenceVersionId) {
   for (const licenceVersionPurpose of licenceVersionPurposes) {
     const licenceVersionPurposeConditions = licenceVersionPurpose.licenceVersionPurposeConditions
 
-    const { id } = await _persistLicenceVersionPurpose(
-      trx, updatedAt, licenceVersionPurpose, licenceVersionId)
+    const { id } = await _persistLicenceVersionPurpose(trx, updatedAt, licenceVersionPurpose, licenceVersionId)
 
     await _persistLicenceVersionPurposeConditions(trx, updatedAt, licenceVersionPurposeConditions, id)
   }
 }
 
-async function _persistLicenceVersionPurposeCondition (
-  trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
+async function _persistLicenceVersionPurposeCondition(
+  trx,
+  updatedAt,
+  licenceVersionPurposeConditions,
+  licenceVersionPurposeId
+) {
   const { ...propertiesToPersist } = licenceVersionPurposeConditions
 
   return LicenceVersionPurposeConditionModel.query(trx)
     .insert({ ...propertiesToPersist, licenceVersionPurposeId, updatedAt })
     .onConflict('externalId')
-    .merge([
-      'licenceVersionPurposeConditionTypeId',
-      'param1',
-      'param2',
-      'notes',
-      'updatedAt'
-    ])
+    .merge(['licenceVersionPurposeConditionTypeId', 'param1', 'param2', 'notes', 'updatedAt'])
     .returning('id')
 }
 
-async function _persistLicenceVersionPurposeConditions (
-  trx, updatedAt, licenceVersionPurposeConditions, licenceVersionPurposeId) {
+async function _persistLicenceVersionPurposeConditions(
+  trx,
+  updatedAt,
+  licenceVersionPurposeConditions,
+  licenceVersionPurposeId
+) {
   for (const licenceVersionPurposeCondition of licenceVersionPurposeConditions) {
     await _persistLicenceVersionPurposeCondition(
-      trx, updatedAt, licenceVersionPurposeCondition, licenceVersionPurposeId)
+      trx,
+      updatedAt,
+      licenceVersionPurposeCondition,
+      licenceVersionPurposeId
+    )
   }
 }
 

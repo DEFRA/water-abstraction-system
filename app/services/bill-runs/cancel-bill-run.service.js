@@ -16,7 +16,7 @@ const CancelBillRunPresenter = require('../../presenters/bill-runs/cancel-bill-r
  * @returns {Promise<object>} an object representing the `pageData` needed by the cancel bill run template. It contains
  * details of the bill run.
  */
-async function go (id) {
+async function go(id) {
   const billRun = await _fetchBillRun(id)
 
   const pageData = CancelBillRunPresenter.go(billRun)
@@ -24,25 +24,13 @@ async function go (id) {
   return pageData
 }
 
-async function _fetchBillRun (id) {
+async function _fetchBillRun(id) {
   return BillRunModel.query()
     .findById(id)
-    .select([
-      'id',
-      'batchType',
-      'billRunNumber',
-      'createdAt',
-      'scheme',
-      'status',
-      'summer',
-      'toFinancialYearEnding'
-    ])
+    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 }
 

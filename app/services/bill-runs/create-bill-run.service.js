@@ -23,7 +23,7 @@ const BillRunModel = require('../../models/bill-run.model.js')
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
-async function go (regionId, financialYearEndings, options) {
+async function go(regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
   const optionsData = _defaultOptions(options)
 
@@ -40,7 +40,7 @@ async function go (regionId, financialYearEndings, options) {
   return billRun
 }
 
-function _defaultOptions (option) {
+function _defaultOptions(option) {
   const defaults = {
     batchType: 'supplementary',
     scheme: 'sroc',

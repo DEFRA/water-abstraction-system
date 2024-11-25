@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (sessionId, requirementIndex, yar) {
+async function go(sessionId, requirementIndex, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const notification = {
@@ -32,7 +32,7 @@ async function go (sessionId, requirementIndex, yar) {
   return _removeRequirementFromSession(session, requirementIndex)
 }
 
-async function _removeRequirementFromSession (session, requirementIndex) {
+async function _removeRequirementFromSession(session, requirementIndex) {
   session.requirements.splice(requirementIndex, 1)
 
   return session.$update()

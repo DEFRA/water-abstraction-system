@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,8 +13,7 @@ const ScheduledNotificationModel = require('../../support/helpers/scheduled-noti
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchCommunicationsService =
-  require('../../../app/services/licences/fetch-communications.service.js')
+const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
 
 describe('Fetch Communications service', () => {
   const licenceRef = generateLicenceRef()
@@ -47,8 +46,8 @@ describe('Fetch Communications service', () => {
         total: 1
       })
 
-      expect(result.communications).to.equal(
-        [{
+      expect(result.communications).to.equal([
+        {
           event: {
             createdAt: new Date('2024-06-01'),
             issuer: 'test.user@defra.gov.uk',
@@ -60,8 +59,8 @@ describe('Fetch Communications service', () => {
           id: scheduledNotification.id,
           messageRef: null,
           messageType: null
-        }]
-      )
+        }
+      ])
     })
   })
 

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -125,16 +125,19 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('returns page data for the view', async () => {
         const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          backLink: `/system/return-versions/setup/${session.id}/check`,
-          pageTitle: 'Select any additional submission options for the return requirements',
-          licenceRef: '01/ABC',
-          multipleUpload: false,
-          noAdditionalOptions: undefined,
-          quarterlyReturnSubmissions: false,
-          quarterlyReturns: undefined
-        }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
+        expect(result).to.equal(
+          {
+            activeNavBar: 'search',
+            backLink: `/system/return-versions/setup/${session.id}/check`,
+            pageTitle: 'Select any additional submission options for the return requirements',
+            licenceRef: '01/ABC',
+            multipleUpload: false,
+            noAdditionalOptions: undefined,
+            quarterlyReturnSubmissions: false,
+            quarterlyReturns: undefined
+          },
+          { skip: ['id', 'sessionId', 'error', 'licenceId'] }
+        )
       })
 
       describe('because the user has not checked anything', () => {

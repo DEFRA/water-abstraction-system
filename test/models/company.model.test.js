@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -59,16 +59,13 @@ describe('Company model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('billingAccountAddresses')
+        const query = await CompanyModel.query().innerJoinRelated('billingAccountAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account addresses', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccountAddresses')
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('billingAccountAddresses')
 
         expect(result).to.be.instanceOf(CompanyModel)
         expect(result.id).to.equal(testRecord.id)
@@ -96,16 +93,13 @@ describe('Company model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('billingAccounts')
+        const query = await CompanyModel.query().innerJoinRelated('billingAccounts')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing accounts', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccounts')
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('billingAccounts')
 
         expect(result).to.be.instanceOf(CompanyModel)
         expect(result.id).to.equal(testRecord.id)
@@ -134,16 +128,13 @@ describe('Company model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('companyAddresses')
+        const query = await CompanyModel.query().innerJoinRelated('companyAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company addresses', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('companyAddresses')
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('companyAddresses')
 
         expect(result).to.be.instanceOf(CompanyModel)
         expect(result.id).to.equal(testRecord.id)
@@ -172,16 +163,13 @@ describe('Company model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('companyContacts')
+        const query = await CompanyModel.query().innerJoinRelated('companyContacts')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company contacts', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('companyContacts')
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('companyContacts')
 
         expect(result).to.be.instanceOf(CompanyModel)
         expect(result.id).to.equal(testRecord.id)
@@ -210,16 +198,13 @@ describe('Company model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('licenceDocumentRoles')
+        const query = await CompanyModel.query().innerJoinRelated('licenceDocumentRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence document roles', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceDocumentRoles')
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
         expect(result).to.be.instanceOf(CompanyModel)
         expect(result.id).to.equal(testRecord.id)

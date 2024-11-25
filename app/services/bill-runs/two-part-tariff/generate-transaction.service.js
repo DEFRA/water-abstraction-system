@@ -32,7 +32,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  *
  * @returns {object} the two-part tariff transaction
  */
-function go (billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
+function go(billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)
 
   if (billableQuantity === 0) {
@@ -49,7 +49,7 @@ function go (billLicenceId, chargeReference, chargePeriod, newLicence, waterUnde
   )
 }
 
-function _billableQuantity (chargeElements) {
+function _billableQuantity(chargeElements) {
   return chargeElements.reduce((total, chargeElement) => {
     total += chargeElement.reviewChargeElements[0].amendedAllocated
 
@@ -57,7 +57,7 @@ function _billableQuantity (chargeElements) {
   }, 0)
 }
 
-function _description (chargeReference) {
+function _description(chargeReference) {
   // If the value is false, undefined, null or simply doesn't exist we return the standard description
   if (!chargeReference.adjustments.s127) {
     return `Water abstraction charge: ${chargeReference.description}`
@@ -71,7 +71,7 @@ function _description (chargeReference) {
  *
  * @private
  */
-function _generateElements (chargeReference) {
+function _generateElements(chargeReference) {
   const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
     delete chargeElement.reviewChargeElements
 
@@ -86,7 +86,7 @@ function _generateElements (chargeReference) {
  *
  * @private
  */
-function _standardTransaction (
+function _standardTransaction(
   billLicenceId,
   billableQuantity,
   chargeReference,

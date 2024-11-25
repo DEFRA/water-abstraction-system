@@ -45,7 +45,7 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status !== 'review') {
@@ -67,7 +67,7 @@ async function go (billRunId) {
  *
  * @private
  */
-function _billingPeriod (billRun) {
+function _billingPeriod(billRun) {
   const { toFinancialYearEnding } = billRun
 
   return {
@@ -76,7 +76,7 @@ function _billingPeriod (billRun) {
   }
 }
 
-async function _fetchBillingAccounts (billRunId) {
+async function _fetchBillingAccounts(billRunId) {
   try {
     // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
     // fails
@@ -90,22 +90,13 @@ async function _fetchBillingAccounts (billRunId) {
   }
 }
 
-async function _fetchBillRun (billRunId) {
+async function _fetchBillRun(billRunId) {
   return BillRunModel.query()
     .findById(billRunId)
-    .select([
-      'id',
-      'batchType',
-      'createdAt',
-      'externalId',
-      'regionId',
-      'scheme',
-      'status',
-      'toFinancialYearEnding'
-    ])
+    .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status', 'toFinancialYearEnding'])
 }
 
-async function _finaliseBillRun (billRun, billRunPopulated) {
+async function _finaliseBillRun(billRun, billRunPopulated) {
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!billRunPopulated) {
@@ -128,7 +119,7 @@ async function _finaliseBillRun (billRun, billRunPopulated) {
  *
  * @private
  */
-async function _generateBillRun (billRun) {
+async function _generateBillRun(billRun) {
   const { id: billRunId } = billRun
 
   try {
@@ -145,7 +136,7 @@ async function _generateBillRun (billRun) {
   }
 }
 
-async function _processBillingPeriod (billingPeriod, billRun) {
+async function _processBillingPeriod(billingPeriod, billRun) {
   const { id: billRunId } = billRun
 
   const billingAccounts = await _fetchBillingAccounts(billRunId)
@@ -155,10 +146,8 @@ async function _processBillingPeriod (billingPeriod, billRun) {
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
-async function _updateStatus (billRunId, status) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status, updatedAt: timestampForPostgres() })
+async function _updateStatus(billRunId, status) {
+  return BillRunModel.query().findById(billRunId).patch({ status, updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

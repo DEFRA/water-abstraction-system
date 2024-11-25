@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -46,16 +46,13 @@ describe('Bill Run Volume model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillRunVolumeModel.query()
-          .innerJoinRelated('billRun')
+        const query = await BillRunVolumeModel.query().innerJoinRelated('billRun')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill run', async () => {
-        const result = await BillRunVolumeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRun')
+        const result = await BillRunVolumeModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
         expect(result).to.be.instanceOf(BillRunVolumeModel)
         expect(result.id).to.equal(testRecord.id)
@@ -77,16 +74,13 @@ describe('Bill Run Volume model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillRunVolumeModel.query()
-          .innerJoinRelated('chargeReference')
+        const query = await BillRunVolumeModel.query().innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge reference', async () => {
-        const result = await BillRunVolumeModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReference')
+        const result = await BillRunVolumeModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
         expect(result).to.be.instanceOf(BillRunVolumeModel)
         expect(result.id).to.equal(testRecord.id)

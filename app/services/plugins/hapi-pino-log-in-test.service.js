@@ -18,7 +18,7 @@
  *
  * @returns {object} an empty object or one containing Hapi-pino config to tell it not to log events
  */
-function go (logInTest) {
+function go(logInTest) {
   if (process.env.NODE_ENV !== 'test' || logInTest) {
     return {}
   }

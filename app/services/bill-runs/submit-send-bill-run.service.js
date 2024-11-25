@@ -31,7 +31,7 @@ const UnflagBilledLicencesService = require('./supplementary/unflag-billed-licen
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (billRunId) {
+async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status !== 'ready') {
@@ -60,21 +60,13 @@ async function go (billRunId) {
  *
  * @private
  */
-async function _fetchBillRun (id) {
+async function _fetchBillRun(id) {
   return BillRunModel.query()
     .findById(id)
-    .select([
-      'id',
-      'batchType',
-      'createdAt',
-      'externalId',
-      'regionId',
-      'scheme',
-      'status'
-    ])
+    .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status'])
 }
 
-async function _fetchChargingModuleBillRun (externalId) {
+async function _fetchChargingModuleBillRun(externalId) {
   const result = await ChargingModuleViewBillRunRequest.send(externalId)
 
   if (!result.succeeded) {
@@ -84,7 +76,7 @@ async function _fetchChargingModuleBillRun (externalId) {
   return result.response.body.billRun
 }
 
-async function _sendBillRun (billRun) {
+async function _sendBillRun(billRun) {
   const startTime = process.hrtime.bigint()
 
   const { id: billRunId, externalId } = billRun
@@ -104,13 +96,13 @@ async function _sendBillRun (billRun) {
   calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRunId })
 }
 
-async function _updateBillRunData (billRun, externalBillRun) {
+async function _updateBillRunData(billRun, externalBillRun) {
   const { transactionFileReference } = externalBillRun
 
   return billRun.$query().patch({ status: 'sent', transactionFileReference })
 }
 
-async function _updateInvoiceData (externalBillRun) {
+async function _updateInvoiceData(externalBillRun) {
   const { invoices } = externalBillRun
 
   for (const invoice of invoices) {
@@ -120,10 +112,8 @@ async function _updateInvoiceData (externalBillRun) {
   }
 }
 
-async function _updateStatus (billRunId, status) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .patch({ status, updatedAt: timestampForPostgres() })
+async function _updateStatus(billRunId, status) {
+  return BillRunModel.query().findById(billRunId).patch({ status, updatedAt: timestampForPostgres() })
 }
 
 module.exports = {

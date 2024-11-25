@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -51,9 +51,7 @@ describe('Cancel Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(CancelBillRunService.go('testId'))
-        .to
-        .reject()
+      await expect(CancelBillRunService.go('testId')).to.reject()
     })
   })
 })

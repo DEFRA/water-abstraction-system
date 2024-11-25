@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,23 +31,23 @@ describe('Return Versions Setup - Cancel service', () => {
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
-        requirements: [{
-          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
-          purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'Bore hole in rear field',
-          abstractionPeriod: {
-            'end-abstraction-period-day': '31',
-            'end-abstraction-period-month': '10',
-            'start-abstraction-period-day': '1',
-            'start-abstraction-period-month': '4'
-          },
-          frequencyReported: 'month',
-          frequencyCollected: 'month',
-          agreementsExceptions: [
-            'none'
-          ]
-        }],
+        requirements: [
+          {
+            points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
+            purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
+            returnsCycle: 'winter-and-all-year',
+            siteDescription: 'Bore hole in rear field',
+            abstractionPeriod: {
+              'end-abstraction-period-day': '31',
+              'end-abstraction-period-month': '10',
+              'start-abstraction-period-day': '1',
+              'start-abstraction-period-month': '4'
+            },
+            frequencyReported: 'month',
+            frequencyCollected: 'month',
+            agreementsExceptions: ['none']
+          }
+        ],
         startDateOptions: 'licenceStartDate',
         reason: 'major-change'
       }

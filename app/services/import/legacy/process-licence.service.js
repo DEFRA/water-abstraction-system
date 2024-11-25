@@ -27,7 +27,7 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  *
  * @returns {Promise<object>} an object representing the saved licence in the database
  */
-async function go (licenceRef) {
+async function go(licenceRef) {
   try {
     const startTime = currentTimeInNanoseconds()
 

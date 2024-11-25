@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,8 +22,7 @@ describe('Review Charge Element Return model', () => {
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await ReviewChargeElementReturnModel.query()
-        .findById(testRecord.id)
+      const result = await ReviewChargeElementReturnModel.query().findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(ReviewChargeElementReturnModel)
       expect(result.id).to.equal(testRecord.id)

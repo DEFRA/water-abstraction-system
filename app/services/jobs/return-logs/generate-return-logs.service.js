@@ -17,7 +17,7 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
  *
  * @returns {Promise<Array>} the array of return log payloads to be created in the database
  */
-async function go (returnRequirement, returnCycle) {
+async function go(returnRequirement, returnCycle) {
   const startDate = _startDate(returnRequirement.returnVersion.startDate, returnCycle.startDate)
   const endDate = _endDate(returnRequirement.returnVersion, returnCycle.endDate)
   const id = _id(returnRequirement, startDate, endDate)
@@ -40,7 +40,7 @@ async function go (returnRequirement, returnCycle) {
   }
 }
 
-function _endDate (returnVersion, returnCycleEndDate) {
+function _endDate(returnVersion, returnCycleEndDate) {
   const _earliestDate = earliestDate([
     returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
@@ -52,7 +52,7 @@ function _endDate (returnVersion, returnCycleEndDate) {
   return formatDateObjectToISO(_earliestDate)
 }
 
-function _id (requirements, startDate, endDate) {
+function _id(requirements, startDate, endDate) {
   const regionCode = requirements.returnVersion.licence.region.naldRegionId
   const licenceReference = requirements.returnVersion.licence.licenceRef
   const legacyId = requirements.legacyId
@@ -60,13 +60,13 @@ function _id (requirements, startDate, endDate) {
   return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
 }
 
-function _isFinal (endDateString, summer) {
+function _isFinal(endDateString, summer) {
   const endDate = new Date(endDateString)
 
   return endDate < cycleEndDate(summer)
 }
 
-async function _metadata (summer, endDate, requirements) {
+async function _metadata(summer, endDate, requirements) {
   return {
     description: requirements.siteDescription,
     isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
@@ -89,7 +89,7 @@ async function _metadata (summer, endDate, requirements) {
   }
 }
 
-function _metadataPoints (points) {
+function _metadataPoints(points) {
   return points.map((point) => {
     return {
       name: point.description,
@@ -101,7 +101,7 @@ function _metadataPoints (points) {
   })
 }
 
-function _metadataPurposes (returnRequirementPurposes) {
+function _metadataPurposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
       ...(returnRequirementPurpose.alias !== null && { alias: returnRequirementPurpose.alias }),
@@ -121,7 +121,7 @@ function _metadataPurposes (returnRequirementPurposes) {
   })
 }
 
-function _startDate (returnVersionStartDate, returnCycleStartDate) {
+function _startDate(returnVersionStartDate, returnCycleStartDate) {
   const _returnVersionStartDate = new Date(returnVersionStartDate)
   const _returnCycleStartDate = new Date(returnCycleStartDate)
 

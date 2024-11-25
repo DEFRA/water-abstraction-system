@@ -26,7 +26,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise<object>} - Resolves with the result of persisting two-part tariff billing years,
  */
-async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
+async function go(twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
   const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
   await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
@@ -38,7 +38,7 @@ async function go (twoPartTariffBillingYears, flagForPreSrocSupplementary, flagF
  * Persists two-part tariff financial years in the LicenceSupplementaryYears table.
  * @private
  */
-async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, licenceId) {
+async function _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, licenceId) {
   if (twoPartTariffBillingYears.length === 0) {
     return
   }
@@ -48,7 +48,7 @@ async function _flagForLicenceSupplementaryYears (twoPartTariffBillingYears, lic
   return CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
 }
 
-async function _updateLicenceFlags (includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
+async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
   return LicenceModel.query()
     .patch({ includeInPresrocBilling, includeInSrocBilling: flagForSrocSupplementary })
     .where('id', licenceId)

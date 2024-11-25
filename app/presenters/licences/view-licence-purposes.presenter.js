@@ -15,7 +15,7 @@ const { formatAbstractionPeriod } = require('../base.presenter.js')
  *
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
-function go (licence) {
+function go(licence) {
   return {
     id: licence.id,
     licencePurposes: _formatLicencePurposes(licence.licenceVersions[0].licenceVersionPurposes),
@@ -24,7 +24,7 @@ function go (licence) {
   }
 }
 
-function _abstractionPeriod (licenceVersionPurpose) {
+function _abstractionPeriod(licenceVersionPurpose) {
   const {
     abstractionPeriodStartDay: startDay,
     abstractionPeriodStartMonth: startMonth,
@@ -35,7 +35,7 @@ function _abstractionPeriod (licenceVersionPurpose) {
   return formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 }
 
-function _formatAbstractionAmounts (licenceVersionPurpose) {
+function _formatAbstractionAmounts(licenceVersionPurpose) {
   const details = []
 
   if (!licenceVersionPurpose) {
@@ -63,13 +63,13 @@ function _formatAbstractionAmounts (licenceVersionPurpose) {
   return details
 }
 
-function _formatAbstractionPoints (points) {
+function _formatAbstractionPoints(points) {
   return points.map((point) => {
     return point.$describe()
   })
 }
 
-function _formatLicencePurposes (licenceVersionPurposes) {
+function _formatLicencePurposes(licenceVersionPurposes) {
   return licenceVersionPurposes.map((licenceVersionPurpose) => {
     const abstractionPoints = _formatAbstractionPoints(licenceVersionPurpose.points)
     const abstractionAmounts = _formatAbstractionAmounts(licenceVersionPurpose)

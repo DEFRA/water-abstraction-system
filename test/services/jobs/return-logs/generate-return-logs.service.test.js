@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -79,7 +79,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -97,27 +99,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -160,7 +166,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(expiredDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${expiredDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${expiredDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -178,28 +186,32 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            alias: returnRequirementPurpose.alias,
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -242,7 +254,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -260,28 +274,32 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          alias: returnRequirementPurpose.alias,
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            alias: returnRequirementPurpose.alias,
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -324,7 +342,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -342,27 +362,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -407,7 +431,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(lapsedDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${lapsedDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${lapsedDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -425,27 +451,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -490,7 +520,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(revokedDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${revokedDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${revokedDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -508,27 +540,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -573,7 +609,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -591,27 +629,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)
@@ -654,7 +696,9 @@ describe('Generate return logs service', () => {
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
-      expect(result.id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`)
+      expect(result.id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${startDate}:${endDate}`
+      )
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.metadata).to.equal({
         description: 'BOREHOLE AT AVALON',
@@ -672,27 +716,31 @@ describe('Generate return logs service', () => {
           periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
           periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
         },
-        points: [{
-          name: point.description,
-          ngr1: point.ngr1,
-          ngr2: point.ngr2,
-          ngr3: point.ngr3,
-          ngr4: point.ngr4
-        }],
-        purposes: [{
-          primary: {
-            code: primaryPurpose.legacyId,
-            description: primaryPurpose.description
-          },
-          secondary: {
-            code: secondaryPurpose.legacyId,
-            description: secondaryPurpose.description
-          },
-          tertiary: {
-            code: purpose.legacyId,
-            description: purpose.description
+        points: [
+          {
+            name: point.description,
+            ngr1: point.ngr1,
+            ngr2: point.ngr2,
+            ngr3: point.ngr3,
+            ngr4: point.ngr4
           }
-        }],
+        ],
+        purposes: [
+          {
+            primary: {
+              code: primaryPurpose.legacyId,
+              description: primaryPurpose.description
+            },
+            secondary: {
+              code: secondaryPurpose.legacyId,
+              description: secondaryPurpose.description
+            },
+            tertiary: {
+              code: purpose.legacyId,
+              description: purpose.description
+            }
+          }
+        ],
         version: 1
       })
       expect(result.returnCycleId).to.equal(returnCycle.id)

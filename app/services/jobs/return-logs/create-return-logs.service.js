@@ -12,14 +12,13 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  *
  * @param {Array} returnLogs - the array of return logs to create
  */
-async function go (returnLogs) {
+async function go(returnLogs) {
   await _createReturnLogs(returnLogs)
 }
 
-async function _createReturnLogs (returnLogs) {
+async function _createReturnLogs(returnLogs) {
   for (const returnLog of returnLogs) {
-    await ReturnLogModel.query()
-      .insert(returnLog)
+    await ReturnLogModel.query().insert(returnLog)
   }
 }
 

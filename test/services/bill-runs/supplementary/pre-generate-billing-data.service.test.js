@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -106,7 +106,8 @@ describe('Pre-generate billing data service', () => {
         const { billLicences: result } = await PreGenerateBillingDataService.go(
           chargeVersions,
           billRunId,
-          billingPeriod)
+          billingPeriod
+        )
 
         const entries = Object.entries(result)
 

@@ -36,7 +36,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise} the service does not resolve to a value
  */
-async function go (licenceRef) {
+async function go(licenceRef) {
   const invalidLicences = await _determineInvalidLicences(licenceRef)
 
   // NOTE: In theory there could be more than one 'bad' licence for the matching licence reference! But mainly we do
@@ -61,13 +61,8 @@ async function go (licenceRef) {
   }
 }
 
-async function _determineInvalidLicences (licenceRef) {
-  const licences = await LicenceModel.query()
-    .select([
-      'id',
-      'licenceRef'
-    ])
-    .whereILike('licenceRef', `%${licenceRef}%`)
+async function _determineInvalidLicences(licenceRef) {
+  const licences = await LicenceModel.query().select(['id', 'licenceRef']).whereILike('licenceRef', `%${licenceRef}%`)
 
   // NOTE: Match any string which has whitespace at the start or the end of the string
   // ^  asserts position at start of the string
@@ -84,90 +79,126 @@ async function _determineInvalidLicences (licenceRef) {
   return invalidLicences
 }
 
-async function _documentHeaders (licenceRef) {
-  return db.raw(`
+async function _documentHeaders(licenceRef) {
+  return db.raw(
+    `
   DELETE FROM crm.document_header WHERE system_external_id = ?;
-  `, licenceRef)
+  `,
+    licenceRef
+  )
 }
 
-async function _documentRoles (licenceRef) {
-  return db.raw(`
+async function _documentRoles(licenceRef) {
+  return db.raw(
+    `
   DELETE FROM "crm_v2"."document_roles" WHERE document_id IN (
     SELECT document_id FROM "crm_v2"."documents" WHERE document_ref = ?
   );
-  `, licenceRef)
+  `,
+    licenceRef
+  )
 }
 
-async function _documents (licenceRef) {
-  return db.raw(`
+async function _documents(licenceRef) {
+  return db.raw(
+    `
   DELETE FROM "crm_v2"."documents" WHERE document_ref = ?;
-  `, licenceRef)
+  `,
+    licenceRef
+  )
 }
 
-async function _licences (licenceId) {
-  return db.raw(`
+async function _licences(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.licences WHERE licence_id = ?;
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _licenceVersionPurposeConditions (licenceId) {
-  return db.raw(`
+async function _licenceVersionPurposeConditions(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.licence_version_purpose_conditions WHERE licence_version_purpose_id IN (
     SELECT licence_version_purpose_id FROM water.licence_version_purposes WHERE licence_version_id IN (
       SELECT licence_version_id FROM water.licence_versions WHERE licence_id = ?
     )
   );
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _licenceVersionPurposes (licenceId) {
-  return db.raw(`
+async function _licenceVersionPurposes(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.licence_version_purposes WHERE licence_version_id IN (
     SELECT licence_version_id FROM water.licence_versions WHERE licence_id = ?
   );
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _licenceVersions (licenceId) {
-  return db.raw(`
+async function _licenceVersions(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.licence_versions WHERE licence_id = ?;
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _permitLicences (licenceRef) {
-  return db.raw(`
+async function _permitLicences(licenceRef) {
+  return db.raw(
+    `
   DELETE FROM permit.licence WHERE licence_ref = ?;
-  `, licenceRef)
+  `,
+    licenceRef
+  )
 }
 
-async function _returnRequirementPurposes (licenceId) {
-  return db.raw(`
+async function _returnRequirementPurposes(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.return_requirement_purposes WHERE return_requirement_id IN (
     SELECT return_requirement_id  FROM water.return_requirements WHERE return_version_id IN (
       SELECT return_version_id FROM water.return_versions WHERE licence_id = ?
     )
   );
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _returnRequirements (licenceId) {
-  return db.raw(`
+async function _returnRequirements(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.return_requirements WHERE return_version_id IN (
     SELECT return_version_id FROM water.return_versions WHERE licence_id = ?
   );
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
-async function _returns (licenceRef) {
-  return db.raw(`
+async function _returns(licenceRef) {
+  return db.raw(
+    `
   DELETE FROM "returns"."returns" WHERE licence_ref = ?;
-  `, licenceRef)
+  `,
+    licenceRef
+  )
 }
 
-async function _returnVersions (licenceId) {
-  return db.raw(`
+async function _returnVersions(licenceId) {
+  return db.raw(
+    `
   DELETE FROM water.return_versions WHERE licence_id = ?;
-  `, licenceId)
+  `,
+    licenceId
+  )
 }
 
 module.exports = {

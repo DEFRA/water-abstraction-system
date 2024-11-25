@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -530,7 +530,8 @@ describe('Licences controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
-            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b', licenceRef: '01/test'
+            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+            licenceRef: '01/test'
           })
         })
 
@@ -545,7 +546,7 @@ describe('Licences controller', () => {
   })
 })
 
-function _markForSupplementaryBilling () {
+function _markForSupplementaryBilling() {
   return {
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
     licenceRef: '01/test',
@@ -558,7 +559,7 @@ function _markForSupplementaryBilling () {
   }
 }
 
-function _viewLicenceBills () {
+function _viewLicenceBills() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -568,7 +569,7 @@ function _viewLicenceBills () {
   }
 }
 
-function _viewLicenceCommunications () {
+function _viewLicenceCommunications() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -578,7 +579,7 @@ function _viewLicenceCommunications () {
   }
 }
 
-function _viewLicenceContacts () {
+function _viewLicenceContacts() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -589,7 +590,7 @@ function _viewLicenceContacts () {
   }
 }
 
-function _viewLicenceHistory () {
+function _viewLicenceHistory() {
   return {
     entries: [{}],
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
@@ -598,7 +599,7 @@ function _viewLicenceHistory () {
   }
 }
 
-function _viewLicenceContactDetails () {
+function _viewLicenceContactDetails() {
   const commonLicenceData = _viewLicence()
 
   commonLicenceData.pageTitle = null
@@ -619,7 +620,7 @@ function _viewLicenceContactDetails () {
   }
 }
 
-function _viewLicencePurposes () {
+function _viewLicencePurposes() {
   return {
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
     licenceRef: '01/140/R01',
@@ -631,9 +632,7 @@ function _viewLicencePurposes () {
           '455.00 cubic metres per hour'
         ],
         abstractionPeriod: '1 November to 31 March',
-        abstractionPoints: [
-          'At National Grid Reference TQ 78392 78004 (LIPWELL STREAM POINT A)'
-        ],
+        abstractionPoints: ['At National Grid Reference TQ 78392 78004 (LIPWELL STREAM POINT A)'],
         purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
       }
     ],
@@ -641,27 +640,25 @@ function _viewLicencePurposes () {
   }
 }
 
-function _viewLicenceReturns () {
+function _viewLicenceReturns() {
   const commonLicenceData = _viewLicence()
 
   return {
     ...commonLicenceData,
     activeTab: 'returns',
-    returns: [
-      { id: 'returns-id' }
-    ],
+    returns: [{ id: 'returns-id' }],
     noReturnsMessage: null
   }
 }
 
-function _viewLicenceSetUp () {
+function _viewLicenceSetUp() {
   const commonLicenceData = _viewLicence()
 
   return {
     ...commonLicenceData,
     activeTab: 'set-up',
     agreements: [{}],
-    chargeInformation: [{ }],
+    chargeInformation: [{}],
     enableRequirementsForReturns: true,
     links: {
       agreements: {
@@ -676,11 +673,11 @@ function _viewLicenceSetUp () {
         noReturnsRequired: '/'
       }
     },
-    returnVersions: [{ }]
+    returnVersions: [{}]
   }
 }
 
-function _viewLicenceSummary () {
+function _viewLicenceSummary() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -693,7 +690,7 @@ function _viewLicenceSummary () {
   }
 }
 
-function _viewLicence () {
+function _viewLicence() {
   return {
     documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
     licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',

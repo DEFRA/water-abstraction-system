@@ -1,6 +1,6 @@
 $govuk-global-styles: true;
 
-@import "node_modules/govuk-frontend/govuk/all";
+@import 'node_modules/govuk-frontend/govuk/all';
 
 // ========== ========== ========== ========== ==========
 // Dividers
@@ -14,37 +14,37 @@ $govuk-global-styles: true;
 // ========== ========== ========== ========== ==========
 .meta-data__label {
   width: 100%;
-  order:1;
+  order: 1;
   margin-bottom: 0px;
   line-height: 25px;
 }
 
 .meta-data__value {
-  order:2;
+  order: 2;
   margin-bottom: 10px;
   line-height: 25px;
 }
 
-@media screen and (min-width:600px) {
+@media screen and (min-width: 600px) {
   .flex_container {
     display: flex;
     width: 100%;
-    flex-wrap:nowrap;
+    flex-wrap: nowrap;
   }
 }
 
 /* 2 columns */
-@media screen and (min-width:600px) {
+@media screen and (min-width: 600px) {
   .meta-data__label {
     width: 20% !important;
-    padding:0px !important;
+    padding: 0px !important;
     font-weight: 400;
   }
   .meta-data__value {
     flex: 1;
     width: 80% !important;
     margin-bottom: 0;
-    padding:0px !important;
+    padding: 0px !important;
   }
 }
 
@@ -66,8 +66,8 @@ $govuk-global-styles: true;
   @media (min-width: 768px) {
     font-size: 19px;
     margin-top: 0;
-    position:relative;
-    left:-15px;
+    position: relative;
+    left: -15px;
   }
 }
 
@@ -98,13 +98,13 @@ $govuk-global-styles: true;
 .navbar__link--active {
   border-left: 4px solid $govuk-link-colour;
   margin-left: -10px;
-    padding-left: 5px;
+  padding-left: 5px;
   @media (min-width: 768px) {
     border-left: none;
     border-bottom: 4px solid $govuk-link-colour;
     margin-bottom: -1px;
-    margin-left:0;
-    padding-left:15px;
+    margin-left: 0;
+    padding-left: 15px;
   }
 }
 
@@ -161,14 +161,14 @@ $govuk-global-styles: true;
   float: right;
 }
 
-.float-left{
-  float:left;
+.float-left {
+  float: left;
 }
 
 // ========== ========== ========== ========== ==========
 // Font
 // ========== ========== ========== ========== ==========
-.govuk-font-size-64{
+.govuk-font-size-64 {
   font-size: 64px !important;
   font-size: 4rem !important;
 }

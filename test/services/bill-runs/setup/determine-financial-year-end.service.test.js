@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -56,7 +56,10 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
       beforeEach(async () => {
         billRun = await BillRunHelper.add({
-          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
+          batchType: 'annual',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd
         })
       })
 
@@ -76,7 +79,10 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
       beforeEach(async () => {
         billRun = await BillRunHelper.add({
-          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd - 1
+          batchType: 'annual',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd - 1
         })
       })
 
@@ -100,10 +106,16 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
       beforeEach(async () => {
         billRunOne = await BillRunHelper.add({
-          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
+          batchType: 'annual',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd
         })
         billRunTwo = await BillRunHelper.add({
-          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd + 1
+          batchType: 'annual',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd + 1
         })
       })
 
@@ -125,10 +137,16 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
 
       beforeEach(async () => {
         billRunOne = await BillRunHelper.add({
-          batchType: 'two_part_tariff', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
+          batchType: 'two_part_tariff',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd
         })
         billRunTwo = await BillRunHelper.add({
-          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd - 1
+          batchType: 'annual',
+          regionId,
+          status: 'sent',
+          toFinancialYearEnding: currentFinancialYearEnd - 1
         })
       })
 

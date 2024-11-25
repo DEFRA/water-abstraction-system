@@ -27,7 +27,7 @@ const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnCycleModel.query()
@@ -45,7 +45,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -80,7 +80,7 @@ function defaults (data = {}) {
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-async function select (index = -1, summer = false) {
+async function select(index = -1, summer = false) {
   const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
 
   if (index > -1) {
@@ -104,11 +104,8 @@ async function select (index = -1, summer = false) {
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-async function selectByDate (date, summer = false) {
-  return ReturnCycleModel.query()
-    .where('summer', summer)
-    .where('startDate', '<=', date)
-    .first()
+async function selectByDate(date, summer = false) {
+  return ReturnCycleModel.query().where('summer', summer).where('startDate', '<=', date).first()
 }
 
 module.exports = {

@@ -15,25 +15,21 @@ const ReturnCycleModel = require('../../../models/return-cycle.model.js')
  *
  * @returns {Promise<string>} the UUID of the return cycle that has been created
  */
-async function go (summer) {
+async function go(summer) {
   const data = _generateData(summer)
   const returnCycle = await _createReturnCycle(data)
 
   return returnCycle
 }
 
-function _createReturnCycle (returnCycle) {
+function _createReturnCycle(returnCycle) {
   return ReturnCycleModel.query()
     .insert(returnCycle)
     .onConflict(['startDate', 'endDate', 'summer'])
-    .merge([
-      'dueDate',
-      'submittedInWrls',
-      'updatedAt'
-    ])
+    .merge(['dueDate', 'submittedInWrls', 'updatedAt'])
 }
 
-function _generateData (summer) {
+function _generateData(summer) {
   const dueDate = cycleDueDateAsISO(summer)
   const endDate = cycleEndDateAsISO(summer)
   const startDate = cycleStartDateAsISO(summer)

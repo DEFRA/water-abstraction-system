@@ -15,7 +15,7 @@ const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
-async function cancel (request, h) {
+async function cancel(request, h) {
   const { id } = request.params
 
   const pageData = await CancelBillRunService.go(id)
@@ -27,7 +27,7 @@ async function cancel (request, h) {
   })
 }
 
-async function index (request, h) {
+async function index(request, h) {
   const { page } = request.query
 
   const pageData = await IndexBillRunsService.go(page)
@@ -38,7 +38,7 @@ async function index (request, h) {
   })
 }
 
-async function send (request, h) {
+async function send(request, h) {
   const { id } = request.params
 
   const pageData = await SendBillRunService.go(id)
@@ -50,7 +50,7 @@ async function send (request, h) {
   })
 }
 
-async function submitCancel (request, h) {
+async function submitCancel(request, h) {
   const { id } = request.params
 
   try {
@@ -64,7 +64,7 @@ async function submitCancel (request, h) {
   }
 }
 
-async function submitSend (request, h) {
+async function submitSend(request, h) {
   const { id } = request.params
 
   try {
@@ -79,7 +79,7 @@ async function submitSend (request, h) {
   }
 }
 
-async function twoPartTariff (request, h) {
+async function twoPartTariff(request, h) {
   const { id } = request.params
 
   try {
@@ -94,7 +94,7 @@ async function twoPartTariff (request, h) {
   }
 }
 
-async function view (request, h) {
+async function view(request, h) {
   const { id } = request.params
 
   const pageData = await ViewBillRunService.go(id)

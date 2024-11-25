@@ -42,24 +42,15 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @returns {Promise<object[]>} An array of `BillRunModel` which are live for the region and financial year specified
  */
-async function go (regionId, financialYearEnding, supplementary) {
+async function go(regionId, financialYearEnding, supplementary) {
   const liveBillRuns = await _fetchLiveBillRuns(regionId)
 
   return _matchLiveBillRuns(liveBillRuns, financialYearEnding, supplementary)
 }
 
-async function _fetchLiveBillRuns (regionId) {
+async function _fetchLiveBillRuns(regionId) {
   return BillRunModel.query()
-    .select([
-      'id',
-      'batchType',
-      'billRunNumber',
-      'createdAt',
-      'scheme',
-      'status',
-      'summer',
-      'toFinancialYearEnding'
-    ])
+    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
     .where('regionId', regionId)
     .whereIn('status', ['queued', 'processing', 'ready', 'review'])
     .orderBy([
@@ -68,14 +59,11 @@ async function _fetchLiveBillRuns (regionId) {
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 }
 
-function _matchLiveBillRuns (liveBillRuns, financialYearEnding, supplementary) {
+function _matchLiveBillRuns(liveBillRuns, financialYearEnding, supplementary) {
   const matches = []
 
   for (const liveBillRun of liveBillRuns) {

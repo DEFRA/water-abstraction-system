@@ -31,7 +31,7 @@ const UserHelper = require('../helpers/user.helper.js')
  * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
  * it is linked to
  */
-async function seed () {
+async function seed() {
   // Select a user
   const user = UserHelper.select()
 
@@ -42,36 +42,18 @@ async function seed () {
   const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
 
   // Create the first requirement record
-  let returnRequirement = await _returnRequirement(
-    returnVersion.id,
-    'week',
-    false,
-    false,
-    'I have an alias'
-  )
+  let returnRequirement = await _returnRequirement(returnVersion.id, 'week', false, false, 'I have an alias')
 
   returnVersion.returnRequirements = [returnRequirement]
 
   // Create the second requirement record
-  returnRequirement = await _returnRequirement(
-    returnVersion.id,
-    'month',
-    true,
-    true,
-    null
-  )
+  returnRequirement = await _returnRequirement(returnVersion.id, 'month', true, true, null)
   returnVersion.returnRequirements.push(returnRequirement)
 
   return { licence, returnVersion, user }
 }
 
-async function _returnRequirement (
-  returnVersionId,
-  reportingFrequency,
-  summer,
-  agreements,
-  alias
-) {
+async function _returnRequirement(returnVersionId, reportingFrequency, summer, agreements, alias) {
   const returnRequirement = await ReturnRequirementHelper.add({
     collectionFrequency: 'week',
     fiftySixException: agreements,
@@ -97,7 +79,9 @@ async function _returnRequirement (
   })
 
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-    purposeId: purpose.id, returnRequirementId, alias
+    purposeId: purpose.id,
+    returnRequirementId,
+    alias
   })
 
   returnRequirementPurpose.purpose = purpose

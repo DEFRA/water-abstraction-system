@@ -34,7 +34,7 @@ const FetchMatchingBillRunService = require('./fetch-matching-bill-run.service.j
  * instance will be returned. For supplementary 2 bill runs may be returned depending on whether there is both an SROC
  * and PRESROC match.
  */
-async function go (regionId, batchType, financialEndYear, season = null) {
+async function go(regionId, batchType, financialEndYear, season = null) {
   const supplementary = batchType === 'supplementary'
 
   const matchingBillRuns = await _fetchMatchingBillRuns(regionId, batchType, financialEndYear, season)
@@ -43,7 +43,7 @@ async function go (regionId, batchType, financialEndYear, season = null) {
   return _processFetchResults(matchingBillRuns, liveBillRuns, supplementary, financialEndYear)
 }
 
-async function _fetchLiveBillRuns (matchingBillRuns, regionId, supplementary, financialEndYear) {
+async function _fetchLiveBillRuns(matchingBillRuns, regionId, supplementary, financialEndYear) {
   // We don't need to check live bill runs if we already have a match for a non-supplementary bill run
   if (!supplementary && matchingBillRuns.length > 0) {
     return []
@@ -63,13 +63,13 @@ async function _fetchLiveBillRuns (matchingBillRuns, regionId, supplementary, fi
   return FetchLiveBillRunsService.go(regionId, financialEndYear, supplementary)
 }
 
-async function _fetchMatchingBillRuns (regionId, batchType, financialEndYear, season) {
+async function _fetchMatchingBillRuns(regionId, batchType, financialEndYear, season) {
   const summer = season === 'summer'
 
   return FetchMatchingBillRunService.go(regionId, batchType, financialEndYear, summer)
 }
 
-function _processFetchResults (matchingBillRuns, liveBillRuns, supplementary, financialEndYear) {
+function _processFetchResults(matchingBillRuns, liveBillRuns, supplementary, financialEndYear) {
   // First, a shortcut! If we have no results to process we have no results to return!
   if (matchingBillRuns.length === 0 && liveBillRuns.length === 0) {
     return []
@@ -82,7 +82,7 @@ function _processFetchResults (matchingBillRuns, liveBillRuns, supplementary, fi
   return _processSupplementaryResults(matchingBillRuns, liveBillRuns, financialEndYear)
 }
 
-function _processNonSupplementaryResults (matchingBillRuns, liveBillRuns) {
+function _processNonSupplementaryResults(matchingBillRuns, liveBillRuns) {
   // If there was a match we return that as the result to display to the user as it will be more applicable
   if (matchingBillRuns.length > 0) {
     return [matchingBillRuns[0]]
@@ -92,7 +92,7 @@ function _processNonSupplementaryResults (matchingBillRuns, liveBillRuns) {
   return [liveBillRuns[0]]
 }
 
-function _processSupplementaryResults (matchingBillRuns, liveBillRuns, financialEndYear) {
+function _processSupplementaryResults(matchingBillRuns, liveBillRuns, financialEndYear) {
   // If we are here we are dealing with a supplementary. What we want to know when it comes to supplementary is
   //
   // - does it have any matches/live bill runs for the current financial year?

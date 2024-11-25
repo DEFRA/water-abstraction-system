@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -29,14 +29,7 @@ describe('View Licence Contact Details service', () => {
         activeNavBar: 'search',
         licenceContactDetails: [
           {
-            address: [
-              'ENVIRONMENT AGENCY',
-              'HORIZON HOUSE',
-              'DEANERY ROAD',
-              'BRISTOL',
-              'AVON',
-              'BS1 5AH'
-            ],
+            address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'AVON', 'BS1 5AH'],
             name: 'A GUPTA',
             role: 'Licence holder'
           }
@@ -49,7 +42,7 @@ describe('View Licence Contact Details service', () => {
   })
 })
 
-function _testFetchLicenceContactDetailsData () {
+function _testFetchLicenceContactDetailsData() {
   return {
     id: 'fea88a95-d81f-4c5c-b497-00e5891a5861',
     licenceRef: '01/123',

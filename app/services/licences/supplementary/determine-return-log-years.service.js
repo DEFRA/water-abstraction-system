@@ -24,7 +24,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {object} - An object containing the related licence, return start and end date and if the licence
  * should be flagged for two-part tariff supplementary billing
  */
-async function go (returnLogId) {
+async function go(returnLogId) {
   const { twoPartTariff, licence, endDate, startDate } = await _fetchReturnLog(returnLogId)
 
   const result = {
@@ -52,7 +52,7 @@ async function go (returnLogId) {
   return result
 }
 
-async function _fetchReturnLog (returnLogId) {
+async function _fetchReturnLog(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select([
@@ -64,17 +64,12 @@ async function _fetchReturnLog (returnLogId) {
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'regionId'
-      ])
+      builder.select(['id', 'regionId'])
     })
 }
 
-async function _flagLicenceForPreSrocSupplementary (licenceId) {
-  return LicenceModel.query()
-    .patch({ includeInPresrocBilling: 'yes' })
-    .where('id', licenceId)
+async function _flagLicenceForPreSrocSupplementary(licenceId) {
+  return LicenceModel.query().patch({ includeInPresrocBilling: 'yes' }).where('id', licenceId)
 }
 
 module.exports = {

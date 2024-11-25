@@ -19,7 +19,7 @@ const { wipe } = require('../test/support/database.js')
  *
  * @returns {Promise} the promise returned by `wipe()` (does not resolve to anything)
  */
-async function wipeDatabase () {
+async function wipeDatabase() {
   if (process.env.NODE_ENV !== 'test') {
     throw Error('Will not wipe database unless NODE_ENV is test')
   }
@@ -27,7 +27,7 @@ async function wipeDatabase () {
   return wipe()
 }
 
-(async () => {
+;(async () => {
   await wipeDatabase()
 
   console.log(`${dbConfig.connection.database} database wiped`)

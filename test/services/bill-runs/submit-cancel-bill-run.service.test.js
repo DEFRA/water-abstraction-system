@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -160,9 +160,7 @@ describe('Submit Cancel Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(SubmitCancelBillBunService.go('testId'))
-        .to
-        .reject()
+      await expect(SubmitCancelBillBunService.go('testId')).to.reject()
     })
   })
 })

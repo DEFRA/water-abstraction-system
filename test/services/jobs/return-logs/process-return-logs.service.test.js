@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -102,7 +102,9 @@ describe('Process return logs service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(allYearDueDate)
       expect(result[0].endDate).to.equal(allYearEndDate)
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(allYearStartDate)
@@ -149,7 +151,8 @@ describe('Process return logs service', () => {
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
       global.GlobalNotifier = notifierStub
       Sinon.stub(GenerateReturnLogsService, 'go')
-        .onFirstCall().resolves({
+        .onFirstCall()
+        .resolves({
           createdAt: new Date(),
           updatedAt: new Date(),
           dueDate: allYearDueDate,
@@ -172,27 +175,31 @@ describe('Process return logs service', () => {
               periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
               periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
             },
-            points: [{
-              name: point.description,
-              ngr1: point.ngr1,
-              ngr2: point.ngr2,
-              ngr3: point.ngr3,
-              ngr4: point.ngr4
-            }],
-            purposes: [{
-              primary: {
-                code: primaryPurpose.legacyId,
-                description: primaryPurpose.description
-              },
-              secondary: {
-                code: secondaryPurpose.legacyId,
-                description: secondaryPurpose.description
-              },
-              tertiary: {
-                code: purpose.legacyId,
-                description: purpose.description
+            points: [
+              {
+                name: point.description,
+                ngr1: point.ngr1,
+                ngr2: point.ngr2,
+                ngr3: point.ngr3,
+                ngr4: point.ngr4
               }
-            }],
+            ],
+            purposes: [
+              {
+                primary: {
+                  code: primaryPurpose.legacyId,
+                  description: primaryPurpose.description
+                },
+                secondary: {
+                  code: secondaryPurpose.legacyId,
+                  description: secondaryPurpose.description
+                },
+                tertiary: {
+                  code: purpose.legacyId,
+                  description: purpose.description
+                }
+              }
+            ],
             version: 1
           },
           returnCycleId: allYearReturnCycle.id,
@@ -202,7 +209,8 @@ describe('Process return logs service', () => {
           status: 'due',
           source: 'WRLS'
         })
-        .onSecondCall().resolves({
+        .onSecondCall()
+        .resolves({
           createdAt: new Date(),
           updatedAt: new Date(),
           dueDate: allYearDueDate,
@@ -225,27 +233,31 @@ describe('Process return logs service', () => {
               periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
               periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
             },
-            points: [{
-              name: point2.description,
-              ngr1: point2.ngr1,
-              ngr2: point2.ngr2,
-              ngr3: point2.ngr3,
-              ngr4: point2.ngr4
-            }],
-            purposes: [{
-              primary: {
-                code: primaryPurpose.legacyId,
-                description: primaryPurpose.description
-              },
-              secondary: {
-                code: secondaryPurpose.legacyId,
-                description: secondaryPurpose.description
-              },
-              tertiary: {
-                code: purpose.legacyId,
-                description: purpose.description
+            points: [
+              {
+                name: point2.description,
+                ngr1: point2.ngr1,
+                ngr2: point2.ngr2,
+                ngr3: point2.ngr3,
+                ngr4: point2.ngr4
               }
-            }],
+            ],
+            purposes: [
+              {
+                primary: {
+                  code: primaryPurpose.legacyId,
+                  description: primaryPurpose.description
+                },
+                secondary: {
+                  code: secondaryPurpose.legacyId,
+                  description: secondaryPurpose.description
+                },
+                tertiary: {
+                  code: purpose.legacyId,
+                  description: purpose.description
+                }
+              }
+            ],
             version: 1
           },
           returnCycleId: allYearReturnCycle.id,
@@ -265,8 +277,12 @@ describe('Process return logs service', () => {
         return result.id
       })
 
-      expect(ids).includes(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`)
-      expect(ids).includes(`v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`)
+      expect(ids).includes(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
+      )
+      expect(ids).includes(
+        `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
+      )
     })
   })
 
@@ -307,7 +323,9 @@ describe('Process return logs service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(allYearDueDate)
       expect(result[0].endDate).to.equal(allYearEndDate)
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(allYearStartDate)
@@ -372,7 +390,9 @@ describe('Process return logs service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
       expect(result[0].endDate).to.equal(summerEndDate)
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(summerStartDate)
@@ -421,7 +441,8 @@ describe('Process return logs service', () => {
       notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
       global.GlobalNotifier = notifierStub
       Sinon.stub(GenerateReturnLogsService, 'go')
-        .onFirstCall().resolves({
+        .onFirstCall()
+        .resolves({
           createdAt: new Date(),
           updatedAt: new Date(),
           dueDate: allYearDueDate,
@@ -444,27 +465,31 @@ describe('Process return logs service', () => {
               periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
               periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
             },
-            points: [{
-              name: point.description,
-              ngr1: point.ngr1,
-              ngr2: point.ngr2,
-              ngr3: point.ngr3,
-              ngr4: point.ngr4
-            }],
-            purposes: [{
-              primary: {
-                code: primaryPurpose.legacyId,
-                description: primaryPurpose.description
-              },
-              secondary: {
-                code: secondaryPurpose.legacyId,
-                description: secondaryPurpose.description
-              },
-              tertiary: {
-                code: purpose.legacyId,
-                description: purpose.description
+            points: [
+              {
+                name: point.description,
+                ngr1: point.ngr1,
+                ngr2: point.ngr2,
+                ngr3: point.ngr3,
+                ngr4: point.ngr4
               }
-            }],
+            ],
+            purposes: [
+              {
+                primary: {
+                  code: primaryPurpose.legacyId,
+                  description: primaryPurpose.description
+                },
+                secondary: {
+                  code: secondaryPurpose.legacyId,
+                  description: secondaryPurpose.description
+                },
+                tertiary: {
+                  code: purpose.legacyId,
+                  description: purpose.description
+                }
+              }
+            ],
             version: 1
           },
           returnCycleId: summerReturnCycle.id,
@@ -474,7 +499,8 @@ describe('Process return logs service', () => {
           status: 'due',
           source: 'WRLS'
         })
-        .onSecondCall().resolves({
+        .onSecondCall()
+        .resolves({
           createdAt: new Date(),
           updatedAt: new Date(),
           dueDate: allYearDueDate,
@@ -497,27 +523,31 @@ describe('Process return logs service', () => {
               periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
               periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
             },
-            points: [{
-              name: point2.description,
-              ngr1: point2.ngr1,
-              ngr2: point2.ngr2,
-              ngr3: point2.ngr3,
-              ngr4: point2.ngr4
-            }],
-            purposes: [{
-              primary: {
-                code: primaryPurpose.legacyId,
-                description: primaryPurpose.description
-              },
-              secondary: {
-                code: secondaryPurpose.legacyId,
-                description: secondaryPurpose.description
-              },
-              tertiary: {
-                code: purpose.legacyId,
-                description: purpose.description
+            points: [
+              {
+                name: point2.description,
+                ngr1: point2.ngr1,
+                ngr2: point2.ngr2,
+                ngr3: point2.ngr3,
+                ngr4: point2.ngr4
               }
-            }],
+            ],
+            purposes: [
+              {
+                primary: {
+                  code: primaryPurpose.legacyId,
+                  description: primaryPurpose.description
+                },
+                secondary: {
+                  code: secondaryPurpose.legacyId,
+                  description: secondaryPurpose.description
+                },
+                tertiary: {
+                  code: purpose.legacyId,
+                  description: purpose.description
+                }
+              }
+            ],
             version: 1
           },
           returnCycleId: summerReturnCycle.id,
@@ -537,8 +567,12 @@ describe('Process return logs service', () => {
         return result.id
       })
 
-      expect(ids).includes(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`)
-      expect(ids).includes(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`)
+      expect(ids).includes(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
+      )
+      expect(ids).includes(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
+      )
     })
   })
 
@@ -579,7 +613,9 @@ describe('Process return logs service', () => {
       expect(result.length).to.equal(1)
       expect(result[0].dueDate).to.equal(summerDueDate)
       expect(result[0].endDate).to.equal(summerEndDate)
-      expect(result[0].id).to.equal(`v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`)
+      expect(result[0].id).to.equal(
+        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
+      )
       expect(result[0].licenceRef).to.equal(licence.licenceRef)
       expect(result[0].returnsFrequency).to.equal('day')
       expect(result[0].startDate).to.equal(summerStartDate)

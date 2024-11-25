@@ -34,7 +34,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
  *
  * @param {object} payload - The payload from the request
  */
-async function go (payload) {
+async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
 

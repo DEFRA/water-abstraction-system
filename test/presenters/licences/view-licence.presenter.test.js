@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -99,7 +99,9 @@ describe('View Licence presenter', () => {
       it('returns a notification just for the "old charge scheme"', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill run for the old charge scheme.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next supplementary bill run for the old charge scheme.'
+        )
       })
     })
 
@@ -124,7 +126,9 @@ describe('View Licence presenter', () => {
       it('returns a notification just for both charge schemes', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill runs for the current and old charge schemes.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.'
+        )
       })
     })
 
@@ -136,7 +140,9 @@ describe('View Licence presenter', () => {
       it('returns a notification just for TPT supplementary', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next two-part tariff supplementary bill run.'
+        )
       })
     })
 
@@ -149,7 +155,9 @@ describe('View Licence presenter', () => {
       it('returns a notification for TPT & PRESROC supplementary', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
+        )
       })
     })
 
@@ -162,7 +170,9 @@ describe('View Licence presenter', () => {
       it('returns a notification for TPT & SROC supplementary', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.'
+        )
       })
     })
 
@@ -176,7 +186,9 @@ describe('View Licence presenter', () => {
       it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
         const result = ViewLicencePresenter.go(licence, auth)
 
-        expect(result.notification).to.equal('This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.')
+        expect(result.notification).to.equal(
+          'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+        )
       })
     })
   })
@@ -300,7 +312,7 @@ describe('View Licence presenter', () => {
   })
 })
 
-function _auth () {
+function _auth() {
   return {
     credentials: {
       roles: [
@@ -323,7 +335,7 @@ function _auth () {
   }
 }
 
-function _licence () {
+function _licence() {
   const licence = LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,

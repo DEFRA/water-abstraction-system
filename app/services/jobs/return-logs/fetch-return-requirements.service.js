@@ -19,11 +19,11 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<Array>} the list of return requirement ids
  */
-async function go (returnCycle, licenceReference) {
+async function go(returnCycle, licenceReference) {
   return _fetchReturnRequirements(returnCycle, licenceReference)
 }
 
-async function _fetchExternalIds (returnCycleId) {
+async function _fetchExternalIds(returnCycleId) {
   const externalIds = await ReturnLogModel.query()
     .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
     .whereNot('status', 'void')
@@ -36,7 +36,7 @@ async function _fetchExternalIds (returnCycleId) {
   return externalIdsArray
 }
 
-async function _fetchReturnRequirements (returnCycle, licenceReference) {
+async function _fetchReturnRequirements(returnCycle, licenceReference) {
   const _cycleEndDate = returnCycle.endDate
   const _cycleStartDate = returnCycle.startDate
   const externalIds = await _fetchExternalIds(returnCycle.id)
@@ -62,19 +62,18 @@ async function _fetchReturnRequirements (returnCycle, licenceReference) {
     .where('returnRequirements.summer', returnCycle.summer)
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (builder) => {
-      builder.select(['endDate',
-        'id',
-        'startDate',
-        'reason'])
+      builder.select(['endDate', 'id', 'startDate', 'reason'])
     })
     .withGraphFetched('returnVersion.licence')
     .modifyGraph('returnVersion.licence', (builder) => {
-      builder.select(['expiredDate',
+      builder.select([
+        'expiredDate',
         'id',
         'lapsedDate',
         'licenceRef',
         'revokedDate',
-        db.raw('regions->>\'historicalAreaCode\' as areacode')])
+        db.raw("regions->>'historicalAreaCode' as areacode")
+      ])
     })
     .withGraphFetched('returnVersion.licence.region')
     .modifyGraph('returnVersion.licence.region', (builder) => {
@@ -82,13 +81,7 @@ async function _fetchReturnRequirements (returnCycle, licenceReference) {
     })
     .withGraphFetched('points')
     .modifyGraph('points', (builder) => {
-      builder.select([
-        'points.description',
-        'points.ngr1',
-        'points.ngr2',
-        'points.ngr3',
-        'points.ngr4'
-      ])
+      builder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
     .withGraphFetched('returnRequirementPurposes.primaryPurpose')
     .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {
@@ -104,32 +97,25 @@ async function _fetchReturnRequirements (returnCycle, licenceReference) {
     })
 }
 
-function _whereExistsClause (licenceReference, cycleStartDate, cycleEndDate) {
+function _whereExistsClause(licenceReference, cycleStartDate, cycleEndDate) {
   const query = ReturnVersionModel.query().select(1)
 
-  query.select(1)
+  query
+    .select(1)
     .innerJoinRelated('licence')
     .where('returnVersions.startDate', '<=', cycleEndDate)
     .where('returnVersions.status', 'current')
     .where((builder) => {
-      builder
-        .whereNull('returnVersions.endDate')
-        .orWhere('returnVersions.endDate', '>=', cycleStartDate)
+      builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.expiredDate')
-        .orWhere('licence.expiredDate', '>=', cycleStartDate)
+      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.lapsedDate')
-        .orWhere('licence.lapsedDate', '>=', cycleStartDate)
+      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
     })
     .where((builder) => {
-      builder
-        .whereNull('licence.revokedDate')
-        .orWhere('licence.revokedDate', '>=', cycleStartDate)
+      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
     })
 
   query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')

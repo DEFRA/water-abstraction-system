@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -160,12 +160,16 @@ describe('Fetch Previous Transactions service', () => {
               )
 
               expect(results).to.have.length(2)
-              expect(results.every((transaction) => {
-                return !transaction.credit
-              })).to.be.true()
-              expect(results.find((transaction) => {
-                return transaction.description === 'follow up'
-              })).to.exist()
+              expect(
+                results.every((transaction) => {
+                  return !transaction.credit
+                })
+              ).to.be.true()
+              expect(
+                results.find((transaction) => {
+                  return transaction.description === 'follow up'
+                })
+              ).to.exist()
             })
           })
         })
@@ -208,7 +212,7 @@ describe('Fetch Previous Transactions service', () => {
   })
 })
 
-async function _createBillRunAndBillAndBillLicence (billRunSetupValues) {
+async function _createBillRunAndBillAndBillLicence(billRunSetupValues) {
   const { billingAccountId, accountNumber, licenceId, licenceRef } = billRunSetupValues
   const { id: billRunId } = await BillRunHelper.add({ status: 'sent' })
   const { id: billId } = await BillHelper.add({ billRunId, billingAccountId, accountNumber })

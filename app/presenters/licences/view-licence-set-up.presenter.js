@@ -37,7 +37,7 @@ const AGREEMENTS = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+function go(chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
   const enableTwoPartSupplementary = FeatureFlagsConfig.enableTwoPartTariffSupplementary
 
@@ -54,7 +54,7 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
   }
 }
 
-function _agreements (commonData, agreements, auth, enableTwoPartSupplementary) {
+function _agreements(commonData, agreements, auth, enableTwoPartSupplementary) {
   return agreements.map((agreement) => {
     return {
       startDate: formatLongDate(agreement.startDate),
@@ -66,7 +66,7 @@ function _agreements (commonData, agreements, auth, enableTwoPartSupplementary) 
   })
 }
 
-function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupplementary) {
+function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary) {
   if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
     return []
   }
@@ -97,8 +97,12 @@ function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupple
     const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
     const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
 
-    if (hasNotEnded && is2PTAgreement && isNotMarkedForSupplementaryBilling &&
-      auth.credentials.scope.includes(ROLES.billing)) {
+    if (
+      hasNotEnded &&
+      is2PTAgreement &&
+      isNotMarkedForSupplementaryBilling &&
+      auth.credentials.scope.includes(ROLES.billing)
+    ) {
       actionLinks.push({
         text: 'Recalculate bills',
         link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
@@ -109,7 +113,7 @@ function _agreementActionLinks (commonData, agreement, auth, enableTwoPartSupple
   return actionLinks
 }
 
-function _agreementLinks (auth, commonData) {
+function _agreementLinks(auth, commonData) {
   if (auth.credentials.scope.includes(ROLES.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
@@ -119,7 +123,7 @@ function _agreementLinks (auth, commonData) {
   return {}
 }
 
-function _chargeInformationLinks (auth, commonData) {
+function _chargeInformationLinks(auth, commonData) {
   if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
@@ -130,14 +134,11 @@ function _chargeInformationLinks (auth, commonData) {
   return {}
 }
 
-function _chargeInformation (chargeVersions, workflows, auth) {
-  return [
-    ..._workflows(workflows, auth),
-    ..._chargeVersions(chargeVersions)
-  ]
+function _chargeInformation(chargeVersions, workflows, auth) {
+  return [..._workflows(workflows, auth), ..._chargeVersions(chargeVersions)]
 }
 
-function _chargeVersions (chargeVersions) {
+function _chargeVersions(chargeVersions) {
   return chargeVersions.map((chargeVersion) => {
     return {
       id: chargeVersion.id,
@@ -155,7 +156,7 @@ function _chargeVersions (chargeVersions) {
   })
 }
 
-function _endsSixYearsAgo (endDate) {
+function _endsSixYearsAgo(endDate) {
   if (!endDate) {
     return null
   }
@@ -175,11 +176,11 @@ function _endsSixYearsAgo (endDate) {
   return endDate.date < sixYearsFromYesterday
 }
 
-function _financialAgreementCode (agreement) {
+function _financialAgreementCode(agreement) {
   return agreement.financialAgreement.code
 }
 
-function _hasTwoPartTariffAgreement (agreements) {
+function _hasTwoPartTariffAgreement(agreements) {
   return agreements.some((agreement) => {
     return agreement.financialAgreement.code === 'S127'
   })
@@ -193,7 +194,7 @@ function _hasTwoPartTariffAgreement (agreements) {
  *
  * @private
  */
-function _reason (returnVersion) {
+function _reason(returnVersion) {
   const reason = returnVersion.$reason()
   const mappedReason = returnRequirementReasons[reason]
 
@@ -204,8 +205,9 @@ function _reason (returnVersion) {
   return reason ?? ''
 }
 
-function _recalculateBills (agreements, auth, commonData, enableTwoPartSupplementary) {
-  if (auth.credentials.scope.includes(ROLES.billing) &&
+function _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary) {
+  if (
+    auth.credentials.scope.includes(ROLES.billing) &&
     _hasTwoPartTariffAgreement(agreements) &&
     enableTwoPartSupplementary
   ) {
@@ -215,13 +217,15 @@ function _recalculateBills (agreements, auth, commonData, enableTwoPartSupplemen
   return {}
 }
 
-function _returnVersions (returnVersions = [{}]) {
+function _returnVersions(returnVersions = [{}]) {
   return returnVersions.map((returnVersion) => {
     return {
-      action: [{
-        text: 'View',
-        link: `/system/return-versions/${returnVersion.id}`
-      }],
+      action: [
+        {
+          text: 'View',
+          link: `/system/return-versions/${returnVersion.id}`
+        }
+      ],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
       reason: _reason(returnVersion),
       startDate: formatLongDate(returnVersion.startDate),
@@ -230,7 +234,7 @@ function _returnVersions (returnVersions = [{}]) {
   })
 }
 
-function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
+function _returnVersionsLinks(commonData, enableRequirementsForReturns) {
   if (enableRequirementsForReturns) {
     return {
       returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
@@ -241,7 +245,7 @@ function _returnVersionsLinks (commonData, enableRequirementsForReturns) {
   return {}
 }
 
-function _workflows (workflows, auth) {
+function _workflows(workflows, auth) {
   return workflows.map((workflow) => {
     return {
       action: _workflowAction(workflow, auth),
@@ -254,7 +258,7 @@ function _workflows (workflows, auth) {
   })
 }
 
-function _workflowAction (workflow, auth) {
+function _workflowAction(workflow, auth) {
   if (workflow.status === 'to_setup' && auth.credentials.scope.includes(ROLES.workflowEditor)) {
     return _workflowActionEditor(workflow)
   }
@@ -266,7 +270,7 @@ function _workflowAction (workflow, auth) {
   return []
 }
 
-function _workflowActionEditor (workflow) {
+function _workflowActionEditor(workflow) {
   return [
     {
       text: 'Set up',
@@ -279,7 +283,7 @@ function _workflowActionEditor (workflow) {
   ]
 }
 
-function _workflowActionReviewer (workflow) {
+function _workflowActionReviewer(workflow) {
   return [
     {
       text: 'Review',
@@ -288,7 +292,7 @@ function _workflowActionReviewer (workflow) {
   ]
 }
 
-function _workflowStartDate (workflow) {
+function _workflowStartDate(workflow) {
   if (workflow.status === 'to_setup') {
     return ''
   }

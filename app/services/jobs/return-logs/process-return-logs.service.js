@@ -36,7 +36,7 @@ const GenerateReturnLogsService = require('./generate-return-logs.service.js')
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
  */
-async function go (cycle, licenceReference) {
+async function go(cycle, licenceReference) {
   try {
     const startTime = currentTimeInNanoseconds()
     const summer = cycle === 'summer'
@@ -60,7 +60,7 @@ async function go (cycle, licenceReference) {
   }
 }
 
-async function _fetchReturnCycleIds (summer) {
+async function _fetchReturnCycleIds(summer) {
   const today = formatDateObjectToISO(new Date())
 
   if (summer) {

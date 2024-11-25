@@ -20,7 +20,7 @@ const ReturnRequirementModel = require('../../../../models/return-requirement.mo
  *
  * @returns {Promise<object>} The new return version requirements data for a licence
  */
-async function go (licenceId, requirements) {
+async function go(licenceId, requirements) {
   const naldRegionId = await _fetchNaldRegionId(licenceId)
   const returnRequirements = []
 
@@ -59,7 +59,7 @@ async function go (licenceId, requirements) {
   return returnRequirements
 }
 
-async function _fetchNaldRegionId (licenceId) {
+async function _fetchNaldRegionId(licenceId) {
   const { naldRegionId } = await LicenceModel.query()
     .findById(licenceId)
     .select('region.naldRegionId')
@@ -68,7 +68,7 @@ async function _fetchNaldRegionId (licenceId) {
   return naldRegionId
 }
 
-async function _generateReturnRequirementPurposes (licenceId, purposes) {
+async function _generateReturnRequirementPurposes(licenceId, purposes) {
   const returnRequirementPurposes = []
 
   for (const purpose of purposes) {
@@ -93,7 +93,7 @@ async function _generateReturnRequirementPurposes (licenceId, purposes) {
   return returnRequirementPurposes
 }
 
-async function _nextLegacyId (naldRegionId) {
+async function _nextLegacyId(naldRegionId) {
   const { lastLegacyId } = await ReturnRequirementModel.query()
     .max('legacyId as lastLegacyId')
     .whereLike('externalId', `${naldRegionId}%`)

@@ -17,11 +17,11 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel` populated with the data needed for the view
  * licence page top section (shared by all tab pages) and some elements needed for the summary tab
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
@@ -37,20 +37,11 @@ async function _fetch (licenceId) {
     .modify('primaryUser')
     .withGraphFetched('licenceSupplementaryYears')
     .modifyGraph('licenceSupplementaryYears', (builder) => {
-      builder
-        .select([
-          'id'
-        ])
-        .where('twoPartTariff', true)
+      builder.select(['id']).where('twoPartTariff', true)
     })
     .withGraphFetched('workflows')
     .modifyGraph('workflows', (builder) => {
-      builder
-        .select([
-          'id',
-          'status'
-        ])
-        .whereNull('deletedAt')
+      builder.select(['id', 'status']).whereNull('deletedAt')
     })
 }
 

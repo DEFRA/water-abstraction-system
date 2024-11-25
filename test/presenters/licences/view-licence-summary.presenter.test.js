@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -45,10 +45,12 @@ describe('View Licence Summary presenter', () => {
         endDate: null,
         licenceHolder: 'Unregistered licence',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        monitoringStations: [{
-          id: 'ac075651-4781-4e24-a684-b943b98607ca',
-          label: 'MEVAGISSEY FIRE STATION'
-        }],
+        monitoringStations: [
+          {
+            id: 'ac075651-4781-4e24-a684-b943b98607ca',
+            label: 'MEVAGISSEY FIRE STATION'
+          }
+        ],
         purposes: {
           caption: 'Purposes',
           data: ['Spray Irrigation - Storage', 'Spray Irrigation - Direct']
@@ -76,36 +78,40 @@ describe('View Licence Summary presenter', () => {
 
     describe('when the there is one licence version purpose', () => {
       beforeEach(() => {
-        licence.licenceVersions[0].licenceVersionPurposes = [{
-          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10,
-          annualQuantity: null,
-          dailyQuantity: null,
-          hourlyQuantity: null,
-          instantQuantity: null,
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          points: [PointModel.fromJson({
-            id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
-            description: null,
-            ngr1: 'TL 23198 88603',
-            ngr2: null,
-            ngr3: null,
-            ngr4: null,
-            source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
-          })],
-          licenceVersionPurposeConditions: [
-            {
-              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
-              licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-                displayTitle: 'General conditions'
+        licence.licenceVersions[0].licenceVersionPurposes = [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            instantQuantity: null,
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            points: [
+              PointModel.fromJson({
+                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                description: null,
+                ngr1: 'TL 23198 88603',
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              })
+            ],
+            licenceVersionPurposeConditions: [
+              {
+                id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+                licenceVersionPurposeConditionType: {
+                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  displayTitle: 'General conditions'
+                }
               }
-            }
-          ]
-        }]
+            ]
+          }
+        ]
       })
 
       describe('but it has no abstraction amounts', () => {
@@ -187,26 +193,28 @@ describe('View Licence Summary presenter', () => {
           source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
         })
 
-        licence.licenceVersions[0].licenceVersionPurposes = [{
-          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10,
-          points: [point],
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          licenceVersionPurposeConditions: []
-        },
-        {
-          id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 11,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
-          points: [point],
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          licenceVersionPurposeConditions: []
-        }]
+        licence.licenceVersions[0].licenceVersionPurposes = [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            points: [point],
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            licenceVersionPurposeConditions: []
+          },
+          {
+            id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 11,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            points: [point],
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            licenceVersionPurposeConditions: []
+          }
+        ]
       })
 
       describe('and each contains a condition with a different display title', () => {
@@ -264,42 +272,48 @@ describe('View Licence Summary presenter', () => {
 
     describe('when there is a single licence version purpose', () => {
       beforeEach(() => {
-        licence.licenceVersions[0].licenceVersionPurposes = [{
-          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10,
-          points: [PointModel.fromJson({
-            id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
-            description: null,
-            ngr1: 'TL 23198 88603',
-            ngr2: null,
-            ngr3: null,
-            ngr4: null,
-            source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
-          })],
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          licenceVersionPurposeConditions: []
-        }]
+        licence.licenceVersions[0].licenceVersionPurposes = [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            points: [
+              PointModel.fromJson({
+                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                description: null,
+                ngr1: 'TL 23198 88603',
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              })
+            ],
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            licenceVersionPurposeConditions: []
+          }
+        ]
       })
 
       describe('with conditions with different display titles', () => {
         beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
-            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
-            licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-              displayTitle: 'General conditions'
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push(
+            {
+              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+              licenceVersionPurposeConditionType: {
+                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                displayTitle: 'General conditions'
+              }
+            },
+            {
+              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+              licenceVersionPurposeConditionType: {
+                id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+                displayTitle: 'Derogation clause'
+              }
             }
-          },
-          {
-            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
-            licenceVersionPurposeConditionType: {
-              id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
-              displayTitle: 'Derogation clause'
-            }
-          })
+          )
         })
 
         it('returns an array containing all the titles in alphabetical order', () => {
@@ -311,20 +325,22 @@ describe('View Licence Summary presenter', () => {
 
       describe('with conditions with the same display titles', () => {
         beforeEach(() => {
-          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
-            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
-            licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-              displayTitle: 'General conditions'
+          licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push(
+            {
+              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+              licenceVersionPurposeConditionType: {
+                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                displayTitle: 'General conditions'
+              }
+            },
+            {
+              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+              licenceVersionPurposeConditionType: {
+                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                displayTitle: 'General conditions'
+              }
             }
-          },
-          {
-            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
-            licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-              displayTitle: 'General conditions'
-            }
-          })
+          )
         })
 
         it('returns an array containing only the distinct title', () => {
@@ -438,9 +454,9 @@ describe('View Licence Summary presenter', () => {
         it('returns the singular version of the link (period and purpose)', () => {
           const result = ViewLicenceSummaryPresenter.go(licence)
 
-          expect(result.abstractionPeriodsAndPurposesLinkText)
-            .to
-            .equal('View details of your purpose, period and amounts')
+          expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(
+            'View details of your purpose, period and amounts'
+          )
         })
       })
 
@@ -454,9 +470,9 @@ describe('View Licence Summary presenter', () => {
             it('returns a mixed version of the link (periods and purpose)', () => {
               const result = ViewLicenceSummaryPresenter.go(licence)
 
-              expect(result.abstractionPeriodsAndPurposesLinkText)
-                .to
-                .equal('View details of your purpose, periods and amounts')
+              expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(
+                'View details of your purpose, periods and amounts'
+              )
             })
           })
 
@@ -464,16 +480,17 @@ describe('View Licence Summary presenter', () => {
             beforeEach(() => {
               licence.licenceVersions[0].licenceVersionPurposes.pop()
               licence.licenceVersions[0].licenceVersionPurposes[1].purpose = {
-                id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct'
+                id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7',
+                description: 'Spray Irrigation - Direct'
               }
             })
 
             it('returns the plural version of the link (periods and purposes)', () => {
               const result = ViewLicenceSummaryPresenter.go(licence)
 
-              expect(result.abstractionPeriodsAndPurposesLinkText)
-                .to
-                .equal('View details of your purposes, periods and amounts')
+              expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(
+                'View details of your purposes, periods and amounts'
+              )
             })
           })
         })
@@ -486,16 +503,17 @@ describe('View Licence Summary presenter', () => {
           describe('and the same purpose', () => {
             beforeEach(() => {
               licence.licenceVersions[0].licenceVersionPurposes[1].purpose = {
-                id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage'
+                id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+                description: 'Spray Irrigation - Storage'
               }
             })
 
             it('returns the singular version of the link (period and purpose)', () => {
               const result = ViewLicenceSummaryPresenter.go(licence)
 
-              expect(result.abstractionPeriodsAndPurposesLinkText)
-                .to
-                .equal('View details of your purpose, period and amounts')
+              expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(
+                'View details of your purpose, period and amounts'
+              )
             })
           })
 
@@ -503,9 +521,9 @@ describe('View Licence Summary presenter', () => {
             it('returns a mixed version of the link (period and purposes)', () => {
               const result = ViewLicenceSummaryPresenter.go(licence)
 
-              expect(result.abstractionPeriodsAndPurposesLinkText)
-                .to
-                .equal('View details of your purposes, period and amounts')
+              expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(
+                'View details of your purposes, period and amounts'
+              )
             })
           })
         })
@@ -589,15 +607,17 @@ describe('View Licence Summary presenter', () => {
 
         describe('that has multiple points', () => {
           beforeEach(() => {
-            licence.licenceVersions[0].licenceVersionPurposes[0].points.push(PointModel.fromJson({
-              description: 'RIVER MEDWAY AT YALDING INTAKE',
-              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-              ngr1: 'TQ 69212 50394',
-              ngr2: null,
-              ngr3: null,
-              ngr4: null,
-              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
-            }))
+            licence.licenceVersions[0].licenceVersionPurposes[0].points.push(
+              PointModel.fromJson({
+                description: 'RIVER MEDWAY AT YALDING INTAKE',
+                id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+                ngr1: 'TQ 69212 50394',
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              })
+            )
           })
 
           it('returns the abstraction points formatted for display', () => {
@@ -818,7 +838,9 @@ describe('View Licence Summary presenter', () => {
         // instance method $name() would return the contact's name. We pretend in order to test the logic in the
         // presenter
         const contact = {
-          $name: () => { return 'Barbara Liskov' }
+          $name: () => {
+            return 'Barbara Liskov'
+          }
         }
 
         licence.licenceDocument = {
@@ -851,10 +873,12 @@ describe('View Licence Summary presenter', () => {
       it("will return an array with the monitoring station's details", async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.monitoringStations).to.equal([{
-          id: 'ac075651-4781-4e24-a684-b943b98607ca',
-          label: 'MEVAGISSEY FIRE STATION'
-        }])
+        expect(result.monitoringStations).to.equal([
+          {
+            id: 'ac075651-4781-4e24-a684-b943b98607ca',
+            label: 'MEVAGISSEY FIRE STATION'
+          }
+        ])
       })
     })
 
@@ -894,10 +918,12 @@ describe('View Licence Summary presenter', () => {
         it("will return an array with just the one monitoring station's details", async () => {
           const result = await ViewLicenceSummaryPresenter.go(licence)
 
-          expect(result.monitoringStations).to.equal([{
-            id: 'ac075651-4781-4e24-a684-b943b98607ca',
-            label: 'MEVAGISSEY FIRE STATION'
-          }])
+          expect(result.monitoringStations).to.equal([
+            {
+              id: 'ac075651-4781-4e24-a684-b943b98607ca',
+              label: 'MEVAGISSEY FIRE STATION'
+            }
+          ])
         })
       })
     })
@@ -1026,7 +1052,7 @@ describe('View Licence Summary presenter', () => {
   })
 })
 
-function _licence () {
+function _licence() {
   const point = PointModel.fromJson({
     id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
     description: null,
@@ -1045,93 +1071,97 @@ function _licence () {
       id: '740375f0-5add-4335-8ed5-b21b55b4a228',
       displayName: 'Avalon'
     },
-    licenceVersions: [{
-      id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
-      startDate: new Date('2022-04-01'),
-      status: 'current',
-      licenceVersionPurposes: [
-        {
-          id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10,
-          annualQuantity: 180000,
-          dailyQuantity: 720,
-          hourlyQuantity: 144,
-          instantQuantity: 40,
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          points: [point],
-          licenceVersionPurposeConditions: [
-            {
-              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
-              licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-                displayTitle: 'General conditions'
+    licenceVersions: [
+      {
+        id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
+        startDate: new Date('2022-04-01'),
+        status: 'current',
+        licenceVersionPurposes: [
+          {
+            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            annualQuantity: 180000,
+            dailyQuantity: 720,
+            hourlyQuantity: 144,
+            instantQuantity: 40,
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            points: [point],
+            licenceVersionPurposeConditions: [
+              {
+                id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+                licenceVersionPurposeConditionType: {
+                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  displayTitle: 'General conditions'
+                }
+              },
+              {
+                id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+                licenceVersionPurposeConditionType: {
+                  id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+                  displayTitle: 'Derogation clause'
+                }
               }
-            },
-            {
-              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
-              licenceVersionPurposeConditionType: {
-                id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
-                displayTitle: 'Derogation clause'
+            ]
+          },
+          {
+            id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 11,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            instantQuantity: null,
+            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            points: [point],
+            licenceVersionPurposeConditions: [
+              {
+                id: '999d98b0-ba6a-4a82-8cb6-03253a6722aa',
+                licenceVersionPurposeConditionType: {
+                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  displayTitle: 'General conditions'
+                }
               }
-            }
-          ]
-        },
-        {
-          id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 11,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
-          annualQuantity: null,
-          dailyQuantity: null,
-          hourlyQuantity: null,
-          instantQuantity: null,
-          purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
-          points: [point],
-          licenceVersionPurposeConditions: [
-            {
-              id: '999d98b0-ba6a-4a82-8cb6-03253a6722aa',
-              licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
-                displayTitle: 'General conditions'
+            ]
+          },
+          {
+            id: 'f68ed9a0-4a2b-42da-8f5b-c5c897113121',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            instantQuantity: null,
+            purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' },
+            points: [point],
+            licenceVersionPurposeConditions: [
+              {
+                id: 'd5f30ba6-8170-4596-9276-362efb2175fa',
+                licenceVersionPurposeConditionType: {
+                  id: '923846ea-da9a-4687-bb66-6dd11411afb9',
+                  displayTitle: 'Non standard quantities'
+                }
               }
-            }
-          ]
-        },
-        {
-          id: 'f68ed9a0-4a2b-42da-8f5b-c5c897113121',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10,
-          annualQuantity: null,
-          dailyQuantity: null,
-          hourlyQuantity: null,
-          instantQuantity: null,
-          purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' },
-          points: [point],
-          licenceVersionPurposeConditions: [
-            {
-              id: 'd5f30ba6-8170-4596-9276-362efb2175fa',
-              licenceVersionPurposeConditionType: {
-                id: '923846ea-da9a-4687-bb66-6dd11411afb9',
-                displayTitle: 'Non standard quantities'
-              }
-            }
-          ]
-        }
-      ]
-    }],
-    licenceMonitoringStations: [{
-      id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
-      monitoringStation: {
-        id: 'ac075651-4781-4e24-a684-b943b98607ca',
-        label: 'MEVAGISSEY FIRE STATION'
+            ]
+          }
+        ]
       }
-    }],
+    ],
+    licenceMonitoringStations: [
+      {
+        id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
+        monitoringStation: {
+          id: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }
+      }
+    ],
     licenceDocument: null,
     licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
   })

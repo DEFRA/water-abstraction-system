@@ -24,7 +24,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  *
  * @returns {Promise<object>} resolves to the result of the update query. Not intended to be used
  */
-async function go (reviewLicenceId, yar, payload) {
+async function go(reviewLicenceId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
 
   // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
@@ -33,7 +33,7 @@ async function go (reviewLicenceId, yar, payload) {
   return _update(reviewLicenceId, parsedPayload)
 }
 
-function _bannerMessage (yar, parsedPayload) {
+function _bannerMessage(yar, parsedPayload) {
   const { progress, status } = parsedPayload
 
   if (status) {
@@ -51,7 +51,7 @@ function _bannerMessage (yar, parsedPayload) {
   yar.flash('banner', 'The progress mark for this licence has been removed.')
 }
 
-function _parsePayload (payload) {
+function _parsePayload(payload) {
   const markProgress = payload['mark-progress'] ?? null
   const licenceStatus = payload['licence-status'] ?? null
 
@@ -61,7 +61,7 @@ function _parsePayload (payload) {
   }
 }
 
-async function _update (reviewLicenceId, parsedPayload) {
+async function _update(reviewLicenceId, parsedPayload) {
   const { progress, status } = parsedPayload
   const patch = {}
 
@@ -71,9 +71,7 @@ async function _update (reviewLicenceId, parsedPayload) {
     patch.progress = progress
   }
 
-  return ReviewLicenceModel.query()
-    .findById(reviewLicenceId)
-    .patch(patch)
+  return ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
 }
 
 module.exports = {

@@ -29,7 +29,7 @@ const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../ba
  *
  * @returns {object} page data needed by the view template
  */
-function go (monitoringStation, auth) {
+function go(monitoringStation, auth) {
   const {
     id: monitoringStationId,
     gridReference,
@@ -53,7 +53,7 @@ function go (monitoringStation, auth) {
   }
 }
 
-function _abstractionPeriod (licenceMonitoringStation) {
+function _abstractionPeriod(licenceMonitoringStation) {
   const {
     abstractionPeriodEndDay: stationEndDay,
     abstractionPeriodEndMonth: stationEndMonth,
@@ -76,7 +76,7 @@ function _abstractionPeriod (licenceMonitoringStation) {
   return formatAbstractionPeriod(stationStartDay, stationStartMonth, stationEndDay, stationEndMonth)
 }
 
-function _alert (status, statusUpdatedAt) {
+function _alert(status, statusUpdatedAt) {
   if (!statusUpdatedAt) {
     return null
   }
@@ -84,7 +84,7 @@ function _alert (status, statusUpdatedAt) {
   return sentenceCase(status)
 }
 
-function _restriction (restrictionType) {
+function _restriction(restrictionType) {
   if (restrictionType === 'stop_or_reduce') {
     return 'Stop or reduce'
   }
@@ -115,7 +115,7 @@ function _restriction (restrictionType) {
  *
  * @private
  */
-function _restrictionHeading (licenceMonitoringStations) {
+function _restrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
     return licenceMonitoringStation.measureType === 'flow'
   })
@@ -135,16 +135,10 @@ function _restrictionHeading (licenceMonitoringStations) {
   return 'Level restriction type and threshold'
 }
 
-function _restrictions (licenceMonitoringStations) {
+function _restrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
-    const {
-      licence,
-      restrictionType,
-      status,
-      statusUpdatedAt,
-      thresholdUnit,
-      thresholdValue
-    } = licenceMonitoringStation
+    const { licence, restrictionType, status, statusUpdatedAt, thresholdUnit, thresholdValue } =
+      licenceMonitoringStation
 
     return {
       abstractionPeriod: _abstractionPeriod(licenceMonitoringStation),
@@ -159,7 +153,7 @@ function _restrictions (licenceMonitoringStations) {
   })
 }
 
-function _restrictionCount (licenceId, licenceMonitoringStations) {
+function _restrictionCount(licenceId, licenceMonitoringStations) {
   const count = licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return licenceMonitoringStation.licenceId === licenceId
   })
@@ -167,7 +161,7 @@ function _restrictionCount (licenceId, licenceMonitoringStations) {
   return count.length
 }
 
-function _pageTitle (riverName, stationName) {
+function _pageTitle(riverName, stationName) {
   if (riverName) {
     return `${riverName} at ${stationName}`
   }
