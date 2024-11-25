@@ -17,7 +17,7 @@ const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/retur
  *
  * @returns {Promise<Arrya>} the return cycle details
  */
-async function go (date, summer) {
+async function go(date, summer) {
   const _date = new Date(date)
   const cycleStartDate = cycleStartDateByDate(_date, summer)
   const cycleEndDate = cycleEndDateByDate(_date, summer)
@@ -25,7 +25,7 @@ async function go (date, summer) {
   return await _fetchReturnCycle(cycleStartDate, cycleEndDate, summer)
 }
 
-async function _fetchReturnCycle (startDate, endDate, summer) {
+async function _fetchReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
     .select(['id', 'startDate', 'endDate', 'dueDate', 'summer'])
     .where('startDate', '>=', startDate)
