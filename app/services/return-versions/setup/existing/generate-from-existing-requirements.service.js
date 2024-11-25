@@ -20,13 +20,17 @@ const FetchExistingRequirementsService = require('./fetch-existing-requirements.
  *
  * @param {string} returnVersionId - The UUID of the selected return version to copy requirements from
  *
- * @returns {Promise<object[]>} an array of return requirements generated from the existing return version and ready to
- * be persisted to the setup session
+ * @returns {Promise<object>}  - an array of return requirements generated from the existing return version and ready to
+ * be persisted to the setup session, if there are multiple uploads and quarterly returns set
  */
 async function go(returnVersionId) {
   const returnVersion = await FetchExistingRequirementsService.go(returnVersionId)
 
-  return _transformForSetup(returnVersion)
+  return {
+    requirements: _transformForSetup(returnVersion),
+    multipleUpload: returnVersion.multipleUpload,
+    quarterlyReturns: returnVersion.quarterlyReturns
+  }
 }
 
 function _agreementExceptions(returnRequirement) {

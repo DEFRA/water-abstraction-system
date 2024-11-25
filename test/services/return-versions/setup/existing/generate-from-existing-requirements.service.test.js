@@ -24,6 +24,34 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
   })
 
   describe('when a matching return version exists', () => {
+    describe('and "multipleUpload" has been set', () => {
+      beforeEach(() => {
+        fetchResult = _fetchResult(returnVersionId)
+
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+      })
+
+      it('returns the saved value', async () => {
+        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+
+        expect(result.multipleUpload).to.be.false()
+      })
+    })
+
+    describe('and "quarterlyReturns" has been set', () => {
+      beforeEach(() => {
+        fetchResult = _fetchResult(returnVersionId)
+
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+      })
+
+      it('returns the saved value', async () => {
+        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+
+        expect(result.quarterlyReturns).to.be.false()
+      })
+    })
+
     describe('and all its return requirements have a site description', () => {
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
@@ -34,7 +62,69 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result).to.equal([
+        expect(result.requirements).to.equal([
+          {
+            points: [fetchResult.returnRequirements[0].points[0].id],
+            purposes: [
+              {
+                alias: fetchResult.returnRequirements[0].returnRequirementPurposes[0].alias,
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
+              }
+            ],
+            returnsCycle: 'winter-and-all-year',
+            siteDescription: 'FIRST BOREHOLE AT AVALON',
+            abstractionPeriod: {
+              'end-abstraction-period-day': 31,
+              'end-abstraction-period-month': 3,
+              'start-abstraction-period-day': 1,
+              'start-abstraction-period-month': 4
+            },
+            frequencyReported: 'week',
+            frequencyCollected: 'week',
+            agreementsExceptions: ['none']
+          },
+          {
+            points: [fetchResult.returnRequirements[1].points[0].id],
+            purposes: [
+              {
+                alias: '',
+                description: 'Spray Irrigation - Storage',
+                id: fetchResult.returnRequirements[1].returnRequirementPurposes[0].purposeId
+              }
+            ],
+            returnsCycle: 'summer',
+            siteDescription: 'SECOND BOREHOLE AT AVALON',
+            abstractionPeriod: {
+              'end-abstraction-period-day': 31,
+              'end-abstraction-period-month': 3,
+              'start-abstraction-period-day': 1,
+              'start-abstraction-period-month': 4
+            },
+            frequencyReported: 'month',
+            frequencyCollected: 'week',
+            agreementsExceptions: [
+              '56-returns-exception',
+              'gravity-fill',
+              'transfer-re-abstraction-scheme',
+              'two-part-tariff'
+            ]
+          }
+        ])
+      })
+    })
+
+    describe('and all its return requirements have a site description', () => {
+      beforeEach(() => {
+        fetchResult = _fetchResult(returnVersionId)
+
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+      })
+
+      it('returns the details of its return requirements transformed for use in the journey', async () => {
+        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+
+        expect(result.requirements).to.equal([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [
@@ -97,7 +187,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result).to.equal([
+        expect(result.requirements).to.equal([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [
@@ -160,6 +250,8 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 function _fetchResult(returnVersionId) {
   return {
     id: returnVersionId,
+    multipleUpload: false,
+    quarterlyReturns: false,
     returnRequirements: [
       {
         id: 'b8c8e40f-2557-4ce5-8fd9-fd7f6bb71c30',
