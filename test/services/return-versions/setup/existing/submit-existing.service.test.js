@@ -63,9 +63,9 @@ describe('Return Versions Setup - Submit Existing service', () => {
         }
 
         Sinon.stub(GenerateFromExistingRequirementsService, 'go').resolves({
-          requirements: [_transformedReturnRequirement()],
           multipleUpload: false,
-          quarterlyReturns: false
+          quarterlyReturns: false,
+          requirements: [_transformedReturnRequirement()]
         })
       })
 

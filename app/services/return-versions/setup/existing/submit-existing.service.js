@@ -51,9 +51,10 @@ async function _save(session, payload) {
   const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService.go(
     payload.existing
   )
-  session.requirements = requirements
+
   session.multipleUpload = multipleUpload
   session.quarterlyReturns = quarterlyReturns
+  session.requirements = requirements
 
   return session.$update()
 }
