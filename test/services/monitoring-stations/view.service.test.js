@@ -86,8 +86,8 @@ describe('Monitoring Stations - View service', () => {
             threshold: '100 m3/s'
           }
         ],
-        stationReference: null,
-        wiskiId: null
+        stationReference: '',
+        wiskiId: ''
       })
     })
   })
