@@ -39,13 +39,13 @@ const BillLicenceModel = require('../../../models/bill-licence.model.js')
  * @returns {object} - An object containing the related licenceId, regionId, start and end date and
  * licence supplementary billing flags
  */
-async function go (billLicenceId) {
+async function go(billLicenceId) {
   const { licence, bill, licenceId } = await _fetchBillLicence(billLicenceId)
 
-  const {
-    flagForPreSrocSupplementary,
-    flagForSrocSupplementary, flagForTwoPartTariffSupplementary
-  } = _updateFlags(bill, licence)
+  const { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = _updateFlags(
+    bill,
+    licence
+  )
 
   const result = {
     licenceId,
@@ -60,7 +60,7 @@ async function go (billLicenceId) {
   return result
 }
 
-function _updateFlags (bill, licence) {
+function _updateFlags(bill, licence) {
   // Set the flags to what they currently are on the licence
   let flagForSrocSupplementary = licence.includeInSrocBilling
   let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
@@ -79,32 +79,21 @@ function _updateFlags (bill, licence) {
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
 }
 
-async function _fetchBillLicence (billLicenceId) {
+async function _fetchBillLicence(billLicenceId) {
   return BillLicenceModel.query()
     .findById(billLicenceId)
     .select('licenceId')
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
-      builder.select([
-        'regionId',
-        'includeInSrocBilling',
-        'includeInPresrocBilling'
-      ])
+      builder.select(['regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
     })
     .withGraphFetched('bill')
     .modifyGraph('bill', (builder) => {
-      builder.select([
-        'id'
-      ])
+      builder.select(['id'])
     })
     .withGraphFetched('bill.billRun')
     .modifyGraph('bill.billRun', (builder) => {
-      builder.select([
-        'id',
-        'batchType',
-        'scheme',
-        'toFinancialYearEnding'
-      ])
+      builder.select(['id', 'batchType', 'scheme', 'toFinancialYearEnding'])
     })
 }
 
