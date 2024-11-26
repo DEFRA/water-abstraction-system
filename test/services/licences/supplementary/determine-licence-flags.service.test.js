@@ -33,8 +33,6 @@ describe('Determine Licence Flags Service', () => {
 
           expect(result.licenceId).to.equal(licence.id)
           expect(result.regionId).to.equal(licence.regionId)
-          expect(result.startDate).to.equal(null)
-          expect(result.endDate).to.equal(null)
         })
 
         it('returns the correct flags', async () => {
@@ -52,8 +50,6 @@ describe('Determine Licence Flags Service', () => {
 
           expect(result.licenceId).to.equal(licence.id)
           expect(result.regionId).to.equal(licence.regionId)
-          expect(result.startDate).to.equal(null)
-          expect(result.endDate).to.equal(null)
         })
 
         it('returns the correct flags', async () => {
@@ -81,8 +77,6 @@ describe('Determine Licence Flags Service', () => {
 
           expect(result.licenceId).to.equal(licence.id)
           expect(result.regionId).to.equal(licence.regionId)
-          expect(result.startDate).to.equal(null)
-          expect(result.endDate).to.equal(null)
         })
 
         it('returns the correct flags', async () => {
@@ -95,20 +89,22 @@ describe('Determine Licence Flags Service', () => {
       })
 
       describe("and a charging scheme of 'alcs'", () => {
+        before(() => {
+          scheme = 'alcs'
+        })
+
         it('returns the licence details', async () => {
           const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
 
           expect(result.licenceId).to.equal(licence.id)
           expect(result.regionId).to.equal(licence.regionId)
-          expect(result.startDate).to.equal(null)
-          expect(result.endDate).to.equal(null)
         })
 
         it('returns the correct flags', async () => {
           const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(true)
+          expect(result.flagForPreSrocSupplementary).to.equal(true)
+          expect(result.flagForSrocSupplementary).to.equal(false)
           expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
         })
       })

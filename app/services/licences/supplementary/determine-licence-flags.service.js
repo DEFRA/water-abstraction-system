@@ -42,8 +42,6 @@ async function go(licenceId, scheme) {
   const result = {
     licenceId,
     regionId: licence.regionId,
-    startDate: null,
-    endDate: null,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
     flagForTwoPartTariffSupplementary: false

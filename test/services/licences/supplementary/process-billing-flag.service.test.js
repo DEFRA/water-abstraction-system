@@ -284,9 +284,9 @@ describe('Process Billing Flag Service', () => {
         }
       })
 
-      describe('that should be flagged for two-part tariff supplementary billing', () => {
+      describe('that should be flagged for sroc supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_licenceData(true))
+          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(true))
           Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
@@ -296,10 +296,10 @@ describe('Process Billing Flag Service', () => {
           expect(DetermineLicenceFlagsService.go.called).to.be.true()
         })
 
-        it('calls the "DetermineExistingBillRunYearsService" to work out the two-part tariff years to persist', async () => {
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          expect(DetermineExistingBillRunYearsService.go.called).to.be.true()
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -322,7 +322,7 @@ describe('Process Billing Flag Service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_licenceData(false))
+          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(false))
           Sinon.stub(DetermineExistingBillRunYearsService, 'go')
         })
 
@@ -386,5 +386,15 @@ function _licenceData(twoPartTariff) {
     flagForPreSrocSupplementary: false,
     flagForSrocSupplementary: true,
     flagForTwoPartTariffSupplementary: twoPartTariff
+  }
+}
+
+function _srocLicenceData(sroc) {
+  return {
+    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
+    flagForPreSrocSupplementary: false,
+    flagForSrocSupplementary: sroc,
+    flagForTwoPartTariffSupplementary: false
   }
 }
