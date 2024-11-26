@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -33,10 +33,13 @@ describe('Bill Runs Setup controller', () => {
   let options
   let server
 
+  // Create server before running the tests
+  before(async () => {
+    server = await init()
+  })
+
   // Create server before each test
   beforeEach(async () => {
-    server = await init()
-
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
