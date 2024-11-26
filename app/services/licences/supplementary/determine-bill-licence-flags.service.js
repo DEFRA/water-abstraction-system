@@ -19,8 +19,8 @@ const BillLicenceModel = require('../../../models/bill-licence.model.js')
  * - Two-part tariff annual bill runs
  * - Two-part tariff supplementary bill runs
  *
- * Removing a licence from a pre-sroc two-part tariff supplementary bill run is handled in a separate service
- * (DetermineLicenceFlagsService).
+ * Removing a licence from the review screen of a pre-sroc two-part tariff supplementary bill run is handled in a
+ * separate service (DetermineLicenceFlagsService).
  *
  * To determine the flags, the service first fetches the licence information using the billLicenceId passed to it. This
  * includes details of which bill run it is being removed from.
