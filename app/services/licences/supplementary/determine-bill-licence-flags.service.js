@@ -68,12 +68,10 @@ function _updateFlags(bill, licence) {
 
   if (bill.billRun.batchType === 'two_part_tariff' && bill.billRun.scheme === 'sroc') {
     flagForTwoPartTariffSupplementary = true
+  } else if (bill.billRun.scheme === 'alcs') {
+    flagForPreSrocSupplementary = true
   } else {
-    if (bill.billRun.scheme === 'alcs') {
-      flagForPreSrocSupplementary = true
-    } else {
-      flagForSrocSupplementary = true
-    }
+    flagForSrocSupplementary = true
   }
 
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
