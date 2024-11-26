@@ -6,7 +6,7 @@
  */
 
 const LicenceModel = require('../../models/licence.model.js')
-const ProcessBillingFlagService = require('../licences/supplementary/process-billing-flag.service.js')
+const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 
 /**
  * Determines if an imported licence has a new end date.
@@ -24,16 +24,9 @@ async function go(importedLicence, licenceId) {
   try {
     const licenceChanged = await _licenceChanged(importedLicence, licenceId)
 
-    if (!licenceChanged) {
-      return
+    if (licenceChanged) {
+      await ProcessImportedLicenceService.go(importedLicence, licenceId)
     }
-
-    const payload = {
-      importedLicence,
-      licenceId
-    }
-
-    await ProcessBillingFlagService.go(payload)
   } catch (error) {
     global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }
