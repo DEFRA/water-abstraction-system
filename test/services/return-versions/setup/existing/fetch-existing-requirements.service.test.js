@@ -32,6 +32,8 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
 
       expect(result).to.equal({
         id: seededReturnVersion.id,
+        multipleUpload: false,
+        quarterlyReturns: false,
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
