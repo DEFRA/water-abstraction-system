@@ -5,8 +5,8 @@
  * @module ProcessBillingFlagService
  */
 
-const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
+const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
