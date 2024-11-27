@@ -19,7 +19,7 @@ const ProcessBillingFlagService = require('../../../app/services/licences/supple
 // Thing under test
 const SubmitRemoveBillService = require('../../../app/services/bills/submit-remove-bill.service.js')
 
-describe.only('Submit Remove Bill service', () => {
+describe('Submit Remove Bill service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
 
   let bill
