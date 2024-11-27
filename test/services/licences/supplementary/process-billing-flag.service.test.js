@@ -12,6 +12,7 @@ const { expect } = Code
 const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+const DetermineLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
 const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
 const DetermineWorkflowFlagsService = require('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
 const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
@@ -277,6 +278,86 @@ describe('Process Billing Flag Service', () => {
       })
     })
 
+    describe('with a licence Id', () => {
+      before(() => {
+        payload = {
+          licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea'
+        }
+      })
+
+      describe('that should be flagged for sroc supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(true))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+        })
+
+        it('calls the "DetermineLicenceFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineLicenceFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+
+      describe('that should not be flagged for two-part tariff supplementary billing', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(false))
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+        })
+
+        it('calls the "DetermineLicenceFlagsService" to determine which flags the licence needs', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineLicenceFlagsService.go.called).to.be.true()
+        })
+
+        it('does not call the "DetermineExistingBillRunYearsService"', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(DetermineExistingBillRunYearsService.go.called).to.be.false()
+        })
+
+        it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          expect(PersistSupplementaryBillingFlagsService.go.called).to.be.true()
+        })
+
+        it('logs the time taken in milliseconds and seconds', async () => {
+          await ProcessBillingFlagService.go(payload)
+
+          const logDataArg = notifierStub.omg.firstCall.args[1]
+
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(logDataArg.timeTakenMs).to.exist()
+          expect(logDataArg.timeTakenSs).to.exist()
+          expect(logDataArg.licenceId).to.exist()
+        })
+      })
+    })
+
     describe('with a bill licence Id', () => {
       before(() => {
         payload = {
@@ -386,5 +467,15 @@ function _licenceData(twoPartTariff) {
     flagForPreSrocSupplementary: false,
     flagForSrocSupplementary: true,
     flagForTwoPartTariffSupplementary: twoPartTariff
+  }
+}
+
+function _srocLicenceData(sroc) {
+  return {
+    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
+    flagForPreSrocSupplementary: false,
+    flagForSrocSupplementary: sroc,
+    flagForTwoPartTariffSupplementary: false
   }
 }
