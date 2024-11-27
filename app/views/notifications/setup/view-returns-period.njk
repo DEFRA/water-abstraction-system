@@ -1,0 +1,30 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: "/manage"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+  {{ govukRadios({
+    name: "whichReturnsPeriod",
+    fieldset: {
+      legend: {
+        text: pageTitle,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    items: items
+  }) }}
+
+  {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+
+{% endblock %}
