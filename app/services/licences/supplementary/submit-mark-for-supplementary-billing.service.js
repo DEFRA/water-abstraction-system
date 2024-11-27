@@ -75,9 +75,10 @@ async function _determineLicenceFlags(licence, supplementaryYears) {
   }
 
   let twoPartTariffBillingYears = []
-  const twoPartTariff = true
 
   if (supplementaryYears.length > 0) {
+    const twoPartTariff = true
+
     twoPartTariffBillingYears = await DetermineExistingBillRunYearsService.go(
       licence.regionId,
       supplementaryYears,
