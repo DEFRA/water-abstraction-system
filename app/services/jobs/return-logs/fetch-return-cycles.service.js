@@ -12,9 +12,9 @@ const { cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js
 /**
  * Given a date return all the return cycles from that date forward.
  *
- * @param {Date} date - the date to use as a baseline
+ * @param {Date} date - this date could be an end date or todays date
  *
- * @returns {Promise<Array>} the ids of the return cycles
+ * @returns {Promise<Array>} an array of return cycle details
  */
 async function go(date) {
   const earliestSummerCycleStartDate = cycleStartDateByDate(date, true)

@@ -8,7 +8,7 @@
 const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Given an array of return log object create them in the database
+ * Given an array of return log objects creates them in the database
  *
  * @param {Array} returnLogs - the array of return logs to create
  */

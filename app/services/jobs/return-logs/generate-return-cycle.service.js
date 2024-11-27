@@ -13,7 +13,7 @@ const ReturnCycleModel = require('../../../models/return-cycle.model.js')
  *
  * @param {boolean} summer - are we running summer cycle or all year
  *
- * @returns {Promise<string>} the UUID of the return cycle that has been created
+ * @returns {Promise<object>} the return cycle details that has been created
  */
 async function go(summer) {
   const data = _generateData(summer)

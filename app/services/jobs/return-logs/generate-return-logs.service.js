@@ -15,7 +15,7 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
  * @param {object} returnRequirement - the return requirement to have a return log created for
  * @param {object} returnCycle - the return cycle details
  *
- * @returns {Promise<Array>} the array of return log payloads to be created in the database
+ * @returns {Promise<object>} the return log payload
  */
 async function go(returnRequirement, returnCycle) {
   const startDate = _startDate(returnRequirement.returnVersion.startDate, returnCycle.startDate)

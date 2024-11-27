@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Process voiding and reissuing return logs when a licence ends
- * @module ProcessLicenceEndingService
+ * Process voiding and issuing return logs for a given licence reference
+ * @module ProcessLicenceReturnLogsService
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
@@ -13,10 +13,10 @@ const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 const VoidReturnLogsService = require('./void-return-logs.service.js')
 
 /**
- * Voids and reiusses the return logs for the given licence from the date provided
+ * Createss return logs and if an end date is provided it will void and reissue return logs for the given licence reference.
  *
  * @param {string} [licenceReference] - The licence to create return logs for
- * @param {Date} [endDate] - An optional - the end date to use when determining which return logs to void and reissue
+ * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
  */
 async function go(licenceReference, endDate) {
   try {
