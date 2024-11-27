@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Determines which supplementary billing flags should be added to a licence
  * @module DetermineLicenceFlagsService
  */
 
