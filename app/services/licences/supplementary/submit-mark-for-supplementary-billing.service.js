@@ -97,10 +97,8 @@ async function _fetchLicenceData(licenceId) {
 async function _flagForBilling(supplementaryYears, licenceId) {
   const licence = await _fetchLicenceData(licenceId)
 
-  const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } = _determineLicenceFlags(
-    licence,
-    supplementaryYears
-  )
+  const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } =
+    await _determineLicenceFlags(licence, supplementaryYears)
 
   await PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
