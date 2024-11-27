@@ -51,7 +51,7 @@ describe('Notifications Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ReturnsPeriodService, 'go').resolves(_viewReturnsPeriod())
+          Sinon.stub(ReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
         })
 
         it('returns the page successfully', async () => {
@@ -73,11 +73,6 @@ function _viewReturnsPeriod() {
     pageTitle: 'Select which returns period to send invitations for',
     backLink: '/manage',
     activeNavBar: 'manage',
-    returnsPeriods: [
-      {
-        value: 'england',
-        text: 'England'
-      }
-    ]
+    returnsPeriod: []
   }
 }
