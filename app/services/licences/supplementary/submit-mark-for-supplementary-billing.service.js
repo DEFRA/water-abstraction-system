@@ -48,20 +48,22 @@ async function go(licenceId, payload) {
   }
 }
 
-async function _fetchLicenceData(licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select(['id', 'licenceRef', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
-}
-
-async function _flagForBilling(supplementaryYears, licenceId) {
-  const licence = await _fetchLicenceData(licenceId)
-  // The `mark for supplementary billing` page only flags a licence for two-part tariff billing. Since pre-sroc covers
-  // two-part billing as well, the only flag that remains unset here is the sroc supplementary flag. As a result, we
-  // simply carry over the existing sroc supplementary flag value from the licence.
+/**
+ * The page only flags a licence for two-part tariff billing. Pre-sroc billing included two-part tariff bills (as
+ * two-part tariff had not been separated out into its own annual bill run like it is with sroc). This means we need
+ * to determine the pre-sroc flag and the two-part tariff billing years.
+ *
+ * Since we persist all 3 types of flags, we need to also carry over the existing sroc supplementary flag value.
+ *
+ * @private
+ */
+async function _determineLicenceFlags(licence, supplementaryYears) {
+  // Set the existing sroc supplementary flag, this flag does not get changed
   const flagForSrocSupplementary = licence.includeInPresrocBilling
+  // Set the existing pre-sroc supplementary flag
   let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
 
+  // Update the pre-sroc supplementary flag if the user selected a pre-sroc year
   if (supplementaryYears.includes('preSroc')) {
     flagForPreSrocSupplementary = true
 
@@ -82,6 +84,23 @@ async function _flagForBilling(supplementaryYears, licenceId) {
       twoPartTariff
     )
   }
+
+  return { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary }
+}
+
+async function _fetchLicenceData(licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select(['id', 'licenceRef', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
+}
+
+async function _flagForBilling(supplementaryYears, licenceId) {
+  const licence = await _fetchLicenceData(licenceId)
+
+  const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } = _determineLicenceFlags(
+    licence,
+    supplementaryYears
+  )
 
   await PersistSupplementaryBillingFlagsService.go(
     twoPartTariffBillingYears,
