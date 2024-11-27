@@ -4,13 +4,65 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
 const DateLib = require('../../app/lib/dates.lib.js')
 
 describe('Dates lib', () => {
+  describe('determineEarliestDate', () => {
+    let dates
+
+    describe('given an array of date strings', () => {
+      before(() => {
+        dates = ['2025-04-01', '2025-03-30', '2025-03-31']
+      })
+
+      it('returns the earliest as a Date value', () => {
+        const result = DateLib.determineEarliestDate(dates)
+
+        expect(result).to.equal(new Date('2025-03-30'))
+      })
+    })
+
+    describe('given an array of date strings that contains null and undefined values', () => {
+      before(() => {
+        dates = ['2025-04-01', null, '2025-03-30', undefined]
+      })
+
+      it('still returns the earliest as a Date value', () => {
+        const result = DateLib.determineEarliestDate(dates)
+
+        expect(result).to.equal(new Date('2025-03-30'))
+      })
+    })
+
+    describe('given an array of date strings that only contains null and undefined values', () => {
+      before(() => {
+        dates = [null, undefined]
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineEarliestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+
+    describe('given an empty array', () => {
+      before(() => {
+        dates = []
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineEarliestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+  })
+
   describe('formatStandardDateToISO', () => {
     it('returns null if the date is null ', () => {
       const result = DateLib.formatStandardDateToISO(null)
@@ -136,20 +188,6 @@ describe('Dates lib', () => {
       const result = DateLib.isQuarterlyReturnSubmissions('2025-03-31')
 
       expect(result).to.be.false()
-    })
-  })
-
-  describe('earliestDate', () => {
-    it('should return the earliest date of 2025-04-01, 2025-03-31, 2025-03-30', () => {
-      const result = DateLib.earliestDate(['2025-04-01', '2025-03-31', '2025-03-30'])
-
-      expect(result).to.equal(new Date('2025-03-30'))
-    })
-
-    it('should be able to handle null valuse and still return the earliest date', () => {
-      const result = DateLib.earliestDate(['2025-04-01', null, '2025-03-31', '2025-03-30'])
-
-      expect(result).to.equal(new Date('2025-03-30'))
     })
   })
 })

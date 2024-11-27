@@ -10,24 +10,31 @@ const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
 
 /**
- * Given a return version and return cycle end date, return the earliest date as a string in the ISO format.
+ * From an array of dates as strings, filter out empty values and return the earliest as a `Date`
  *
- * @param {Array} returnVersion - The list of dates to check.
- * @returns {String} - The earliest date as a string in the ISO format.
- * @private
+ * This was created as part of our work on generating return logs for licences, and needing to work out the earliest
+ * end date between the return version end date, and the return cycle end date for the given year.
+ *
+ * @param {string[]} dates - The dates from which to select the earliest
+ *
+ * @returns {Date} The earliest date string as a `Date`
  */
-function earliestDate(dates) {
-  const _dates = [...dates]
-    .filter((date) => {
-      return date
-    })
-    .map((date) => {
-      return new Date(date)
-    })
+function determineEarliestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
 
-  const _earliestDate = new Date(Math.min(..._dates))
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
 
-  return _earliestDate
+  const valuesAsDates = allEmptyValuesRemoved.map((date) => {
+    return new Date(date)
+  })
+
+  const earliestDateTimestamp = Math.min(...valuesAsDates)
+
+  return new Date(earliestDateTimestamp)
 }
 
 /**
@@ -150,7 +157,7 @@ function isQuarterlyReturnSubmissions(date) {
 }
 
 module.exports = {
-  earliestDate,
+  determineEarliestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,

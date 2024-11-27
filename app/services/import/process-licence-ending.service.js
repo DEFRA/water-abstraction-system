@@ -4,7 +4,7 @@
  * Determines if an imported licence has a new end date
  * @module ProcessLicenceEndingService
  */
-const { earliestDate } = require('../../lib/dates.lib.js')
+const { determineEarliestDate } = require('../../lib/dates.lib.js')
 const LicenceModel = require('../../models/licence.model.js')
 const ProcessImportedLicenceService = require('../licences/supplementary/process-imported-licence.service.js')
 const ProcessLicenceReturnLogsService = require('../jobs/return-logs/process-licence-return-logs.service.js')
@@ -34,9 +34,9 @@ async function go(importedLicence, licenceId) {
     await ProcessImportedLicenceService.go(importedLicence, licenceId)
 
     const { expiredDate, lapsedDate, revokedDate } = importedLicence
-    const _earliestDate = earliestDate([expiredDate, lapsedDate, revokedDate])
+    const earliestDate = determineEarliestDate([expiredDate, lapsedDate, revokedDate])
 
-    await ProcessLicenceReturnLogsService.go(importedLicence.licenceRef, _earliestDate)
+    await ProcessLicenceReturnLogsService.go(importedLicence.licenceRef, earliestDate)
   } catch (error) {
     global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
   }

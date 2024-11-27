@@ -5,7 +5,7 @@
  * @module GenerateReturnLogService
  */
 
-const { earliestDate } = require('../../../lib/dates.lib.js')
+const { determineEarliestDate } = require('../../../lib/dates.lib.js')
 const { cycleEndDate } = require('../../../lib/return-cycle-dates.lib.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 
@@ -41,7 +41,7 @@ async function go(returnRequirement, returnCycle) {
 }
 
 function _endDate(returnVersion, returnCycleEndDate) {
-  const _earliestDate = earliestDate([
+  const earliestDate = determineEarliestDate([
     returnVersion.licence.expiredDate,
     returnVersion.licence.lapsedDate,
     returnVersion.licence.revokedDate,
@@ -49,7 +49,7 @@ function _endDate(returnVersion, returnCycleEndDate) {
     returnCycleEndDate
   ])
 
-  return formatDateObjectToISO(_earliestDate)
+  return formatDateObjectToISO(earliestDate)
 }
 
 function _id(requirements, startDate, endDate) {
