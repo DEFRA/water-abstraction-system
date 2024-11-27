@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determines what supplementary billing flag should be added to a licence removed from a bill run
+ * Determines which supplementary billing flag should be added to a licence removed from a bill run
  * @module DetermineBillLicenceFlagsService
  */
 
@@ -60,23 +60,6 @@ async function go(billLicenceId) {
   return result
 }
 
-function _updateFlags(bill, licence) {
-  // Set the flags to what they currently are on the licence
-  let flagForSrocSupplementary = licence.includeInSrocBilling
-  let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
-  let flagForTwoPartTariffSupplementary = false
-
-  if (bill.billRun.batchType === 'two_part_tariff' && bill.billRun.scheme === 'sroc') {
-    flagForTwoPartTariffSupplementary = true
-  } else if (bill.billRun.scheme === 'alcs') {
-    flagForPreSrocSupplementary = true
-  } else {
-    flagForSrocSupplementary = true
-  }
-
-  return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
-}
-
 async function _fetchBillLicence(billLicenceId) {
   return BillLicenceModel.query()
     .findById(billLicenceId)
@@ -93,6 +76,23 @@ async function _fetchBillLicence(billLicenceId) {
     .modifyGraph('bill.billRun', (builder) => {
       builder.select(['id', 'batchType', 'scheme', 'toFinancialYearEnding'])
     })
+}
+
+function _updateFlags(bill, licence) {
+  // Set the flags to what they currently are on the licence
+  let flagForSrocSupplementary = licence.includeInSrocBilling
+  let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
+  let flagForTwoPartTariffSupplementary = false
+
+  if (bill.billRun.batchType === 'two_part_tariff' && bill.billRun.scheme === 'sroc') {
+    flagForTwoPartTariffSupplementary = true
+  } else if (bill.billRun.scheme === 'alcs') {
+    flagForPreSrocSupplementary = true
+  } else {
+    flagForSrocSupplementary = true
+  }
+
+  return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
 }
 
 module.exports = {
