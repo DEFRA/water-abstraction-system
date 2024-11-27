@@ -6,8 +6,9 @@
  */
 
 const DetermineBillingYearsService = require('./determine-billing-years.service.js')
-const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
+const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
+const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
 const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
 const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
 const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
@@ -54,6 +55,8 @@ async function _determineFlags(payload) {
     return DetermineReturnLogFlagsService.go(payload.returnId)
   } else if (payload.workflowId) {
     return DetermineWorkflowFlagsService.go(payload.workflowId)
+  } else if (payload.billLicenceId) {
+    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
   } else if (payload.licenceId) {
     return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
   } else {
