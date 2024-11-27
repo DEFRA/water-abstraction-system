@@ -9,7 +9,7 @@ const ReturnsPeriodService = require('../services/notifications/setup/returns-pe
 
 const basePath = 'notifications/setup'
 
-async function viewReturnsPeriod(request, h) {
+async function viewReturnsPeriod(_request, h) {
   const pageDate = ReturnsPeriodService.go()
 
   return h.view(`${basePath}/view-returns-period.njk`, {
