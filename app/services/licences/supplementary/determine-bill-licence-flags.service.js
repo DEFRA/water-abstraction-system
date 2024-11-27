@@ -43,7 +43,7 @@ async function go(billLicenceId) {
   const { licence, bill, licenceId } = await _fetchBillLicence(billLicenceId)
 
   const { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = _updateFlags(
-    bill,
+    bill.billRun,
     licence
   )
 
@@ -78,15 +78,15 @@ async function _fetchBillLicence(billLicenceId) {
     })
 }
 
-function _updateFlags(bill, licence) {
+function _updateFlags(billRun, licence) {
   // Set the flags to what they currently are on the licence
   let flagForSrocSupplementary = licence.includeInSrocBilling
   let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
   let flagForTwoPartTariffSupplementary = false
 
-  if (bill.billRun.batchType === 'two_part_tariff' && bill.billRun.scheme === 'sroc') {
+  if (billRun.batchType === 'two_part_tariff' && billRun.scheme === 'sroc') {
     flagForTwoPartTariffSupplementary = true
-  } else if (bill.billRun.scheme === 'alcs') {
+  } else if (billRun.scheme === 'alcs') {
     flagForPreSrocSupplementary = true
   } else {
     flagForSrocSupplementary = true
