@@ -1,6 +1,8 @@
 'use strict'
 
 /**
+ * Determines if a licence should be flagged for supplementary billing based on changes to the expired/lapsed/revoked
+ * dates
  * @module DetermineImportedLicenceFlagsService
  */
 
