@@ -44,7 +44,7 @@ describe('Notifications Setup controller', () => {
           url: basePath + '/returns-period',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: ['returns'] }
           }
         }
       })
