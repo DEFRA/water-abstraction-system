@@ -12,7 +12,7 @@ const routes = [
       handler: NotificationsSetupController.viewReturnsPeriod,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
