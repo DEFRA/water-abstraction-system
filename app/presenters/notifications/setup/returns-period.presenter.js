@@ -9,6 +9,7 @@ const { monthsAsIntegers } = require('../../../lib/static-lookups.lib')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'
+const twentyEighth = 28
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page
@@ -40,7 +41,7 @@ function _returnsPeriod() {
  *  A date is in January if it is between 1st January - 28th January
  */
 function _dayIsInJanuary(date) {
-  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= 28
+  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= twentyEighth
 }
 
 function _dayIsInJanuaryOptions(currentYear, previousYear) {
