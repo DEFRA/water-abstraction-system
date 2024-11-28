@@ -39,21 +39,15 @@ async function flagForBilling(request, h) {
 /**
  * A test end point to create return logs for a given licence reference
  *
- * @param _request - the hapi request object
+ * @param request - the hapi request object
  * @param h - the hapi response object
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function returnLogsForLicence(_request, h) {
-  let licenceReference
+async function returnLogsForLicence(request, h) {
+  const { licenceReference } = request.payload
 
-  if (h.request.payload !== null && h.request.payload.licenceReference) {
-    licenceReference = h.request.payload.licenceReference
-  } else {
-    return h.response().code(404)
-  }
-
-  ProcessLicenceReturnLogsService.go(licenceReference)
+  await ProcessLicenceReturnLogsService.go(licenceReference)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
