@@ -34,9 +34,9 @@ function _returnsPeriod() {
     return _dayInJanuaryOptions(currentYear, previousYear)
   } else if (_dayIsBetweenNovemberAndDecember(today)) {
     return _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear)
+  } else {
+    return []
   }
-
-  return []
 }
 
 /*
