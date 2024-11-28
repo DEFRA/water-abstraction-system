@@ -60,23 +60,13 @@ async function go(cycle) {
 async function _fetchReturnCycleIds(summer) {
   const today = formatDateObjectToISO(new Date())
 
-  if (summer) {
-    let summerReturnCycle = await FetchReturnCycleService.go(today, true)
+  let returnCycle = await FetchReturnCycleService.go(today, summer)
 
-    if (!summerReturnCycle) {
-      summerReturnCycle = await GenerateReturnCycleService.go(true)
-    }
-
-    return summerReturnCycle
+  if (!returnCycle) {
+    returnCycle = await GenerateReturnCycleService.go(summer)
   }
 
-  let allYearReturnCycle = await FetchReturnCycleService.go(today, false)
-
-  if (!allYearReturnCycle) {
-    allYearReturnCycle = await GenerateReturnCycleService.go(false)
-  }
-
-  return allYearReturnCycle
+  return returnCycle
 }
 
 module.exports = {
