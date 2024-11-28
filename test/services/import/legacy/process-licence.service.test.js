@@ -15,7 +15,6 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Things to stub
 const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
 const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
 const TransformCompanyAddressesService = require('../../../../app/services/import/legacy/transform-company-addresses.service.js')
@@ -38,7 +37,6 @@ describe('Import Legacy Process Licence service', () => {
   let licenceRef
   let notifierStub
   let PersistImportServiceStub
-  let processLicenceReturnLogsServiceStub
   let transformedLicence
   let wrlsLicenceId
 
@@ -81,7 +79,6 @@ describe('Import Legacy Process Licence service', () => {
         wrlsLicenceId
       })
       PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
-      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
     it('saves the imported licence and creates the return logs', async () => {
@@ -107,14 +104,12 @@ describe('Import Legacy Process Licence service', () => {
     beforeEach(() => {
       Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
       PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
-      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
     it('saves the imported licence but does not process the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
-      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.false()
     })
   })
 
