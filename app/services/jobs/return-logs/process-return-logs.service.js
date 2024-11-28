@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Process the return logs for the next cycle
+ * Determines what return logs need to be generated for a given cycle and creates them
  * @module ProcessReturnLogsService
  */
 
@@ -14,7 +14,8 @@ const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
 const GenerateReturnLogsService = require('../../return-logs/generate-return-logs.service.js')
 
 /**
- * Creates the return logs for the next cycle
+ * Determines what return logs need to be generated for a given cycle and creates them
+ *
  * The return requirement is the information held against the licence that defines how and when an abstractor needs to
  * submit their returns.
  *
@@ -28,7 +29,7 @@ const GenerateReturnLogsService = require('../../return-logs/generate-return-log
  * would be created.
  *
  * So, this job will run twice yearly: once for each cycle. The job determines which return requirements need a return
- * log generated for the selected cycle and then creates them.
+ * log created for the selected cycle and then creates them.
  *
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  */
@@ -50,9 +51,9 @@ async function go(cycle) {
 
     await CreateReturnLogsService.go(returnLogs)
 
-    calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle })
+    calculateAndLogTimeTaken(startTime, 'Return logs job complete', { cycle })
   } catch (error) {
-    global.GlobalNotifier.omfg('Create return logs job failed', { cycle, error })
+    global.GlobalNotifier.omfg('Return logs job failed', { cycle, error })
   }
 }
 
