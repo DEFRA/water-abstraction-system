@@ -39,32 +39,60 @@ const PersistSupplementaryBillingFlagsService = require('./persist-supplementary
 async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
-    const result = await _determineFlags(payload)
+    const results = await _determineFlags(payload)
 
-    await _setFlagForLicence(result)
+    for (const result of results) {
+      await _setFlagForLicence(result)
+    }
 
-    calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId: result.licenceId })
+    calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId: results[0].licenceId })
   } catch (error) {
     global.GlobalNotifier.omfg('Supplementary Billing Flag failed', payload, error)
   }
 }
 
+/**
+ * Determines which flags to set for supplementary billing
+ *
+ * This function takes a payload and determines which flags should be set for supplementary billing.
+ * It does this by calling the relevant service based on the presence of certain properties in the payload,
+ * such as `licenceId`, `importedLicence`, `chargeVersionId`, `returnId`, `workflowId`, and `billLicenceId`.
+ * The results are then returned as an array. The service returns an array rather than the direct result as it is
+ * possible that there will be two properties in the payload (specifically if chargeVersionId is present then so will
+ * workflowId).
+ *
+ * @private
+ */
 async function _determineFlags(payload) {
+  const result = []
+
+  // If `importedLicence` is provided in the payload, it always includes a `licenceId` as well. However, not all
+  // licences requiring flagging will have an `importedLicence`. Therefore, we only call `DetermineLicenceFlagsService`
+  // when a `licenceId` exists and no `importedLicence` is present.
+  if (payload.licenceId && !payload.importedLicence) {
+    result.push(await DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme))
+  }
   if (payload.importedLicence) {
-    return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
-  } else if (payload.chargeVersionId) {
-    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
-  } else if (payload.returnId) {
-    return DetermineReturnLogFlagsService.go(payload.returnId)
-  } else if (payload.workflowId) {
-    return DetermineWorkflowFlagsService.go(payload.workflowId)
-  } else if (payload.billLicenceId) {
-    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
-  } else if (payload.licenceId) {
-    return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
-  } else {
+    result.push(await DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId))
+  }
+  if (payload.chargeVersionId) {
+    result.push(await DetermineChargeVersionFlagsService.go(payload.chargeVersionId))
+  }
+  if (payload.returnId) {
+    result.push(await DetermineReturnLogFlagsService.go(payload.returnId))
+  }
+  if (payload.workflowId) {
+    result.push(await DetermineWorkflowFlagsService.go(payload.workflowId))
+  }
+  if (payload.billLicenceId) {
+    result.push(await DetermineBillLicenceFlagsService.go(payload.billLicenceId))
+  }
+
+  if (result.length === 0) {
     throw new Error('Invalid payload for process billing flags service')
   }
+
+  return result
 }
 
 async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
