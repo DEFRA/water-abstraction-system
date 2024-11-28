@@ -18,7 +18,7 @@ function go() {
 
   return {
     activeNavBar: 'manage',
-    pageTitle: 'Select which returns period to send invitations for',
+    pageTitle: 'Select the returns periods for the invitations',
     ...formattedData
   }
 }
