@@ -15,10 +15,10 @@ const VoidReturnLogsService = require('./void-return-logs.service.js')
 /**
  * Process voiding and issuing return logs for a given licence reference
  *
- * @param {string} [licenceReference] - The licence to create return logs for
+ * @param {string} licenceReference - The licence to create return logs for
  * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
  */
-async function go(licenceReference, endDate) {
+async function go(licenceReference, endDate = null) {
   try {
     const startTime = currentTimeInNanoseconds()
     let returnCycles = []
