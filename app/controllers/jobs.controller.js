@@ -54,13 +54,7 @@ async function returnLogs(request, h) {
     return h.response().code(NOT_FOUND_STATUS_CODE)
   }
 
-  let licenceReference
-
-  if (h.request.payload !== null && h.request.payload.licenceReference) {
-    licenceReference = h.request.payload.licenceReference
-  }
-
-  ProcessReturnLogsService.go(cycle, licenceReference)
+  ProcessReturnLogsService.go(cycle)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }

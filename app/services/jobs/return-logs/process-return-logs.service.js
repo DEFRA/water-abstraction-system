@@ -30,19 +30,15 @@ const GenerateReturnLogsService = require('../../return-logs/generate-return-log
  * So, this job will run twice yearly: once for each cycle. The job determines which return requirements need a return
  * log generated for the selected cycle and then creates them.
  *
- * > Because the job creates _all_ return logs in a cycle, it makes it difficult to test what it is generating is
- * > correct. So, to support testing and validation, we can pass a licence ref in the job request to limit the creation
- * > to just a single licence.
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
- * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
  */
-async function go(cycle, licenceReference) {
+async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
     const summer = cycle === 'summer'
 
     const returnCycle = await _fetchReturnCycleIds(summer)
-    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
+    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     const returnLogs = []
 
@@ -54,7 +50,7 @@ async function go(cycle, licenceReference) {
 
     await CreateReturnLogsService.go(returnLogs)
 
-    calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle, licenceReference })
+    calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle })
   } catch (error) {
     global.GlobalNotifier.omfg('Create return logs job failed', { cycle, error })
   }
