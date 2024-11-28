@@ -36,9 +36,8 @@ const GenerateReturnLogsService = require('../../return-logs/generate-return-log
 async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
-    const summer = cycle === 'summer'
 
-    const returnCycle = await _fetchReturnCycle(summer)
+    const returnCycle = await _fetchReturnCycle(cycle)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     const returnLogs = []
@@ -57,8 +56,9 @@ async function go(cycle) {
   }
 }
 
-async function _fetchReturnCycle(summer) {
+async function _fetchReturnCycle(cycle) {
   const today = formatDateObjectToISO(new Date())
+  const summer = cycle === 'summer'
 
   let returnCycle = await FetchReturnCycleService.go(today, summer)
 
