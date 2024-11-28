@@ -38,7 +38,7 @@ async function go(cycle) {
     const startTime = currentTimeInNanoseconds()
     const summer = cycle === 'summer'
 
-    const returnCycle = await _fetchReturnCycleIds(summer)
+    const returnCycle = await _fetchReturnCycle(summer)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     const returnLogs = []
@@ -57,7 +57,7 @@ async function go(cycle) {
   }
 }
 
-async function _fetchReturnCycleIds(summer) {
+async function _fetchReturnCycle(summer) {
   const today = formatDateObjectToISO(new Date())
 
   let returnCycle = await FetchReturnCycleService.go(today, summer)
