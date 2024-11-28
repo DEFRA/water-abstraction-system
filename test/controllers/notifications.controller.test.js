@@ -72,7 +72,7 @@ describe('Notifications Setup controller', () => {
 
 function _viewReturnsPeriod() {
   return {
-    pageTitle: 'Select which returns period to send invitations for',
+    pageTitle: 'Select the returns periods for the invitations',
     backLink: '/manage',
     activeNavBar: 'manage',
     returnsPeriod: []

@@ -18,7 +18,7 @@ describe('Notifications Setup - Returns Period service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         backLink: '/manage',
-        pageTitle: 'Select which returns period to send invitations for',
+        pageTitle: 'Select the returns periods for the invitations',
         returnsPeriod: []
       })
     })
