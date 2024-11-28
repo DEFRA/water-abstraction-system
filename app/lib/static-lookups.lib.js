@@ -92,12 +92,12 @@ module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
+  monthsAsIntegers,
+  naldRegions,
   organisationTypes,
   returnCycleDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
-  naldRegions,
   sources,
-  twoPartTariffReviewIssues,
-  monthsAsIntegers
+  twoPartTariffReviewIssues
 }
