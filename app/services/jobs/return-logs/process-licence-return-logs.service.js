@@ -13,7 +13,7 @@ const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 const VoidReturnLogsService = require('./void-return-logs.service.js')
 
 /**
- * Createss return logs and if an end date is provided it will void and reissue return logs for the given licence reference.
+ * Process voiding and issuing return logs for a given licence reference
  *
  * @param {string} [licenceReference] - The licence to create return logs for
  * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
