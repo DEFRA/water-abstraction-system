@@ -6,6 +6,10 @@ const companyTypes = ['person', 'organisation']
 
 const contactTypes = ['person', 'department']
 
+const monthsAsIntegers = {
+  january: 0
+}
+
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 const returnCycleDates = {
@@ -94,5 +98,6 @@ module.exports = {
   returnRequirementReasons,
   naldRegions,
   sources,
-  twoPartTariffReviewIssues
+  twoPartTariffReviewIssues,
+  monthsAsIntegers
 }

@@ -56,7 +56,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           } = ReturnsPeriodPresenter.go()
 
           expect(firstOption).to.equal({
-            value: 'quarterlyJanToMarch',
+            value: 'currentPeriod',
             text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
             hint: {
               text: `Due date 28 Jan ${currentYear}`
@@ -72,7 +72,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           } = ReturnsPeriodPresenter.go()
 
           expect(secondOption).to.equal({
-            value: 'quarterlyAprilToMarch',
+            value: 'nextPeriod',
             text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
             hint: {
               text: `Due date 28 April ${currentYear}`

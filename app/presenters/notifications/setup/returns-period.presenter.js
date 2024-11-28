@@ -5,6 +5,11 @@
  * @module ReturnsPeriodPresenter
  */
 
+const { monthsAsIntegers } = require('../../../lib/static-lookups.lib')
+
+const currentPeriod = 'currentPeriod'
+const nextPeriod = 'nextPeriod'
+
 /**
  * Formats data for the `/notifications/setup/returns-period` page
  *
@@ -30,24 +35,25 @@ function _returnsPeriod() {
 }
 
 /*
- *  Checks if a date is in January
+ *  Checks if a date is in January (Before the 29th)
+ *
  *  A date is in January if it is between 1st January - 28th January
  */
 function _dayIsInJanuary(date) {
-  return date.getMonth() === 0 && date.getDate() >= 1 && date.getDate() <= 28
+  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= 28
 }
 
 function _dayIsInJanuaryOptions(currentYear, previousYear) {
   return [
     {
-      value: 'quarterlyJanToMarch',
+      value: currentPeriod,
       text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
       hint: {
         text: `Due date 28 Jan ${currentYear}`
       }
     },
     {
-      value: 'quarterlyAprilToMarch',
+      value: nextPeriod,
       text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
       hint: {
         text: `Due date 28 April ${currentYear}`
