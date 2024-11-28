@@ -8,22 +8,22 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
-const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PointHelper = require('../../../support/helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
+const FetchReturnRequirementsService = require('../../../app/services/return-logs/fetch-return-requirements.service.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const PointHelper = require('../../support/helpers/point.helper.js')
+const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const ReturnCycleHelper = require('../../support/helpers/return-cycle.helper.js')
+const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
+const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
+const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
+const GenerateReturnLogsService = require('../../../app/services/return-logs/generate-return-logs.service.js')
 
 describe('Generate return logs service', () => {
   const today = new Date()

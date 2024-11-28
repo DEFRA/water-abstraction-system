@@ -8,13 +8,13 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
+const ReturnCycleHelper = require('../../support/helpers/return-cycle.helper.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const VoidReturnLogsService = require('../../../../app/services/jobs/return-logs/void-return-logs.service.js')
+const VoidReturnLogsService = require('../../../app/services/return-logs/void-return-logs.service.js')
 
 describe('Void return log service', () => {
   let licenceReference

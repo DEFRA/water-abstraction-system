@@ -25,7 +25,7 @@ const ReturnVersionHelper = require('../../../support/helpers/return-version.hel
 const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
 
 // Things we need to stub
-const GenerateReturnLogsService = require('../../../../app/services/jobs/return-logs/generate-return-logs.service.js')
+const GenerateReturnLogsService = require('../../../../app/services/return-logs/generate-return-logs.service.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')

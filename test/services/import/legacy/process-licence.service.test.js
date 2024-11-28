@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Things to stub
 const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
 const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
 const TransformCompanyAddressesService = require('../../../../app/services/import/legacy/transform-company-addresses.service.js')

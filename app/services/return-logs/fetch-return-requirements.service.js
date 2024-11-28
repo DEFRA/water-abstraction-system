@@ -5,11 +5,11 @@
  * @module FetchReturnRequirementsService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
+const ReturnRequirementModel = require('../../models/return-requirement.model.js')
+const ReturnVersionModel = require('../../models/return-version.model.js')
 
-const { db } = require('../../../../db/db.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetch all return requirements that need return logs created in the provided return cycle.

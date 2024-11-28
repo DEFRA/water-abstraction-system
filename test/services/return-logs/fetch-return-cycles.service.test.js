@@ -8,10 +8,10 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
+const ReturnCycleHelper = require('../../support/helpers/return-cycle.helper.js')
 
 // Thing under test
-const FetchReturnCyclesService = require('../../../../app/services/jobs/return-logs/fetch-return-cycles.service.js')
+const FetchReturnCyclesService = require('../../../app/services/return-logs/fetch-return-cycles.service.js')
 
 describe('Fetch return cycles service', () => {
   let allYearReturnCycle

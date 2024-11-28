@@ -5,8 +5,8 @@
  * @module VoidReturnLogsService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const { cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
+const { cycleStartDateByDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given a licence reference and a date this service voids the return logs from that date forward.

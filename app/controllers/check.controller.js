@@ -6,7 +6,7 @@
  */
 
 const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
-const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
+const ProcessLicenceReturnLogsService = require('../services/return-logs/process-licence-return-logs.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 

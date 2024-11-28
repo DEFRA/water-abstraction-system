@@ -5,7 +5,7 @@
  * @module CreateReturnLogsService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
 
 /**
  * Given an array of return log objects creates them in the database

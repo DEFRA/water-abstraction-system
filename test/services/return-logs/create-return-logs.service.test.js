@@ -8,19 +8,19 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
+const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
+const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
+const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const CreateReturnLogsService = require('../../../../app/services/jobs/return-logs/create-return-logs.service.js')
+const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 
 describe('Create return log service', () => {
   const allYearDueDate = new Date(new Date().getFullYear() + 1, 3, 28).toISOString().split('T')[0]

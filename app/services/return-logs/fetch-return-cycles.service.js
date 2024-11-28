@@ -5,9 +5,9 @@
  * @module FetchReturnCyclesService
  */
 
-const ReturnCycleModel = require('../../../models/return-cycle.model.js')
+const ReturnCycleModel = require('../../models/return-cycle.model.js')
 
-const { cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
+const { cycleStartDateByDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given a date return all the return cycles from that date forward.

@@ -8,7 +8,7 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const ProcessLicenceReturnLogsService = require('../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+const ProcessLicenceReturnLogsService = require('../../app/services/return-logs/process-licence-return-logs.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')

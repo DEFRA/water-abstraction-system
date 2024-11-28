@@ -5,9 +5,9 @@
  * @module GenerateReturnLogService
  */
 
-const { determineEarliestDate } = require('../../../lib/dates.lib.js')
-const { cycleEndDate } = require('../../../lib/return-cycle-dates.lib.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+const { determineEarliestDate } = require('../../lib/dates.lib.js')
+const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
+const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
 
 /**
  * Generates the payload for submission to the returns table.

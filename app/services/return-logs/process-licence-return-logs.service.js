@@ -5,7 +5,7 @@
  * @module ProcessLicenceReturnLogsService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../lib/general.lib.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchReturnCyclesService = require('./fetch-return-cycles.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
