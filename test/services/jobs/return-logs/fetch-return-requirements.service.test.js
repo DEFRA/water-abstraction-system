@@ -129,25 +129,20 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
                 returnRequirementPurposes: [
                   {
                     id: returnRequirementPurpose.id,
-                    returnRequirementId: returnRequirement.id,
-                    primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
-                    secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId,
-                    purposeId: returnRequirementPurpose.purposeId,
-                    alias: returnRequirementPurpose.alias,
-                    externalId: returnRequirementPurpose.externalId,
-                    createdAt: returnRequirementPurpose.createdAt,
-                    updatedAt: returnRequirementPurpose.updatedAt,
                     primaryPurpose: {
-                      legacyId: primaryPurpose.legacyId,
-                      description: primaryPurpose.description
+                      description: primaryPurpose.description,
+                      id: primaryPurpose.id,
+                      legacyId: primaryPurpose.legacyId
                     },
                     purpose: {
-                      legacyId: purpose.legacyId,
-                      description: purpose.description
+                      description: purpose.description,
+                      id: purpose.id,
+                      legacyId: purpose.legacyId
                     },
                     secondaryPurpose: {
-                      legacyId: secondaryPurpose.legacyId,
-                      description: secondaryPurpose.description
+                      description: secondaryPurpose.description,
+                      id: secondaryPurpose.id,
+                      legacyId: secondaryPurpose.legacyId
                     }
                   }
                 ]
@@ -401,25 +396,20 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
                 returnRequirementPurposes: [
                   {
                     id: returnRequirementPurpose.id,
-                    returnRequirementId: returnRequirement.id,
-                    primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
-                    secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId,
-                    purposeId: returnRequirementPurpose.purposeId,
-                    alias: returnRequirementPurpose.alias,
-                    externalId: returnRequirementPurpose.externalId,
-                    createdAt: returnRequirementPurpose.createdAt,
-                    updatedAt: returnRequirementPurpose.updatedAt,
                     primaryPurpose: {
-                      legacyId: primaryPurpose.legacyId,
-                      description: primaryPurpose.description
+                      description: primaryPurpose.description,
+                      id: primaryPurpose.id,
+                      legacyId: primaryPurpose.legacyId
                     },
                     purpose: {
-                      legacyId: purpose.legacyId,
-                      description: purpose.description
+                      description: purpose.description,
+                      id: purpose.id,
+                      legacyId: purpose.legacyId
                     },
                     secondaryPurpose: {
-                      legacyId: secondaryPurpose.legacyId,
-                      description: secondaryPurpose.description
+                      description: secondaryPurpose.description,
+                      id: secondaryPurpose.id,
+                      legacyId: secondaryPurpose.legacyId
                     }
                   }
                 ]

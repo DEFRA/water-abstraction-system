@@ -59,39 +59,46 @@ async function _fetch(returnCycle) {
     .whereExists(_whereExistsClause(_cycleStartDate, _cycleEndDate))
     .where('returnRequirements.summer', returnCycle.summer)
     .withGraphFetched('returnVersion')
-    .modifyGraph('returnVersion', (builder) => {
-      builder.select(['endDate', 'id', 'reason', 'startDate'])
-    })
-    .withGraphFetched('returnVersion.licence')
-    .modifyGraph('returnVersion.licence', (builder) => {
-      builder.select([
-        'expiredDate',
-        'id',
-        'lapsedDate',
-        'licenceRef',
-        'revokedDate',
-        db.raw("regions->>'historicalAreaCode' as areacode")
-      ])
-    })
-    .withGraphFetched('returnVersion.licence.region')
-    .modifyGraph('returnVersion.licence.region', (builder) => {
-      builder.select(['id', 'naldRegionId'])
+    .modifyGraph('returnVersion', (returnVersionBuilder) => {
+      returnVersionBuilder
+        .select(['endDate', 'id', 'reason', 'startDate'])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder
+            .select([
+              'expiredDate',
+              'id',
+              'lapsedDate',
+              'licenceRef',
+              'revokedDate',
+              db.raw("regions->>'historicalAreaCode' as areacode")
+            ])
+            .withGraphFetched('region')
+            .modifyGraph('region', (regionBuilder) => {
+              regionBuilder.select(['id', 'naldRegionId'])
+            })
+        })
     })
     .withGraphFetched('points')
-    .modifyGraph('points', (builder) => {
-      builder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+    .modifyGraph('points', (pointsBuilder) => {
+      pointsBuilder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
-    .withGraphFetched('returnRequirementPurposes.primaryPurpose')
-    .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {
-      builder.select(['legacyId', 'description'])
-    })
-    .withGraphFetched('returnRequirementPurposes.secondaryPurpose')
-    .modifyGraph('returnRequirementPurposes.secondaryPurpose', (builder) => {
-      builder.select(['legacyId', 'description'])
-    })
-    .withGraphFetched('returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirementPurposes.purpose', (builder) => {
-      builder.select(['legacyId', 'description'])
+    .withGraphFetched('returnRequirementPurposes')
+    .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+      returnRequirementPurposesBuilder
+        .select(['id'])
+        .withGraphFetched('primaryPurpose')
+        .modifyGraph('primaryPurpose', (primaryPurposeBuilder) => {
+          primaryPurposeBuilder.select(['description', 'id', 'legacyId'])
+        })
+        .withGraphFetched('purpose')
+        .modifyGraph('purpose', (purposeBuilder) => {
+          purposeBuilder.select(['description', 'id', 'legacyId'])
+        })
+        .withGraphFetched('secondaryPurpose')
+        .modifyGraph('secondaryPurpose', (secondaryPurposeBuilder) => {
+          secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
+        })
     })
 }
 
