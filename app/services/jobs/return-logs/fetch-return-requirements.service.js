@@ -35,6 +35,7 @@ async function _fetchExternalIds(returnCycleId) {
 }
 
 async function _fetch(returnCycle) {
+  const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
   const externalIds = await _fetchExternalIds(returnCycle.id)
 
   return ReturnRequirementModel.query()
@@ -53,9 +54,28 @@ async function _fetch(returnCycle) {
       'twoPartTariff',
       'upload'
     ])
-    .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(returnCycle))
     .where('returnRequirements.summer', returnCycle.summer)
+    .whereNotIn('returnRequirements.externalId', externalIds)
+    .whereExists(
+      ReturnVersionModel.query()
+        .select(1)
+        .innerJoinRelated('licence')
+        .where('returnVersions.startDate', '<=', cycleEndDate)
+        .where('returnVersions.status', 'current')
+        .where((builder) => {
+          builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
+        })
+        .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
+    )
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (returnVersionBuilder) => {
       returnVersionBuilder
@@ -98,33 +118,6 @@ async function _fetch(returnCycle) {
           secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
         })
     })
-}
-
-function _whereExistsClause(returnCycle) {
-  const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
-  const query = ReturnVersionModel.query()
-
-  query
-    .select(1)
-    .innerJoinRelated('licence')
-    .where('returnVersions.startDate', '<=', cycleEndDate)
-    .where('returnVersions.status', 'current')
-    .where((builder) => {
-      builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
-    })
-
-  query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
-
-  return query
 }
 
 module.exports = {
