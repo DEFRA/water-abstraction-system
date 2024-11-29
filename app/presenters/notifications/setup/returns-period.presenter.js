@@ -5,12 +5,13 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { monthsAsIntegers } = require('../../../lib/static-lookups.lib')
+const { formatLongDate } = require('../../base.presenter')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'
-const twentyEighth = 28
-const twentyNinth = 29
+
+const dueApril = '04-28'
+const dueJanuary = '01-28'
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page
@@ -45,25 +46,26 @@ function _returnsPeriod() {
  *  A date is in January if it is between 1st January - 28th January
  */
 function _dayIsInJanuary(date) {
-  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= twentyEighth
+  const startDate = new Date(date.getFullYear(), 0, 1) // January 1
+  const endDate = new Date(date.getFullYear(), 0, 28) // January 28
+
+  return _isDateBetween(date, startDate, endDate)
 }
 
 function _dayInJanuaryOptions(currentYear, previousYear) {
   return [
-    {
-      value: currentPeriod,
-      text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
-      hint: {
-        text: `Due date 28 Jan ${currentYear}`
-      }
-    },
-    {
-      value: nextPeriod,
-      text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
-      hint: {
-        text: `Due date 28 April ${currentYear}`
-      }
-    }
+    _quarterlyOptions(
+      currentPeriod,
+      new Date(`${previousYear}-10-01`),
+      new Date(`${previousYear}-12-31`),
+      new Date(`${currentYear}-${dueJanuary}`)
+    ),
+    _quarterlyOptions(
+      nextPeriod,
+      new Date(`${currentYear}-01-01`),
+      new Date(`${currentYear}-03-31`),
+      new Date(`${currentYear}-${dueApril}`)
+    )
   ]
 }
 
@@ -73,29 +75,45 @@ function _dayInJanuaryOptions(currentYear, previousYear) {
  * @returns {boolean} - true if date is in range (29th November - 31st December)
  */
 function _dayIsBetweenNovemberAndDecember(date) {
-  return (
-    date.getMonth() === monthsAsIntegers.december ||
-    (date.getMonth() === monthsAsIntegers.november && date.getDate() === twentyNinth)
-  )
+  const startDate = new Date(date.getFullYear(), 10, 29) // November 29
+  const endDate = new Date(date.getFullYear(), 11, 31) // December 31
+
+  return _isDateBetween(date, startDate, endDate)
 }
 
 function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
   return [
-    {
-      value: currentPeriod,
-      text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
-      hint: {
-        text: `Due date 28 Jan ${nextYear}`
-      }
-    },
-    {
-      value: nextPeriod,
-      text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
-      hint: {
-        text: `Due date 28 April ${nextYear}`
-      }
-    }
+    _quarterlyOptions(
+      currentPeriod,
+      new Date(`${currentYear}-10-01`),
+      new Date(`${currentYear}-12-31`),
+      new Date(`${nextYear}-${dueJanuary}`)
+    ),
+    _quarterlyOptions(
+      nextPeriod,
+      new Date(`${nextYear}-01-01`),
+      new Date(`${nextYear}-03-31`),
+      new Date(`${nextYear}-${dueApril}`)
+    )
   ]
+}
+
+function _quarterlyOptions(period, fromDate, toDate, dueDate) {
+  return {
+    value: period,
+    text: `Quarterly ${formatLongDate(fromDate)} to ${formatLongDate(toDate)}`,
+    hint: {
+      text: `Due date ${formatLongDate(dueDate)}`
+    }
+  }
+}
+
+function _isDateBetween(targetDate, startDate, endDate) {
+  const target = new Date(targetDate).getTime()
+  const start = new Date(startDate).getTime()
+  const end = new Date(endDate).getTime()
+
+  return target >= start && target <= end
 }
 
 module.exports = {
