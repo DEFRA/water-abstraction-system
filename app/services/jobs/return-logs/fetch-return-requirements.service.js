@@ -35,8 +35,6 @@ async function _fetchExternalIds(returnCycleId) {
 }
 
 async function _fetch(returnCycle) {
-  const _cycleEndDate = returnCycle.endDate
-  const _cycleStartDate = returnCycle.startDate
   const externalIds = await _fetchExternalIds(returnCycle.id)
 
   return ReturnRequirementModel.query()
@@ -56,7 +54,7 @@ async function _fetch(returnCycle) {
       'upload'
     ])
     .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(_cycleStartDate, _cycleEndDate))
+    .whereExists(_whereExistsClause(returnCycle))
     .where('returnRequirements.summer', returnCycle.summer)
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (returnVersionBuilder) => {
@@ -102,7 +100,8 @@ async function _fetch(returnCycle) {
     })
 }
 
-function _whereExistsClause(cycleStartDate, cycleEndDate) {
+function _whereExistsClause(returnCycle) {
+  const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
   const query = ReturnVersionModel.query().select(1)
 
   query
