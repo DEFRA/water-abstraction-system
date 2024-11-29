@@ -8,7 +8,7 @@
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const FetchReturnCycleService = require('./fetch-return-cycle.service.js')
-const FetchReturnRequirementsService = require('../../return-logs/fetch-return-requirements.service.js')
+const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
 const GenerateReturnLogsService = require('../../return-logs/generate-return-logs.service.js')
