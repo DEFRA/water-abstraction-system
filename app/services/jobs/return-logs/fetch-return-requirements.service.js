@@ -21,22 +21,8 @@ async function go(returnCycle) {
   return _fetch(returnCycle)
 }
 
-async function _fetchExternalIds(returnCycleId) {
-  const externalIds = await ReturnLogModel.query()
-    .select([db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
-    .whereNot('status', 'void')
-    .where('returnCycleId', returnCycleId)
-
-  const externalIdsArray = externalIds.map((item) => {
-    return item.externalid
-  })
-
-  return externalIdsArray
-}
-
 async function _fetch(returnCycle) {
   const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
-  const externalIds = await _fetchExternalIds(returnCycle.id)
 
   return ReturnRequirementModel.query()
     .select([
@@ -55,7 +41,16 @@ async function _fetch(returnCycle) {
       'upload'
     ])
     .where('returnRequirements.summer', returnCycle.summer)
-    .whereNotIn('returnRequirements.externalId', externalIds)
+    .whereNotExists(
+      ReturnLogModel.query()
+        .select(1)
+        .whereNot('status', 'void')
+        .where('returnCycleId', returnCycle.id)
+        .whereColumn(
+          db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference)"),
+          'returnRequirements.externalId'
+        )
+    )
     .whereExists(
       ReturnVersionModel.query()
         .select(1)
