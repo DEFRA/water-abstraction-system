@@ -102,7 +102,7 @@ async function _fetch(returnCycle) {
 
 function _whereExistsClause(returnCycle) {
   const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
-  const query = ReturnVersionModel.query().select(1)
+  const query = ReturnVersionModel.query()
 
   query
     .select(1)
