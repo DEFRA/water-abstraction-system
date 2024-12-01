@@ -63,6 +63,58 @@ describe('Dates lib', () => {
     })
   })
 
+  describe('determineLatestDate', () => {
+    let dates
+
+    describe('given an array of dates', () => {
+      before(async () => {
+        dates = [new Date('2025-04-01'), new Date('2025-03-30'), new Date('2025-03-31')]
+      })
+
+      it('returns the latest as a Date value', () => {
+        const result = DateLib.determineLatestDate(dates)
+
+        expect(result).to.equal(new Date('2025-04-01'))
+      })
+    })
+
+    describe('given an array of that contains date, null and undefined values', () => {
+      before(() => {
+        dates = [new Date('2025-04-01'), null, new Date('2025-03-30'), undefined]
+      })
+
+      it('still returns the latest as a Date value', () => {
+        const result = DateLib.determineLatestDate(dates)
+
+        expect(result).to.equal(new Date('2025-04-01'))
+      })
+    })
+
+    describe('given an array that only contains null and undefined values', () => {
+      before(() => {
+        dates = [null, undefined]
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineLatestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+
+    describe('given an empty array', () => {
+      before(() => {
+        dates = []
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineLatestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+  })
+
   describe('formatStandardDateToISO', () => {
     it('returns null if the date is null ', () => {
       const result = DateLib.formatStandardDateToISO(null)

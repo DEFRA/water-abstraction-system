@@ -33,6 +33,18 @@ function determineEarliestDate(dates) {
 
   return new Date(earliestDateTimestamp)
 }
+
+/**
+ * From an array of dates, filter out empty values and return the latest as a `Date`
+ *
+ * This was created as part of our work on generating return logs for licences, and needing to work out the latest end
+ * date between the licence start date, the return version start date, and the return cycle start date.
+ *
+ * @param {Date[]} dates - The dates from which to select the latest
+ *
+ * @returns {Date} The latest date
+ */
+function determineLatestDate(dates) {
   const allEmptyValuesRemoved = dates.filter((date) => {
     return date
   })
@@ -45,9 +57,9 @@ function determineEarliestDate(dates) {
     return new Date(date)
   })
 
-  const earliestDateTimestamp = Math.min(...valuesAsDates)
+  const latestDateTimestamp = Math.max(...valuesAsDates)
 
-  return new Date(earliestDateTimestamp)
+  return new Date(latestDateTimestamp)
 }
 
 /**
@@ -171,6 +183,7 @@ function isQuarterlyReturnSubmissions(date) {
 
 module.exports = {
   determineEarliestDate,
+  determineLatestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
