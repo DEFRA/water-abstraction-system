@@ -25,7 +25,7 @@ const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.
 // Thing under test
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
-describe('Return Logs - Generate return logs service', () => {
+describe('Return Logs - Generate Return Log service', () => {
   const today = new Date()
   const year = today.getFullYear()
 
@@ -74,8 +74,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -161,8 +161,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return one return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return one return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(expiredDate)
@@ -249,8 +249,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return one return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return one return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -337,8 +337,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -426,8 +426,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(lapsedDate)
@@ -515,8 +515,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(revokedDate)
@@ -604,8 +604,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -691,8 +691,8 @@ describe('Return Logs - Generate return logs service', () => {
       returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
     })
 
-    it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
+    it('should return a valid return log payload', () => {
+      const result = GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)

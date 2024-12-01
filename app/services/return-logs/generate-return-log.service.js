@@ -1,27 +1,26 @@
 'use strict'
 
 /**
- * Generates the payload for submission to the returns table.
+ * Generate return log data from a return requirement and return cycle
  * @module GenerateReturnLogService
  */
 
-const { determineEarliestDate } = require('../../lib/dates.lib.js')
+const { determineEarliestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
 const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
-const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
 
 /**
- * Generates the payload for submission to the returns table.
+ * Generate return log data from a return requirement and return cycle
  *
- * @param {object} returnRequirement - the return requirement to have a return log created for
- * @param {object} returnCycle - the return cycle details
+ * @param {module:ReturnRequirement} returnRequirement - the return requirement to generate a return log from
+ * @param {module:ReturnCycle} returnCycle - the return cycle for the return log
  *
- * @returns {Promise<object>} the return log payload
+ * @returns {object} the generated return log data
  */
-async function go(returnRequirement, returnCycle) {
+function go(returnRequirement, returnCycle) {
   const startDate = _startDate(returnRequirement.returnVersion.startDate, returnCycle.startDate)
   const endDate = _endDate(returnRequirement.returnVersion, returnCycle.endDate)
   const id = _id(returnRequirement, startDate, endDate)
-  const metadata = await _metadata(returnRequirement.summer, endDate, returnRequirement)
+  const metadata = _metadata(returnRequirement.summer, endDate, returnRequirement)
 
   return {
     createdAt: new Date(),
@@ -66,7 +65,7 @@ function _isFinal(endDateString, summer) {
   return endDate < cycleEndDate(summer)
 }
 
-async function _metadata(summer, endDate, requirements) {
+function _metadata(summer, endDate, requirements) {
   return {
     description: requirements.siteDescription,
     isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
