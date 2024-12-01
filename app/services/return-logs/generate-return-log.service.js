@@ -120,6 +120,8 @@ function _points(points) {
 function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
+      // NOTE: This is a way of only adding the `alias` property if an alias is set. If one is not set, its not just
+      // set to null, instead `alias:` isn't present on the return object
       ...(returnRequirementPurpose.alias !== null && { alias: returnRequirementPurpose.alias }),
       primary: {
         code: returnRequirementPurpose.primaryPurpose.legacyId,
