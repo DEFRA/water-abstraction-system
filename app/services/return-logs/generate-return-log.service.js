@@ -5,7 +5,7 @@
  * @module GenerateReturnLogService
  */
 
-const { determineEarliestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
+const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
 const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
@@ -17,36 +17,39 @@ const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
  * @returns {object} the generated return log data
  */
 function go(returnRequirement, returnCycle) {
-  const startDate = _startDate(returnRequirement.returnVersion.startDate, returnCycle.startDate)
-  const endDate = _endDate(returnRequirement.returnVersion, returnCycle.endDate)
+  const { legacyId, reportingFrequency: returnsFrequency, returnVersion, summer } = returnRequirement
+  const { dueDate, endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
+
+  const startDate = _startDate(returnVersion, returnCycleStartDate)
+  const endDate = _endDate(returnVersion, returnCycleEndDate)
   const id = _id(returnRequirement, startDate, endDate)
-  const metadata = _metadata(returnRequirement.summer, endDate, returnRequirement)
+  const metadata = _metadata(summer, endDate, returnRequirement)
 
   return {
-    dueDate: returnCycle.dueDate,
+    dueDate,
     endDate,
     id,
-    licenceRef: returnRequirement.returnVersion.licence.licenceRef,
+    licenceRef: returnVersion.licence.licenceRef,
     metadata,
-    returnCycleId: returnCycle.id,
-    returnsFrequency: returnRequirement.reportingFrequency,
-    returnReference: returnRequirement.legacyId.toString(),
+    returnCycleId,
+    returnsFrequency,
+    returnReference: legacyId.toString(),
+    source: 'WRLS',
     startDate,
-    status: 'due',
-    source: 'WRLS'
+    status: 'due'
   }
 }
 
 function _endDate(returnVersion, returnCycleEndDate) {
-  const earliestDate = determineEarliestDate([
-    returnVersion.licence.expiredDate,
-    returnVersion.licence.lapsedDate,
-    returnVersion.licence.revokedDate,
-    returnVersion.endDate,
+  const { endDate: returnVersionEndDate, licence } = returnVersion
+
+  return determineEarliestDate([
+    licence.expiredDate,
+    licence.lapsedDate,
+    licence.revokedDate,
+    returnVersionEndDate,
     returnCycleEndDate
   ])
-
-  return formatDateObjectToISO(earliestDate)
 }
 
 function _id(requirements, startDate, endDate) {
@@ -54,7 +57,7 @@ function _id(requirements, startDate, endDate) {
   const licenceReference = requirements.returnVersion.licence.licenceRef
   const legacyId = requirements.legacyId
 
-  return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDate}:${endDate}`
+  return `v1:${regionCode}:${licenceReference}:${legacyId}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
 }
 
 function _isFinal(endDateString, summer) {
@@ -118,15 +121,10 @@ function _metadataPurposes(returnRequirementPurposes) {
   })
 }
 
-function _startDate(returnVersionStartDate, returnCycleStartDate) {
-  const _returnVersionStartDate = new Date(returnVersionStartDate)
-  const _returnCycleStartDate = new Date(returnCycleStartDate)
+function _startDate(returnVersion, returnCycleStartDate) {
+  const { startDate: returnVersionStartDate, licence } = returnVersion
 
-  if (_returnVersionStartDate > _returnCycleStartDate) {
-    return formatDateObjectToISO(_returnVersionStartDate)
-  }
-
-  return formatDateObjectToISO(_returnCycleStartDate)
+  return determineLatestDate([licence.startDate, returnVersionStartDate, returnCycleStartDate])
 }
 
 module.exports = {
