@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Given a return cycle type, it generates
- * @module GenerateCurrentReturnCycleService
+ * Given a return cycle type, it generates the cycle data based on the current date and creates it
+ * @module CreateCurrentReturnCycleService
  */
 
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -10,11 +10,11 @@ const { cycleDueDateAsISO, cycleEndDateAsISO, cycleStartDateAsISO } = require('.
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
- * Creates the new entry in the return_cycle table and returns its id.
+ * Given a return cycle type, it generates the cycle data based on the current date and creates it
  *
- * @param {boolean} summer - are we running summer cycle or all year
+ * @param {boolean} summer - true if creating the current summer return cycle, else false
  *
- * @returns {Promise<module:ReturnCycleModel>} the return cycle details that has been created
+ * @returns {Promise<module:ReturnCycleModel>} the created return cycle
  */
 async function go(summer) {
   const data = _generateData(summer)
