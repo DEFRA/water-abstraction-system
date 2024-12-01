@@ -1,33 +1,32 @@
 'use strict'
 
 /**
- * Fetches the return cycle for the given date
+ * Given a return cycle type, it fetches the current matching return cycle
  * @module FetchReturnCycleService
  */
 
+const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
-const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
-
 /**
- * Given a date this service returns the return cycle for that date.
+ * Given a return cycle type, it fetches the current matching return cycle
  *
- * @param {string} date - the date to find the return cycle for - YYYY-MM-DD
- * @param {boolean} summer - which cycle to return - summer or winter and all year
+ * @param {boolean} summer - true if looking for the current summer return cycle, else false
  *
- * @returns {Promise<Arrya>} the return cycle details
+ * @returns {Promise<module:ReturnCycleModel>} the matching return cycle, else `undefined`
  */
-async function go(date, summer) {
-  const _date = new Date(date)
-  const cycleStartDate = cycleStartDateByDate(_date, summer)
-  const cycleEndDate = cycleEndDateByDate(_date, summer)
+async function go(summer) {
+  const today = new Date()
 
-  return await _fetchReturnCycle(cycleStartDate, cycleEndDate, summer)
+  const cycleStartDate = cycleStartDateByDate(today, summer)
+  const cycleEndDate = cycleEndDateByDate(today, summer)
+
+  return _fetch(cycleStartDate, cycleEndDate, summer)
 }
 
-async function _fetchReturnCycle(startDate, endDate, summer) {
+async function _fetch(startDate, endDate, summer) {
   return ReturnCycleModel.query()
-    .select(['id', 'startDate', 'endDate', 'dueDate', 'summer'])
+    .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('startDate', '>=', startDate)
     .where('endDate', '<=', endDate)
     .where('summer', summer)
