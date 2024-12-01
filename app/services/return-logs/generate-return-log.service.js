@@ -17,13 +17,13 @@ const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
  * @returns {object} the generated return log data
  */
 function go(returnRequirement, returnCycle) {
-  const { legacyId, reportingFrequency: returnsFrequency, returnVersion, summer } = returnRequirement
+  const { legacyId, reportingFrequency, returnVersion } = returnRequirement
   const { dueDate, endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
 
   const startDate = _startDate(returnVersion, returnCycleStartDate)
   const endDate = _endDate(returnVersion, returnCycleEndDate)
-  const id = _id(returnRequirement, startDate, endDate)
-  const metadata = _metadata(summer, endDate, returnRequirement)
+  const id = _id(returnVersion, legacyId, startDate, endDate)
+  const metadata = _metadata(returnRequirement, endDate)
 
   return {
     dueDate,
@@ -32,7 +32,7 @@ function go(returnRequirement, returnCycle) {
     licenceRef: returnVersion.licence.licenceRef,
     metadata,
     returnCycleId,
-    returnsFrequency,
+    returnsFrequency: reportingFrequency,
     returnReference: legacyId.toString(),
     source: 'WRLS',
     startDate,
@@ -52,44 +52,60 @@ function _endDate(returnVersion, returnCycleEndDate) {
   ])
 }
 
-function _id(requirements, startDate, endDate) {
-  const regionCode = requirements.returnVersion.licence.region.naldRegionId
-  const licenceReference = requirements.returnVersion.licence.licenceRef
-  const legacyId = requirements.legacyId
+/**
+ * For reasons known only to the previous team, the unique identifier for each return log is a mix of references and
+ * date values. This function handles that.
+ *
+ * @private
+ */
+function _id(returnVersion, legacyId, startDate, endDate) {
+  const regionCode = returnVersion.licence.region.naldRegionId
+  const licenceReference = returnVersion.licence.licenceRef
+  const startDateAsString = formatDateObjectToISO(startDate)
+  const endDateAsString = formatDateObjectToISO(endDate)
 
-  return `v1:${regionCode}:${licenceReference}:${legacyId}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
+  return `v1:${regionCode}:${licenceReference}:${legacyId}:${startDateAsString}:${endDateAsString}`
 }
 
-function _isFinal(endDateString, summer) {
-  const endDate = new Date(endDateString)
+function _metadata(returnRequirement, endDate) {
+  const {
+    abstractionPeriodEndDay,
+    abstractionPeriodEndMonth,
+    abstractionPeriodStartDay,
+    abstractionPeriodStartMonth,
+    legacyId,
+    points,
+    returnRequirementPurposes,
+    returnVersion,
+    siteDescription,
+    summer,
+    twoPartTariff,
+    upload
+  } = returnRequirement
 
-  return endDate < cycleEndDate(summer)
-}
-
-function _metadata(summer, endDate, requirements) {
   return {
-    description: requirements.siteDescription,
-    isCurrent: requirements.returnVersion.reason !== 'succession-or-transfer-of-licence',
-    isFinal: _isFinal(endDate, summer),
+    description: siteDescription,
+    isCurrent: returnVersion.reason !== 'succession-or-transfer-of-licence',
+    isFinal: endDate < cycleEndDate(summer),
     isSummer: summer,
-    isTwoPartTariff: requirements.twoPartTariff,
-    isUpload: requirements.upload,
+    isTwoPartTariff: twoPartTariff,
+    isUpload: upload,
     nald: {
-      regionCode: requirements.returnVersion.licence.region.naldRegionId,
-      areaCode: requirements.returnVersion.licence.areacode,
-      formatId: requirements.legacyId,
-      periodStartDay: requirements.abstractionPeriodStartDay.toString(),
-      periodStartMonth: requirements.abstractionPeriodStartMonth.toString(),
-      periodEndDay: requirements.abstractionPeriodEndDay.toString(),
-      periodEndMonth: requirements.abstractionPeriodEndMonth.toString()
+      regionCode: returnVersion.licence.region.naldRegionId,
+      areaCode: returnVersion.licence.areacode,
+      formatId: legacyId,
+      periodStartDay: abstractionPeriodStartDay.toString(),
+      periodStartMonth: abstractionPeriodStartMonth.toString(),
+      periodEndDay: abstractionPeriodEndDay.toString(),
+      periodEndMonth: abstractionPeriodEndMonth.toString()
     },
-    points: _metadataPoints(requirements.points),
-    purposes: _metadataPurposes(requirements.returnRequirementPurposes),
+    points: _points(points),
+    purposes: _purposes(returnRequirementPurposes),
     version: 1
   }
 }
 
-function _metadataPoints(points) {
+function _points(points) {
   return points.map((point) => {
     return {
       name: point.description,
@@ -101,7 +117,7 @@ function _metadataPoints(points) {
   })
 }
 
-function _metadataPurposes(returnRequirementPurposes) {
+function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
     return {
       ...(returnRequirementPurpose.alias !== null && { alias: returnRequirementPurpose.alias }),
