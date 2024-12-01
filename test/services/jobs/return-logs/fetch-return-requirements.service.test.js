@@ -25,18 +25,22 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 // Thing under test
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
-describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
-  let licence
-  let point
-  let primaryPurpose
-  let purpose
-  let region
-  let returnCycle
-  let returnRequirement
-  let returnRequirementPurpose
-  let returnVersion
-  let secondaryPurpose
+// NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
+// but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved
+// that code to a helper function at the bottom but in order for it to be able to access the variables they need to be
+// declared here.
+let licence
+let point
+let primaryPurpose
+let purpose
+let region
+let returnCycle
+let returnRequirement
+let returnRequirementPurpose
+let returnVersion
+let secondaryPurpose
 
+describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
   describe('when the return cycle is "summer', () => {
     before(async () => {
       returnCycle = await ReturnCycleHelper.select(0, true)
@@ -85,70 +89,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
               const results = await FetchReturnRequirementsService.go(returnCycle)
 
-              const expected = ReturnRequirementModel.fromJson({
-                abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-                abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-                abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-                abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-                externalId: returnRequirement.externalId,
-                id: returnRequirement.id,
-                legacyId: returnRequirement.legacyId,
-                reportingFrequency: returnRequirement.reportingFrequency,
-                returnVersionId: returnRequirement.returnVersionId,
-                siteDescription: returnRequirement.siteDescription,
-                summer: returnRequirement.summer,
-                twoPartTariff: returnRequirement.twoPartTariff,
-                upload: returnRequirement.upload,
-                returnVersion: {
-                  endDate: returnVersion.endDate,
-                  id: returnVersion.id,
-                  reason: returnVersion.reason,
-                  startDate: returnVersion.startDate,
-                  licence: {
-                    expiredDate: licence.expiredDate,
-                    id: licence.id,
-                    lapsedDate: licence.lapsedDate,
-                    licenceRef: licence.licenceRef,
-                    revokedDate: licence.revokedDate,
-                    areacode: 'SAAR',
-                    region: {
-                      id: region.id,
-                      naldRegionId: region.naldRegionId
-                    }
-                  }
-                },
-                points: [
-                  {
-                    description: point.description,
-                    ngr1: point.ngr1,
-                    ngr2: point.ngr2,
-                    ngr3: point.ngr3,
-                    ngr4: point.ngr4
-                  }
-                ],
-                returnRequirementPurposes: [
-                  {
-                    id: returnRequirementPurpose.id,
-                    primaryPurpose: {
-                      description: primaryPurpose.description,
-                      id: primaryPurpose.id,
-                      legacyId: primaryPurpose.legacyId
-                    },
-                    purpose: {
-                      description: purpose.description,
-                      id: purpose.id,
-                      legacyId: purpose.legacyId
-                    },
-                    secondaryPurpose: {
-                      description: secondaryPurpose.description,
-                      id: secondaryPurpose.id,
-                      legacyId: secondaryPurpose.legacyId
-                    }
-                  }
-                ]
-              })
+              const expectedResult = _expectedResult()
 
-              expect(results).to.include(expected)
+              expect(results).to.include(expectedResult)
             })
           })
 
@@ -166,70 +109,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
                 const results = await FetchReturnRequirementsService.go(returnCycle)
 
-                const expected = ReturnRequirementModel.fromJson({
-                  abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-                  abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-                  abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-                  abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-                  externalId: returnRequirement.externalId,
-                  id: returnRequirement.id,
-                  legacyId: returnRequirement.legacyId,
-                  reportingFrequency: returnRequirement.reportingFrequency,
-                  returnVersionId: returnRequirement.returnVersionId,
-                  siteDescription: returnRequirement.siteDescription,
-                  summer: returnRequirement.summer,
-                  twoPartTariff: returnRequirement.twoPartTariff,
-                  upload: returnRequirement.upload,
-                  returnVersion: {
-                    endDate: returnVersion.endDate,
-                    id: returnVersion.id,
-                    reason: returnVersion.reason,
-                    startDate: returnVersion.startDate,
-                    licence: {
-                      expiredDate: licence.expiredDate,
-                      id: licence.id,
-                      lapsedDate: licence.lapsedDate,
-                      licenceRef: licence.licenceRef,
-                      revokedDate: licence.revokedDate,
-                      areacode: 'SAAR',
-                      region: {
-                        id: region.id,
-                        naldRegionId: region.naldRegionId
-                      }
-                    }
-                  },
-                  points: [
-                    {
-                      description: point.description,
-                      ngr1: point.ngr1,
-                      ngr2: point.ngr2,
-                      ngr3: point.ngr3,
-                      ngr4: point.ngr4
-                    }
-                  ],
-                  returnRequirementPurposes: [
-                    {
-                      id: returnRequirementPurpose.id,
-                      primaryPurpose: {
-                        description: primaryPurpose.description,
-                        id: primaryPurpose.id,
-                        legacyId: primaryPurpose.legacyId
-                      },
-                      purpose: {
-                        description: purpose.description,
-                        id: purpose.id,
-                        legacyId: purpose.legacyId
-                      },
-                      secondaryPurpose: {
-                        description: secondaryPurpose.description,
-                        id: secondaryPurpose.id,
-                        legacyId: secondaryPurpose.legacyId
-                      }
-                    }
-                  ]
-                })
+                const expectedResult = _expectedResult()
 
-                expect(results).to.include(expected)
+                expect(results).to.include(expectedResult)
               })
             })
 
@@ -435,70 +317,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
               const results = await FetchReturnRequirementsService.go(returnCycle)
 
-              const expected = ReturnRequirementModel.fromJson({
-                abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-                abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-                abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-                abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-                externalId: returnRequirement.externalId,
-                id: returnRequirement.id,
-                legacyId: returnRequirement.legacyId,
-                reportingFrequency: returnRequirement.reportingFrequency,
-                returnVersionId: returnRequirement.returnVersionId,
-                siteDescription: returnRequirement.siteDescription,
-                summer: returnRequirement.summer,
-                twoPartTariff: returnRequirement.twoPartTariff,
-                upload: returnRequirement.upload,
-                returnVersion: {
-                  endDate: returnVersion.endDate,
-                  id: returnVersion.id,
-                  reason: returnVersion.reason,
-                  startDate: returnVersion.startDate,
-                  licence: {
-                    expiredDate: licence.expiredDate,
-                    id: licence.id,
-                    lapsedDate: licence.lapsedDate,
-                    licenceRef: licence.licenceRef,
-                    revokedDate: licence.revokedDate,
-                    areacode: 'SAAR',
-                    region: {
-                      id: region.id,
-                      naldRegionId: region.naldRegionId
-                    }
-                  }
-                },
-                points: [
-                  {
-                    description: point.description,
-                    ngr1: point.ngr1,
-                    ngr2: point.ngr2,
-                    ngr3: point.ngr3,
-                    ngr4: point.ngr4
-                  }
-                ],
-                returnRequirementPurposes: [
-                  {
-                    id: returnRequirementPurpose.id,
-                    primaryPurpose: {
-                      description: primaryPurpose.description,
-                      id: primaryPurpose.id,
-                      legacyId: primaryPurpose.legacyId
-                    },
-                    purpose: {
-                      description: purpose.description,
-                      id: purpose.id,
-                      legacyId: purpose.legacyId
-                    },
-                    secondaryPurpose: {
-                      description: secondaryPurpose.description,
-                      id: secondaryPurpose.id,
-                      legacyId: secondaryPurpose.legacyId
-                    }
-                  }
-                ]
-              })
+              const expectedResult = _expectedResult()
 
-              expect(results).to.include(expected)
+              expect(results).to.include(expectedResult)
             })
           })
 
@@ -516,70 +337,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
                 const results = await FetchReturnRequirementsService.go(returnCycle)
 
-                const expected = ReturnRequirementModel.fromJson({
-                  abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-                  abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-                  abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-                  abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-                  externalId: returnRequirement.externalId,
-                  id: returnRequirement.id,
-                  legacyId: returnRequirement.legacyId,
-                  reportingFrequency: returnRequirement.reportingFrequency,
-                  returnVersionId: returnRequirement.returnVersionId,
-                  siteDescription: returnRequirement.siteDescription,
-                  summer: returnRequirement.summer,
-                  twoPartTariff: returnRequirement.twoPartTariff,
-                  upload: returnRequirement.upload,
-                  returnVersion: {
-                    endDate: returnVersion.endDate,
-                    id: returnVersion.id,
-                    reason: returnVersion.reason,
-                    startDate: returnVersion.startDate,
-                    licence: {
-                      expiredDate: licence.expiredDate,
-                      id: licence.id,
-                      lapsedDate: licence.lapsedDate,
-                      licenceRef: licence.licenceRef,
-                      revokedDate: licence.revokedDate,
-                      areacode: 'SAAR',
-                      region: {
-                        id: region.id,
-                        naldRegionId: region.naldRegionId
-                      }
-                    }
-                  },
-                  points: [
-                    {
-                      description: point.description,
-                      ngr1: point.ngr1,
-                      ngr2: point.ngr2,
-                      ngr3: point.ngr3,
-                      ngr4: point.ngr4
-                    }
-                  ],
-                  returnRequirementPurposes: [
-                    {
-                      id: returnRequirementPurpose.id,
-                      primaryPurpose: {
-                        description: primaryPurpose.description,
-                        id: primaryPurpose.id,
-                        legacyId: primaryPurpose.legacyId
-                      },
-                      purpose: {
-                        description: purpose.description,
-                        id: purpose.id,
-                        legacyId: purpose.legacyId
-                      },
-                      secondaryPurpose: {
-                        description: secondaryPurpose.description,
-                        id: secondaryPurpose.id,
-                        legacyId: secondaryPurpose.legacyId
-                      }
-                    }
-                  ]
-                })
+                const expectedResult = _expectedResult()
 
-                expect(results).to.include(expected)
+                expect(results).to.include(expectedResult)
               })
             })
 
@@ -737,6 +497,71 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
     })
   })
 })
+
+function _expectedResult() {
+  return ReturnRequirementModel.fromJson({
+    abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+    externalId: returnRequirement.externalId,
+    id: returnRequirement.id,
+    legacyId: returnRequirement.legacyId,
+    reportingFrequency: returnRequirement.reportingFrequency,
+    returnVersionId: returnRequirement.returnVersionId,
+    siteDescription: returnRequirement.siteDescription,
+    summer: returnRequirement.summer,
+    twoPartTariff: returnRequirement.twoPartTariff,
+    upload: returnRequirement.upload,
+    returnVersion: {
+      endDate: returnVersion.endDate,
+      id: returnVersion.id,
+      reason: returnVersion.reason,
+      startDate: returnVersion.startDate,
+      licence: {
+        expiredDate: licence.expiredDate,
+        id: licence.id,
+        lapsedDate: licence.lapsedDate,
+        licenceRef: licence.licenceRef,
+        revokedDate: licence.revokedDate,
+        areacode: 'SAAR',
+        region: {
+          id: region.id,
+          naldRegionId: region.naldRegionId
+        }
+      }
+    },
+    points: [
+      {
+        description: point.description,
+        ngr1: point.ngr1,
+        ngr2: point.ngr2,
+        ngr3: point.ngr3,
+        ngr4: point.ngr4
+      }
+    ],
+    returnRequirementPurposes: [
+      {
+        id: returnRequirementPurpose.id,
+        primaryPurpose: {
+          description: primaryPurpose.description,
+          id: primaryPurpose.id,
+          legacyId: primaryPurpose.legacyId
+        },
+        purpose: {
+          description: purpose.description,
+          id: purpose.id,
+          legacyId: purpose.legacyId
+        },
+        secondaryPurpose: {
+          description: secondaryPurpose.description,
+          id: secondaryPurpose.id,
+          legacyId: secondaryPurpose.legacyId
+        }
+      }
+    ]
+  })
+}
 
 function _resultIds(results) {
   return results.map((result) => {
