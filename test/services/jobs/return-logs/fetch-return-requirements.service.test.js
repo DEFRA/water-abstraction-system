@@ -152,21 +152,104 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             })
           })
 
-          describe('but the return requirement has an existing return log for the given cycle', () => {
-            before(async () => {
-              await ReturnLogHelper.add({
-                metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
-                returnCycleId: returnCycle.id,
-                returnReference: returnRequirement.legacyId
+          describe('and the return requirement has an existing return log for the given cycle', () => {
+            describe("but the return log's status is 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'void'
+                })
+              })
+
+              it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const expected = ReturnRequirementModel.fromJson({
+                  abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+                  abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+                  abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+                  abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+                  externalId: returnRequirement.externalId,
+                  id: returnRequirement.id,
+                  legacyId: returnRequirement.legacyId,
+                  reportingFrequency: returnRequirement.reportingFrequency,
+                  returnVersionId: returnRequirement.returnVersionId,
+                  siteDescription: returnRequirement.siteDescription,
+                  summer: returnRequirement.summer,
+                  twoPartTariff: returnRequirement.twoPartTariff,
+                  upload: returnRequirement.upload,
+                  returnVersion: {
+                    endDate: returnVersion.endDate,
+                    id: returnVersion.id,
+                    reason: returnVersion.reason,
+                    startDate: returnVersion.startDate,
+                    licence: {
+                      expiredDate: licence.expiredDate,
+                      id: licence.id,
+                      lapsedDate: licence.lapsedDate,
+                      licenceRef: licence.licenceRef,
+                      revokedDate: licence.revokedDate,
+                      areacode: 'SAAR',
+                      region: {
+                        id: region.id,
+                        naldRegionId: region.naldRegionId
+                      }
+                    }
+                  },
+                  points: [
+                    {
+                      description: point.description,
+                      ngr1: point.ngr1,
+                      ngr2: point.ngr2,
+                      ngr3: point.ngr3,
+                      ngr4: point.ngr4
+                    }
+                  ],
+                  returnRequirementPurposes: [
+                    {
+                      id: returnRequirementPurpose.id,
+                      primaryPurpose: {
+                        description: primaryPurpose.description,
+                        id: primaryPurpose.id,
+                        legacyId: primaryPurpose.legacyId
+                      },
+                      purpose: {
+                        description: purpose.description,
+                        id: purpose.id,
+                        legacyId: purpose.legacyId
+                      },
+                      secondaryPurpose: {
+                        description: secondaryPurpose.description,
+                        id: secondaryPurpose.id,
+                        legacyId: secondaryPurpose.legacyId
+                      }
+                    }
+                  ]
+                })
+
+                expect(results).to.include(expected)
               })
             })
 
-            it('does not return that return requirement', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+            describe("and the return log's status is anything other than 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'due'
+                })
+              })
 
-              const resultIds = _resultIds(results)
+              it('does not return that return requirement', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
 
-              expect(resultIds).not.to.include(returnRequirement.id)
+                const resultIds = _resultIds(results)
+
+                expect(resultIds).not.to.include(returnRequirement.id)
+              })
             })
           })
         })
@@ -420,20 +503,103 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           describe('but the return requirement has an existing return log for the given cycle', () => {
-            before(async () => {
-              await ReturnLogHelper.add({
-                metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
-                returnCycleId: returnCycle.id,
-                returnReference: returnRequirement.legacyId
+            describe("but the return log's status is 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'void'
+                })
+              })
+
+              it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const expected = ReturnRequirementModel.fromJson({
+                  abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+                  abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+                  abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+                  abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+                  externalId: returnRequirement.externalId,
+                  id: returnRequirement.id,
+                  legacyId: returnRequirement.legacyId,
+                  reportingFrequency: returnRequirement.reportingFrequency,
+                  returnVersionId: returnRequirement.returnVersionId,
+                  siteDescription: returnRequirement.siteDescription,
+                  summer: returnRequirement.summer,
+                  twoPartTariff: returnRequirement.twoPartTariff,
+                  upload: returnRequirement.upload,
+                  returnVersion: {
+                    endDate: returnVersion.endDate,
+                    id: returnVersion.id,
+                    reason: returnVersion.reason,
+                    startDate: returnVersion.startDate,
+                    licence: {
+                      expiredDate: licence.expiredDate,
+                      id: licence.id,
+                      lapsedDate: licence.lapsedDate,
+                      licenceRef: licence.licenceRef,
+                      revokedDate: licence.revokedDate,
+                      areacode: 'SAAR',
+                      region: {
+                        id: region.id,
+                        naldRegionId: region.naldRegionId
+                      }
+                    }
+                  },
+                  points: [
+                    {
+                      description: point.description,
+                      ngr1: point.ngr1,
+                      ngr2: point.ngr2,
+                      ngr3: point.ngr3,
+                      ngr4: point.ngr4
+                    }
+                  ],
+                  returnRequirementPurposes: [
+                    {
+                      id: returnRequirementPurpose.id,
+                      primaryPurpose: {
+                        description: primaryPurpose.description,
+                        id: primaryPurpose.id,
+                        legacyId: primaryPurpose.legacyId
+                      },
+                      purpose: {
+                        description: purpose.description,
+                        id: purpose.id,
+                        legacyId: purpose.legacyId
+                      },
+                      secondaryPurpose: {
+                        description: secondaryPurpose.description,
+                        id: secondaryPurpose.id,
+                        legacyId: secondaryPurpose.legacyId
+                      }
+                    }
+                  ]
+                })
+
+                expect(results).to.include(expected)
               })
             })
 
-            it('does not return that return requirement', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+            describe("and the return log's status is anything other than 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'completed'
+                })
+              })
 
-              const resultIds = _resultIds(results)
+              it('does not return that return requirement', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
 
-              expect(resultIds).not.to.include(returnRequirement.id)
+                const resultIds = _resultIds(results)
+
+                expect(resultIds).not.to.include(returnRequirement.id)
+              })
             })
           })
         })
