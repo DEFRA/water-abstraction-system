@@ -10,16 +10,29 @@ const lastDayOfFebruary = 28
 const lastDayOfFebruaryLeapYear = 29
 
 /**
- * From an array of dates as strings, filter out empty values and return the earliest as a `Date`
+ * From an array of dates, filter out empty values and return the earliest
  *
  * This was created as part of our work on generating return logs for licences, and needing to work out the earliest
- * end date between the return version end date, and the return cycle end date for the given year.
+ * end date between the licence's expired, lapsed and revoked end dates, the return version's end date, and the return
+ * cycle's end date.
  *
- * @param {string[]} dates - The dates from which to select the earliest
+ * @param {Date[]} dates - The dates from which to select the earliest
  *
- * @returns {Date} The earliest date string as a `Date`
+ * @returns {Date} The earliest date
  */
 function determineEarliestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
+
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
+
+  const earliestDateTimestamp = Math.min(...allEmptyValuesRemoved)
+
+  return new Date(earliestDateTimestamp)
+}
   const allEmptyValuesRemoved = dates.filter((date) => {
     return date
   })
