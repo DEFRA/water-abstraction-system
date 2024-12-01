@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * General helper methods
+ * Date helper methods
  * @module DatesLib
  */
 
-const february = 2
-const lastDayOfFebruary = 28
-const lastDayOfFebruaryLeapYear = 29
+const FEBRUARY = 2
+const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
+const LAST_DAY_OF_FEB_LEAP_YEAR = 29
 
 /**
  * From an array of dates, filter out empty values and return the earliest
@@ -133,11 +133,11 @@ function isISODateFormat(dateString) {
 function _isValidLeapYearDate(dateString) {
   const [year, month, day] = dateString.split('-')
 
-  if (_isLeapYear(year) === true && Number(month) === february && Number(day) > lastDayOfFebruaryLeapYear) {
+  if (_isLeapYear(year) === true && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_LEAP_YEAR) {
     return false
   }
 
-  if (_isLeapYear(year) === false && Number(month) === february && Number(day) > lastDayOfFebruary) {
+  if (_isLeapYear(year) === false && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_STANDARD_YEAR) {
     return false
   }
 
