@@ -23,9 +23,9 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const GenerateReturnLogsService = require('../../../app/services/return-logs/generate-return-logs.service.js')
+const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
-describe('Generate return logs service', () => {
+describe('Return Logs - Generate return logs service', () => {
   const today = new Date()
   const year = today.getFullYear()
 
@@ -75,7 +75,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -162,7 +162,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(expiredDate)
@@ -250,7 +250,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -338,7 +338,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -427,7 +427,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(lapsedDate)
@@ -516,7 +516,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(revokedDate)
@@ -605,7 +605,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
@@ -692,7 +692,7 @@ describe('Generate return logs service', () => {
     })
 
     it('should return a valid return log payload', async () => {
-      const result = await GenerateReturnLogsService.go(returnRequirements[0], returnCycle)
+      const result = await GenerateReturnLogService.go(returnRequirements[0], returnCycle)
 
       expect(result.dueDate).to.equal(returnCycle.dueDate)
       expect(result.endDate).to.equal(endDate)
