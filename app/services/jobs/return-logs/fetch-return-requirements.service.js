@@ -99,7 +99,7 @@ async function _fetch(returnCycle) {
     .withGraphFetched('returnRequirementPurposes')
     .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
       returnRequirementPurposesBuilder
-        .select(['id'])
+        .select(['alias', 'id'])
         .withGraphFetched('primaryPurpose')
         .modifyGraph('primaryPurpose', (primaryPurposeBuilder) => {
           primaryPurposeBuilder.select(['description', 'id', 'legacyId'])

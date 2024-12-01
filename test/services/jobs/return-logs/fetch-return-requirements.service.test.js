@@ -70,6 +70,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Summer purpose alias for testing',
               returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
@@ -298,6 +299,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Winter purpose alias for testing',
               returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
@@ -542,6 +544,7 @@ function _expectedResult() {
     ],
     returnRequirementPurposes: [
       {
+        alias: returnRequirementPurpose.alias,
         id: returnRequirementPurpose.id,
         primaryPurpose: {
           description: primaryPurpose.description,
