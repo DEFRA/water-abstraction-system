@@ -23,8 +23,6 @@ function go(returnRequirement, returnCycle) {
   const metadata = _metadata(returnRequirement.summer, endDate, returnRequirement)
 
   return {
-    createdAt: new Date(),
-    updatedAt: new Date(),
     dueDate: returnCycle.dueDate,
     endDate,
     id,
