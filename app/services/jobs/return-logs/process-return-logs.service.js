@@ -7,11 +7,11 @@
 
 const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const FetchReturnCycleService = require('./fetch-return-cycle.service.js')
+const FetchCurrentReturnCycleService = require('./fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const GenerateReturnCycleService = require('./generate-return-cycle.service.js')
-const GenerateReturnLogsService = require('../../return-logs/generate-return-logs.service.js')
+const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
+const GenerateReturnLogService = require('../../return-logs/generate-return-log.service.js')
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
@@ -43,11 +43,12 @@ async function go(cycle) {
     const returnLogs = []
 
     for (const returnRequirement of returnRequirements) {
-      const returnLog = await GenerateReturnLogsService.go(returnRequirement, returnCycle)
+      const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
       returnLogs.push(returnLog)
     }
 
+    // NOTE: I'm talking about this point in the code!
     await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { cycle })
@@ -60,10 +61,10 @@ async function _fetchReturnCycle(cycle) {
   const today = formatDateObjectToISO(new Date())
   const summer = cycle === 'summer'
 
-  let returnCycle = await FetchReturnCycleService.go(today, summer)
+  let returnCycle = await FetchCurrentReturnCycleService.go(today, summer)
 
   if (!returnCycle) {
-    returnCycle = await GenerateReturnCycleService.go(summer)
+    returnCycle = await CreateCurrentReturnCycleService.go(summer)
   }
 
   return returnCycle
