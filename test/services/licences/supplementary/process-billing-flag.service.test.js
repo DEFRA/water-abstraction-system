@@ -24,7 +24,6 @@ const ProcessBillingFlagService = require('../../../../app/services/licences/sup
 describe('Process Billing Flag Service', () => {
   let notifierStub
   let payload
-  let persistSupplementaryBillingFlagsServiceStub
 
   beforeEach(() => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
@@ -33,12 +32,13 @@ describe('Process Billing Flag Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    persistSupplementaryBillingFlagsServiceStub = Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
+    Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
   })
 
   afterEach(() => {
     Sinon.restore()
   })
+
   describe('when given a valid payload', () => {
     describe('with a chargeVersionId & workflowId', () => {
       before(() => {
@@ -51,29 +51,15 @@ describe('Process Billing Flag Service', () => {
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
           Sinon.stub(DetermineChargeVersionFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(true))
-
-          const determineExistingBillRuYearsServiceStub = Sinon.stub(DetermineExistingBillRunYearsService, 'go')
-          determineExistingBillRuYearsServiceStub.onCall(0).resolves([2023])
-          determineExistingBillRuYearsServiceStub.onCall(1).resolves([2024])
+          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" with the correct flags to persist', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          expect(persistSupplementaryBillingFlagsServiceStub.calledTwice).to.be.true()
-
           expect(
-            persistSupplementaryBillingFlagsServiceStub.firstCall.calledWith(
+            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
               [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
-          ).to.be.true()
-          expect(
-            persistSupplementaryBillingFlagsServiceStub.secondCall.calledWith(
-              [2024],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
@@ -102,18 +88,8 @@ describe('Process Billing Flag Service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          expect(persistSupplementaryBillingFlagsServiceStub.calledTwice).to.be.true()
-
           expect(
-            persistSupplementaryBillingFlagsServiceStub.firstCall.calledWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
-          ).to.be.true()
-          expect(
-            persistSupplementaryBillingFlagsServiceStub.secondCall.calledWith(
+            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
               [],
               false,
               true,
