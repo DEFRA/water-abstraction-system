@@ -5,13 +5,16 @@
  * @module ProcessReturnLogsService
  */
 
-const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+const {
+  calculateAndLogTimeTaken,
+  currentTimeInNanoseconds,
+  timestampForPostgres
+} = require('../../../lib/general.lib.js')
+const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
 const FetchCurrentReturnCycleService = require('./fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
 const GenerateReturnLogService = require('../../return-logs/generate-return-log.service.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
@@ -40,34 +43,28 @@ async function go(cycle) {
     const returnCycle = await _fetchReturnCycle(cycle)
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
-    const returnLogs = []
-
     for (const returnRequirement of returnRequirements) {
       const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
+      const timestamp = timestampForPostgres()
 
-      returnLogs.push(returnLog)
+      await ReturnLogModel.query().insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
     }
-
-    // NOTE: I'm talking about this point in the code!
-    await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { cycle })
   } catch (error) {
-    global.GlobalNotifier.omfg('Return logs job failed', { cycle, error })
+    global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
   }
 }
 
 async function _fetchReturnCycle(cycle) {
-  const today = formatDateObjectToISO(new Date())
   const summer = cycle === 'summer'
+  const returnCycle = await FetchCurrentReturnCycleService.go(summer)
 
-  let returnCycle = await FetchCurrentReturnCycleService.go(today, summer)
-
-  if (!returnCycle) {
-    returnCycle = await CreateCurrentReturnCycleService.go(summer)
+  if (returnCycle) {
+    return returnCycle
   }
 
-  return returnCycle
+  return CreateCurrentReturnCycleService.go(summer)
 }
 
 module.exports = {

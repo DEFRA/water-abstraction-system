@@ -5,638 +5,244 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
-const { cycleDueDate, cycleEndDate, cycleStartDate } = require('../../../../app/lib/return-cycle-dates.lib.js')
-const FetchReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-return-cycle.service.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
-
 // Things we need to stub
-const GenerateReturnLogsService = require('../../../../app/services/return-logs/generate-return-logs.service.js')
+const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
+const FetchCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-current-return-cycle.service.js')
+const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
 
 describe('Process return logs service', () => {
-  const allYearDueDate = cycleDueDate(false)
-  const allYearEndDate = cycleEndDate(false)
-  const allYearEndDateAsISO = formatDateObjectToISO(allYearEndDate)
-  const allYearStartDate = cycleStartDate(false)
-  const allYearStartDateAsISO = formatDateObjectToISO(allYearStartDate)
-  const summerDueDate = cycleDueDate(true)
-  const summerEndDate = cycleEndDate(true)
-  const summerEndDateAsISO = formatDateObjectToISO(summerEndDate)
-  const summerStartDate = cycleStartDate(true)
-  const summerStartDateAsISO = formatDateObjectToISO(summerStartDate)
+  const cycle = 'all-year'
 
-  let allYearReturnCycle
-  let cycle
-  let licence
-  let licence2
+  let createReturnCycleStub
+  let insertStub
   let notifierStub
-  let point
-  let point2
-  let primaryPurpose
-  let purpose
-  let region
-  let returnVersion
-  let returnVersion2
-  let returnRequirement
-  let returnRequirement2
-  let secondaryPurpose
-  let summerReturnCycle
+
+  beforeEach(() => {
+    insertStub = Sinon.stub().resolves()
+    Sinon.stub(ReturnLogModel, 'query').returns({
+      insert: insertStub
+    })
+
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
-  describe('cycle is "all-year" and a licence reference is provided', () => {
-    before(async () => {
-      cycle = 'all-year'
-      allYearReturnCycle = await ReturnCycleHelper.select(0, false)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+  describe('when the requested return cycle exists', () => {
+    beforeEach(() => {
+      Sinon.stub(FetchCurrentReturnCycleService, 'go').resolves(_returnCycle())
+      createReturnCycleStub = Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves()
     })
 
-    it('can successfully save a return log in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, licence.licenceRef)
+    describe('and there are return requirements that need return logs created', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([_returnRequirement()])
+      })
 
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
+      it('does not create a new return cycle', async () => {
+        await ProcessReturnLogsService.go(cycle)
 
-      expect(result.length).to.equal(1)
-      expect(result[0].dueDate).to.equal(allYearDueDate)
-      expect(result[0].endDate).to.equal(allYearEndDate)
-      expect(result[0].id).to.equal(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
-      )
-      expect(result[0].licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnsFrequency).to.equal('day')
-      expect(result[0].startDate).to.equal(allYearStartDate)
-      expect(result[0].status).to.equal('due')
-      expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(allYearReturnCycle.id)
+        expect(createReturnCycleStub.called).to.be.false()
+      })
+
+      it('creates the return logs', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        // Check we create the return log as expected
+        const [insertObject] = insertStub.args[0]
+
+        // NOTE: We don't assert every property of the object passed in because we know it is coming from
+        // GenerateReturnLogsService and that has its own suite of tests. We do however confirm that the createdAt and
+        // UpdatedAt properties are set because those only get set in the service
+        expect(insertObject.id).to.equal('v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31')
+        expect(insertObject.createdAt).to.exist()
+        expect(insertObject.updatedAt).to.exist()
+      })
+
+      it('logs the time taken in milliseconds and seconds', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const logDataArg = notifierStub.omg.firstCall.args[1]
+
+        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.cycle).to.equal(cycle)
+      })
+    })
+
+    describe('but there are no return requirements that need return logs created', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([])
+      })
+
+      it('does not create any return logs', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        expect(insertStub.called).to.be.false()
+      })
+
+      it('still logs the time taken in milliseconds and seconds', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const logDataArg = notifierStub.omg.firstCall.args[1]
+
+        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.cycle).to.equal(cycle)
+      })
     })
   })
 
-  describe('cycle is "all-year" and a licence reference is not provided', () => {
-    before(async () => {
-      cycle = 'all-year'
-      allYearReturnCycle = await ReturnCycleHelper.select(0, false)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      licence2 = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnVersion2 = await ReturnVersionHelper.add({ licenceId: licence2.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      returnRequirement2 = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion2.id
-      })
-      point = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      point2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-      Sinon.stub(GenerateReturnLogsService, 'go')
-        .onFirstCall()
-        .resolves({
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          dueDate: allYearDueDate,
-          endDate: allYearEndDate,
-          id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`,
-          licenceRef: licence.licenceRef,
-          metadata: {
-            description: 'BOREHOLE AT AVALON',
-            isCurrent: true,
-            isFinal: false,
-            isSummer: false,
-            isTwoPartTariff: false,
-            isUpload: false,
-            nald: {
-              regionCode: region.naldRegionId,
-              areaCode: licence.regions.historicalAreaCode,
-              formatId: returnRequirement.legacyId,
-              periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-              periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-              periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-              periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-            },
-            points: [
-              {
-                name: point.description,
-                ngr1: point.ngr1,
-                ngr2: point.ngr2,
-                ngr3: point.ngr3,
-                ngr4: point.ngr4
-              }
-            ],
-            purposes: [
-              {
-                primary: {
-                  code: primaryPurpose.legacyId,
-                  description: primaryPurpose.description
-                },
-                secondary: {
-                  code: secondaryPurpose.legacyId,
-                  description: secondaryPurpose.description
-                },
-                tertiary: {
-                  code: purpose.legacyId,
-                  description: purpose.description
-                }
-              }
-            ],
-            version: 1
-          },
-          returnCycleId: allYearReturnCycle.id,
-          returnsFrequency: 'day',
-          returnReference: returnRequirement.legacyId.toString(),
-          startDate: allYearStartDate,
-          status: 'due',
-          source: 'WRLS'
-        })
-        .onSecondCall()
-        .resolves({
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          dueDate: allYearDueDate,
-          endDate: allYearEndDate,
-          id: `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`,
-          licenceRef: licence2.licenceRef,
-          metadata: {
-            description: 'BOREHOLE AT AVALON',
-            isCurrent: true,
-            isFinal: false,
-            isSummer: false,
-            isTwoPartTariff: false,
-            isUpload: false,
-            nald: {
-              regionCode: region.naldRegionId,
-              areaCode: licence2.regions.historicalAreaCode,
-              formatId: returnRequirement2.legacyId,
-              periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
-              periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
-              periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
-              periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
-            },
-            points: [
-              {
-                name: point2.description,
-                ngr1: point2.ngr1,
-                ngr2: point2.ngr2,
-                ngr3: point2.ngr3,
-                ngr4: point2.ngr4
-              }
-            ],
-            purposes: [
-              {
-                primary: {
-                  code: primaryPurpose.legacyId,
-                  description: primaryPurpose.description
-                },
-                secondary: {
-                  code: secondaryPurpose.legacyId,
-                  description: secondaryPurpose.description
-                },
-                tertiary: {
-                  code: purpose.legacyId,
-                  description: purpose.description
-                }
-              }
-            ],
-            version: 1
-          },
-          returnCycleId: allYearReturnCycle.id,
-          returnsFrequency: 'day',
-          returnReference: returnRequirement2.legacyId.toString(),
-          startDate: allYearStartDate,
-          status: 'due',
-          source: 'WRLS'
-        })
+  describe('when the requested return cycle does not exist', () => {
+    beforeEach(() => {
+      Sinon.stub(FetchCurrentReturnCycleService, 'go').resolves()
+      createReturnCycleStub = Sinon.stub(CreateCurrentReturnCycleService, 'go').resolves(_returnCycle())
     })
 
-    it('can successfully save a return log in the database', async () => {
+    describe('and there are return requirements that need return logs created', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([_returnRequirement()])
+      })
+
+      it('creates a new return cycle', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        expect(createReturnCycleStub.called).to.be.true()
+      })
+
+      it('creates the return logs', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        // Check we create the return log as expected
+        const [insertObject] = insertStub.args[0]
+
+        // NOTE: We don't assert every property of the object passed in because we know it is coming from
+        // GenerateReturnLogsService and that has its own suite of tests. We do however confirm that the createdAt and
+        // UpdatedAt properties are set because those only get set in the service
+        expect(insertObject.id).to.equal('v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31')
+        expect(insertObject.createdAt).to.exist()
+        expect(insertObject.updatedAt).to.exist()
+      })
+
+      it('logs the time taken in milliseconds and seconds', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const logDataArg = notifierStub.omg.firstCall.args[1]
+
+        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.cycle).to.equal(cycle)
+      })
+    })
+  })
+
+  describe('when the service errors', () => {
+    beforeEach(() => {
+      Sinon.stub(FetchCurrentReturnCycleService, 'go').rejects()
+    })
+
+    it('handles the error', async () => {
       await ProcessReturnLogsService.go(cycle)
-      const results = await ReturnLogModel.query().where('returnCycleId', allYearReturnCycle.id)
 
-      const ids = results.map((result) => {
-        return result.id
-      })
+      const args = notifierStub.omfg.firstCall.args
 
-      expect(ids).includes(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
-      )
-      expect(ids).includes(
-        `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
-      )
-    })
-  })
-
-  describe('cycle is "all-year" and a licence reference is provided but there is no exisiting return cycle', () => {
-    before(async () => {
-      cycle = 'all-year'
-      allYearReturnCycle = await ReturnCycleHelper.select(0, false)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      Sinon.stub(FetchReturnCycleService, 'go').resolves(undefined)
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('can successfully create a return cycle and can successfully save a return log in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, licence.licenceRef)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].dueDate).to.equal(allYearDueDate)
-      expect(result[0].endDate).to.equal(allYearEndDate)
-      expect(result[0].id).to.equal(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${allYearStartDateAsISO}:${allYearEndDateAsISO}`
-      )
-      expect(result[0].licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnsFrequency).to.equal('day')
-      expect(result[0].startDate).to.equal(allYearStartDate)
-      expect(result[0].status).to.equal('due')
-      expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(allYearReturnCycle.id)
-    })
-  })
-
-  describe('cycle is "all-year" and a licence reference is provided but there is no matching return requirements', () => {
-    before(async () => {
-      cycle = 'all-year'
-      Sinon.stub(GenerateReturnLogsService, 'go').resolves([])
-    })
-
-    it('will not save anything in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, 'testReference')
-
-      const result = await ReturnLogModel.query().where('licenceRef', 'testReference')
-
-      expect(result.length).to.equal(0)
-    })
-  })
-
-  describe('cycle is "summer" and a licence reference is provided', () => {
-    before(async () => {
-      cycle = 'summer'
-      summerReturnCycle = await ReturnCycleHelper.select(0, true)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('can successfully save a return log in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, licence.licenceRef)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].dueDate).to.equal(summerDueDate)
-      expect(result[0].endDate).to.equal(summerEndDate)
-      expect(result[0].id).to.equal(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
-      )
-      expect(result[0].licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnsFrequency).to.equal('day')
-      expect(result[0].startDate).to.equal(summerStartDate)
-      expect(result[0].status).to.equal('due')
-      expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(summerReturnCycle.id)
-    })
-  })
-
-  describe('cycle is "summer" and a licence reference is not provided', () => {
-    before(async () => {
-      cycle = 'summer'
-      summerReturnCycle = await ReturnCycleHelper.select(0, true)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      licence2 = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnVersion2 = await ReturnVersionHelper.add({ licenceId: licence2.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      returnRequirement2 = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion2.id,
-        summer: true
-      })
-      point = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      point2 = await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement2.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-      Sinon.stub(GenerateReturnLogsService, 'go')
-        .onFirstCall()
-        .resolves({
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          dueDate: allYearDueDate,
-          endDate: allYearEndDate,
-          id: `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`,
-          licenceRef: licence.licenceRef,
-          metadata: {
-            description: 'BOREHOLE AT AVALON',
-            isCurrent: true,
-            isFinal: false,
-            isSummer: true,
-            isTwoPartTariff: false,
-            isUpload: false,
-            nald: {
-              regionCode: region.naldRegionId,
-              areaCode: licence.regions.historicalAreaCode,
-              formatId: returnRequirement.legacyId,
-              periodStartDay: returnRequirement.abstractionPeriodStartDay.toString(),
-              periodStartMonth: returnRequirement.abstractionPeriodStartMonth.toString(),
-              periodEndDay: returnRequirement.abstractionPeriodEndDay.toString(),
-              periodEndMonth: returnRequirement.abstractionPeriodEndMonth.toString()
-            },
-            points: [
-              {
-                name: point.description,
-                ngr1: point.ngr1,
-                ngr2: point.ngr2,
-                ngr3: point.ngr3,
-                ngr4: point.ngr4
-              }
-            ],
-            purposes: [
-              {
-                primary: {
-                  code: primaryPurpose.legacyId,
-                  description: primaryPurpose.description
-                },
-                secondary: {
-                  code: secondaryPurpose.legacyId,
-                  description: secondaryPurpose.description
-                },
-                tertiary: {
-                  code: purpose.legacyId,
-                  description: purpose.description
-                }
-              }
-            ],
-            version: 1
-          },
-          returnCycleId: summerReturnCycle.id,
-          returnsFrequency: 'day',
-          returnReference: returnRequirement.legacyId.toString(),
-          startDate: allYearStartDate,
-          status: 'due',
-          source: 'WRLS'
-        })
-        .onSecondCall()
-        .resolves({
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          dueDate: allYearDueDate,
-          endDate: allYearEndDate,
-          id: `v1:${region.naldRegionId}:${licence2.licenceRef}:${returnRequirement2.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`,
-          licenceRef: licence2.licenceRef,
-          metadata: {
-            description: 'BOREHOLE AT AVALON',
-            isCurrent: true,
-            isFinal: false,
-            isSummer: true,
-            isTwoPartTariff: false,
-            isUpload: false,
-            nald: {
-              regionCode: region.naldRegionId,
-              areaCode: licence2.regions.historicalAreaCode,
-              formatId: returnRequirement2.legacyId,
-              periodStartDay: returnRequirement2.abstractionPeriodStartDay.toString(),
-              periodStartMonth: returnRequirement2.abstractionPeriodStartMonth.toString(),
-              periodEndDay: returnRequirement2.abstractionPeriodEndDay.toString(),
-              periodEndMonth: returnRequirement2.abstractionPeriodEndMonth.toString()
-            },
-            points: [
-              {
-                name: point2.description,
-                ngr1: point2.ngr1,
-                ngr2: point2.ngr2,
-                ngr3: point2.ngr3,
-                ngr4: point2.ngr4
-              }
-            ],
-            purposes: [
-              {
-                primary: {
-                  code: primaryPurpose.legacyId,
-                  description: primaryPurpose.description
-                },
-                secondary: {
-                  code: secondaryPurpose.legacyId,
-                  description: secondaryPurpose.description
-                },
-                tertiary: {
-                  code: purpose.legacyId,
-                  description: purpose.description
-                }
-              }
-            ],
-            version: 1
-          },
-          returnCycleId: summerReturnCycle.id,
-          returnsFrequency: 'day',
-          returnReference: returnRequirement2.legacyId.toString(),
-          startDate: allYearStartDate,
-          status: 'due',
-          source: 'WRLS'
-        })
-    })
-
-    it('can successfully save a return log in the database', async () => {
-      await ProcessReturnLogsService.go(cycle)
-      const results = await ReturnLogModel.query().where('returnCycleId', summerReturnCycle.id)
-
-      const ids = results.map((result) => {
-        return result.id
-      })
-
-      expect(ids).includes(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
-      )
-      expect(ids).includes(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
-      )
-    })
-  })
-
-  describe('cycle is "summer" and a licence reference is provided but there is no exisiting return cycle', () => {
-    before(async () => {
-      cycle = 'summer'
-      summerReturnCycle = await ReturnCycleHelper.select(0, true)
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer: true, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      Sinon.stub(FetchReturnCycleService, 'go').resolves(undefined)
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('can successfully create a return cycle and can successfully save a return log in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, licence.licenceRef)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].dueDate).to.equal(summerDueDate)
-      expect(result[0].endDate).to.equal(summerEndDate)
-      expect(result[0].id).to.equal(
-        `v1:${region.naldRegionId}:${licence.licenceRef}:${returnRequirement.legacyId}:${summerStartDateAsISO}:${summerEndDateAsISO}`
-      )
-      expect(result[0].licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnsFrequency).to.equal('day')
-      expect(result[0].startDate).to.equal(summerStartDate)
-      expect(result[0].status).to.equal('due')
-      expect(result[0].source).to.equal('WRLS')
-      expect(result[0].returnCycleId).to.equal(summerReturnCycle.id)
-    })
-  })
-
-  describe('cycle is "summer" and a licence reference is provided but there is no matching return requirements', () => {
-    before(async () => {
-      cycle = 'summer'
-      Sinon.stub(GenerateReturnLogsService, 'go').resolves([])
-    })
-
-    it('will not save anything in the database', async () => {
-      await ProcessReturnLogsService.go(cycle, 'testReference')
-
-      const result = await ReturnLogModel.query().where('licenceRef', 'testReference')
-
-      expect(result.length).to.equal(0)
+      expect(args[0]).to.equal('Return logs job failed')
+      expect(args[1]).to.equal({ cycle })
+      expect(args[2]).to.be.an.error()
     })
   })
 })
+
+function _returnCycle() {
+  return {
+    id: '6889b98d-964f-4966-b6d6-bf511d6526a1',
+    startDate: new Date('2024-04-01'),
+    endDate: new Date('2025-03-31'),
+    dueDate: new Date('2025-04-28'),
+    summer: false,
+    submittedInWrls: true
+  }
+}
+
+function _returnRequirement() {
+  return {
+    abstractionPeriodEndDay: 31,
+    abstractionPeriodEndMonth: 3,
+    abstractionPeriodStartDay: 1,
+    abstractionPeriodStartMonth: 4,
+    externalId: '4:16999651',
+    id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
+    legacyId: 16999651,
+    reportingFrequency: 'day',
+    returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
+    siteDescription: 'BOREHOLE AT AVALON',
+    summer: false,
+    twoPartTariff: false,
+    upload: false,
+    returnVersion: {
+      endDate: null,
+      id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
+      reason: 'new-licence',
+      startDate: new Date('2022-04-01'),
+      licence: {
+        expiredDate: null,
+        id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
+        lapsedDate: null,
+        licenceRef: '01/25/90/3242',
+        revokedDate: null,
+        areacode: 'SAAR',
+        region: {
+          id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
+          naldRegionId: 4
+        }
+      }
+    },
+    points: [
+      {
+        description: 'Winter cycle - live licence - live return version - winter return requirement',
+        ngr1: 'TG 713 291',
+        ngr2: null,
+        ngr3: null,
+        ngr4: null
+      }
+    ],
+    returnRequirementPurposes: [
+      {
+        alias: 'Purpose alias for testing',
+        id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
+        primaryPurpose: {
+          description: 'Agriculture',
+          id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
+          legacyId: 'A'
+        },
+        purpose: {
+          description: 'General Farming & Domestic',
+          id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
+          legacyId: '140'
+        },
+        secondaryPurpose: {
+          description: 'General Agriculture',
+          id: '2457bfeb-a120-4b57-802a-46494bd22f82',
+          legacyId: 'AGR'
+        }
+      }
+    ]
+  }
+}
