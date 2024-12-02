@@ -1,0 +1,97 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    {{ pageTitle }}
+  </h1>
+
+  {{ govukWarningText({
+    text: "We may not be able to show a full list of your conditions, because we do
+      not hold all of your licence information on our system yet. You must refer
+      to the paper copy of your licence to view and comply with all of your conditions.",
+    iconFallbackText: "Warning"
+  }) }}
+
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Person 2"
+      }
+    },
+    rows: [
+      {
+        key: {
+          text: "Details known"
+        },
+        value: {
+          html: "Yes"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "whether details are known"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Relationship to lead tenant"
+        },
+        value: {
+          html: "Partner"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "relationship to lead tenant"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Age"
+        },
+        value: {
+          html: "42"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "age"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Working situation"
+        },
+        value: {
+          html: "Unable to work because of long-term sickness or disability"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "working situation"
+            }
+          ]
+        }
+      }
+    ]
+  }) }}
+{% endblock %}
