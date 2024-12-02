@@ -44,15 +44,23 @@ async function go(cycle) {
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
-      const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
-      const timestamp = timestampForPostgres()
-
-      await ReturnLogModel.query().insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
+      await _createReturnLog(returnRequirement, returnCycle)
     }
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { cycle })
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
+  }
+}
+
+async function _createReturnLog(returnRequirement, returnCycle) {
+  try {
+    const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
+    const timestamp = timestampForPostgres()
+
+    await ReturnLogModel.query().insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Return log creation errored', { returnRequirement }, error)
   }
 }
 

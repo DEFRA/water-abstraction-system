@@ -12,6 +12,7 @@ const { expect } = Code
 const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 const FetchCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+const GenerateReturnLogService = require('../../../../app/services/return-logs/generate-return-log.service.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 // Thing under test
@@ -82,6 +83,30 @@ describe('Process return logs service', () => {
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.cycle).to.equal(cycle)
+      })
+
+      describe('but it errors when creating the return log', () => {
+        beforeEach(() => {
+          // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
+          // But if the actual insert were to throw the expected behaviour would be the same.
+          Sinon.stub(GenerateReturnLogService, 'go').throws()
+        })
+
+        it('handles the error', async () => {
+          await ProcessReturnLogsService.go(cycle)
+
+          const args = notifierStub.omfg.firstCall.args
+
+          expect(args[0]).to.equal('Return log creation errored')
+          expect(args[1].returnRequirement.id).to.equal('4bc1efa7-10af-4958-864e-32acae5c6fa4')
+          expect(args[2]).to.be.an.error()
+        })
+
+        it('does not stop the job completing', async () => {
+          await ProcessReturnLogsService.go(cycle)
+
+          expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        })
       })
     })
 
