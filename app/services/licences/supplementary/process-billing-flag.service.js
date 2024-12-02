@@ -77,9 +77,9 @@ async function _determineFlags(payload) {
   }
   if (payload.licenceId) {
     return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
-  } else {
-    throw new Error('Invalid payload for process billing flags service')
   }
+
+  throw new Error('Invalid payload for process billing flags service')
 }
 
 async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
