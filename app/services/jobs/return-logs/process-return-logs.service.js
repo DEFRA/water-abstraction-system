@@ -47,7 +47,7 @@ async function go(cycle) {
       await _createReturnLog(returnRequirement, returnCycle)
     }
 
-    calculateAndLogTimeTaken(startTime, 'Return logs job complete', { cycle })
+    calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
   }

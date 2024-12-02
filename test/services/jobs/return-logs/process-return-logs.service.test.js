@@ -82,6 +82,7 @@ describe('Process return logs service', () => {
         expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.count).to.equal(1)
         expect(logDataArg.cycle).to.equal(cycle)
       })
 
@@ -129,6 +130,7 @@ describe('Process return logs service', () => {
         expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.count).to.equal(0)
         expect(logDataArg.cycle).to.equal(cycle)
       })
     })
@@ -173,6 +175,7 @@ describe('Process return logs service', () => {
         expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
+        expect(logDataArg.count).to.equal(1)
         expect(logDataArg.cycle).to.equal(cycle)
       })
     })
