@@ -5,11 +5,11 @@
  * @module ProcessLicenceReturnLogsService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../lib/general.lib.js')
-const CreateReturnLogsService = require('./create-return-logs.service.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const GenerateReturnLogService = require('./generate-return-log.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
 const VoidReturnLogsService = require('./void-return-logs.service.js')
 
 /**
@@ -29,24 +29,26 @@ async function go(licenceReference, endDate = null) {
     }
 
     const returnCycles = await _fetchReturnCycles(endDate)
-    const returnLogs = []
 
     for (const returnCycle of returnCycles) {
       const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
 
       for (const returnRequirement of returnRequirements) {
-        const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
-
-        returnLogs.push(returnLog)
+        await _createReturnLog(returnRequirement, returnCycle)
       }
     }
-
-    await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
   } catch (error) {
     global.GlobalNotifier.omfg('Create licence return logs job failed', { error })
   }
+}
+
+async function _createReturnLog(returnRequirement, returnCycle) {
+  const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
+  const timestamp = timestampForPostgres()
+
+  await ReturnLogModel.query().insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
 }
 
 async function _fetchReturnCycles(endDate) {
