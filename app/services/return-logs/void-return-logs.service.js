@@ -15,10 +15,15 @@ const { cycleStartDateByDate } = require('../../lib/return-cycle-dates.lib.js')
  * @param {Date} date - the date from which to void return logs - YYYY-MM-DD
  */
 async function go(licenceReference, date) {
-  const allYearReturnLogs = await _fetchReturnLogs(licenceReference, date, false)
-  const summerReturnLogs = await _fetchReturnLogs(licenceReference, date, true)
+  await ReturnLogModel.query()
+    .patch({ status: 'void' })
+    .where('licenceRef', licenceReference)
+    .where('endDate', '>=', date)
 
-  await _voidReturnLogs([...allYearReturnLogs, ...summerReturnLogs])
+  // const allYearReturnLogs = await _fetchReturnLogs(licenceReference, date, false)
+  // const summerReturnLogs = await _fetchReturnLogs(licenceReference, date, true)
+
+  // await _voidReturnLogs([...allYearReturnLogs, ...summerReturnLogs])
 }
 
 async function _fetchReturnLogs(licenceReference, date, summer) {
