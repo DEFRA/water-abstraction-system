@@ -17,13 +17,17 @@ const { cycleStartDateByDate } = require('../../lib/return-cycle-dates.lib.js')
  * @returns {Promise<Array>} an array of return cycle details
  */
 async function go(date) {
-  const earliestSummerCycleStartDate = cycleStartDateByDate(date, true)
-  const earliestAllYearCycleStartDate = cycleStartDateByDate(date, false)
+  return ReturnCycleModel.query()
+    .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
+    .where('endDate', '>=', date)
+    .orderBy('endDate', 'desc')
+  // const earliestSummerCycleStartDate = cycleStartDateByDate(date, true)
+  // const earliestAllYearCycleStartDate = cycleStartDateByDate(date, false)
 
-  const summerReturnCycles = await _fetchReturnCycles(earliestSummerCycleStartDate, true)
-  const allYearReturnCycles = await _fetchReturnCycles(earliestAllYearCycleStartDate, false)
+  // const summerReturnCycles = await _fetchReturnCycles(earliestSummerCycleStartDate, true)
+  // const allYearReturnCycles = await _fetchReturnCycles(earliestAllYearCycleStartDate, false)
 
-  return [...summerReturnCycles, ...allYearReturnCycles]
+  // return [...summerReturnCycles, ...allYearReturnCycles]
 }
 
 async function _fetchReturnCycles(startDate, summer) {

@@ -45,18 +45,18 @@ describe('Fetch return cycles service', () => {
           summer: summerReturnCycle.summer
         },
         {
-          dueDate: previousSummerReturnCycle.dueDate,
-          endDate: previousSummerReturnCycle.endDate,
-          id: previousSummerReturnCycle.id,
-          startDate: previousSummerReturnCycle.startDate,
-          summer: previousSummerReturnCycle.summer
-        },
-        {
           dueDate: allYearReturnCycle.dueDate,
           endDate: allYearReturnCycle.endDate,
           id: allYearReturnCycle.id,
           startDate: allYearReturnCycle.startDate,
           summer: allYearReturnCycle.summer
+        },
+        {
+          dueDate: previousSummerReturnCycle.dueDate,
+          endDate: previousSummerReturnCycle.endDate,
+          id: previousSummerReturnCycle.id,
+          startDate: previousSummerReturnCycle.startDate,
+          summer: previousSummerReturnCycle.summer
         }
       ])
     })
