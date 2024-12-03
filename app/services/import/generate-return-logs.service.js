@@ -23,16 +23,16 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go(importedLicence, licenceId) {
   try {
     const { expiredDate, lapsedDate, revokedDate } = importedLicence
-    const importedEarliestDate = determineEarliestDate(expiredDate, lapsedDate, revokedDate)
-    const existingEarliestDate = _fetchLicenceEndDate(licenceId)
-    const earliestDate = determineEarliestDate(importedEarliestDate, existingEarliestDate)
+    const importedEarliestEndDate = determineEarliestDate(expiredDate, lapsedDate, revokedDate)
+    const existingEarliestEndDate = _fetchLicenceEndDate(licenceId)
+    const earliestDate = determineEarliestDate(importedEarliestEndDate, existingEarliestEndDate)
 
-    if (importedEarliestDate !== null && earliestDate !== existingEarliestDate) {
+    if (importedEarliestEndDate !== null && earliestDate !== existingEarliestEndDate) {
       // If they are not the same then void the returns from the earliest date and generate new ones
       // await ProcessLicenceReturnLogsService.go(licenceId, earliestDate)
     } else {
       // If there is now no earliest date then void the last set of return logs and generate new ones
-      // await VoidReturnLogsService.go(licenceId, existingEarliestDate)
+      // await VoidReturnLogsService.go(licenceId, new Date())
       // await ProcessLicenceReturnLogsService.go(licenceId)
     }
   } catch (error) {

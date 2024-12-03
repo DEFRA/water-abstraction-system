@@ -12,7 +12,8 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const ProcessLicenceReturnLogsService = require('../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+// const ProcessLicenceReturnLogsService = require('../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+// const VoidReturnLogsService = require('../../../app/services/jobs/return-logs/void-return-logs.service.js')
 
 // Thing under test
 const GenerateReturnLogsService = require('../../../app/services/import/generate-return-logs.service.js')
@@ -39,7 +40,8 @@ describe('Generate Return Logs Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+    // Sinon.stub(VoidReturnLogsService, 'go').resolves()
+    // Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
   })
 
   afterEach(async () => {
@@ -47,32 +49,6 @@ describe('Generate Return Logs Service', () => {
   })
 
   describe('when the existing version of the licence', () => {
-    describe('matches the imported version of the licence', () => {
-      describe('because all the dates are null', () => {
-        before(() => {
-          importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
-        })
-
-        it('does not call ProcessLicenceReturnLogsService', async () => {
-          await GenerateReturnLogsService.go(importedLicence, existingLicenceNullDates.id)
-
-          expect(ProcessLicenceReturnLogsService.go.called).to.be.false()
-        })
-      })
-
-      describe('because all the dates match', () => {
-        before(() => {
-          importedLicence = { expiredDate, lapsedDate, revokedDate }
-        })
-
-        it('does not call ProcessLicenceReturnLogsService', async () => {
-          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-          expect(ProcessLicenceReturnLogsService.go.called).to.be.false()
-        })
-      })
-    })
-
     describe('does not match the imported version of the licence', () => {
       describe('because the imported version has an end date where the existing version has null', () => {
         before(() => {
