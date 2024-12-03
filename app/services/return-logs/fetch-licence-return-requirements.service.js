@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for generating return logs
- * @module FetchReturnRequirementsService
+ * @module FetchLicenceReturnRequirementsService
  */
 
 const ReturnLogModel = require('../../models/return-log.model.js')

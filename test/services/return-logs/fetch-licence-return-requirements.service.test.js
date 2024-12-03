@@ -22,7 +22,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
 
 // Thing under test
-const FetchReturnRequirementsService = require('../../../app/services/return-logs/fetch-return-requirements.service.js')
+const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
 
 describe('Fetch return requirements service', () => {
   const summerReturns = []
@@ -75,7 +75,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -170,7 +170,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return two return log payloads', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(2)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -319,7 +319,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return two return log payloads', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(2)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -451,7 +451,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -532,7 +532,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -614,7 +614,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -696,7 +696,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -778,7 +778,7 @@ describe('Fetch return requirements service', () => {
     })
 
     it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
+      const result = await FetchLicenceReturnRequirementsService.go(returnCycle, licence.licenceRef)
 
       expect(result.length).to.equal(1)
       expect(result[0].id).to.equal(returnRequirement.id)
@@ -837,7 +837,7 @@ describe('Fetch return requirements service', () => {
     it('should return five return log payloads', async () => {
       returnCycle = await ReturnCycleHelper.select(0, false)
 
-      const results = await FetchReturnRequirementsService.go(returnCycle)
+      const results = await FetchLicenceReturnRequirementsService.go(returnCycle)
 
       const returnRequirementExternalId = results.map((returnLog) => {
         return returnLog.legacyId
@@ -855,7 +855,7 @@ describe('Fetch return requirements service', () => {
     it('should return five return log payloads', async () => {
       returnCycle = await ReturnCycleHelper.select(0, true)
 
-      const results = await FetchReturnRequirementsService.go(returnCycle)
+      const results = await FetchLicenceReturnRequirementsService.go(returnCycle)
 
       const returnRequirementExternalId = results.map((returnLog) => {
         return returnLog.legacyId
