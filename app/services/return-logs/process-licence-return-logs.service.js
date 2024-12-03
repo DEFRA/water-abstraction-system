@@ -5,7 +5,7 @@
  * @module ProcessLicenceReturnLogsService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const GenerateReturnLogService = require('./generate-return-log.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
@@ -19,28 +19,20 @@ const VoidReturnLogsService = require('./void-return-logs.service.js')
  * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
  */
 async function go(licenceReference, endDate = null) {
-  try {
-    const startTime = currentTimeInNanoseconds()
+  if (endDate) {
+    await VoidReturnLogsService.go(licenceReference, endDate)
+  } else {
+    endDate = new Date()
+  }
 
-    if (endDate) {
-      await VoidReturnLogsService.go(licenceReference, endDate)
-    } else {
-      endDate = new Date()
+  const returnCycles = await _fetchReturnCycles(endDate)
+
+  for (const returnCycle of returnCycles) {
+    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
+
+    for (const returnRequirement of returnRequirements) {
+      await _createReturnLog(returnRequirement, returnCycle)
     }
-
-    const returnCycles = await _fetchReturnCycles(endDate)
-
-    for (const returnCycle of returnCycles) {
-      const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
-
-      for (const returnRequirement of returnRequirements) {
-        await _createReturnLog(returnRequirement, returnCycle)
-      }
-    }
-
-    calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
-  } catch (error) {
-    global.GlobalNotifier.omfg('Create licence return logs job failed', { error })
   }
 }
 
