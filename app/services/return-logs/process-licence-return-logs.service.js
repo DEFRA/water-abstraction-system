@@ -15,12 +15,12 @@ const VoidReturnLogsService = require('./void-return-logs.service.js')
 /**
  * Process voiding and reissuing return logs for a given licence reference
  *
- * @param {string} licenceReference - The licence to create return logs for
+ * @param {string} licenceId - The UUID of the licence to create return logs for
  * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
  */
-async function go(licenceReference, endDate = null) {
+async function go(licenceId, endDate = null) {
   if (endDate) {
-    await VoidReturnLogsService.go(licenceReference, endDate)
+    await VoidReturnLogsService.go(licenceId, endDate)
   } else {
     endDate = new Date()
   }
@@ -28,7 +28,7 @@ async function go(licenceReference, endDate = null) {
   const returnCycles = await _fetchReturnCycles(endDate)
 
   for (const returnCycle of returnCycles) {
-    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
+    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceId)
 
     for (const returnRequirement of returnRequirements) {
       await _createReturnLog(returnRequirement, returnCycle)

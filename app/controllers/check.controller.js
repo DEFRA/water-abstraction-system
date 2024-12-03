@@ -44,15 +44,15 @@ async function flagForBilling(request, h) {
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function returnLogsForLicence(request, h) {
-  const { licenceReference } = request.payload
+async function licenceReturnLogs(request, h) {
+  const { licenceId } = request.params
 
-  await ProcessLicenceReturnLogsService.go(licenceReference)
+  await ProcessLicenceReturnLogsService.go(licenceId)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
 module.exports = {
   flagForBilling,
-  returnLogsForLicence
+  licenceReturnLogs
 }
