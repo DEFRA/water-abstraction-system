@@ -12,12 +12,12 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+const ProcessLicenceReturnLogsService = require('../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 
 // Thing under test
-const DetermineSupplementaryBillingFlagsService = require('../../../app/services/import/determine-supplementary-billing-flags.service.js')
+const GenerateReturnLogsService = require('../../../app/services/import/generate-return-logs.service.js')
 
-describe('Determine Supplementary Billing Flags Service', () => {
+describe('Generate Return Logs Service', () => {
   const lapsedDate = new Date('2023-01-01')
   const revokedDate = new Date('2023-01-01')
   const expiredDate = new Date('2023-01-01')
@@ -39,7 +39,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
   })
 
   afterEach(async () => {
@@ -53,10 +53,10 @@ describe('Determine Supplementary Billing Flags Service', () => {
           importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
         })
 
-        it('does not call ProcessImportedLicenceService', async () => {
-          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+        it('does not call ProcessLicenceReturnLogsService', async () => {
+          await GenerateReturnLogsService.go(importedLicence, existingLicenceNullDates.id)
 
-          expect(ProcessBillingFlagService.go.called).to.be.false()
+          expect(ProcessLicenceReturnLogsService.go.called).to.be.false()
         })
       })
 
@@ -65,10 +65,10 @@ describe('Determine Supplementary Billing Flags Service', () => {
           importedLicence = { expiredDate, lapsedDate, revokedDate }
         })
 
-        it('does not call ProcessImportedLicenceService', async () => {
-          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
+        it('does not call ProcessLicenceReturnLogsService', async () => {
+          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessBillingFlagService.go.called).to.be.false()
+          expect(ProcessLicenceReturnLogsService.go.called).to.be.false()
         })
       })
     })
@@ -80,9 +80,9 @@ describe('Determine Supplementary Billing Flags Service', () => {
         })
 
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
+          await GenerateReturnLogsService.go(importedLicence, existingLicenceNullDates.id)
 
-          expect(ProcessBillingFlagService.go.called).to.be.true()
+          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
         })
       })
 
@@ -92,9 +92,9 @@ describe('Determine Supplementary Billing Flags Service', () => {
         })
 
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
+          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessBillingFlagService.go.called).to.be.true()
+          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
         })
       })
 
@@ -104,9 +104,9 @@ describe('Determine Supplementary Billing Flags Service', () => {
         })
 
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
+          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessBillingFlagService.go.called).to.be.true()
+          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
         })
       })
     })
@@ -123,7 +123,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
     })
 
     it('handles the error', async () => {
-      await DetermineSupplementaryBillingFlagsService.go(importedLicence, licenceId)
+      await GenerateReturnLogsService.go(importedLicence, licenceId)
 
       const args = notifierStub.omfg.firstCall.args
 
