@@ -10,22 +10,20 @@ const FetchReturnRequirementsService = require('./fetch-return-requirements.serv
 const GenerateReturnLogService = require('./generate-return-log.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
-const VoidReturnLogsService = require('./void-return-logs.service.js')
 
 /**
  * Process voiding and reissuing return logs for a given licence reference
  *
  * @param {string} licenceId - The UUID of the licence to create return logs for
- * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
+ * @param {Date} [changeDate] - An optional change date to use when determining which return logs to void and reissue
  */
-async function go(licenceId, endDate = null) {
-  if (endDate) {
-    await VoidReturnLogsService.go(licenceId, endDate)
-  } else {
-    endDate = new Date()
+async function go(licenceId, changeDate = null) {
+  if (!changeDate) {
+    changeDate = new Date()
   }
 
-  const returnCycles = await _fetchReturnCycles(endDate)
+  await _voidReturnLogs(licenceId, changeDate)
+  const returnCycles = await _fetchReturnCycles(changeDate)
 
   for (const returnCycle of returnCycles) {
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceId)
@@ -48,6 +46,13 @@ async function _fetchReturnCycles(endDate) {
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>=', endDate)
     .orderBy('endDate', 'desc')
+}
+
+async function _voidReturnLogs(licenceRef, changeDate) {
+  await ReturnLogModel.query()
+    .patch({ status: 'void' })
+    .where('licenceRef', licenceRef)
+    .where('endDate', '>=', changeDate)
 }
 
 module.exports = {
