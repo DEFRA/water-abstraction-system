@@ -58,11 +58,11 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
 
           expect(insertObject).to.equal(
             {
-              dueDate: '2025-04-28',
-              endDate: '2025-03-31',
+              dueDate: new Date('2025-04-28'),
+              endDate: new Date('2025-03-31'),
               summer,
               submittedInWrls: true,
-              startDate: '2024-04-01'
+              startDate: new Date('2024-04-01')
             },
             { skip: ['createdAt', 'updatedAt'] }
           )
@@ -82,11 +82,11 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
 
           expect(insertObject).to.equal(
             {
-              dueDate: '2024-04-28',
-              endDate: '2024-03-31',
+              dueDate: new Date('2024-04-28'),
+              endDate: new Date('2024-03-31'),
               summer,
               submittedInWrls: true,
-              startDate: '2023-04-01'
+              startDate: new Date('2023-04-01')
             },
             { skip: ['createdAt', 'updatedAt'] }
           )
@@ -131,11 +131,11 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
 
           expect(insertObject).to.equal(
             {
-              dueDate: '2024-11-28',
-              endDate: '2024-10-31',
+              dueDate: new Date('2024-11-28'),
+              endDate: new Date('2024-10-31'),
               summer,
               submittedInWrls: true,
-              startDate: '2023-11-01'
+              startDate: new Date('2023-11-01')
             },
             { skip: ['createdAt', 'updatedAt'] }
           )
@@ -155,11 +155,11 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
 
           expect(insertObject).to.equal(
             {
-              dueDate: '2023-11-28',
-              endDate: '2023-10-31',
+              dueDate: new Date('2023-11-28'),
+              endDate: new Date('2023-10-31'),
               summer,
               submittedInWrls: true,
-              startDate: '2022-11-01'
+              startDate: new Date('2022-11-01')
             },
             { skip: ['createdAt', 'updatedAt'] }
           )
