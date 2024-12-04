@@ -22,7 +22,7 @@ async function go(returnCycle) {
 }
 
 async function _fetch(returnCycle) {
-  const { endDate: cycleEndDate, startDate: cycleStartDate } = returnCycle
+  const { id: returnCycleId, endDate: cycleEndDate, startDate: cycleStartDate, summer } = returnCycle
 
   return ReturnRequirementModel.query()
     .select([
@@ -40,12 +40,12 @@ async function _fetch(returnCycle) {
       'twoPartTariff',
       'upload'
     ])
-    .where('returnRequirements.summer', returnCycle.summer)
+    .where('returnRequirements.summer', summer)
     .whereNotExists(
       ReturnLogModel.query()
         .select(1)
         .whereNot('status', 'void')
-        .where('returnCycleId', returnCycle.id)
+        .where('returnCycleId', returnCycleId)
         .whereColumn(
           db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference)"),
           'returnRequirements.externalId'
