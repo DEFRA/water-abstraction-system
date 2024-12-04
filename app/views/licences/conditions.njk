@@ -17,81 +17,57 @@
     iconFallbackText: "Warning"
   }) }}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Person 2"
-      }
-    },
-    rows: [
-      {
-        key: {
-          text: "Details known"
-        },
-        value: {
-          html: "Yes"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "whether details are known"
-            }
-          ]
+  {% for condition in conditions %}
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: condition.displayTitle,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
         }
       },
-      {
-        key: {
-          text: "Relationship to lead tenant"
+      rows: [
+        {
+          key: {
+            text: "Abstraction point"
+          },
+          value: {
+            text: condition.point
+          }
         },
-        value: {
-          html: "Partner"
+        {
+          key: {
+            text: "Purpose"
+          },
+          value: {
+            text: condition.purpose
+          }
         },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "relationship to lead tenant"
-            }
-          ]
+        {
+          key: {
+            text: "Notes"
+          },
+          value: {
+            text: condition.notes
+          }
+        },
+        {
+          key: {
+            text: "Condition type"
+          },
+          value: {
+            text: condition.conditionTypeDescription
+          }
+        },
+        {
+          key: {
+            text: "Subcode description"
+          },
+          value: {
+            text: condition.subcodeDescription
+          }
         }
-      },
-      {
-        key: {
-          text: "Age"
-        },
-        value: {
-          html: "42"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "age"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Working situation"
-        },
-        value: {
-          html: "Unable to work because of long-term sickness or disability"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "working situation"
-            }
-          ]
-        }
-      }
-    ]
-  }) }}
+      ]
+    }) }}
+  {% endfor %}
 {% endblock %}
