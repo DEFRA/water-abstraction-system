@@ -31,7 +31,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
       day = 15
 
       testDate = new Date(currentYear, month, day)
-      clock = Sinon.useFakeTimers()
+      clock = Sinon.useFakeTimers(testDate)
     })
     it('correctly presents the data', () => {
       const result = ReturnsPeriodPresenter.go()
