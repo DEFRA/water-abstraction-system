@@ -18,11 +18,9 @@ async function returnLog(request, h) {
     return Boom.badImplementation('Id is required')
   }
 
-  const data = await ReturnLogService.go(request, id)
-  // TODO: Remove this as we only include it to check the data we receive
-  const dataString = JSON.stringify(data, null, 2)
+  const pageData = await ReturnLogService.go(request, id)
 
-  return h.view('returns/return-log.njk', { data, dataString })
+  return h.view('returns/return-log.njk', { ...pageData })
 }
 
 module.exports = {

@@ -1,10 +1,69 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <span class="govuk-caption-l">Data for {{ data.returnId }}</span>
-    </h1>
+    <span class="govuk-caption-l">Licence number {{ data.licenceNumber }}</span>
+    <h1 class="govuk-heading-l">Abstraction return</h1>
+    <dl class="meta govuk-!-margin-bottom-4">
+      <div class="meta__row">
+        <dt class="meta__key">
+          Site description
+        </dt>
+        <dd class="meta__value">
+          {% if description != 'null' %}
+            {{ description }}
+          {% endif %}
+        </dd>
+      </div>
+      <div class="meta__row">
+        <dt class="meta__key">
+          Purpose
+        </dt>
+        <dd class="meta__value">
+          RETURN_PURPOSE
+        </dd>
+      </div>
+      <div class="meta__row">
+        <dt class="meta__key">
+          Return period
+        </dt>
+        <dd class="meta__value">
+          {{ returnPeriod }}
+        </dd>
+      </div>
+      <div class="meta__row">
+        <dt class="meta__key">
+          Abstraction period
+        </dt>
+        <dd class="meta__value">
+          ABSTRACTION_PERIOD
+        </dd>
+      </div>
+      <div class="meta__row">
+        <dt class="meta__key">
+          TARIFF
+        </dt>
+      </div>
+    </dl>
+
+    {{ govukTable({
+      firstCellIsHeader: true,
+      head: [
+        {
+          text: "Month"
+        },
+        {
+          text: "Total cubic metres"
+        },
+        {
+          text: "Details"
+        }
+      ],
+      rows: tableRows
+    }) }}
+
     <pre>
       {{ dataString }}
     </pre>
