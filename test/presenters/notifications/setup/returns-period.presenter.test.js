@@ -11,14 +11,12 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe.only('Notifications Setup - Returns Period presenter', () => {
+describe('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
   let testDate
-  let month
-  let day
   let clock
 
   afterEach(() => {
@@ -27,10 +25,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
 
   describe('when provided no params', () => {
     beforeEach(() => {
-      month = 0
-      day = 15
-
-      testDate = new Date(currentYear, month, day)
+      testDate = new Date(`${currentYear}-01-15`)
       clock = Sinon.useFakeTimers(testDate)
     })
     it('correctly presents the data', () => {
@@ -44,10 +39,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
     describe('When the current date is between 1 January - 28 January', () => {
       describe('and the date is in January', () => {
         beforeEach(() => {
-          month = 0
-          day = 15
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-01-15`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -86,10 +78,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
 
       describe('and the date is 28 January', () => {
         beforeEach(() => {
-          month = 0
-          day = 28
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-01-28`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -130,10 +119,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
     describe('When the current date is between 29 October - 28 November', () => {
       describe('and the date is 29th October', () => {
         beforeEach(() => {
-          month = 9
-          day = 29
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-10-29`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -171,10 +157,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
       })
       describe('and the date is in November', () => {
         beforeEach(() => {
-          month = 10
-          day = 20
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-11-20`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -212,10 +195,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
       })
       describe('and the date is 28 November', () => {
         beforeEach(() => {
-          month = 10
-          day = 28
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-11-28`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -256,10 +236,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
     describe('When the current date is between 29 November - 31 December', () => {
       describe('and the date is in December', () => {
         beforeEach(() => {
-          month = 11
-          day = 25
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-12-25`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -297,10 +274,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
       })
       describe('and the date is 29 November', () => {
         beforeEach(() => {
-          month = 10
-          day = 29
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-11-29`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
