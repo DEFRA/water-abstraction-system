@@ -24,22 +24,6 @@ function cycleDueDate(summer, determinationDate = new Date()) {
 }
 
 /**
- * Given an arbitrary date and if it is summer or all-year return the due date of that cycle
- *
- * @param {Date} date - the date whose due date you want to find
- * @param {boolean} summer - true for summer, false for winter and all year
- *
- * @returns {Date} the due date of the next cycle
- */
-function cycleDueDateByDate(date, summer) {
-  if (summer) {
-    return _summerDueDate(date)
-  }
-
-  return _allYearDueDate(date)
-}
-
-/**
  * Determine the end date of next provided cycle, either summer and winter or all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year
@@ -172,7 +156,6 @@ function _summerStartDate(date) {
 
 module.exports = {
   cycleDueDate,
-  cycleDueDateByDate,
   cycleEndDate,
   cycleEndDateByDate,
   cycleStartDate,
