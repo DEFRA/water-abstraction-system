@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe('Notifications Setup - Returns Period presenter', () => {
+describe.only('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
@@ -42,42 +42,86 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
   describe('Options availability based on the current date', () => {
     describe('When the current date is between 1st January - 28th January', () => {
-      beforeEach(() => {
-        month = 0
-        day = 15
+      describe('and the date is in January', () => {
+        beforeEach(() => {
+          month = 0
+          day = 15
 
-        testDate = new Date(currentYear, month, day)
-        clock = Sinon.useFakeTimers(testDate)
-      })
+          testDate = new Date(currentYear, month, day)
+          clock = Sinon.useFakeTimers(testDate)
+        })
 
-      describe('Option 1 should be for Quarterly 1st October (previous year) to 31st December (previous year) with a due date 28 Jan (current year)', () => {
-        it('should return the correct "text" and "hint" values', () => {
-          const {
-            returnsPeriod: [firstOption]
-          } = ReturnsPeriodPresenter.go()
+        describe('Option 1 should be for Quarterly 1st October (previous year) to 31st December (previous year) with a due date 28 Jan (current year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [firstOption]
+            } = ReturnsPeriodPresenter.go()
 
-          expect(firstOption).to.equal({
-            value: 'currentPeriod',
-            text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
-            hint: {
-              text: `Due date 28 Jan ${currentYear}`
-            }
+            expect(firstOption).to.equal({
+              value: 'currentPeriod',
+              text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
+              hint: {
+                text: `Due date 28 Jan ${currentYear}`
+              }
+            })
+          })
+        })
+
+        describe('Option 2 should be for Quarterly 1st January (current year) to 31st March (current year) with a due date 28 April (current year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [, secondOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(secondOption).to.equal({
+              value: 'nextPeriod',
+              text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
+              hint: {
+                text: `Due date 28 April ${currentYear}`
+              }
+            })
           })
         })
       })
 
-      describe('Option 2 should be for Quarterly 1st January (current year) to 31st March (current year) with a due date 28 April (current year)', () => {
-        it('should return the correct "text" and "hint" values', () => {
-          const {
-            returnsPeriod: [, secondOption]
-          } = ReturnsPeriodPresenter.go()
+      describe('and the date is 28th January', () => {
+        beforeEach(() => {
+          month = 0
+          day = 28
 
-          expect(secondOption).to.equal({
-            value: 'nextPeriod',
-            text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
-            hint: {
-              text: `Due date 28 April ${currentYear}`
-            }
+          testDate = new Date(currentYear, month, day)
+          clock = Sinon.useFakeTimers(testDate)
+        })
+
+        describe('Option 1 should be for Quarterly 1st October (previous year) to 31st December (previous year) with a due date 28 Jan (current year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [firstOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(firstOption).to.equal({
+              value: 'currentPeriod',
+              text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
+              hint: {
+                text: `Due date 28 Jan ${currentYear}`
+              }
+            })
+          })
+        })
+
+        describe('Option 2 should be for Quarterly 1st January (current year) to 31st March (current year) with a due date 28 April (current year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [, secondOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(secondOption).to.equal({
+              value: 'nextPeriod',
+              text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
+              hint: {
+                text: `Due date 28 April ${currentYear}`
+              }
+            })
           })
         })
       })
