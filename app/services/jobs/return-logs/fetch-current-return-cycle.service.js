@@ -5,7 +5,7 @@
  * @module FetchReturnCycleService
  */
 
-const { cycleEndDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
+const { cycleEndDate, cycleStartDate } = require('../../../lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
@@ -16,9 +16,7 @@ const ReturnCycleModel = require('../../../models/return-cycle.model.js')
  * @returns {Promise<module:ReturnCycleModel>} the matching return cycle, else `undefined`
  */
 async function go(summer) {
-  const today = new Date()
-
-  const startDate = cycleStartDateByDate(today, summer)
+  const startDate = cycleStartDate(summer)
   const endDate = cycleEndDate(summer)
 
   return _fetch(startDate, endDate, summer)

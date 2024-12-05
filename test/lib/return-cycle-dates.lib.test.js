@@ -26,88 +26,6 @@ describe('Return Cycle Dates lib', () => {
     clock.restore()
   })
 
-  describe('cycleStartDate', () => {
-    describe('when the requested cycle is "summer" and the current date is after the cycle start', () => {
-      before(() => {
-        summer = true
-        testDate = new Date(`${year}-12-01`)
-        clock = Sinon.useFakeTimers(testDate)
-
-        expectedDate = new Date(
-          new Date().getFullYear(),
-          returnCycleDates.summer.startDate.month,
-          returnCycleDates.summer.startDate.day
-        )
-      })
-
-      it('should return the start date for the current summer cycle', () => {
-        const result = ReturnCycleDatesLib.cycleStartDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-
-    describe('when the requested cycle is "summer" and the current date is before the cycle start', () => {
-      before(() => {
-        summer = true
-        testDate = new Date(`${year}-09-01`)
-        clock = Sinon.useFakeTimers(testDate)
-
-        expectedDate = new Date(
-          new Date().getFullYear() - 1,
-          returnCycleDates.summer.startDate.month,
-          returnCycleDates.summer.startDate.day
-        )
-      })
-
-      it('should return the start date for the previous summer cycle', () => {
-        const result = ReturnCycleDatesLib.cycleStartDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-
-    describe('when the requested cycle is "winter and all year" and the current date is after the cycle start', () => {
-      before(() => {
-        summer = false
-        testDate = new Date(`${year}-05-01`)
-        clock = Sinon.useFakeTimers(testDate)
-
-        expectedDate = new Date(
-          new Date().getFullYear(),
-          returnCycleDates.allYear.startDate.month,
-          returnCycleDates.allYear.startDate.day
-        )
-      })
-
-      it('should return the start date of the current winter and all year cycle', () => {
-        const result = ReturnCycleDatesLib.cycleStartDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-
-    describe('when the requested cycle is "winter and all year" and the current date is before the cycle start', () => {
-      before(() => {
-        summer = false
-        testDate = new Date(`${year}-02-01`)
-        clock = Sinon.useFakeTimers(testDate)
-
-        expectedDate = new Date(
-          new Date().getFullYear() - 1,
-          returnCycleDates.allYear.startDate.month,
-          returnCycleDates.allYear.startDate.day
-        )
-      })
-
-      it('should return the start date of the previous winter and all year cycle', () => {
-        const result = ReturnCycleDatesLib.cycleStartDate(summer)
-
-        expect(result).to.equal(expectedDate)
-      })
-    })
-  })
-
   describe('cycleDueDate', () => {
     describe('when "summer" is true', () => {
       before(() => {
@@ -432,7 +350,7 @@ describe('Return Cycle Dates lib', () => {
     })
   })
 
-  describe('cycleStartDateByDate', () => {
+  describe('cycleStartDate', () => {
     describe('when "summer" is true', () => {
       before(() => {
         summer = true
@@ -452,7 +370,7 @@ describe('Return Cycle Dates lib', () => {
           })
 
           it('should return the start date for the current summer cycle', () => {
-            const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+            const result = ReturnCycleDatesLib.cycleStartDate(summer)
 
             expect(result).to.equal(expectedDate)
           })
@@ -471,7 +389,7 @@ describe('Return Cycle Dates lib', () => {
           })
 
           it('should return the start date for the previous summer cycle', () => {
-            const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+            const result = ReturnCycleDatesLib.cycleStartDate(summer)
 
             expect(result).to.equal(expectedDate)
           })
@@ -490,7 +408,7 @@ describe('Return Cycle Dates lib', () => {
 
         it('should return the correct end date for the summer cycle', () => {
           const testDate = new Date(`${year - 1}-12-01`)
-          const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+          const result = ReturnCycleDatesLib.cycleStartDate(summer, testDate)
 
           expect(result).to.equal(expectedDate)
         })
@@ -508,7 +426,7 @@ describe('Return Cycle Dates lib', () => {
 
         it('should return the correct end date for the summer cycle', () => {
           const testDate = new Date(`${year - 1}-09-01`)
-          const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+          const result = ReturnCycleDatesLib.cycleStartDate(summer, testDate)
 
           expect(result).to.equal(expectedDate)
         })
@@ -534,7 +452,7 @@ describe('Return Cycle Dates lib', () => {
           })
 
           it('should return the start date of the current winter and all year cycle', () => {
-            const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+            const result = ReturnCycleDatesLib.cycleStartDate(summer)
 
             expect(result).to.equal(expectedDate)
           })
@@ -553,7 +471,7 @@ describe('Return Cycle Dates lib', () => {
           })
 
           it('should return the start date of the previous winter and all year cycle', () => {
-            const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+            const result = ReturnCycleDatesLib.cycleStartDate(summer)
 
             expect(result).to.equal(expectedDate)
           })
@@ -572,7 +490,7 @@ describe('Return Cycle Dates lib', () => {
 
         it('should return the correct end date for the all year cycle', () => {
           const testDate = new Date(`${year - 1}-05-01`)
-          const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+          const result = ReturnCycleDatesLib.cycleStartDate(summer, testDate)
 
           expect(result).to.equal(expectedDate)
         })
@@ -590,7 +508,7 @@ describe('Return Cycle Dates lib', () => {
 
         it('should return the correct end date for the all year cycle', () => {
           const testDate = new Date(`${year - 1}-03-01`)
-          const result = ReturnCycleDatesLib.cycleStartDateByDate(testDate, summer)
+          const result = ReturnCycleDatesLib.cycleStartDate(summer, testDate)
 
           expect(result).to.equal(expectedDate)
         })
