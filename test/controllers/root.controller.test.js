@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // For running our service
@@ -13,8 +13,8 @@ const { init } = require('../../app/server.js')
 describe('Root controller: GET /', () => {
   let server
 
-  // Create server before each test
-  beforeEach(async () => {
+  // Create server before running the tests
+  before(async () => {
     server = await init()
   })
 

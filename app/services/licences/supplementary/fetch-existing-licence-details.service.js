@@ -41,6 +41,7 @@ function _query() {
       l.expired_date,
       l.lapsed_date,
       l.revoked_date,
+      l.region_id,
       (CASE l.include_in_presroc_billing
         WHEN 'yes' THEN TRUE
         ELSE FALSE

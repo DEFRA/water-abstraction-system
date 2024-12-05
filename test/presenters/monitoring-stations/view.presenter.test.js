@@ -75,8 +75,30 @@ describe('Monitoring Stations - View presenter', () => {
             threshold: '100 m3/s'
           }
         ],
-        stationReference: null,
-        wiskiId: null
+        stationReference: '',
+        wiskiId: ''
+      })
+    })
+  })
+
+  describe('the "gridReference" property', () => {
+    describe('when a monitoring station has a grid reference', () => {
+      it('returns the grid reference', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.gridReference).to.equal('TL2664640047')
+      })
+    })
+
+    describe('when a monitoring station does not have a grid reference', () => {
+      beforeEach(() => {
+        monitoringStation.gridReference = null
+      })
+
+      it('returns an empty string', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.gridReference).to.equal('')
       })
     })
   })
@@ -311,6 +333,50 @@ describe('Monitoring Stations - View presenter', () => {
         const result = ViewPresenter.go(monitoringStation, auth)
 
         expect(result.restrictions[0].restrictionCount).to.equal(2)
+      })
+    })
+  })
+
+  describe('the "stationReference" property', () => {
+    describe('when a monitoring station has a station reference', () => {
+      beforeEach(() => {
+        monitoringStation.stationReference = 'STN12345'
+      })
+
+      it('returns the station reference', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.stationReference).to.equal('STN12345')
+      })
+    })
+
+    describe('when a monitoring station does not have a station reference', () => {
+      it('returns an empty string', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.stationReference).to.equal('')
+      })
+    })
+  })
+
+  describe('the "wiskiId" property', () => {
+    describe('when a monitoring station has a WSKI Id', () => {
+      beforeEach(() => {
+        monitoringStation.wiskiId = 'WSK12345'
+      })
+
+      it('returns the WSKI Id', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.wiskiId).to.equal('WSK12345')
+      })
+    })
+
+    describe('when a monitoring station does not have a WSKI Id', () => {
+      it('returns an empty string', () => {
+        const result = ViewPresenter.go(monitoringStation, auth)
+
+        expect(result.wiskiId).to.equal('')
       })
     })
   })

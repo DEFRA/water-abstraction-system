@@ -12,7 +12,7 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const ProcessImportedLicenceService = require('../../../app/services/licences/supplementary/process-imported-licence.service.js')
+const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 // Thing under test
 const DetermineSupplementaryBillingFlagsService = require('../../../app/services/import/determine-supplementary-billing-flags.service.js')
@@ -39,7 +39,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    Sinon.stub(ProcessImportedLicenceService, 'go').resolves()
+    Sinon.stub(ProcessBillingFlagService, 'go').resolves()
   })
 
   afterEach(async () => {
@@ -56,7 +56,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
         it('does not call ProcessImportedLicenceService', async () => {
           await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
 
-          expect(ProcessImportedLicenceService.go.called).to.be.false()
+          expect(ProcessBillingFlagService.go.called).to.be.false()
         })
       })
 
@@ -68,7 +68,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
         it('does not call ProcessImportedLicenceService', async () => {
           await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessImportedLicenceService.go.called).to.be.false()
+          expect(ProcessBillingFlagService.go.called).to.be.false()
         })
       })
     })
@@ -82,7 +82,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
           await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicenceNullDates.id)
 
-          expect(ProcessImportedLicenceService.go.called).to.be.true()
+          expect(ProcessBillingFlagService.go.called).to.be.true()
         })
       })
 
@@ -94,7 +94,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
           await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessImportedLicenceService.go.called).to.be.true()
+          expect(ProcessBillingFlagService.go.called).to.be.true()
         })
       })
 
@@ -106,7 +106,7 @@ describe('Determine Supplementary Billing Flags Service', () => {
         it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
           await DetermineSupplementaryBillingFlagsService.go(importedLicence, existingLicencePopulatedDates.id)
 
-          expect(ProcessImportedLicenceService.go.called).to.be.true()
+          expect(ProcessBillingFlagService.go.called).to.be.true()
         })
       })
     })

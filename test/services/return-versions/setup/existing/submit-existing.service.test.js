@@ -62,7 +62,11 @@ describe('Return Versions Setup - Submit Existing service', () => {
           existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab'
         }
 
-        Sinon.stub(GenerateFromExistingRequirementsService, 'go').resolves([_transformedReturnRequirement()])
+        Sinon.stub(GenerateFromExistingRequirementsService, 'go').resolves({
+          multipleUpload: false,
+          quarterlyReturns: false,
+          requirements: [_transformedReturnRequirement()]
+        })
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -77,6 +81,22 @@ describe('Return Versions Setup - Submit Existing service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.requirements).to.equal([_transformedReturnRequirement()])
+      })
+
+      it('saves the return versions "multipleUpload" state', async () => {
+        await SubmitExistingService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.multipleUpload).to.equal(false)
+      })
+
+      it('saves the return versions "quarterlyReturns" state', async () => {
+        await SubmitExistingService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.quarterlyReturns).to.equal(false)
       })
     })
 

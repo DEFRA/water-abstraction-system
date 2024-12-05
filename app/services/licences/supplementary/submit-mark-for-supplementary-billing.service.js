@@ -5,27 +5,25 @@
  * @module SubmitMarkForSupplementaryBillingService
  */
 
-const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
 const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
-const LegacyRequest = require('../../../requests/legacy.request.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const MarkForSupplementaryBillingPresenter = require('../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
+const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
 const SupplementaryYearValidator = require('../../../validators/licences/supplementary/supplementary-year.validator.js')
 
 /**
  * Handles the submission to mark a licence for supplementary billing.
  * Validates the submitted form data and flags the licence for supplementary billing based on the provided years.
  *
- * If "preSroc" is part of the selected years, it will call the legacy system to mark those years.
- * After marking for legacy years, it processes the remaining years for supplementary billing.
+ * If "preSroc" is part of the selected years, it will flag this as true and update all the licence flags by calling
+ * `PersistSupplementaryBillingFlagsService`.
  *
  * @param {string} licenceId - The UUID of the licence to flag
  * @param {object} payload - The submitted form data
- * @param {object} user - Instance of `UserModel` that represents the user making the request
  *
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
-async function go(licenceId, payload, user) {
+async function go(licenceId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -35,7 +33,7 @@ async function go(licenceId, payload, user) {
     // as a string.
     supplementaryYears = Array.isArray(supplementaryYears) ? supplementaryYears : [supplementaryYears]
 
-    await _flagLicenceYears(supplementaryYears, licenceId, user)
+    await _flagForBilling(supplementaryYears, licenceId)
 
     return { error: null }
   }
@@ -50,13 +48,24 @@ async function go(licenceId, payload, user) {
   }
 }
 
-async function _fetchLicenceData(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef', 'regionId'])
-}
+/**
+ * The page only flags a licence for two-part tariff billing. Pre-sroc billing included two-part tariff bills (as
+ * two-part tariff had not been separated out into its own annual bill run like it is with sroc). This means we need
+ * to determine the pre-sroc flag and the two-part tariff billing years.
+ *
+ * Since we persist all 3 types of flags, we need to also carry over the existing sroc supplementary flag value.
+ *
+ * @private
+ */
+async function _determineLicenceFlags(licence, supplementaryYears) {
+  // Set the existing sroc supplementary flag, this flag does not get changed
+  const flagForSrocSupplementary = licence.includeInPresrocBilling
+  // Set the existing pre-sroc supplementary flag
+  let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
 
-async function _flagLicenceYears(supplementaryYears, licenceId, user) {
+  // Update the pre-sroc supplementary flag if the user selected a pre-sroc year
   if (supplementaryYears.includes('preSroc')) {
-    await LegacyRequest.post('water', `licences/${licenceId}/mark-for-supplementary-billing`, user.id)
+    flagForPreSrocSupplementary = true
 
     // Remove the 'preSroc' property to allow the supplementary years to be passed to our sroc supplementary flagging
     // service
@@ -65,20 +74,39 @@ async function _flagLicenceYears(supplementaryYears, licenceId, user) {
     })
   }
 
-  if (supplementaryYears.length === 0) {
-    return
+  let twoPartTariffBillingYears = []
+
+  if (supplementaryYears.length > 0) {
+    const twoPartTariff = true
+
+    twoPartTariffBillingYears = await DetermineExistingBillRunYearsService.go(
+      licence.regionId,
+      supplementaryYears,
+      twoPartTariff
+    )
   }
 
-  const { regionId } = await _fetchLicenceData(licenceId)
-  const twoPartTariff = true
+  return { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary }
+}
 
-  const financialYearEnds = await DetermineExistingBillRunYearsService.go(regionId, supplementaryYears, twoPartTariff)
+async function _fetchLicenceData(licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select(['id', 'licenceRef', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
+}
 
-  if (financialYearEnds.length === 0) {
-    return
-  }
+async function _flagForBilling(supplementaryYears, licenceId) {
+  const licence = await _fetchLicenceData(licenceId)
 
-  await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+  const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } =
+    await _determineLicenceFlags(licence, supplementaryYears)
+
+  await PersistSupplementaryBillingFlagsService.go(
+    twoPartTariffBillingYears,
+    flagForPreSrocSupplementary,
+    flagForSrocSupplementary,
+    licenceId
+  )
 }
 
 async function _getPageData(licenceId) {

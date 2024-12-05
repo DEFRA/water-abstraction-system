@@ -32,10 +32,13 @@ describe('Determine Existing Bill Run Years Service', () => {
         beforeEach(async () => {
           // Add an annual bill run to check this doesn't get picked up when we are looking for twoPartTariff ones
           billRun = await BillRunHelper.add({ batchType: 'annual', status: 'sent', regionId })
+          // Add an errored two-part tariff bill run to check this doesn't get picked up either
+          billRunTwo = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'error', regionId })
         })
 
         afterEach(async () => {
           await billRun.$query().delete()
+          await billRunTwo.$query().delete()
         })
 
         it('does not return any years', async () => {
@@ -78,6 +81,8 @@ describe('Determine Existing Bill Run Years Service', () => {
         beforeEach(async () => {
           // Add an annual two-part tariff bill run to confirm we only match to non two-part tariff
           billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId })
+          // Add a cancelled annual bill run to check this doesn't get picked up either
+          billRunTwo = await BillRunHelper.add({ batchType: 'annual', status: 'cancel', regionId })
         })
 
         afterEach(async () => {

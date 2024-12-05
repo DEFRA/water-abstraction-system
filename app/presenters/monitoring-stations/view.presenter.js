@@ -41,15 +41,15 @@ function go(monitoringStation, auth) {
   } = monitoringStation
 
   return {
-    gridReference,
+    gridReference: gridReference ?? '',
     monitoringStationId,
     pageTitle: _pageTitle(riverName, monitoringStationName),
     permissionToManageLinks: auth.credentials.scope.includes('manage_gauging_station_licence_links'),
     permissionToSendAlerts: auth.credentials.scope.includes('hof_notifications'),
     restrictionHeading: _restrictionHeading(licenceMonitoringStations),
     restrictions: _restrictions(licenceMonitoringStations),
-    stationReference,
-    wiskiId
+    stationReference: stationReference ?? '',
+    wiskiId: wiskiId ?? ''
   }
 }
 

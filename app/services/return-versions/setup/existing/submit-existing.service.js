@@ -48,7 +48,13 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.requirements = await GenerateFromExistingRequirementsService.go(payload.existing)
+  const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService.go(
+    payload.existing
+  )
+
+  session.multipleUpload = multipleUpload
+  session.quarterlyReturns = quarterlyReturns
+  session.requirements = requirements
 
   return session.$update()
 }
