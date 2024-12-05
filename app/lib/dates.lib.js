@@ -66,6 +66,23 @@ function isValidDate(dateString) {
 }
 
 /**
+ * Check if a date is between the provided date range
+ *
+ * @param {Date} date
+ * @param {Date} startDate
+ * @param {Date} endDate
+ *
+ * @returns {boolean} - true if the date is between the range (inclusive)
+ */
+function isDateBetweenRange(date, startDate, endDate) {
+  const target = new Date(date).getTime()
+  const start = new Date(startDate).getTime()
+  const end = new Date(endDate).getTime()
+
+  return target >= start && target <= end
+}
+
+/**
  * Checks a string matches the ISO 8601 date format
  *
  * @param {dateString} dateString - The date in the iso format 2001-01-01
@@ -131,6 +148,7 @@ function isQuarterlyReturnSubmissions(date) {
 module.exports = {
   formatDateObjectToISO,
   formatStandardDateToISO,
+  isDateBetweenRange,
   isISODateFormat,
   isQuarterlyReturnSubmissions,
   isValidDate

@@ -5,13 +5,11 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { monthsAsIntegers } = require('../../../lib/static-lookups.lib')
 const { formatLongDate } = require('../../base.presenter')
+const { isDateBetweenRange } = require('../../../lib/dates.lib')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'
-const twentyEighth = 28
-const twentyNinth = 29
 const dueApril = '04-28'
 const dueJanuary = '01-28'
 
@@ -50,7 +48,7 @@ function _returnsPeriod() {
  *  A date is in January if it is between 1st January - 28th January
  */
 function _dayIsInJanuary(date) {
-  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= twentyEighth
+  return isDateBetweenRange(date, new Date(date.getFullYear() + '-01-01'), new Date(date.getFullYear() + '-01-28'))
 }
 
 function _dayInJanuaryOptions(currentYear, previousYear) {
@@ -76,10 +74,7 @@ function _dayInJanuaryOptions(currentYear, previousYear) {
  * @returns {boolean} - true if date is in range (29th November - 31st December)
  */
 function _dayIsBetweenNovemberAndDecember(date) {
-  return (
-    date.getMonth() === monthsAsIntegers.december ||
-    (date.getMonth() === monthsAsIntegers.november && date.getDate() === twentyNinth)
-  )
+  return isDateBetweenRange(date, new Date(date.getFullYear() + '-11-29'), new Date(date.getFullYear() + '-12-31'))
 }
 
 function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
@@ -105,10 +100,7 @@ function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
  * @returns {boolean} - true if date is in range (29th October - 28th November)
  */
 function _dayIsBetweenOctoberAndNovember(date) {
-  return (
-    (date.getMonth() === monthsAsIntegers.october && date.getDate() === twentyNinth) ||
-    (date.getMonth() === monthsAsIntegers.november && date.getDate() <= twentyEighth)
-  )
+  return isDateBetweenRange(date, new Date(date.getFullYear() + '-10-29'), new Date(date.getFullYear() + '-11-28'))
 }
 
 function _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear) {
