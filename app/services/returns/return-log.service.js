@@ -2,10 +2,11 @@
 
 /**
  * TODO: Document
- * @module ReturnLogservice
+ * @module ReturnLogService
  */
 
 const LegacyRequest = require('../../requests/legacy.request.js')
+const ReturnLogPresenter = require('../../presenters/return-logs/view.presenter.js')
 
 /**
  * TBC
@@ -22,7 +23,11 @@ async function go(request, returnId) {
 
   const { body } = result.response
 
-  return body
+  const pageData = ReturnLogPresenter.go(body)
+
+  // TODO: Check licence in CRM to ensure user has access
+
+  return pageData
 }
 
 module.exports = {
