@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe('Notifications Setup - Returns Period presenter', () => {
+describe.only('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
@@ -41,7 +41,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
   })
 
   describe('Options availability based on the current date', () => {
-    describe('When the current date is between 1st January - 28th January', () => {
+    describe('When the current date is between 1 January - 28 January', () => {
       describe('and the date is in January', () => {
         beforeEach(() => {
           month = 0
@@ -51,7 +51,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Quarterly 1st October (previous year) to 31st December (previous year) with a due date 28 Jan (current year)', () => {
+        describe('Option 1 should be for Quarterly 1 October (previous year) to 31 December (previous year) with a due date 28 January (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -59,15 +59,15 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
+              text: `Quarterly 1 October ${previousYear} to 31 December ${previousYear}`,
               hint: {
-                text: `Due date 28 Jan ${currentYear}`
+                text: `Due date 28 January ${currentYear}`
               }
             })
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st January (current year) to 31st March (current year) with a due date 28 April (current year)', () => {
+        describe('Option 2 should be for Quarterly 1 January (current year) to 31 March (current year) with a due date 28 April (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -75,7 +75,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
+              text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
               hint: {
                 text: `Due date 28 April ${currentYear}`
               }
@@ -84,7 +84,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
         })
       })
 
-      describe('and the date is 28th January', () => {
+      describe('and the date is 28 January', () => {
         beforeEach(() => {
           month = 0
           day = 28
@@ -93,7 +93,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Quarterly 1st October (previous year) to 31st December (previous year) with a due date 28 Jan (current year)', () => {
+        describe('Option 1 should be for Quarterly 1 October (previous year) to 31 December (previous year) with a due date 28 January (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -101,15 +101,15 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
+              text: `Quarterly 1 October ${previousYear} to 31 December ${previousYear}`,
               hint: {
-                text: `Due date 28 Jan ${currentYear}`
+                text: `Due date 28 January ${currentYear}`
               }
             })
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st January (current year) to 31st March (current year) with a due date 28 April (current year)', () => {
+        describe('Option 2 should be for Quarterly 1 January (current year) to 31 March (current year) with a due date 28 April (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -117,7 +117,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
+              text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
               hint: {
                 text: `Due date 28 April ${currentYear}`
               }
@@ -127,7 +127,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('When the current date is between 29th October - 28th November', () => {
+    describe('When the current date is between 29 October - 28 November', () => {
       describe('and the date is 29th October', () => {
         beforeEach(() => {
           month = 9
@@ -137,7 +137,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Summer annual 1st November (previous year) to 31st October (current year) with a due date 28 November (current year)', () => {
+        describe('Option 1 should be for Summer annual 1 November (previous year) to 31 October (current year) with a due date 28 November (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -145,7 +145,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Summer annual 1st November ${previousYear} to 31st October ${currentYear}`,
+              text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
               }
@@ -153,7 +153,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 January (next year)', () => {
+        describe('Option 2 should be for Quarterly 1 October (current year) to 31 December (current year) with a due date 28 January (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -161,7 +161,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
                 text: `Due date 28 January ${nextYear}`
               }
@@ -178,7 +178,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Summer annual 1st November (previous year) to 31st October (current year) with a due date 28 November (current year)', () => {
+        describe('Option 1 should be for Summer annual 1 November (previous year) to 31 October (current year) with a due date 28 November (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -186,7 +186,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Summer annual 1st November ${previousYear} to 31st October ${currentYear}`,
+              text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
               }
@@ -194,7 +194,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 January (next year)', () => {
+        describe('Option 2 should be for Quarterly 1 October (current year) to 31 December (current year) with a due date 28 January (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -202,7 +202,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
                 text: `Due date 28 January ${nextYear}`
               }
@@ -210,7 +210,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
       })
-      describe('and the date is 28th November', () => {
+      describe('and the date is 28 November', () => {
         beforeEach(() => {
           month = 10
           day = 28
@@ -219,7 +219,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Summer annual 1st November (previous year) to 31st October (current year) with a due date 28 November (current year)', () => {
+        describe('Option 1 should be for Summer annual 1 November (previous year) to 31 October (current year) with a due date 28 November (current year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -227,7 +227,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Summer annual 1st November ${previousYear} to 31st October ${currentYear}`,
+              text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
               }
@@ -235,7 +235,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 January (next year)', () => {
+        describe('Option 2 should be for Quarterly 1 October (current year) to 31 December (current year) with a due date 28 January (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -243,7 +243,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
                 text: `Due date 28 January ${nextYear}`
               }
@@ -253,7 +253,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('When the current date is between 29th November - 31st December', () => {
+    describe('When the current date is between 29 November - 31 December', () => {
       describe('and the date is in December', () => {
         beforeEach(() => {
           month = 11
@@ -263,7 +263,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 Jan (next year)', () => {
+        describe('Option 1 should be for Quarterly 1 October (current year) to 31 December (current year) with a due date 28 January (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -271,15 +271,15 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
-                text: `Due date 28 Jan ${nextYear}`
+                text: `Due date 28 January ${nextYear}`
               }
             })
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st January (next year) to 31st March (next year) with a due date 28 April (next year)', () => {
+        describe('Option 2 should be for Quarterly 1 January (next year) to 31 March (next year) with a due date 28 April (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -287,7 +287,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
+              text: `Quarterly 1 January ${nextYear} to 31 March ${nextYear}`,
               hint: {
                 text: `Due date 28 April ${nextYear}`
               }
@@ -295,7 +295,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
       })
-      describe('and the date is 29th November', () => {
+      describe('and the date is 29 November', () => {
         beforeEach(() => {
           month = 10
           day = 29
@@ -304,7 +304,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        describe('Option 1 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 Jan (next year)', () => {
+        describe('Option 1 should be for Quarterly 1 October (current year) to 31 December (current year) with a due date 28 January (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [firstOption]
@@ -312,15 +312,15 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(firstOption).to.equal({
               value: 'currentPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
-                text: `Due date 28 Jan ${nextYear}`
+                text: `Due date 28 January ${nextYear}`
               }
             })
           })
         })
 
-        describe('Option 2 should be for Quarterly 1st January (next year) to 31st March (next year) with a due date 28 April (next year)', () => {
+        describe('Option 2 should be for Quarterly 1 January (next year) to 31 March (next year) with a due date 28 April (next year)', () => {
           it('should return the correct "text" and "hint" values', () => {
             const {
               returnsPeriod: [, secondOption]
@@ -328,7 +328,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
             expect(secondOption).to.equal({
               value: 'nextPeriod',
-              text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
+              text: `Quarterly 1 January ${nextYear} to 31 March ${nextYear}`,
               hint: {
                 text: `Due date 28 April ${nextYear}`
               }
