@@ -207,4 +207,14 @@ describe('View presenter', () => {
       })
     })
   })
+
+  describe('the "abstractionPeriod property', () => {
+    describe('when data is provided', () => {
+      it('returns the abstraction period from the metadata', () => {
+        const result = ViewPresenter.go(data)
+
+        expect(result.abstractionPeriod).to.equal('1 April to 31 October')
+      })
+    })
+  })
 })
