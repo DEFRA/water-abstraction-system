@@ -34,6 +34,8 @@ function _returnsPeriod() {
     return _dayInJanuaryOptions(currentYear, previousYear)
   } else if (_dayIsBetweenNovemberAndDecember(today)) {
     return _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear)
+  } else if (_dayIsBetweenOctoberAndNovember(today)) {
+    return _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear)
   } else {
     return []
   }
@@ -93,6 +95,40 @@ function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
       text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
       hint: {
         text: `Due date 28 April ${nextYear}`
+      }
+    }
+  ]
+}
+
+/*
+ *  When the date is between 29th October - 28th November
+ *
+ * @returns {boolean} - true if date is in range (29th October - 28th November)
+ */
+function _dayIsBetweenOctoberAndNovember(date) {
+  if (date.getMonth() === monthsAsIntegers.october && date.getDate() === twentyNinth) {
+    return true
+  } else if (date.getMonth() === monthsAsIntegers.november && date.getDate() <= twentyEighth) {
+    return true
+  } else {
+    return false
+  }
+}
+
+function _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear) {
+  return [
+    {
+      value: currentPeriod,
+      text: `Summer annual 1st November ${previousYear} to 31st October ${currentYear}`,
+      hint: {
+        text: `Due date 28 November ${currentYear}`
+      }
+    },
+    {
+      value: nextPeriod,
+      text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+      hint: {
+        text: `Due date 28 January ${nextYear}`
       }
     }
   ]

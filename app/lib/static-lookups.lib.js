@@ -16,6 +16,7 @@ const contactTypes = ['person', 'department']
  */
 const monthsAsIntegers = {
   january: 0,
+  october: 9,
   november: 10,
   december: 11
 }
