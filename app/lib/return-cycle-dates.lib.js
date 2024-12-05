@@ -8,18 +8,19 @@
 const { returnCycleDates } = require('./static-lookups.lib.js')
 
 /**
- * Get the due date of next provided cycle, either summer or winter and all year
+ * Determine the due date of next provided cycle, either summer or winter and all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year
+ * @param {Date} [determinationDate] - the date by which to determine the cycle's 'due date' (defaults to current date)
  *
  * @returns {Date} the due date of the next cycle
  */
-function cycleDueDate(summer) {
+function cycleDueDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerDueDate(new Date())
+    return _summerDueDate(determinationDate)
   }
 
-  return _allYearDueDate(new Date())
+  return _allYearDueDate(determinationDate)
 }
 
 /**
@@ -39,18 +40,19 @@ function cycleDueDateByDate(date, summer) {
 }
 
 /**
- * Get the end date of next provided cycle, either summer and winter or all year
+ * Determine the end date of next provided cycle, either summer and winter or all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year
+ * @param {Date} [determinationDate] - the date by which to determine the cycle's 'end date' (defaults to current date)
  *
  * @returns {Date} the end date of the next cycle
  */
-function cycleEndDate(summer) {
+function cycleEndDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerEndDate(new Date())
+    return _summerEndDate(determinationDate)
   }
 
-  return _allYearEndDate(new Date())
+  return _allYearEndDate(determinationDate)
 }
 
 /**
@@ -70,18 +72,20 @@ function cycleEndDateByDate(date, summer) {
 }
 
 /**
- * Get the start date of next provided cycle, either summer or winter and all year
+ * Determine the start date of next provided cycle, either summer or winter and all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year
+ * @param {Date} [determinationDate] - the date by which to determine the cycle's 'start date' (defaults to current
+ * date)
  *
  * @returns {Date} the start date of the next cycle.
  */
-function cycleStartDate(summer) {
+function cycleStartDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerStartDate(new Date())
+    return _summerStartDate(determinationDate)
   }
 
-  return _allYearStartDate(new Date())
+  return _allYearStartDate(determinationDate)
 }
 
 /**
