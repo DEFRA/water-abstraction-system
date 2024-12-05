@@ -84,42 +84,85 @@ describe('Notifications Setup - Returns Period presenter', () => {
     })
 
     describe('When the current date is between 29th November - 31st December', () => {
-      beforeEach(() => {
-        month = 11
-        day = 25
+      describe('and the date is in December', () => {
+        beforeEach(() => {
+          month = 11
+          day = 25
 
-        testDate = new Date(currentYear, month, day)
-        clock = Sinon.useFakeTimers(testDate)
-      })
+          testDate = new Date(currentYear, month, day)
+          clock = Sinon.useFakeTimers(testDate)
+        })
 
-      describe('Option 1 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 Jan (next year)', () => {
-        it('should return the correct "text" and "hint" values', () => {
-          const {
-            returnsPeriod: [firstOption]
-          } = ReturnsPeriodPresenter.go()
+        describe('Option 1 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 Jan (next year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [firstOption]
+            } = ReturnsPeriodPresenter.go()
 
-          expect(firstOption).to.equal({
-            value: 'currentPeriod',
-            text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
-            hint: {
-              text: `Due date 28 Jan ${nextYear}`
-            }
+            expect(firstOption).to.equal({
+              value: 'currentPeriod',
+              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              hint: {
+                text: `Due date 28 Jan ${nextYear}`
+              }
+            })
+          })
+        })
+
+        describe('Option 2 should be for Quarterly 1st January (next year) to 31st March (next year) with a due date 28 April (next year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [, secondOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(secondOption).to.equal({
+              value: 'nextPeriod',
+              text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
+              hint: {
+                text: `Due date 28 April ${nextYear}`
+              }
+            })
           })
         })
       })
+      describe('and the date is 29th November', () => {
+        beforeEach(() => {
+          month = 10
+          day = 29
 
-      describe('Option 2 should be for Quarterly 1st January (next year) to 31st March (next year) with a due date 28 April (next year)', () => {
-        it('should return the correct "text" and "hint" values', () => {
-          const {
-            returnsPeriod: [, secondOption]
-          } = ReturnsPeriodPresenter.go()
+          testDate = new Date(currentYear, month, day)
+          clock = Sinon.useFakeTimers(testDate)
+        })
 
-          expect(secondOption).to.equal({
-            value: 'nextPeriod',
-            text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
-            hint: {
-              text: `Due date 28 April ${nextYear}`
-            }
+        describe('Option 1 should be for Quarterly 1st October (current year) to 31st December (current year) with a due date 28 Jan (next year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [firstOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(firstOption).to.equal({
+              value: 'currentPeriod',
+              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              hint: {
+                text: `Due date 28 Jan ${nextYear}`
+              }
+            })
+          })
+        })
+
+        describe('Option 2 should be for Quarterly 1st January (next year) to 31st March (next year) with a due date 28 April (next year)', () => {
+          it('should return the correct "text" and "hint" values', () => {
+            const {
+              returnsPeriod: [, secondOption]
+            } = ReturnsPeriodPresenter.go()
+
+            expect(secondOption).to.equal({
+              value: 'nextPeriod',
+              text: `Quarterly 1st January ${nextYear} to 31st March ${nextYear}`,
+              hint: {
+                text: `Due date 28 April ${nextYear}`
+              }
+            })
           })
         })
       })
