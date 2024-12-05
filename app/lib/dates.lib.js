@@ -68,9 +68,13 @@ function isValidDate(dateString) {
 /**
  * Check if a date is between the provided date range
  *
- * @param {Date} date
- * @param {Date} startDate
- * @param {Date} endDate
+ * Can handle a valid string or a date object as a param
+ *
+ * The params are assumed to be strings
+ *
+ * @param {Date|string} date
+ * @param {Date|string} startDate
+ * @param {Date|string} endDate
  *
  * @returns {boolean} - true if the date is between the range (inclusive)
  */

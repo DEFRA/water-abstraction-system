@@ -10,8 +10,21 @@ const { isDateBetweenRange } = require('../../../lib/dates.lib')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'
-const dueApril = '04-28'
-const dueJanuary = '01-28'
+
+const january = 0
+const dates = {
+  dueAprilDate: '04-28',
+  dueJanuaryDate: '01-28',
+  januaryFirst: '01-01',
+  marchThirtyFirst: '03-31',
+  octoberFirst: '10-01',
+  octoberTwentyNinth: '10-29',
+  octoberThirtyFirst: '10-31',
+  novemberFirst: '11-01',
+  novemberTwentyEighth: '11-28',
+  novemberTwentyNinth: '11-29',
+  decemberThirtyFirst: '12-31'
+}
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page
@@ -27,71 +40,40 @@ function go() {
 
 function _returnsPeriod() {
   const today = new Date()
-  const currentYear = today.getFullYear()
-  const previousYear = currentYear - 1
-  const nextYear = currentYear + 1
 
-  if (_dayIsInJanuary(today)) {
-    return _dayInJanuaryOptions(currentYear, previousYear)
-  } else if (_dayIsBetweenNovemberAndDecember(today)) {
-    return _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear)
+  if (_dayIsInQuarterOne(today)) {
+    return _dayInQuarterOne(today)
   } else if (_dayIsBetweenOctoberAndNovember(today)) {
-    return _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear)
+    return _dayBetweenOctoberAndNovemberOptions(today)
   } else {
     return []
   }
 }
 
-/*
- *  Checks if a date is in January (Before the 29th)
+/** Checks if a day is quarter one
+ * This logic differs from normal quarters as it spans across a year
  *
- *  A date is in January if it is between 1st January - 28th January
- */
-function _dayIsInJanuary(date) {
-  return isDateBetweenRange(date, new Date(date.getFullYear() + '-01-01'), new Date(date.getFullYear() + '-01-28'))
-}
-
-function _dayInJanuaryOptions(currentYear, previousYear) {
-  return [
-    _quarterlyOptions(
-      currentPeriod,
-      new Date(`${previousYear}-10-01`),
-      new Date(`${previousYear}-12-31`),
-      new Date(`${currentYear}-${dueJanuary}`)
-    ),
-    _quarterlyOptions(
-      nextPeriod,
-      new Date(`${currentYear}-01-01`),
-      new Date(`${currentYear}-03-31`),
-      new Date(`${currentYear}-${dueApril}`)
-    )
-  ]
-}
-
-/*
- *  When the date is between 29th November - 31st December
+ * To handle this span the function adds / subtracts a year from the star or end date
  *
- * @returns {boolean} - true if date is in range (29th November - 31st December)
+ * @param {Date} date - the date to check is in quarter one
+ *
+ * @returns {boolean} - true if date is in the range (11 November - 28 January)
+ *
+ * @private
  */
-function _dayIsBetweenNovemberAndDecember(date) {
-  return isDateBetweenRange(date, new Date(date.getFullYear() + '-11-29'), new Date(date.getFullYear() + '-12-31'))
-}
+function _dayIsInQuarterOne(date) {
+  const year = date.getFullYear()
 
-function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
-  return [
-    _quarterlyOptions(
-      currentPeriod,
-      new Date(`${currentYear}-10-01`),
-      new Date(`${currentYear}-12-31`),
-      new Date(`${nextYear}-${dueJanuary}`)
-    ),
-    _quarterlyOptions(
-      nextPeriod,
-      new Date(`${nextYear}-01-01`),
-      new Date(`${nextYear}-03-31`),
-      new Date(`${nextYear}-${dueApril}`)
-    )
-  ]
+  let startDate = new Date(`${year}-${dates.novemberTwentyNinth}`)
+  let endDate = new Date(`${year}-${dates.dueJanuaryDate}`)
+
+  if (date.getMonth() !== january) {
+    endDate = new Date(`${year + 1}-${dates.dueJanuaryDate}`)
+  } else {
+    startDate = new Date(`${year - 1}-${dates.novemberTwentyNinth}`)
+  }
+
+  return isDateBetweenRange(date, startDate, endDate)
 }
 
 /*
@@ -100,24 +82,46 @@ function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
  * @returns {boolean} - true if date is in range (29th October - 28th November)
  */
 function _dayIsBetweenOctoberAndNovember(date) {
-  return isDateBetweenRange(date, new Date(date.getFullYear() + '-10-29'), new Date(date.getFullYear() + '-11-28'))
+  const octoberTwentyNinth = new Date(`${date.getFullYear()}-${dates.octoberTwentyNinth}`)
+  const novemberTwentyEighth = new Date(`${date.getFullYear()}-${dates.novemberTwentyEighth}`)
+  return isDateBetweenRange(date, octoberTwentyNinth, novemberTwentyEighth)
 }
 
-function _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear) {
-  return [
-    _summerOptions(
-      currentPeriod,
-      new Date(`${previousYear}-11-01`),
-      new Date(`${currentYear}-10-31`),
-      new Date(`${currentYear}-11-28`)
-    ),
-    _quarterlyOptions(
-      nextPeriod,
-      new Date(`${currentYear}-10-01`),
-      new Date(`${currentYear}-12-31`),
-      new Date(`${nextYear}-${dueJanuary}`)
-    )
-  ]
+function _dayInQuarterOne(date) {
+  const currentYear = date.getFullYear()
+  const previousYear = currentYear - 1
+  const nextYear = currentYear + 1
+
+  if (date.getMonth() === january) {
+    return [_octToDecQuarter(currentPeriod, previousYear, currentYear), _janToMarchQuarter(nextPeriod, currentYear)]
+  } else {
+    return [_octToDecQuarter(currentPeriod, currentYear, nextYear), _janToMarchQuarter(nextPeriod, nextYear)]
+  }
+}
+
+function _dayBetweenOctoberAndNovemberOptions(date) {
+  const currentYear = date.getFullYear()
+  const previousYear = currentYear - 1
+  const nextYear = currentYear + 1
+  return [_summerOptions(currentPeriod, previousYear, currentYear), _octToDecQuarter(nextPeriod, currentYear, nextYear)]
+}
+
+function _janToMarchQuarter(period, year) {
+  return _quarterlyOptions(
+    period,
+    new Date(`${year}-${dates.januaryFirst}`),
+    new Date(`${year}-${dates.marchThirtyFirst}`),
+    new Date(`${year}-${dates.dueAprilDate}`)
+  )
+}
+
+function _octToDecQuarter(period, toYear, dueYear) {
+  return _quarterlyOptions(
+    period,
+    new Date(`${toYear}-${dates.octoberFirst}`),
+    new Date(`${toYear}-${dates.decemberThirtyFirst}`),
+    new Date(`${dueYear}-${dates.dueJanuaryDate}`)
+  )
 }
 
 function _quarterlyOptions(period, fromDate, toDate, dueDate) {
@@ -130,7 +134,11 @@ function _quarterlyOptions(period, fromDate, toDate, dueDate) {
   }
 }
 
-function _summerOptions(period, fromDate, toDate, dueDate) {
+function _summerOptions(period, previousYear, currentYear) {
+  const fromDate = new Date(`${previousYear}-${dates.novemberFirst}`)
+  const toDate = new Date(`${currentYear}-${dates.octoberThirtyFirst}`)
+  const dueDate = new Date(`${currentYear}-${dates.novemberTwentyEighth}`)
+
   return {
     value: period,
     text: `Summer annual ${formatLongDate(fromDate)} to ${formatLongDate(toDate)}`,
