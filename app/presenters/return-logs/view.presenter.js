@@ -5,6 +5,8 @@
  * @module ReturnLogPresenter
  */
 
+const { formatAbstractionPeriod } = require('../base.presenter.js')
+
 /**
  * TODO: Document
  * @param data
@@ -17,7 +19,7 @@ function go(data) {
   const returnPeriod = _formatReturnPeriod(data.startDate, data.endDate)
 
   const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = data.metadata.nald
-  const abstractionPeriod = _formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
+  const abstractionPeriod = formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 
   const purposes = _formatPurposes(data.metadata.purposes)
 
@@ -49,29 +51,11 @@ function _formatReturnPeriod(startDate, endDate) {
   return `${formattedStartDate} to ${formattedEndDate}`
 }
 
-function _formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth) {
-  // We only use 2024 here as a placeholder since a year is required to create a Date object
-  const startDate = new Date(2024, periodStartMonth - 1, periodStartDay)
-  const endDate = new Date(2024, periodEndMonth - 1, periodEndDay)
-
-  const periodStart = _formatDateDayMonth(startDate)
-  const periodEnd = _formatDateDayMonth(endDate)
-
-  return `${periodStart} to ${periodEnd}`
-}
-
 function _formatDateDayMonthYear(date) {
   return new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
-  }).format(new Date(date))
-}
-
-function _formatDateDayMonth(date) {
-  return new Intl.DateTimeFormat('en-GB', {
-    day: 'numeric',
-    month: 'long'
   }).format(new Date(date))
 }
 
