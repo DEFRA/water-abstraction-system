@@ -1,48 +1,52 @@
 'use strict'
 
 /**
- * Process the return logs for the given licence reference
+ * Process voiding and issuing return logs for a given licence reference
  * @module ProcessLicenceReturnLogsService
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const FetchLicenceReturnLogsService = require('./fetch-licence-return-requirements.service.js')
+const CreateReturnLogsService = require('./create-return-logs.service.js')
+const FetchReturnCyclesService = require('./fetch-return-cycles.service.js')
+const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const GenerateReturnLogsService = require('./generate-return-logs.service.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
+const VoidReturnLogsService = require('./void-return-logs.service.js')
 
 /**
- * Creates the return logs for the given licence
- * The return requirement is the information held against the licence that defines how and when an abstractor needs to
- * submit their returns.
+ * Createss return logs and if an end date is provided it will void and reissue return logs for the given licence reference.
  *
- * The return log is the 'header' record generated each return cycle from the requirement that an abstractor submits
- * their returns against.
- *
- * When users make changes to return requirements, the service will determine if any new return logs need to be
- * created depending on the current cycle.
- *
- * This service is for use when a new licence version is detected
- *
- * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
+ * @param {string} [licenceReference] - The licence to create return logs for
+ * @param {Date} [endDate] - An optional end date to use when determining which return logs to void and reissue
  */
-async function go(licenceReference) {
+async function go(licenceReference, endDate) {
   try {
     const startTime = currentTimeInNanoseconds()
+    let returnCycles = []
 
-    const returnRequirements = await FetchLicenceReturnLogsService.go(licenceReference)
-    const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
+    if (endDate) {
+      await VoidReturnLogsService.go(licenceReference, endDate)
+      returnCycles = await FetchReturnCyclesService.go(endDate)
+    } else {
+      returnCycles = await FetchReturnCyclesService.go(new Date())
+    }
 
-    await _createReturnLogs(returnLogs)
+    const returnLogs = []
+
+    for (const returnCycle of returnCycles) {
+      const returnRequirements = await FetchReturnRequirementsService.go(returnCycle, licenceReference)
+
+      for (const returnRequirement of returnRequirements) {
+        const returnLog = await GenerateReturnLogsService.go(returnRequirement, returnCycle)
+
+        returnLogs.push(returnLog)
+      }
+    }
+
+    await CreateReturnLogsService.go(returnLogs)
 
     calculateAndLogTimeTaken(startTime, 'Create licence return logs job complete', { licenceReference })
   } catch (error) {
     global.GlobalNotifier.omfg('Create licence return logs job failed', { error })
-  }
-}
-
-async function _createReturnLogs(returnLogs) {
-  for (const returnLog of returnLogs) {
-    await ReturnLogModel.query().insert(returnLog)
   }
 }
 

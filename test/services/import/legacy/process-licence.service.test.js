@@ -88,7 +88,6 @@ describe('Import Legacy Process Licence service', () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
-      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.true()
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {

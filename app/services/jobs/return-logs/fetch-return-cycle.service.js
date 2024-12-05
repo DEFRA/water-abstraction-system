@@ -7,7 +7,7 @@
 
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
-const { returnCycleDates } = require('../../../lib/static-lookups.lib.js')
+const { cycleEndDateByDate, cycleStartDateByDate } = require('../../../lib/return-cycle-dates.lib.js')
 
 /**
  * Given a date this service returns the return cycle for that date.
@@ -15,62 +15,19 @@ const { returnCycleDates } = require('../../../lib/static-lookups.lib.js')
  * @param {string} date - the date to find the return cycle for - YYYY-MM-DD
  * @param {boolean} summer - which cycle to return - summer or winter and all year
  *
- * @returns {Promise<string>} the id of the return cycle
+ * @returns {Promise<Arrya>} the return cycle details
  */
 async function go(date, summer) {
   const _date = new Date(date)
-  const cycleStartDate = _cycleStartDateByDate(_date, summer)
-  const cycleEndDate = _cycleEndDateByDate(_date, summer)
-  const data = await _fetchReturnCycle(cycleStartDate, cycleEndDate, summer)
+  const cycleStartDate = cycleStartDateByDate(_date, summer)
+  const cycleEndDate = cycleEndDateByDate(_date, summer)
 
-  if (data) {
-    return data.id
-  }
-
-  return undefined
-}
-
-function _cycleEndDateByDate(date, summer) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  if (summer) {
-    if (month >= returnCycleDates.summer.endDate.month) {
-      return `${year + 1}-10-31`
-    }
-
-    return `${year}-10-31`
-  }
-
-  if (month >= returnCycleDates.allYear.endDate.month) {
-    return `${year + 1}-03-31`
-  }
-
-  return `${year}-03-31`
-}
-
-function _cycleStartDateByDate(date, summer) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  if (summer) {
-    if (month <= returnCycleDates.summer.startDate.month) {
-      return `${year - 1}-11-01`
-    }
-
-    return `${year - 1}-04-01`
-  }
-
-  if (month <= returnCycleDates.allYear.startDate.month) {
-    return `${year - 1}-04-01`
-  }
-
-  return `${year}-04-01`
+  return await _fetchReturnCycle(cycleStartDate, cycleEndDate, summer)
 }
 
 async function _fetchReturnCycle(startDate, endDate, summer) {
   return ReturnCycleModel.query()
-    .select(['id'])
+    .select(['id', 'startDate', 'endDate', 'dueDate', 'summer'])
     .where('startDate', '>=', startDate)
     .where('endDate', '<=', endDate)
     .where('summer', summer)
