@@ -17,10 +17,10 @@ const { returnCycleDates } = require('./static-lookups.lib.js')
  */
 function determineCycleDueDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerDueDate(determinationDate)
+    return _dueDate(determinationDate, returnCycleDates.summer)
   }
 
-  return _allYearDueDate(determinationDate)
+  return _dueDate(determinationDate, returnCycleDates.allYear)
 }
 
 /**
@@ -33,10 +33,10 @@ function determineCycleDueDate(summer, determinationDate = new Date()) {
  */
 function determineCycleEndDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerEndDate(determinationDate)
+    return _endDate(determinationDate, returnCycleDates.summer)
   }
 
-  return _allYearEndDate(determinationDate)
+  return _endDate(determinationDate, returnCycleDates.allYear)
 }
 
 /**
@@ -50,74 +50,41 @@ function determineCycleEndDate(summer, determinationDate = new Date()) {
  */
 function determineCycleStartDate(summer, determinationDate = new Date()) {
   if (summer) {
-    return _summerStartDate(determinationDate)
+    return _startDate(determinationDate, returnCycleDates.summer)
   }
 
-  return _allYearStartDate(determinationDate)
+  return _startDate(determinationDate, returnCycleDates.allYear)
 }
 
-function _allYearDueDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
+function _dueDate(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+  const month = determinationDate.getMonth()
 
-  const cycleDueDay = returnCycleDates.allYear.dueDate.day
-  const cycleDueMonth = returnCycleDates.allYear.dueDate.month + 1
-  const cycleDueYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
+  const cycleDueDay = cycle.dueDate.day
+  const cycleDueMonth = cycle.dueDate.month + 1
+  const cycleDueYear = month > cycle.endDate.month ? year + 1 : year
 
   return new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
 }
 
-function _allYearEndDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
+function _endDate(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+  const month = determinationDate.getMonth()
 
-  const cycleEndDay = returnCycleDates.allYear.endDate.day
-  const cycleEndMonth = returnCycleDates.allYear.endDate.month + 1
-  const cycleEndYear = month > returnCycleDates.allYear.endDate.month ? year + 1 : year
-
-  return new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
-}
-
-function _allYearStartDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  const cycleStartDay = returnCycleDates.allYear.startDate.day
-  const cycleStartMonth = returnCycleDates.allYear.startDate.month + 1
-  const cycleStartYear = month < returnCycleDates.allYear.startDate.month ? year - 1 : year
-
-  return new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
-}
-
-function _summerDueDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  const cycleDueDay = returnCycleDates.summer.dueDate.day
-  const cycleDueMonth = returnCycleDates.summer.dueDate.month + 1
-  const cycleDueYear = month > returnCycleDates.summer.endDate.month ? year + 1 : year
-
-  return new Date(`${cycleDueYear}-${cycleDueMonth}-${cycleDueDay}`)
-}
-
-function _summerEndDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-
-  const cycleEndDay = returnCycleDates.summer.endDate.day
-  const cycleEndMonth = returnCycleDates.summer.endDate.month + 1
-  const cycleEndYear = month > returnCycleDates.summer.endDate.month ? year + 1 : year
+  const cycleEndDay = cycle.endDate.day
+  const cycleEndMonth = cycle.endDate.month + 1
+  const cycleEndYear = month > cycle.endDate.month ? year + 1 : year
 
   return new Date(`${cycleEndYear}-${cycleEndMonth}-${cycleEndDay}`)
 }
 
-function _summerStartDate(date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
+function _startDate(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+  const month = determinationDate.getMonth()
 
-  const cycleStartDay = returnCycleDates.summer.startDate.day
-  const cycleStartMonth = returnCycleDates.summer.startDate.month + 1
-  const cycleStartYear = month < returnCycleDates.summer.startDate.month ? year - 1 : year
+  const cycleStartDay = cycle.startDate.day
+  const cycleStartMonth = cycle.startDate.month + 1
+  const cycleStartYear = month < cycle.startDate.month ? year - 1 : year
 
   return new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
 }
