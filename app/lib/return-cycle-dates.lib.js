@@ -40,22 +40,6 @@ function cycleEndDate(summer, determinationDate = new Date()) {
 }
 
 /**
- * Given an arbitrary date and if it is summer or all-year return the end date of that cycle
- *
- * @param {Date} date - the date whose start date you want to find
- * @param {boolean} summer - true for summer, false for winter and all year
- *
- * @returns {Date} the start date of the next cycle
- */
-function cycleEndDateByDate(date, summer) {
-  if (summer) {
-    return _summerEndDate(date)
-  }
-
-  return _allYearEndDate(date)
-}
-
-/**
  * Determine the start date of next provided cycle, either summer or winter and all year
  *
  * @param {boolean} summer - true for summer, false for winter and all year
@@ -157,7 +141,6 @@ function _summerStartDate(date) {
 module.exports = {
   cycleDueDate,
   cycleEndDate,
-  cycleEndDateByDate,
   cycleStartDate,
   cycleStartDateByDate
 }
