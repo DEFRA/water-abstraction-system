@@ -50,7 +50,8 @@ function _returnsPeriod() {
   }
 }
 
-/** Checks if a day is quarter one
+/**
+ * Checks if a day is quarter one
  * This logic differs from normal quarters as it spans across a year
  *
  * To handle this span the function adds / subtracts a year from the star or end date
@@ -76,10 +77,14 @@ function _dayIsInQuarterOne(date) {
   return isDateBetweenRange(date, startDate, endDate)
 }
 
-/*
- *  When the date is between 29th October - 28th November
+/**
+ * When the date is between 29th October - 28th November
+ *
+ * @param date
  *
  * @returns {boolean} - true if date is in range (29th October - 28th November)
+ *
+ * @private
  */
 function _dayIsBetweenOctoberAndNovember(date) {
   const octoberTwentyNinth = new Date(`${date.getFullYear()}-${dates.octoberTwentyNinth}`)
@@ -87,6 +92,17 @@ function _dayIsBetweenOctoberAndNovember(date) {
   return isDateBetweenRange(date, octoberTwentyNinth, novemberTwentyEighth)
 }
 
+/**
+ * When a date is in quarter one there are some alternations to the options depending on the date
+ *
+ * If the date is in January then the years shown differ from those before January
+ *
+ * @param {Date} date -
+ *
+ * @returns {object} - the return period options
+ *
+ * @private
+ */
 function _dayInQuarterOne(date) {
   const currentYear = date.getFullYear()
   const previousYear = currentYear - 1
@@ -101,9 +117,8 @@ function _dayInQuarterOne(date) {
 
 function _dayBetweenOctoberAndNovemberOptions(date) {
   const currentYear = date.getFullYear()
-  const previousYear = currentYear - 1
   const nextYear = currentYear + 1
-  return [_summerOptions(currentPeriod, previousYear, currentYear), _octToDecQuarter(nextPeriod, currentYear, nextYear)]
+  return [_summerOptions(currentPeriod, date), _octToDecQuarter(nextPeriod, currentYear, nextYear)]
 }
 
 function _janToMarchQuarter(period, year) {
@@ -134,7 +149,10 @@ function _quarterlyOptions(period, fromDate, toDate, dueDate) {
   }
 }
 
-function _summerOptions(period, previousYear, currentYear) {
+function _summerOptions(period, date) {
+  const currentYear = date.getFullYear()
+  const previousYear = currentYear - 1
+
   const fromDate = new Date(`${previousYear}-${dates.novemberFirst}`)
   const toDate = new Date(`${currentYear}-${dates.octoberThirtyFirst}`)
   const dueDate = new Date(`${currentYear}-${dates.novemberTwentyEighth}`)
