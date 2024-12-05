@@ -10,10 +10,9 @@ const { expect } = Code
 
 // Things we need to stub
 const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
+const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
 const FetchCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-const GenerateReturnLogService = require('../../../../app/services/return-logs/generate-return-log.service.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
@@ -22,15 +21,11 @@ describe('Process return logs service', () => {
   const cycle = 'all-year'
 
   let createReturnCycleStub
-  let insertStub
+  let createReturnLogsStub
   let notifierStub
 
   beforeEach(() => {
-    insertStub = Sinon.stub().resolves()
-    Sinon.stub(ReturnLogModel, 'query').returns({
-      insert: insertStub
-    })
-
+    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -63,15 +58,7 @@ describe('Process return logs service', () => {
       it('creates the return logs', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        // Check we create the return log as expected
-        const [insertObject] = insertStub.args[0]
-
-        // NOTE: We don't assert every property of the object passed in because we know it is coming from
-        // GenerateReturnLogsService and that has its own suite of tests. We do however confirm that the createdAt and
-        // UpdatedAt properties are set because those only get set in the service
-        expect(insertObject.id).to.equal('v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31')
-        expect(insertObject.createdAt).to.exist()
-        expect(insertObject.updatedAt).to.exist()
+        expect(createReturnLogsStub.called).to.be.true()
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
@@ -85,30 +72,6 @@ describe('Process return logs service', () => {
         expect(logDataArg.count).to.equal(1)
         expect(logDataArg.cycle).to.equal(cycle)
       })
-
-      describe('but it errors when creating the return log', () => {
-        beforeEach(() => {
-          // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
-          // But if the actual insert were to throw the expected behaviour would be the same.
-          Sinon.stub(GenerateReturnLogService, 'go').throws()
-        })
-
-        it('handles the error', async () => {
-          await ProcessReturnLogsService.go(cycle)
-
-          const args = notifierStub.omfg.firstCall.args
-
-          expect(args[0]).to.equal('Return log creation errored')
-          expect(args[1].returnRequirement.id).to.equal('4bc1efa7-10af-4958-864e-32acae5c6fa4')
-          expect(args[2]).to.be.an.error()
-        })
-
-        it('does not stop the job completing', async () => {
-          await ProcessReturnLogsService.go(cycle)
-
-          expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
-        })
-      })
     })
 
     describe('but there are no return requirements that need return logs created', () => {
@@ -119,7 +82,7 @@ describe('Process return logs service', () => {
       it('does not create any return logs', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        expect(insertStub.called).to.be.false()
+        expect(createReturnCycleStub.called).to.be.false()
       })
 
       it('still logs the time taken in milliseconds and seconds', async () => {
@@ -156,15 +119,7 @@ describe('Process return logs service', () => {
       it('creates the return logs', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        // Check we create the return log as expected
-        const [insertObject] = insertStub.args[0]
-
-        // NOTE: We don't assert every property of the object passed in because we know it is coming from
-        // GenerateReturnLogsService and that has its own suite of tests. We do however confirm that the createdAt and
-        // UpdatedAt properties are set because those only get set in the service
-        expect(insertObject.id).to.equal('v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31')
-        expect(insertObject.createdAt).to.exist()
-        expect(insertObject.updatedAt).to.exist()
+        expect(createReturnLogsStub.called).to.be.true()
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {

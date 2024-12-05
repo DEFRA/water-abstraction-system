@@ -5,16 +5,11 @@
  * @module ProcessReturnLogsService
  */
 
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
+const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
 const FetchCurrentReturnCycleService = require('./fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
-const GenerateReturnLogService = require('../../return-logs/generate-return-log.service.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
@@ -44,23 +39,12 @@ async function go(cycle) {
     const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
-      await _createReturnLog(returnRequirement, returnCycle)
+      await CreateReturnLogsService.go(returnRequirement, returnCycle)
     }
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
-  }
-}
-
-async function _createReturnLog(returnRequirement, returnCycle) {
-  try {
-    const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
-    const timestamp = timestampForPostgres()
-
-    await ReturnLogModel.query().insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
-  } catch (error) {
-    global.GlobalNotifier.omfg('Return log creation errored', { returnRequirement }, error)
   }
 }
 
