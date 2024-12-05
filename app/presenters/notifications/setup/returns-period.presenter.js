@@ -106,13 +106,10 @@ function _dayBetweenNovemberAndDecemberOptions(currentYear, nextYear) {
  * @returns {boolean} - true if date is in range (29th October - 28th November)
  */
 function _dayIsBetweenOctoberAndNovember(date) {
-  if (date.getMonth() === monthsAsIntegers.october && date.getDate() === twentyNinth) {
-    return true
-  } else if (date.getMonth() === monthsAsIntegers.november && date.getDate() <= twentyEighth) {
-    return true
-  } else {
-    return false
-  }
+  return (
+    (date.getMonth() === monthsAsIntegers.october && date.getDate() === twentyNinth) ||
+    (date.getMonth() === monthsAsIntegers.november && date.getDate() <= twentyEighth)
+  )
 }
 
 function _dayBetweenOctoberAndNovemberOptions(previousYear, currentYear, nextYear) {
