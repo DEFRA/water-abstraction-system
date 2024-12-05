@@ -6,7 +6,11 @@
  */
 
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
-const { cycleDueDate, cycleEndDate, cycleStartDate } = require('../../../lib/return-cycle-dates.lib.js')
+const {
+  determineCycleDueDate,
+  determineCycleEndDate,
+  determineCycleStartDate
+} = require('../../../lib/return-cycle-dates.lib.js')
 const ReturnCycleModel = require('../../../models/return-cycle.model.js')
 
 /**
@@ -27,11 +31,11 @@ function _generateData(summer) {
 
   return {
     createdAt: timestamp,
-    dueDate: cycleDueDate(summer),
-    endDate: cycleEndDate(summer),
+    dueDate: determineCycleDueDate(summer),
+    endDate: determineCycleEndDate(summer),
     summer,
     submittedInWrls: true,
-    startDate: cycleStartDate(summer),
+    startDate: determineCycleStartDate(summer),
     updatedAt: timestamp
   }
 }

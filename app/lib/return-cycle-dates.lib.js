@@ -15,7 +15,7 @@ const { returnCycleDates } = require('./static-lookups.lib.js')
  *
  * @returns {Date} the due date of the next cycle
  */
-function cycleDueDate(summer, determinationDate = new Date()) {
+function determineCycleDueDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _summerDueDate(determinationDate)
   }
@@ -31,7 +31,7 @@ function cycleDueDate(summer, determinationDate = new Date()) {
  *
  * @returns {Date} the end date of the next cycle
  */
-function cycleEndDate(summer, determinationDate = new Date()) {
+function determineCycleEndDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _summerEndDate(determinationDate)
   }
@@ -48,7 +48,7 @@ function cycleEndDate(summer, determinationDate = new Date()) {
  *
  * @returns {Date} the start date of the next cycle.
  */
-function cycleStartDate(summer, determinationDate = new Date()) {
+function determineCycleStartDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _summerStartDate(determinationDate)
   }
@@ -123,7 +123,7 @@ function _summerStartDate(date) {
 }
 
 module.exports = {
-  cycleDueDate,
-  cycleEndDate,
-  cycleStartDate
+  determineCycleDueDate,
+  determineCycleEndDate,
+  determineCycleStartDate
 }

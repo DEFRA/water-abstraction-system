@@ -6,7 +6,7 @@
  */
 
 const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
-const { cycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
+const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
  * Generate return log data from a return requirement and return cycle
@@ -86,7 +86,7 @@ function _metadata(returnRequirement, endDate) {
   return {
     description: siteDescription,
     isCurrent: returnVersion.reason !== 'succession-or-transfer-of-licence',
-    isFinal: endDate < cycleEndDate(summer),
+    isFinal: endDate < determineCycleEndDate(summer),
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
     isUpload: upload,
