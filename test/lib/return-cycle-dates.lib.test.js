@@ -787,4 +787,81 @@ describe('Return Cycle Dates lib', () => {
       })
     })
   })
+
+  describe('periods', () => {
+    // Temp
+    beforeEach(() => {
+      clock = Sinon.useFakeTimers()
+    })
+    describe('work out periods', () => {
+      it('should return the calculated return periods', () => {
+        const result = ReturnCycleDatesLib.periods(new Date(`2024-10-29`))
+        expect(result).to.equal({
+          summerAllYear: {
+            dueDate: new Date('2024-11-28'),
+            endDate: new Date('2024-10-31'),
+            startDate: new Date('2023-11-01'),
+            value: 'summerAllYear'
+          },
+          summerQuarterOne: {
+            dueDate: new Date('2024-11-29'),
+            endDate: new Date('2025-01-28'),
+            startDate: new Date('2024-11-29'),
+            value: 'summerQuarterOne'
+          }
+        })
+      })
+    })
+  })
+
+  describe.only('periods current', () => {
+    // Temp
+    beforeEach(() => {
+      clock = Sinon.useFakeTimers()
+    })
+
+    describe('work out periods - AC4 - 29th October - 28th November', () => {
+      it('should return current period', () => {
+        const result = ReturnCycleDatesLib.currentReturnPeriod(new Date(`2024-11-20`))
+        expect(result).to.equal({
+          dueDate: new Date('2024-11-28'),
+          endDate: new Date('2024-10-31'),
+          startDate: new Date('2023-11-01'),
+          name: 'summerAllYear'
+        })
+      })
+
+      it('should return next period', () => {
+        const result = ReturnCycleDatesLib.nextReturnPeriod(new Date(`2024-11-20`))
+        expect(result).to.equal({
+          dueDate: new Date('2025-01-28'),
+          endDate: new Date('2024-12-31'),
+          startDate: new Date('2024-10-01'),
+          name: 'winterQuarterThree'
+        })
+      })
+    })
+
+    describe('work out periods - AC - 3 due 29th July - 28th October', () => {
+      it('should return current period', () => {
+        const result = ReturnCycleDatesLib.currentReturnPeriod(new Date(`2024-10-20`))
+        expect(result).to.equal({
+          dueDate: new Date('2024-10-28'),
+          endDate: new Date('2024-09-30'),
+          startDate: new Date('2024-07-01'),
+          name: 'winterQuarterTwo'
+        })
+      })
+
+      it('should return next period', () => {
+        const result = ReturnCycleDatesLib.nextReturnPeriod(new Date(`2024-10-20`))
+        expect(result).to.equal({
+          dueDate: new Date('2024-11-28'),
+          endDate: new Date('2024-10-31'),
+          startDate: new Date('2023-11-01'),
+          name: 'summerAllYear'
+        })
+      })
+    })
+  })
 })
