@@ -243,7 +243,7 @@ function sentenceCase(value) {
 }
 
 /**
- * Convert a string to title case by capitalizing the first letter of each word
+ * Convert a string to title case by lowercasing all characters then capitalizing the first letter of each word
  *
  * Will work for strings containing multiple words or only one.
  *
@@ -252,7 +252,7 @@ function sentenceCase(value) {
  * @returns {string} The title cased string
  */
 function titleCase(value) {
-  const words = value.split(' ')
+  const words = value.toLowerCase().split(' ')
   const titleCasedWords = []
 
   words.forEach((word) => {
