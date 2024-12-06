@@ -109,7 +109,7 @@ describe('Process licence return logs service', () => {
       await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
+      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
 
       expect(areDatesSequential).to.equal(true)
       expect(result.length).to.equal(4)
@@ -303,7 +303,7 @@ describe('Process licence return logs service', () => {
       await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
+      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
 
       expect(areDatesSequential).to.equal(true)
       expect(result.length).to.equal(4)
@@ -463,7 +463,7 @@ describe('Process licence return logs service', () => {
       await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
+      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
 
       expect(areDatesSequential).to.equal(true)
       expect(result.length).to.equal(4)
@@ -657,7 +657,7 @@ describe('Process licence return logs service', () => {
       await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
 
       const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinousReturnLogs(licence.licenceRef)
+      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
 
       expect(areDatesSequential).to.equal(true)
       expect(result.length).to.equal(4)
