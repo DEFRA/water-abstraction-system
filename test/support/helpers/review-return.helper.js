@@ -56,7 +56,7 @@ function defaults(data = {}) {
 
   const defaults = {
     reviewLicenceId: generateUUID(),
-    returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
+    returnId: generateReturnLogId(new Date('2022-04-01'), new Date('2023-03-31'), 1, licenceRef, returnReference),
     returnReference,
     returnStatus: 'completed',
     abstractionOutsidePeriod: false,

@@ -8,14 +8,15 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PointHelper = require('../../../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
+const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
 const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
@@ -24,848 +25,549 @@ const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpo
 // Thing under test
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
-describe('Fetch return requirements service', () => {
-  const summerReturns = []
-  const allYearReturns = []
+// NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
+// but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved
+// that code to a helper function at the bottom but in order for it to be able to access the variables they need to be
+// declared here.
+let licence
+let point
+let primaryPurpose
+let purpose
+let region
+let returnCycle
+let returnRequirement
+let returnRequirementPurpose
+let returnVersion
+let secondaryPurpose
 
-  let expiredDate
-  let lapsedDate
-  let licence
-  let point
-  let point2
-  let primaryPurpose
-  let primaryPurpose2
-  let purpose
-  let purpose2
-  let region
-  let returnCycle
-  let returnVersion
-  let returnRequirement
-  let returnRequirement2
-  let returnRequirementPurpose
-  let returnRequirementPurpose2
-  let revokedDate
-  let secondaryPurpose
-  let secondaryPurpose2
-  let startDate
-
-  describe('when provided a summer return cycle, one return requirement and a licenceRef provided', () => {
+describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
+  describe('when the return cycle is "summer', () => {
     before(async () => {
       returnCycle = await ReturnCycleHelper.select(0, true)
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      summerReturns.push(returnRequirement.legacyId)
     })
 
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is false, two return requirements and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, false)
-      primaryPurpose = PrimaryPurposeHelper.select()
-      primaryPurpose2 = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      purpose2 = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      secondaryPurpose2 = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      returnRequirement2 = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      point2 = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point2.id, returnRequirementId: returnRequirement2.id })
-      returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose2.id,
-        purposeId: purpose2.id,
-        returnRequirementId: returnRequirement2.id,
-        secondaryPurposeId: secondaryPurpose2.id
-      })
-      allYearReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return two return log payloads', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(2)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-      expect(result[1].id).to.equal(returnRequirement2.id)
-      expect(result[1].returnVersionId).to.equal(returnVersion.id)
-      expect(result[1].reportingFrequency).to.equal(returnRequirement2.reportingFrequency)
-      expect(result[1].summer).to.equal(returnRequirement2.summer)
-      expect(result[1].upload).to.equal(returnRequirement2.upload)
-      expect(result[1].abstractionPeriodStartDay).to.equal(returnRequirement2.abstractionPeriodStartDay)
-      expect(result[1].abstractionPeriodStartMonth).to.equal(returnRequirement2.abstractionPeriodStartMonth)
-      expect(result[1].abstractionPeriodEndDay).to.equal(returnRequirement2.abstractionPeriodEndDay)
-      expect(result[1].abstractionPeriodEndMonth).to.equal(returnRequirement2.abstractionPeriodEndMonth)
-      expect(result[1].siteDescription).to.equal(returnRequirement2.siteDescription)
-      expect(result[1].legacyId).to.equal(returnRequirement2.legacyId)
-      expect(result[1].externalId).to.equal(returnRequirement2.externalId)
-      expect(result[1].twoPartTariff).to.equal(returnRequirement2.twoPartTariff)
-      expect(result[1].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[1].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[1].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[1].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[1].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[1].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[1].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[1].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[1].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[1].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[1].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[1].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[1].points[0].description).to.equal(point2.description)
-      expect(result[1].points[0].ngr1).to.equal(point2.ngr1)
-      expect(result[1].points[0].ngr2).to.equal(point2.ngr2)
-      expect(result[1].points[0].ngr3).to.equal(point2.ngr3)
-      expect(result[1].points[0].ngr4).to.equal(point2.ngr4)
-      expect(result[1].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose2.id)
-      expect(result[1].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose2.returnRequirementId
-      )
-      expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose2.primaryPurposeId
-      )
-      expect(result[1].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose2.secondaryPurposeId
-      )
-      expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose2.purposeId)
-      expect(result[1].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose2.alias)
-      expect(result[1].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose2.externalId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose2.description)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(
-        secondaryPurpose2.description
-      )
-      expect(result[1].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].purpose.description).to.equal(purpose2.description)
-    })
-  })
-
-  describe('when summer is true, two return requirements and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, true)
-      primaryPurpose = PrimaryPurposeHelper.select()
-      primaryPurpose2 = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      purpose2 = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      secondaryPurpose2 = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      returnRequirement2 = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      point2 = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point2.id, returnRequirementId: returnRequirement2.id })
-      returnRequirementPurpose2 = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose2.id,
-        purposeId: purpose2.id,
-        returnRequirementId: returnRequirement2.id,
-        secondaryPurposeId: secondaryPurpose2.id
-      })
-      summerReturns.push(returnRequirement.legacyId)
-      summerReturns.push(returnRequirement2.legacyId)
-    })
-
-    it('should return two return log payloads', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(2)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-      expect(result[1].id).to.equal(returnRequirement2.id)
-      expect(result[1].returnVersionId).to.equal(returnVersion.id)
-      expect(result[1].reportingFrequency).to.equal(returnRequirement2.reportingFrequency)
-      expect(result[1].summer).to.equal(returnRequirement2.summer)
-      expect(result[1].upload).to.equal(returnRequirement2.upload)
-      expect(result[1].abstractionPeriodStartDay).to.equal(returnRequirement2.abstractionPeriodStartDay)
-      expect(result[1].abstractionPeriodStartMonth).to.equal(returnRequirement2.abstractionPeriodStartMonth)
-      expect(result[1].abstractionPeriodEndDay).to.equal(returnRequirement2.abstractionPeriodEndDay)
-      expect(result[1].abstractionPeriodEndMonth).to.equal(returnRequirement2.abstractionPeriodEndMonth)
-      expect(result[1].siteDescription).to.equal(returnRequirement2.siteDescription)
-      expect(result[1].legacyId).to.equal(returnRequirement2.legacyId)
-      expect(result[1].externalId).to.equal(returnRequirement2.externalId)
-      expect(result[1].twoPartTariff).to.equal(returnRequirement2.twoPartTariff)
-      expect(result[1].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[1].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[1].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[1].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[1].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[1].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[1].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[1].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[1].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[1].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[1].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[1].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[1].points[0].description).to.equal(point2.description)
-      expect(result[1].points[0].ngr1).to.equal(point2.ngr1)
-      expect(result[1].points[0].ngr2).to.equal(point2.ngr2)
-      expect(result[1].points[0].ngr3).to.equal(point2.ngr3)
-      expect(result[1].points[0].ngr4).to.equal(point2.ngr4)
-      expect(result[1].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose2.id)
-      expect(result[1].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose2.returnRequirementId
-      )
-      expect(result[1].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose2.primaryPurposeId
-      )
-      expect(result[1].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose2.secondaryPurposeId
-      )
-      expect(result[1].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose2.purposeId)
-      expect(result[1].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose2.alias)
-      expect(result[1].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose2.externalId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose2.description)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(
-        secondaryPurpose2.description
-      )
-      expect(result[1].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose2.legacyId)
-      expect(result[1].returnRequirementPurposes[0].purpose.description).to.equal(purpose2.description)
-    })
-  })
-
-  describe('when summer is false, there is an expired date, one return requirement and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, false)
-      expiredDate = new Date(new Date().getFullYear() + 1, 1, 31).toISOString().split('T')[0]
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      allYearReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is false, there is an expired date after the end of the cycle, one return requirement and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, false)
-      expiredDate = new Date(new Date().getFullYear() + 1, 3, 31).toISOString().split('T')[0]
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      allYearReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is true, there is a lapsed date, one return requirement and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, true)
-      lapsedDate = new Date(new Date().getFullYear() + 1, 8, 31).toISOString().split('T')[0]
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ lapsedDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      summerReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is true, there is a revoked date that is after the cycle, one return requirement and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, true)
-      revokedDate = new Date(new Date().getFullYear() + 1, 10, 31).toISOString().split('T')[0]
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ revokedDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      summerReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is true, the return version start date is after the cycle start date, one return requirement and a licenceRef provided', () => {
-    before(async () => {
-      returnCycle = await ReturnCycleHelper.select(0, true)
-      startDate = formatDateObjectToISO(new Date(`${returnCycle.startDate.getFullYear()}-11-01`))
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, startDate })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer: true
-      })
-      point = await PointHelper.add()
-      await ReturnRequirementPointHelper.add({ pointId: point.id, returnRequirementId: returnRequirement.id })
-      returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-      summerReturns.push(returnRequirement.legacyId)
-    })
-
-    it('should return one return log payload', async () => {
-      const result = await FetchReturnRequirementsService.go(returnCycle, licence.licenceRef)
-
-      expect(result.length).to.equal(1)
-      expect(result[0].id).to.equal(returnRequirement.id)
-      expect(result[0].returnVersionId).to.equal(returnVersion.id)
-      expect(result[0].reportingFrequency).to.equal(returnRequirement.reportingFrequency)
-      expect(result[0].summer).to.equal(returnRequirement.summer)
-      expect(result[0].upload).to.equal(returnRequirement.upload)
-      expect(result[0].abstractionPeriodStartDay).to.equal(returnRequirement.abstractionPeriodStartDay)
-      expect(result[0].abstractionPeriodStartMonth).to.equal(returnRequirement.abstractionPeriodStartMonth)
-      expect(result[0].abstractionPeriodEndDay).to.equal(returnRequirement.abstractionPeriodEndDay)
-      expect(result[0].abstractionPeriodEndMonth).to.equal(returnRequirement.abstractionPeriodEndMonth)
-      expect(result[0].siteDescription).to.equal(returnRequirement.siteDescription)
-      expect(result[0].legacyId).to.equal(returnRequirement.legacyId)
-      expect(result[0].externalId).to.equal(returnRequirement.externalId)
-      expect(result[0].twoPartTariff).to.equal(returnRequirement.twoPartTariff)
-      expect(result[0].returnVersion.endDate).to.equal(returnVersion.endDate)
-      expect(result[0].returnVersion.id).to.equal(returnVersion.id)
-      expect(result[0].returnVersion.startDate).to.equal(returnVersion.startDate)
-      expect(result[0].returnVersion.reason).to.equal(returnVersion.reason)
-      expect(result[0].returnVersion.licence.id).to.equal(licence.id)
-      expect(result[0].returnVersion.licence.expiredDate).to.equal(licence.expiredDate)
-      expect(result[0].returnVersion.licence.lapsedDate).to.equal(licence.lapsedDate)
-      expect(result[0].returnVersion.licence.licenceRef).to.equal(licence.licenceRef)
-      expect(result[0].returnVersion.licence.revokedDate).to.equal(licence.revokedDate)
-      expect(result[0].returnVersion.licence.areacode).to.equal(licence.regions.historicalAreaCode)
-      expect(result[0].returnVersion.licence.region.id).to.equal(region.id)
-      expect(result[0].returnVersion.licence.region.naldRegionId).to.equal(region.naldRegionId)
-      expect(result[0].points[0].description).to.equal(point.description)
-      expect(result[0].points[0].ngr1).to.equal(point.ngr1)
-      expect(result[0].points[0].ngr2).to.equal(point.ngr2)
-      expect(result[0].points[0].ngr3).to.equal(point.ngr3)
-      expect(result[0].points[0].ngr4).to.equal(point.ngr4)
-      expect(result[0].returnRequirementPurposes[0].id).to.equal(returnRequirementPurpose.id)
-      expect(result[0].returnRequirementPurposes[0].returnRequirementId).to.equal(
-        returnRequirementPurpose.returnRequirementId
-      )
-      expect(result[0].returnRequirementPurposes[0].primaryPurposeId).to.equal(
-        returnRequirementPurpose.primaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].secondaryPurposeId).to.equal(
-        returnRequirementPurpose.secondaryPurposeId
-      )
-      expect(result[0].returnRequirementPurposes[0].purposeId).to.equal(returnRequirementPurpose.purposeId)
-      expect(result[0].returnRequirementPurposes[0].alias).to.equal(returnRequirementPurpose.alias)
-      expect(result[0].returnRequirementPurposes[0].externalId).to.equal(returnRequirementPurpose.externalId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.legacyId).to.equal(primaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].primaryPurpose.description).to.equal(primaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.legacyId).to.equal(secondaryPurpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].secondaryPurpose.description).to.equal(secondaryPurpose.description)
-      expect(result[0].returnRequirementPurposes[0].purpose.legacyId).to.equal(purpose.legacyId)
-      expect(result[0].returnRequirementPurposes[0].purpose.description).to.equal(purpose.description)
-    })
-  })
-
-  describe('when summer is false, and no licenceReference is provided it should return all the return requirements that are eligible', () => {
-    it('should return five return log payloads', async () => {
-      returnCycle = await ReturnCycleHelper.select(0, false)
-
-      const results = await FetchReturnRequirementsService.go(returnCycle)
-
-      const returnRequirementExternalId = results.map((returnLog) => {
-        return returnLog.legacyId
+    describe('and there is a licence that does not end before the cycle starts', () => {
+      before(async () => {
+        region = RegionHelper.select()
+        licence = await LicenceHelper.add({ regionId: region.id })
       })
 
-      expect(
-        allYearReturns.every((result) => {
-          return returnRequirementExternalId.includes(result)
+      describe('and the licence has a return version that does not end before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
-      ).to.equal(true)
+
+        describe('and the return version has a return requirement flagged as "summer"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: true
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Summer purpose alias for testing',
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Summer cycle - live licence - live return version - summer return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          describe('and the return requirement does not have an existing return log for the given cycle', () => {
+            it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+              const results = await FetchReturnRequirementsService.go(returnCycle)
+
+              const expectedResult = _expectedResult()
+
+              expect(results).to.include(expectedResult)
+            })
+          })
+
+          describe('and the return requirement has an existing return log for the given cycle', () => {
+            describe("but the return log's status is 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'void'
+                })
+              })
+
+              it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const expectedResult = _expectedResult()
+
+                expect(results).to.include(expectedResult)
+              })
+            })
+
+            describe("and the return log's status is anything other than 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'due'
+                })
+              })
+
+              it('does not return that return requirement', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const resultIds = _resultIds(results)
+
+                expect(resultIds).not.to.include(returnRequirement.id)
+              })
+            })
+          })
+        })
+
+        describe('and the return version has a return requirement flagged as "winter & all year"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: false
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Summer cycle - live licence - live return version - winter return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
+
+      describe('and the licence has a return version that ends before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
+        })
+
+        describe('and return version has a return requirement flagged as "summer"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: true
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Summer cycle - live licence - ended return version - summer return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
+    })
+
+    describe('and there is a licence that ends before the cycle starts', () => {
+      before(async () => {
+        region = RegionHelper.select()
+        licence = await LicenceHelper.add({ expiredDate: new Date('2022-04-30'), regionId: region.id })
+      })
+
+      describe('and the licence has a return version that does not end before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
+        })
+
+        describe('and the return version has a return requirement flagged as "summer"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: true
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Summer cycle - ended licence - live return version - summer return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
     })
   })
 
-  describe('when summer is true, and no licenceReference is provided it should return all the return requirements that are eligible', () => {
-    it('should return five return log payloads', async () => {
-      returnCycle = await ReturnCycleHelper.select(0, true)
+  describe('when the return cycle is "winter & all year"', () => {
+    before(async () => {
+      returnCycle = await ReturnCycleHelper.select(0, false)
+    })
 
-      const results = await FetchReturnRequirementsService.go(returnCycle)
-
-      const returnRequirementExternalId = results.map((returnLog) => {
-        return returnLog.legacyId
+    describe('and there is a licence that does not end before the cycle starts', () => {
+      before(async () => {
+        region = RegionHelper.select()
+        licence = await LicenceHelper.add({ regionId: region.id })
       })
 
-      expect(
-        summerReturns.every((result) => {
-          return returnRequirementExternalId.includes(result)
+      describe('and the licence has a return version that does not end before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
-      ).to.equal(true)
+
+        describe('and the return version has a return requirement flagged as "winter & all year"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: false
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Winter purpose alias for testing',
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Winter cycle - live licence - live return version - winter return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          describe('and the return requirement does not have an existing return log for the given cycle', () => {
+            it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+              const results = await FetchReturnRequirementsService.go(returnCycle)
+
+              const expectedResult = _expectedResult()
+
+              expect(results).to.include(expectedResult)
+            })
+          })
+
+          describe('but the return requirement has an existing return log for the given cycle', () => {
+            describe("but the return log's status is 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'void'
+                })
+              })
+
+              it('returns that matching return requirement and all related data needed to generate a return log', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const expectedResult = _expectedResult()
+
+                expect(results).to.include(expectedResult)
+              })
+            })
+
+            describe("and the return log's status is anything other than 'void'", () => {
+              before(async () => {
+                await ReturnLogHelper.add({
+                  metadata: { nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.legacyId } },
+                  returnCycleId: returnCycle.id,
+                  returnReference: returnRequirement.legacyId,
+                  status: 'completed'
+                })
+              })
+
+              it('does not return that return requirement', async () => {
+                const results = await FetchReturnRequirementsService.go(returnCycle)
+
+                const resultIds = _resultIds(results)
+
+                expect(resultIds).not.to.include(returnRequirement.id)
+              })
+            })
+          })
+        })
+
+        describe('and the return version has a return requirement flagged as "summer"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: true
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Winter cycle - live licence - live return version - summer return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
+
+      describe('and the licence has a return version that ends before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
+        })
+
+        describe('and the return version has a return requirement flagged as "winter & all year"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: false
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Winter cycle - live licence - ended return version - winter return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
+    })
+
+    describe('and there is a licence that ends before the cycle starts', () => {
+      before(async () => {
+        region = RegionHelper.select()
+        licence = await LicenceHelper.add({ expiredDate: new Date('2022-04-30'), regionId: region.id })
+      })
+
+      describe('and the licence has a return version that does not end before the cycle starts', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
+        })
+
+        describe('and the return version has a return requirement flagged as "winter & all year"', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: false
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Winter cycle - ended licence - live return version - winter return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('does not return that return requirement', async () => {
+            const results = await FetchReturnRequirementsService.go(returnCycle)
+
+            const resultIds = _resultIds(results)
+
+            expect(resultIds).not.to.include(returnRequirement.id)
+          })
+        })
+      })
     })
   })
 })
+
+function _expectedResult() {
+  return ReturnRequirementModel.fromJson({
+    abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+    externalId: returnRequirement.externalId,
+    id: returnRequirement.id,
+    legacyId: returnRequirement.legacyId,
+    reportingFrequency: returnRequirement.reportingFrequency,
+    returnVersionId: returnRequirement.returnVersionId,
+    siteDescription: returnRequirement.siteDescription,
+    summer: returnRequirement.summer,
+    twoPartTariff: returnRequirement.twoPartTariff,
+    upload: returnRequirement.upload,
+    returnVersion: {
+      endDate: returnVersion.endDate,
+      id: returnVersion.id,
+      reason: returnVersion.reason,
+      startDate: returnVersion.startDate,
+      licence: {
+        expiredDate: licence.expiredDate,
+        id: licence.id,
+        lapsedDate: licence.lapsedDate,
+        licenceRef: licence.licenceRef,
+        revokedDate: licence.revokedDate,
+        areacode: 'SAAR',
+        region: {
+          id: region.id,
+          naldRegionId: region.naldRegionId
+        }
+      }
+    },
+    points: [
+      {
+        description: point.description,
+        ngr1: point.ngr1,
+        ngr2: point.ngr2,
+        ngr3: point.ngr3,
+        ngr4: point.ngr4
+      }
+    ],
+    returnRequirementPurposes: [
+      {
+        alias: returnRequirementPurpose.alias,
+        id: returnRequirementPurpose.id,
+        primaryPurpose: {
+          description: primaryPurpose.description,
+          id: primaryPurpose.id,
+          legacyId: primaryPurpose.legacyId
+        },
+        purpose: {
+          description: purpose.description,
+          id: purpose.id,
+          legacyId: purpose.legacyId
+        },
+        secondaryPurpose: {
+          description: secondaryPurpose.description,
+          id: secondaryPurpose.id,
+          legacyId: secondaryPurpose.legacyId
+        }
+      }
+    ]
+  })
+}
+
+function _resultIds(results) {
+  return results.map((result) => {
+    return result.id
+  })
+}

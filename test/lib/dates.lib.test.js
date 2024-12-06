@@ -14,9 +14,9 @@ describe('Dates lib', () => {
   describe('determineEarliestDate', () => {
     let dates
 
-    describe('given an array of date strings', () => {
-      before(() => {
-        dates = ['2025-04-01', '2025-03-30', '2025-03-31']
+    describe('given an array of dates', () => {
+      before(async () => {
+        dates = [new Date('2025-04-01'), new Date('2025-03-30'), new Date('2025-03-31')]
       })
 
       it('returns the earliest as a Date value', () => {
@@ -26,9 +26,9 @@ describe('Dates lib', () => {
       })
     })
 
-    describe('given an array of date strings that contains null and undefined values', () => {
+    describe('given an array of that contains date, null and undefined values', () => {
       before(() => {
-        dates = ['2025-04-01', null, '2025-03-30', undefined]
+        dates = [new Date('2025-04-01'), null, new Date('2025-03-30'), undefined]
       })
 
       it('still returns the earliest as a Date value', () => {
@@ -38,7 +38,7 @@ describe('Dates lib', () => {
       })
     })
 
-    describe('given an array of date strings that only contains null and undefined values', () => {
+    describe('given an array that only contains null and undefined values', () => {
       before(() => {
         dates = [null, undefined]
       })
@@ -58,6 +58,58 @@ describe('Dates lib', () => {
       it('throws an error', () => {
         expect(() => {
           return DateLib.determineEarliestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+  })
+
+  describe('determineLatestDate', () => {
+    let dates
+
+    describe('given an array of dates', () => {
+      before(async () => {
+        dates = [new Date('2025-04-01'), new Date('2025-03-30'), new Date('2025-03-31')]
+      })
+
+      it('returns the latest as a Date value', () => {
+        const result = DateLib.determineLatestDate(dates)
+
+        expect(result).to.equal(new Date('2025-04-01'))
+      })
+    })
+
+    describe('given an array of that contains date, null and undefined values', () => {
+      before(() => {
+        dates = [new Date('2025-04-01'), null, new Date('2025-03-30'), undefined]
+      })
+
+      it('still returns the latest as a Date value', () => {
+        const result = DateLib.determineLatestDate(dates)
+
+        expect(result).to.equal(new Date('2025-04-01'))
+      })
+    })
+
+    describe('given an array that only contains null and undefined values', () => {
+      before(() => {
+        dates = [null, undefined]
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineLatestDate(dates)
+        }).to.throw('No dates provided to determine earliest')
+      })
+    })
+
+    describe('given an empty array', () => {
+      before(() => {
+        dates = []
+      })
+
+      it('throws an error', () => {
+        expect(() => {
+          return DateLib.determineLatestDate(dates)
         }).to.throw('No dates provided to determine earliest')
       })
     })

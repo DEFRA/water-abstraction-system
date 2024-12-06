@@ -4,8 +4,9 @@
  * @module ReturnLogHelper
  */
 
-const { generateLicenceRef } = require('./licence.helper.js')
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('./licence.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateLegacyId } = require('./return-requirement.helper.js')
 
@@ -54,14 +55,14 @@ function defaults(data = {}) {
   const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
-  const startDate = data.startDate ? data.startDate : '2022-04-01'
-  const endDate = data.endDate ? data.endDate : '2023-03-31'
+  const startDate = data.startDate ? data.startDate : new Date('2022-04-01')
+  const endDate = data.endDate ? data.endDate : new Date('2023-03-31')
 
   const defaults = {
     id: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),
     createdAt: timestamp,
     dueDate: new Date('2023-04-28'),
-    endDate: new Date('2023-03-31'),
+    endDate,
     licenceRef,
     metadata: {
       description: 'BOREHOLE AT AVALON',
@@ -86,7 +87,7 @@ function defaults(data = {}) {
     receivedDate,
     returnReference,
     returnsFrequency: 'month',
-    startDate: new Date('2022-04-01'),
+    startDate,
     status: 'due',
     updatedAt: timestamp
   }
@@ -118,8 +119,8 @@ function defaults(data = {}) {
  * @returns {string} the generated return log ID
  */
 function generateReturnLogId(
-  startDate = '2022-04-01',
-  endDate = '2023-03-31',
+  startDate = new Date('2022-04-01'),
+  endDate = new Date('2023-03-31'),
   version = 1,
   licenceRef = null,
   returnReference = null
@@ -132,7 +133,7 @@ function generateReturnLogId(
     returnReference = generateLegacyId()
   }
 
-  return `v${version}:1:${licenceRef}:${returnReference}:${startDate}:${endDate}`
+  return `v${version}:1:${licenceRef}:${returnReference}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
 }
 
 /**
@@ -146,7 +147,7 @@ function generateReturnLogId(
  * @returns {Promise<boolean>} - A promise that resolves to true if the return logs are continuous,
  * or false otherwise.
  */
-async function hasContinousReturnLogs(licenceReference) {
+async function hasContinuousReturnLogs(licenceReference) {
   const returnLogs = await ReturnLogModel.query()
     .select(['endDate', 'startDate'])
     .where('licenceRef', licenceReference)
@@ -180,5 +181,5 @@ module.exports = {
   add,
   defaults,
   generateReturnLogId,
-  hasContinousReturnLogs
+  hasContinuousReturnLogs
 }
