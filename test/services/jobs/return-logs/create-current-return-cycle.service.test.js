@@ -16,9 +16,6 @@ const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 const CreateCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/create-current-return-cycle.service.js')
 
 describe('Jobs - Return Logs - Create Return Cycle service', () => {
-  const today = new Date()
-  const year = today.getFullYear()
-
   let clock
   let insertStub
   let summer
@@ -45,9 +42,9 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
         })
       })
 
-      describe('and the current date is after the end of April (20**-05-01)', () => {
+      describe('and the current date is after the end of April (2024-05-01)', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`${year}-05-01`))
+          clock = Sinon.useFakeTimers(new Date('2024-05-01'))
         })
 
         it('creates the correct "all year" return cycle', async () => {
@@ -58,7 +55,7 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
 
           expect(insertObject).to.equal(
             {
-              dueDate: new Date('2025-04-28'),
+              dueDate: new Date(`2025-04-28`),
               endDate: new Date('2025-03-31'),
               summer,
               submittedInWrls: true,
@@ -69,9 +66,9 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
         })
       })
 
-      describe('and the current date is before the end of April (20**-01-01)', () => {
+      describe('and the current date is before the end of April (2024-01-01)', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+          clock = Sinon.useFakeTimers(new Date('2024-01-01'))
         })
 
         it('creates the correct "all year" return cycle', async () => {
@@ -118,9 +115,33 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
         })
       })
 
-      describe('and the current date is after the end of October (20**-12-01)', () => {
+      describe('and the current date is after the end of October (2024-12-01)', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+          clock = Sinon.useFakeTimers(new Date('2024-12-01'))
+        })
+
+        it('creates the correct "summer" return cycle', async () => {
+          await CreateCurrentReturnCycleService.go(summer)
+
+          // Check we create the return cycle as expected
+          const [insertObject] = insertStub.args[0]
+
+          expect(insertObject).to.equal(
+            {
+              dueDate: new Date('2025-11-28'),
+              endDate: new Date('2025-10-31'),
+              summer,
+              submittedInWrls: true,
+              startDate: new Date('2024-11-01')
+            },
+            { skip: ['createdAt', 'updatedAt'] }
+          )
+        })
+      })
+
+      describe('and the current date is before the end of October (2024-09-01)', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date('2024-09-01'))
         })
 
         it('creates the correct "summer" return cycle', async () => {
@@ -136,30 +157,6 @@ describe('Jobs - Return Logs - Create Return Cycle service', () => {
               summer,
               submittedInWrls: true,
               startDate: new Date('2023-11-01')
-            },
-            { skip: ['createdAt', 'updatedAt'] }
-          )
-        })
-      })
-
-      describe('and the current date is before the end of October (20**-09-01)', () => {
-        beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`${year - 1}-09-01`))
-        })
-
-        it('creates the correct "summer" return cycle', async () => {
-          await CreateCurrentReturnCycleService.go(summer)
-
-          // Check we create the return cycle as expected
-          const [insertObject] = insertStub.args[0]
-
-          expect(insertObject).to.equal(
-            {
-              dueDate: new Date('2023-11-28'),
-              endDate: new Date('2023-10-31'),
-              summer,
-              submittedInWrls: true,
-              startDate: new Date('2022-11-01')
             },
             { skip: ['createdAt', 'updatedAt'] }
           )
