@@ -7,7 +7,6 @@
 
 const { formatLongDate } = require('../../base.presenter')
 const { isDateBetweenRange } = require('../../../lib/dates.lib')
-const { returnCycleDates } = require('../../../lib/static-lookups.lib')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'

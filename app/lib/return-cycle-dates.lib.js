@@ -7,6 +7,7 @@
 
 const { formatDateObjectToISO } = require('./dates.lib.js')
 const { returnCycleDates } = require('./static-lookups.lib.js')
+const { isDateBetweenRange } = require('./dates.lib')
 
 /**
  * Get the due date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
@@ -230,6 +231,152 @@ function cycleStartDateByDate(date, summer) {
   return formatDateObjectToISO(startDate)
 }
 
+/**
+ * The return periods
+ *
+ * All year (Winter)
+ * Name       | Start Date  | End Date  | Due Date  |
+ * Full year    1/04/25       31/03/26    28/04/26
+ * Q1           1/04/25       30/06/25    28/07/25
+ * Q2           1/07/25       31/09/25    28/10/25
+ * Q3           1/10/25       31/12/25    28/01/26
+ * Q4           1/01/26       31/03/26    28/04/26
+ *
+ * Summer (Annual)
+ * Name       | Start Date  | End Date  | Due Date  |
+ * Full year    1/11/26       31/10/27    28/11/27
+ * Q1           1/11/26       31/01/26    28/02/26
+ * Q2           1/02/27       30/04/27    28/05/27
+ * Q3           1/05/27       31/07/27    28/08/27
+ * Q4           1/08/27       31/10/27    28/11/27
+ *
+ * @param {Date} date - the date to calculate the return periods
+ *
+ * @returns {object} - return periods
+ */
+function periods(date) {
+  const year = date.getFullYear()
+
+  return {
+    winterFullYear: {
+      // Done
+      name: 'winterFullYear',
+      startDate: new Date(`${year - 1}-04-01`),
+      endDate: new Date(`${year}-03-31`),
+      dueDate: new Date(`${year}-04-28`)
+    },
+    winterQuarterOne: {
+      // Done
+      name: 'winterQuarterOne',
+      startDate: new Date(`${year}-04-01`),
+      endDate: new Date(`${year}-06-30`),
+      dueDate: new Date(`${year}-07-28`)
+    },
+    winterQuarterTwo: {
+      // Done - should appear twice ?
+      name: 'winterQuarterTwo',
+      startDate: new Date(`${year}-07-01`),
+      endDate: new Date(`${year}-09-30`),
+      dueDate: new Date(`${year}-10-28`)
+    },
+    winterQuarterThree: {
+      // Done - appears twice (tested once)
+      name: 'winterQuarterThree',
+      startDate: new Date(`${year}-10-01`),
+      endDate: new Date(`${year}-12-31`),
+      dueDate: new Date(`${year + 1}-01-28`)
+    },
+    winterQuarterFour: {
+      // Done (appears twice with year increases ? - like it's all next year - AC 5)
+      name: 'winterQuarterFour',
+      startDate: new Date(`${year}-01-01`),
+      endDate: new Date(`${year}-03-31`),
+      dueDate: new Date(`${year}-04-28`)
+    },
+    summerAllYear: {
+      // Done - appears twice (tested once)
+      name: 'summerAllYear',
+      startDate: new Date(`${year - 1}-11-01`),
+      endDate: new Date(`${year}-10-31`),
+      dueDate: new Date(`${year}-11-28`)
+    },
+    summerQuarterOne: {
+      name: 'summerQuarterOne',
+      // This might be an issue = split later (across year)
+      startDate: new Date(`${year - 1}-11-01`),
+      endDate: new Date(`${year}-01-31`),
+      dueDate: new Date(`${year + 1}-02-28`)
+    },
+    summerQuarterTwo: {
+      name: 'summerQuarterTwo',
+      startDate: new Date(`${year + 1}-02-01`),
+      endDate: new Date(`${year + 1}-04-30`),
+      dueDate: new Date(`${year + 1}-05-28`)
+    },
+    summerQuarterThree: {
+      name: 'summerQuarterThree',
+      startDate: new Date(`${year + 1}-05-01`),
+      endDate: new Date(`${year + 1}-07-31`),
+      dueDate: new Date(`${year + 1}-08-28`)
+    },
+    summerQuarterFour: {
+      name: 'summerQuarterFour',
+      startDate: new Date(`${year + 1}-08-01`),
+      endDate: new Date(`${year + 1}-10-31`),
+      dueDate: new Date(`${year + 1}-11-28`)
+    }
+  }
+}
+
+/**
+ * Get the current return period based on the given date.
+ *
+ * @param {Date} date - The date to find the current period for.
+ * @returns {object} - The current return period.
+ */
+function currentReturnPeriod(date) {
+  const sortedPeriods = _sortedReturnPeriods(date)
+  return _findClosestPeriod(date, sortedPeriods)
+}
+
+/**
+ * Get the next return period based on the given date.
+ *
+ * @param {Date} date - The date to find the next period for.
+ * @returns {object} - The next return period.
+ */
+function nextReturnPeriod(date) {
+  const sortedPeriods = _sortedReturnPeriods(date)
+  const closestPeriod = _findClosestPeriod(date, sortedPeriods)
+  const currentIndex = sortedPeriods.findIndex((period) => period === closestPeriod)
+  return sortedPeriods[(currentIndex + 1) % sortedPeriods.length]
+}
+
+/**
+ * Get the sorted return periods based on the given date.
+ *
+ * @param {Date} date - The date to generate the periods for.
+ * @returns {Array} - The sorted array of return periods.
+ */
+function _sortedReturnPeriods(date) {
+  return Object.values(periods(date)).sort((a, b) => a.dueDate - b.dueDate)
+}
+
+/**
+ * Find the closest period to the given date.
+ *
+ * @param {Date} date - The date to compare.
+ * @param {Array} sortedPeriods - The sorted array of periods.
+ * @returns {object} - The closest period.
+ */
+function _findClosestPeriod(date, sortedPeriods) {
+  return sortedPeriods.reduce((closest, period) => {
+    const diff = Math.abs(period.dueDate - date)
+    const closestDiff = Math.abs(closest.dueDate - date)
+    return diff < closestDiff ? period : closest
+  })
+}
+
 module.exports = {
   cycleDueDate,
   cycleDueDateByDate,
@@ -239,5 +386,8 @@ module.exports = {
   cycleEndDateAsISO,
   cycleStartDate,
   cycleStartDateByDate,
-  cycleStartDateAsISO
+  cycleStartDateAsISO,
+  periods,
+  currentReturnPeriod,
+  nextReturnPeriod
 }
