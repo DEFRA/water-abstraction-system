@@ -36,7 +36,6 @@ let returnRequirement
 let returnRequirementPurpose
 let returnVersion
 let secondaryPurpose
-let summer
 
 describe('Return Logs - Fetch Licence Return Requirements service', () => {
   const changeDate = new Date('2024-12-04')
@@ -56,7 +55,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
-        describe('and the return version has a return requirement flagged as "summer"', () => {
+        describe('and the return version has a return requirement', () => {
           before(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
@@ -85,36 +84,22 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
             })
           })
 
-          describe('and the return cycle being processed is "summer"', () => {
-            before(() => {
-              summer = true
-            })
+          it('returns the return requirement and all related data needed to generate a return log', async () => {
+            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
-            it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
+            const expectedResult = _expectedResult()
 
-              const expectedResult = _expectedResult()
-
-              expect(results).to.include(expectedResult)
-            })
-          })
-
-          describe('and the return cycle being processed is "winter & all-year"', () => {
-            before(() => {
-              summer = false
-            })
-
-            it('does not return that return requirement', async () => {
-              const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
-
-              const resultIds = _resultIds(results)
-
-              expect(resultIds).not.to.include(returnRequirement.id)
-            })
+            expect(results).to.include(expectedResult)
           })
         })
+      })
 
-        describe('and the return version has a return requirement flagged as "all-year"', () => {
+      describe('and it has a return version that ends before the change date', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
+        })
+
+        describe('and the return version has a return requirement', () => {
           before(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
@@ -143,74 +128,8 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
             })
           })
 
-          describe('and the return cycle being processed is "summer"', () => {
-            before(() => {
-              summer = true
-            })
-
-            it('does not return that return requirement', async () => {
-              const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
-
-              const resultIds = _resultIds(results)
-
-              expect(resultIds).not.to.include(returnRequirement.id)
-            })
-          })
-
-          describe('and the return cycle being processed is "winter & all-year"', () => {
-            before(() => {
-              summer = false
-            })
-
-            it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
-
-              const expectedResult = _expectedResult()
-
-              expect(results).to.include(expectedResult)
-            })
-          })
-        })
-      })
-
-      describe('and it has a return version that ends before the change date', () => {
-        before(async () => {
-          returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
-        })
-
-        describe('and the return version has a return requirement with a matching return cycle', () => {
-          before(async () => {
-            summer = true
-
-            returnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: returnVersion.id,
-              summer
-            })
-
-            primaryPurpose = PrimaryPurposeHelper.select()
-            purpose = PurposeHelper.select()
-            secondaryPurpose = SecondaryPurposeHelper.select()
-
-            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-
-            point = await PointHelper.add({
-              description: 'Summer cycle - live licence - live return version - summer return requirement'
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
-            })
-          })
-
           it('does not return that return requirement', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
+            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
             const resultIds = _resultIds(results)
 
@@ -230,14 +149,12 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
-        describe('and the return version has a return requirement with a matching return cycle', () => {
+        describe('and the return version has a return requirement', () => {
           before(async () => {
-            summer = true
-
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
-              summer
+              summer: true
             })
 
             primaryPurpose = PrimaryPurposeHelper.select()
@@ -262,7 +179,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate, summer)
+            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
             const resultIds = _resultIds(results)
 

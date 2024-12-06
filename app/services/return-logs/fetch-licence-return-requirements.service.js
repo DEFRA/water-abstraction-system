@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches return requirements for a given licence with an end date after the provided date for the matching cycle
+ * Fetches return requirements for a given licence with an end date after the provided date
  * @module FetchLicenceReturnRequirementsService
  */
 
@@ -10,20 +10,18 @@ const ReturnRequirementModel = require('../../models/return-requirement.model.js
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Fetches return requirements for a given licence with an end date after the provided date for the matching cycle
+ * Fetches return requirements for a given licence with an end date after the provided date
  *
  * @param {string} licenceId - the UUID of the licence that the return requirements are linked to
  * @param {Date} changeDate - the date where the change occurs from and from which we need to reissue return logs from
- * @param {boolean} summer - whether we are sourcing return requirements to reissue summer or all-year return logs
  *
- * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence, change date,
- * and return cycle
+ * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-async function go(licenceId, changeDate, summer) {
-  return _fetch(licenceId, changeDate, summer)
+async function go(licenceId, changeDate) {
+  return _fetch(licenceId, changeDate)
 }
 
-async function _fetch(licenceId, changeDate, summer) {
+async function _fetch(licenceId, changeDate) {
   return ReturnRequirementModel.query()
     .select([
       'abstractionPeriodEndDay',
@@ -40,7 +38,6 @@ async function _fetch(licenceId, changeDate, summer) {
       'twoPartTariff',
       'upload'
     ])
-    .where('returnRequirements.summer', summer)
     .whereExists(
       ReturnVersionModel.query()
         .select(1)
