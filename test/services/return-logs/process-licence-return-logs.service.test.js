@@ -5,749 +5,182 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const ReturnCycleHelper = require('../../support/helpers/return-cycle.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
+const {
+  returnCycle,
+  returnCycles,
+  returnRequirement,
+  returnRequirements
+} = require('../../fixtures/return-logs.fixture.js')
+
+// Things we need to stub
+const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
+const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
+const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
+const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/void-licence-return-logs.service.js')
 
 // Thing under test
 const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 describe('Process licence return logs service', () => {
-  let endDate
-  let licence
-  let notifierStub
-  let primaryPurpose
-  let previousCycle
-  let purpose
-  let region
-  let returnCycle
-  let returnVersion
-  let returnRequirement
-  let returnRequirement2
-  let secondaryPurpose
-  let summer
-  let testDate
-  let twoCyclesAgo
+  const changeDate = new Date('2024-05-26')
+  const currentDate = new Date('2024-07-15')
+  const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
 
-  describe('when summer is true and the licence has an endDate that ends in the current cycle', () => {
-    before(async () => {
-      summer = true
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
+  let clock
+  let createReturnLogsStub
+  let fetchReturnRequirementsStub
+  let returnCycleModelStub
+  let voidReturnLogsStub
 
-      const returnCycleEndDate = new Date(returnCycle.endDate)
+  beforeEach(() => {
+    // We control what the 'current' date is, so we can assert what the service does when not provided with `changeDate`
+    clock = Sinon.useFakeTimers(currentDate)
 
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
+    fetchReturnRequirementsStub = Sinon.stub(FetchLicenceReturnRequirementsService, 'go')
+    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go')
+    voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
 
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
-
-      expect(areDatesSequential).to.equal(true)
-      expect(result.length).to.equal(4)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
-      expect(result[2].endDate).to.equal(new Date(endDate))
-      expect(result[3].status).to.equal('void')
+    returnCycleModelStub = Sinon.stub().resolves(returnCycles())
+    Sinon.stub(ReturnCycleModel, 'query').returns({
+      select: Sinon.stub().returnsThis(),
+      where: Sinon.stub().returnsThis(),
+      orderBy: returnCycleModelStub
     })
   })
 
-  describe('when summer is true and the licence has no end date', () => {
-    before(async () => {
-      summer = true
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
+  afterEach(() => {
+    Sinon.restore()
+    clock.restore()
+  })
 
-      const returnCycleEndDate = new Date(returnCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
+  describe('when called with a known licence ID', () => {
+    describe('and the licence has both "summer" and "all-year" return requirements', () => {
+      beforeEach(() => {
+        fetchReturnRequirementsStub.resolves(returnRequirements())
       })
 
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+      describe('and the change date means multiple return cycles need processing', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves(returnCycles())
+
+          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-03-31'])
+        })
+
+        it('processes all the return requirements for the licence', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+          expect(createReturnLogsStub.callCount).to.equal(2)
+          expect(voidReturnLogsStub.callCount).to.equal(2)
+        })
+      })
+
+      describe('but the change date means only a single return cycle needs processing', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves([returnCycle(true)])
+
+          createReturnLogsStub.resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+        })
+
+        it('processes only the matching return requirements for the licence', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+          // Confirm we only call create once with our summer return requirement
+          const createReturnLogArgs = createReturnLogsStub.firstCall.args
+
+          expect(createReturnLogsStub.callCount).to.equal(1)
+          expect(createReturnLogArgs[0].id).to.equal('3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2')
+
+          // Confirm we only call void once, with the return log ID generated from our summer return requirement
+          const voidReturnLogArgs = voidReturnLogsStub.firstCall.args
+
+          expect(voidReturnLogsStub.callCount).to.equal(1)
+          expect(voidReturnLogArgs[0]).to.equal(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+        })
+      })
     })
 
-    it('creates the return logs for the current cycle', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef)
+    describe('and the licence has only a "summer" return requirement', () => {
+      beforeEach(() => {
+        fetchReturnRequirementsStub.resolves([returnRequirement(true)])
+        createReturnLogsStub.resolves()
+      })
 
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
+      describe('but the change date means only an "all-year" return cycle needs processing', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves([returnCycle(false)])
+        })
 
-      expect(result.length).to.equal(1)
-      expect(result[0].status).to.equal('due')
+        it('does not process any return requirements for the licence', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+          expect(createReturnLogsStub.called).to.be.false()
+          expect(voidReturnLogsStub.called).to.be.false()
+        })
+      })
+    })
+
+    describe('and the licence has only an "all-year" return requirement', () => {
+      beforeEach(() => {
+        fetchReturnRequirementsStub.resolves([returnRequirement(false)])
+        createReturnLogsStub.resolves()
+      })
+
+      describe('but the change date means only a "summer" return cycle needs processing', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves([returnCycle(true)])
+        })
+
+        it('does not process any return requirements for the licence', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+          expect(createReturnLogsStub.called).to.be.false()
+          expect(voidReturnLogsStub.called).to.be.false()
+        })
+      })
     })
   })
 
-  describe('when summer is true and a licence has an endDate that ends in a future cycle', () => {
-    before(async () => {
-      summer = true
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(returnCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth() + 2}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+  describe('when called with a unknown licence ID, or licence with no return requirements', () => {
+    beforeEach(() => {
+      fetchReturnRequirementsStub.resolves([])
+      returnCycleModelStub.resolves()
+      createReturnLogsStub.resolves()
+      voidReturnLogsStub.resolves()
     })
 
-    it('does not void and reissue any of the return logs', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
+    it('does not attempt to process the licence', async () => {
+      await ProcessLicenceReturnLogsService.go(licenceId)
 
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-
-      expect(result.length).to.equal(3)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
+      expect(fetchReturnRequirementsStub.called).to.be.true()
+      expect(returnCycleModelStub.called).to.be.false()
+      expect(createReturnLogsStub.called).to.be.false()
+      expect(voidReturnLogsStub.called).to.be.false()
     })
   })
 
-  describe('when summer is true and the licence has an endDate that ends in the previous cycle', () => {
-    before(async () => {
-      summer = true
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(previousCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+  describe('when called with no "change date"', () => {
+    beforeEach(() => {
+      returnCycleModelStub.resolves(returnCycles())
+      fetchReturnRequirementsStub.resolves([])
+      createReturnLogsStub.resolves()
+      voidReturnLogsStub.resolves()
     })
 
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
+    it('defaults to using the current date as the change date', async () => {
+      await ProcessLicenceReturnLogsService.go(licenceId)
 
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
+      const fetchArgs = fetchReturnRequirementsStub.firstCall.args
 
-      expect(areDatesSequential).to.equal(true)
-      expect(result.length).to.equal(4)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[1].endDate).to.equal(new Date(endDate))
-      expect(result[2].status).to.equal('void')
-      expect(result[3].status).to.equal('void')
-    })
-  })
+      expect(fetchArgs[1]).to.equal(currentDate)
 
-  describe('when summer is true and the licence has an endDate that ends in the previous cycle and return requirements for both cycles', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(previousCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      returnRequirement2 = await ReturnRequirementHelper.add({ summer: !summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement2.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-
-      expect(result.length).to.equal(6)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
-      expect(result[2].endDate).to.equal(new Date(endDate))
-      expect(result[3].status).to.equal('void')
-      expect(result[4].status).to.equal('void')
-      expect(result[5].status).to.equal('void')
-    })
-  })
-
-  describe('when summer is false and the licence has an endDate that ends in the current cycle', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(returnCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
-
-      expect(areDatesSequential).to.equal(true)
-      expect(result.length).to.equal(4)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
-      expect(result[2].endDate).to.equal(new Date(endDate))
-      expect(result[3].status).to.equal('void')
-    })
-  })
-
-  describe('when summer is false and the licence has no end date', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(returnCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({
-        regionId: region.naldRegionId,
-        returnVersionId: returnVersion.id,
-        summer
-      })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('creates the return logs for the current cycle', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-
-      expect(result.length).to.equal(1)
-      expect(result[0].status).to.equal('due')
-    })
-  })
-
-  describe('when summer is false and a licence has an endDate that ends in a future cycle', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(returnCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth() + 2}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('does not void and reissue any of the return logs', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-
-      expect(result.length).to.equal(3)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
-    })
-  })
-
-  describe('when summer is false and the licence has an endDate that ends in the previous cycle', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(previousCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-      const areDatesSequential = await ReturnLogHelper.hasContinuousReturnLogs(licence.licenceRef)
-
-      expect(areDatesSequential).to.equal(true)
-      expect(result.length).to.equal(4)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[1].endDate).to.equal(new Date(endDate))
-      expect(result[2].status).to.equal('void')
-      expect(result[3].status).to.equal('void')
-    })
-  })
-
-  describe('when summer is false and the licence has an endDate that ends in the previous cycle and return requirements for both cycles', () => {
-    before(async () => {
-      summer = false
-      returnCycle = await ReturnCycleHelper.select(0, summer)
-      previousCycle = await ReturnCycleHelper.select(1, summer)
-      twoCyclesAgo = await ReturnCycleHelper.select(2, summer)
-
-      const returnCycleEndDate = new Date(previousCycle.endDate)
-
-      testDate = new Date(`${returnCycleEndDate.getFullYear()}-${returnCycleEndDate.getMonth()}-25`)
-      endDate = testDate.toISOString().split('T')[0]
-
-      region = RegionHelper.select()
-      licence = await LicenceHelper.add({ expiredDate: endDate, regionId: region.id })
-      returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-      returnRequirement = await ReturnRequirementHelper.add({ summer, returnVersionId: returnVersion.id })
-      returnRequirement2 = await ReturnRequirementHelper.add({ summer: !summer, returnVersionId: returnVersion.id })
-      await ReturnRequirementPointHelper.add({ returnRequirementId: returnRequirement.id })
-      primaryPurpose = PrimaryPurposeHelper.select()
-      purpose = PurposeHelper.select()
-      secondaryPurpose = SecondaryPurposeHelper.select()
-      await ReturnRequirementPurposeHelper.add({
-        alias: null,
-        primaryPurposeId: primaryPurpose.id,
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id,
-        secondaryPurposeId: secondaryPurpose.id
-      })
-
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(returnCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: returnCycle.id,
-        returnReference: returnRequirement2.legacyId,
-        startDate: formatDateObjectToISO(returnCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(previousCycle.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: previousCycle.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(previousCycle.startDate)
-      })
-      await ReturnLogHelper.add({
-        endDate: formatDateObjectToISO(twoCyclesAgo.endDate),
-        licenceRef: licence.licenceRef,
-        returnCycleId: twoCyclesAgo.id,
-        returnReference: returnRequirement.legacyId,
-        startDate: formatDateObjectToISO(twoCyclesAgo.startDate)
-      })
-
-      // BaseRequest depends on the GlobalNotifier to have been set.
-      // This happens in app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered.
-      // As we're not creating an instance of Hapi server in this test we recreate the condition by setting
-      // it directly with our own stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
-    })
-
-    it('voids the return logs from the given end date and reissues them', async () => {
-      await ProcessLicenceReturnLogsService.go(licence.licenceRef, testDate)
-
-      const result = await ReturnLogModel.query().where('licenceRef', licence.licenceRef).orderBy('endDate', 'ASC')
-
-      expect(result.length).to.equal(6)
-      expect(result[0].status).to.equal('due')
-      expect(result[1].status).to.equal('due')
-      expect(result[2].status).to.equal('due')
-      expect(result[2].endDate).to.equal(new Date(endDate))
-      expect(result[3].status).to.equal('void')
-      expect(result[4].status).to.equal('void')
-      expect(result[5].status).to.equal('void')
+      expect(returnCycleModelStub.called).to.be.false()
+      expect(createReturnLogsStub.called).to.be.false()
+      expect(voidReturnLogsStub.called).to.be.false()
     })
   })
 })
