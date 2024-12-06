@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe('Notifications Setup - Returns Period presenter', () => {
+describe.only('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
@@ -130,7 +130,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(firstOption).to.equal({
-              value: 'currentPeriod',
+              value: 'summer',
               text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
@@ -168,7 +168,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(firstOption).to.equal({
-              value: 'currentPeriod',
+              value: 'summer',
               text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
@@ -206,7 +206,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(firstOption).to.equal({
-              value: 'currentPeriod',
+              value: 'summer',
               text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`

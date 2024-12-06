@@ -7,6 +7,7 @@
 
 const { formatLongDate } = require('../../base.presenter')
 const { isDateBetweenRange } = require('../../../lib/dates.lib')
+const { returnCycleDates } = require('../../../lib/static-lookups.lib')
 
 const currentPeriod = 'currentPeriod'
 const nextPeriod = 'nextPeriod'
@@ -24,6 +25,44 @@ const dates = {
   novemberTwentyEighth: '11-28',
   novemberTwentyNinth: '11-29',
   decemberThirtyFirst: '12-31'
+}
+
+// 8 things -
+// take in today - calculate the next two
+// next two due dates -
+
+// full year and q4 the same due date - (only full year include q4 - should already)
+
+// on q4 - use the all year not he q4 - use the full year
+
+// take to day and get next two due dates -
+
+// All year
+// Full year - 1/04/25 - 31/03/26 - 28/04/26
+// Q1 1/04/25 - 30/06/25 - 28/07/25
+// Q2 1/07/25  - 31/09/25 - 28/10/25
+// Q3 1/10/25 - 31/12/25 - 28/01/26 -
+// Q4 1/01/26 - 31/03/26 - 28/04/26
+//
+// Summer
+// Full year - 1/11/26 - 31/10/27 - 28/11/27
+// Q1 1/11/26 - 31/01/26 - 28/02/26 -
+// Q2 1/02/27 - 30/04/27 - 28/05/27
+// Q3 1/05/27 - 31/07/27 - 28/08/27
+// Q4 1/08/27 - 31/10/27 - 28/11/27
+
+const options = {
+  summer: {
+    value: 'summer',
+    getDates() {
+      const today = new Date()
+      return {
+        dueDate: new Date(`${today.getFullYear()}-${dates.novemberTwentyEighth}`),
+        endDate: new Date(`${today.getFullYear()}-${dates.octoberThirtyFirst}`),
+        startDate: new Date(`${today.getFullYear() - 1}-${dates.novemberFirst}`)
+      }
+    }
+  }
 }
 
 /**
@@ -150,16 +189,10 @@ function _quarterlyOptions(period, fromDate, toDate, dueDate) {
 }
 
 function _summerOptions(period, date) {
-  const currentYear = date.getFullYear()
-  const previousYear = currentYear - 1
-
-  const fromDate = new Date(`${previousYear}-${dates.novemberFirst}`)
-  const toDate = new Date(`${currentYear}-${dates.octoberThirtyFirst}`)
-  const dueDate = new Date(`${currentYear}-${dates.novemberTwentyEighth}`)
-
+  const { startDate, endDate, dueDate } = options.summer.getDates()
   return {
-    value: period,
-    text: `Summer annual ${formatLongDate(fromDate)} to ${formatLongDate(toDate)}`,
+    value: options.summer.value,
+    text: `Summer annual ${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     hint: {
       text: `Due date ${formatLongDate(dueDate)}`
     }
