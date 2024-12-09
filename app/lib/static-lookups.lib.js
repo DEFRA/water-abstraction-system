@@ -15,7 +15,10 @@ const contactTypes = ['person', 'department']
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
  */
 const monthsAsIntegers = {
-  january: 0
+  january: 0,
+  october: 9,
+  november: 10,
+  december: 11
 }
 
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
