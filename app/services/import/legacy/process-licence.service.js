@@ -8,7 +8,6 @@
 const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistImportService = require('../persist-import.service.js')
-const ProcessLicenceReturnLogsService = require('../../jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformLicenceDocumentService = require('./transform-licence-document.service.js')
 const TransformLicenceDocumentRolesService = require('./transform-licence-document-roles.service.js')
@@ -40,7 +39,6 @@ async function go(licenceRef) {
     // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
     if (wrlsLicenceId) {
       DetermineSupplementaryBillingFlagsService.go(transformedLicence, wrlsLicenceId)
-      await ProcessLicenceReturnLogsService.go(wrlsLicenceId)
     }
 
     // Pass the transformed licence through each transformation step, building the licence as we go
