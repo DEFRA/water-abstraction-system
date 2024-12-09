@@ -259,10 +259,10 @@ function periods(date) {
   return {
     winterFullYear: {
       // Done
-      name: 'winterFullYear',
-      startDate: new Date(`${year - 1}-04-01`),
-      endDate: new Date(`${year}-03-31`),
-      dueDate: new Date(`${year}-04-28`)
+      name: 'winterFullYear', // this has a func to calculate
+      startDate: new Date(`${year}-04-01`),
+      endDate: new Date(`${year + 1}-03-31`), // year fandango - use
+      dueDate: new Date(`${year + 1}-04-28`) // year fandango
     },
     winterQuarterOne: {
       // Done
@@ -275,7 +275,7 @@ function periods(date) {
       // Done - should appear twice ?
       name: 'winterQuarterTwo',
       startDate: new Date(`${year}-07-01`),
-      endDate: new Date(`${year}-09-30`),
+      endDate: new Date(`${year}-09-31`),
       dueDate: new Date(`${year}-10-28`)
     },
     winterQuarterThree: {
@@ -288,16 +288,16 @@ function periods(date) {
     winterQuarterFour: {
       // Done (appears twice with year increases ? - like it's all next year - AC 5)
       name: 'winterQuarterFour',
-      startDate: new Date(`${year}-01-01`),
-      endDate: new Date(`${year}-03-31`),
-      dueDate: new Date(`${year}-04-28`)
+      startDate: new Date(`${year + 1}-01-01`),
+      endDate: new Date(`${year + 1}-03-31`),
+      dueDate: new Date(`${year + 1}-04-28`)
     },
-    summerAllYear: {
+    summerFullYear: {
       // Done - appears twice (tested once)
-      name: 'summerAllYear',
-      startDate: new Date(`${year - 1}-11-01`),
-      endDate: new Date(`${year}-10-31`),
-      dueDate: new Date(`${year}-11-28`)
+      name: 'summerFullYear', // this has a func to calculate
+      startDate: new Date(`${year}-11-01`),
+      endDate: new Date(`${year}-10-31`), // year fandango
+      dueDate: new Date(`${year}-11-28`) // year fandango
     },
     summerQuarterOne: {
       name: 'summerQuarterOne',
