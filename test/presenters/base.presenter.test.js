@@ -105,6 +105,18 @@ describe('Base presenter', () => {
       })
     })
 
+    describe('when the batch type is "two_part_supplementary"', () => {
+      beforeEach(() => {
+        batchType = 'two_part_supplementary'
+      })
+
+      it('returns "Two-part tariff supplementary"', () => {
+        const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
+
+        expect(result).to.equal('Two-part tariff supplementary')
+      })
+    })
+
     describe('when the batch type is "two_part_tariff"', () => {
       beforeEach(() => {
         batchType = 'two_part_tariff'
