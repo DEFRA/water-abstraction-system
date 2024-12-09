@@ -1,29 +1,27 @@
 'use strict'
 
 /**
- * Fetches the matching return requirements for a given return cycle
- * @module FetchReturnRequirementsService
+ * Fetches return requirements for a given licence with an end date after the provided date
+ * @module FetchLicenceReturnRequirementsService
  */
 
-const { db } = require('../../../../db/db.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+const { db } = require('../../../db/db.js')
+const ReturnRequirementModel = require('../../models/return-requirement.model.js')
+const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Fetches the matching return requirements for a given return cycle
+ * Fetches return requirements for a given licence with an end date after the provided date
  *
- * @param {module:ReturnCycleModel} returnCycle - the `ReturnCycleModel` to fetch return requirements for
+ * @param {string} licenceId - the UUID of the licence that the return requirements are linked to
+ * @param {Date} changeDate - the date where the change occurs from and from which we need to reissue return logs from
  *
- * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the given return cycle
+ * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-async function go(returnCycle) {
-  return _fetch(returnCycle)
+async function go(licenceId, changeDate) {
+  return _fetch(licenceId, changeDate)
 }
 
-async function _fetch(returnCycle) {
-  const { id: returnCycleId, endDate: cycleEndDate, startDate: cycleStartDate, summer } = returnCycle
-
+async function _fetch(licenceId, changeDate) {
   return ReturnRequirementModel.query()
     .select([
       'abstractionPeriodEndDay',
@@ -40,34 +38,23 @@ async function _fetch(returnCycle) {
       'twoPartTariff',
       'upload'
     ])
-    .where('returnRequirements.summer', summer)
-    .whereNotExists(
-      ReturnLogModel.query()
-        .select(1)
-        .whereNot('status', 'void')
-        .where('returnCycleId', returnCycleId)
-        .whereColumn(
-          db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference)"),
-          'returnRequirements.externalId'
-        )
-    )
     .whereExists(
       ReturnVersionModel.query()
         .select(1)
         .innerJoinRelated('licence')
-        .where('returnVersions.startDate', '<=', cycleEndDate)
+        .where('licence.id', licenceId)
         .where('returnVersions.status', 'current')
         .where((builder) => {
-          builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
+          builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', changeDate)
         })
         .where((builder) => {
-          builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
+          builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', changeDate)
         })
         .where((builder) => {
-          builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
+          builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', changeDate)
         })
         .where((builder) => {
-          builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
+          builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', changeDate)
         })
         .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
     )
