@@ -1,0 +1,128 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% from "macros/bill-run-status-tag.njk" import statusTag %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">{{ pageCaption }}</span>{{ pageTitle }}
+    </h1>
+
+    {% if warningMessage %}
+      {{ govukWarningText({
+        text: warningMessage,
+        iconFallbackText: 'Warning'
+      }) }}
+    {% endif %}
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {% if exists %}
+      {% set billRunStatusHtml %}
+        {{ statusTag(billRunStatus, true) }}
+      {% endset %}
+
+      {% set billRunLinkHtml %}
+        <a href="{{ billRunLink }}" class="govuk-body govuk-link">
+          <span data-test="number">{{ billRunNumber }}</span> <span class="govuk-visually-hidden">View bill run {{ billRunNumber }}</span>
+        </a>
+      {% endset %}
+    {% endif %}
+
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'bill-run-details'
+      },
+      rows: [
+      {
+          key: {
+            text: "Bill run number"
+          },
+          value: {
+            html: billRunLinkHtml
+          }
+        } if exists,
+        {
+          key: {
+            text: "Status"
+          },
+          value: {
+            html: billRunStatusHtml
+          }
+        } if exists,
+        {
+          key: {
+            text: "Date created"
+          },
+          value: {
+            html: '<span data-test="created">' + dateCreated + '</span>'
+          }
+        } if exists,
+        {
+          key: {
+            text: "Region"
+          },
+          value: {
+            html: '<span data-test="region">' + regionName + '</span>'
+          }
+        },
+        {
+          key: {
+            text: "Bill run type"
+          },
+          value: {
+            html: '<span data-test="type">' + billRunType + '</span>'
+          }
+        },
+        {
+          key: {
+            text: "Charge scheme"
+          },
+          value: {
+            html: '<span data-test="new-scheme">' + chargeScheme + '</span>'
+          }
+        },
+        {
+          key: {
+            text: "Financial year"
+          },
+          value: {
+            html: '<span data-test="new-year">' + financialYear + '</span>'
+          }
+        } if financialYear
+      ]
+    }) }}
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {% if exists == false %}
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        {{ govukButton({
+          text: "Create bill run",
+          classes: "govuk-!-margin-right-6",
+          preventDoubleClick: true
+        }) }}
+      </form>
+      <hr class="govuk-section-break govuk-section-break--s">
+    {% endif %}
+
+    <a href="/system/bill-runs" class="govuk-link">Return to bill runs</a>
+  </div>
+{% endblock %}
