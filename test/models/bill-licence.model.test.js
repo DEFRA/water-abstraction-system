@@ -26,11 +26,11 @@ describe('Bill Licence model', () => {
   let testTransactions
 
   before(async () => {
-    // Link to a bill
+    // Link bills
     testBill = await BillHelper.add()
     const { id: billId } = testBill
 
-    // Linking to a licence
+    // Linking licences
     testLicence = await LicenceHelper.add()
 
     const { id: licenceId } = testLicence
@@ -39,7 +39,7 @@ describe('Bill Licence model', () => {
     testRecord = await BillLicenceHelper.add({ billId, licenceId })
     const { id } = testRecord
 
-    // Link to transactions
+    // Link transactions
     testTransactions = []
     for (let i = 0; i < 2; i++) {
       const transaction = await TransactionHelper.add({ billLicenceId: id })

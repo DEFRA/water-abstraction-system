@@ -30,7 +30,7 @@ describe('Address model', () => {
     testRecord = await AddressHelper.add()
     const { id: addressId } = testRecord
 
-    // Link the billing account addresses
+    // Link billing account addresses
     testBillingAccountAddresses = []
     for (let i = 0; i < 2; i++) {
       // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
@@ -41,7 +41,7 @@ describe('Address model', () => {
       testBillingAccountAddresses.push(billingAccountAddress)
     }
 
-    // Link the company addresses
+    // Link company addresses
     testCompanyAddresses = []
     for (let i = 0; i < 2; i++) {
       const companyAddress = await CompanyAddressHelper.add({ addressId })
@@ -49,7 +49,7 @@ describe('Address model', () => {
       testCompanyAddresses.push(companyAddress)
     }
 
-    // Link the licence document roles
+    // Link licence document roles
     testLicenceDocumentRoles = []
     for (let i = 0; i < 2; i++) {
       const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })

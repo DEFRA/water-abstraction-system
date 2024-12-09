@@ -23,11 +23,11 @@ describe('Bill Run Volume model', () => {
   let testRecord
 
   before(async () => {
-    // Link to bill run
+    // Link bill runs
     testBillRun = await BillRunHelper.add()
     const { id: billRunId } = testBillRun
 
-    // Link to charge reference
+    // Link charge references
     testChargeReference = await ChargeReferenceHelper.add()
     const { id: chargeReferenceId } = testChargeReference
 

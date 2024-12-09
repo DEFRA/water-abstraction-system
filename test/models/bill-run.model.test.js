@@ -29,7 +29,7 @@ describe('Bill Run model', () => {
   let testReviewLicences
 
   before(async () => {
-    // Link to region
+    // Link regions
     testRegion = RegionHelper.select()
     const { id: regionId } = testRegion
 
@@ -37,7 +37,7 @@ describe('Bill Run model', () => {
     testRecord = await BillRunHelper.add({ regionId })
     const { id } = testRecord
 
-    // Link to bills
+    // Link bills
     testBills = []
     for (let i = 0; i < 2; i++) {
       const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: id })

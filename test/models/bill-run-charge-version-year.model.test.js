@@ -23,11 +23,11 @@ describe('Bill Run Charge Version Year model', () => {
   let testRecord
 
   before(async () => {
-    // Link to a bill run
+    // Link bill runs
     testBillRun = await BillRunHelper.add()
     const { id: billRunId } = testBillRun
 
-    // Link to a charge version
+    // Link charge versions
     testChargeVersion = await ChargeVersionHelper.add()
     const { id: chargeVersionId } = testChargeVersion
 

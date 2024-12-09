@@ -30,7 +30,7 @@ describe.only('Bill model', () => {
     testBillRun = await BillRunHelper.add()
     const { id: billRunId } = testBillRun
 
-    // Link billing accouns
+    // Link billing accounts
     testBillingAccount = await BillingAccountHelper.add()
     const { id: billingAccountId } = testBillingAccount
 
