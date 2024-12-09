@@ -5,7 +5,8 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
+const DetermineLicenceEndDateChangedService = require('../determine-licence-end-date-changed.service.js')
+const GenerateReturnLogsService = require('../generate-return-logs.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistImportService = require('../persist-import.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
