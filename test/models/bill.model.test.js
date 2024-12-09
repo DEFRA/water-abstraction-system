@@ -19,7 +19,7 @@ const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 // Thing under test
 const BillModel = require('../../app/models/bill.model.js')
 
-describe.only('Bill model', () => {
+describe('Bill model', () => {
   let testBillingAccount
   let testBillLicences
   let testBillRun
