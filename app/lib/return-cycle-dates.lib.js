@@ -154,9 +154,9 @@ function periods(date) {
     summerFullYear: {
       // Done - appears twice (tested once)
       name: 'summerFullYear', // this has a func to calculate
-      startDate: new Date(`${year}-11-01`),
-      endDate: new Date(`${year}-10-31`), // year fandango
-      dueDate: new Date(`${year}-11-28`) // year fandango
+      startDate: determineCycleStartDate(true),
+      endDate: determineCycleEndDate(true),
+      dueDate: determineCycleDueDate(true)
     },
     summerQuarterOne: {
       name: 'summerQuarterOne',

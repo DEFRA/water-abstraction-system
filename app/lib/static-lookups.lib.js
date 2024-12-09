@@ -15,6 +15,8 @@ const returnCycleDates = {
     startDate: { day: 1, month: 3 }
   },
   summer: {
+    fullYear: {},
+    quarterOne: {},
     dueDate: { day: 28, month: 10 },
     endDate: { day: 31, month: 9 },
     startDate: { day: 1, month: 10 }
