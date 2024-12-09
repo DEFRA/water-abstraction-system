@@ -7,7 +7,6 @@
 
 const { formatDateObjectToISO } = require('./dates.lib.js')
 const { returnCycleDates } = require('./static-lookups.lib.js')
-const { isDateBetweenRange } = require('./dates.lib')
 
 /**
  * Get the due date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
