@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -39,38 +38,34 @@ describe('Bill Runs Setup Exists service', () => {
 
   describe('when called', () => {
     describe('and the user is intending to create a two-part tariff bill run', () => {
-      beforeEach(async () => {
-        setupSession = await SessionHelper.add({
-          data: {
-            type: 'two_part_tariff',
-            region: region.id,
-            year: '2022',
-            season: 'summer'
-          }
-        })
+      beforeEach(() => {
+        setupSession = {
+          type: 'two_part_tariff',
+          region: region.id,
+          year: '2022',
+          season: 'summer'
+        }
 
         Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(2022)
       })
 
       describe('and no matching bill runs exist', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is as selected', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with an empty "matches", and "toFinancialYearEnding" is as selected', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults).to.be.empty()
-          expect(pageData).to.be.null()
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(2022)
+          expect(matches).to.be.empty()
+          expect(toFinancialYearEnding).to.equal(2022)
         })
       })
 
       describe('and a matching bill run exists', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
             {
               id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1',
@@ -86,55 +81,49 @@ describe('Bill Runs Setup Exists service', () => {
           ])
         })
 
-        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with "matches" set, and "toFinancialYearEnding" is as selected', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults[0].id).to.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
-          expect(pageData.billRunId).to.be.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(2022)
+          expect(matches[0].id).to.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
+          expect(toFinancialYearEnding).to.equal(2022)
         })
       })
     })
 
     describe('and the user is intending to create an annual bill run', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         // NOTE: Just to prove the service can handle it, we imagine the user went down the route of a 2PT bill run,
         // then changed their mind and went back and selected supplementary. Year and season are now irrelevant and
         // leaving them in confirms this.
-        setupSession = await SessionHelper.add({
-          data: {
-            type: 'annual',
-            region,
-            year: '2022',
-            season: 'summer'
-          }
-        })
+        setupSession = {
+          type: 'annual',
+          region,
+          year: '2022',
+          season: 'summer'
+        }
 
         Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(currentFinancialEndYear)
       })
 
       describe('and no matching bill runs exist', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is the current financial year end', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with an empty "matches", and "toFinancialYearEnding" is the current financial year end', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults).to.be.empty()
-          expect(pageData).to.be.null()
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(currentFinancialEndYear)
+          expect(matches).to.be.empty()
+          expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
         })
       })
 
       describe('and a matching bill run exists', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
             {
               id: '5612815f-9f67-4ac1-b697-d9ab7789274c',
@@ -150,55 +139,49 @@ describe('Bill Runs Setup Exists service', () => {
           ])
         })
 
-        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with "matches" set, and "toFinancialYearEnding" is the current financial year end', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults[0].id).to.equal('5612815f-9f67-4ac1-b697-d9ab7789274c')
-          expect(pageData.billRunId).to.be.equal('5612815f-9f67-4ac1-b697-d9ab7789274c')
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(currentFinancialEndYear)
+          expect(matches[0].id).to.equal('5612815f-9f67-4ac1-b697-d9ab7789274c')
+          expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
         })
       })
     })
 
     describe('and the user is intending to create a supplementary bill run', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         // NOTE: Just to prove the service can handle it, we imagine the user went down the route of a 2PT bill run,
         // then changed their mind and went back and selected supplementary. Year and season are now irrelevant and
         // leaving them in confirms this.
-        setupSession = await SessionHelper.add({
-          data: {
-            type: 'supplementary',
-            region: region.id,
-            year: '2022',
-            season: 'summer'
-          }
-        })
+        setupSession = {
+          type: 'supplementary',
+          region: region.id,
+          year: '2022',
+          season: 'summer'
+        }
 
         Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(currentFinancialEndYear)
       })
 
       describe('and no matching bill runs exist', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is the current financial year end', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with an empty "matches", and "toFinancialYearEnding" is the current financial year end', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults).to.be.empty()
-          expect(pageData).to.be.null()
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(currentFinancialEndYear)
+          expect(matches).to.be.empty()
+          expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
         })
       })
 
       describe('and one matching bill run exists', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
             {
               id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
@@ -214,22 +197,18 @@ describe('Bill Runs Setup Exists service', () => {
           ])
         })
 
-        // NOTE: If there is only one match for supplementary we don't populate the pageData because we won't show the
-        // exists page. If there is only one match, then we _can_ generate the other schema's bill run
-        it('returns an object with "matchResults:" set, a null "pageData:" property and year to use is the current financial year end', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with "matches" set, and "toFinancialYearEnding" is the current financial year end', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
-          expect(matchResults[0].id).to.equal('7b8a518b-ee0c-4c12-acfe-3b99f99d4c53')
-          expect(pageData).to.be.null()
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(currentFinancialEndYear)
+          expect(matches[0].id).to.equal('7b8a518b-ee0c-4c12-acfe-3b99f99d4c53')
+          expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
         })
       })
 
       describe('and two matching bill runs exist', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
             {
               id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
@@ -256,23 +235,18 @@ describe('Bill Runs Setup Exists service', () => {
           ])
         })
 
-        // NOTE: If there are 2 matches for supplementary then we populate the pageData for the first match. TBH we
-        // don't have a solution that can show both matches. But eventually we will only be generating SROC bill runs so
-        // this problem will go away!
-        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is the current financial year end', async () => {
-          const result = await ExistsService.go(setupSession.id)
+        it('returns an object with "matches" set, and "toFinancialYearEnding" is the current financial year end', async () => {
+          const result = await ExistsService.go(setupSession)
 
-          const { matchResults, pageData, session, yearToUse } = result
+          const { matches, toFinancialYearEnding } = result
 
           expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(
-            matchResults[0].id
+            matches[0].id
           )
           expect(['7b8a518b-ee0c-4c12-acfe-3b99f99d4c53', '5be625b3-a954-465d-8ab8-cde1b2f052ce']).includes(
-            matchResults[1].id
+            matches[1].id
           )
-          expect(pageData.billRunId).to.equal(matchResults[0].id)
-          expect(session).to.equal(session)
-          expect(yearToUse).to.equal(currentFinancialEndYear)
+          expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
         })
       })
     })
