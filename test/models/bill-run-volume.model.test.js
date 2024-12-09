@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,13 +18,24 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
 
 describe('Bill Run Volume model', () => {
+  let testBillRun
+  let testChargeReference
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillRunVolumeHelper.add()
-    })
+  before(async () => {
+    // Link to bill run
+    testBillRun = await BillRunHelper.add()
+    const { id: billRunId } = testBillRun
 
+    // Link to charge reference
+    testChargeReference = await ChargeReferenceHelper.add()
+    const { id: chargeReferenceId } = testChargeReference
+
+    // Test record
+    testRecord = await BillRunVolumeHelper.add({ billRunId, chargeReferenceId, twoPartTariffStatus: 90 })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillRunVolumeModel.query().findById(testRecord.id)
 
@@ -35,16 +46,6 @@ describe('Bill Run Volume model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill run', () => {
-      let testBillRun
-
-      beforeEach(async () => {
-        testBillRun = await BillRunHelper.add()
-
-        const { id: billRunId } = testBillRun
-
-        testRecord = await BillRunVolumeHelper.add({ billRunId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query().innerJoinRelated('billRun')
 
@@ -63,16 +64,6 @@ describe('Bill Run Volume model', () => {
     })
 
     describe('when linking to charge reference', () => {
-      let testChargeReference
-
-      beforeEach(async () => {
-        testChargeReference = await ChargeReferenceHelper.add()
-
-        const { id: chargeReferenceId } = testChargeReference
-
-        testRecord = await BillRunVolumeHelper.add({ chargeReferenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query().innerJoinRelated('chargeReference')
 
@@ -103,10 +94,6 @@ describe('Bill Run Volume model', () => {
 
   describe('$twoPartTariffStatus', () => {
     describe('when the two-part tariff status is set', () => {
-      beforeEach(async () => {
-        testRecord = await BillRunVolumeHelper.add({ twoPartTariffStatus: 90 })
-      })
-
       it('returns the status', () => {
         const result = testRecord.$twoPartTariffStatus()
 
@@ -115,7 +102,7 @@ describe('Bill Run Volume model', () => {
     })
 
     describe('when the two-part tariff status is not set', () => {
-      beforeEach(async () => {
+      before(async () => {
         testRecord = await BillRunVolumeHelper.add()
       })
 
