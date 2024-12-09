@@ -191,7 +191,7 @@ describe('Bill Runs Setup Check presenter', () => {
           it('returns a link to the SROC review page', async () => {
             const result = await CheckPresenter.go(session, existsResults)
 
-            expect(result.billRunLink).to.equal('/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182/review')
+            expect(result.billRunLink).to.equal('/system/bill-runs/review/c0608545-9870-4605-a407-5ff49f8a5182')
           })
         })
 

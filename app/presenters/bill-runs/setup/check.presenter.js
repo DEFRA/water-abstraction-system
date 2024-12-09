@@ -74,7 +74,7 @@ function _billRunLink(matches) {
   }
 
   if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
-    return `/system/bill-runs/${billRunId}/review`
+    return `/system/bill-runs/review/${billRunId}`
   }
 
   return `/billing/batch/${billRunId}/two-part-tariff-review`
