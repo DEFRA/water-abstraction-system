@@ -49,22 +49,37 @@ async function go(payload) {
   }
 }
 
+/**
+ * Determines which flags to set for supplementary billing
+ *
+ * This function takes a payload and determines which flags should be set for supplementary billing.
+ * It does this by calling the relevant service based on the presence of certain properties in the payload,
+ * such as `licenceId`, `importedLicence`, `chargeVersionId`, `returnId`, `workflowId`, and `billLicenceId`.
+ * The results are then returned.
+ *
+ * @private
+ */
 async function _determineFlags(payload) {
   if (payload.importedLicence) {
     return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
-  } else if (payload.chargeVersionId) {
-    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
-  } else if (payload.returnId) {
-    return DetermineReturnLogFlagsService.go(payload.returnId)
-  } else if (payload.workflowId) {
-    return DetermineWorkflowFlagsService.go(payload.workflowId)
-  } else if (payload.billLicenceId) {
-    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
-  } else if (payload.licenceId) {
-    return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
-  } else {
-    throw new Error('Invalid payload for process billing flags service')
   }
+  if (payload.chargeVersionId) {
+    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+  }
+  if (payload.returnId) {
+    return DetermineReturnLogFlagsService.go(payload.returnId)
+  }
+  if (payload.workflowId) {
+    return DetermineWorkflowFlagsService.go(payload.workflowId)
+  }
+  if (payload.billLicenceId) {
+    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
+  }
+  if (payload.licenceId) {
+    return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
+  }
+
+  throw new Error('Invalid payload for process billing flags service')
 }
 
 async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {

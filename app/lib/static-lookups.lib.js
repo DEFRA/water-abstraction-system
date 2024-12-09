@@ -6,6 +6,21 @@ const companyTypes = ['person', 'organisation']
 
 const contactTypes = ['person', 'department']
 
+/*
+ * Helper map for Months of the Year in integer format
+ *
+ * The getMonth() method of Date instances returns the month for this date according to local time,
+ * as a zero-based value (where zero indicates the first month of the year).
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
+ */
+const monthsAsIntegers = {
+  january: 0,
+  october: 9,
+  november: 10,
+  december: 11
+}
+
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 const returnCycleDates = {
@@ -88,11 +103,12 @@ module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
+  monthsAsIntegers,
+  naldRegions,
   organisationTypes,
   returnCycleDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
-  naldRegions,
   sources,
   twoPartTariffReviewIssues
 }
