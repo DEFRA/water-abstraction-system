@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,13 +20,45 @@ const LicenceDocumentRoleModel = require('../../app/models/licence-document-role
 const ContactModel = require('../../app/models/contact.model.js')
 
 describe('Contact model', () => {
+  let testBillingAccountAddresses
+  let testCompanyContacts
+  let testLicenceDocumentRoles
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ContactHelper.add()
-    })
+  before(async () => {
+    // Test record
+    testRecord = await ContactHelper.add()
+    const { id: contactId } = testRecord
 
+    // Link billing account addresses
+    testBillingAccountAddresses = []
+    for (let i = 0; i < 2; i++) {
+      // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
+      // billingAccountId and start date
+      const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
+      const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, contactId })
+
+      testBillingAccountAddresses.push(billingAccountAddress)
+    }
+
+    // Link company contacts
+    testCompanyContacts = []
+    for (let i = 0; i < 2; i++) {
+      const companyContact = await CompanyContactHelper.add({ contactId })
+
+      testCompanyContacts.push(companyContact)
+    }
+
+    // Link licence document roles
+    testLicenceDocumentRoles = []
+    for (let i = 0; i < 2; i++) {
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ contactId })
+
+      testLicenceDocumentRoles.push(licenceDocumentRole)
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await ContactModel.query().findById(testRecord.id)
 
@@ -37,23 +69,6 @@ describe('Contact model', () => {
 
   describe('Relationships', () => {
     describe('when linking to billing account addresses', () => {
-      let testBillingAccountAddresses
-
-      beforeEach(async () => {
-        testRecord = await ContactHelper.add()
-        const { id: contactId } = testRecord
-
-        testBillingAccountAddresses = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
-          // billingAccountId and start date
-          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-          const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, contactId })
-
-          testBillingAccountAddresses.push(billingAccountAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('billingAccountAddresses')
 
@@ -74,21 +89,6 @@ describe('Contact model', () => {
     })
 
     describe('when linking to company contacts', () => {
-      let testCompanyContacts
-
-      beforeEach(async () => {
-        testRecord = await ContactHelper.add()
-
-        const { id: contactId } = testRecord
-
-        testCompanyContacts = []
-        for (let i = 0; i < 2; i++) {
-          const companyContact = await CompanyContactHelper.add({ contactId })
-
-          testCompanyContacts.push(companyContact)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('companyContacts')
 
@@ -109,21 +109,6 @@ describe('Contact model', () => {
     })
 
     describe('when linking to licence document roles', () => {
-      let testLicenceDocumentRoles
-
-      beforeEach(async () => {
-        testRecord = await ContactHelper.add()
-
-        const { id: contactId } = testRecord
-
-        testLicenceDocumentRoles = []
-        for (let i = 0; i < 2; i++) {
-          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ contactId })
-
-          testLicenceDocumentRoles.push(licenceDocumentRole)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('licenceDocumentRoles')
 
