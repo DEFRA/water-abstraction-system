@@ -9,8 +9,16 @@ const { returnCycleDates } = require('./static-lookups.lib.js')
 const { determineCycleStartDate, determineCycleEndDate, determineCycleDueDate } = require('./return-cycle-dates.lib')
 
 /**
+ * Determine returns periods
+ *
+ * Return periods are summer, allYear (winter) and quarters (Quarters are form April to April)
+ *
+ * Based on the current date or one provided this function will calculate the upcoming periods due dates.
+ *
  *
  * @param {Date} determinationDate
+ *
+ * @returns {object} - The return periods calculated for the next one
  */
 function determineReturnsPeriods(determinationDate = new Date()) {
   return {
@@ -96,6 +104,7 @@ function _isDue(determinationDate, cycle) {
 
 function _startDateQuarterFour(determinationDate, cycle) {
   const year = determinationDate.getFullYear()
+  const nextYear = year + 1
 
   const periodStartDay = cycle.startDate.day
   const periodStartMonth = cycle.startDate.month + 1
@@ -104,7 +113,7 @@ function _startDateQuarterFour(determinationDate, cycle) {
   if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
     periodStartYear = year
   } else {
-    periodStartYear = year + 1
+    periodStartYear = nextYear
   }
 
   return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
@@ -112,6 +121,7 @@ function _startDateQuarterFour(determinationDate, cycle) {
 
 function _endDateQuarterFour(determinationDate, cycle) {
   const year = determinationDate.getFullYear()
+  const nextYear = year + 1
 
   const periodStartDay = cycle.endDate.day
   const periodStartMonth = cycle.endDate.month + 1
@@ -120,7 +130,7 @@ function _endDateQuarterFour(determinationDate, cycle) {
   if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
     periodStartYear = year
   } else {
-    periodStartYear = year + 1
+    periodStartYear = nextYear
   }
 
   return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
@@ -138,15 +148,16 @@ function _endDateQuarterFour(determinationDate, cycle) {
  * @param {Date} determinationDate
  * @param {object} cycle
  *
- * @returns {Date} - The due date for quarter four
+ * @returns {Date} - The due date for quarter four is always the following year
  */
 function _isDueQuarterFour(determinationDate, cycle) {
   const year = determinationDate.getFullYear()
+  const nextYear = year + 1
 
   const periodDueDay = cycle.dueDate.day
   const periodDueMonth = cycle.dueDate.month + 1
 
-  return new Date(`${year + 1}-${periodDueMonth}-${periodDueDay}`)
+  return new Date(`${nextYear}-${periodDueMonth}-${periodDueDay}`)
 }
 
 module.exports = {
