@@ -34,7 +34,7 @@ describe('Bill Runs Setup Check presenter', () => {
           batchType: 'annual',
           billRunNumber: 12345,
           createdAt: new Date('2024-05-01'),
-          region: { id: '06988275-b8ce-4bbc-882b-48cd13fa523c', displayName: 'Stormlands' },
+          region: { id: regionId, displayName: 'Stormlands' },
           scheme: 'sroc',
           status: 'sent',
           summer: false,
@@ -46,7 +46,7 @@ describe('Bill Runs Setup Check presenter', () => {
 
     Sinon.stub(RegionModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
-      findById: Sinon.stub().withArgs(regionId).resolves({ id: regionId, displayName: 'Avalon' })
+      findById: Sinon.stub().withArgs(regionId).resolves({ id: regionId, displayName: 'Stormlands' })
     })
   })
 
@@ -74,7 +74,7 @@ describe('Bill Runs Setup Check presenter', () => {
           exists: false,
           financialYear: '2024 to 2025',
           pageTitle: 'Check the bill run to be created',
-          regionName: 'Avalon',
+          regionName: 'Stormlands',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           warningMessage: null
         })
@@ -272,7 +272,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is an existing blocking bill run', () => {
       beforeEach(() => {
         // NOTE: We wouldn't expect a two-part tariff bill run to block an annual, but we set it to something different
-        // to demonstrate that it is using the existing batch type when it is present
+        // to demonstrate that it is using the existing bill run's batch type when it is present
         existsResults.matches[0].batchType = 'two_part_tariff'
       })
 
@@ -391,15 +391,21 @@ describe('Bill Runs Setup Check presenter', () => {
       it("returns the selected region's name", async () => {
         const result = await CheckPresenter.go(session, existsResults)
 
-        expect(result.regionName).to.equal('Avalon')
+        expect(result.regionName).to.equal('Stormlands')
       })
     })
 
     describe('when there is an existing blocking bill run', () => {
+      beforeEach(() => {
+        // NOTE: It would never happen that the blocking bill run would be for a different region, but we set it to
+        // something different to demonstrate that it is using the existing bill run's region when it is present
+        existsResults.matches[0].region.displayName = 'Avalon'
+      })
+
       it("returns its region's name", async () => {
         const result = await CheckPresenter.go(session, existsResults)
 
-        expect(result.regionName).to.equal('Stormlands')
+        expect(result.regionName).to.equal('Avalon')
       })
     })
   })
