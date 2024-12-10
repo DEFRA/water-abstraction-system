@@ -1,13 +1,66 @@
 'use strict'
 
 /**
- * General helper methods
+ * Date helper methods
  * @module DatesLib
  */
 
-const february = 2
-const lastDayOfFebruary = 28
-const lastDayOfFebruaryLeapYear = 29
+const FEBRUARY = 2
+const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
+const LAST_DAY_OF_FEB_LEAP_YEAR = 29
+
+/**
+ * From an array of dates, filter out empty values and return the earliest
+ *
+ * This was created as part of our work on generating return logs for licences, and needing to work out the earliest
+ * end date between the licence's expired, lapsed and revoked end dates, the return version's end date, and the return
+ * cycle's end date.
+ *
+ * @param {Date[]} dates - The dates from which to select the earliest
+ *
+ * @returns {Date} The earliest date
+ */
+function determineEarliestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
+
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
+
+  const earliestDateTimestamp = Math.min(...allEmptyValuesRemoved)
+
+  return new Date(earliestDateTimestamp)
+}
+
+/**
+ * From an array of dates, filter out empty values and return the latest as a `Date`
+ *
+ * This was created as part of our work on generating return logs for licences, and needing to work out the latest end
+ * date between the licence start date, the return version start date, and the return cycle start date.
+ *
+ * @param {Date[]} dates - The dates from which to select the latest
+ *
+ * @returns {Date} The latest date
+ */
+function determineLatestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
+
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
+
+  const valuesAsDates = allEmptyValuesRemoved.map((date) => {
+    return new Date(date)
+  })
+
+  const latestDateTimestamp = Math.max(...valuesAsDates)
+
+  return new Date(latestDateTimestamp)
+}
 
 /**
  * Formats a string assumed to be a date in the format 01/01/2001
@@ -92,11 +145,11 @@ function isISODateFormat(dateString) {
 function _isValidLeapYearDate(dateString) {
   const [year, month, day] = dateString.split('-')
 
-  if (_isLeapYear(year) === true && Number(month) === february && Number(day) > lastDayOfFebruaryLeapYear) {
+  if (_isLeapYear(year) === true && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_LEAP_YEAR) {
     return false
   }
 
-  if (_isLeapYear(year) === false && Number(month) === february && Number(day) > lastDayOfFebruary) {
+  if (_isLeapYear(year) === false && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_STANDARD_YEAR) {
     return false
   }
 
@@ -129,6 +182,8 @@ function isQuarterlyReturnSubmissions(date) {
 }
 
 module.exports = {
+  determineEarliestDate,
+  determineLatestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,

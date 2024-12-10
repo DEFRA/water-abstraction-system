@@ -18,6 +18,7 @@ const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 
  */
 const monthsAsIntegers = {
   january: 0,
+  october: 9,
   november: 10,
   december: 11
 }

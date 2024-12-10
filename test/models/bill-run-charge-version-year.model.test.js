@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,13 +18,24 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
 
 describe('Bill Run Charge Version Year model', () => {
+  let testBillRun
+  let testChargeVersion
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillRunChargeVersionYearHelper.add()
-    })
+  before(async () => {
+    // Link bill runs
+    testBillRun = await BillRunHelper.add()
+    const { id: billRunId } = testBillRun
 
+    // Link charge versions
+    testChargeVersion = await ChargeVersionHelper.add()
+    const { id: chargeVersionId } = testChargeVersion
+
+    // Test record
+    testRecord = await BillRunChargeVersionYearHelper.add({ billRunId, chargeVersionId })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillRunChargeVersionYearModel.query().findById(testRecord.id)
 
@@ -35,16 +46,6 @@ describe('Bill Run Charge Version Year model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill run', () => {
-      let testBillRun
-
-      beforeEach(async () => {
-        testBillRun = await BillRunHelper.add()
-
-        const { id: billRunId } = testBillRun
-
-        testRecord = await BillRunChargeVersionYearHelper.add({ billRunId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunChargeVersionYearModel.query().innerJoinRelated('billRun')
 
@@ -63,16 +64,6 @@ describe('Bill Run Charge Version Year model', () => {
     })
 
     describe('when linking to charge version', () => {
-      let testChargeVersion
-
-      beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add()
-
-        const { id: chargeVersionId } = testChargeVersion
-
-        testRecord = await BillRunChargeVersionYearHelper.add({ chargeVersionId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunChargeVersionYearModel.query().innerJoinRelated('chargeVersion')
 

@@ -1,17 +1,19 @@
 'use strict'
 
 /**
- * Process the return logs for the next cycle
+ * Determines what return logs need to be generated for a given cycle and creates them
  * @module ProcessReturnLogsService
  */
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const CreateCurrentReturnCycleService = require('./create-current-return-cycle.service.js')
+const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
+const FetchCurrentReturnCycleService = require('./fetch-current-return-cycle.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
-const GenerateReturnLogsService = require('./generate-return-logs.service.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Creates the return logs for the next cycle
+ * Determines what return logs need to be generated for a given cycle and creates them
+ *
  * The return requirement is the information held against the licence that defines how and when an abstractor needs to
  * submit their returns.
  *
@@ -25,34 +27,36 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * would be created.
  *
  * So, this job will run twice yearly: once for each cycle. The job determines which return requirements need a return
- * log generated for the selected cycle and then creates them.
+ * log created for the selected cycle and then creates them.
  *
- * > Because the job creates _all_ return logs in a cycle, it makes it difficult to test what it is generating is
- * > correct. So, to support testing and validation, we can pass a licence ref in the job request to limit the creation
- * > to just a single licence.
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
- * @param {string} [licenceReference] - An optional argument to limit return log creation to just the specific licence
  */
-async function go(cycle, licenceReference = null) {
+async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
-    const summer = cycle === 'summer'
 
-    const returnRequirements = await FetchReturnRequirementsService.go(summer, licenceReference)
-    const returnLogs = await GenerateReturnLogsService.go(returnRequirements)
+    const returnCycle = await _fetchReturnCycle(cycle)
+    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
 
-    await _createReturnLogs(returnLogs)
+    for (const returnRequirement of returnRequirements) {
+      await CreateReturnLogsService.go(returnRequirement, returnCycle)
+    }
 
-    calculateAndLogTimeTaken(startTime, 'Create return logs job complete', { cycle, licenceReference })
+    calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
   } catch (error) {
-    global.GlobalNotifier.omfg('Create return logs job failed', { cycle, error })
+    global.GlobalNotifier.omfg('Return logs job failed', { cycle }, error)
   }
 }
 
-async function _createReturnLogs(returnLogs) {
-  for (const returnLog of returnLogs) {
-    await ReturnLogModel.query().insert(returnLog)
+async function _fetchReturnCycle(cycle) {
+  const summer = cycle === 'summer'
+  const returnCycle = await FetchCurrentReturnCycleService.go(summer)
+
+  if (returnCycle) {
+    return returnCycle
   }
+
+  return CreateCurrentReturnCycleService.go(summer)
 }
 
 module.exports = {
