@@ -13,8 +13,6 @@ const { determineCycleStartDate, determineCycleEndDate, determineCycleDueDate } 
  * @param {Date} determinationDate
  */
 function determineReturnsPeriods(determinationDate = new Date()) {
-  const year = determinationDate.getFullYear()
-
   return {
     allYear: {
       name: 'allYear',
@@ -48,9 +46,9 @@ function determineReturnsPeriods(determinationDate = new Date()) {
     },
     quarterFour: {
       name: 'quarterFour',
-      startDate: _startDate(determinationDate, returnCycleDates.quarterFour),
-      endDate: _endDate(determinationDate, returnCycleDates.quarterFour),
-      dueDate: _dueDate(determinationDate, returnCycleDates.quarterFour)
+      startDate: _startDateQuarterFour(determinationDate, returnCycleDates.quarterFour),
+      endDate: _endDateQuarterFour(determinationDate, returnCycleDates.quarterFour),
+      dueDate: _isDueQuarterFour(determinationDate, returnCycleDates.quarterFour)
     }
   }
 }
@@ -60,7 +58,7 @@ function _startDate(determinationDate, cycle) {
 
   const periodStartDay = cycle.startDate.day
   const periodStartMonth = cycle.startDate.month + 1
-  const periodStartYear = year
+  const periodStartYear = _isDue(determinationDate, cycle) ? year + 1 : year
 
   return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
 }
@@ -70,7 +68,7 @@ function _endDate(determinationDate, cycle) {
 
   const periodEndDay = cycle.endDate.day
   const periodEndMonth = cycle.endDate.month + 1
-  const periodEndYear = year
+  const periodEndYear = _isDue(determinationDate, cycle) ? year + 1 : year
 
   return new Date(`${periodEndYear}-${periodEndMonth}-${periodEndDay}`)
 }
@@ -80,9 +78,75 @@ function _dueDate(determinationDate, cycle) {
 
   const periodDueDay = cycle.dueDate.day
   const periodDueMonth = cycle.dueDate.month + 1
-  const periodDueYear = year
+  const periodDueYear = _isDue(determinationDate, cycle) ? year + 1 : year
 
   return new Date(`${periodDueYear}-${periodDueMonth}-${periodDueDay}`)
+}
+
+function _isDue(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+
+  const periodDueDay = cycle.dueDate.day
+  const periodDueMonth = cycle.dueDate.month + 1
+
+  const dueDate = new Date(`${year}-${periodDueMonth}-${periodDueDay}`)
+
+  return dueDate.getTime() < determinationDate.getTime()
+}
+
+function _startDateQuarterFour(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+
+  const periodStartDay = cycle.startDate.day
+  const periodStartMonth = cycle.startDate.month + 1
+  let periodStartYear
+
+  if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
+    periodStartYear = year
+  } else {
+    periodStartYear = year + 1
+  }
+
+  return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
+}
+
+function _endDateQuarterFour(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+
+  const periodStartDay = cycle.endDate.day
+  const periodStartMonth = cycle.endDate.month + 1
+  let periodStartYear
+
+  if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
+    periodStartYear = year
+  } else {
+    periodStartYear = year + 1
+  }
+
+  return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
+}
+
+/**
+ * Quarter Four spans a new year.
+ *
+ * It has to accommodate for the due date being in the next year
+ *
+ * If the determination date is in the next year. Then the due date will be in the following year for that
+ *
+ * So if the date is 2024-01-01 the Due date will be in 2025 and the Start and End will be in 2024
+ *
+ * @param {Date} determinationDate
+ * @param {object} cycle
+ *
+ * @returns {Date} - The due date for quarter four
+ */
+function _isDueQuarterFour(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+
+  const periodDueDay = cycle.dueDate.day
+  const periodDueMonth = cycle.dueDate.month + 1
+
+  return new Date(`${year + 1}-${periodDueMonth}-${periodDueDay}`)
 }
 
 module.exports = {
