@@ -33,6 +33,30 @@ const returnCycleDates = {
     dueDate: { day: 28, month: 10 },
     endDate: { day: 31, month: 9 },
     startDate: { day: 1, month: 10 }
+  },
+  //1st Jan - 31st Mar (Due date 28th Apr) - Quarter
+  quarterOne: {
+    dueDate: { day: 28, month: 3 },
+    endDate: { day: 31, month: 2 },
+    startDate: { day: 1, month: 0 }
+  },
+  // 1st Apr - 30th Jun (Due to 28th Jul) - Quarter
+  quarterTwo: {
+    dueDate: { day: 28, month: 6 },
+    endDate: { day: 30, month: 5 },
+    startDate: { day: 1, month: 3 }
+  },
+  // 1st Jul - 30th Sep (Due date 28th Oct) - Quarter
+  quarterThree: {
+    dueDate: { day: 28, month: 9 },
+    endDate: { day: 30, month: 8 },
+    startDate: { day: 1, month: 6 }
+  },
+  // 1st Oct - 31st Dec (Due date 28th Jan) - Quarter},
+  quarterFour: {
+    dueDate: { day: 28, month: 0 },
+    endDate: { day: 31, month: 11 },
+    startDate: { day: 1, month: 9 }
   }
 }
 
