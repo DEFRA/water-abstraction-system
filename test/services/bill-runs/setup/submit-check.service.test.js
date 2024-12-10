@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
@@ -43,7 +44,7 @@ describe('Bill Runs Setup Submit Check service', () => {
   describe('when called', () => {
     describe('and no existing bill runs are found', () => {
       beforeEach(async () => {
-        existsResults = { matches: [], toFinancialYearEnding: 2025 }
+        existsResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
 
         Sinon.stub(ExistsService, 'go').resolves(existsResults)
 
@@ -76,7 +77,8 @@ describe('Bill Runs Setup Submit Check service', () => {
               toFinancialYearEnding: 2025
             }
           ],
-          toFinancialYearEnding: 2025
+          toFinancialYearEnding: 2025,
+          trigger: engineTriggers.neither
         }
 
         Sinon.stub(ExistsService, 'go').resolves(existsResults)

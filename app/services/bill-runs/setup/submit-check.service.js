@@ -9,6 +9,7 @@ const CheckPresenter = require('../../../presenters/bill-runs/setup/check.presen
 const CreateService = require('./create.service.js')
 const ExistsService = require('./exists.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
@@ -42,9 +43,9 @@ async function go(sessionId, auth) {
   const existsResults = await ExistsService.go(session)
 
   // NOTE: As there is nothing a user can change on the /check page we _should_ never get a POST request from it if a
-  // match was found. This is just protection against malicious use, or more likely, someone has left the page idle
-  // and another user has triggered a bill run that now blocks it.
-  if (existsResults.matches.length === 0) {
+  // blocking bill run was found. This is just protection against malicious use, or more likely, someone has left the
+  // page idle and another user has triggered a bill run that now blocks it.
+  if (existsResults.trigger !== engineTriggers.neither) {
     // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
     // is not currently possible
     if (session.type !== 'two_part_supplementary') {
