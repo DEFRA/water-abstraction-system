@@ -14,8 +14,7 @@ const { formatAbstractionPeriod, formatLongDate, titleCase } = require('../base.
 function go(data) {
   const dataString = JSON.stringify(data, null, 2)
 
-  const { licenceNumber } = data
-  console.log('🚀 ~ go ~ licenceNumber:', licenceNumber)
+  const { licenceNumber, status } = data
 
   const tableRows = _formatRows(data.lines)
   const description = data.metadata.description
@@ -28,7 +27,17 @@ function go(data) {
 
   const purposes = _formatPurposes(data.metadata.purposes)
 
-  return { dataString, tableRows, description, purposes, returnPeriod, abstractionPeriod, returnPurpose, licenceNumber }
+  return {
+    dataString,
+    abstractionPeriod,
+    description,
+    licenceNumber,
+    purposes,
+    returnPeriod,
+    returnPurpose,
+    status,
+    tableRows
+  }
 }
 
 function _formatRows(lines) {
