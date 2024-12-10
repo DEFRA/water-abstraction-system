@@ -19,7 +19,7 @@ const DetermineFinancialYearEndService = require('./determine-financial-year-end
  *
  * All this needs to be taken into account when determining if a 'matching' bill run exists.
  *
- * @param {string} session - The bill run setup session instance
+ * @param {object} session - The bill run setup session instance
  *
  * @returns {Promise<object>} Any matching bill runs and the year it determined would be used for
  * `toFinancialYearEnding`
