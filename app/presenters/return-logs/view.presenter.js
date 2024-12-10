@@ -5,7 +5,7 @@
  * @module ReturnLogPresenter
  */
 
-const { formatAbstractionPeriod } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, titleCase } = require('../base.presenter.js')
 
 /**
  * TODO: Document
@@ -21,9 +21,11 @@ function go(data) {
   const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = data.metadata.nald
   const abstractionPeriod = formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth)
 
+  const returnPurpose = _formatReturnPurpose(data.metadata.purposes)
+
   const purposes = _formatPurposes(data.metadata.purposes)
 
-  return { dataString, tableRows, description, purposes, returnPeriod, abstractionPeriod }
+  return { dataString, tableRows, description, purposes, returnPeriod, abstractionPeriod, returnPurpose }
 }
 
 function _formatRows(lines) {
@@ -45,18 +47,20 @@ function _formatPurposes(purposes) {
 }
 
 function _formatReturnPeriod(startDate, endDate) {
-  const formattedStartDate = _formatDateDayMonthYear(startDate)
-  const formattedEndDate = _formatDateDayMonthYear(endDate)
+  const formattedStartDate = formatLongDate(new Date(startDate))
+  const formattedEndDate = formatLongDate(new Date(endDate))
 
   return `${formattedStartDate} to ${formattedEndDate}`
 }
 
-function _formatDateDayMonthYear(date) {
-  return new Intl.DateTimeFormat('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(new Date(date))
+function _formatReturnPurpose(purposes) {
+  return purposes
+    .map((purpose) => {
+      const purposeToDisplay = purpose.alias || purpose.tertiary.description
+      // titleCase
+      return titleCase(purposeToDisplay)
+    })
+    .join(', ')
 }
 
 function _formatDateMonthYear(date) {
