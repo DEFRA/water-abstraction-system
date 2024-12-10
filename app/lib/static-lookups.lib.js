@@ -23,6 +23,26 @@ const monthsAsIntegers = {
 
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
+/**
+ * An object defining the return periods / cycles with their respective start dates, end dates, and due dates.
+ *
+ * Each period / cycle is represented with the following properties:
+ * - `startDate`: The starting date of the period (day and month).
+ * - `endDate`: The ending date of the period (day and month).
+ * - `dueDate`: The due date for the period (day and month).
+ *
+ * Months are zero-based, where January = 0, February = 1, ..., December = 11.
+ *
+ * | Name         | Start Date    | End Date      | Due Date       |
+ * |--------------|---------------|---------------|----------------|
+ * | Quarter One  | 1 January     | 31 March      | 28th April     |
+ * | All Year     | 1 April       | 31 March      | 28th April     |
+ * | Quarter Two  | 1 April       | 30 June       | 28th July      |
+ * | Quarter Three| 1 July        | 30 September  | 28th October   |
+ * | Quarter Four | 1 October     | 31 December   | 28th January   |
+ * | Summer       | 1 November    | 31 October    | 28th November  |
+ *
+ */
 const returnCycleDates = {
   allYear: {
     dueDate: { day: 28, month: 3 },
@@ -34,25 +54,21 @@ const returnCycleDates = {
     endDate: { day: 31, month: 9 },
     startDate: { day: 1, month: 10 }
   },
-  //1st Jan - 31st Mar (Due date 28th Apr) - Quarter
   quarterOne: {
     dueDate: { day: 28, month: 3 },
     endDate: { day: 31, month: 2 },
     startDate: { day: 1, month: 0 }
   },
-  // 1st Apr - 30th Jun (Due to 28th Jul) - Quarter
   quarterTwo: {
     dueDate: { day: 28, month: 6 },
     endDate: { day: 30, month: 5 },
     startDate: { day: 1, month: 3 }
   },
-  // 1st Jul - 30th Sep (Due date 28th Oct) - Quarter
   quarterThree: {
     dueDate: { day: 28, month: 9 },
     endDate: { day: 30, month: 8 },
     startDate: { day: 1, month: 6 }
   },
-  // 1st Oct - 31st Dec (Due date 28th Jan) - Quarter},
   quarterFour: {
     dueDate: { day: 28, month: 0 },
     endDate: { day: 31, month: 11 },
