@@ -74,7 +74,7 @@ async function setup(_request, h) {
 async function submitCheck(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitCheckService.go(sessionId, request.auth.credentials.user)
+  const pageData = await SubmitCheckService.go(sessionId, request.auth)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/check.njk', {
