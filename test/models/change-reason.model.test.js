@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,10 +18,20 @@ const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const CHANGE_REASON_SUCCESSION_REMAINDER_INDEX = 9
 
 describe('Change Reason model', () => {
+  let testChargeVersions
   let testRecord
 
   before(async () => {
     testRecord = ChangeReasonHelper.select(CHANGE_REASON_SUCCESSION_REMAINDER_INDEX)
+    const { id } = testRecord
+
+    // Link charge versions
+    testChargeVersions = []
+    for (let i = 0; i < 2; i++) {
+      const chargeVersion = await ChargeVersionHelper.add({ changeReasonId: id })
+
+      testChargeVersions.push(chargeVersion)
+    }
   })
 
   describe('Basic query', () => {
@@ -35,19 +45,6 @@ describe('Change Reason model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge versions', () => {
-      let testChargeVersions
-
-      beforeEach(async () => {
-        const { id } = testRecord
-
-        testChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({ changeReasonId: id })
-
-          testChargeVersions.push(chargeVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChangeReasonModel.query().innerJoinRelated('chargeVersions')
 

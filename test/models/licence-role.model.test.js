@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,13 +20,42 @@ const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 
 describe('Licence Role model', () => {
+  let testCompanyAddresses
+  let testCompanyContacts
+  let testLicenceDocumentRoles
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceRoleHelper.select()
-    })
+  before(async () => {
+    // Test record
+    testRecord = await LicenceRoleHelper.select()
+    const { id: licenceRoleId } = testRecord
 
+    // Link company addresses
+    testCompanyAddresses = []
+    for (let i = 0; i < 2; i++) {
+      const companyAddress = await CompanyAddressHelper.add({ licenceRoleId })
+
+      testCompanyAddresses.push(companyAddress)
+    }
+
+    // Link company contacts
+    testCompanyContacts = []
+    for (let i = 0; i < 2; i++) {
+      const companyContact = await CompanyContactHelper.add({ licenceRoleId })
+
+      testCompanyContacts.push(companyContact)
+    }
+
+    // Link licence document roles
+    testLicenceDocumentRoles = []
+    for (let i = 0; i < 2; i++) {
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceRoleId })
+
+      testLicenceDocumentRoles.push(licenceDocumentRole)
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceRoleModel.query().findById(testRecord.id)
 
@@ -37,21 +66,6 @@ describe('Licence Role model', () => {
 
   describe('Relationships', () => {
     describe('when linking to company addresses', () => {
-      let testCompanyAddresses
-
-      beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.select()
-
-        const { id: licenceRoleId } = testRecord
-
-        testCompanyAddresses = []
-        for (let i = 0; i < 2; i++) {
-          const companyAddress = await CompanyAddressHelper.add({ licenceRoleId })
-
-          testCompanyAddresses.push(companyAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('companyAddresses')
 
@@ -72,21 +86,6 @@ describe('Licence Role model', () => {
     })
 
     describe('when linking to company contacts', () => {
-      let testCompanyContacts
-
-      beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.select()
-
-        const { id: licenceRoleId } = testRecord
-
-        testCompanyContacts = []
-        for (let i = 0; i < 2; i++) {
-          const companyContact = await CompanyContactHelper.add({ licenceRoleId })
-
-          testCompanyContacts.push(companyContact)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('companyContacts')
 
@@ -107,21 +106,6 @@ describe('Licence Role model', () => {
     })
 
     describe('when linking to licence document roles', () => {
-      let testLicenceDocumentRoles
-
-      beforeEach(async () => {
-        testRecord = await LicenceRoleHelper.select()
-
-        const { id: licenceRoleId } = testRecord
-
-        testLicenceDocumentRoles = []
-        for (let i = 0; i < 2; i++) {
-          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceRoleId })
-
-          testLicenceDocumentRoles.push(licenceDocumentRole)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('licenceDocumentRoles')
 

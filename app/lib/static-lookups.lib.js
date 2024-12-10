@@ -6,6 +6,8 @@ const companyTypes = ['person', 'organisation']
 
 const contactTypes = ['person', 'department']
 
+const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
+
 /*
  * Helper map for Months of the Year in integer format
  *
@@ -16,8 +18,25 @@ const contactTypes = ['person', 'department']
  */
 const monthsAsIntegers = {
   january: 0,
+  october: 9,
   november: 10,
   december: 11
+}
+
+/**
+ * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
+ *
+ */
+const naldRegions = {
+  AN: 'Anglian',
+  MD: 'Midlands',
+  NO: 'Northumbria',
+  NW: 'North West',
+  SO: 'Southern',
+  SW: 'South West (incl Wessex)',
+  TH: 'Thames',
+  WL: 'Wales',
+  YO: 'Yorkshire'
 }
 
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
@@ -65,22 +84,6 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
-/**
- * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
- *
- */
-const naldRegions = {
-  AN: 'Anglian',
-  MD: 'Midlands',
-  NO: 'Northumbria',
-  NW: 'North West',
-  SO: 'Southern',
-  SW: 'South West (incl Wessex)',
-  TH: 'Thames',
-  WL: 'Wales',
-  YO: 'Yorkshire'
-}
-
 const sources = ['nald', 'wrls']
 
 const twoPartTariffReviewIssues = {
@@ -102,6 +105,7 @@ module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
+  engineTriggers,
   monthsAsIntegers,
   naldRegions,
   organisationTypes,
