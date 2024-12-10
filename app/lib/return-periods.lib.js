@@ -56,7 +56,7 @@ function determineReturnsPeriods(determinationDate = new Date()) {
       name: 'quarterFour',
       startDate: _startDateQuarterFour(determinationDate, returnCycleDates.quarterFour),
       endDate: _endDateQuarterFour(determinationDate, returnCycleDates.quarterFour),
-      dueDate: _isDueQuarterFour(determinationDate, returnCycleDates.quarterFour)
+      dueDate: _dueQuarterFour(determinationDate, returnCycleDates.quarterFour)
     }
   }
 }
@@ -150,7 +150,7 @@ function _endDateQuarterFour(determinationDate, cycle) {
  *
  * @returns {Date} - The due date for quarter four is always the following year
  */
-function _isDueQuarterFour(determinationDate, cycle) {
+function _dueQuarterFour(determinationDate, cycle) {
   const year = determinationDate.getFullYear()
   const nextYear = year + 1
 

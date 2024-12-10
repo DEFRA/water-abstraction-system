@@ -25,7 +25,7 @@ describe('Return Periods lib', () => {
     clock.restore()
   })
 
-  describe.only('determineReturnsPeriods', () => {
+  describe('determineReturnsPeriods', () => {
     let startDate, endDate, dueDate, dates
 
     describe('"allYear"', () => {
@@ -87,7 +87,7 @@ describe('Return Periods lib', () => {
       })
     })
 
-    describe('"quarterOne" - Starts 1 January - 31 March (Due date 28 April) ', () => {
+    describe('"quarterOne" - 1 January - 31 March (Due date 28 April) ', () => {
       describe('when it is currently "quarterOne"', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnCycleDates.quarterOne, year)
@@ -149,7 +149,7 @@ describe('Return Periods lib', () => {
       })
     })
 
-    describe('"quarterTwo" - Starts 1 April - 30 June (Due date 28 July) ', () => {
+    describe('"quarterTwo" - 1 April - 30 June (Due date 28 July) ', () => {
       describe('when it is currently "quarterTwo"', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnCycleDates.quarterTwo, year)
@@ -211,7 +211,7 @@ describe('Return Periods lib', () => {
       })
     })
 
-    describe('"quarterThree" - Starts 1 July - 30 September (Due date 28 October) ', () => {
+    describe('"quarterThree" - 1 July - 30 September (Due date 28 October) ', () => {
       describe('when it is currently "quarterThree"', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnCycleDates.quarterThree, year)
@@ -273,7 +273,7 @@ describe('Return Periods lib', () => {
       })
     })
 
-    describe('"quarterFour" - Starts 1 October - 31 December (Due date 28 January) ', () => {
+    describe('"quarterFour" - 1 October - 31 December (Due date 28 January) ', () => {
       let dueDateNextYear
       describe('when it is currently "quarterFour"', () => {
         beforeEach(() => {
