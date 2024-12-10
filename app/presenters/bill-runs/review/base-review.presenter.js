@@ -204,7 +204,7 @@ function formatIssues(issues) {
  *
  * @param {Array} purposes - the purposes taken from the return logs metadata
  *
- * @returns {string} the purpose(s) descriptions presented as a comma separated string
+ * @returns {string} the purpose descriptions presented as a comma separated string
  */
 function formatPurposes(purposes) {
   const firstPurposeDescription = purposes[0].tertiary.description
