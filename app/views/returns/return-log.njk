@@ -2,11 +2,16 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{% from "macros/return-log-status-tag.njk" import statusTag %}
+
 {% block content %}
   <div class="govuk-body">
     <span class="govuk-caption-l">Licence {{ licenceNumber }}</span>
     <h1 class="govuk-heading-l">Abstraction return</h1>
-    <dl class="meta govuk-!-margin-bottom-4">
+      <p class="govuk-body">
+        {{ statusTag(status, true) }}
+      </p>
+      <dl class="meta govuk-!-margin-bottom-4">
       <div class="meta__row">
         <dt class="meta__key">
           Site description
