@@ -7,6 +7,7 @@
 
 const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
 const LicenceModel = require('../../../models/licence.model.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Persists the supplementary billing flags for a licence
@@ -48,7 +49,11 @@ async function _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, lice
 
 async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
   return LicenceModel.query()
-    .patch({ includeInPresrocBilling, includeInSrocBilling: flagForSrocSupplementary })
+    .patch({
+      includeInPresrocBilling,
+      includeInSrocBilling: flagForSrocSupplementary,
+      updatedAt: timestampForPostgres()
+    })
     .where('id', licenceId)
 }
 
