@@ -12,6 +12,7 @@ const {
   formatLongDate
 } = require('../../base.presenter.js')
 const RegionModel = require('../../../models/region.model.js')
+const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -26,10 +27,11 @@ const LAST_PRESROC_YEAR = 2022
 async function go(session, existsResults) {
   const { id: sessionId, region } = session
 
-  const { matches, toFinancialYearEnding } = existsResults
+  const { matches, toFinancialYearEnding, trigger } = existsResults
 
-  const scheme = _chargeScheme(existsResults)
+  const scheme = _chargeScheme(matches, trigger)
   const billRunType = _billRunType(session, matches, scheme)
+  const messages = _messages(matches, toFinancialYearEnding, trigger, billRunType)
 
   return {
     backLink: _backLink(session),
@@ -39,12 +41,12 @@ async function go(session, existsResults) {
     billRunType,
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: _dateCreated(matches),
-    exists: existsResults.matches.length > 0,
+    exists: trigger === engineTriggers.neither,
     financialYear: existsResults.toFinancialYearEnding === 0 ? null : formatFinancialYear(toFinancialYearEnding),
-    pageTitle: _pageTitle(matches, toFinancialYearEnding),
+    pageTitle: messages.title,
     regionName: await _regionName(matches, region),
     sessionId,
-    warningMessage: _warningMessage(matches, toFinancialYearEnding, billRunType)
+    warningMessage: messages.warning
   }
 }
 
@@ -106,12 +108,12 @@ function _billRunType(session, matches, scheme) {
   return formatBillRunType(matchingBillRun.batchType, matchingBillRun.scheme, matchingBillRun.summer)
 }
 
-function _chargeScheme(existsResults) {
-  if (existsResults.matches.length > 0) {
-    return existsResults.matches[0].scheme
+function _chargeScheme(matches, trigger) {
+  if (trigger === engineTriggers.neither && matches.length > 0) {
+    return matches[0].scheme
   }
 
-  if (existsResults.toFinancialYearEnding <= LAST_PRESROC_YEAR) {
+  if (trigger === engineTriggers.old) {
     return 'presroc'
   }
 
@@ -126,16 +128,41 @@ function _dateCreated(matches) {
   return formatLongDate(matches[0].createdAt)
 }
 
-function _pageTitle(matches, toFinancialYearEnding) {
+function _messages(matches, toFinancialYearEnding, trigger, billRunType) {
   if (toFinancialYearEnding === 0) {
-    return 'Cannot create bill run'
+    return {
+      title: 'This bill run is blocked',
+      warning: 'You cannot create a supplementary bill run for this region until you have created an annual bill run'
+    }
   }
 
-  if (matches.length > 0) {
-    return 'This bill run already exists'
+  if (trigger !== engineTriggers.neither) {
+    return {
+      title: 'Check the bill run to be created',
+      warning: null
+    }
   }
 
-  return 'Check the bill run to be created'
+  const { batchType, status } = matches[0]
+
+  if (batchType === 'supplementary') {
+    return {
+      title: 'This bill run is blocked',
+      warning: 'You need to confirm or cancel the existing bill run before you can create a new one'
+    }
+  }
+
+  if (status !== 'sent') {
+    return {
+      title: 'This bill run already exists',
+      warning: 'You need to cancel the existing bill run before you can create a new one'
+    }
+  }
+
+  return {
+    title: 'This bill run already exists',
+    warning: `You can only have one ${billRunType} bill run per region in a financial year`
+  }
 }
 
 async function _regionName(matches, regionId) {
@@ -146,28 +173,6 @@ async function _regionName(matches, regionId) {
   const regionInstance = await RegionModel.query().select(['id', 'displayName']).findById(regionId)
 
   return regionInstance.displayName
-}
-
-function _warningMessage(matches, toFinancialYearEnding, billRunType) {
-  if (toFinancialYearEnding === 0) {
-    return 'You cannot create a supplementary bill run for this region until you have created an annual bill run'
-  }
-
-  if (matches.length === 0) {
-    return null
-  }
-
-  const { batchType, status } = matches[0]
-
-  if (batchType === 'supplementary') {
-    return 'You need to confirm or cancel this bill run before you can create a new one'
-  }
-
-  if (status !== 'sent') {
-    return 'You need to cancel this bill run before you can create a new one'
-  }
-
-  return `You can only have one ${billRunType} bill run per region in a financial year`
 }
 
 module.exports = {

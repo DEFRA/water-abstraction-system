@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+
 // Things we need to stub
 const RegionModel = require('../../../../app/models/region.model.js')
 
@@ -38,10 +41,11 @@ describe('Bill Runs Setup Check presenter', () => {
           scheme: 'sroc',
           status: 'sent',
           summer: false,
-          toFinancialYearEnding: 2024
+          toFinancialYearEnding: 2025
         }
       ],
-      toFinancialYearEnding: 2025
+      toFinancialYearEnding: 2025,
+      trigger: engineTriggers.neither
     }
 
     Sinon.stub(RegionModel, 'query').returns({
@@ -58,6 +62,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('and there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('correctly presents the data', async () => {
@@ -164,6 +169,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('returns null', async () => {
@@ -216,6 +222,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('returns null', async () => {
@@ -238,6 +245,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('returns null', async () => {
@@ -260,6 +268,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('returns the bill run type of the session formatted for display', async () => {
@@ -288,25 +297,41 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
-      describe('and the "toFinancialYearEnding" has been determined as greater than 2022', () => {
-        it('returns the "Current"', async () => {
+      describe('and the "toFinancialYearEnding" has been determined', () => {
+        describe('and the "trigger" has been determined as current', () => {
+          it('returns "Current"', async () => {
+            const result = await CheckPresenter.go(session, existsResults)
+
+            expect(result.chargeScheme).to.equal('Current')
+          })
+        })
+
+        describe('and the "trigger" has been determined as old', () => {
+          beforeEach(() => {
+            existsResults.trigger = engineTriggers.old
+          })
+
+          it('returns "Old"', async () => {
+            const result = await CheckPresenter.go(session, existsResults)
+
+            expect(result.chargeScheme).to.equal('Old')
+          })
+        })
+      })
+
+      describe('and the "toFinancialYearEnding" has been determined as 0 (non-prod edge case for supplementary)', () => {
+        beforeEach(() => {
+          existsResults.toFinancialYearEnding = 0
+          existsResults.trigger = engineTriggers.neither
+        })
+
+        it('returns "Current"', async () => {
           const result = await CheckPresenter.go(session, existsResults)
 
           expect(result.chargeScheme).to.equal('Current')
-        })
-      })
-
-      describe('and the "toFinancialYearEnding" has been determined as equal to or less than 2022', () => {
-        beforeEach(() => {
-          existsResults.toFinancialYearEnding = 2022
-        })
-
-        it('returns the "Old"', async () => {
-          const result = await CheckPresenter.go(session, existsResults)
-
-          expect(result.chargeScheme).to.equal('Old')
         })
       })
     })
@@ -328,6 +353,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it('returns null', async () => {
@@ -350,6 +376,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       describe('and the "toFinancialYearEnding" has been determined', () => {
@@ -363,21 +390,41 @@ describe('Bill Runs Setup Check presenter', () => {
       describe('and the "toFinancialYearEnding" has been determined as 0 (non-prod edge case for supplementary)', () => {
         beforeEach(() => {
           existsResults.toFinancialYearEnding = 0
+          existsResults.trigger = engineTriggers.neither
         })
 
-        it('returns "Cannot create bill run"', async () => {
+        it('returns "This bill run is blocked"', async () => {
           const result = await CheckPresenter.go(session, existsResults)
 
-          expect(result.pageTitle).to.equal('Cannot create bill run')
+          expect(result.pageTitle).to.equal('This bill run is blocked')
         })
       })
     })
 
     describe('when there is an existing blocking bill run', () => {
-      it('returns "This bill run already exists"', async () => {
-        const result = await CheckPresenter.go(session, existsResults)
+      describe('and its batch type is "supplementary"', () => {
+        beforeEach(() => {
+          existsResults.matches[0].batchType = 'supplementary'
+          existsResults.trigger = engineTriggers.neither
+        })
 
-        expect(result.pageTitle).to.equal('This bill run already exists')
+        it('returns "This bill run is blocked"', async () => {
+          const result = await CheckPresenter.go(session, existsResults)
+
+          expect(result.pageTitle).to.equal('This bill run is blocked')
+        })
+      })
+
+      describe('and its batch type is not "supplementary"', () => {
+        beforeEach(() => {
+          existsResults.trigger = engineTriggers.neither
+        })
+
+        it('returns "This bill run already exists"', async () => {
+          const result = await CheckPresenter.go(session, existsResults)
+
+          expect(result.pageTitle).to.equal('This bill run already exists')
+        })
       })
     })
   })
@@ -386,6 +433,7 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
       it("returns the selected region's name", async () => {
@@ -400,6 +448,7 @@ describe('Bill Runs Setup Check presenter', () => {
         // NOTE: It would never happen that the blocking bill run would be for a different region, but we set it to
         // something different to demonstrate that it is using the existing bill run's region when it is present
         existsResults.matches[0].region.displayName = 'Avalon'
+        existsResults.trigger = engineTriggers.neither
       })
 
       it("returns its region's name", async () => {
@@ -414,16 +463,38 @@ describe('Bill Runs Setup Check presenter', () => {
     describe('when there is no existing blocking bill run', () => {
       beforeEach(() => {
         existsResults.matches = []
+        existsResults.trigger = engineTriggers.current
       })
 
-      it('returns null', async () => {
-        const result = await CheckPresenter.go(session, existsResults)
+      describe('and the "toFinancialYearEnding" has been determined', () => {
+        it('returns null', async () => {
+          const result = await CheckPresenter.go(session, existsResults)
 
-        expect(result.warningMessage).to.be.null()
+          expect(result.warningMessage).to.be.null()
+        })
+      })
+
+      describe('and the "toFinancialYearEnding" has been determined as 0 (non-prod edge case for supplementary)', () => {
+        beforeEach(() => {
+          existsResults.toFinancialYearEnding = 0
+          existsResults.trigger = engineTriggers.neither
+        })
+
+        it('returns "You cannot create a supplementary bill run for this region [..]"', async () => {
+          const result = await CheckPresenter.go(session, existsResults)
+
+          expect(result.warningMessage).to.equal(
+            'You cannot create a supplementary bill run for this region until you have created an annual bill run'
+          )
+        })
       })
     })
 
     describe('when there is an existing blocking bill run', () => {
+      beforeEach(() => {
+        existsResults.trigger = engineTriggers.neither
+      })
+
       describe('and its batch type is "supplementary"', () => {
         beforeEach(() => {
           existsResults.matches[0].batchType = 'supplementary'
@@ -433,7 +504,7 @@ describe('Bill Runs Setup Check presenter', () => {
           const result = await CheckPresenter.go(session, existsResults)
 
           expect(result.warningMessage).to.equal(
-            'You need to confirm or cancel this bill run before you can create a new one'
+            'You need to confirm or cancel the existing bill run before you can create a new one'
           )
         })
       })
@@ -465,7 +536,9 @@ describe('Bill Runs Setup Check presenter', () => {
           it('returns the "You need to cancel this [..]" message', async () => {
             const result = await CheckPresenter.go(session, existsResults)
 
-            expect(result.warningMessage).to.equal('You need to cancel this bill run before you can create a new one')
+            expect(result.warningMessage).to.equal(
+              'You need to cancel the existing bill run before you can create a new one'
+            )
           })
         })
       })
