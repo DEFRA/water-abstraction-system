@@ -30,10 +30,6 @@ describe('Return Periods lib', () => {
 
     describe('"allYear"', () => {
       beforeEach(() => {
-        testDate = new Date(`${year}-01-01`)
-        clock = Sinon.useFakeTimers(testDate)
-      })
-      beforeEach(() => {
         startDate = new Date(
           `${lastYear}-${returnCycleDates.allYear.startDate.month + 1}-${returnCycleDates.allYear.startDate.day}`
         )
@@ -46,7 +42,7 @@ describe('Return Periods lib', () => {
       })
 
       it('should return the "allYear" period', () => {
-        const result = ReturnPeriodDatesLib.determineReturnsPeriods()
+        const result = ReturnPeriodDatesLib.determineReturnsPeriods(new Date(`${year}-01-01`))
 
         expect(result.allYear).to.equal({
           dueDate,
@@ -58,11 +54,6 @@ describe('Return Periods lib', () => {
     })
 
     describe('"summer"', () => {
-      beforeEach(() => {
-        testDate = new Date(`${year}-01-01`)
-        clock = Sinon.useFakeTimers(testDate)
-      })
-
       beforeEach(() => {
         startDate = new Date(
           `${lastYear}-${returnCycleDates.summer.startDate.month + 1}-${returnCycleDates.summer.startDate.day}`
@@ -76,7 +67,7 @@ describe('Return Periods lib', () => {
       })
 
       it('should return the "summer" period', () => {
-        const result = ReturnPeriodDatesLib.determineReturnsPeriods()
+        const result = ReturnPeriodDatesLib.determineReturnsPeriods(new Date(`${year}-01-01`))
 
         expect(result.summer).to.equal({
           dueDate,
