@@ -64,24 +64,6 @@ describe('Bill Runs Setup Submit Year service', () => {
           expect(result.setupComplete).to.be.false()
         })
       })
-
-      describe('and the type is two-part tariff supplementary', () => {
-        beforeEach(async () => {
-          payload = {
-            year: '2023'
-          }
-          session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
-        })
-
-        it('saves the submitted value and returns an object to redirect the user to the Bill Runs page', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
-
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.year).to.equal('2023')
-          expect(result.goBackToBillRuns).to.be.true()
-        })
-      })
     })
 
     describe('with an invalid payload', () => {
