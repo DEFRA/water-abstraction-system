@@ -76,11 +76,11 @@ describe('Bill Runs Setup Check presenter', () => {
           billRunType: 'Annual',
           chargeScheme: 'Current',
           dateCreated: null,
-          exists: false,
           financialYear: '2024 to 2025',
           pageTitle: 'Check the bill run to be created',
           regionName: 'Stormlands',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+          showCreateButton: true,
           warningMessage: null
         })
       })
@@ -98,11 +98,11 @@ describe('Bill Runs Setup Check presenter', () => {
           billRunType: 'Annual',
           chargeScheme: 'Current',
           dateCreated: '1 May 2024',
-          exists: true,
           financialYear: '2024 to 2025',
           pageTitle: 'This bill run already exists',
           regionName: 'Stormlands',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+          showCreateButton: false,
           warningMessage: 'You can only have one Annual bill run per region in a financial year'
         })
       })

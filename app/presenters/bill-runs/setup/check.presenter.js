@@ -41,11 +41,11 @@ async function go(session, existsResults) {
     billRunType,
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: _dateCreated(matches),
-    exists: trigger === engineTriggers.neither,
     financialYear: existsResults.toFinancialYearEnding === 0 ? null : formatFinancialYear(toFinancialYearEnding),
     pageTitle: messages.title,
     regionName: await _regionName(matches, region),
     sessionId,
+    showCreateButton: trigger !== engineTriggers.neither,
     warningMessage: messages.warning
   }
 }

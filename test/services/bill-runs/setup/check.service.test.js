@@ -50,11 +50,11 @@ describe('Bill Runs Setup Check service', () => {
         billRunType: 'Annual',
         chargeScheme: 'Current',
         dateCreated: null,
-        exists: false,
         financialYear: '2024 to 2025',
         pageTitle: 'Check the bill run to be created',
         regionName: 'Avalon',
         sessionId: session.id,
+        showCreateButton: true,
         warningMessage: null
       })
     })

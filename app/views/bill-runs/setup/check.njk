@@ -32,15 +32,17 @@
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    {% if exists %}
-      {% set billRunStatusHtml %}
-        {{ statusTag(billRunStatus, true) }}
-      {% endset %}
-
+    {% if billRunNumber %}
       {% set billRunLinkHtml %}
         <a href="{{ billRunLink }}" class="govuk-body govuk-link">
           <span data-test="number">{{ billRunNumber }}</span> <span class="govuk-visually-hidden">View bill run {{ billRunNumber }}</span>
         </a>
+      {% endset %}
+    {% endif %}
+
+    {% if billRunStatus %}
+      {% set billRunStatusHtml %}
+        {{ statusTag(billRunStatus, true) }}
       {% endset %}
     {% endif %}
 
@@ -57,7 +59,7 @@
           value: {
             html: billRunLinkHtml
           }
-        } if exists,
+        } if billRunNumber,
         {
           key: {
             text: "Status"
@@ -65,7 +67,7 @@
           value: {
             html: billRunStatusHtml
           }
-        } if exists,
+        } if billRunStatus,
         {
           key: {
             text: "Date created"
@@ -73,7 +75,7 @@
           value: {
             html: '<span data-test="created">' + dateCreated + '</span>'
           }
-        } if exists,
+        } if dateCreated,
         {
           key: {
             text: "Region"
@@ -111,7 +113,7 @@
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    {% if exists == false %}
+    {% if showCreateButton %}
       <form method="post">
         <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
         {{ govukButton({

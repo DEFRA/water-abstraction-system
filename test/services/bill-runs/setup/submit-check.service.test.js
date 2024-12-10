@@ -101,11 +101,11 @@ describe('Bill Runs Setup Submit Check service', () => {
           billRunType: 'Annual',
           chargeScheme: 'Current',
           dateCreated: '1 May 2024',
-          exists: true,
           financialYear: '2024 to 2025',
           pageTitle: 'This bill run already exists',
           regionName: 'Stormlands',
           sessionId: session.id,
+          showCreateButton: false,
           warningMessage: 'You can only have one Annual bill run per region in a financial year'
         })
       })
