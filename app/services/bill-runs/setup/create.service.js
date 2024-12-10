@@ -16,24 +16,25 @@ const StartBillRunProcessService = require('../start-bill-run-process.service.js
  * calls to this one for bill runs that the two engines will reject because they already exist.
  *
  * Once the bill runs have been triggered it finishes by deleting the setup session. Control is handed back to the
- * controller whilst the engines create and being building the bill runs.
+ * controller whilst the engines create and begin building the bill runs.
  *
- * @param {object} user - Instance of `UserModel` that represents the user making the request
- * @param {object} existsResults - Results of `ExistsService` returned in the controller and passed on to this service
+ * @param {object} session - The bill run setup session instance
+ * @param {object} existsResults - Results of `ExistsService`
+ * @param {module:UserModel} user - Instance of `UserModel` that represents the user making the request
  */
-async function go(user, existsResults) {
-  const { matchResults, session, yearToUse } = existsResults
+async function go(session, existsResults, user) {
+  const { matches, toFinancialYearEnding } = existsResults
   const { region: regionId, type, summer } = session
 
-  const existingBillRun = matchResults[0]
+  const existingBillRun = matches[0]
 
-  await _triggerBillRun(regionId, type, user, yearToUse, existingBillRun)
-  await _triggerLegacyBillRun(regionId, type, user, yearToUse, summer, existingBillRun)
+  await _triggerBillRun(regionId, type, user, toFinancialYearEnding, existingBillRun)
+  await _triggerLegacyBillRun(regionId, type, user, toFinancialYearEnding, summer, existingBillRun)
 
   await session.$query().delete()
 }
 
-async function _triggerBillRun(regionId, batchType, user, year, existingBillRun = null) {
+async function _triggerBillRun(regionId, batchType, user, toFinancialYearEnding, existingBillRun = null) {
   const { username: userEmail } = user
 
   // The one case we have to handle is where the user selected supplementary and a match was found, but it was to an
@@ -44,14 +45,14 @@ async function _triggerBillRun(regionId, batchType, user, year, existingBillRun 
   }
 
   // We do not bother to send requests for PRESROC 2PT bill runs to our engine
-  if (batchType === 'two_part_tariff' && [2021, 2022].includes(year)) {
+  if (batchType === 'two_part_tariff' && [2021, 2022].includes(toFinancialYearEnding)) {
     return null
   }
 
-  return StartBillRunProcessService.go(regionId, batchType, userEmail, year)
+  return StartBillRunProcessService.go(regionId, batchType, userEmail, toFinancialYearEnding)
 }
 
-async function _triggerLegacyBillRun(regionId, batchType, user, year, summer, existingBillRun = null) {
+async function _triggerLegacyBillRun(regionId, batchType, user, toFinancialYearEnding, summer, existingBillRun = null) {
   // The legacy service no longer handles annual billing
   if (batchType === 'annual') {
     return null
@@ -65,11 +66,11 @@ async function _triggerLegacyBillRun(regionId, batchType, user, year, summer, ex
   }
 
   // We do not bother to send requests for SROC 2PT bill runs to the legacy service
-  if (batchType === 'two_part_tariff' && [2024, 2023].includes(year)) {
+  if (batchType === 'two_part_tariff' && [2024, 2023].includes(toFinancialYearEnding)) {
     return null
   }
 
-  return LegacyCreateBillRunRequest.send(batchType, regionId, year, user, summer)
+  return LegacyCreateBillRunRequest.send(batchType, regionId, toFinancialYearEnding, user, summer)
 }
 
 module.exports = {

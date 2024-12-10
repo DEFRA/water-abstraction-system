@@ -50,11 +50,11 @@ describe('Bill Runs Setup Create service', () => {
       // itself. Without this the tests fail though the service works fine.
       session.$afterFind()
 
-      existsResults = { matchResults: [], session, yearToUse: 2024 }
+      existsResults = { matches: [], toFinancialYearEnding: 2024 }
     })
 
     it('deletes the setup session', async () => {
-      await CreateService.go(user, existsResults)
+      await CreateService.go(session, existsResults, user)
 
       const findSessionResults = await SessionModel.query().where('id', session.id)
 
@@ -69,11 +69,11 @@ describe('Bill Runs Setup Create service', () => {
       })
       session.$afterFind()
 
-      existsResults = { matchResults: [], session, yearToUse: 2024 }
+      existsResults = { matches: [], toFinancialYearEnding: 2024 }
     })
 
     it('only triggers our bill run process', async () => {
-      await CreateService.go(user, existsResults)
+      await CreateService.go(session, existsResults, user)
 
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
       expect(startBillRunProcessServiceStub.calledWith(region.id, 'annual', 'carol.shaw@atari.com', 2024)).to.be.true()
@@ -90,11 +90,11 @@ describe('Bill Runs Setup Create service', () => {
 
     describe('and there were no matching bill runs', () => {
       beforeEach(async () => {
-        existsResults = { matchResults: [], session, yearToUse: 2024 }
+        existsResults = { matches: [], toFinancialYearEnding: 2024 }
       })
 
       it('triggers both our and the legacy bill run processes', async () => {
-        await CreateService.go(user, existsResults)
+        await CreateService.go(session, existsResults, user)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
         expect(
@@ -105,11 +105,11 @@ describe('Bill Runs Setup Create service', () => {
 
     describe('and there is a matching PRESROC bill run', () => {
       beforeEach(async () => {
-        existsResults = { matchResults: [{ scheme: 'alcs' }], session, yearToUse: 2024 }
+        existsResults = { matches: [{ scheme: 'alcs' }], toFinancialYearEnding: 2024 }
       })
 
       it('only triggers our bill run process', async () => {
-        await CreateService.go(user, existsResults)
+        await CreateService.go(session, existsResults, user)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
         expect(
@@ -120,11 +120,11 @@ describe('Bill Runs Setup Create service', () => {
 
     describe('and there is a matching SROC bill run', () => {
       beforeEach(async () => {
-        existsResults = { matchResults: [{ scheme: 'sroc' }], session, yearToUse: 2024 }
+        existsResults = { matches: [{ scheme: 'sroc' }], toFinancialYearEnding: 2024 }
       })
 
       it('only triggers the legacy bill run process', async () => {
-        await CreateService.go(user, existsResults)
+        await CreateService.go(session, existsResults, user)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
         expect(startBillRunProcessServiceStub.called).to.be.false()
@@ -145,11 +145,11 @@ describe('Bill Runs Setup Create service', () => {
         })
         session.$afterFind()
 
-        existsResults = { matchResults: [], session, yearToUse: 2022 }
+        existsResults = { matches: [{ scheme: 'sroc' }], toFinancialYearEnding: 2022 }
       })
 
       it('only triggers the legacy bill run process', async () => {
-        await CreateService.go(user, existsResults)
+        await CreateService.go(session, existsResults, user)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
         expect(startBillRunProcessServiceStub.called).to.be.false()
@@ -167,11 +167,11 @@ describe('Bill Runs Setup Create service', () => {
         })
         session.$afterFind()
 
-        existsResults = { matchResults: [], session, yearToUse: 2023 }
+        existsResults = { matches: [], toFinancialYearEnding: 2023 }
       })
 
       it('only triggers our bill run process', async () => {
-        await CreateService.go(user, existsResults)
+        await CreateService.go(session, existsResults, user)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
         expect(
