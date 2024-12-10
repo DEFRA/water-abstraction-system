@@ -12,13 +12,12 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const Boom = require('@hapi/boom')
-const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
-const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
+const CheckService = require('../../app/services/bill-runs/setup/check.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
 const NoLicencesService = require('../../app/services/bill-runs/setup/no-licences.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SeasonService = require('../../app/services/bill-runs/setup/season.service.js')
+const SubmitCheckService = require('../../app/services/bill-runs/setup/submit-check.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
 const SubmitSeasonService = require('../../app/services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
@@ -76,74 +75,113 @@ describe('Bill Runs Setup controller', () => {
     })
   })
 
-  describe('/bill-runs/setup/{sessionId}/create', () => {
+  describe('/bill-runs/setup/{sessionId}/check', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _getOptions('create')
+        options = _getOptions('check')
       })
 
       describe('when the request succeeds', () => {
         describe('but there is an existing bill run', () => {
           beforeEach(() => {
-            Sinon.stub(ExistsService, 'go').resolves({
-              matchResults: [{ id: '81e97369-e744-44c9-ad2e-75e8e632e61c' }],
-              pageData: {
-                billRunId: '81e97369-e744-44c9-ad2e-75e8e632e61c',
-                billRunLink: '/system/bill-runs/81e97369-e744-44c9-ad2e-75e8e632e61c'
-              },
-              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
-              yearToUse: 2024
+            Sinon.stub(CheckService, 'go').resolves({
+              backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
+              billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
+              billRunNumber: 12345,
+              billRunStatus: 'sent',
+              billRunType: 'Annual',
+              chargeScheme: 'Current',
+              dateCreated: '1 May 2024',
+              exists: true,
+              financialYear: '2024 to 2025',
+              pageTitle: 'This bill run already exists',
+              regionName: 'Stormlands',
+              sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+              warningMessage: 'You can only have one Annual bill run per region in a financial year'
             })
           })
 
-          it('returns the "create" page displaying the existing bill run', async () => {
+          it('returns the "check" page displaying the existing bill run', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('This bill run already exists')
-            expect(response.payload).to.contain('81e97369-e744-44c9-ad2e-75e8e632e61c')
+            expect(response.payload).to.contain('c0608545-9870-4605-a407-5ff49f8a5182')
           })
         })
 
         describe('and there is no existing bill run', () => {
           beforeEach(() => {
-            Sinon.stub(ExistsService, 'go').resolves({
-              matchResults: [],
-              pageData: null,
-              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
-              yearToUse: 2024
+            Sinon.stub(CheckService, 'go').resolves({
+              backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
+              billRunLink: null,
+              billRunNumber: null,
+              billRunStatus: null,
+              billRunType: 'Annual',
+              chargeScheme: 'Current',
+              dateCreated: null,
+              exists: false,
+              financialYear: '2024 to 2025',
+              pageTitle: 'Check the bill run to be created',
+              regionName: 'Stormlands',
+              sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+              warningMessage: null
             })
-            Sinon.stub(CreateService, 'go').resolves()
           })
 
-          it('redirects to the bill runs page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs')
-          })
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the create service threw an error', () => {
-          beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-            Sinon.stub(ExistsService, 'go').resolves({
-              matchResults: [],
-              pageData: null,
-              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
-              yearToUse: 2024
-            })
-            Sinon.stub(CreateService, 'go').rejects()
-          })
-
-          it('returns the error page', async () => {
+          it('returns the "check" page displaying the bill run to be created', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.payload).to.contain('Check the bill run to be created')
           })
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when no one else has kicked off a blocking bill run whilst this one is in progress', () => {
+        beforeEach(async () => {
+          options = _postOptions('check')
+          Sinon.stub(SubmitCheckService, 'go').resolves({})
+        })
+
+        it('redirects to the bill runs page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs')
+        })
+      })
+
+      describe('when someone else has kicked off a blocking bill run whilst this one is in progress', () => {
+        beforeEach(async () => {
+          options = _postOptions('check')
+
+          Sinon.stub(SubmitCheckService, 'go').resolves({
+            error: true,
+            backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
+            billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
+            billRunNumber: 12345,
+            billRunStatus: 'sent',
+            billRunType: 'Annual',
+            chargeScheme: 'Current',
+            dateCreated: '1 May 2024',
+            exists: true,
+            financialYear: '2024 to 2025',
+            pageTitle: 'This bill run already exists',
+            regionName: 'Stormlands',
+            sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+            warningMessage: 'You can only have one Annual bill run per region in a financial year'
+          })
+        })
+
+        it('re-renders the "check" page displaying the existing bill run', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('This bill run already exists')
+          expect(response.payload).to.contain('c0608545-9870-4605-a407-5ff49f8a5182')
         })
       })
     })
@@ -206,12 +244,12 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitRegionService, 'go').resolves({ setupComplete: true })
           })
 
-          it('redirects to the create bill run endpoint', async () => {
+          it('redirects to the "check" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
             )
           })
         })
@@ -221,7 +259,7 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitRegionService, 'go').resolves({ setupComplete: false })
           })
 
-          it('redirects to the select financial year', async () => {
+          it('redirects to the "select financial year" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
@@ -284,12 +322,12 @@ describe('Bill Runs Setup controller', () => {
           Sinon.stub(SubmitSeasonService, 'go').resolves({})
         })
 
-        it('redirects to the create bill run endpoint', async () => {
+        it('redirects to the "check" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(
-            '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+            '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
           )
         })
       })
@@ -437,12 +475,12 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: true })
           })
 
-          it('redirects to the create bill run endpoint', async () => {
+          it('redirects to the "check"', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create'
+              '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
             )
           })
         })
@@ -459,19 +497,6 @@ describe('Bill Runs Setup controller', () => {
             expect(response.headers.location).to.equal(
               '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season'
             )
-          })
-        })
-
-        describe('and the bill run type is two-part tariff supplementary', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitYearService, 'go').resolves({ goBackToBillRuns: true })
-          })
-
-          it('redirects to the bill runs page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs')
           })
         })
       })
