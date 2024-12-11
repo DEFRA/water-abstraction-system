@@ -70,15 +70,19 @@ function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
 /**
  * Formats how the bill run type for display in views
  *
- * @param {string} batchType - The type of bill run; annual, supplementary or two_part_tariff
+ * @param {string} batchType - The type of bill run; annual, supplementary, two_part_tariff or two_part_supplementary
  * @param {string} scheme - Whether the bill run is PRESROC (alcs) or SROC (sroc)
  * @param {boolean} summer - Applies to PRESROC two-part tariff bill runs. Whether the bill run is for summer only
  *
  * @returns {string} The bill run type formatted for display
  */
 function formatBillRunType(batchType, scheme, summer) {
-  if (batchType !== 'two_part_tariff') {
+  if (!['two_part_tariff', 'two_part_supplementary'].includes(batchType)) {
     return titleCase(batchType)
+  }
+
+  if (batchType === 'two_part_supplementary') {
+    return 'Two-part tariff supplementary'
   }
 
   if (scheme === 'sroc') {

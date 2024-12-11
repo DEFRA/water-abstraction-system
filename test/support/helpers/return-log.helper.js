@@ -55,8 +55,8 @@ function defaults(data = {}) {
   const returnReference = data.returnReference ? data.returnReference : generateLegacyId()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
-  const startDate = data.startDate ? data.startDate : new Date('2022-04-01')
-  const endDate = data.endDate ? data.endDate : new Date('2023-03-31')
+  const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
+  const endDate = data.endDate ? new Date(data.endDate) : new Date('2023-03-31')
 
   const defaults = {
     id: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),

@@ -5,14 +5,12 @@
  * @module BillRunsSetupController
  */
 
-const Boom = require('@hapi/boom')
-
-const CreateService = require('../services/bill-runs/setup/create.service.js')
-const ExistsService = require('../services/bill-runs/setup/exists.service.js')
+const CheckService = require('../services/bill-runs/setup/check.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const NoLicencesService = require('../services/bill-runs/setup/no-licences.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SeasonService = require('../services/bill-runs/setup/season.service.js')
+const SubmitCheckService = require('../services/bill-runs/setup/submit-check.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
 const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
@@ -20,29 +18,15 @@ const SubmitYearService = require('../services/bill-runs/setup/submit-year.servi
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 const YearService = require('../services/bill-runs/setup/year.service.js')
 
-async function create(request, h) {
+async function check(request, h) {
   const { sessionId } = request.params
 
-  const results = await ExistsService.go(sessionId)
+  const pageData = await CheckService.go(sessionId)
 
-  // If the results include a pageData property it's because `ExistsService` found a match and so has formatted page
-  // data for the create view to display the matching bill run to the user
-  if (results.pageData) {
-    return h.view('bill-runs/setup/create.njk', {
-      activeNavBar: 'bill-runs',
-      pageTitle: 'This bill run already exists',
-      ...results.pageData
-    })
-  }
-
-  // If we get here then we are go for launch!
-  try {
-    await CreateService.go(request.auth.credentials.user, results)
-
-    return h.redirect('/system/bill-runs')
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.view('bill-runs/setup/check.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
 }
 
 async function noLicences(request, h) {
@@ -87,6 +71,21 @@ async function setup(_request, h) {
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
 
+async function submitCheck(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitCheckService.go(sessionId, request.auth)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/check.njk', {
+      activeNavBar: 'bill-runs',
+      ...pageData
+    })
+  }
+
+  return h.redirect(`/system/bill-runs`)
+}
+
 async function submitRegion(request, h) {
   const { sessionId } = request.params
 
@@ -101,7 +100,7 @@ async function submitRegion(request, h) {
   }
 
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
@@ -120,7 +119,7 @@ async function submitSeason(request, h) {
     })
   }
 
-  return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
 }
 
 async function submitType(request, h) {
@@ -152,14 +151,8 @@ async function submitYear(request, h) {
     })
   }
 
-  // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
-  // is not currently possible
-  if (pageData.goBackToBillRuns) {
-    return h.redirect('/system/bill-runs')
-  }
-
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
@@ -194,11 +187,12 @@ async function year(request, h) {
 }
 
 module.exports = {
-  create,
+  check,
   noLicences,
   region,
   season,
   setup,
+  submitCheck,
   submitRegion,
   submitSeason,
   submitType,
