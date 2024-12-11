@@ -12,100 +12,194 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-// const ProcessLicenceReturnLogsService = require('../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
-// const VoidReturnLogsService = require('../../../app/services/jobs/return-logs/void-return-logs.service.js')
+const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 // Thing under test
 const GenerateReturnLogsService = require('../../../app/services/import/generate-return-logs.service.js')
 
 describe('Generate Return Logs Service', () => {
-  const lapsedDate = new Date('2023-01-01')
-  const revokedDate = new Date('2023-01-01')
-  const expiredDate = new Date('2023-01-01')
+  const changeDate = new Date('2024-05-26')
+  const olderChangeDate = new Date('2024-05-20')
+  const currentDate = new Date('2024-07-15')
 
-  let existingLicenceNullDates
-  let existingLicencePopulatedDates
-  let notifierStub
+  let clock
   let importedLicence
-
-  before(async () => {
-    existingLicenceNullDates = await LicenceHelper.add()
-    existingLicencePopulatedDates = await LicenceHelper.add({ expiredDate, lapsedDate, revokedDate })
-  })
+  let licence
+  let notifierStub
+  let processLicenceReturnLogsStub
 
   beforeEach(() => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
+    // We control what the 'current' date is, so we can assert what the service does when not provided with `changeDate`
+    clock = Sinon.useFakeTimers(currentDate)
+    processLicenceReturnLogsStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
-
-    // Sinon.stub(VoidReturnLogsService, 'go').resolves()
-    // Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     Sinon.restore()
+    clock.restore()
   })
 
-  describe('when the existing version of the licence', () => {
-    describe('does not match the imported version of the licence', () => {
-      describe('because the imported version has an end date where the existing version has null', () => {
-        before(() => {
-          importedLicence = { expiredDate, lapsedDate: null, revokedDate: null }
-        })
-
-        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await GenerateReturnLogsService.go(importedLicence, existingLicenceNullDates.id)
-
-          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
-        })
-      })
-
-      describe('because the imported version has a null end date where the existing version has one', () => {
-        before(() => {
-          importedLicence = { expiredDate, lapsedDate: null, revokedDate }
-        })
-
-        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
-        })
-      })
-
-      describe('because the imported version has a different end date to the existing version', () => {
-        before(() => {
-          importedLicence = { expiredDate, lapsedDate, revokedDate: new Date('2023-02-02') }
-        })
-
-        it('calls ProcessImportedLicenceService to handle what supplementary flags are needed', async () => {
-          await GenerateReturnLogsService.go(importedLicence, existingLicencePopulatedDates.id)
-
-          expect(ProcessLicenceReturnLogsService.go.called).to.be.true()
-        })
-      })
-    })
-  })
-
-  describe('when there is an error', () => {
-    let licenceId
-
-    before(() => {
-      // To make the service fail we pass it an invalid licence id
-      licenceId = '1234'
-
+  describe('when the imported licence has no end date and the existing licence has an expiredDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: changeDate, lapsedDate: null, revokedDate: null })
       importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
     })
 
-    it('handles the error', async () => {
-      await GenerateReturnLogsService.go(importedLicence, licenceId)
+    it('should call the GenerateReturnLogsService with the expiredDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
 
-      const args = notifierStub.omfg.firstCall.args
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
 
-      expect(args[0]).to.equal('Determine supplementary billing flags on import failed ')
-      expect(args[1].licenceId).to.equal(licenceId)
-      expect(args[2]).to.be.an.error()
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has no end date and the existing licence has a lapsedDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: changeDate, revokedDate: null })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+    })
+
+    it('should call the GenerateReturnLogsService with the lapsedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has no end date and the existing licence has a revokedDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: changeDate })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: null }
+    })
+
+    it('should call the GenerateReturnLogsService with the revokedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has an expiredDate and the existing licence has no end date', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: null })
+      importedLicence = { expiredDate: changeDate, lapsedDate: null, revokedDate: null }
+    })
+
+    it('should call the GenerateReturnLogsService with the expiredDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has a lapsedDate and the existing licence has no end date', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: null })
+      importedLicence = { expiredDate: null, lapsedDate: changeDate, revokedDate: null }
+    })
+
+    it('should call the GenerateReturnLogsService with the lapsedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has a revokedDate and the existing licence has no end date', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: null })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: changeDate }
+    })
+
+    it('should call the GenerateReturnLogsService with the revokedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(changeDate)
+    })
+  })
+
+  describe('when the imported licence has a revokedDate and the existing licence has an older revokedDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: olderChangeDate })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: changeDate }
+    })
+
+    it('should call the GenerateReturnLogsService with the earlier revokedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(olderChangeDate)
+    })
+  })
+
+  describe('when the imported licence has an older revokedDate and the existing licence has a revokedDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: null, lapsedDate: null, revokedDate: changeDate })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: olderChangeDate }
+    })
+
+    it('should call the GenerateReturnLogsService with the earlier revokedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(olderChangeDate)
+    })
+  })
+
+  describe('when the imported licence has an older revokedDate and the existing licence has a revokedDate, expiredDate and lapsedDate', () => {
+    before(async () => {
+      licence = await LicenceHelper.add({ expiredDate: changeDate, lapsedDate: changeDate, revokedDate: changeDate })
+      importedLicence = { expiredDate: null, lapsedDate: null, revokedDate: olderChangeDate }
+    })
+
+    it('should call the GenerateReturnLogsService with the earlier revokedDate', async () => {
+      await GenerateReturnLogsService.go(licence.id, importedLicence)
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+
+      const processReturnLogArgs = processLicenceReturnLogsStub.firstCall.args
+
+      expect(processLicenceReturnLogsStub.callCount).to.equal(1)
+      expect(processReturnLogArgs[1]).to.equal(olderChangeDate)
     })
   })
 })
