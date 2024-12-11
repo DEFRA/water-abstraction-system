@@ -39,6 +39,7 @@ describe('Generate Return Logs Service', () => {
   afterEach(() => {
     Sinon.restore()
     clock.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the imported licence has no end date and the existing licence has an expiredDate', () => {
