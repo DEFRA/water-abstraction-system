@@ -99,7 +99,7 @@ describe('Generate Transaction service', () => {
           )
 
           expect(result.description).to.equal(
-            'Two-part tariff basic water abstraction charge: Lower Queenstown - Pittisham'
+            'Two-part tariff second part water abstraction charge: Lower Queenstown - Pittisham'
           )
         })
       })

@@ -273,7 +273,7 @@ describe('Generate Transactions service', () => {
           )
 
           expect(results[0].description).to.equal(
-            `Two-part tariff basic water abstraction charge: ${chargeReference.description}`
+            `Two-part tariff first part water abstraction charge: ${chargeReference.description}`
           )
         })
       })

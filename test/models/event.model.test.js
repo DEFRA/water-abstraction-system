@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,7 @@ const EventModel = require('../../app/models/event.model.js')
 describe('Event model', () => {
   let testRecord
 
-  beforeEach(async () => {
+  before(async () => {
     testRecord = await EventHelper.add()
   })
 
