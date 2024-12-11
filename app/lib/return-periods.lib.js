@@ -234,7 +234,7 @@ function _newYearElapsedQuarterFour(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
+  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
     return lastYear
   } else {
     return year
@@ -263,7 +263,7 @@ function _newYearElapsedQuarterFourDueDate(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
+  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`).getTime()) {
     return year
   } else {
     return nextYear
