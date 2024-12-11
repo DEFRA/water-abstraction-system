@@ -253,7 +253,7 @@ describe('Return Periods lib', () => {
 
     describe('"quarterFour": 1 October - 31 December (Due date 28 January) ', () => {
       let dueDateNextYear
-      describe('when it is currently "quarterFour"', () => {
+      describe('when it is currently "quarterFour" (Between October and December)', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnCycleDates.quarterFour, year)
 
@@ -274,14 +274,38 @@ describe('Return Periods lib', () => {
         })
       })
 
-      describe('when it is before "quarterFour" (in the previous year)', () => {
+      describe('when it is currently "quarterFour" (In January before the Due date)', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-01-01`)
+        })
+
+        it('should return the "quarterFour" period - with the Due date in the current year and the start and end in the previous year', () => {
+          const result = ReturnPeriodLib.determineReturnsPeriods(testDate)
+
+          dates = _getPeriodDates(returnCycleDates.quarterFour, year)
+
+          const startDate = new Date(dates.startDate)
+          startDate.setFullYear(startDate.getFullYear() - 1)
+
+          const endDate = new Date(dates.endDate)
+          endDate.setFullYear(endDate.getFullYear() - 1)
+
+          expect(result.quarterFour).to.equal({
+            dueDate: dates.dueDate,
+            endDate,
+            startDate
+          })
+        })
+      })
+
+      describe('when it is before "quarterFour"', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnCycleDates.quarterFour, year)
 
           dueDateNextYear = new Date(dates.dueDate)
           dueDateNextYear.setFullYear(dueDateNextYear.getFullYear() + 1)
 
-          testDate = new Date(`${year}-12-31`)
+          testDate = new Date(`${year}-08-01`)
         })
 
         it('should return the "quarterFour" period in the upcoming year', () => {

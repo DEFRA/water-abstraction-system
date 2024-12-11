@@ -146,12 +146,11 @@ function _isDue(determinationDate, cycle) {
 }
 
 /**
- * Calculate the start date for Quarter Four based on the determination date.
+ * Calculates the start date for Quarter Four based on the determination date.
  *
- * The start date is determined using the cycle's start day and month. If the determination date
- * is on or before December 31 of the current year, the start year is set to the current year.
- * Otherwise, the start year is incremented to the next year.
- * (This indicates the period is further in the future with other periods falling before it)
+ * The start date is determined using the cycle's start day and month. The year for the start date
+ * is always set to the year of the provided determination date, regardless of its specific value.
+ *
  *
  * @param {Date} determinationDate - The base date used to calculate the start date.
  * @param {object} cycle - The cycle object containing the start date information.
@@ -160,29 +159,21 @@ function _isDue(determinationDate, cycle) {
  * @private
  */
 function _startDateQuarterFour(determinationDate, cycle) {
-  const year = determinationDate.getFullYear()
-  const nextYear = year + 1
-
   const periodStartDay = cycle.startDate.day
   const periodStartMonth = cycle.startDate.month + 1
-  let periodStartYear
 
-  if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
-    periodStartYear = year
-  } else {
-    periodStartYear = nextYear
-  }
+  const year = _newYearElapsedQuarterFour(determinationDate, cycle)
 
-  return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
+  return new Date(`${year}-${periodStartMonth}-${periodStartDay}`)
 }
 
 /**
- * Calculate the end date for Quarter Four based on the determination date.
+ * Calculates the end date for Quarter Four based on the determination date.
  *
  * The end date is determined using the cycle's end day and month. If the determination date
- * is on or before December 31 of the current year, the end year is set to the current year.
- * Otherwise, the end year is incremented to the next year.
- * (This indicates the period is further in the future with other periods falling before it)
+ * falls on or before December 31 of the current year, the end year is set to the current year.
+ * Otherwise, the end year is incremented to the next year, indicating that the quarter is
+ * further in the future, with other periods falling before it.
  *
  * @param {Date} determinationDate - The base date used to calculate the end date.
  * @param {Object} cycle - The cycle object containing the end date information.
@@ -191,28 +182,20 @@ function _startDateQuarterFour(determinationDate, cycle) {
  * @private
  */
 function _endDateQuarterFour(determinationDate, cycle) {
-  const year = determinationDate.getFullYear()
-  const nextYear = year + 1
-
   const periodStartDay = cycle.endDate.day
   const periodStartMonth = cycle.endDate.month + 1
-  let periodStartYear
 
-  if (determinationDate.getTime() <= new Date(`${year}-12-31`)) {
-    periodStartYear = year
-  } else {
-    periodStartYear = nextYear
-  }
+  const year = _newYearElapsedQuarterFour(determinationDate, cycle)
 
-  return new Date(`${periodStartYear}-${periodStartMonth}-${periodStartDay}`)
+  return new Date(`${year}-${periodStartMonth}-${periodStartDay}`)
 }
 
 /**
- * Calculate the due date for Quarter Four, which spans into the next year.
+ * Calculates the due date for Quarter Four, which spans into the next year.
  *
- * If the determination date is within the current year, the due date will be in the following year.
- * For example, if the determination date is `2024-01-01`, the due date will be in `2025`, while the
- * start and end dates will be in `2024`.
+ * The due date is always set in the following year relative to the provided determination date.
+ * For example, if the determination date is `2024-01-01`, the due date will be in `2025`,
+ * while the start and end dates for the quarter would remain in `2024`.
  *
  * @param {Date} determinationDate - The base date used to calculate the due date.
  * @param {object} cycle - The cycle object containing the due date information.
@@ -221,13 +204,70 @@ function _endDateQuarterFour(determinationDate, cycle) {
  * @private
  */
 function _dueQuarterFour(determinationDate, cycle) {
+  const periodDueDay = cycle.dueDate.day
+  const periodDueMonth = cycle.dueDate.month + 1
+
+  const year = _newYearElapsedQuarterFourDueDate(determinationDate, cycle)
+
+  return new Date(`${year}-${periodDueMonth}-${periodDueDay}`)
+}
+
+/**
+ * Determines whether the new year has elapsed for Quarter Four based on the determination date.
+ *
+ * This function calculates the year associated with Quarter Four by comparing the determination
+ * date with the due date specified in the cycle. If the determination date is earlier than or equal
+ * to the due date for Quarter Four in the current year, the previous year is returned (as the quarter is still Due).
+ * Otherwise, the current year is returned.
+ *
+ * @param {Date} determinationDate - The base date used to determine the year for Quarter Four.
+ * @param {object} cycle - The cycle object containing the due date information.
+ *
+ * @returns {number} The year associated with Quarter Four: the previous year if the determination date
+ *                   is before or on the due date, otherwise the current year.
+ * @private
+ */
+function _newYearElapsedQuarterFour(determinationDate, cycle) {
+  const year = determinationDate.getFullYear()
+  const lastYear = year - 1
+
+  const periodDueDay = cycle.dueDate.day
+  const periodDueMonth = cycle.dueDate.month + 1
+
+  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
+    return lastYear
+  } else {
+    return year
+  }
+}
+
+/**
+ * Determines the year associated with Quarter Four's due date based on the determination date.
+ *
+ * This function calculates the year for Quarter Four's due date by comparing the determination date
+ * with the due date specified in the cycle. If the determination date is earlier than or equal to
+ * the due date in the current year, the current year is returned. Otherwise, the next year is returned
+ * (as the quarter is non longer due in the current year).
+ *
+ * @param {Date} determinationDate - The base date used to determine the year for Quarter Four's due date.
+ * @param {object} cycle - The cycle object containing the due date information.
+ *
+ * @returns {number} The year associated with Quarter Four's due date: the current year if the determination
+ *                   date is before or on the due date, otherwise the next year.
+ * @private
+ */
+function _newYearElapsedQuarterFourDueDate(determinationDate, cycle) {
   const year = determinationDate.getFullYear()
   const nextYear = year + 1
 
   const periodDueDay = cycle.dueDate.day
   const periodDueMonth = cycle.dueDate.month + 1
 
-  return new Date(`${nextYear}-${periodDueMonth}-${periodDueDay}`)
+  if (determinationDate.getTime() <= new Date(`${year}-${periodDueMonth}-${periodDueDay}`)) {
+    return year
+  } else {
+    return nextYear
+  }
 }
 
 module.exports = {
