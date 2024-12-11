@@ -49,7 +49,11 @@ async function go(regionId, billRunType, year = null) {
     return Number(year)
   }
 
-  return currentFinancialYearEnd
+  if (billRunType !== 'two_part_supplementary') {
+    return currentFinancialYearEnd
+  }
+
+  throw new Error('Year must be specified for two-part supplementary bill runs.')
 }
 
 async function _determineSupplementaryEndYear(regionId, currentFinancialYearEnd) {

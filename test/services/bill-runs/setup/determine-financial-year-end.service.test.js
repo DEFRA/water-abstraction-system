@@ -127,6 +127,29 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
   })
 
+  describe('when called for a two-part tariff supplementary bill run', () => {
+    // NOTE: Year should always be provided for two-part tariff supplementary
+    describe('and "year" is provided', () => {
+      beforeEach(() => {
+        selectedYear = 2023
+      })
+
+      it('returns the year provided', async () => {
+        const result = await DetermineFinancialYearEndService.go(regionId, 'two_part_supplementary', selectedYear)
+
+        expect(result).to.equal(selectedYear)
+      })
+    })
+
+    describe('and "year" is not provided', () => {
+      it('throws an error', async () => {
+        const result = await expect(DetermineFinancialYearEndService.go(regionId, 'two_part_supplementary')).to.reject()
+
+        expect(result.message).to.equal('Year must be specified for two-part supplementary bill runs.')
+      })
+    })
+  })
+
   describe('Non-production scenarios (do not exist in production)', () => {
     describe('when called for an supplementary bill run', () => {
       // NOTE: This would never happen in a 'real' environment. But we often manipulate bill run dates whilst testing
