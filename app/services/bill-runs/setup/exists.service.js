@@ -46,51 +46,6 @@ async function go(session) {
   return { matches, toFinancialYearEnding, trigger }
 }
 
-function _trigger(session, matches, toFinancialYearEnding) {
-  const { type: requestedBatchType } = session
-
-  // This will only hit in non-production environments where the user has requested supplementary but there is no annual
-  // bill run for the region. See notes in _toFinancialYearEnding()
-  if (toFinancialYearEnding === 0) {
-    return engineTriggers.neither
-  }
-
-  // No matches means we can trigger a bill run
-  if (matches.length === 0) {
-    // If the requested type is supplementary we need to trigger both bill run engines
-    if (requestedBatchType === 'supplementary') {
-      return engineTriggers.both
-    }
-
-    // This means the requested type is annual or two-part tariff, and year end is after PRESROC so trigger our engine
-    if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
-      return engineTriggers.current
-    }
-
-    // TODO: Remove once all PRESROC two-part tariff annual has been generated
-    // No annual request will get to here (all PRESROC annual bill runs have been generated). So, the user must be
-    // requesting a PRESROC two-part tariff annual
-    return engineTriggers.old
-  }
-
-  // One match means we might still trigger a bill run, but only if the request was for a supplementary
-  if (matches.length === 1) {
-    // It wasn't, so trigger neither. You can't generate these whilst another is in progress or one already exists
-    if (requestedBatchType === 'annual' || requestedBatchType === 'two_part_tariff') {
-      return engineTriggers.neither
-    }
-
-    // It was for supplementary, so we'll trigger the opposite of what is the match
-    if (matches[0].scheme === 'alcs') {
-      return engineTriggers.current
-    }
-
-    return engineTriggers.old
-  }
-
-  return engineTriggers.neither
-}
-
 async function _fetchMatchingBillRun(session, toFinancialYearEnding) {
   // If toFinancialYearEnding is 0 then we are dealing with the non-prod scenario of trying to create a supplementary in
   // a region with no bill run. There is no point checking for a blocking bill run in this case.
@@ -137,6 +92,51 @@ async function _toFinancialYearEnding(session) {
     // billing'. So, we now return 0 here when this happens, so the presenter can display a message to the user.
     return 0
   }
+}
+
+function _trigger(session, matches, toFinancialYearEnding) {
+  const { type: requestedBatchType } = session
+
+  // This will only hit in non-production environments where the user has requested supplementary but there is no annual
+  // bill run for the region. See notes in _toFinancialYearEnding()
+  if (toFinancialYearEnding === 0) {
+    return engineTriggers.neither
+  }
+
+  // No matches means we can trigger a bill run
+  if (matches.length === 0) {
+    // If the requested type is supplementary we need to trigger both bill run engines
+    if (requestedBatchType === 'supplementary') {
+      return engineTriggers.both
+    }
+
+    // This means the requested type is annual or two-part tariff, and year end is after PRESROC so trigger our engine
+    if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
+      return engineTriggers.current
+    }
+
+    // TODO: Remove once all PRESROC two-part tariff annual has been generated
+    // No annual request will get to here (all PRESROC annual bill runs have been generated). So, the user must be
+    // requesting a PRESROC two-part tariff annual
+    return engineTriggers.old
+  }
+
+  // One match means we might still trigger a bill run, but only if the request was for a supplementary
+  if (matches.length === 1) {
+    // It wasn't, so trigger neither. You can't generate these whilst another is in progress or one already exists
+    if (requestedBatchType === 'annual' || requestedBatchType === 'two_part_tariff') {
+      return engineTriggers.neither
+    }
+
+    // It was for supplementary, so we'll trigger the opposite of what is the match
+    if (matches[0].scheme === 'alcs') {
+      return engineTriggers.current
+    }
+
+    return engineTriggers.old
+  }
+
+  return engineTriggers.neither
 }
 
 module.exports = {
