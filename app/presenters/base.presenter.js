@@ -268,8 +268,41 @@ function titleCase(value) {
   return titleCasedWords.join(' ')
 }
 
+/**
+ * Dummy function to be used for test coverage purposes only
+ * @param {*} input - Value to receive
+ *
+ * @returns {*} The same value as input
+ */
+function dummyFunctionForTestCoveragePurposes(input) {
+  // Convoluted code just to pad out the number of uncovered lines
+  const outputArray = []
+
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+  outputArray.push(input)
+
+  return outputArray.pop()
+}
+
 module.exports = {
   convertPenceToPounds,
+  dummyFunctionForTestCoveragePurposes,
   generateBillRunTitle,
   formatAbstractionDate,
   formatAbstractionPeriod,
