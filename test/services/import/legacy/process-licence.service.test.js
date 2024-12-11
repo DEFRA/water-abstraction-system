@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
-const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
+const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
@@ -47,7 +47,7 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
-    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
+    Sinon.stub(ProcessBillingFlagService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
@@ -67,7 +67,6 @@ describe('Import Legacy Process Licence service', () => {
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when there is a valid NALD licence to import with an existing licence', () => {

@@ -26,7 +26,7 @@ function determineEarliestDate(dates) {
   })
 
   if (allEmptyValuesRemoved.length === 0) {
-    throw Error('No dates provided to determine earliest')
+    return null
   }
 
   const earliestDateTimestamp = Math.min(...allEmptyValuesRemoved)

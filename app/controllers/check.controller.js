@@ -5,7 +5,7 @@
  * @module CheckController
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
+const ProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const ProcessLicenceReturnLogsService = require('../services/return-logs/process-licence-return-logs.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
@@ -25,13 +25,14 @@ const NO_CONTENT_STATUS_CODE = 204
 async function flagForBilling(request, h) {
   const { licenceId, expiredDate, lapsedDate, revokedDate } = request.payload
 
-  const transformedLicence = {
+  const payload = {
     expiredDate: expiredDate ? new Date(expiredDate) : null,
     lapsedDate: lapsedDate ? new Date(lapsedDate) : null,
+    licenceId,
     revokedDate: revokedDate ? new Date(revokedDate) : null
   }
 
-  await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+  await ProcessBillingFlagService.go(payload)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
