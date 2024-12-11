@@ -133,6 +133,7 @@ jobs:
         run: |
           npm test
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' coverage/lcov.info
+          head coverage/lcov.info
 
       - name: Code coverage
         uses: livewing/lcov-job-summary@v1.2.0
