@@ -41,6 +41,19 @@ const naldRegions = {
 
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
+const returnCycleDates = {
+  allYear: {
+    dueDate: { day: 28, month: 3 },
+    endDate: { day: 31, month: 2 },
+    startDate: { day: 1, month: 3 }
+  },
+  summer: {
+    dueDate: { day: 28, month: 10 },
+    endDate: { day: 31, month: 9 },
+    startDate: { day: 1, month: 10 }
+  }
+}
+
 /**
  * An object defining the return periods / cycles with their respective start dates, end dates, and due dates.
  *
@@ -61,17 +74,8 @@ const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPart
  * | Summer       | 1 November    | 31 October    | 28th November  |
  *
  */
-const returnCycleDates = {
-  allYear: {
-    dueDate: { day: 28, month: 3 },
-    endDate: { day: 31, month: 2 },
-    startDate: { day: 1, month: 3 }
-  },
-  summer: {
-    dueDate: { day: 28, month: 10 },
-    endDate: { day: 31, month: 9 },
-    startDate: { day: 1, month: 10 }
-  },
+const returnPeriodDates = {
+  ...returnCycleDates,
   quarterOne: {
     dueDate: { day: 28, month: 3 },
     endDate: { day: 31, month: 2 },
@@ -150,6 +154,7 @@ module.exports = {
   naldRegions,
   organisationTypes,
   returnCycleDates,
+  returnPeriodDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
   sources,
