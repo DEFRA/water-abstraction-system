@@ -12,8 +12,9 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   return {
+    pageTitle: 'Select the bill run type',
     sessionId: session.id,
     selectedType: session.type ? session.type : null
   }

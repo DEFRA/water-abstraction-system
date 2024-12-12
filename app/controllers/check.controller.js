@@ -5,32 +5,54 @@
  * @module CheckController
  */
 
-const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
+const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
+const ProcessLicenceReturnLogsService = require('../services/return-logs/process-licence-return-logs.service.js')
 
-const redirectStatusCode = 204
+const NO_CONTENT_STATUS_CODE = 204
 
 /**
- * A test end point to create return logs for a given licence reference
+ * A test end point for the licence supplementary billing flags process
  *
- * @param _request - the hapi request object
+ * This endpoint takes a licenceId and an expired, lapsed and revoked date. It passes this onto the
+ * `DetermineSupplementaryBillingFlagsService` to test if it correctly flags the licence for supplementary billing. This
+ * normally happens during the licence import process.
+ *
+ * @param request - the hapi request object
  * @param h - the hapi response object
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function returnLogsForLicence (_request, h) {
-  let licenceReference
+async function flagForBilling(request, h) {
+  const { licenceId, expiredDate, lapsedDate, revokedDate } = request.payload
 
-  if (h.request.payload !== null && h.request.payload.licenceReference) {
-    licenceReference = h.request.payload.licenceReference
-  } else {
-    return h.response().code(404)
+  const transformedLicence = {
+    expiredDate: expiredDate ? new Date(expiredDate) : null,
+    lapsedDate: lapsedDate ? new Date(lapsedDate) : null,
+    revokedDate: revokedDate ? new Date(revokedDate) : null
   }
 
-  ProcessLicenceReturnLogsService.go(licenceReference)
+  await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
 
-  return h.response().code(redirectStatusCode)
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
+/**
+ * A test end point to create return logs for a given licence reference
+ *
+ * @param request - the hapi request object
+ * @param h - the hapi response object
+ *
+ * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
+ */
+async function licenceReturnLogs(request, h) {
+  const { licenceId } = request.params
+
+  await ProcessLicenceReturnLogsService.go(licenceId)
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
 module.exports = {
-  returnLogsForLicence
+  flagForBilling,
+  licenceReturnLogs
 }

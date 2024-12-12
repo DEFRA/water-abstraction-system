@@ -58,7 +58,7 @@
  *
  * @returns {object[]} An array of the consolidated date ranges
  */
-function go (dateRanges) {
+function go(dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
   const sortedDates = _sortDates(dateRanges)
 
@@ -67,7 +67,7 @@ function go (dateRanges) {
   return consolidatedDateRanges
 }
 
-function _sortDates (dateRanges) {
+function _sortDates(dateRanges) {
   return dateRanges.sort((a, b) => {
     return a.startDate - b.startDate
   })
@@ -82,39 +82,41 @@ function _sortDates (dateRanges) {
  *
  * @private
  */
-function _consolidateDates (dateRanges) {
+function _consolidateDates(dateRanges) {
   // We use reduce to build up an array of consolidated date ranges as we iterate over our initial dateRanges array.
   // Each time round we compare the current range from dateRanges with the one we previously added to our array of
   // consolidated ranges to see if it overlaps, which determines what we add to our ongoing array before we iterate
   // again over the next item in dateRanges
-  return dateRanges.reduce((acc, currentRange) => {
-    // If this is the first range then there's nothing else to check yet so simply add it to our ongoing acc array
-    if (acc.length === 0) {
-      return [currentRange]
-    }
+  return dateRanges.reduce(
+    (acc, currentRange) => {
+      // If this is the first range then there's nothing else to check yet so simply add it to our ongoing acc array
+      if (acc.length === 0) {
+        return [currentRange]
+      }
 
-    // Get the last date range we added to acc. We use pop (which removes it from the acc array) as we may end up
-    // replacing it entirely if the current date range overlaps it
-    const previousRange = acc.pop()
+      // Get the last date range we added to acc. We use pop (which removes it from the acc array) as we may end up
+      // replacing it entirely if the current date range overlaps it
+      const previousRange = acc.pop()
 
-    // If the current end date is before the previous end date then the current range is completely inside the previous
-    // one so we simply add the previous one back to our ongoing acc array
-    if (currentRange.endDate <= previousRange.endDate) {
-      return [...acc, previousRange]
-    }
+      // If the current end date is before the previous end date then the current range is completely inside the previous
+      // one so we simply add the previous one back to our ongoing acc array
+      if (currentRange.endDate <= previousRange.endDate) {
+        return [...acc, previousRange]
+      }
 
-    // If the current range's start date is on or earlier than the previous end date then the current range overlaps
-    // (starting the same day as the previous one ends counts as overlapping) so we add a new date range to our ongoing
-    // acc array, starting when the previous range starts and ending when the current range ends
-    if (currentRange.startDate <= previousRange.endDate) {
-      return [...acc, { startDate: previousRange.startDate, endDate: currentRange.endDate }]
-    }
+      // If the current range's start date is on or earlier than the previous end date then the current range overlaps
+      // (starting the same day as the previous one ends counts as overlapping) so we add a new date range to our ongoing
+      // acc array, starting when the previous range starts and ending when the current range ends
+      if (currentRange.startDate <= previousRange.endDate) {
+        return [...acc, { startDate: previousRange.startDate, endDate: currentRange.endDate }]
+      }
 
-    // If ranges don't overlap then simply add the previous _and_ current ranges to our ongoing acc array
-    return [...acc, previousRange, currentRange]
-  },
-  // Start with an empty array
-  [])
+      // If ranges don't overlap then simply add the previous _and_ current ranges to our ongoing acc array
+      return [...acc, previousRange, currentRange]
+    },
+    // Start with an empty array
+    []
+  )
 }
 
 module.exports = {

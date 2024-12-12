@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,10 +26,12 @@ describe('Bills controller', () => {
   let options
   let server
 
-  beforeEach(async () => {
-    // Create server before each test
+  // Create server before running the tests
+  before(async () => {
     server = await init()
+  })
 
+  beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -146,9 +148,7 @@ describe('Bills controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(
-            '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing'
-          )
+          expect(response.headers.location).to.equal('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
         })
       })
 
@@ -171,17 +171,11 @@ describe('Bills controller', () => {
   })
 })
 
-function _testMultiLicenceBill () {
+function _testMultiLicenceBill() {
   return {
     accountName: 'Mr B Blobby',
     accountNumber: 'E99999999A',
-    addressLines: [
-      'C/O Noel Edmonds',
-      'Crinkley Bottom',
-      'Cricket St Thomas',
-      'Somerset',
-      'TA20 1KL'
-    ],
+    addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL'],
     billId: '64924759-8142-4a08-9d1e-1e902cd9d316',
     billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     billNumber: 'EAI9999999T',
@@ -218,17 +212,11 @@ function _testMultiLicenceBill () {
   }
 }
 
-function _testSingleLicenceBill () {
+function _testSingleLicenceBill() {
   return {
     accountName: 'Mr B Blobby',
     accountNumber: 'E99999999A',
-    addressLines: [
-      'C/O Noel Edmonds',
-      'Crinkley Bottom',
-      'Cricket St Thomas',
-      'Somerset',
-      'TA20 1KL'
-    ],
+    addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL'],
     billId: '8b8b8831-d671-4456-93cd-30310e6fdf7a',
     billingAccountId: '7771d5a3-305c-4564-8167-74ba0cc4f08e',
     billNumber: 'EAI9999999T',
@@ -261,11 +249,13 @@ function _testSingleLicenceBill () {
         adjustments: '',
         billableDays: '214/214',
         chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
-        chargeElements: [{
-          purpose: 'Trickle Irrigation - Direct',
-          abstractionPeriod: '1 April to 31 October',
-          volume: '21.474ML'
-        }],
+        chargeElements: [
+          {
+            purpose: 'Trickle Irrigation - Direct',
+            abstractionPeriod: '1 April to 31 October',
+            volume: '21.474ML'
+          }
+        ],
         chargePeriod: '1 April 2023 to 31 March 2024',
         chargeReference: '4.5.13 (£11.62)',
         chargeType: 'standard',
@@ -288,17 +278,11 @@ function _testSingleLicenceBill () {
   }
 }
 
-function _testSingleLicenceBillPreSroc () {
+function _testSingleLicenceBillPreSroc() {
   return {
     accountName: 'Mr B Blobby',
     accountNumber: 'E99999999A',
-    addressLines: [
-      'C/O Noel Edmonds',
-      'Crinkley Bottom',
-      'Cricket St Thomas',
-      'Somerset',
-      'TA20 1KL'
-    ],
+    addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL'],
     billId: '8b8b8831-d671-4456-93cd-30310e6fdf7a',
     billingAccountId: '7771d5a3-305c-4564-8167-74ba0cc4f08e',
     billNumber: 'EAI9999999T',
@@ -331,11 +315,13 @@ function _testSingleLicenceBillPreSroc () {
         adjustments: '',
         billableDays: '214/214',
         chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
-        chargeElements: [{
-          purpose: 'Trickle Irrigation - Direct',
-          abstractionPeriod: '1 April to 31 October',
-          volume: '21.474ML'
-        }],
+        chargeElements: [
+          {
+            purpose: 'Trickle Irrigation - Direct',
+            abstractionPeriod: '1 April to 31 October',
+            volume: '21.474ML'
+          }
+        ],
         chargePeriod: '1 April 2023 to 31 March 2024',
         chargeReference: '4.5.13 (£11.62)',
         chargeType: 'standard',

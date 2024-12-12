@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,47 @@ const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
 
 describe('Bill Run model', () => {
+  let testBillRunVolumes
+  let testBills
   let testRecord
+  let testRegion
+  let testReviewLicences
+
+  before(async () => {
+    // Link regions
+    testRegion = RegionHelper.select()
+    const { id: regionId } = testRegion
+
+    // Test record
+    testRecord = await BillRunHelper.add({ regionId })
+    const { id } = testRecord
+
+    // Link bills
+    testBills = []
+    for (let i = 0; i < 2; i++) {
+      const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: id })
+
+      testBills.push(bill)
+    }
+
+    // Link to bill run volumes
+    testBillRunVolumes = []
+    for (let i = 0; i < 2; i++) {
+      const billRunVolume = await BillRunVolumeHelper.add({ billRunId: id })
+
+      testBillRunVolumes.push(billRunVolume)
+    }
+
+    // Link to review licences
+    testReviewLicences = []
+    for (let i = 0; i < 2; i++) {
+      const reviewLicence = await ReviewLicenceHelper.add({ billRunId: id })
+
+      testReviewLicences.push(reviewLicence)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillRunHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await BillRunModel.query().findById(testRecord.id)
 
@@ -39,24 +73,14 @@ describe('Bill Run model', () => {
 
   describe('Relationships', () => {
     describe('when linking to region', () => {
-      let testRegion
-
-      beforeEach(async () => {
-        testRegion = RegionHelper.select()
-        testRecord = await BillRunHelper.add({ regionId: testRegion.id })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillRunModel.query()
-          .innerJoinRelated('region')
+        const query = await BillRunModel.query().innerJoinRelated('region')
 
         expect(query).to.exist()
       })
 
       it('can eager load the region', async () => {
-        const result = await BillRunModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('region')
+        const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('region')
 
         expect(result).to.be.instanceOf(BillRunModel)
         expect(result.id).to.equal(testRecord.id)
@@ -67,31 +91,14 @@ describe('Bill Run model', () => {
     })
 
     describe('when linking to bills', () => {
-      let testBills
-
-      beforeEach(async () => {
-        testRecord = await BillRunHelper.add()
-        const { id } = testRecord
-
-        testBills = []
-        for (let i = 0; i < 2; i++) {
-          const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: id })
-
-          testBills.push(bill)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillRunModel.query()
-          .innerJoinRelated('bills')
+        const query = await BillRunModel.query().innerJoinRelated('bills')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bills', async () => {
-        const result = await BillRunModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('bills')
+        const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('bills')
 
         expect(result).to.be.instanceOf(BillRunModel)
         expect(result.id).to.equal(testRecord.id)
@@ -104,31 +111,14 @@ describe('Bill Run model', () => {
     })
 
     describe('when linking to bill run volumes', () => {
-      let testBillRunVolumes
-
-      beforeEach(async () => {
-        testRecord = await BillRunHelper.add()
-        const { id } = testRecord
-
-        testBillRunVolumes = []
-        for (let i = 0; i < 2; i++) {
-          const billRunVolume = await BillRunVolumeHelper.add({ billRunId: id })
-
-          testBillRunVolumes.push(billRunVolume)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillRunModel.query()
-          .innerJoinRelated('billRunVolumes')
+        const query = await BillRunModel.query().innerJoinRelated('billRunVolumes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bills', async () => {
-        const result = await BillRunModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRunVolumes')
+        const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('billRunVolumes')
 
         expect(result).to.be.instanceOf(BillRunModel)
         expect(result.id).to.equal(testRecord.id)
@@ -141,31 +131,14 @@ describe('Bill Run model', () => {
     })
 
     describe('when linking to review Licences', () => {
-      let testReviewLicences
-
-      beforeEach(async () => {
-        testRecord = await BillRunHelper.add()
-        const { id } = testRecord
-
-        testReviewLicences = []
-        for (let i = 0; i < 2; i++) {
-          const reviewLicence = await ReviewLicenceHelper.add({ billRunId: id })
-
-          testReviewLicences.push(reviewLicence)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillRunModel.query()
-          .innerJoinRelated('reviewLicences')
+        const query = await BillRunModel.query().innerJoinRelated('reviewLicences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review licences', async () => {
-        const result = await BillRunModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewLicences')
+        const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('reviewLicences')
 
         expect(result).to.be.instanceOf(BillRunModel)
         expect(result.id).to.equal(testRecord.id)

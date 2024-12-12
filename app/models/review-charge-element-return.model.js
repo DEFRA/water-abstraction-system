@@ -8,8 +8,8 @@
 const BaseModel = require('./base.model.js')
 
 class ReviewChargeElementReturnModel extends BaseModel {
-  static get tableName () {
-    return 'reviewChargeElementsReturns'
+  static get tableName() {
+    return 'reviewChargeElementReturns'
   }
 }
 

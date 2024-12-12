@@ -14,16 +14,22 @@ const ViewLicenceService = require('./view-licence.service.js')
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
-async function go (licenceId, auth, page) {
+async function go(licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const billsData = await FetchLicenceBillsService.go(licenceId, page)
   const pageData = ViewLicenceBillsPresenter.go(billsData.bills)
 
-  const pagination = PaginatorPresenter.go(billsData.pagination.total, Number(page), `/system/licences/${licenceId}/bills`)
+  const pagination = PaginatorPresenter.go(
+    billsData.pagination.total,
+    Number(page),
+    `/system/licences/${licenceId}/bills`
+  )
 
   return {
     activeTab: 'bills',

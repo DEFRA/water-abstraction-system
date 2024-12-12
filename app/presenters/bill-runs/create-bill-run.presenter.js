@@ -15,16 +15,8 @@
  *
  * @returns {object} the formatted response
  */
-function go (billRun) {
-  const {
-    id: billingBatchId,
-    regionId: region,
-    scheme,
-    batchType,
-    status,
-    externalId,
-    errorCode
-  } = billRun
+function go(billRun) {
+  const { id: billingBatchId, regionId: region, scheme, batchType, status, externalId, errorCode } = billRun
 
   return {
     billingBatchId,

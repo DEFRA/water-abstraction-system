@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,10 +18,20 @@ const FinancialAgreementModel = require('../../app/models/financial-agreement.mo
 const FINANCIAL_AGREEMENT_MVAL_INDEX = 7
 
 describe('Financial Agreement model', () => {
+  let testLicenceAgreements
   let testRecord
 
   before(async () => {
+    // Test record
     testRecord = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MVAL_INDEX)
+
+    // Link to licence agreements
+    testLicenceAgreements = []
+    for (let i = 0; i < 2; i++) {
+      const licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId: testRecord.id })
+
+      testLicenceAgreements.push(licenceAgreement)
+    }
   })
 
   describe('Basic query', () => {
@@ -35,20 +45,8 @@ describe('Financial Agreement model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence agreements', () => {
-      let testLicenceAgreements
-
-      before(async () => {
-        testLicenceAgreements = []
-        for (let i = 0; i < 2; i++) {
-          const licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId: testRecord.id })
-
-          testLicenceAgreements.push(licenceAgreement)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await FinancialAgreementModel.query()
-          .innerJoinRelated('licenceAgreements')
+        const query = await FinancialAgreementModel.query().innerJoinRelated('licenceAgreements')
 
         expect(query).to.exist()
       })

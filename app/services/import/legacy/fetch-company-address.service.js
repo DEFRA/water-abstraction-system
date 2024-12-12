@@ -17,7 +17,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<ImportLegacyCompanyAddressType[]>}
  */
-async function go (regionCode, licenceId) {
+async function go(regionCode, licenceId) {
   const licenceHolderData = await _getLicenceHolder(regionCode, licenceId)
   const returnsToData = await _getReturnsTo(regionCode, licenceId)
 
@@ -29,7 +29,7 @@ async function go (regionCode, licenceId) {
  *
  * @private
  */
-async function _getLicenceHolder (regionCode, licenceId) {
+async function _getLicenceHolder(regionCode, licenceId) {
   const query = `
     WITH end_date_cte AS (
       SELECT
@@ -78,7 +78,7 @@ async function _getLicenceHolder (regionCode, licenceId) {
  *
  * @private
  */
-async function _getReturnsTo (regionCode, licenceId) {
+async function _getReturnsTo(regionCode, licenceId) {
   const query = `
     SELECT
       CASE

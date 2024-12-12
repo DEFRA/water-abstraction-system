@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -106,7 +106,7 @@ describe('Index Bill Runs service', () => {
   })
 })
 
-function _fetchedBillRuns () {
+function _fetchedBillRuns() {
   return [
     {
       id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',

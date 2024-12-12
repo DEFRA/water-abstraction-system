@@ -18,7 +18,7 @@ const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
  * @returns {Promise<module:LicenceDocumentRoleHelper>} the licence document role which will link through to all the
  * entities that make up the licence holder
  */
-async function seed (licenceRef, name = 'Licence Holder Ltd') {
+async function seed(licenceRef, name = 'Licence Holder Ltd') {
   // Create a licence role (the default is licenceHolder)
   const { id: licenceRoleId } = await LicenceRoleHelper.select()
 

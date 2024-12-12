@@ -17,7 +17,7 @@ const GeneralLib = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The newly created event record
  */
-async function go (billRun, issuer) {
+async function go(billRun, issuer) {
   // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set
   // them when creating the record
   const timestamp = GeneralLib.timestampForPostgres()
@@ -38,7 +38,7 @@ async function go (billRun, issuer) {
   return event
 }
 
-function _metadata (billRun) {
+function _metadata(billRun) {
   return CreateBillRunEventPresenter.go(billRun)
 }
 

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -61,14 +61,12 @@ describe('View Licence service', () => {
 
   describe('when a licence with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewLicenceService.go('a45341d0-82c7-4a00-975c-e978a6f776eb', auth))
-        .to
-        .reject()
+      await expect(ViewLicenceService.go('a45341d0-82c7-4a00-975c-e978a6f776eb', auth)).to.reject()
     })
   })
 })
 
-function _auth () {
+function _auth() {
   return {
     credentials: {
       roles: [
@@ -91,7 +89,7 @@ function _auth () {
   }
 }
 
-function _licence () {
+function _licence() {
   const licence = LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,

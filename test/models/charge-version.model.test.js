@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -35,19 +35,74 @@ const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 
 describe('Charge Version model', () => {
   let chargeVersionId
+  let testBillingAccount
+  let testBillRunChargeVersionYears
   let testChangeReason
+  let testChargeReferences
+  let testLicence
+  let testModLogs
+  let testNote
   let testRecord
+  let testReviewChargeVersions
   let testUser
 
-  before(() => {
+  before(async () => {
+    // Link billing account
+    testBillingAccount = await BillingAccountHelper.add()
+    const { id: billingAccountId } = testBillingAccount
+
+    // Link change reason
     testChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
+    const { id: changeReasonId } = testChangeReason
+
+    // Link charge version note
+    testNote = await ChargeVersionNoteHelper.add()
+    const { id: noteId } = testNote
+
+    // Link licence
+    testLicence = await LicenceHelper.add()
+    const { id: licenceId } = testLicence
+
+    // Test record
+    testRecord = await ChargeVersionHelper.add({ billingAccountId, changeReasonId, noteId, licenceId })
+
+    // Link bill run charge version years
+    testBillRunChargeVersionYears = []
+    for (let i = 0; i < 2; i++) {
+      const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId: testRecord.id })
+
+      testBillRunChargeVersionYears.push(billRunChargeVersionYear)
+    }
+
+    // Link charge references
+    testChargeReferences = []
+    for (let i = 0; i < 2; i++) {
+      const chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: testRecord.id })
+
+      testChargeReferences.push(chargeReference)
+    }
+
+    // Link mod logs
+    testModLogs = []
+    for (let i = 0; i < 2; i++) {
+      const modLog = await ModLogHelper.add({
+        chargeVersionId: testRecord.id,
+        licenceRef: testRecord.licenceRef
+      })
+
+      testModLogs.push(modLog)
+    }
+
+    // Link review charge versions
+    testReviewChargeVersions = []
+    for (let i = 0; i < 2; i++) {
+      const reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId: testRecord.id })
+
+      testReviewChargeVersions.push(reviewChargeVersion)
+    }
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ChargeVersionHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ChargeVersionModel.query().findById(testRecord.id)
 
@@ -58,27 +113,14 @@ describe('Charge Version model', () => {
 
   describe('Relationships', () => {
     describe('when linking to billing account', () => {
-      let testBillingAccount
-
-      beforeEach(async () => {
-        testBillingAccount = await BillingAccountHelper.add()
-
-        const { id: billingAccountId } = testBillingAccount
-
-        testRecord = await ChargeVersionHelper.add({ billingAccountId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('billingAccount')
+        const query = await ChargeVersionModel.query().innerJoinRelated('billingAccount')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccount')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('billingAccount')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -89,22 +131,8 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to bill run charge version years', () => {
-      let testBillRunChargeVersionYears
-
-      beforeEach(async () => {
-        testRecord = await ChargeVersionHelper.add()
-
-        testBillRunChargeVersionYears = []
-        for (let i = 0; i < 2; i++) {
-          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId: testRecord.id })
-
-          testBillRunChargeVersionYears.push(billRunChargeVersionYear)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('billRunChargeVersionYears')
+        const query = await ChargeVersionModel.query().innerJoinRelated('billRunChargeVersionYears')
 
         expect(query).to.exist()
       })
@@ -125,23 +153,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to change reason', () => {
-      beforeEach(async () => {
-        const { id: changeReasonId } = testChangeReason
-
-        testRecord = await ChargeVersionHelper.add({ changeReasonId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('changeReason')
+        const query = await ChargeVersionModel.query().innerJoinRelated('changeReason')
 
         expect(query).to.exist()
       })
 
       it('can eager load the change reason', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('changeReason')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('changeReason')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -152,30 +171,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to charge references', () => {
-      let testChargeReferences
-
-      beforeEach(async () => {
-        testRecord = await ChargeVersionHelper.add()
-
-        testChargeReferences = []
-        for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: testRecord.id })
-
-          testChargeReferences.push(chargeReference)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('chargeReferences')
+        const query = await ChargeVersionModel.query().innerJoinRelated('chargeReferences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge references', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeReferences')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeReferences')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -188,27 +191,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to charge version note', () => {
-      let testNote
-
-      beforeEach(async () => {
-        testNote = await ChargeVersionNoteHelper.add()
-
-        const { id: noteId } = testNote
-
-        testRecord = await ChargeVersionHelper.add({ noteId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('chargeVersionNote')
+        const query = await ChargeVersionModel.query().innerJoinRelated('chargeVersionNote')
 
         expect(query).to.exist()
       })
 
       it('can eager load the note', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersionNote')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeVersionNote')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -219,27 +209,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-
-        testRecord = await ChargeVersionHelper.add({ licenceId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('licence')
+        const query = await ChargeVersionModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -250,32 +227,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to mod logs', () => {
-      let testModLogs
-
-      beforeEach(async () => {
-        testRecord = await ChargeVersionHelper.add()
-
-        testModLogs = []
-        for (let i = 0; i < 2; i++) {
-          const modLog = await ModLogHelper.add({
-            chargeVersionId: testRecord.id, licenceRef: testRecord.licenceRef
-          })
-
-          testModLogs.push(modLog)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('modLogs')
+        const query = await ChargeVersionModel.query().innerJoinRelated('modLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the mod logs', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('modLogs')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -288,30 +247,14 @@ describe('Charge Version model', () => {
     })
 
     describe('when linking to review charge versions', () => {
-      let testReviewChargeVersions
-
-      beforeEach(async () => {
-        testRecord = await ChargeVersionHelper.add()
-
-        testReviewChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const reviewChargeVersion = await ReviewChargeVersionHelper.add({ chargeVersionId: testRecord.id })
-
-          testReviewChargeVersions.push(reviewChargeVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeVersionModel.query()
-          .innerJoinRelated('reviewChargeVersions')
+        const query = await ChargeVersionModel.query().innerJoinRelated('reviewChargeVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review charge versions', async () => {
-        const result = await ChargeVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewChargeVersions')
+        const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('reviewChargeVersions')
 
         expect(result).to.be.instanceOf(ChargeVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -349,10 +292,14 @@ describe('Charge Version model', () => {
         const firstNaldId = randomInteger(100, 99998)
 
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), chargeVersionId
+          externalId: `${regionCode}:${firstNaldId}`,
+          naldDate: new Date('2012-06-01'),
+          chargeVersionId
         })
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), chargeVersionId
+          externalId: `${regionCode}:${firstNaldId + 1}`,
+          naldDate: new Date('2012-06-02'),
+          chargeVersionId
         })
 
         testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
@@ -505,10 +452,14 @@ describe('Charge Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              note: null,
+              chargeVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, note: null, chargeVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              note: null,
+              chargeVersionId
             })
 
             testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
@@ -528,10 +479,14 @@ describe('Charge Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, note: null, chargeVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              note: null,
+              chargeVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', chargeVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              note: 'Transfer per app 12-DEF',
+              chargeVersionId
             })
 
             testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
@@ -588,10 +543,14 @@ describe('Charge Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, chargeVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              reasonDescription: null,
+              chargeVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'Transferred',
+              chargeVersionId
             })
 
             testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')
@@ -611,10 +570,14 @@ describe('Charge Version model', () => {
           const firstNaldId = randomInteger(100, 99998)
 
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'Formal Variation', chargeVersionId
+            externalId: `${regionCode}:${firstNaldId}`,
+            reasonDescription: 'Formal Variation',
+            chargeVersionId
           })
           await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', chargeVersionId
+            externalId: `${regionCode}:${firstNaldId + 1}`,
+            reasonDescription: 'Transferred',
+            chargeVersionId
           })
 
           testRecord = await ChargeVersionModel.query().findById(chargeVersionId).modify('history')

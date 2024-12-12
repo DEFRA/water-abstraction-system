@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,8 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const FetchLicenceDocumentService = require('../../../../app/services/import/legacy/fetch-licence-document.service.js')
 
 // Thing under test
-const TransformLicenceDocumentService =
-  require('../../../../app/services/import/legacy/transform-licence-document.service.js')
+const TransformLicenceDocumentService = require('../../../../app/services/import/legacy/transform-licence-document.service.js')
 
 describe('Import Legacy Transform Licence Document service', () => {
   // NOTE: Clearly this is an incomplete representation of the licence returned from TransformedLicenceService. But for
@@ -50,6 +49,7 @@ describe('Import Legacy Transform Licence Document service', () => {
       expect(transformedLicence.licenceDocument).to.equal({
         licenceRef,
         endDate: null,
+        licenceDocumentRoles: [],
         startDate: new Date('1999-01-01')
       })
     })
@@ -66,10 +66,11 @@ describe('Import Legacy Transform Licence Document service', () => {
   })
 })
 
-function _legacyLicenceDocument (licenceRef) {
+function _legacyLicenceDocument(licenceRef) {
   return {
     end_date: null,
     start_date: new Date('1999-01-01'),
-    licence_ref: licenceRef
+    licence_ref: licenceRef,
+    licenceDocumentRoles: []
   }
 }

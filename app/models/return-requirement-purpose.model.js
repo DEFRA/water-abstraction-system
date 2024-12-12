@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReturnRequirementPurposeModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'returnRequirementPurposes'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       primaryPurpose: {
         relation: Model.BelongsToOneRelation,

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,13 +20,45 @@ const LicenceDocumentRoleModel = require('../../app/models/licence-document-role
 const AddressModel = require('../../app/models/address.model.js')
 
 describe('Address model', () => {
+  let testBillingAccountAddresses
+  let testCompanyAddresses
+  let testLicenceDocumentRoles
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await AddressHelper.add()
-    })
+  before(async () => {
+    // Test record
+    testRecord = await AddressHelper.add()
+    const { id: addressId } = testRecord
 
+    // Link billing account addresses
+    testBillingAccountAddresses = []
+    for (let i = 0; i < 2; i++) {
+      // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
+      // billingAccountId and start date
+      const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
+      const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, addressId })
+
+      testBillingAccountAddresses.push(billingAccountAddress)
+    }
+
+    // Link company addresses
+    testCompanyAddresses = []
+    for (let i = 0; i < 2; i++) {
+      const companyAddress = await CompanyAddressHelper.add({ addressId })
+
+      testCompanyAddresses.push(companyAddress)
+    }
+
+    // Link licence document roles
+    testLicenceDocumentRoles = []
+    for (let i = 0; i < 2; i++) {
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })
+
+      testLicenceDocumentRoles.push(licenceDocumentRole)
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await AddressModel.query().findById(testRecord.id)
 
@@ -37,34 +69,14 @@ describe('Address model', () => {
 
   describe('Relationships', () => {
     describe('when linking to billing account addresses', () => {
-      let testBillingAccountAddresses
-
-      beforeEach(async () => {
-        testRecord = await AddressHelper.add()
-        const { id: addressId } = testRecord
-
-        testBillingAccountAddresses = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
-          // billingAccountId and start date
-          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-          const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, addressId })
-
-          testBillingAccountAddresses.push(billingAccountAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('billingAccountAddresses')
+        const query = await AddressModel.query().innerJoinRelated('billingAccountAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account addresses', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billingAccountAddresses')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('billingAccountAddresses')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -77,32 +89,14 @@ describe('Address model', () => {
     })
 
     describe('when linking to company addresses', () => {
-      let testCompanyAddresses
-
-      beforeEach(async () => {
-        testRecord = await AddressHelper.add()
-
-        const { id: addressId } = testRecord
-
-        testCompanyAddresses = []
-        for (let i = 0; i < 2; i++) {
-          const companyAddress = await CompanyAddressHelper.add({ addressId })
-
-          testCompanyAddresses.push(companyAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('companyAddresses')
+        const query = await AddressModel.query().innerJoinRelated('companyAddresses')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company addresses', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('companyAddresses')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('companyAddresses')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -115,32 +109,14 @@ describe('Address model', () => {
     })
 
     describe('when linking to licence document roles', () => {
-      let testLicenceDocumentRoles
-
-      beforeEach(async () => {
-        testRecord = await AddressHelper.add()
-
-        const { id: addressId } = testRecord
-
-        testLicenceDocumentRoles = []
-        for (let i = 0; i < 2; i++) {
-          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })
-
-          testLicenceDocumentRoles.push(licenceDocumentRole)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await AddressModel.query()
-          .innerJoinRelated('licenceDocumentRoles')
+        const query = await AddressModel.query().innerJoinRelated('licenceDocumentRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence document roles', async () => {
-        const result = await AddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceDocumentRoles')
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
         expect(result).to.be.instanceOf(AddressModel)
         expect(result.id).to.equal(testRecord.id)

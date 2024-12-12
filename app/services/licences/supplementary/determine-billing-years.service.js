@@ -22,7 +22,7 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
  * @returns {object[]} - The financial year end that are impacted by the changes between the start and end dates and are
  * relevant for SROC.
  */
-function go (startDate, endDate) {
+function go(startDate, endDate) {
   const years = []
 
   const startYear = _adjustedFinancialYearEnd(startDate)
@@ -48,7 +48,7 @@ function go (startDate, endDate) {
  *
  * @private
  */
-function _adjustedFinancialYearEnd (date) {
+function _adjustedFinancialYearEnd(date) {
   let year = date.getFullYear()
 
   if (date.getMonth() >= APRIL) {

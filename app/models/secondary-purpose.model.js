@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class SecondaryPurposeModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'secondaryPurposes'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,

@@ -14,24 +14,16 @@ const WorkflowModel = require('../../models/workflow.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return WorkflowModel.query()
     .where('licenceId', licenceId)
     .andWhere('deletedAt', null)
-    .select([
-      'id',
-      'createdAt',
-      'status',
-      'licenceId',
-      'data'
-    ])
-    .orderBy([
-      { column: 'createdAt', order: 'desc' }
-    ])
+    .select(['id', 'createdAt', 'status', 'licenceId', 'data'])
+    .orderBy([{ column: 'createdAt', order: 'desc' }])
 }
 
 module.exports = {

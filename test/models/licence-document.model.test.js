@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,13 +18,29 @@ const LicenceDocumentRoleModel = require('../../app/models/licence-document-role
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 
 describe('Licence Document model', () => {
+  let testLicence
+  let testLicenceDocumentRoles
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceDocumentHelper.add()
-    })
+  before(async () => {
+    // Link to licence
+    testLicence = await LicenceHelper.add()
+    const { licenceRef } = testLicence
 
+    // Test record
+    testRecord = await LicenceDocumentHelper.add({ licenceRef })
+    const { id: licenceDocumentId } = testRecord
+
+    // Link to licence document roles
+    testLicenceDocumentRoles = []
+    for (let i = 0; i < 2; i++) {
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceDocumentId })
+
+      testLicenceDocumentRoles.push(licenceDocumentRole)
+    }
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceDocumentModel.query().findById(testRecord.id)
 
@@ -35,27 +51,14 @@ describe('Licence Document model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { licenceRef } = testLicence
-
-        testRecord = await LicenceDocumentHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await LicenceDocumentModel.query()
-          .innerJoinRelated('licence')
+        const query = await LicenceDocumentModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await LicenceDocumentModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await LicenceDocumentModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(LicenceDocumentModel)
         expect(result.id).to.equal(testRecord.id)
@@ -66,24 +69,8 @@ describe('Licence Document model', () => {
     })
 
     describe('when linking to licence document roles', () => {
-      let testLicenceDocumentRoles
-
-      beforeEach(async () => {
-        testRecord = await LicenceDocumentHelper.add()
-
-        const { id: licenceDocumentId } = testRecord
-
-        testLicenceDocumentRoles = []
-        for (let i = 0; i < 2; i++) {
-          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceDocumentId })
-
-          testLicenceDocumentRoles.push(licenceDocumentRole)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await LicenceDocumentModel.query()
-          .innerJoinRelated('licenceDocumentRoles')
+        const query = await LicenceDocumentModel.query().innerJoinRelated('licenceDocumentRoles')
 
         expect(query).to.exist()
       })

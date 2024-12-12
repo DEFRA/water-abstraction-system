@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -35,8 +35,7 @@ describe('Group Role model', () => {
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await GroupRoleModel.query()
-        .findById(testRecord.id)
+      const result = await GroupRoleModel.query().findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(GroupRoleModel)
       expect(result.id).to.equal(testRecord.id)
@@ -46,16 +45,13 @@ describe('Group Role model', () => {
   describe('Relationships', () => {
     describe('when linking to role', () => {
       it('can successfully run a related query', async () => {
-        const query = await GroupRoleModel.query()
-          .innerJoinRelated('role')
+        const query = await GroupRoleModel.query().innerJoinRelated('role')
 
         expect(query).to.exist()
       })
 
       it('can eager load the role', async () => {
-        const result = await GroupRoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('role')
+        const result = await GroupRoleModel.query().findById(testRecord.id).withGraphFetched('role')
 
         expect(result).to.be.instanceOf(GroupRoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -67,16 +63,13 @@ describe('Group Role model', () => {
 
     describe('when linking to group', () => {
       it('can successfully run a related query', async () => {
-        const query = await GroupRoleModel.query()
-          .innerJoinRelated('group')
+        const query = await GroupRoleModel.query().innerJoinRelated('group')
 
         expect(query).to.exist()
       })
 
       it('can eager load the group', async () => {
-        const result = await GroupRoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('group')
+        const result = await GroupRoleModel.query().findById(testRecord.id).withGraphFetched('group')
 
         expect(result).to.be.instanceOf(GroupRoleModel)
         expect(result.id).to.equal(testRecord.id)

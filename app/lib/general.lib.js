@@ -29,7 +29,7 @@ const { randomUUID } = require('crypto')
  * @param {string} message - the message to log
  * @param {object} [data] - additional data to include with the log output
  */
-function calculateAndLogTimeTaken (startTime, message, data = {}) {
+function calculateAndLogTimeTaken(startTime, message, data = {}) {
   const endTime = currentTimeInNanoseconds()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
@@ -64,7 +64,7 @@ function calculateAndLogTimeTaken (startTime, message, data = {}) {
  *
  * @returns {bigint} the current time in nanoseconds
  */
-function currentTimeInNanoseconds () {
+function currentTimeInNanoseconds() {
   return process.hrtime.bigint()
 }
 
@@ -76,7 +76,7 @@ function currentTimeInNanoseconds () {
  *
  * @returns {object} An object containing a `startDate` and `endDate`
  */
-function determineCurrentFinancialYear () {
+function determineCurrentFinancialYear() {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
 
@@ -108,7 +108,7 @@ function determineCurrentFinancialYear () {
  * @param {string} [text='Changes made'] - text for the notification
  *
  */
-function flashNotification (yar, title = 'Updated', text = 'Changes made') {
+function flashNotification(yar, title = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
     title,
     text
@@ -131,7 +131,7 @@ function flashNotification (yar, title = 'Updated', text = 'Changes made') {
  *
  * @returns {string} a randomly generated UUID
  */
-function generateUUID () {
+function generateUUID() {
   return randomUUID({ disableEntropyCache: true })
 }
 
@@ -164,7 +164,7 @@ function generateUUID () {
  *
  * @returns {boolean} Returns true if there _any_ check period overlaps with a reference period, else false
  */
-function periodsOverlap (referencePeriods, checkPeriods) {
+function periodsOverlap(referencePeriods, checkPeriods) {
   for (const referencePeriod of referencePeriods) {
     const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
       if (checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate) {
@@ -193,7 +193,7 @@ function periodsOverlap (referencePeriods, checkPeriods) {
  *
  * @returns {string} The date now as an ISO string, for example `'2023-01-13T18:29:51.682Z'`
  */
-function timestampForPostgres () {
+function timestampForPostgres() {
   return new Date().toISOString()
 }
 
@@ -229,7 +229,7 @@ function timestampForPostgres () {
  *
  * @returns {boolean} true if a match else false
  */
-function transactionsMatch (left, right) {
+function transactionsMatch(left, right) {
   // When we put together this matching logic our instincts were to try and do something 'better' than this long,
   // chained `&&` statement. But whatever we came up with was
   //
@@ -238,7 +238,8 @@ function transactionsMatch (left, right) {
   //
   // We also believe this makes it easy to see what properties are being compared. Plus the moment something doesn't
   // match we bail. So, much as it feels 'wrong', we are sticking with it!
-  return left.chargeType === right.chargeType &&
+  return (
+    left.chargeType === right.chargeType &&
     left.chargeCategoryCode === right.chargeCategoryCode &&
     left.billableDays === right.billableDays &&
     left.section126Factor === right.section126Factor &&
@@ -250,6 +251,7 @@ function transactionsMatch (left, right) {
     left.supportedSource === right.supportedSource &&
     left.supportedSourceName === right.supportedSourceName &&
     left.waterCompanyCharge === right.waterCompanyCharge
+  )
 }
 
 module.exports = {

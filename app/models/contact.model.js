@@ -37,11 +37,11 @@ const BaseModel = require('./base.model.js')
  *
  */
 class ContactModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'contacts'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
@@ -83,7 +83,7 @@ class ContactModel extends BaseModel {
    *
    * @returns {string} The name for the contact derived from its various parts
    */
-  $name () {
+  $name() {
     if (this.contactType === 'department') {
       return this.department
     }
@@ -104,7 +104,7 @@ class ContactModel extends BaseModel {
     return onlyPopulatedNameParts.join(' ')
   }
 
-  _determineInitials () {
+  _determineInitials() {
     if (this.initials) {
       return this.initials
     }

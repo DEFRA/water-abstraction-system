@@ -5,8 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 
 // Things we need to stub
 const FetchBillSummaryService = require('../../../app/services/bills/fetch-bill-summary.service.js')
@@ -50,19 +53,17 @@ describe('Remove Bill service', () => {
   })
 })
 
-function _billSummary () {
-  return {
-    id: '71d03336-f683-42fe-b67c-c861f25f1fbd',
-    netAmount: 1045,
-    billingAccount: {
-      id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
-      accountNumber: 'T65757520A',
-      company: {
-        id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
-        name: 'Example Trading Ltd',
-        type: 'organisation'
-      },
-      billingAccountAddresses: [{
+function _billSummary() {
+  const billingAccount = BillingAccountModel.fromJson({
+    id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
+    accountNumber: 'T65757520A',
+    company: {
+      id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
+      name: 'Example Trading Ltd',
+      type: 'organisation'
+    },
+    billingAccountAddresses: [
+      {
         id: '1d440029-745a-47ec-a43e-9f4a36014126',
         company: null,
         contact: {
@@ -77,8 +78,14 @@ function _billSummary () {
           salutation: null,
           suffix: null
         }
-      }]
-    },
+      }
+    ]
+  })
+
+  return {
+    id: '71d03336-f683-42fe-b67c-c861f25f1fbd',
+    netAmount: 1045,
+    billingAccount,
     billLicences: [
       {
         id: '9304f6b8-0664-4fec-98e1-8fd16144315c',

@@ -22,9 +22,9 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  * @param {object[]} years - The years that the licence can be flagged for
  * @param {boolean} twoPartTariff - If there are two-part tariff indicators on the licence
  *
- * @returns {object[]} - The years that can be flagged for supplementary billing
+ * @returns {Promise<object[]>} - The years that can be flagged for supplementary billing
  */
-async function go (regionId, years, twoPartTariff) {
+async function go(regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
 }
 
@@ -35,13 +35,15 @@ async function go (regionId, years, twoPartTariff) {
  *
  * @private
  */
-async function _supplementaryBillingYears (regionId, years, twoPartTariff) {
+async function _supplementaryBillingYears(regionId, years, twoPartTariff) {
   const batchType = twoPartTariff ? 'two_part_tariff' : 'annual'
+  const billRunStatus = ['sent', 'ready', 'review', 'sending']
 
   const billRuns = await BillRunModel.query()
     .distinct('toFinancialYearEnding')
     .where('regionId', regionId)
     .where('batchType', batchType)
+    .whereIn('status', billRunStatus)
     .whereIn('toFinancialYearEnding', years)
 
   return billRuns.map((billRun) => {

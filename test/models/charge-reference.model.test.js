@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,13 +28,66 @@ const TransactionModel = require('../../app/models/transaction.model.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 
 describe('Charge Reference model', () => {
+  let testBillRunVolumes
+  let testChargeCategory
+  let testChargeElements
+  let testChargeVersion
   let testRecord
+  let testReviewChargeReferences
+  let testPurpose
+  let testTransactions
+
+  before(async () => {
+    // Link purpose
+    testPurpose = PurposeHelper.select()
+    const { id: purposeId } = testPurpose
+
+    // Link charge version
+    testChargeVersion = await ChargeVersionHelper.add()
+    const { id: chargeVersionId } = testChargeVersion
+
+    // Link charge category
+    testChargeCategory = ChargeCategoryHelper.select()
+    const { id: chargeCategoryId } = testChargeCategory
+
+    // Test record
+    testRecord = await ChargeReferenceHelper.add({ chargeCategoryId, chargeVersionId, purposeId })
+    const { id } = testRecord
+
+    // Link bill run volumes
+    testBillRunVolumes = []
+    for (let i = 0; i < 2; i++) {
+      const billRunVolume = await BillRunVolumeHelper.add({ chargeReferenceId: id })
+
+      testBillRunVolumes.push(billRunVolume)
+    }
+
+    // Link charge elements
+    testChargeElements = []
+    for (let i = 0; i < 2; i++) {
+      const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: testRecord.id })
+
+      testChargeElements.push(chargeElement)
+    }
+
+    // Link review charge references
+    testReviewChargeReferences = []
+    for (let i = 0; i < 2; i++) {
+      const reviewChargeReference = await ReviewChargeReferenceHelper.add({ chargeReferenceId: testRecord.id })
+
+      testReviewChargeReferences.push(reviewChargeReference)
+    }
+
+    // Link transactions
+    testTransactions = []
+    for (let i = 0; i < 2; i++) {
+      const transaction = await TransactionHelper.add({ chargeReferenceId: testRecord.id })
+
+      testTransactions.push(transaction)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ChargeReferenceHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ChargeReferenceModel.query().findById(testRecord.id)
 
@@ -45,31 +98,14 @@ describe('Charge Reference model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill run volumes', () => {
-      let testBillRunVolumes
-
-      beforeEach(async () => {
-        testRecord = await ChargeReferenceHelper.add()
-        const { id } = testRecord
-
-        testBillRunVolumes = []
-        for (let i = 0; i < 2; i++) {
-          const billRunVolume = await BillRunVolumeHelper.add({ chargeReferenceId: id })
-
-          testBillRunVolumes.push(billRunVolume)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('billRunVolumes')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('billRunVolumes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bills', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRunVolumes')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('billRunVolumes')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -82,27 +118,14 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to charge category', () => {
-      let testChargeCategory
-
-      beforeEach(async () => {
-        testChargeCategory = ChargeCategoryHelper.select()
-
-        const { id: chargeCategoryId } = testChargeCategory
-
-        testRecord = await ChargeReferenceHelper.add({ chargeCategoryId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeCategory')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeCategory')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge category', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeCategory')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeCategory')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -113,30 +136,14 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to charge elements', () => {
-      let testChargeElements
-
-      beforeEach(async () => {
-        testRecord = await ChargeReferenceHelper.add()
-
-        testChargeElements = []
-        for (let i = 0; i < 2; i++) {
-          const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: testRecord.id })
-
-          testChargeElements.push(chargeElement)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeElements')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge elements', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeElements')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -149,27 +156,14 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to charge version', () => {
-      let testChargeVersion
-
-      beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add()
-
-        const { id: chargeVersionId } = testChargeVersion
-
-        testRecord = await ChargeReferenceHelper.add({ chargeVersionId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargeVersion')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('chargeVersion')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersion')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -180,27 +174,14 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to purpose', () => {
-      let testPurpose
-
-      beforeEach(async () => {
-        testPurpose = PurposeHelper.select()
-
-        const { id: purposeId } = testPurpose
-
-        testRecord = await ChargeReferenceHelper.add({ purposeId })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('purpose')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the purpose', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('purpose')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
@@ -211,22 +192,8 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to review charge references', () => {
-      let testReviewChargeReferences
-
-      beforeEach(async () => {
-        testRecord = await ChargeReferenceHelper.add()
-
-        testReviewChargeReferences = []
-        for (let i = 0; i < 2; i++) {
-          const reviewChargeReference = await ReviewChargeReferenceHelper.add({ chargeReferenceId: testRecord.id })
-
-          testReviewChargeReferences.push(reviewChargeReference)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('reviewChargeReferences')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('reviewChargeReferences')
 
         expect(query).to.exist()
       })
@@ -247,30 +214,14 @@ describe('Charge Reference model', () => {
     })
 
     describe('when linking to transactions', () => {
-      let testTransactions
-
-      beforeEach(async () => {
-        testRecord = await ChargeReferenceHelper.add()
-
-        testTransactions = []
-        for (let i = 0; i < 2; i++) {
-          const transaction = await TransactionHelper.add({ chargeReferenceId: testRecord.id })
-
-          testTransactions.push(transaction)
-        }
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('transactions')
+        const query = await ChargeReferenceModel.query().innerJoinRelated('transactions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the transactions', async () => {
-        const result = await ChargeReferenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('transactions')
+        const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('transactions')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.id).to.equal(testRecord.id)

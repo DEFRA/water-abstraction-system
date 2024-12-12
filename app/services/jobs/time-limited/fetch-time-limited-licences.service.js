@@ -23,7 +23,7 @@ const { db } = require('../../../../db/db.js')
  * @returns {Promise<object[]>} The licence IDs with time-limited elements and their current licence version ID (needed
  * else we break the workflow). Also the ID of the charge version that has the time limited charge element
  */
-async function go () {
+async function go() {
   // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to
   // charge purposes! Our Objection JS skills failed us as we could not get the query to work using innerJoinRelated()
   return db
@@ -34,9 +34,7 @@ async function go () {
     .innerJoin('chargeReferences as cr', 'cv.id', 'cr.chargeVersionId')
     .innerJoin('chargeElements as ce', 'cr.id', 'ce.chargeReferenceId')
     .where((builder) => {
-      builder
-        .whereNull('l.expiredDate')
-        .orWhere('l.expiredDate', '>', new Date())
+      builder.whereNull('l.expiredDate').orWhere('l.expiredDate', '>', new Date())
     })
     .whereNull('l.revokedDate')
     .whereNull('l.lapsedDate')
@@ -46,16 +44,10 @@ async function go () {
     .where('cv.status', 'current')
     .whereNotNull('ce.timeLimitedEndDate')
     .where('ce.timeLimitedEndDate', '<', _offSetCurrentDateByDays(50))
-    .whereNotExists(
-      db
-        .select(1)
-        .from('workflows as w')
-        .whereColumn('l.id', 'w.licenceId')
-        .whereNull('w.deletedAt')
-    )
+    .whereNotExists(db.select(1).from('workflows as w').whereColumn('l.id', 'w.licenceId').whereNull('w.deletedAt'))
 }
 
-function _offSetCurrentDateByDays (days) {
+function _offSetCurrentDateByDays(days) {
   const date = new Date()
 
   date.setDate(date.getDate() + days)

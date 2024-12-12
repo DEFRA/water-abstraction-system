@@ -8,7 +8,17 @@ const RegionModel = require('../../app/models/region.model.js')
 
 const ServerConfig = require('../../config/server.config.js')
 
-async function seed () {
+/**
+ * Seed the regions reference data
+ *
+ * Water.regions does not have a composite key constraint for chargeRegionId and naldRegionId.
+ *
+ * We do not want multiple occurrences of the column pair chargeRegionId and naldRegionId.
+ *
+ * We manually check if the combination exits already and update / insert accordingly.
+ *
+ */
+async function seed() {
   for (const region of regions) {
     const exists = await _exists(region)
 
@@ -20,7 +30,7 @@ async function seed () {
   }
 }
 
-async function _applyTestFlag (region, id) {
+async function _applyTestFlag(region, id) {
   if (region.name !== 'Test') {
     return null
   }
@@ -28,7 +38,7 @@ async function _applyTestFlag (region, id) {
   return db('regions').withSchema('water').update('isTest', true).where('regionId', id)
 }
 
-async function _exists (region) {
+async function _exists(region) {
   const { chargeRegionId, naldRegionId } = region
 
   const result = await RegionModel.query()
@@ -41,7 +51,7 @@ async function _exists (region) {
   return !!result
 }
 
-async function _insert (region) {
+async function _insert(region) {
   // The Bill Run & Test regions are only intended to be seeded in our non-production environments
   if ((region.name === 'Bill Run' || region.name === 'Test') && ServerConfig.environment === 'production') {
     return
@@ -52,7 +62,7 @@ async function _insert (region) {
   return _applyTestFlag(region, result.id)
 }
 
-async function _update (region) {
+async function _update(region) {
   const { chargeRegionId, displayName, naldRegionId, name } = region
 
   return RegionModel.query()

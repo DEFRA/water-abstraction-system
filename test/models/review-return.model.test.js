@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,16 +49,13 @@ describe('Review Return model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewReturnModel.query()
-          .innerJoinRelated('reviewLicence')
+        const query = await ReviewReturnModel.query().innerJoinRelated('reviewLicence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review licence', async () => {
-        const result = await ReviewReturnModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewLicence')
+        const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewLicence')
 
         expect(result).to.be.instanceOf(ReviewReturnModel)
         expect(result.id).to.equal(testRecord.id)
@@ -80,16 +77,13 @@ describe('Review Return model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewReturnModel.query()
-          .innerJoinRelated('returnLog')
+        const query = await ReviewReturnModel.query().innerJoinRelated('returnLog')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return log', async () => {
-        const result = await ReviewReturnModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnLog')
+        const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('returnLog')
 
         expect(result).to.be.instanceOf(ReviewReturnModel)
         expect(result.id).to.equal(testRecord.id)
@@ -120,16 +114,13 @@ describe('Review Return model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewReturnModel.query()
-          .innerJoinRelated('reviewChargeElements')
+        const query = await ReviewReturnModel.query().innerJoinRelated('reviewChargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review charge elements', async () => {
-        const result = await ReviewReturnModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewChargeElements')
+        const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewChargeElements')
 
         expect(result).to.be.instanceOf(ReviewReturnModel)
         expect(result.id).to.equal(testRecord.id)

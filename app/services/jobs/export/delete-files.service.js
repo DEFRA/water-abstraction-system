@@ -12,7 +12,7 @@ const fsPromises = require('fs').promises
  *
  * @param {string} path - The folder or file path that we want to delete
  */
-async function go (path) {
+async function go(path) {
   try {
     await fsPromises.rm(path, { recursive: true, force: true })
   } catch (error) {

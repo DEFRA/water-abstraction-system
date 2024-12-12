@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -51,31 +51,33 @@ const billingChargeCategoriesColumnInfo = [
   'maxVolume'
 ]
 
-const csvHeaders = '"billingChargeCategoryId",' +
-'"reference",' +
-'"subsistenceCharge",' +
-'"description",' +
-'"shortDescription",' +
-'"dateCreated",' +
-'"dateUpdated",' +
-'"isTidal",' +
-'"lossFactor",' +
-'"modelTier",' +
-'"isRestrictedSource",' +
-'"minVolume",' +
-'"maxVolume"\n'
+const csvHeaders =
+  '"billingChargeCategoryId",' +
+  '"reference",' +
+  '"subsistenceCharge",' +
+  '"description",' +
+  '"shortDescription",' +
+  '"dateCreated",' +
+  '"dateUpdated",' +
+  '"isTidal",' +
+  '"lossFactor",' +
+  '"modelTier",' +
+  '"isRestrictedSource",' +
+  '"minVolume",' +
+  '"maxVolume"\n'
 
-const csvValues = '"20146cdc-9b40-4769-aa78-b51c17080d56",' +
-'"4.1.1",9700,' +
-'"Low loss tidal abstraction of water up to and ""including"" 25,002 megalitres a year where no model applies",' +
-'"Low loss, tidal, up to and including 25,002 ML/yr",' +
-'2022-12-14T18:39:45.000Z,2022-12-14T18:39:45.000Z,' +
-'true,' +
-',' +
-',' +
-'false,' +
-',' +
-'25002\n'
+const csvValues =
+  '"20146cdc-9b40-4769-aa78-b51c17080d56",' +
+  '"4.1.1",9700,' +
+  '"Low loss tidal abstraction of water up to and ""including"" 25,002 megalitres a year where no model applies",' +
+  '"Low loss, tidal, up to and including 25,002 ML/yr",' +
+  '2022-12-14T18:39:45.000Z,2022-12-14T18:39:45.000Z,' +
+  'true,' +
+  ',' +
+  ',' +
+  'false,' +
+  ',' +
+  '25002\n'
 
 describe('Convert to CSV service', () => {
   describe('when given a row of data to convert', () => {

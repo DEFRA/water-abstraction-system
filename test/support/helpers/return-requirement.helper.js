@@ -27,7 +27,7 @@ const ReturnRequirementModel = require('../../../app/models/return-requirement.m
  *
  * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementModel.query()
@@ -45,28 +45,43 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
-  const legacyId = data.legacyId ? data.legacyId : randomInteger(100, 99999)
+function defaults(data = {}) {
+  const legacyId = data.legacyId ? data.legacyId : generateLegacyId()
+  const regionId = data.regionId ? data.regionId : '9'
 
   const defaults = {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    externalId: `9:${legacyId}`,
+    externalId: `${regionId}:${legacyId}`,
     legacyId,
     returnsFrequency: 'day',
     returnVersionId: generateUUID(),
     siteDescription: 'BOREHOLE AT AVALON'
   }
 
-  return {
+  const returnRequirement = {
     ...defaults,
     ...data
   }
+
+  delete returnRequirement.regionId
+
+  return returnRequirement
+}
+
+/**
+ * Generates a return requirement legacy ID (also known as return reference)
+ *
+ * @returns {number}
+ */
+function generateLegacyId() {
+  return randomInteger(100, 19999999)
 }
 
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLegacyId
 }

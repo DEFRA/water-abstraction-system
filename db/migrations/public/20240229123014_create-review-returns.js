@@ -4,8 +4,7 @@ const tableName = 'review_returns'
 const replacedTableName = 'review_return_results'
 
 exports.up = function (knex) {
-  return knex
-    .schema
+  return knex.schema
     .dropTableIfExists(replacedTableName)
     .createTable(tableName, (table) => {
       // Primary Key
@@ -45,8 +44,7 @@ exports.up = function (knex) {
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
+  return knex.schema
     .dropTableIfExists(tableName)
     .createTable(replacedTableName, (table) => {
       // Primary Key

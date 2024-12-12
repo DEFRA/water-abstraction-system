@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -618,7 +618,7 @@ describe('Import Licence Version Purpose validator', () => {
   })
 })
 
-function _transformedLicenceVersionPurpose () {
+function _transformedLicenceVersionPurpose() {
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,

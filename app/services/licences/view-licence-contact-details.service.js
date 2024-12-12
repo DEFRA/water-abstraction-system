@@ -15,7 +15,7 @@ const FetchLicenceContactDetailsService = require('./fetch-licence-contact-detai
  *
  * @returns {Promise<object>} The view data for the licence contacts page
  */
-async function go (licenceId) {
+async function go(licenceId) {
   const licence = await FetchLicenceContactDetailsService.go(licenceId)
   const formattedData = await ViewLicenceContactDetailsPresenter.go(licence)
 

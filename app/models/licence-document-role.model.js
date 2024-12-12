@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class LicenceDocumentRoleModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceDocumentRoles'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       address: {
         relation: Model.BelongsToOneRelation,

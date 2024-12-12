@@ -20,7 +20,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} An object containing arrays of bills and billLicences objects
  */
-async function go (chargeVersions, billRunId, billingPeriod) {
+async function go(chargeVersions, billRunId, billingPeriod) {
   const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
 
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
@@ -29,7 +29,7 @@ async function go (chargeVersions, billRunId, billingPeriod) {
   return { bills, billLicences }
 }
 
-function _generateBill (billingAccountId, accountNumber, billRunId, financialYearEnding) {
+function _generateBill(billingAccountId, accountNumber, billRunId, financialYearEnding) {
   return {
     id: generateUUID(),
     accountNumber,
@@ -41,7 +41,7 @@ function _generateBill (billingAccountId, accountNumber, billRunId, financialYea
   }
 }
 
-function _generateBillLicence (billId, licenceId, licenceRef) {
+function _generateBillLicence(billId, licenceId, licenceRef) {
   return {
     id: generateUUID(),
     billId,
@@ -65,7 +65,7 @@ function _generateBillLicence (billId, licenceId, licenceRef) {
  *
  * @private
  */
-function _preGenerateBillLicences (chargeVersions, bills) {
+function _preGenerateBillLicences(chargeVersions, bills) {
   const keyedBillLicences = chargeVersions.reduce((acc, chargeVersion) => {
     const { id: billId } = bills[chargeVersion.billingAccountId]
     const { id: licenceId, licenceRef } = chargeVersion.licence
@@ -87,7 +87,7 @@ function _preGenerateBillLicences (chargeVersions, bills) {
   return keyedBillLicences
 }
 
-function _billLicenceKey (billId, licenceId) {
+function _billLicenceKey(billId, licenceId) {
   return `${billId}-${licenceId}`
 }
 
@@ -105,7 +105,7 @@ function _billLicenceKey (billId, licenceId) {
  *
  * @private
  */
-function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
+function _preGenerateBills(billingAccounts, billRunId, billingPeriod) {
   const keyedBills = billingAccounts.reduce((acc, billingAccount) => {
     const { id: billingAccountId, accountNumber } = billingAccount
 
@@ -113,12 +113,7 @@ function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
     // bill licence already exists in the object before generating one
     return {
       ...acc,
-      [billingAccountId]: _generateBill(
-        billingAccountId,
-        accountNumber,
-        billRunId,
-        billingPeriod.endDate.getFullYear()
-      )
+      [billingAccountId]: _generateBill(billingAccountId, accountNumber, billRunId, billingPeriod.endDate.getFullYear())
     }
   }, {})
 

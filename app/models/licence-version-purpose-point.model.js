@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class LicenceVersionPurposePointModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'licenceVersionPurposePoints'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceVersionPurpose: {
         relation: Model.BelongsToOneRelation,

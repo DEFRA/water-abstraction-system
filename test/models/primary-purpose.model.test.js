@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -43,7 +43,8 @@ describe('Primary Purpose model', () => {
         testLicenceVersionPurposes = []
         for (let i = 0; i < 2; i++) {
           const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-            notes: `TEST licence Version purpose ${i}`, primaryPurposeId: testRecord.id
+            notes: `TEST licence Version purpose ${i}`,
+            primaryPurposeId: testRecord.id
           })
 
           testLicenceVersionPurposes.push(licenceVersionPurpose)
@@ -51,8 +52,7 @@ describe('Primary Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PrimaryPurposeModel.query()
-          .innerJoinRelated('licenceVersionPurposes')
+        const query = await PrimaryPurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
         expect(query).to.exist()
       })
@@ -81,7 +81,8 @@ describe('Primary Purpose model', () => {
         testReturnRequirementPurposes = []
         for (let i = 0; i < 2; i++) {
           const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-            alias: `TEST return requirement purpose ${i}`, primaryPurposeId: testRecord.id
+            alias: `TEST return requirement purpose ${i}`,
+            primaryPurposeId: testRecord.id
           })
 
           testReturnRequirementPurposes.push(returnRequirementPurpose)
@@ -89,8 +90,7 @@ describe('Primary Purpose model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PrimaryPurposeModel.query()
-          .innerJoinRelated('returnRequirementPurposes')
+        const query = await PrimaryPurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 
         expect(query).to.exist()
       })

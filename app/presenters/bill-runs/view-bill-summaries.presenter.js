@@ -7,7 +7,16 @@
 
 const { formatMoney } = require('../base.presenter.js')
 
-function go (billSummaries) {
+/**
+ * Formats summary data of bills connected to a bill run for the bill run summary page
+ *
+ * @param {object[]} billSummaries - An array of bill summary objects.
+ *
+ * @returns {object[]} An array of bill groups. Each group contains a type, a caption, and an array of bills. If there
+ * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
+ * grouped under 'other-abstractors'.
+ */
+function go(billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
 
@@ -32,17 +41,9 @@ function go (billSummaries) {
   return billGroups
 }
 
-function _bills (summaries) {
+function _bills(summaries) {
   return summaries.map((summary) => {
-    const {
-      agentName,
-      allLicences,
-      id,
-      companyName,
-      financialYearEnding,
-      accountNumber,
-      netAmount
-    } = summary
+    const { agentName, allLicences, id, companyName, financialYearEnding, accountNumber, netAmount } = summary
 
     const licences = allLicences.split(',')
 
@@ -58,7 +59,7 @@ function _bills (summaries) {
   })
 }
 
-function _billingContact (agentName, companyName) {
+function _billingContact(agentName, companyName) {
   if (agentName) {
     return agentName
   }
@@ -66,7 +67,7 @@ function _billingContact (agentName, companyName) {
   return companyName
 }
 
-function _caption (bills, isWaterCompany) {
+function _caption(bills, isWaterCompany) {
   const numberOfRows = bills.length
 
   if (numberOfRows === 1) {
@@ -76,7 +77,7 @@ function _caption (bills, isWaterCompany) {
   return isWaterCompany ? `${numberOfRows} water companies` : `${numberOfRows} other abstractors`
 }
 
-function _otherAbstractors (summaries) {
+function _otherAbstractors(summaries) {
   const filteredSummaries = summaries.filter((summary) => {
     return !summary.waterCompany
   })
@@ -84,7 +85,7 @@ function _otherAbstractors (summaries) {
   return _bills(filteredSummaries)
 }
 
-function _waterCompanies (summaries) {
+function _waterCompanies(summaries) {
   const filteredSummaries = summaries.filter((summary) => {
     return summary.waterCompany
   })

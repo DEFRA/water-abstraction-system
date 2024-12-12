@@ -19,7 +19,7 @@ const servicesConfig = require('../../config/services.config.js')
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function deleteRequest (path) {
+async function deleteRequest(path) {
   const result = await _sendRequest(path, BaseRequest.delete)
 
   return _parseResult(result)
@@ -32,7 +32,7 @@ async function deleteRequest (path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get (path) {
+async function get(path) {
   const result = await _sendRequest(path, BaseRequest.get)
 
   return _parseResult(result)
@@ -45,7 +45,7 @@ async function get (path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function patch (path) {
+async function patch(path) {
   const result = await _sendRequest(path, BaseRequest.patch)
 
   return _parseResult(result)
@@ -59,7 +59,7 @@ async function patch (path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post (path, body = {}) {
+async function post(path, body = {}) {
   const result = await _sendRequest(path, BaseRequest.post, body)
 
   return _parseResult(result)
@@ -70,7 +70,7 @@ async function post (path, body = {}) {
  *
  * @private
  */
-async function _sendRequest (path, method, body) {
+async function _sendRequest(path, method, body) {
   const authentication = await global.HapiServerMethods.getChargingModuleToken()
   const options = _requestOptions(authentication.accessToken, body)
 
@@ -92,7 +92,7 @@ async function _sendRequest (path, method, body) {
  *
  * @private
  */
-function _requestOptions (accessToken, body) {
+function _requestOptions(accessToken, body) {
   return {
     prefixUrl: servicesConfig.chargingModule.url,
     headers: {
@@ -111,7 +111,7 @@ function _requestOptions (accessToken, body) {
  *
  * @private
  */
-function _parseResult (result) {
+function _parseResult(result) {
   const { body, headers, statusCode } = result.response
 
   if (body) {

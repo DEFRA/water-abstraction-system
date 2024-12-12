@@ -26,7 +26,7 @@ const RequestNotifierLib = require('./request-notifier.lib.js')
  * method so it throws an error after logging.
  */
 class BoomNotifierLib extends RequestNotifierLib {
-  omfg (message, data = {}) {
+  omfg(message, data = {}) {
     super.omfg(message, data)
     throw Boom.badData(message, data)
   }

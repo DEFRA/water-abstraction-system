@@ -21,56 +21,34 @@ const BillLicenceModel = require('../../models/bill-licence.model.js')
  * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill, billing account and bill
  * run. Also all transactions linked to the bill licence so we can work out the total for the licence
  */
-async function go (billLicenceId) {
+async function go(billLicenceId) {
   return _fetchBillLicence(billLicenceId)
 }
 
-async function _fetchBillLicence (billLicenceId) {
+async function _fetchBillLicence(billLicenceId) {
   const results = await BillLicenceModel.query()
     .findById(billLicenceId)
-    .select([
-      'id',
-      'licenceId',
-      'licenceRef'
-    ])
+    .select(['id', 'licenceId', 'licenceRef'])
     .withGraphFetched('bill')
     .modifyGraph('bill', (builder) => {
-      builder.select([
-        'id',
-        'accountNumber'
-      ])
+      builder.select(['id', 'accountNumber'])
     })
     .withGraphFetched('bill.billingAccount')
     .modifyGraph('bill.billingAccount', (builder) => {
-      builder.select([
-        'id',
-        'accountNumber'
-      ])
+      builder.select(['id', 'accountNumber'])
     })
     .withGraphFetched('bill.billingAccount.company')
     .modifyGraph('bill.billingAccount.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
+      builder.select(['id', 'name', 'type'])
     })
     .withGraphFetched('bill.billingAccount.billingAccountAddresses')
     // The current billing account address is denoted by the fact it is the only one with a null end date
     .modifyGraph('bill.billingAccount.billingAccountAddresses', (builder) => {
-      builder
-        .select([
-          'id'
-        ])
-        .whereNull('endDate')
+      builder.select(['id']).whereNull('endDate')
     })
     .withGraphFetched('bill.billingAccount.billingAccountAddresses.company')
     .modifyGraph('bill.billingAccount.billingAccountAddresses.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
+      builder.select(['id', 'name', 'type'])
     })
     .withGraphFetched('bill.billingAccount.billingAccountAddresses.contact')
     .modifyGraph('bill.billingAccount.billingAccountAddresses.contact', (builder) => {
@@ -102,18 +80,11 @@ async function _fetchBillLicence (billLicenceId) {
     })
     .withGraphFetched('bill.billRun.region')
     .modifyGraph('bill.billRun.region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
     .withGraphFetched('transactions')
     .modifyGraph('transactions', (builder) => {
-      builder.select([
-        'id',
-        'credit',
-        'netAmount'
-      ])
+      builder.select(['id', 'credit', 'netAmount'])
     })
 
   return results

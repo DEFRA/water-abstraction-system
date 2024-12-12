@@ -20,6 +20,7 @@ const BaseNotifierLib = require('./base-notifier.lib.js')
  * related log entries and Errbit notifications by using the ID.
  */
 class RequestNotifierLib extends BaseNotifierLib {
+  // eslint-disable-next-line jsdoc/lines-before-block
   /**
    * Instantiate a new instance
    *
@@ -30,7 +31,7 @@ class RequestNotifierLib extends BaseNotifierLib {
    * @param {object} notifier - An instance of the {@link https://github.com/airbrake/airbrake-js|airbrake-js} `notify()`
    * method which our 'AirbrakePlugin` adds to Hapi
    */
-  constructor (id, logger, notifier) {
+  constructor(id, logger, notifier) {
     super(logger, notifier)
     this._id = id
   }
@@ -56,7 +57,7 @@ class RequestNotifierLib extends BaseNotifierLib {
    *
    * @private
    */
-  _formatLogPacket (data, error) {
+  _formatLogPacket(data, error) {
     const dataWithRequestId = {
       ...data,
       req: {
@@ -81,7 +82,7 @@ class RequestNotifierLib extends BaseNotifierLib {
    *
    * @private
    */
-  _formatNotifyPacket (data, error, message) {
+  _formatNotifyPacket(data, error, message) {
     const dataWithRequestId = {
       ...data,
       req: {

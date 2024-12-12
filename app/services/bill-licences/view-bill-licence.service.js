@@ -16,7 +16,7 @@ const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bi
  * @returns {Promise<object>} a formatted representation of the bill licence and its transactions for use in the bill
  * licence view page
  */
-async function go (id) {
+async function go(id) {
   const billLicence = await FetchBillLicenceService.go(id)
 
   return ViewBillLicencePresenter.go(billLicence)

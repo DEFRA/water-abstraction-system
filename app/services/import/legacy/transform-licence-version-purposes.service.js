@@ -19,12 +19,13 @@ const LicenceVersionPurposeValidator = require('../../../validators/import/licen
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  */
-async function go (regionCode, naldLicenceId, transformedLicence) {
+async function go(regionCode, naldLicenceId, transformedLicence) {
   const naldLicenceVersionPurposes = await FetchLicenceVersionPurposesService.go(regionCode, naldLicenceId)
 
   naldLicenceVersionPurposes.forEach((naldLicenceVersionPurpose) => {
     const matchingLicenceVersion = _matchingLicenceVersion(
-      transformedLicence.licenceVersions, naldLicenceVersionPurpose
+      transformedLicence.licenceVersions,
+      naldLicenceVersionPurpose
     )
 
     const transformedLicenceVersionPurpose = LicenceVersionPurposePresenter.go(naldLicenceVersionPurpose)
@@ -35,7 +36,7 @@ async function go (regionCode, naldLicenceId, transformedLicence) {
   })
 }
 
-function _matchingLicenceVersion (licenceVersions, naldLicenceVersionPurpose) {
+function _matchingLicenceVersion(licenceVersions, naldLicenceVersionPurpose) {
   return licenceVersions.find((licenceVersion) => {
     return licenceVersion.externalId === naldLicenceVersionPurpose.version_external_id
   })

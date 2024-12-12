@@ -20,7 +20,7 @@
  * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
-function go (request) {
+function go(request) {
   const stopResponse = _stopResponse(request)
 
   let statusCode = _extractStatusCode(request)
@@ -47,7 +47,7 @@ function go (request) {
  *
  * @private
  */
-function _extractStatusCode (request) {
+function _extractStatusCode(request) {
   const { response } = request
 
   if (response.isBoom) {
@@ -57,7 +57,7 @@ function _extractStatusCode (request) {
   return response.statusCode
 }
 
-function _logError (statusCode, request) {
+function _logError(statusCode, request) {
   const { response } = request
 
   if (statusCode === 404) {
@@ -88,7 +88,7 @@ function _logError (statusCode, request) {
  *
  * @private
  */
-function _stopResponse (request) {
+function _stopResponse(request) {
   // `isBoom` is only present when dealing with requests that have resulted in an error being thrown.
   // `plainOutput` is only present when the route's `options:` property has `app: { plainOutput: true }` applied.
   // !! typecasts undefined values into booleans which means we can be explicit in what we are dealing with.
@@ -112,7 +112,7 @@ function _stopResponse (request) {
  *
  * @private
  */
-function _determineSafeStatusCode (statusCode) {
+function _determineSafeStatusCode(statusCode) {
   // The status code will be a 2xx or 3xx so safe to return as is
   if (statusCode < 400) {
     return statusCode

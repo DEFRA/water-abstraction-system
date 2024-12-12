@@ -1,11 +1,9 @@
 'use strict'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists('gauging_stations')
-    .createView('monitoring_stations', (view) => {
-      view.as(knex('gauging_stations').withSchema('water').select([
+  return knex.schema.dropViewIfExists('gauging_stations').createView('monitoring_stations', (view) => {
+    view.as(
+      knex('gauging_stations').withSchema('water').select([
         'gauging_station_id AS id',
         'label',
         'lat',
@@ -23,16 +21,15 @@ exports.up = function (knex) {
         // 'is_test'
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists('monitoring_stations')
-    .createView('gauging_stations', (view) => {
-      view.as(knex('gauging_stations').withSchema('water').select([
+  return knex.schema.dropViewIfExists('monitoring_stations').createView('gauging_stations', (view) => {
+    view.as(
+      knex('gauging_stations').withSchema('water').select([
         'gauging_station_id AS id',
         'label',
         'lat',
@@ -50,6 +47,7 @@ exports.down = function (knex) {
         // 'is_test'
         'date_created AS created_at',
         'date_updated AS updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }

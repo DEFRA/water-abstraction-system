@@ -21,7 +21,7 @@ const SendToS3BucketService = require('./send-to-s3-bucket.service.js')
  *
  * @param {string} schemaName - The name of the database schema to export
  */
-async function go (schemaName) {
+async function go(schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
   let compressedSchemaPath
 
@@ -51,7 +51,7 @@ async function go (schemaName) {
  *
  * @private
  */
-function _folderToUpload (schemaName) {
+function _folderToUpload(schemaName) {
   const temporaryFilePath = os.tmpdir()
 
   return path.join(temporaryFilePath, schemaName)

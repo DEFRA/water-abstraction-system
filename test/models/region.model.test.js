@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -49,16 +49,13 @@ describe('Region model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await RegionModel.query()
-          .innerJoinRelated('billRuns')
+        const query = await RegionModel.query().innerJoinRelated('billRuns')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill runs', async () => {
-        const result = await RegionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billRuns')
+        const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('billRuns')
 
         expect(result).to.be.instanceOf(RegionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -85,16 +82,13 @@ describe('Region model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await RegionModel.query()
-          .innerJoinRelated('licences')
+        const query = await RegionModel.query().innerJoinRelated('licences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licences', async () => {
-        const result = await RegionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licences')
+        const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('licences')
 
         expect(result).to.be.instanceOf(RegionModel)
         expect(result.id).to.equal(testRecord.id)

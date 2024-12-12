@@ -16,15 +16,13 @@ const BaseModel = require('./base.model.js')
  * > contains these properties they will override the existing properties of the session instance.
  */
 class SessionModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'sessions'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'data'
-    ]
+  static get jsonAttributes() {
+    return ['data']
   }
 
   /**
@@ -46,7 +44,7 @@ class SessionModel extends BaseModel {
    *
    * @param {object} _queryContext - Objection.js query context which we do not use
    */
-  $afterFind (_queryContext) {
+  $afterFind(_queryContext) {
     for (const [key, value] of Object.entries(this.data)) {
       this[key] = value
     }
@@ -75,7 +73,7 @@ class SessionModel extends BaseModel {
    *
    * @returns {Promise<number>} - the number of affected rows. In our case this will always be 1!
    */
-  async $update () {
+  async $update() {
     const { id, createdAt, data, updatedAt, ...currentData } = this
 
     return this.$query().patch({ data: currentData })

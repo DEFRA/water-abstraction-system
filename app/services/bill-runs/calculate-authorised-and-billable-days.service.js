@@ -45,18 +45,18 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * problem is what this service tackles.
  *
  * @param {{startDate: Date, endDate: Date}} chargePeriod - Charge period is determined as the overlap between a charge
- *  version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
- *  version and billing period are compared the charge period's start date is the latest of the two, and the end date is
- *  the earliest of their end dates
+ * version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
+ * version and billing period are compared the charge period's start date is the latest of the two, and the end date is
+ * the earliest of their end dates
  * @param {{startDate: Date, endDate: Date}} billingPeriod - The period a bill run is being calculated for. Currently,
- *  this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
+ * this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
  * @param {module:ChargeReferenceModel} chargeReference - A charge version can have multiple charge references, though
- *  each will have a different reference, for example, 4.1.10. Each reference can have multiple charge elements and it's
- *  these that hold the abstraction period data
+ * each will have a different reference, for example, 4.1.10. Each reference can have multiple charge elements and it's
+ * these that hold the abstraction period data
  *
  * @returns {object} An object containing an `authorisedDays` and `billableDays` property
  */
-function go (chargePeriod, billingPeriod, chargeReference) {
+function go(chargePeriod, billingPeriod, chargeReference) {
   const { chargeElements } = chargeReference
 
   const authorisedAbstractionPeriods = []
@@ -102,7 +102,7 @@ function go (chargePeriod, billingPeriod, chargeReference) {
  *
  * @private
  */
-function _calculateDays (abstractionOverlapPeriod) {
+function _calculateDays(abstractionOverlapPeriod) {
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
 
   // ceil() always rounds up, even if the result is 1.1 (rounds to 2). We add 1 to make the calculation inclusive of
@@ -135,7 +135,7 @@ function _calculateDays (abstractionOverlapPeriod) {
  *
  * @private
  */
-function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
+function _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod) {
   const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)
   const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
 
@@ -145,7 +145,7 @@ function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod)
   }
 }
 
-function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
+function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
   const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
 
   const totalDays = consolidatedAbstractionPeriods.reduce((acc, abstractionPeriod) => {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -38,7 +38,10 @@ describe('Hapi Pino Ignore Request service', () => {
   describe('when the request is for an asset', () => {
     describe('and LOG_ASSET_REQUESTS is false', () => {
       it('returns true', () => {
-        const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/assets/stylesheets/application.css' })
+        const result = HapiPinoIgnoreRequestService.go(
+          { logAssetRequests: false },
+          { path: '/assets/stylesheets/application.css' }
+        )
 
         expect(result).to.be.true()
       })
@@ -46,7 +49,10 @@ describe('Hapi Pino Ignore Request service', () => {
 
     describe('and LOG_ASSET_REQUESTS is true', () => {
       it('returns false', () => {
-        const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: true }, { path: '/assets/stylesheets/application.css' })
+        const result = HapiPinoIgnoreRequestService.go(
+          { logAssetRequests: true },
+          { path: '/assets/stylesheets/application.css' }
+        )
 
         expect(result).to.be.false()
       })

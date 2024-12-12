@@ -17,7 +17,7 @@ const NALD_STATUSES = {
  *
  * @returns {object} the NALD licence version data transformed into the WRLS format ready for validation and persisting
  */
-function go (licenceVersion) {
+function go(licenceVersion) {
   return {
     endDate: licenceVersion.effective_end_date,
     externalId: licenceVersion.external_id,

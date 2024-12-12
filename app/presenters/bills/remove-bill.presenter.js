@@ -21,25 +21,18 @@ const {
  *
  * @returns {object} - the prepared bill summary data to be passed to the confirm remove a bill page
  */
-function go (bill) {
+function go(bill) {
   const { id: billId, billingAccount, billLicences, billRun } = bill
 
-  const {
-    billRunNumber,
-    billRunStatus,
-    billRunType,
-    chargeScheme,
-    dateCreated,
-    financialYear,
-    region
-  } = _billRunSummary(billRun)
+  const { billRunNumber, billRunStatus, billRunType, chargeScheme, dateCreated, financialYear, region } =
+    _billRunSummary(billRun)
 
   const accountNumber = billingAccount.accountNumber
   const licences = _licences(billLicences)
   const licencesText = licences.includes(',') ? 'Licences' : 'Licence'
 
   return {
-    accountName: _accountName(billingAccount),
+    accountName: billingAccount.$accountName(),
     accountNumber,
     billId,
     billRunNumber,
@@ -57,27 +50,8 @@ function go (bill) {
   }
 }
 
-function _accountName (billingAccount) {
-  const accountAddress = billingAccount.billingAccountAddresses[0]
-
-  if (accountAddress.company) {
-    return accountAddress.company.name
-  }
-
-  return billingAccount.company.name
-}
-
-function _billRunSummary (billRun) {
-  const {
-    batchType,
-    billRunNumber,
-    createdAt,
-    region,
-    scheme,
-    status,
-    summer,
-    toFinancialYearEnding
-  } = billRun
+function _billRunSummary(billRun) {
+  const { batchType, billRunNumber, createdAt, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
     billRunNumber,
@@ -90,7 +64,7 @@ function _billRunSummary (billRun) {
   }
 }
 
-function _licences (billLicences) {
+function _licences(billLicences) {
   const licenceReferences = billLicences.map((billLicence) => {
     return billLicence.licenceRef
   })
@@ -98,11 +72,11 @@ function _licences (billLicences) {
   return licenceReferences.join(', ')
 }
 
-function _pageTitle (accountName) {
+function _pageTitle(accountName) {
   return `You're about to remove the bill for ${accountName} from the bill run`
 }
 
-function _supplementaryMessage (licencesText) {
+function _supplementaryMessage(licencesText) {
   return `The ${licencesText.toLowerCase()} will go into the next supplementary bill run.`
 }
 

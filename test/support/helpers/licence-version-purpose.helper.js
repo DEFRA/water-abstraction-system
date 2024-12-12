@@ -32,7 +32,7 @@ const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
  *
  * @returns {Promise<module:LicenceVersionPurposeModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposeModel.query()
@@ -50,7 +50,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: primaryPurposeId } = PrimaryPurposeHelper.select()
   const { id: purposeId } = PurposeHelper.select()
   const { id: secondaryPurposeId } = SecondaryPurposeHelper.select()
@@ -82,7 +82,7 @@ function defaults (data = {}) {
  *
  * @returns {string} - A randomly generated external id
  */
-function generateLicenceVersionPurposeExternalId () {
+function generateLicenceVersionPurposeExternalId() {
   return `${randomInteger(0, 9)}:${randomInteger(10000, 99999)}`
 }
 

@@ -5,7 +5,7 @@
  * @module RootController
  */
 
-function index (_request, _h) {
+function index(_request, _h) {
   return { status: 'alive' }
 }
 

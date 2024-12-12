@@ -13,7 +13,7 @@ const Joi = require('joi')
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licence) {
+function go(licence) {
   const schema = Joi.object({
     expiredDate: Joi.date().allow(null),
     lapsedDate: Joi.date().allow(null),

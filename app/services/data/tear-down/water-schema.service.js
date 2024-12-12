@@ -12,11 +12,11 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>}
  */
-async function go () {
+async function go() {
   return _deleteAllTestData()
 }
 
-async function _deleteAllTestData () {
+async function _deleteAllTestData() {
   return db.raw(`
   ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL;
   ALTER TABLE water.billing_batches DISABLE TRIGGER ALL;
@@ -38,6 +38,98 @@ async function _deleteAllTestData () {
   ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
   ALTER TABLE water.return_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.scheduled_notification DISABLE TRIGGER ALL;
+
+  DELETE
+  FROM
+    "water"."licence_supplementary_years" AS "lsy"
+      USING "public"."licences" AS "l",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "lsy"."licence_id" = "l"."id"
+    AND "l"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_returns" AS "rr"
+      USING "public"."review_licences" AS "rl",
+    "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "rr"."review_licence_id" = "rl"."id"
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_charge_element_returns" AS "rcer"
+      USING "public"."review_charge_elements" AS "rce",
+    "public"."review_charge_references" AS "rcr",
+    "public"."review_charge_versions" AS "rcv",
+    "public"."review_licences" AS "rl",
+    "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "rcer"."review_charge_element_id" = "rce"."id"
+    AND "rce"."review_charge_reference_id" = "rcr"."id"
+    AND "rcr"."review_charge_version_id" = "rcv"."id"
+    AND "rcv"."review_licence_id" = "rl"."id"
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_charge_elements" AS "rce"
+      USING "public"."review_charge_references" AS "rcr",
+    "public"."review_charge_versions" AS "rcv",
+    "public"."review_licences" AS "rl",
+    "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+  "r"."nald_region_id" = 9
+    AND "rce"."review_charge_reference_id" = "rcr"."id"
+    AND "rcr"."review_charge_version_id" = "rcv"."id"
+    AND "rcv"."review_licence_id" = "rl"."id"
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_charge_references" AS "rcr"
+      USING "public"."review_charge_versions" AS "rcv",
+    "public"."review_licences" AS "rl",
+    "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "rcr"."review_charge_version_id" = "rcv"."id"
+    AND "rcv"."review_licence_id" = "rl"."id"
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_charge_versions" AS "rcv"
+      USING "public"."review_licences" AS "rl",
+    "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "rcv"."review_licence_id" = "rl"."id"
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
+
+  DELETE
+  FROM
+    "water"."review_licences" AS "rl"
+      USING "public"."bill_runs" AS "br",
+    "public"."regions" AS "r"
+  WHERE
+    "r"."nald_region_id" = 9
+    AND "rl"."bill_run_id" = "br"."id"
+    AND "br"."region_id" = "r"."id";
 
   DELETE
   FROM

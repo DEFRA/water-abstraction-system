@@ -20,15 +20,10 @@ const UserModel = require('../../models/user.model.js')
  *
  * @param {number} userId - The user id to get roles and groups for
  *
- * @returns {Promise<object>} result The resulting roles and groups
- * @returns {UserModel} result.user Returns the UserModel representing the user, or `null` if the user is not found
- * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
- * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of
+ * @returns {Promise<object>} returns an object containing the matching `UserModel` and an array of its roles and groups
  */
-async function go (userId) {
-  const user = await UserModel.query()
-    .findById(userId)
-    .withGraphFetched('[roles, groups.roles]')
+async function go(userId) {
+  const user = await UserModel.query().findById(userId).withGraphFetched('[roles, groups.roles]')
 
   if (!user) {
     return {
@@ -56,7 +51,7 @@ async function go (userId) {
  *
  * @private
  */
-function _extractRolesAndGroupsFromUser (user) {
+function _extractRolesAndGroupsFromUser(user) {
   const { roles, groups } = user
 
   delete user.roles
@@ -73,7 +68,7 @@ function _extractRolesAndGroupsFromUser (user) {
  *
  * @private
  */
-function _extractRolesFromGroups (groups) {
+function _extractRolesFromGroups(groups) {
   return groups.flatMap((group) => {
     const { roles } = group
 
@@ -83,7 +78,7 @@ function _extractRolesFromGroups (groups) {
   })
 }
 
-function _combineAndDedupeRoles (rolesArrayToDedupe) {
+function _combineAndDedupeRoles(rolesArrayToDedupe) {
   // Our usual method of de-duping arrays (putting the array into a new Set and then spreading it back into an array)
   // doesn't work here as the Role objects are not considered to be equal when doing this. We therefore use reduce to
   // dedupe by going through each Role object in the original array and only adding it to the accumulated results array

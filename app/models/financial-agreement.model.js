@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class FinancialAgreementModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'financialAgreements'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceAgreements: {
         relation: Model.HasManyRelation,

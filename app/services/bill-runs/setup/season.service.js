@@ -18,13 +18,10 @@ const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.pres
  *
  * @returns {Promise<object>} The view data for the season page
  */
-async function go (sessionId) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = SeasonPresenter.go(session)
 
-  return {
-    ...formattedData
-  }
+  return SeasonPresenter.go(session)
 }
 
 module.exports = {

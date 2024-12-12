@@ -67,7 +67,11 @@
             {{ abstractionPeriods[0] }}
           {% endif %}
         </div>
-        <a href="/licences/{{ documentId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
+        {% if enableLicencePurposesView %}
+          <a href="/system/licences/{{ licenceId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
+        {% else %}
+          <a href="/licences/{{ documentId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
+        {% endif %}
       </dd>
     </div>
   {% endif %}
@@ -89,7 +93,11 @@
             {{ abstractionPoints[0] }}
           {% endif %}
         </div>
-        <a href="/licences/{{ documentId }}/points">{{ abstractionPointsLinkText }}</a>
+        {% if enableLicencePointsView %}
+          <a href="/system/licences/{{ licenceId }}/points">{{ abstractionPointsLinkText }}</a>
+        {% else %}
+          <a href="/licences/{{ documentId }}/points">{{ abstractionPointsLinkText }}</a>
+        {% endif %}
       </dd>
     </div>
   {% endif %}

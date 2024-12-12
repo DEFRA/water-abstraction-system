@@ -21,7 +21,7 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (billRunId) {
+async function send(billRunId) {
   const path = `billing/batches/${billRunId}/refresh`
 
   return LegacyRequest.post('water', path)

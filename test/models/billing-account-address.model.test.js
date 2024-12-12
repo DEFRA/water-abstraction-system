@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -22,13 +22,34 @@ const ContactModel = require('../../app/models/contact.model.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 
 describe('Billing Account Address model', () => {
+  let testAddress
+  let testBillingAccount
+  let testContact
+  let testCompany
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillingAccountAddressHelper.add()
-    })
+  before(async () => {
+    // Link contact
+    testContact = await ContactHelper.add()
+    const { id: contactId } = testContact
 
+    // Link billing account
+    testBillingAccount = await BillingAccountHelper.add()
+    const { id: billingAccountId } = testBillingAccount
+
+    // Link company
+    testCompany = await CompanyHelper.add()
+    const { id: companyId } = testCompany
+
+    // Link address
+    testAddress = await AddressHelper.add()
+    const { id: addressId } = testAddress
+
+    // Test record
+    testRecord = await BillingAccountAddressHelper.add({ addressId, companyId, billingAccountId, contactId })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillingAccountAddressModel.query().findById(testRecord.id)
 
@@ -39,24 +60,14 @@ describe('Billing Account Address model', () => {
 
   describe('Relationships', () => {
     describe('when linking to address', () => {
-      let testAddress
-
-      beforeEach(async () => {
-        testAddress = await AddressHelper.add()
-        testRecord = await BillingAccountAddressHelper.add({ addressId: testAddress.id })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountAddressModel.query()
-          .innerJoinRelated('address')
+        const query = await BillingAccountAddressModel.query().innerJoinRelated('address')
 
         expect(query).to.exist()
       })
 
       it('can eager load the address', async () => {
-        const result = await BillingAccountAddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('address')
+        const result = await BillingAccountAddressModel.query().findById(testRecord.id).withGraphFetched('address')
 
         expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -67,24 +78,14 @@ describe('Billing Account Address model', () => {
     })
 
     describe('when linking to company', () => {
-      let testCompany
-
-      beforeEach(async () => {
-        testCompany = await CompanyHelper.add()
-        testRecord = await BillingAccountAddressHelper.add({ companyId: testCompany.id })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountAddressModel.query()
-          .innerJoinRelated('company')
+        const query = await BillingAccountAddressModel.query().innerJoinRelated('company')
 
         expect(query).to.exist()
       })
 
       it('can eager load the company', async () => {
-        const result = await BillingAccountAddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('company')
+        const result = await BillingAccountAddressModel.query().findById(testRecord.id).withGraphFetched('company')
 
         expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.id).to.equal(testRecord.id)
@@ -95,16 +96,8 @@ describe('Billing Account Address model', () => {
     })
 
     describe('when linking to billing account', () => {
-      let testBillingAccount
-
-      beforeEach(async () => {
-        testBillingAccount = await BillingAccountHelper.add()
-        testRecord = await BillingAccountAddressHelper.add({ billingAccountId: testBillingAccount.id })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountAddressModel.query()
-          .innerJoinRelated('billingAccount')
+        const query = await BillingAccountAddressModel.query().innerJoinRelated('billingAccount')
 
         expect(query).to.exist()
       })
@@ -123,24 +116,14 @@ describe('Billing Account Address model', () => {
     })
 
     describe('when linking to contact', () => {
-      let testContact
-
-      beforeEach(async () => {
-        testContact = await ContactHelper.add()
-        testRecord = await BillingAccountAddressHelper.add({ contactId: testContact.id })
-      })
-
       it('can successfully run a related query', async () => {
-        const query = await BillingAccountAddressModel.query()
-          .innerJoinRelated('contact')
+        const query = await BillingAccountAddressModel.query().innerJoinRelated('contact')
 
         expect(query).to.exist()
       })
 
       it('can eager load the contact', async () => {
-        const result = await BillingAccountAddressModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('contact')
+        const result = await BillingAccountAddressModel.query().findById(testRecord.id).withGraphFetched('contact')
 
         expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.id).to.equal(testRecord.id)

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = exports.lab = Lab.script()
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -54,16 +54,13 @@ describe('Role model', () => {
   describe('Relationships', () => {
     describe('when linking to group roles', () => {
       it('can successfully run a related query', async () => {
-        const query = await RoleModel.query()
-          .innerJoinRelated('groupRoles')
+        const query = await RoleModel.query().innerJoinRelated('groupRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the group roles', async () => {
-        const result = await RoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('groupRoles')
+        const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('groupRoles')
 
         expect(result).to.be.instanceOf(RoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -77,16 +74,13 @@ describe('Role model', () => {
 
     describe('when linking to user roles', () => {
       it('can successfully run a related query', async () => {
-        const query = await RoleModel.query()
-          .innerJoinRelated('userRoles')
+        const query = await RoleModel.query().innerJoinRelated('userRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user roles', async () => {
-        const result = await RoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('userRoles')
+        const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('userRoles')
 
         expect(result).to.be.instanceOf(RoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -100,16 +94,13 @@ describe('Role model', () => {
 
     describe('when linking through group roles to groups', () => {
       it('can successfully run a related query', async () => {
-        const query = await RoleModel.query()
-          .innerJoinRelated('groups')
+        const query = await RoleModel.query().innerJoinRelated('groups')
 
         expect(query).to.exist()
       })
 
       it('can eager load the groups', async () => {
-        const result = await RoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('groups')
+        const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('groups')
 
         expect(result).to.be.instanceOf(RoleModel)
         expect(result.id).to.equal(testRecord.id)
@@ -123,16 +114,13 @@ describe('Role model', () => {
 
     describe('when linking through user roles to users', () => {
       it('can successfully run a related query', async () => {
-        const query = await RoleModel.query()
-          .innerJoinRelated('users')
+        const query = await RoleModel.query().innerJoinRelated('users')
 
         expect(query).to.exist()
       })
 
       it('can eager load the users', async () => {
-        const result = await RoleModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('users')
+        const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('users')
 
         expect(result).to.be.instanceOf(RoleModel)
         expect(result.id).to.equal(testRecord.id)

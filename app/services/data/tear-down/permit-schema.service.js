@@ -7,11 +7,16 @@
 
 const { db } = require('../../../../db/db.js')
 
-async function go () {
+/**
+ * Removes all data created for acceptance tests from the permit schema
+ *
+ * @returns {Promise<object>}
+ */
+async function go() {
   return _deleteAllTestData()
 }
 
-async function _deleteAllTestData () {
+async function _deleteAllTestData() {
   return db.raw(`
   ALTER TABLE permit.licence DISABLE TRIGGER ALL;
 

@@ -3,11 +3,10 @@
 const viewName = 'licence_document_headers'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex('document_header').withSchema('crm').select([
+  return knex.schema.createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex('document_header').withSchema('crm').select([
         'document_id AS id',
         // This could be ignored as it is always set to the same ID. But that id comes from a single record in the
         // crm.entity table which has the `entity_type` regime. So, for the purposes of testing we just have to live
@@ -23,12 +22,11 @@ exports.up = function (knex) {
         'date_created AS created_at',
         'date_updated AS updated_at',
         'date_deleted AS deleted_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

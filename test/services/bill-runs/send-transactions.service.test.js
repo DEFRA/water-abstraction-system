@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -76,9 +76,7 @@ describe('Send Transactions service', () => {
     it('throws a BillRunError with the correct code', async () => {
       const error = await expect(
         SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
-      )
-        .to
-        .reject()
+      ).to.reject()
 
       expect(error).to.be.an.instanceOf(BillRunError)
       expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
@@ -86,7 +84,7 @@ describe('Send Transactions service', () => {
   })
 })
 
-function _transaction (transactionId) {
+function _transaction(transactionId) {
   return {
     id: transactionId,
     chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
@@ -122,7 +120,7 @@ function _transaction (transactionId) {
   }
 }
 
-function _chargingModuleResponse (transactionId) {
+function _chargingModuleResponse(transactionId) {
   return {
     succeeded: true,
     response: {

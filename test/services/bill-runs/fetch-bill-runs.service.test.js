@@ -5,11 +5,12 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
@@ -103,9 +104,30 @@ describe('Fetch Bill Runs service', () => {
       })
     })
   })
+
+  describe('when there are no bill runs', () => {
+    beforeEach(async () => {
+      // There will usually be bill runs in the database from other tests so we stub the query to simulate no bill runs
+      const queryStub = Sinon.stub(BillRunModel, 'query')
+
+      queryStub.returns({
+        select: Sinon.stub().returnsThis(),
+        innerJoinRelated: Sinon.stub().returnsThis(),
+        orderBy: Sinon.stub().returnsThis(),
+        page: Sinon.stub().resolves({ results: [], total: 0 })
+      })
+    })
+
+    it('returns a result with no "results" and 0 for "total"', async () => {
+      const result = await FetchBillRunsService.go()
+
+      expect(result.results).to.be.empty()
+      expect(result.total).to.equal(0)
+    })
+  })
 })
 
-function _addBillRun (billRunNumber, createdAt, netTotal, creditNoteCount, invoiceCount, regionId) {
+function _addBillRun(billRunNumber, createdAt, netTotal, creditNoteCount, invoiceCount, regionId) {
   return BillRunHelper.add({
     billRunNumber,
     createdAt,

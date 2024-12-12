@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -76,7 +76,8 @@ describe('Licence model', () => {
         testBillLicences = []
         for (let i = 0; i < 2; i++) {
           const billLicence = await BillLicenceHelper.add({
-            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+            licenceRef: testRecord.licenceRef,
+            licenceId: testRecord.id
           })
 
           testBillLicences.push(billLicence)
@@ -84,16 +85,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('billLicences')
+        const query = await LicenceModel.query().innerJoinRelated('billLicences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill licences', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('billLicences')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('billLicences')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -114,7 +112,8 @@ describe('Licence model', () => {
         testChargeVersions = []
         for (let i = 0; i < 2; i++) {
           const chargeVersion = await ChargeVersionHelper.add({
-            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+            licenceRef: testRecord.licenceRef,
+            licenceId: testRecord.id
           })
 
           testChargeVersions.push(chargeVersion)
@@ -122,16 +121,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('chargeVersions')
+        const query = await LicenceModel.query().innerJoinRelated('chargeVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge versions', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersions')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -158,16 +154,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceAgreements')
+        const query = await LicenceModel.query().innerJoinRelated('licenceAgreements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence agreements', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceAgreements')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceAgreements')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -191,16 +184,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceDocument')
+        const query = await LicenceModel.query().innerJoinRelated('licenceDocument')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence document', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceDocument')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceDocument')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -222,16 +212,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceDocumentHeader')
+        const query = await LicenceModel.query().innerJoinRelated('licenceDocumentHeader')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence document header', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceDocumentHeader')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentHeader')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -256,16 +243,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceMonitoringStations')
+        const query = await LicenceModel.query().innerJoinRelated('licenceMonitoringStations')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence monitoring stations', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceMonitoringStations')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceMonitoringStations')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -292,16 +276,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceSupplementaryYears')
+        const query = await LicenceModel.query().innerJoinRelated('licenceSupplementaryYears')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence supplementary years', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceSupplementaryYears')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceSupplementaryYears')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -328,16 +309,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('licenceVersions')
+        const query = await LicenceModel.query().innerJoinRelated('licenceVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence versions', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceVersions')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceVersions')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -358,7 +336,8 @@ describe('Licence model', () => {
         testModLogs = []
         for (let i = 0; i < 2; i++) {
           const modLog = await ModLogHelper.add({
-            licenceRef: testRecord.licenceRef, licenceId: testRecord.id
+            licenceRef: testRecord.licenceRef,
+            licenceId: testRecord.id
           })
 
           testModLogs.push(modLog)
@@ -366,16 +345,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('modLogs')
+        const query = await LicenceModel.query().innerJoinRelated('modLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the mod logs', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('modLogs')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -399,16 +375,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('region')
+        const query = await LicenceModel.query().innerJoinRelated('region')
 
         expect(query).to.exist()
       })
 
       it('can eager load the region', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('region')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('region')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -433,16 +406,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('returnLogs')
+        const query = await LicenceModel.query().innerJoinRelated('returnLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return logs', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnLogs')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -469,16 +439,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('returnVersions')
+        const query = await LicenceModel.query().innerJoinRelated('returnVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return versions', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnVersions')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('returnVersions')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -505,16 +472,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('reviewLicences')
+        const query = await LicenceModel.query().innerJoinRelated('reviewLicences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the workflows', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('reviewLicences')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('reviewLicences')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -541,16 +505,13 @@ describe('Licence model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('workflows')
+        const query = await LicenceModel.query().innerJoinRelated('workflows')
 
         expect(query).to.exist()
       })
 
       it('can eager load the workflows', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('workflows')
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('workflows')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
@@ -902,7 +863,8 @@ describe('Licence model', () => {
         const licence = await LicenceHelper.add()
 
         await LicenceDocumentHeaderHelper.add({
-          licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+          licenceRef: licence.licenceRef,
+          licenceName: 'My custom licence name'
         })
 
         testRecord = await LicenceModel.query().findById(licence.id).modify('licenceName')
@@ -939,11 +901,15 @@ describe('Licence model', () => {
         primaryUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: licenceEntity.id, username })
 
         await LicenceEntityRoleHelper.add({
-          companyEntityId, licenceEntityId: licenceEntity.id, role: 'primary_user'
+          companyEntityId,
+          licenceEntityId: licenceEntity.id,
+          role: 'primary_user'
         })
 
         await LicenceDocumentHeaderHelper.add({
-          companyEntityId, licenceRef: licence.licenceRef, licenceName: 'My custom licence name'
+          companyEntityId,
+          licenceRef: licence.licenceRef,
+          licenceName: 'My custom licence name'
         })
 
         testRecord = await LicenceModel.query().findById(licence.id).modify('primaryUser')

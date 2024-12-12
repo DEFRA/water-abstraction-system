@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class PointModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'points'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       licenceVersionPurposes: {
         relation: Model.ManyToManyRelation,
@@ -66,12 +66,12 @@ class PointModel extends BaseModel {
    *
    * @returns {string} the description of this abstraction point
    */
-  $describe () {
+  $describe() {
     let abstractionPoint
 
     // If ng4 is populated then we know this point is an 'area'
     if (this.ngr4) {
-      abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${this.ngr1} ${this.ngr2} ${this.ngr3} and ${this.ngr4}`
+      abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${this.ngr1}, ${this.ngr2}, ${this.ngr3} and ${this.ngr4}`
     } else if (this.ngr2) {
       // If ng2 is populated then we know this point is a 'reach'
       abstractionPoint = `Between National Grid References ${this.ngr1} and ${this.ngr2}`

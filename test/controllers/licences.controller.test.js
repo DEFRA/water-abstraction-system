@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,7 +13,7 @@ const Boom = require('@hapi/boom')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
+const InitiateSessionService = require('../../app/services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const MarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/marked-for-supplementary-billing.service.js')
 const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
@@ -23,6 +23,8 @@ const ViewLicenceCommunicationsService = require('../../app/services/licences/vi
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
+const ViewLicencePointsService = require('../../app/services/licences/view-licence-points.service.js')
+const ViewLicencePurposesService = require('../../app/services/licences/view-licence-purposes.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
@@ -34,10 +36,12 @@ describe('Licences controller', () => {
   let options
   let server
 
-  beforeEach(async () => {
-    // Create server before each test
+  // Create server before running the tests
+  before(async () => {
     server = await init()
+  })
 
+  beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -214,7 +218,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
+          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
@@ -248,6 +252,62 @@ describe('Licences controller', () => {
     })
   })
 
+  describe('/licences/{id}/points', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/points',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicencePointsService, 'go').resolves(_viewLicencePoints())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence abstraction points')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/purposes', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/purposes',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicencePurposesService, 'go').resolves(_viewLicencePurposes())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence purpose details')
+        })
+      })
+    })
+  })
+
   describe('/licences/{id}/returns-required', () => {
     describe('GET', () => {
       const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
@@ -272,7 +332,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
+          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
@@ -501,7 +561,8 @@ describe('Licences controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
-            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b', licenceRef: '01/test'
+            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+            licenceRef: '01/test'
           })
         })
 
@@ -509,14 +570,14 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('You’ve marked this licence for the next supplementary bill run')
+          expect(response.payload).to.contain('You&#39;ve marked this licence for the next supplementary bill run')
         })
       })
     })
   })
 })
 
-function _markForSupplementaryBilling () {
+function _markForSupplementaryBilling() {
   return {
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
     licenceRef: '01/test',
@@ -529,7 +590,7 @@ function _markForSupplementaryBilling () {
   }
 }
 
-function _viewLicenceBills () {
+function _viewLicenceBills() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -539,7 +600,7 @@ function _viewLicenceBills () {
   }
 }
 
-function _viewLicenceCommunications () {
+function _viewLicenceCommunications() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -549,7 +610,7 @@ function _viewLicenceCommunications () {
   }
 }
 
-function _viewLicenceContacts () {
+function _viewLicenceContacts() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -560,7 +621,7 @@ function _viewLicenceContacts () {
   }
 }
 
-function _viewLicenceHistory () {
+function _viewLicenceHistory() {
   return {
     entries: [{}],
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
@@ -569,7 +630,7 @@ function _viewLicenceHistory () {
   }
 }
 
-function _viewLicenceContactDetails () {
+function _viewLicenceContactDetails() {
   const commonLicenceData = _viewLicence()
 
   commonLicenceData.pageTitle = null
@@ -590,27 +651,71 @@ function _viewLicenceContactDetails () {
   }
 }
 
-function _viewLicenceReturns () {
+function _viewLicencePoints() {
+  return {
+    id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
+    licencePoints: [
+      {
+        bgsReference: '',
+        category: 'Single Point',
+        depth: 183,
+        description: 'MIZKAN UK LTD, BURNTWOOD - BOREHOLE',
+        gridReference: 'At National Grid Reference SK 05769 08747',
+        hydroOffsetDistance: '',
+        hydroReference: '',
+        locationNote: '',
+        note: '',
+        primaryType: 'Groundwater',
+        secondaryType: 'Borehole',
+        sourceDescription: 'Groundwater Midlands Region',
+        sourceType: 'Groundwater',
+        wellReference: ''
+      }
+    ],
+    licenceRef: '03/28/07/0006',
+    pageTitle: 'Licence abstraction points'
+  }
+}
+
+function _viewLicencePurposes() {
+  return {
+    id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
+    licenceRef: '01/140/R01',
+    licencePurposes: [
+      {
+        abstractionAmounts: [
+          '165000.00 cubic metres per year',
+          '10920.00 cubic metres per day',
+          '455.00 cubic metres per hour'
+        ],
+        abstractionPeriod: '1 November to 31 March',
+        abstractionPoints: ['At National Grid Reference TQ 78392 78004 (LIPWELL STREAM POINT A)'],
+        purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
+      }
+    ],
+    pageTitle: 'Licence purpose details'
+  }
+}
+
+function _viewLicenceReturns() {
   const commonLicenceData = _viewLicence()
 
   return {
     ...commonLicenceData,
     activeTab: 'returns',
-    returns: [
-      { id: 'returns-id' }
-    ],
+    returns: [{ id: 'returns-id' }],
     noReturnsMessage: null
   }
 }
 
-function _viewLicenceSetUp () {
+function _viewLicenceSetUp() {
   const commonLicenceData = _viewLicence()
 
   return {
     ...commonLicenceData,
     activeTab: 'set-up',
     agreements: [{}],
-    chargeInformation: [{ }],
+    chargeInformation: [{}],
     enableRequirementsForReturns: true,
     links: {
       agreements: {
@@ -625,11 +730,11 @@ function _viewLicenceSetUp () {
         noReturnsRequired: '/'
       }
     },
-    returnVersions: [{ }]
+    returnVersions: [{}]
   }
 }
 
-function _viewLicenceSummary () {
+function _viewLicenceSummary() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -642,7 +747,7 @@ function _viewLicenceSummary () {
   }
 }
 
-function _viewLicence () {
+function _viewLicence() {
   return {
     documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
     licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',

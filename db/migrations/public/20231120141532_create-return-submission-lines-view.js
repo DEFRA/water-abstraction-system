@@ -3,11 +3,10 @@
 const viewName = 'return_submission_lines'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
-      view.as(knex('lines').withSchema('returns').select([
+  return knex.schema.createView(viewName, (view) => {
+    // NOTE: We have commented out unused columns from the source table
+    view.as(
+      knex('lines').withSchema('returns').select([
         'line_id AS id',
         'version_id AS return_submission_id',
         // 'substance', // always 'water'
@@ -21,12 +20,11 @@ exports.up = function (knex) {
         'user_unit',
         'created_at',
         'updated_at'
-      ]))
-    })
+      ])
+    )
+  })
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .dropViewIfExists(viewName)
+  return knex.schema.dropViewIfExists(viewName)
 }

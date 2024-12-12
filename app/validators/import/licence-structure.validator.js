@@ -33,15 +33,16 @@ const Joi = require('joi')
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (licence) {
+function go(licence) {
   const schema = Joi.object({
-    licenceVersions: Joi.array().min(1).items(
-      Joi.object({
-        licenceVersionPurposes: Joi.array().min(1)
-      })
-        .unknown(true))
-  })
-    .unknown(true)
+    licenceVersions: Joi.array()
+      .min(1)
+      .items(
+        Joi.object({
+          licenceVersionPurposes: Joi.array().min(1)
+        }).unknown(true)
+      )
+  }).unknown(true)
 
   const result = schema.validate(licence)
 

@@ -3,10 +3,11 @@
 const tableName = 'billing_transactions'
 
 exports.up = function (knex) {
-  return knex
-    .schema
-    .withSchema('water')
-    .createTable(tableName, (table) => {
+  return (
+    // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
+    // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after
+    // Knex has created the table.
+    knex.schema.withSchema('water').createTable(tableName, (table) => {
       // Primary Key
       table.uuid('billing_transaction_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
@@ -68,78 +69,64 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-    })
-    // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
-    // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after
-    // Knex has created the table.
-    .raw(`
+    }).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT abstraction_period_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (abstraction_period IS NOT NULL) OR (scheme = 'sroc'))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT charge_element_id_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (charge_element_id IS NOT NULL))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT end_date_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (end_date IS NOT NULL))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT loss_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (loss IS NOT NULL))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT purposes_check
       CHECK (
         ((purposes IS NOT NULL) OR (scheme = 'alcs'))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT season_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (season IS NOT NULL) OR (scheme = 'sroc'))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT source_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (source IS NOT NULL))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT start_date_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (start_date IS NOT NULL))
       );
-    `)
-    .raw(`
+    `).raw(`
       ALTER TABLE water.billing_transactions
       ADD CONSTRAINT volume_check
       CHECK (
         ((charge_type = 'minimum_charge') OR (volume IS NOT NULL))
       );
     `)
+  )
 }
 
 exports.down = function (knex) {
-  return knex
-    .schema
-    .withSchema('water')
-    .dropTableIfExists(tableName)
+  return knex.schema.withSchema('water').dropTableIfExists(tableName)
 }

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -52,16 +52,13 @@ describe('Return Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnVersionModel.query()
-          .innerJoinRelated('licence')
+        const query = await ReturnVersionModel.query().innerJoinRelated('licence')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence', async () => {
-        const result = await ReturnVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licence')
+        const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('licence')
 
         expect(result).to.be.instanceOf(ReturnVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -86,16 +83,13 @@ describe('Return Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnVersionModel.query()
-          .innerJoinRelated('modLogs')
+        const query = await ReturnVersionModel.query().innerJoinRelated('modLogs')
 
         expect(query).to.exist()
       })
 
       it('can eager load the mod logs', async () => {
-        const result = await ReturnVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('modLogs')
+        const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
         expect(result).to.be.instanceOf(ReturnVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -115,25 +109,23 @@ describe('Return Version model', () => {
 
         testReturnRequirements = []
         for (let i = 0; i < 2; i++) {
-          const returnRequirement = await ReturnRequirementHelper.add(
-            { siteDescription: `TEST RTN REQ ${i}`, returnVersionId: testRecord.id }
-          )
+          const returnRequirement = await ReturnRequirementHelper.add({
+            siteDescription: `TEST RTN REQ ${i}`,
+            returnVersionId: testRecord.id
+          })
 
           testReturnRequirements.push(returnRequirement)
         }
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnVersionModel.query()
-          .innerJoinRelated('returnRequirements')
+        const query = await ReturnVersionModel.query().innerJoinRelated('returnRequirements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return requirements', async () => {
-        const result = await ReturnVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnRequirements')
+        const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('returnRequirements')
 
         expect(result).to.be.instanceOf(ReturnVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -157,16 +149,13 @@ describe('Return Version model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnVersionModel.query()
-          .innerJoinRelated('user')
+        const query = await ReturnVersionModel.query().innerJoinRelated('user')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user', async () => {
-        const result = await ReturnVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('user')
+        const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('user')
 
         expect(result).to.be.instanceOf(ReturnVersionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -202,10 +191,14 @@ describe('Return Version model', () => {
         const firstNaldId = randomInteger(100, 99998)
 
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId}`, naldDate: new Date('2012-06-01'), returnVersionId
+          externalId: `${regionCode}:${firstNaldId}`,
+          naldDate: new Date('2012-06-01'),
+          returnVersionId
         })
         await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId + 1}`, naldDate: new Date('2012-06-02'), returnVersionId
+          externalId: `${regionCode}:${firstNaldId + 1}`,
+          naldDate: new Date('2012-06-02'),
+          returnVersionId
         })
 
         testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
@@ -347,10 +340,14 @@ describe('Return Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, note: null, returnVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              note: null,
+              returnVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, note: null, returnVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              note: null,
+              returnVersionId
             })
 
             testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
@@ -370,10 +367,14 @@ describe('Return Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, note: null, returnVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              note: null,
+              returnVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', returnVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              note: 'Transfer per app 12-DEF',
+              returnVersionId
             })
 
             testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
@@ -398,10 +399,14 @@ describe('Return Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, note: 'New Licence per app 9-ABC', returnVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              note: 'New Licence per app 9-ABC',
+              returnVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, note: 'Transfer per app 12-DEF', returnVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              note: 'Transfer per app 12-DEF',
+              returnVersionId
             })
 
             testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
@@ -466,10 +471,14 @@ describe('Return Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: null, returnVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              reasonDescription: null,
+              returnVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'New licence', returnVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'New licence',
+              returnVersionId
             })
 
             testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
@@ -488,10 +497,14 @@ describe('Return Version model', () => {
             const firstNaldId = randomInteger(100, 99998)
 
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`, reasonDescription: 'New licence', returnVersionId
+              externalId: `${regionCode}:${firstNaldId}`,
+              reasonDescription: 'New licence',
+              returnVersionId
             })
             await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`, reasonDescription: 'Transferred', returnVersionId
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'Transferred',
+              returnVersionId
             })
 
             testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')

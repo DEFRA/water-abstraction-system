@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -61,7 +61,7 @@ describe('View Licence History presenter', () => {
             dateCreated: '5 April 2021',
             displayNote: true,
             notes: ['Test note'],
-            link: '/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view',
+            link: '/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
             reason: 'New licence',
             type: { index: 2, name: 'Return version' }
           }
@@ -115,7 +115,9 @@ describe('View Licence History presenter', () => {
         it('returns the charge version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
-          expect(result.entries[0].link).to.equal('/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view')
+          expect(result.entries[0].link).to.equal(
+            '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view'
+          )
         })
       })
 
@@ -131,7 +133,7 @@ describe('View Licence History presenter', () => {
         it('returns the return version link', () => {
           const result = ViewLicenceHistoryPresenter.go(licence)
 
-          expect(result.entries[2].link).to.equal('/system/return-requirements/3f09ce0b-288c-4c0b-b519-7329fe70a6cc/view')
+          expect(result.entries[2].link).to.equal('/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc')
         })
       })
     })
@@ -149,9 +151,11 @@ describe('View Licence History presenter', () => {
         describe('and the reason does not map to a WRLS reason', () => {
           beforeEach(() => {
             licence.returnVersions[0].reason = null
-            licence.returnVersions[0].modLogs = [ModLogModel.fromJson({
-              reasonDescription: 'This is a reason'
-            })]
+            licence.returnVersions[0].modLogs = [
+              ModLogModel.fromJson({
+                reasonDescription: 'This is a reason'
+              })
+            ]
           })
 
           it("returns the entry's reason", () => {
@@ -191,7 +195,7 @@ describe('View Licence History presenter', () => {
   })
 })
 
-function _testLicence () {
+function _testLicence() {
   const changeReason = ChangeReasonModel.fromJson({
     id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
     description: 'Major change'
@@ -206,9 +210,11 @@ function _testLicence () {
     id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
     licenceRef: '01/123',
     licenceDocument: {
-      licenceDocumentRoles: [{
-        id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
-      }]
+      licenceDocumentRoles: [
+        {
+          id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
+        }
+      ]
     }
   })
 
@@ -248,14 +254,8 @@ function _testLicence () {
   return {
     id: testLicence.id,
     licenceRef: testLicence.licenceRef,
-    licenceVersions: [
-      licenceVersions
-    ],
-    chargeVersions: [
-      chargeVersions
-    ],
-    returnVersions: [
-      returnVersions
-    ]
+    licenceVersions: [licenceVersions],
+    chargeVersions: [chargeVersions],
+    returnVersions: [returnVersions]
   }
 }

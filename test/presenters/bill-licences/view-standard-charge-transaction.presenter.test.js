@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -82,7 +82,9 @@ describe('View Standard Charge Transaction presenter', () => {
         it('returns "Supported source Candover (£14567.00), Public Water Supply (£2498.00)"', () => {
           const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-          expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00), Public Water Supply (£2498.00)')
+          expect(result.additionalCharges).to.equal(
+            'Supported source Candover (£14567.00), Public Water Supply (£2498.00)'
+          )
         })
       })
     })
@@ -328,7 +330,7 @@ describe('View Standard Charge Transaction presenter', () => {
   })
 })
 
-function _baseTransaction () {
+function _baseTransaction() {
   return {
     billingTransactionId: '3ca5221c-94c4-4246-8e96-41084cad1429',
     authorisedDays: 214,
@@ -346,7 +348,7 @@ function _baseTransaction () {
   }
 }
 
-function _presrocTransaction () {
+function _presrocTransaction() {
   const transaction = {
     ..._baseTransaction(),
     loss: 'high',
@@ -369,7 +371,7 @@ function _presrocTransaction () {
   return transaction
 }
 
-function _srocTransaction () {
+function _srocTransaction() {
   const transaction = {
     ..._baseTransaction(),
     aggregateFactor: 1,

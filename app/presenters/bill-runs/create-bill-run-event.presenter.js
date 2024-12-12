@@ -5,7 +5,14 @@
  * @module CreateBillRunEventPresenter
  */
 
-function go (billRun) {
+/**
+ * Formats a `BillRunModel` into the metadata content needed for a bill run's 'event' record
+ *
+ * @param {module:BillRunModel} billRun - the bill run to format
+ *
+ * @returns {object} - the formatted content
+ */
+function go(billRun) {
   const {
     batchType,
     creditNoteCount,

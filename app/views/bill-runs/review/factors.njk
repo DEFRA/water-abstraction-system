@@ -1,0 +1,85 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to review charge reference',
+      href: '/system/bill-runs/review/charge-reference/' + reviewChargeReferenceId
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-full">
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: 'There is a problem',
+          errorList: error.errorList
+        }) }}
+      {% endif %}
+
+      {# Title #}
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">{{chargeDescription}}</span>
+        {{pageTitle}}
+      </h1>
+      <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialPeriod}}</span>
+      <h2 class="govuk-heading-m" data-test="charge-period">Charge period {{chargePeriod}}</h2>
+
+      {# Inset section #}
+      {% if otherAdjustments.length > 0 %}
+        {% set insertText %}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Other adjustments apply:</p>
+          {% for otherAdjustment in otherAdjustments %}
+            {% set adjustmentIndex = loop.index0 %}
+            <div data-test="adjustment-{{adjustmentIndex}}">{{otherAdjustment}}</div>
+          {% endfor %}
+        {% endset %}
+
+        {{ govukInsetText({
+          html: insertText
+        }) }}
+      {% endif %}
+
+      {# Input fields #}
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        {{ govukInput({
+          label: {
+            text: "Aggregate factor",
+            classes: "govuk-label"
+          },
+          id: "amended-aggregate",
+          name: "amendedAggregate",
+          classes: "govuk-input--width-10",
+          value: amendedAggregate,
+          errorMessage: {
+            text: error.amendedAggregate.message
+          } if error.amendedAggregate
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Charge adjustment",
+            classes: "govuk-label"
+          },
+          id: "amended-charge-adjustment",
+          name: "amendedChargeAdjustment",
+          classes: "govuk-input--width-10",
+          value: amendedChargeAdjustment,
+          errorMessage: {
+            text: error.amendedChargeAdjustment.message
+          } if error.amendedChargeAdjustment
+        }) }}
+
+        {{ govukButton({ text: 'Confirm', preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

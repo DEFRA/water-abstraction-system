@@ -6,8 +6,8 @@
       "combine_logs": true,
       "env_production": {
         "watch": false,
-        "instances" : "max",
-        "exec_mode" : "cluster"
+        "instances": "max",
+        "exec_mode": "cluster"
       }
     }
   ]

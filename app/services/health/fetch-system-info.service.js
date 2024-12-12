@@ -14,7 +14,7 @@ const exec = util.promisify(require('child_process').exec)
  *
  * @returns {Promise<object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
-async function go () {
+async function go() {
   return {
     name: 'System',
     serviceName: 'system',
@@ -24,7 +24,7 @@ async function go () {
   }
 }
 
-async function _getCommitHash () {
+async function _getCommitHash() {
   try {
     const { stdout, stderr } = await exec('git rev-parse HEAD')
 
@@ -34,7 +34,7 @@ async function _getCommitHash () {
   }
 }
 
-async function _getTagReference () {
+async function _getTagReference() {
   try {
     const { stdout, stderr } = await exec('git describe --always --tags')
 

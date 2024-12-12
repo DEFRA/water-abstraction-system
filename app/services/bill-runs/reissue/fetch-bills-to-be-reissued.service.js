@@ -14,7 +14,7 @@ const BillModel = require('../../../models/bill.model.js')
  *
  * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */
-async function go (regionId) {
+async function go(regionId) {
   try {
     const result = await BillModel.query()
       .select(
@@ -31,10 +31,7 @@ async function go (regionId) {
       .where('billRun.scheme', 'sroc')
       .withGraphFetched('billLicences.transactions')
       .modifyGraph('billLicences', (builder) => {
-        builder.select(
-          'licenceRef',
-          'licenceId'
-        )
+        builder.select('licenceRef', 'licenceId')
       })
 
     return result
@@ -42,11 +39,7 @@ async function go (regionId) {
     // If getting bills errors then we log the error and return an empty array; the db hasn't yet been modified at
     // this stage so we can simply move on to the next stage of processing the bill run.
 
-    global.GlobalNotifier.omfg(
-      'Could not fetch reissue bills',
-      { region: regionId },
-      error
-    )
+    global.GlobalNotifier.omfg('Could not fetch reissue bills', { region: regionId }, error)
 
     return []
   }

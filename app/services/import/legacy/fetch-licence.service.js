@@ -14,15 +14,17 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<ImportLegacyLicenceType>}
  */
-async function go (licenceRef) {
+async function go(licenceRef) {
   const query = _query()
 
-  const { rows: [row] } = await db.raw(query, [licenceRef])
+  const {
+    rows: [row]
+  } = await db.raw(query, [licenceRef])
 
   return row
 }
 
-function _query () {
+function _query() {
   return `
     SELECT
       nal."AREP_AREA_CODE" AS historical_area_code,

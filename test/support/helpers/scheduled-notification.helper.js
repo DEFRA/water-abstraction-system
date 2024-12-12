@@ -18,7 +18,7 @@ const ScheduledNotificationModel = require('../../../app/models/scheduled-notifi
  *
  * @returns {Promise<module:ScheduledNotificationModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ScheduledNotificationModel.query()
@@ -36,7 +36,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     // INFO: The table does not have a default for the createdAt column.
     createdAt: timestampForPostgres()

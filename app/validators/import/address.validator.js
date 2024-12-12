@@ -13,7 +13,7 @@ const Joi = require('joi')
  *
  * @throws {Joi.ValidationError} - throws a Joi validation error if the validation fails
  */
-function go (address) {
+function go(address) {
   const schema = Joi.object({
     address1: Joi.string().required(),
     address2: Joi.string().allow(null),

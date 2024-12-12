@@ -1,0 +1,112 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to review charge element',
+      href: '/system/bill-runs/review/charge-element/' + reviewChargeElementId + '/' + elementIndex
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-5">
+    <div class="govuk-grid-column-full">
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: 'There is a problem',
+          errorList: error.errorList
+        }) }}
+      {% endif %}
+      <span class="govuk-caption-l" data-test="charge-element">{{ chargeDescription }}</span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{pageTitle}}</h1>
+
+      {% for chargePeriod in chargePeriods %}
+        {% set chargePeriodIndex = loop.index0 %}
+        <p class="govuk-!-margin-bottom-0" data-test="charge-period-{{ chargePeriodIndex }}">{{ chargePeriod }}</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# Periods #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-m" data-test="financial-year">Financial year {{financialPeriod}}</span>
+      <h2 class="govuk-heading-m" data-test="charge-period">Charge period {{chargePeriod}}</h2>
+
+      {# Billable returns inset #}
+      {% set insertText %}
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <span class="govuk-!-font-weight-bold">Billable returns</span>
+          {{billableReturns}} ML
+        </p>
+      {% endset %}
+      {{ govukInsetText({
+          html: insertText
+        })
+      }}
+    </div>
+  </div>
+
+  <div class="govuk-body">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {% set quantityInputHTML %}
+        {% if error.customQuantityErrorMessage %}
+          {% set errorClass = 'govuk-input--error' %}
+        {% endif %}
+
+        {{ govukInput({
+          id: "custom-quantity",
+          name: "customQuantity",
+          classes: "govuk-!-width-one-third " + errorClass,
+          value: customQuantityValue,
+          label: {
+            text: "Billable returns quantity"
+          },
+          hint: {
+            text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
+          },
+          suffix: {
+            text: "ML"
+          },
+          errorMessage: error.customQuantityErrorMessage
+        }) }}
+    {% endset %}
+
+      {{ govukRadios({
+        id: 'quantity-options',
+        name: 'quantityOptions',
+        items: [
+          {
+            id: 'authorised-quantity',
+            value: authorisedQuantity,
+            html: '<div data-test="authorised-quantity">Authorised ' + authorisedQuantity + 'ML</div>'
+          },
+          {
+            id: 'custom-quantity-selector',
+            value: 'customQuantity',
+            text: 'Custom quantity',
+            checked: customQuantitySelected,
+            conditional: {
+              html: quantityInputHTML
+            }
+          }
+        ],
+        errorMessage: error.quantityOptionsErrorMessage
+      }) }}
+
+      {# Hidden input for authorised volume #}
+      <input type="hidden" name="authorisedVolume" value="{{ authorisedQuantity }}">
+
+      {{ govukButton({ text: 'Confirm', preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

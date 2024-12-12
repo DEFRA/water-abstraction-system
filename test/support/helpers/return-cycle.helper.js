@@ -8,7 +8,6 @@ const { selectRandomEntry } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
-const { data: returnCycles } = require('../../../db/seeds/data/return-cycles.js')
 
 /**
  * Add a new return cycle
@@ -28,7 +27,7 @@ const { data: returnCycles } = require('../../../db/seeds/data/return-cycles.js'
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnCycleModel.query()
@@ -46,7 +45,7 @@ function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -77,10 +76,13 @@ function defaults (data = {}) {
  *
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
+ * @param {boolean} summer - select either a summer or all year one
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-function select (index = -1) {
+async function select(index = -1, summer = false) {
+  const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
+
   if (index > -1) {
     return returnCycles[index]
   }
@@ -88,8 +90,27 @@ function select (index = -1) {
   return selectRandomEntry(returnCycles)
 }
 
+/**
+ * Select an entry from the reference data entries seeded at the start of testing
+ *
+ * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
+ * when using the service.
+ *
+ * So, they are seeded automatically when tests are run. Tests that need to link to a specific record can use this
+ * method to provide a date and if it's summer or all year and then get the return cycle back.
+ *
+ * @param {Date} [date] - The reference entry to select.
+ * @param {boolean} summer - select either a summer or all year one
+ *
+ * @returns {object} The selected reference entry or one picked at random
+ */
+async function selectByDate(date, summer = false) {
+  return ReturnCycleModel.query().where('summer', summer).where('startDate', '<=', date).first()
+}
+
 module.exports = {
   add,
   defaults,
-  select
+  select,
+  selectByDate
 }

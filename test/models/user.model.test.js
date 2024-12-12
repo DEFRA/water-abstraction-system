@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -65,21 +65,20 @@ describe('User model', () => {
   describe('Relationships', () => {
     describe('when linking to charge version notes', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('chargeVersionNotes')
+        const query = await UserModel.query().innerJoinRelated('chargeVersionNotes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge version notes', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersionNotes')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('chargeVersionNotes')
 
-        const foundChargeVersionNoteOne = result.chargeVersionNotes
-          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteOne.id })
-        const foundChargeVersionNoteTwo = result.chargeVersionNotes
-          .find((chargeVersionNote) => { return chargeVersionNote.id === testChargeVersionNoteTwo.id })
+        const foundChargeVersionNoteOne = result.chargeVersionNotes.find((chargeVersionNote) => {
+          return chargeVersionNote.id === testChargeVersionNoteOne.id
+        })
+        const foundChargeVersionNoteTwo = result.chargeVersionNotes.find((chargeVersionNote) => {
+          return chargeVersionNote.id === testChargeVersionNoteTwo.id
+        })
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
@@ -93,16 +92,13 @@ describe('User model', () => {
 
     describe('when linking through user groups to groups', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('groups')
+        const query = await UserModel.query().innerJoinRelated('groups')
 
         expect(query).to.exist()
       })
 
       it('can eager load the groups', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('groups')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('groups')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
@@ -132,16 +128,13 @@ describe('User model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('licenceEntity')
+        const query = await UserModel.query().innerJoinRelated('licenceEntity')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence entity', async () => {
-        const result = await UserModel.query()
-          .findById(testAddedRecord.id)
-          .withGraphFetched('licenceEntity')
+        const result = await UserModel.query().findById(testAddedRecord.id).withGraphFetched('licenceEntity')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testAddedRecord.id)
@@ -164,16 +157,13 @@ describe('User model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('returnVersions')
+        const query = await UserModel.query().innerJoinRelated('returnVersions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return versions', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnVersions')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('returnVersions')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
@@ -187,16 +177,13 @@ describe('User model', () => {
 
     describe('when linking through user roles to roles', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('roles')
+        const query = await UserModel.query().innerJoinRelated('roles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the roles', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('roles')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('roles')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
@@ -210,16 +197,13 @@ describe('User model', () => {
 
     describe('when linking to user groups', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('userGroups')
+        const query = await UserModel.query().innerJoinRelated('userGroups')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user groups', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('userGroups')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('userGroups')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)
@@ -233,16 +217,13 @@ describe('User model', () => {
 
     describe('when linking to user roles', () => {
       it('can successfully run a related query', async () => {
-        const query = await UserModel.query()
-          .innerJoinRelated('userRoles')
+        const query = await UserModel.query().innerJoinRelated('userRoles')
 
         expect(query).to.exist()
       })
 
       it('can eager load the user roles', async () => {
-        const result = await UserModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('userRoles')
+        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('userRoles')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.id).to.equal(testRecord.id)

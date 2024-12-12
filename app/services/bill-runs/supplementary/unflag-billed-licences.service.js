@@ -36,7 +36,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise<number>} Resolves to the count of records updated
  */
-async function go (billRun) {
+async function go(billRun) {
   const { scheme } = billRun
 
   if (scheme === 'sroc') {
@@ -51,7 +51,7 @@ async function go (billRun) {
  *
  * @private
  */
-async function _updateOldScheme (billRun) {
+async function _updateOldScheme(billRun) {
   const { createdAt, regionId } = billRun
 
   return LicenceModel.query()
@@ -59,10 +59,7 @@ async function _updateOldScheme (billRun) {
     .where('updatedAt', '<=', createdAt)
     .where('regionId', regionId)
     .where('includeInPresrocBilling', 'yes')
-    .whereNotExists(
-      LicenceModel.relatedQuery('workflows')
-        .whereNull('workflows.deletedAt')
-    )
+    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
 }
 
 /**
@@ -70,16 +67,13 @@ async function _updateOldScheme (billRun) {
  *
  * @private
  */
-async function _updateCurrentScheme (billRun) {
+async function _updateCurrentScheme(billRun) {
   const { id: billRunId, createdAt } = billRun
 
   return LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .where('updatedAt', '<=', createdAt)
-    .whereNotExists(
-      LicenceModel.relatedQuery('workflows')
-        .whereNull('workflows.deletedAt')
-    )
+    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
     .whereExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', 'billLicences.billId')

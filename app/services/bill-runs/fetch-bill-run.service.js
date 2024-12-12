@@ -18,7 +18,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
  * licence, numbers, financial year and total net amount) for each bill linked to the bill run
  */
-async function go (id) {
+async function go(id) {
   const billRun = await _fetchBillRun(id)
   const billSummaries = await _fetchBillSummaries(id)
 
@@ -28,7 +28,7 @@ async function go (id) {
   }
 }
 
-async function _fetchBillRun (id) {
+async function _fetchBillRun(id) {
   const result = BillRunModel.query()
     .findById(id)
     .select([
@@ -51,10 +51,7 @@ async function _fetchBillRun (id) {
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select(['id', 'displayName'])
     })
 
   return result
@@ -91,7 +88,7 @@ async function _fetchBillRun (id) {
  *
  * @private
  */
-async function _fetchBillSummaries (id) {
+async function _fetchBillSummaries(id) {
   const results = await db
     .select(
       'bi.id',
@@ -111,18 +108,12 @@ async function _fetchBillSummaries (id) {
     .from('bills AS bi')
     .innerJoin('billing_accounts AS ia', 'ia.id', 'bi.billing_account_id')
     .innerJoin('companies AS c', 'c.id', 'ia.company_id')
-    .innerJoin(
-      'billing_account_addresses AS iaa',
-      function () {
-        this.on('iaa.billing_account_id', '=', 'ia.id').andOnNull('iaa.end_date')
-      }
-    )
+    .innerJoin('billing_account_addresses AS iaa', function () {
+      this.on('iaa.billing_account_id', '=', 'ia.id').andOnNull('iaa.end_date')
+    })
     .leftJoin('companies AS ac', 'ac.id', 'iaa.company_id')
     .where('bi.bill_run_id', '=', id)
-    .orderBy([
-      { column: 'bi.account_number' },
-      { column: 'bi.financial_year_ending', order: 'desc' }
-    ])
+    .orderBy([{ column: 'bi.account_number' }, { column: 'bi.financial_year_ending', order: 'desc' }])
 
   return results
 }

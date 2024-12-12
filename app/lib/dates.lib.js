@@ -1,15 +1,66 @@
 'use strict'
 
 /**
- * General helper methods
+ * Date helper methods
  * @module DatesLib
  */
 
-const { returnCycleDates } = require('./static-lookups.lib.js')
+const FEBRUARY = 2
+const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
+const LAST_DAY_OF_FEB_LEAP_YEAR = 29
 
-const february = 2
-const lastDayOfFebruary = 28
-const lastDayOfFebruaryLeapYear = 29
+/**
+ * From an array of dates, filter out empty values and return the earliest
+ *
+ * This was created as part of our work on generating return logs for licences, and needing to work out the earliest
+ * end date between the licence's expired, lapsed and revoked end dates, the return version's end date, and the return
+ * cycle's end date.
+ *
+ * @param {Date[]} dates - The dates from which to select the earliest
+ *
+ * @returns {Date} The earliest date
+ */
+function determineEarliestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
+
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
+
+  const earliestDateTimestamp = Math.min(...allEmptyValuesRemoved)
+
+  return new Date(earliestDateTimestamp)
+}
+
+/**
+ * From an array of dates, filter out empty values and return the latest as a `Date`
+ *
+ * This was created as part of our work on generating return logs for licences, and needing to work out the latest end
+ * date between the licence start date, the return version start date, and the return cycle start date.
+ *
+ * @param {Date[]} dates - The dates from which to select the latest
+ *
+ * @returns {Date} The latest date
+ */
+function determineLatestDate(dates) {
+  const allEmptyValuesRemoved = dates.filter((date) => {
+    return date
+  })
+
+  if (allEmptyValuesRemoved.length === 0) {
+    throw Error('No dates provided to determine earliest')
+  }
+
+  const valuesAsDates = allEmptyValuesRemoved.map((date) => {
+    return new Date(date)
+  })
+
+  const latestDateTimestamp = Math.max(...valuesAsDates)
+
+  return new Date(latestDateTimestamp)
+}
 
 /**
  * Formats a string assumed to be a date in the format 01/01/2001
@@ -21,7 +72,7 @@ const lastDayOfFebruaryLeapYear = 29
  * @param {string} date - The date in the format 01/01/2001
  * @returns {string | null} - a date in the iso format 2001-01-01
  */
-function formatStandardDateToISO (date) {
+function formatStandardDateToISO(date) {
   if (date === 'null' || date === null) {
     return null
   }
@@ -43,116 +94,8 @@ function formatStandardDateToISO (date) {
  * @param {Date} date - a date object to be formatted
  * @returns {Date} - the date formatted in YYYY-MM-DD.
  */
-function formatDateObjectToISO (date) {
+function formatDateObjectToISO(date) {
   return date.toISOString().split('T')[0]
-}
-
-/**
- * Get the due date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the due date of the next cycle as an ISO string.
- */
-function cycleDueDateAsISO (summer) {
-  return formatDateObjectToISO(cycleDueDate(summer))
-}
-
-/**
- * Get the due date of next provided cycle, either summer or winter and all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the due date of the next cycle.
- */
-function cycleDueDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month > returnCycleDates.summer.endDate.month) {
-      return new Date(year + 1, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.dueDate.month, returnCycleDates.summer.dueDate.day)
-  }
-
-  if (month > returnCycleDates.allYear.endDate.month) {
-    return new Date(year + 1, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.dueDate.month, returnCycleDates.allYear.dueDate.day)
-}
-
-/**
- * Get the end date of next provided cycle, either summer or winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the end date of the next cycle as an ISO string.
- */
-function cycleEndDateAsISO (summer) {
-  return formatDateObjectToISO(cycleEndDate(summer))
-}
-
-/**
- * Get the end date of next provided cycle, either summer and winter or all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the end date of the next cycle.
- */
-function cycleEndDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month > returnCycleDates.summer.endDate.month) {
-      return new Date(year + 1, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.endDate.month, returnCycleDates.summer.endDate.day)
-  }
-
-  if (month > returnCycleDates.allYear.endDate.month) {
-    return new Date(year + 1, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.endDate.month, returnCycleDates.allYear.endDate.day)
-}
-
-/**
- * Get the start date of next provided cycle, either summer and winter and all year, formatted as YYYY-MM-DD
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {string} - the start date of the next cycle as an ISO string.
- */
-function cycleStartDateAsISO (summer) {
-  return formatDateObjectToISO(cycleStartDate(summer))
-}
-
-/**
- * Get the start date of next provided cycle, either summer or winter and all year
- *
- * @param {boolean} summer - true for summer, false for winter and all year.
- * @returns {Date} - the start date of the next cycle.
- */
-function cycleStartDate (summer) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  if (summer) {
-    if (month < returnCycleDates.summer.startDate.month) {
-      return new Date(year - 1, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
-    }
-
-    return new Date(year, returnCycleDates.summer.startDate.month, returnCycleDates.summer.startDate.day)
-  }
-
-  if (month < returnCycleDates.allYear.startDate.month) {
-    return new Date(year - 1, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
-  }
-
-  return new Date(year, returnCycleDates.allYear.startDate.month, returnCycleDates.allYear.startDate.day)
 }
 
 /**
@@ -161,7 +104,7 @@ function cycleStartDate (summer) {
  * @param {dateString | undefined } dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isValidDate (dateString) {
+function isValidDate(dateString) {
   if (!dateString) {
     return false
   }
@@ -181,7 +124,7 @@ function isValidDate (dateString) {
  * @param {dateString} dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isISODateFormat (dateString) {
+function isISODateFormat(dateString) {
   const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
 
   return isoDatePattern.test(dateString)
@@ -199,39 +142,51 @@ function isISODateFormat (dateString) {
  *
  * @private
  */
-function _isValidLeapYearDate (dateString) {
+function _isValidLeapYearDate(dateString) {
   const [year, month, day] = dateString.split('-')
 
-  if (_isLeapYear(year) === true && Number(month) === february && Number(day) > lastDayOfFebruaryLeapYear) {
+  if (_isLeapYear(year) === true && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_LEAP_YEAR) {
     return false
   }
 
-  if (_isLeapYear(year) === false && Number(month) === february && Number(day) > lastDayOfFebruary) {
+  if (_isLeapYear(year) === false && Number(month) === FEBRUARY && Number(day) > LAST_DAY_OF_FEB_STANDARD_YEAR) {
     return false
   }
 
   return true
 }
 
-function _isLeapYear (year) {
+function _isLeapYear(year) {
   const set400 = 400
 
-  if ((year % 4 === 0 && year % 100 !== 0) || (year % set400 === 0)) {
+  if ((year % 4 === 0 && year % 100 !== 0) || year % set400 === 0) {
     return true
   }
 
   return false
 }
 
+/**
+ * Checks if the given date is a quarterly returns submission
+ *
+ * A quarterly returns submission will be true when the date provided is >= 1 April 2025
+ *
+ * @param {string} date - The date to compare against the quarterly return submissions date
+ *
+ * @returns {boolean} - Will return true if the date is for a quarterly return submission
+ *
+ * @private
+ */
+function isQuarterlyReturnSubmissions(date) {
+  return new Date(date).getTime() >= new Date('2025-04-01').getTime()
+}
+
 module.exports = {
+  determineEarliestDate,
+  determineLatestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
-  cycleDueDate,
-  cycleDueDateAsISO,
-  cycleEndDate,
-  cycleEndDateAsISO,
-  cycleStartDate,
-  cycleStartDateAsISO,
   isISODateFormat,
+  isQuarterlyReturnSubmissions,
   isValidDate
 }

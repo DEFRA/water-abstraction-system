@@ -18,7 +18,7 @@ const WriteTableToFileService = require('./write-table-to-file.service.js')
  * @param {string} schemaFolderPath - The folder path where the schema files are stored
  * @param {string} schemaName - The name of the database schema
  */
-async function go (tableName, schemaFolderPath, schemaName) {
+async function go(tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)
 
   await WriteTableToFileService.go(data.headers, data.rows, schemaFolderPath, tableName)

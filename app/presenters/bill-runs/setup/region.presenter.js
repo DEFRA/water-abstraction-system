@@ -13,10 +13,11 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session, regions) {
+function go(session, regions) {
   return {
-    sessionId: session.id,
+    pageTitle: 'Select the region',
     regions,
+    sessionId: session.id,
     selectedRegion: session.region ? session.region : null
   }
 }

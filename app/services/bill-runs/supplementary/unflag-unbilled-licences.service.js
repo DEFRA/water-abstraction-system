@@ -36,16 +36,13 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {Promise<number>} Resolves to the count of records updated
  */
-async function go (billRun, allLicenceIds) {
+async function go(billRun, allLicenceIds) {
   const { id: billRunId, createdAt } = billRun
 
   const result = await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .where('updatedAt', '<=', createdAt)
-    .whereNotExists(
-      LicenceModel.relatedQuery('workflows')
-        .whereNull('workflows.deletedAt')
-    )
+    .whereNotExists(LicenceModel.relatedQuery('workflows').whereNull('workflows.deletedAt'))
     .whereNotExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', '=', 'billLicences.billId')

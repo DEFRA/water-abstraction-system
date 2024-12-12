@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -102,6 +102,18 @@ describe('Base presenter', () => {
         const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
         expect(result).to.equal('Supplementary')
+      })
+    })
+
+    describe('when the batch type is "two_part_supplementary"', () => {
+      beforeEach(() => {
+        batchType = 'two_part_supplementary'
+      })
+
+      it('returns "Two-part tariff supplementary"', () => {
+        const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
+
+        expect(result).to.equal('Two-part tariff supplementary')
       })
     })
 

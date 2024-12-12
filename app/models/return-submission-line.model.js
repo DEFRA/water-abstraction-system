@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReturnSubmissionLineModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'returnSubmissionLines'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       returnSubmission: {
         relation: Model.BelongsToOneRelation,

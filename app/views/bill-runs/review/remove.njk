@@ -1,0 +1,84 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/bill-run-status-tag.njk" import statusTag %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to review licence',
+      href: '/system/bill-runs/review/licence/' + reviewLicenceId
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>{{ pageTitle }}
+    </h1>
+
+    {{ govukInsetText({
+      text: 'The licence will go into the next two-part tariff supplementary bill run.'
+    }) }}
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+
+      {# Status tag #}
+      <p class="govuk-body">
+        {{ statusTag(billRunStatus) }}
+      </p>
+
+      {# Bill run meta-data #}
+      {#
+        GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
+        can't assign our data-test attribute using the component. Our solution is to use the html option for each row
+        instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
+        span.
+      #}
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          attributes: {
+            'data-test': 'bill-run-meta-data'
+          },
+          rows: [
+            {
+              key: { text: "Date created", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Region", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Bill run type", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-type">' + 'Two-part tariff' + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Charge scheme", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-scheme">' + 'Current' + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Financial year", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-year">' + financialYearPeriod + '</span>', classes: "meta-data__value" }
+            }
+          ]
+        })
+      }}
+
+      <form method="post">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        {{ govukButton({ text: "Remove this licence", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

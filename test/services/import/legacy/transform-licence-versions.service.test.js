@@ -5,15 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
 const FetchLicenceVersionsService = require('../../../../app/services/import/legacy/fetch-licence-versions.service.js')
 
 // Thing under test
-const TransformLicenceVersionsService =
-  require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
+const TransformLicenceVersionsService = require('../../../../app/services/import/legacy/transform-licence-versions.service.js')
 
 describe('Import Legacy Transform Licence Versions service', () => {
   // NOTE: Clearly this is an incomplete representation of the licence returned from TransformedLicenceService. But for
@@ -76,7 +75,7 @@ describe('Import Legacy Transform Licence Versions service', () => {
   })
 })
 
-function _legacyLicenceVersion () {
+function _legacyLicenceVersion() {
   return {
     effective_end_date: null,
     effective_start_date: new Date('1999-01-01'),

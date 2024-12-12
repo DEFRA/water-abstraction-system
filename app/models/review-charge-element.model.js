@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReviewChargeElementModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'reviewChargeElements'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       reviewChargeReference: {
         relation: Model.BelongsToOneRelation,
@@ -30,8 +30,8 @@ class ReviewChargeElementModel extends BaseModel {
         join: {
           from: 'reviewChargeElements.id',
           through: {
-            from: 'reviewChargeElementsReturns.reviewChargeElementId',
-            to: 'reviewChargeElementsReturns.reviewReturnId'
+            from: 'reviewChargeElementReturns.reviewChargeElementId',
+            to: 'reviewChargeElementReturns.reviewReturnId'
           },
           to: 'reviewReturns.id'
         }

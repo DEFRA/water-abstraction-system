@@ -26,7 +26,7 @@ const { randomInteger } = require('../general.js')
  *
  * @returns {Promise<module:LicenceVersionPurposeConditionModel>} The instance of the newly created record
  */
-async function add (data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposeConditionModel.query()
@@ -44,7 +44,7 @@ async function add (data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const { id: licenceVersionPurposeConditionTypeId } = LicenceVersionPurposeConditionTypeHelper.select()
   const timestamp = timestampForPostgres()
 

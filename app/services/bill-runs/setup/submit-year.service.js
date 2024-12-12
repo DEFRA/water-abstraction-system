@@ -30,19 +30,13 @@ const YearValidator = require('../../../validators/bill-runs/setup/year.validato
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the year page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
-
-    // Temporary code to end the journey if the bill run type is two-part supplementary as processing this bill run type
-    // is not currently possible
-    if (session.type === 'two_part_supplementary') {
-      return { goBackToBillRuns: true }
-    }
 
     return { setupComplete: ['2024', '2023'].includes(session.year) }
   }
@@ -51,21 +45,21 @@ async function go (sessionId, payload) {
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
   const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
 
-  const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
+  const pageData = YearPresenter.go(licenceSupplementaryYears, session)
 
   return {
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
-async function _save (session, payload) {
+async function _save(session, payload) {
   session.year = payload.year
 
   return session.$update()
 }
 
-function _validate (payload, regions) {
+function _validate(payload, regions) {
   const validation = YearValidator.go(payload, regions)
 
   if (!validation.error) {

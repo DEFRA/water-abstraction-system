@@ -49,7 +49,7 @@
  *
  * @returns {object[]} An array of abstraction periods each containing a start and end date
  */
-function go (referencePeriod, startDay, startMonth, endDay, endMonth) {
+function go(referencePeriod, startDay, startMonth, endDay, endMonth) {
   const abstractionPeriodsWithYears = _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth)
 
   return abstractionPeriodsWithYears.map((abstractionPeriod) => {
@@ -57,11 +57,11 @@ function go (referencePeriod, startDay, startMonth, endDay, endMonth) {
   })
 }
 
-function _addOneYear (date) {
+function _addOneYear(date) {
   return new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
 }
 
-function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
+function _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod) {
   const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)
   const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
 
@@ -71,7 +71,7 @@ function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod)
   }
 }
 
-function _determineYears (referencePeriod, startDay, startMonth, endDay, endMonth) {
+function _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth) {
   const periodStartYear = referencePeriod.startDate.getFullYear()
 
   // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
@@ -104,15 +104,14 @@ function _determineYears (referencePeriod, startDay, startMonth, endDay, endMont
   })
 }
 
-function _isPeriodValid (referencePeriod, abstractionPeriod) {
+function _isPeriodValid(referencePeriod, abstractionPeriod) {
   // If either period starts after the other ends then there is no intersection and `false` is returned
   return !(
-    abstractionPeriod.startDate > referencePeriod.endDate ||
-    referencePeriod.startDate > abstractionPeriod.endDate
+    abstractionPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > abstractionPeriod.endDate
   )
 }
 
-function _subtractOneYear (date) {
+function _subtractOneYear(date) {
   return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
 

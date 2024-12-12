@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -104,16 +104,32 @@ describe('Fetch Bill Licence service', () => {
 
         await Promise.all([
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '3', chargeCategoryCode: '4.3.1', billableDays: 10
+            billLicenceId,
+            chargeReferenceId,
+            description: '3',
+            chargeCategoryCode: '4.3.1',
+            billableDays: 10
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '1', chargeCategoryCode: '4.3.2', createdAt: new Date('2023-02-02')
+            billLicenceId,
+            chargeReferenceId,
+            description: '1',
+            chargeCategoryCode: '4.3.2',
+            createdAt: new Date('2023-02-02')
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '2', chargeCategoryCode: '4.3.1', billableDays: 20
+            billLicenceId,
+            chargeReferenceId,
+            description: '2',
+            chargeCategoryCode: '4.3.1',
+            billableDays: 20
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '0', chargeCategoryCode: '4.3.2', createdAt: new Date('2023-02-01')
+            billLicenceId,
+            chargeReferenceId,
+            description: '0',
+            chargeCategoryCode: '4.3.2',
+            createdAt: new Date('2023-02-01')
           })
         ])
       })
@@ -167,16 +183,32 @@ describe('Fetch Bill Licence service', () => {
 
         await Promise.all([
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '3', chargeCategoryCode: null, billableDays: 10
+            billLicenceId,
+            chargeReferenceId,
+            description: '3',
+            chargeCategoryCode: null,
+            billableDays: 10
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '1', chargeCategoryCode: null, createdAt: new Date('2023-02-02')
+            billLicenceId,
+            chargeReferenceId,
+            description: '1',
+            chargeCategoryCode: null,
+            createdAt: new Date('2023-02-02')
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '2', chargeCategoryCode: null, billableDays: 20
+            billLicenceId,
+            chargeReferenceId,
+            description: '2',
+            chargeCategoryCode: null,
+            billableDays: 20
           }),
           TransactionHelper.add({
-            billLicenceId, chargeReferenceId, description: '0', chargeCategoryCode: null, createdAt: new Date('2023-02-01')
+            billLicenceId,
+            chargeReferenceId,
+            description: '0',
+            chargeCategoryCode: null,
+            createdAt: new Date('2023-02-01')
           })
         ])
       })

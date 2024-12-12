@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -43,16 +43,13 @@ describe('Return Submission model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnSubmissionModel.query()
-          .innerJoinRelated('returnLog')
+        const query = await ReturnSubmissionModel.query().innerJoinRelated('returnLog')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return log', async () => {
-        const result = await ReturnSubmissionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('returnLog')
+        const result = await ReturnSubmissionModel.query().findById(testRecord.id).withGraphFetched('returnLog')
 
         expect(result).to.be.instanceOf(ReturnSubmissionModel)
         expect(result.id).to.equal(testRecord.id)
@@ -84,8 +81,7 @@ describe('Return Submission model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReturnSubmissionModel.query()
-          .innerJoinRelated('returnSubmissionLines')
+        const query = await ReturnSubmissionModel.query().innerJoinRelated('returnSubmissionLines')
 
         expect(query).to.exist()
       })

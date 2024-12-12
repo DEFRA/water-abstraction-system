@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -115,9 +115,10 @@ describe('Legacy Request', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.delete('foobar', testPath))
-          .to
-          .reject(Error, 'Request to unknown legacy service foobar')
+        await expect(LegacyRequest.delete('foobar', testPath)).to.reject(
+          Error,
+          'Request to unknown legacy service foobar'
+        )
       })
     })
   })
@@ -215,9 +216,7 @@ describe('Legacy Request', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.get('foobar', testPath))
-          .to
-          .reject(Error, 'Request to unknown legacy service foobar')
+        await expect(LegacyRequest.get('foobar', testPath)).to.reject(Error, 'Request to unknown legacy service foobar')
       })
     })
   })
@@ -317,9 +316,10 @@ describe('Legacy Request', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.post('foobar', testPath, null, true, requestBody))
-          .to
-          .reject(Error, 'Request to unknown legacy service foobar')
+        await expect(LegacyRequest.post('foobar', testPath, null, true, requestBody)).to.reject(
+          Error,
+          'Request to unknown legacy service foobar'
+        )
       })
     })
   })

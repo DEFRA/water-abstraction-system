@@ -18,7 +18,7 @@ const LicenceVersionValidator = require('../../../validators/import/licence-vers
  * @param {string} naldLicenceId - The NALD ID for the licence being imported
  * @param {object} transformedLicence - An object representing a valid WRLS licence
  */
-async function go (regionCode, naldLicenceId, transformedLicence) {
+async function go(regionCode, naldLicenceId, transformedLicence) {
   const naldLicenceVersions = await FetchLicenceVersionsService.go(regionCode, naldLicenceId)
 
   naldLicenceVersions.forEach((naldLicenceVersion) => {

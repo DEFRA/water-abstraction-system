@@ -11,7 +11,7 @@ const SchemaExportService = require('./schema-export.service.js')
 /**
  * Calls SchemaExportService giving it a schemaName
  */
-async function go () {
+async function go() {
   // Mark the start time for later logging
   const startTime = currentTimeInNanoseconds()
 

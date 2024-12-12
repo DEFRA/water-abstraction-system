@@ -16,16 +16,14 @@ const ReviewLicenceModel = require('../../../app/models/review-licence.model.js'
  * - `billRunId` - [random UUID]
  * - `licenceId` - [random UUID]
  * - `licenceRef` - [randomly generated - 01/123]
- * - `licenceHolder` - A LicenceHolder
- * - `progress` - false
- * - `status` - ready
- * - `issues` - null
+ * - `licenceHolder` - Licence Holder Ltd
+ * - `issues` - ''
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
  * @returns {Promise<module:ReviewLicenceModel>} The instance of the newly created record
  */
-function add (data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewLicenceModel.query()
@@ -43,15 +41,13 @@ function add (data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-function defaults (data = {}) {
+function defaults(data = {}) {
   const defaults = {
     billRunId: generateUUID(),
     licenceId: generateUUID(),
     licenceRef: generateLicenceRef(),
     licenceHolder: 'Licence Holder Ltd',
-    progress: false,
-    status: 'ready',
-    issues: null
+    issues: ''
   }
 
   return {

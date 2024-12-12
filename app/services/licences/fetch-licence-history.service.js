@@ -14,34 +14,25 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @returns {Promise<module:LicenceModel>} the licence and related charge, licence and return versions
  */
-async function go (licenceId) {
+async function go(licenceId) {
   return _fetch(licenceId)
 }
 
-async function _fetch (licenceId) {
+async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select(['id', 'licenceRef'])
     .withGraphFetched('chargeVersions')
     .modifyGraph('chargeVersions', (builder) => {
-      builder.select(
-        'id'
-      )
-        .modify('history')
+      builder.select('id').modify('history')
     })
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
-      builder.select(
-        'id'
-      )
-        .modify('history')
+      builder.select('id').modify('history')
     })
     .withGraphFetched('returnVersions')
     .modifyGraph('returnVersions', (builder) => {
-      builder.select(
-        'id'
-      )
-        .modify('history')
+      builder.select('id').modify('history')
     })
 }
 

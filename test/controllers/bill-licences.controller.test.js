@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,10 +24,12 @@ describe('Bill Licences controller', () => {
   let options
   let server
 
-  beforeEach(async () => {
-    // Create server before each test
+  // Create server before running the tests
+  before(async () => {
     server = await init()
+  })
 
+  beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -143,7 +145,7 @@ describe('Bill Licences controller', () => {
   })
 })
 
-function _options (path) {
+function _options(path) {
   const root = '/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316'
   const url = path ? `${root}/${path}` : root
 
@@ -157,7 +159,7 @@ function _options (path) {
   }
 }
 
-function _presrocPageData () {
+function _presrocPageData() {
   return {
     accountNumber: 'W99999999A',
     billId: '5a5b313b-e707-490a-a693-799339941e4f',
@@ -201,7 +203,7 @@ function _presrocPageData () {
   }
 }
 
-function _srocPageData () {
+function _srocPageData() {
   return {
     accountNumber: 'B99990099A',
     billId: '13822096-1118-404c-81a4-fdbe5fb73d8f',
@@ -218,18 +220,21 @@ function _srocPageData () {
         additionalCharges: '',
         adjustments: 'Two-part tariff (0.5)',
         billableDays: '214/214',
-        chargeCategoryDescription: 'High loss, non-tidal, restricted water, greater than 120 up to and including 220 ML/yr, Tier 1 model',
-        chargeElements: [{
-          purpose: 'Trickle Irrigation - Direct',
-          abstractionPeriod: '1 April to 31 October',
-          volume: '150ML'
-        }],
+        chargeCategoryDescription:
+          'High loss, non-tidal, restricted water, greater than 120 up to and including 220 ML/yr, Tier 1 model',
+        chargeElements: [
+          {
+            purpose: 'Trickle Irrigation - Direct',
+            abstractionPeriod: '1 April to 31 October',
+            volume: '150ML'
+          }
+        ],
         chargePeriod: '1 April 2023 to 31 March 2024',
         chargeReference: '4.6.29 (£35.74)',
         chargeType: 'standard',
         creditAmount: '',
         debitAmount: '£1,787.00',
-        description: 'Two-part tariff basic water abstraction charge: Borehole at Muckton - Sussex',
+        description: 'Two-part tariff first part water abstraction charge: Borehole at Muckton - Sussex',
         quantity: '150ML'
       },
       {

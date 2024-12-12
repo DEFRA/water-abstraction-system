@@ -12,8 +12,9 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go (session) {
+function go(session) {
   return {
+    pageTitle: 'Select the season',
     sessionId: session.id,
     selectedSeason: session.season ? session.season : null
   }

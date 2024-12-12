@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,13 +13,14 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things to stub
+const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
 const PersistImportService = require('../../../../app/services/import/persist-import.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
 const TransformAddressesService = require('../../../../app/services/import/legacy/transform-addresses.service.js')
 const TransformCompaniesService = require('../../../../app/services/import/legacy/transform-companies.service.js')
 const TransformCompanyAddressesService = require('../../../../app/services/import/legacy/transform-company-addresses.service.js')
 const TransformContactsService = require('../../../../app/services/import/legacy/transform-contacts.service.js')
 const TransformLicenceDocumentService = require('../../../../app/services/import/legacy/transform-licence-document.service.js')
+const TransformLicenceDocumentRolesService = require('../../../../app/services/import/legacy/transform-licence-document-roles.service.js')
 const TransformLicenceService = require('../../../../app/services/import/legacy/transform-licence.service.js')
 const TransformLicenceVersionPurposeConditionsService = require('../../../../app/services/import/legacy/transform-licence-version-purpose-conditions.service.js')
 const TransformLicenceVersionPurposesService = require('../../../../app/services/import/legacy/transform-licence-version-purposes.service.js')
@@ -36,7 +37,6 @@ describe('Import Legacy Process Licence service', () => {
   let licenceRef
   let notifierStub
   let PersistImportServiceStub
-  let processLicenceReturnLogsServiceStub
   let transformedLicence
   let wrlsLicenceId
 
@@ -47,10 +47,12 @@ describe('Import Legacy Process Licence service', () => {
 
     transformedLicence = _transformedLicence(licenceRef)
 
+    Sinon.stub(DetermineSupplementaryBillingFlagsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionsService, 'go').resolves()
     Sinon.stub(TransformLicenceVersionPurposesService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceVersionPurposeConditionsService, 'go').resolves(transformedLicence)
     Sinon.stub(TransformLicenceDocumentService, 'go').resolves()
+    Sinon.stub(TransformLicenceDocumentRolesService, 'go').resolves()
     Sinon.stub(TransformCompaniesService, 'go').resolves({ company: [], transformedCompany: [] })
     Sinon.stub(TransformContactsService, 'go').resolves()
     Sinon.stub(TransformAddressesService, 'go').resolves()
@@ -70,16 +72,19 @@ describe('Import Legacy Process Licence service', () => {
 
   describe('when there is a valid NALD licence to import with an existing licence', () => {
     beforeEach(() => {
-      Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence, wrlsLicenceId })
+      Sinon.stub(TransformLicenceService, 'go').resolves({
+        naldLicenceId,
+        regionCode,
+        transformedLicence,
+        wrlsLicenceId
+      })
       PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
-      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
     it('saves the imported licence and creates the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
-      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.true()
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -87,9 +92,7 @@ describe('Import Legacy Process Licence service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(
-        notifierStub.omg.calledWith('Legacy licence import complete')
-      ).to.be.true()
+      expect(notifierStub.omg.calledWith('Legacy licence import complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.licenceId).to.equal(licenceId)
@@ -101,14 +104,12 @@ describe('Import Legacy Process Licence service', () => {
     beforeEach(() => {
       Sinon.stub(TransformLicenceService, 'go').resolves({ naldLicenceId, regionCode, transformedLicence })
       PersistImportServiceStub = Sinon.stub(PersistImportService, 'go').resolves(licenceId)
-      processLicenceReturnLogsServiceStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     })
 
     it('saves the imported licence but does not process the return logs', async () => {
       await ProcessLicenceService.go(licenceRef)
 
       expect(PersistImportServiceStub.calledWith(transformedLicence)).to.be.true()
-      expect(processLicenceReturnLogsServiceStub.calledWith(wrlsLicenceId)).to.be.false()
     })
   })
 
@@ -131,21 +132,23 @@ describe('Import Legacy Process Licence service', () => {
 
 // NOTE: This is an incomplete transformed licence. But this minimum valid structure saves us having to also stub
 // the LicenceStructureValidator
-function _transformedLicence (licenceRef) {
+function _transformedLicence(licenceRef) {
   return {
     licenceRef,
-    licenceVersions: [{
-      externalId: '6:2113:100:0',
-      licenceVersionPurposes: [
-        {
-          externalId: '6:10000004',
-          licenceVersionPurposeConditions: []
-        },
-        {
-          externalId: '6:10000005',
-          licenceVersionPurposeConditions: []
-        }
-      ]
-    }]
+    licenceVersions: [
+      {
+        externalId: '6:2113:100:0',
+        licenceVersionPurposes: [
+          {
+            externalId: '6:10000004',
+            licenceVersionPurposeConditions: []
+          },
+          {
+            externalId: '6:10000005',
+            licenceVersionPurposeConditions: []
+          }
+        ]
+      }
+    ]
   }
 }

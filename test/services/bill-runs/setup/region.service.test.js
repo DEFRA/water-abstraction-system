@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,7 +18,7 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 // Thing under test
 const RegionService = require('../../../../app/services/bill-runs/setup/region.service.js')
 
-describe('Bill Runs Setup Region service', () => {
+describe('Bill Runs - Setup - Region service', () => {
   let session
   let regions
   let region
@@ -41,8 +41,9 @@ describe('Bill Runs Setup Region service', () => {
       const result = await RegionService.go(session.id)
 
       expect(result).to.equal({
-        sessionId: session.id,
+        pageTitle: 'Select the region',
         regions,
+        sessionId: session.id,
         selectedRegion: region.id
       })
     })

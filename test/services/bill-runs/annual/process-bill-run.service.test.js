@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -34,7 +34,9 @@ describe('Annual Process Bill Run service', () => {
     const financialYearEnd = billingPeriod.startDate.getFullYear()
 
     billRun = await BillRunHelper.add({
-      batchType: 'annual', fromFinancialYearEnding: financialYearEnd, toFinancialYearEnding: financialYearEnd
+      batchType: 'annual',
+      fromFinancialYearEnding: financialYearEnd,
+      toFinancialYearEnding: financialYearEnd
     })
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js

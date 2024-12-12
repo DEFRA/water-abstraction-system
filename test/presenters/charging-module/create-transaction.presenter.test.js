@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -46,10 +46,7 @@ describe('Charging Module Create Transaction presenter', () => {
         ])
         .withGraphFetched('region')
         .modifyGraph('licence.region', (builder) => {
-          builder.select([
-            'id',
-            'chargeRegionId'
-          ])
+          builder.select(['id', 'chargeRegionId'])
         })
 
       // NOTE: The transaction object the presenter expects is what `FormatSrocTransactionLineService` returns rather
@@ -86,7 +83,9 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.compensationCharge).to.equal(false)
       expect(result.customerReference).to.equal(accountNumber)
       expect(result.licenceNumber).to.equal(licence.licenceRef)
-      expect(result.lineDescription).to.equal('Water abstraction charge: Agriculture other than spray irrigation at East Rudham')
+      expect(result.lineDescription).to.equal(
+        'Water abstraction charge: Agriculture other than spray irrigation at East Rudham'
+      )
       expect(result.loss).to.equal('medium')
       expect(result.region).to.equal(region.chargeRegionId)
       expect(result.regionalChargingArea).to.equal('Southern')

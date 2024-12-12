@@ -10,11 +10,11 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 class ReturnRequirementModel extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'returnRequirements'
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     return {
       points: {
         relation: Model.ManyToManyRelation,
