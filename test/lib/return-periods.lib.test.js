@@ -365,7 +365,7 @@ describe('Return Period lib', () => {
       })
     })
 
-    describe('When the current period is due for "quarterTwo"', () => {
+    describe('When the current period is due for "quarterThree"', () => {
       describe('and the current date is between 29 July - 28 October', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnPeriodDates.quarterThree, year)
@@ -471,7 +471,6 @@ describe('Return Period lib', () => {
           const result = ReturnPeriodLib.determineNextReturnPeriod(testDate)
 
           expect(result).to.equal({
-            // wrong string ?
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
