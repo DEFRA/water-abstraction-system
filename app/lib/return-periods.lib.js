@@ -270,6 +270,44 @@ function _newYearElapsedQuarterFourDueDate(determinationDate, period) {
   }
 }
 
+/**
+ *
+ * @param determinationDate
+ */
+function determineCurrentReturnPeriod(determinationDate = new Date()) {
+  const returnPeriods = determineReturnsPeriods(determinationDate)
+
+  const sortMe = []
+
+  for (const [key, value] of Object.entries(returnPeriods)) {
+    sortMe.push({ name: key, ...value })
+  }
+
+  const sorted = sortMe.sort((a, b) => a.dueDate - b.dueDate)
+
+  return sorted[0]
+}
+
+/**
+ *
+ * @param determinationDate
+ */
+function determineNextReturnPeriod(determinationDate = new Date()) {
+  const returnPeriods = determineReturnsPeriods(determinationDate)
+
+  const sortMe = []
+
+  for (const [key, value] of Object.entries(returnPeriods)) {
+    sortMe.push({ name: key, ...value })
+  }
+
+  const sorted = sortMe.sort((a, b) => a.dueDate - b.dueDate)
+
+  return sorted[1]
+}
+
 module.exports = {
-  determineReturnsPeriods
+  determineReturnsPeriods,
+  determineCurrentReturnPeriod,
+  determineNextReturnPeriod
 }

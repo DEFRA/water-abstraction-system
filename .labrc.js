@@ -1,12 +1,12 @@
 'use strict'
 
 module.exports = {
-  verbose: true,
-  coverage: true,
-  'coverage-exclude': ['db/seeds'],
-  // lcov reporter required for SonarQube
-  reporter: ['console', 'html', 'lcov'],
-  output: ['stdout', 'coverage/coverage.html', 'coverage/lcov.info'],
+  // verbose: true,
+  // coverage: true,
+  // 'coverage-exclude': ['db/seeds'],
+  // // lcov reporter required for SonarQube
+  // reporter: ['console', 'html', 'lcov'],
+  // output: ['stdout', 'coverage/coverage.html', 'coverage/lcov.info'],
   // @aws-sdk/s3 exposes global variables which cause errors during test if we don't ignore them. lab expects the list
   // of globals to ignore to be a single comma-delimited string; for ease of management we define them in an array then
   // join them.
