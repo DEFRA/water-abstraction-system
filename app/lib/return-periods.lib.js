@@ -270,6 +270,66 @@ function _newYearElapsedQuarterFourDueDate(determinationDate, period) {
   }
 }
 
+/**
+ * Determines the upcoming return periods based on a given determination date. It calculates the return periods,
+ * maps them, sorts them by due date, and returns the current return period.
+ *
+ * @param {Date} [determinationDate=new Date()] - The date to determine the upcoming return periods from.
+ * Defaults to the current date if not provided.
+ *
+ * @returns {object[]} - An array of return periods
+ */
+function determineUpcomingReturnPeriods(determinationDate = new Date()) {
+  const returnPeriods = determineReturnsPeriods(determinationDate)
+  const mappedReturnPeriods = _mapReturnsPeriods(returnPeriods)
+  return _sortByDueDate(mappedReturnPeriods)
+}
+
+/**
+ * Maps the returnPeriods object to an array of objects with the key added as the name field.
+ *
+ * This name field can be used to extract the return period.
+ *
+ * @param {object} returnPeriods - The object containing return period information, where each key represents a period name and its value contains date properties.
+ * @returns {Array<object>} An array of objects, each containing the `name` of the return period and its associated `dueDate`, `endDate`, and `startDate`.
+ *
+ * @example
+ * Input: {
+ *   quarterOne: { dueDate: '2024-01-31', endDate: '2024-03-31', startDate: '2024-01-01' },
+ *   quarterTwo: { dueDate: '2024-04-30', endDate: '2024-06-30', startDate: '2024-04-01' }
+ * }
+ *
+ * Output: [
+ *    { name: 'quarterOne', dueDate: '2024-01-31', endDate: '2024-03-31', startDate: '2024-01-01' },
+ *    { name: 'quarterTwo', dueDate: '2024-04-30', endDate: '2024-06-30', startDate: '2024-04-01' }
+ *  ]
+ */
+function _mapReturnsPeriods(returnPeriods) {
+  return Object.entries(returnPeriods).map(([key, value]) => {
+    return { name: key, ...value }
+  })
+}
+
+/**
+ * Sorts an array of objects by their `dueDate` and, if they are equal, by their `startDate` (month and day only).
+ *
+ * @param {Array<object>} toSort - The array of objects to be sorted.
+ *
+ * @returns {Array<object>} The sorted array, first by `dueDate`, and then by the month and day of `startDate` in case of ties.
+ */
+function _sortByDueDate(toSort) {
+  return toSort.sort(function (a, b) {
+    if (a.dueDate.getTime() === b.dueDate.getTime()) {
+      const aMonthDay = a.startDate.getMonth() * 100 + a.startDate.getDate()
+      const bMonthDay = b.startDate.getMonth() * 100 + b.startDate.getDate()
+
+      return aMonthDay - bMonthDay
+    }
+    return a.dueDate.getTime() - b.dueDate.getTime()
+  })
+}
+
 module.exports = {
-  determineReturnsPeriods
+  determineReturnsPeriods,
+  determineUpcomingReturnPeriods
 }
