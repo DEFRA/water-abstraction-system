@@ -50,7 +50,8 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @param {string} regionId - UUID of the region a bill run is being created for
  *
- * @returns {Promise<module:BillRunModel[]>} An array containing the matched bill runs if found
+ * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
+ * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(regionId) {
   const toFinancialYearEnding = await _toFinancialYearEnding(regionId)

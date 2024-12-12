@@ -34,8 +34,8 @@ const LAST_PRESROC_YEAR = 2022
  * @param {boolean} [summer] - Applies only to PRESROC two-part tariff. Whether the bill run is summer or winter
  * all-year
  *
- * @returns {Promise<module:BillRunModel[]>} An array containing the matched bill run if found, otherwise the result of
- * calling `FetchLiveBillRunsService`
+ * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
+ * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(regionId, year, summer = false) {
   const toFinancialYearEnding = _toFinancialYearEnding(year)

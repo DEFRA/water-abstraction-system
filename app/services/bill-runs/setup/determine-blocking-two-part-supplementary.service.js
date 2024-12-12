@@ -35,8 +35,8 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * @param {string} regionId - UUID of the region a bill run is being created for
  * @param {number} year - The year selected by the user for the bill run
  *
- * @returns {Promise<module:BillRunModel[]>} An array containing the matched bill run if found, otherwise the result of
- * calling `FetchLiveBillRunsService`
+ * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
+ * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(regionId, year) {
   const toFinancialYearEnding = await _toFinancialYearEnding(regionId, year)

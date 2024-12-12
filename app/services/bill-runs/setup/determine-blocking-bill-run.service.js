@@ -36,8 +36,8 @@ const DetermineBlockingTwoPartSupplementaryService = require('./determine-blocki
  *
  * @param {object} session - The bill run setup session instance
  *
- * @returns {Promise<object>} Any matching bill runs, the year it determined would be used for
- * `toFinancialYearEnding`, and what bill runs to trigger (if any)
+ * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
+ * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(session) {
   const { region, season, type, year } = session
