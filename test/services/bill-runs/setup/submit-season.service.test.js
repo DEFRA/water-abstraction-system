@@ -54,11 +54,12 @@ describe('Bill Runs - Setup - Submit Season service', () => {
           const result = await SubmitSeasonService.go(session.id, payload)
 
           expect(result).to.equal({
-            sessionId: session.id,
-            selectedSeason: null,
             error: {
               text: 'Select the season'
-            }
+            },
+            pageTitle: 'Select the season',
+            sessionId: session.id,
+            selectedSeason: null
           })
         })
       })

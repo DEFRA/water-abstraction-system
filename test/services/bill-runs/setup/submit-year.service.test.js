@@ -85,6 +85,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
           expect(result).to.equal({
             financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: false }],
+            pageTitle: 'Select the financial year',
             sessionId: session.id,
             selectedYear: null,
             error: {

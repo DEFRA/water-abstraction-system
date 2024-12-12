@@ -25,6 +25,7 @@ describe('Bill Runs - Setup - Type service', () => {
       const result = await SeasonService.go(session.id)
 
       expect(result).to.equal({
+        pageTitle: 'Select the season',
         sessionId: session.id,
         selectedSeason: 'summer'
       })

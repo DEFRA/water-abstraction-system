@@ -32,8 +32,9 @@ describe('Bill Runs - Setup - Region presenter', () => {
         const result = RegionPresenter.go(session, regions)
 
         expect(result).to.equal({
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+          pageTitle: 'Select the region',
           regions,
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedRegion: null
         })
       })
@@ -48,8 +49,9 @@ describe('Bill Runs - Setup - Region presenter', () => {
         const result = RegionPresenter.go(session, regions)
 
         expect(result).to.equal({
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
+          pageTitle: 'Select the region',
           regions,
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedRegion: 'Stormlands'
         })
       })

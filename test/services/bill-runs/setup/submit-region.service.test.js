@@ -103,12 +103,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           expect(result).to.equal({
-            sessionId: session.id,
-            regions,
-            selectedRegion: null,
             error: {
               text: 'Select the region'
-            }
+            },
+            pageTitle: 'Select the region',
+            regions,
+            sessionId: session.id,
+            selectedRegion: null
           })
         })
       })

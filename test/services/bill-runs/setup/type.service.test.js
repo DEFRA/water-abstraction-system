@@ -37,6 +37,7 @@ describe('Bill Runs - Setup - Type service', () => {
 
       expect(result).to.equal({
         enableTwoPartTariffSupplementary: false,
+        pageTitle: 'Select the bill run type',
         sessionId: session.id,
         selectedType: 'annual'
       })

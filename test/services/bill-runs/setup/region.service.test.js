@@ -41,8 +41,9 @@ describe('Bill Runs - Setup - Region service', () => {
       const result = await RegionService.go(session.id)
 
       expect(result).to.equal({
-        sessionId: session.id,
+        pageTitle: 'Select the region',
         regions,
+        sessionId: session.id,
         selectedRegion: region.id
       })
     })
