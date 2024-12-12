@@ -11,6 +11,7 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 const DetermineBlockingAnnualService = require('./determine-blocking-annual.service.js')
 const DetermineBlockingSupplementaryService = require('./determine-blocking-supplementary.service.js')
 const DetermineBlockingTwoPartAnnualService = require('./determine-blocking-two-part-annual.service.js')
+const DetermineBlockingTwoPartSupplementaryService = require('./determine-blocking-two-part-supplementary.service.js')
 
 /**
  * Determines if an existing bill run blocks the one a user is trying to setup
@@ -24,15 +25,17 @@ const DetermineBlockingTwoPartAnnualService = require('./determine-blocking-two-
  * All this needs to be taken into account when determining if a 'matching' bill run exists.
  *
  * Once we have a match, we then need to determine what, if any, bill runs we can trigger. In summary, for annual
- * or two-part tariff, if a match is found you cannot trigger them.
+ * or two-part tariff annual, if a match is found you cannot trigger them.
  *
  * Supplementary gets complex because
  *
  * - you can create more than one in a year for a region
- * - both engines have to be triggered to cover the 6 year billing period
+ * - for non two-part tariff, both engines have to be triggered to cover the 6 year billing period
  *
  * So, we might have matches, but as long as they are 'sent' we can proceed. If only one is 'sent', we can still trigger
- * the one of the bill run engines, but we have to figure out which one first.
+ * one of the bill run engines, but we have to figure out which one first.
+ *
+ * Two-part tariff supplementary is the easiest: we just need to check if there are any 'live' bill runs.
  *
  * @param {object} session - The bill run setup session instance
  *
@@ -57,6 +60,10 @@ async function _determineBlockingBillRun(session, toFinancialYearEnding) {
 
   if (type === 'supplementary') {
     return DetermineBlockingSupplementaryService.go(region, toFinancialYearEnding)
+  }
+
+  if (type === 'two_part_supplementary') {
+    return DetermineBlockingTwoPartSupplementaryService.go(region, toFinancialYearEnding)
   }
 
   if (type === 'two_part_tariff') {

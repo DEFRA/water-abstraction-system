@@ -15,6 +15,7 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 const DetermineBlockingAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-annual.service.js')
 const DetermineBlockingSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-supplementary.service.js')
 const DetermineBlockingTwoPartAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js')
+const DetermineBlockingTwoPartSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js')
 const DetermineFinancialYearEndService = require('../../../../app/services/bill-runs/setup/determine-financial-year-end.service.js')
 
 // Thing under test
@@ -88,7 +89,7 @@ describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
       })
     })
 
-    describe('and the user is intending to create a two-part tariff bill run', () => {
+    describe('and the user is intending to create a two-part tariff annual bill run', () => {
       beforeEach(() => {
         toFinancialYearEnding = 2022
 
@@ -116,7 +117,7 @@ describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
 
           expect(result).to.equal({
             matches: [],
-            toFinancialYearEnding: 2022,
+            toFinancialYearEnding,
             trigger: engineTriggers.old
           })
         })
@@ -235,6 +236,60 @@ describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
           expect(matches[0].id).to.equal('5612815f-9f67-4ac1-b697-d9ab7789274c')
           expect(matches[1].id).to.equal('fb837754-7a95-4b39-97d6-2a0694bd912c')
           expect(toFinancialYearEnding).to.equal(currentFinancialEndYear)
+          expect(trigger).to.equal(engineTriggers.neither)
+        })
+      })
+    })
+
+    describe('and the user is intending to create a two-part tariff supplementary bill run', () => {
+      beforeEach(() => {
+        toFinancialYearEnding = 2024
+
+        session = {
+          type: 'two_part_supplementary',
+          region: regionId,
+          year: toFinancialYearEnding
+        }
+
+        Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(toFinancialYearEnding)
+      })
+
+      describe('and no blocking bill runs exist', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineBlockingTwoPartSupplementaryService, 'go').resolves({
+            matches: [],
+            toFinancialYearEnding,
+            trigger: engineTriggers.current
+          })
+        })
+
+        it('returns an empty "matches", "toFinancialYearEnding" is as selected, and "trigger" is current', async () => {
+          const result = await DetermineBlockingBillRunService.go(session)
+
+          expect(result).to.equal({
+            matches: [],
+            toFinancialYearEnding,
+            trigger: engineTriggers.current
+          })
+        })
+      })
+
+      describe('and a blocking bill run exists', () => {
+        beforeEach(() => {
+          Sinon.stub(DetermineBlockingTwoPartSupplementaryService, 'go').resolves({
+            matches: [{ id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1' }],
+            toFinancialYearEnding,
+            trigger: engineTriggers.neither
+          })
+        })
+
+        it('returns "matches" set, "toFinancialYearEnding" is as selected, and "trigger" is neither', async () => {
+          const result = await DetermineBlockingBillRunService.go(session)
+
+          const { matches, toFinancialYearEnding, trigger } = result
+
+          expect(matches[0].id).to.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
+          expect(toFinancialYearEnding).to.equal(2024)
           expect(trigger).to.equal(engineTriggers.neither)
         })
       })
