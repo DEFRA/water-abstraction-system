@@ -11,16 +11,6 @@ const { expect } = Code
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
-  describe('#dummyFunctionForTestCoveragePurposes()', () => {
-    it('correctly returns the input value', () => {
-      const value = 'VALUE'
-
-      const result = BasePresenter.dummyFunctionForTestCoveragePurposes(value)
-
-      expect(result).to.equal(value)
-    })
-  })
-
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
