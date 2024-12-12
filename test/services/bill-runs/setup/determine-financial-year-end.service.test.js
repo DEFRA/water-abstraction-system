@@ -3,13 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Thing under test
 const DetermineFinancialYearEndService = require('../../../../app/services/bill-runs/setup/determine-financial-year-end.service.js')
@@ -19,9 +22,14 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
   const regionId = '42995569-bc1f-4330-8ed3-3b9c550c3cac'
 
   let currentFinancialYearEnd
+  let selectedYear
 
   beforeEach(async () => {
     currentFinancialYearEnd = currentFinancialYear.endDate.getFullYear()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called for an annual bill run', () => {
@@ -32,7 +40,7 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
   })
 
-  describe('when called for a two-part tariff bill run', () => {
+  describe('when called for a two-part tariff annual bill run', () => {
     describe('and "year" is not provided', () => {
       it('returns the current financial year end', async () => {
         const result = await DetermineFinancialYearEndService.go(regionId, 'two_part_tariff')
@@ -42,29 +50,31 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
 
     describe('and "year" is provided', () => {
-      it('returns the year provided', async () => {
-        const result = await DetermineFinancialYearEndService.go(regionId, 'two_part_tariff', 2023)
+      beforeEach(() => {
+        selectedYear = 2023
+      })
 
-        expect(result).to.equal(2023)
+      it('returns the year provided', async () => {
+        const result = await DetermineFinancialYearEndService.go(regionId, 'two_part_tariff', selectedYear)
+
+        expect(result).to.equal(selectedYear)
       })
     })
   })
 
   describe('when called for an supplementary bill run', () => {
     describe('and the last "sent" annual bill run is in the current financial year', () => {
-      let billRun
-
       beforeEach(async () => {
-        billRun = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd
+        Sinon.stub(BillRunModel, 'query').returns({
+          select: Sinon.stub().returnsThis(),
+          where: Sinon.stub().returnsThis(),
+          orderBy: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
+          first: Sinon.stub().resolves({
+            id: '081e4f2c-7ff9-4aa6-b316-9384dbda7c39',
+            toFinancialYearEnding: currentFinancialYearEnd
+          })
         })
-      })
-
-      afterEach(async () => {
-        await billRun.$query().delete()
       })
 
       it('returns the current financial year end', async () => {
@@ -75,19 +85,17 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
     })
 
     describe('and the last "sent" annual bill run is in the previous financial year', () => {
-      let billRun
-
       beforeEach(async () => {
-        billRun = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd - 1
+        Sinon.stub(BillRunModel, 'query').returns({
+          select: Sinon.stub().returnsThis(),
+          where: Sinon.stub().returnsThis(),
+          orderBy: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
+          first: Sinon.stub().resolves({
+            id: '081e4f2c-7ff9-4aa6-b316-9384dbda7c39',
+            toFinancialYearEnding: currentFinancialYearEnd - 1
+          })
         })
-      })
-
-      afterEach(async () => {
-        await billRun.$query().delete()
       })
 
       it('returns the previous financial year end', async () => {
@@ -97,62 +105,18 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
       })
     })
 
-    // NOTE: This would never happen in a 'real' environment. But we often manipulate bill run dates whilst testing
-    // to move annual bill runs out of the way. We would hate to break this ability so we have logic to only look at
-    // sent annual bill runs with an end year less than or equal to the current financial end year
-    describe('and the last "sent" annual bill run is in the next financial year', () => {
-      let billRunOne
-      let billRunTwo
-
-      beforeEach(async () => {
-        billRunOne = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd
-        })
-        billRunTwo = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd + 1
-        })
-      })
-
-      afterEach(async () => {
-        await billRunOne.$query().delete()
-        await billRunTwo.$query().delete()
-      })
-
-      it('returns the financial year end of the bill run in the current year', async () => {
-        const result = await DetermineFinancialYearEndService.go(regionId, 'supplementary')
-
-        expect(result).to.equal(currentFinancialYearEnd)
-      })
-    })
-
     describe('and the last "sent" bill run is not an annual', () => {
-      let billRunOne
-      let billRunTwo
-
       beforeEach(async () => {
-        billRunOne = await BillRunHelper.add({
-          batchType: 'two_part_tariff',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd
+        Sinon.stub(BillRunModel, 'query').returns({
+          select: Sinon.stub().returnsThis(),
+          where: Sinon.stub().returnsThis(),
+          orderBy: Sinon.stub().returnsThis(),
+          limit: Sinon.stub().returnsThis(),
+          first: Sinon.stub().resolves({
+            id: '081e4f2c-7ff9-4aa6-b316-9384dbda7c39',
+            toFinancialYearEnding: currentFinancialYearEnd - 1
+          })
         })
-        billRunTwo = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId,
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd - 1
-        })
-      })
-
-      afterEach(async () => {
-        await billRunOne.$query().delete()
-        await billRunTwo.$query().delete()
       })
 
       it('ignores the other bill run and returns the financial year end of the first matching "sent" annual', async () => {
@@ -161,27 +125,73 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
         expect(result).to.equal(currentFinancialYearEnd - 1)
       })
     })
+  })
 
-    // NOTE: This would never happen in a 'real' environment. All regions have 'sent' annual bill runs so a result
-    // would always be found
-    describe('and there is no "sent" annual bill run for the same region', () => {
-      let billRun
+  describe('when called for a two-part tariff supplementary bill run', () => {
+    // NOTE: Year should always be provided for two-part tariff supplementary
+    describe('and "year" is provided', () => {
+      beforeEach(() => {
+        selectedYear = 2023
+      })
 
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add({
-          batchType: 'annual',
-          regionId: '576fde36-c19f-4e20-b852-7328d20d2aa0',
-          status: 'sent',
-          toFinancialYearEnding: currentFinancialYearEnd
+      it('returns the year provided', async () => {
+        const result = await DetermineFinancialYearEndService.go(regionId, 'two_part_supplementary', selectedYear)
+
+        expect(result).to.equal(selectedYear)
+      })
+    })
+
+    describe('and "year" is not provided', () => {
+      it('throws an error', async () => {
+        const result = await expect(DetermineFinancialYearEndService.go(regionId, 'two_part_supplementary')).to.reject()
+
+        expect(result.message).to.equal('Year must be specified for two-part supplementary bill runs.')
+      })
+    })
+  })
+
+  describe('Non-production scenarios (do not exist in production)', () => {
+    describe('when called for an supplementary bill run', () => {
+      // NOTE: This would never happen in a 'real' environment. But we often manipulate bill run dates whilst testing
+      // to move annual bill runs out of the way. We would hate to break this ability so we have logic to only look at
+      // sent annual bill runs with an end year less than or equal to the current financial end year
+      describe('and the last "sent" annual bill run is in the next financial year', () => {
+        beforeEach(async () => {
+          Sinon.stub(BillRunModel, 'query').returns({
+            select: Sinon.stub().returnsThis(),
+            where: Sinon.stub().returnsThis(),
+            orderBy: Sinon.stub().returnsThis(),
+            limit: Sinon.stub().returnsThis(),
+            first: Sinon.stub().resolves({
+              id: '010d6238-a6a5-4c4b-b12f-4f95a68d8cee',
+              toFinancialYearEnding: currentFinancialYearEnd
+            })
+          })
+        })
+
+        it('returns the financial year end of the bill run in the current year', async () => {
+          const result = await DetermineFinancialYearEndService.go(regionId, 'supplementary')
+
+          expect(result).to.equal(currentFinancialYearEnd)
         })
       })
 
-      afterEach(async () => {
-        await billRun.$query().delete()
-      })
+      // NOTE: This would never happen in a 'real' environment. All regions have 'sent' annual bill runs so a result
+      // would always be found
+      describe('and there is no "sent" annual bill run for the same region', () => {
+        beforeEach(async () => {
+          Sinon.stub(BillRunModel, 'query').returns({
+            select: Sinon.stub().returnsThis(),
+            where: Sinon.stub().returnsThis(),
+            orderBy: Sinon.stub().returnsThis(),
+            limit: Sinon.stub().returnsThis(),
+            first: Sinon.stub().resolves(undefined)
+          })
+        })
 
-      it('throws an error', async () => {
-        await expect(DetermineFinancialYearEndService.go(regionId, 'supplementary')).to.reject()
+        it('throws an error', async () => {
+          await expect(DetermineFinancialYearEndService.go(regionId, 'supplementary')).to.reject()
+        })
       })
     })
   })

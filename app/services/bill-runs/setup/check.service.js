@@ -6,7 +6,7 @@
  */
 
 const CheckPresenter = require('../../../presenters/bill-runs/setup/check.presenter.js')
-const ExistsService = require('./exists.service.js')
+const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -19,9 +19,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const existsResults = await ExistsService.go(session)
+  const blockingResults = await DetermineBlockingBillRunService.go(session)
 
-  return CheckPresenter.go(session, existsResults)
+  return CheckPresenter.go(session, blockingResults)
 }
 
 module.exports = {

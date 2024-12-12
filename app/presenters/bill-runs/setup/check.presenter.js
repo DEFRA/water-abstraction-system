@@ -20,14 +20,14 @@ const LAST_PRESROC_YEAR = 2022
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page
  *
  * @param {module:SessionModel} session - The session instance for the setup bill run journey
- * @param {object} existsResults - The results from `ExistsService`
+ * @param {object} blockingResults - The results from `DetermineBlockingBillRunService`
  *
  * @returns {object} - The data formatted for the view template
  */
-async function go(session, existsResults) {
+async function go(session, blockingResults) {
   const { id: sessionId, region } = session
 
-  const { matches, toFinancialYearEnding, trigger } = existsResults
+  const { matches, toFinancialYearEnding, trigger } = blockingResults
 
   const scheme = _chargeScheme(matches, trigger)
   const billRunType = _billRunType(session, matches, scheme)
@@ -41,7 +41,7 @@ async function go(session, existsResults) {
     billRunType,
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: _dateCreated(matches),
-    financialYear: existsResults.toFinancialYearEnding === 0 ? null : formatFinancialYear(toFinancialYearEnding),
+    financialYear: blockingResults.toFinancialYearEnding === 0 ? null : formatFinancialYear(toFinancialYearEnding),
     pageTitle: messages.title,
     regionName: await _regionName(matches, region),
     sessionId,
