@@ -36,7 +36,7 @@ const LAST_PRESROC_YEAR = 2022
  */
 async function go(regionId, toFinancialYearEnding) {
   const srocMatch = await _fetchSrocMatch(regionId, toFinancialYearEnding)
-  const presrocMatch = await _fetchPresrocMatch(regionId, toFinancialYearEnding)
+  const presrocMatch = await _fetchPresrocMatch(regionId)
 
   // Return both after filtering out any that is null
   const matches = [srocMatch, presrocMatch].filter((match) => {
