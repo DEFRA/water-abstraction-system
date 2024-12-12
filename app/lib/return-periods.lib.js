@@ -271,33 +271,18 @@ function _newYearElapsedQuarterFourDueDate(determinationDate, period) {
 }
 
 /**
- * Determines the current return period based on a given determination date. It calculates the return periods,
+ * Determines the upcoming return periods based on a given determination date. It calculates the return periods,
  * maps them, sorts them by due date, and returns the current return period.
  *
- * @param {Date} [determinationDate=new Date()] - The date to determine the current return period from. Defaults to the current date if not provided.
+ * @param {Date} [determinationDate=new Date()] - The date to determine the upcoming return periods from.
+ * Defaults to the current date if not provided.
  *
- * @returns {object} The current return period, which includes properties like `dueDate`, `startDate`, and `endDate`.
+ * @returns {object[]} - An array of return periods
  */
-function determineCurrentReturnPeriod(determinationDate = new Date()) {
+function determineUpcomingReturnPeriods(determinationDate = new Date()) {
   const returnPeriods = determineReturnsPeriods(determinationDate)
   const mappedReturnPeriods = _mapReturnsPeriods(returnPeriods)
-  const [currentReturnPeriod] = _sortByDueDate(mappedReturnPeriods)
-  return currentReturnPeriod
-}
-
-/**
- * Determines the next return period based on a given determination date. It calculates the return periods,
- * maps them, sorts them by due date, and returns the next return period.
- *
- * @param {Date} [determinationDate=new Date()] - The date to determine the next return period from. Defaults to the current date if not provided.
- *
- * @returns {object} The next return period after the given determination date, which includes properties like `dueDate`, `startDate`, and `endDate`.
- */
-function determineNextReturnPeriod(determinationDate = new Date()) {
-  const returnPeriods = determineReturnsPeriods(determinationDate)
-  const mappedReturnPeriods = _mapReturnsPeriods(returnPeriods)
-  const [, nextReturnPeriod] = _sortByDueDate(mappedReturnPeriods)
-  return nextReturnPeriod
+  return _sortByDueDate(mappedReturnPeriods)
 }
 
 /**
@@ -346,6 +331,5 @@ function _sortByDueDate(toSort) {
 
 module.exports = {
   determineReturnsPeriods,
-  determineCurrentReturnPeriod,
-  determineNextReturnPeriod
+  determineUpcomingReturnPeriods
 }
