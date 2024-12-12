@@ -320,7 +320,9 @@ function determineNextReturnPeriod(determinationDate = new Date()) {
  *  ]
  */
 function _mapReturnsPeriods(returnPeriods) {
-  return Object.entries(returnPeriods).map(([key, value]) => ({ name: key, ...value }))
+  return Object.entries(returnPeriods).map(([key, value]) => {
+    return { name: key, ...value }
+  })
 }
 
 /**
