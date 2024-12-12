@@ -14,7 +14,7 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
-const ExistsService = require('../../../../app/services/bill-runs/setup/exists.service.js')
+const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
 const RegionModel = require('../../../../app/models/region.model.js')
 
 // Thing under test
@@ -33,8 +33,8 @@ describe('Bill Runs Setup Submit Check service', () => {
   }
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
+  let blockingResults
   let createStub
-  let existsResults
   let session
 
   beforeEach(async () => {
@@ -42,11 +42,11 @@ describe('Bill Runs Setup Submit Check service', () => {
   })
 
   describe('when called', () => {
-    describe('and no existing bill runs are found', () => {
+    describe('and no blocking bill runs are found', () => {
       beforeEach(async () => {
-        existsResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
+        blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
 
-        Sinon.stub(ExistsService, 'go').resolves(existsResults)
+        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves(blockingResults)
 
         createStub = Sinon.stub(CreateService, 'go').resolves()
       })
@@ -61,9 +61,9 @@ describe('Bill Runs Setup Submit Check service', () => {
 
     // NOTE: The only time we would expect this to happen, is if a user delayed confirming creation of the bill run long
     // enough for someone else to have kicked of another, that now blocks this one
-    describe('and an existing bill run is found', () => {
+    describe('and a blocking bill run is found', () => {
       beforeEach(async () => {
-        existsResults = {
+        blockingResults = {
           matches: [
             {
               id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -81,7 +81,7 @@ describe('Bill Runs Setup Submit Check service', () => {
           trigger: engineTriggers.neither
         }
 
-        Sinon.stub(ExistsService, 'go').resolves(existsResults)
+        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves(blockingResults)
 
         Sinon.stub(RegionModel, 'query').returns({
           select: Sinon.stub().returnsThis(),
