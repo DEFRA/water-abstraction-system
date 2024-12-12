@@ -32,12 +32,11 @@ async function check(request, h) {
 async function noLicences(request, h) {
   const { sessionId } = request.params
 
-  const regionName = await NoLicencesService.go(sessionId)
+  const pageData = await NoLicencesService.go(sessionId)
 
   return h.view('bill-runs/setup/no-licences.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
-    sessionId
+    ...pageData
   })
 }
 
