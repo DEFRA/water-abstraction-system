@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
@@ -19,8 +20,9 @@ const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setu
 const DetermineBlockingAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-annual.service.js')
 
 describe('Bill Runs Setup Determine Blocking Annual Bill Run service', () => {
+  const currentFinancialYear = determineCurrentFinancialYear()
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
-  const toFinancialYearEnding = 2025
+  const toFinancialYearEnding = currentFinancialYear.endDate.getFullYear()
 
   let billRunQueryStub
   let fetchLiveBillRunStub
@@ -63,7 +65,7 @@ describe('Bill Runs Setup Determine Blocking Annual Bill Run service', () => {
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
-      const result = await DetermineBlockingAnnualService.go(regionId, toFinancialYearEnding)
+      const result = await DetermineBlockingAnnualService.go(regionId)
 
       expect(result).to.equal({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
     })
@@ -86,7 +88,7 @@ describe('Bill Runs Setup Determine Blocking Annual Bill Run service', () => {
       })
 
       it('returns no matches and determines that the "current" engine can be triggered', async () => {
-        const result = await DetermineBlockingAnnualService.go(regionId, toFinancialYearEnding)
+        const result = await DetermineBlockingAnnualService.go(regionId)
 
         expect(result).to.equal({ matches: [], toFinancialYearEnding, trigger: engineTriggers.current })
       })
@@ -101,7 +103,7 @@ describe('Bill Runs Setup Determine Blocking Annual Bill Run service', () => {
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
-        const result = await DetermineBlockingAnnualService.go(regionId, toFinancialYearEnding)
+        const result = await DetermineBlockingAnnualService.go(regionId)
 
         expect(result).to.equal({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
       })
