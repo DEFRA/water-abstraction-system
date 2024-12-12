@@ -14,6 +14,10 @@ const LAST_PRESROC_YEAR = 2022
 /**
  * Determines if an existing bill run will block a user from creating a new two-part annual bill run
  *
+ * It first needs to determine what financial year the bill run will be for. Two-part tariff annual, currently, is
+ * whatever year the user selected until such time as the backlog is cleared. It will then be the same as standard
+ * annual: the current financial year.
+ *
  * You can only create one SROC two-part annual bill run per region, per financial year. For PRESROC, its one per
  * region, financial year, and cycle (summer or winter). So, our first check is to see if one already exists.
  *
@@ -26,14 +30,16 @@ const LAST_PRESROC_YEAR = 2022
  * > consistent for the orchestrating service
  *
  * @param {string} regionId - UUID of the region a bill run is being created for
- * @param {number} toFinancialYearEnding - The end year of the financial period the bill run will be for
+ * @param {number} year - The year selected by the user for the bill run
  * @param {boolean} [summer] - Applies only to PRESROC two-part tariff. Whether the bill run is summer or winter
  * all-year
  *
  * @returns {Promise<module:BillRunModel[]>} An array containing the matched bill run if found, otherwise the result of
  * calling `FetchLiveBillRunsService`
  */
-async function go(regionId, toFinancialYearEnding, summer = false) {
+async function go(regionId, year, summer = false) {
+  const toFinancialYearEnding = _toFinancialYearEnding(year)
+
   let match = await _fetchMatches(regionId, toFinancialYearEnding, summer)
 
   if (!match) {
@@ -64,6 +70,10 @@ async function _fetchMatches(regionId, toFinancialYearEnding, summer) {
     })
     .limit(1)
     .first()
+}
+
+function _toFinancialYearEnding(year) {
+  return Number(year)
 }
 
 function _trigger(match, toFinancialYearEnding) {
