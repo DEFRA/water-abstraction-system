@@ -17,7 +17,7 @@ const FetchLicenceSupplementaryYearsService = require('../../../../app/services/
 // Thing under test
 const YearService = require('../../../../app/services/bill-runs/setup/year.service.js')
 
-describe('Bill Runs Setup Year service', () => {
+describe('Bill Runs - Setup - Year service', () => {
   const regionId = 'cff057a0-f3a7-4ae6-bc2b-01183e40fd05'
 
   let session

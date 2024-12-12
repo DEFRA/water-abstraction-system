@@ -18,7 +18,7 @@ const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setu
 // Thing under test
 const DetermineBlockingTwoPartAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js')
 
-describe('Bill Runs Setup Determine Blocking Two Part Annual Bill Run service', () => {
+describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let billRunQueryStub

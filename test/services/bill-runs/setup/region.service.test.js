@@ -18,7 +18,7 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 // Thing under test
 const RegionService = require('../../../../app/services/bill-runs/setup/region.service.js')
 
-describe('Bill Runs Setup Region service', () => {
+describe('Bill Runs - Setup - Region service', () => {
   let session
   let regions
   let region

@@ -18,7 +18,7 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 // Thing under test
 const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
 
-describe('Bill Runs Setup Submit Region service', () => {
+describe('Bill Runs - Setup - Submit Region service', () => {
   let payload
   let region
   let regions

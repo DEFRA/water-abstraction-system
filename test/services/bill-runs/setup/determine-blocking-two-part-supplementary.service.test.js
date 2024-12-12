@@ -18,7 +18,7 @@ const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setu
 // Thing under test
 const DetermineBlockingTwoPartSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js')
 
-describe('Bill Runs Setup Determine Blocking Two Part Supplementary Bill Run service', () => {
+describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let billRunQueryStub

@@ -17,7 +17,7 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 // Thing under test
 const TypeService = require('../../../../app/services/bill-runs/setup/type.service.js')
 
-describe('Bill Runs Setup Type service', () => {
+describe('Bill Runs - Setup - Type service', () => {
   let session
 
   beforeEach(async () => {

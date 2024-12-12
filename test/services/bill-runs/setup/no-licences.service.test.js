@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const NoLicencesService = require('../../../../app/services/bill-runs/setup/no-licences.service.js')
 
-describe('Bill Runs Setup No Licences service', () => {
+describe('Bill Runs - Setup - No Licences service', () => {
   let sessionId
 
   describe('when called with a valid session id', () => {

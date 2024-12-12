@@ -19,7 +19,7 @@ const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setu
 // Thing under test
 const DetermineBlockingAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-annual.service.js')
 
-describe('Bill Runs Setup Determine Blocking Annual Bill Run service', () => {
+describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
   const toFinancialYearEnding = currentFinancialYear.endDate.getFullYear()

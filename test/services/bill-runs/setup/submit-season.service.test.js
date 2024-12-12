@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitSeasonService = require('../../../../app/services/bill-runs/setup/submit-season.service.js')
 
-describe('Bill Runs Setup Submit Season service', () => {
+describe('Bill Runs - Setup - Submit Season service', () => {
   let payload
   let session
 

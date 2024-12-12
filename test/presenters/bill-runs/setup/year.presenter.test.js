@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const YearPresenter = require('../../../../app/presenters/bill-runs/setup/year.presenter.js')
 
-describe('Bill Runs Setup Year presenter', () => {
+describe('Bill Runs - Setup - Year presenter', () => {
   let licenceSupplementaryYears
   let session
 

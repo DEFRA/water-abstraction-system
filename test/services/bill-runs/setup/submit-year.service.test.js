@@ -17,7 +17,7 @@ const FetchLicenceSupplementaryYearsService = require('../../../../app/services/
 // Thing under test
 const SubmitYearService = require('../../../../app/services/bill-runs/setup/submit-year.service.js')
 
-describe('Bill Runs Setup Submit Year service', () => {
+describe('Bill Runs - Setup - Submit Year service', () => {
   let payload
   let session
 

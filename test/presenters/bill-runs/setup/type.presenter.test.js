@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const TypePresenter = require('../../../../app/presenters/bill-runs/setup/type.presenter.js')
 
-describe('Bill Runs Setup Type presenter', () => {
+describe('Bill Runs - Setup - Type presenter', () => {
   let session
 
   describe('when provided with a bill run setup session record', () => {

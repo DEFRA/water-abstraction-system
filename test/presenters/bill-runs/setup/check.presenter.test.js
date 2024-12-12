@@ -17,7 +17,7 @@ const RegionModel = require('../../../../app/models/region.model.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/bill-runs/setup/check.presenter.js')
 
-describe('Bill Runs Setup Check presenter', () => {
+describe('Bill Runs - Setup - Check presenter', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let blockingResults

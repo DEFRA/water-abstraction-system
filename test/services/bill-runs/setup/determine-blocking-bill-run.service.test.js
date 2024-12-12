@@ -23,7 +23,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 // Thing under test
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
 
-describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
+describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
   const currentFinancialEndYear = currentFinancialYear.endDate.getFullYear()
   const regionId = '9ff20191-f942-4a09-a177-860e37502d4a'

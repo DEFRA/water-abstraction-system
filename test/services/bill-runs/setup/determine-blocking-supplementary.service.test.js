@@ -18,7 +18,7 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 // Thing under test
 const DetermineBlockingSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-supplementary.service.js')
 
-describe('Bill Runs Setup Determine Blocking Supplementary Bill Run service', () => {
+describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
   const toFinancialYearEnding = currentFinancialYear.endDate.getFullYear()
