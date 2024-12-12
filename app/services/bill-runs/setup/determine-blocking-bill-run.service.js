@@ -1,24 +1,25 @@
 'use strict'
 
 /**
- * Determines if an existing bill run matches the one a user is trying to setup
- * @module ExistsService
+ * Determines if an existing bill run blocks the one a user is trying to setup
+ * @module DetermineBlockingBillRunService
  */
 
-const DetermineBlockingBillRunService = require('../determine-blocking-bill-run.service.js')
 const DetermineFinancialYearEndService = require('./determine-financial-year-end.service.js')
 const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 
-const LAST_PRESROC_YEAR = 2022
+const DetermineBlockingAnnualService = require('./determine-blocking-annual.service.js')
+const DetermineBlockingSupplementaryService = require('./determine-blocking-supplementary.service.js')
+const DetermineBlockingTwoPartAnnualService = require('./determine-blocking-two-part-annual.service.js')
 
 /**
- * Determines if an existing bill run matches the one a user is trying to setup
+ * Determines if an existing bill run blocks the one a user is trying to setup
  *
  * Once the user completes the bill run setup journey we first need to check if a matching bill run already exists.
  *
  * The criteria though can differ depending on the details selected. For example, you can only have 1 annual bill run
  * per region per year. Supplementary you can have as many as you like but never more than one in process. Two-part
- * tariff, depending on the year, you can have either 2 or 1.
+ * tariff, depending on the year, you can have either 2 or 1 because of the summer and winter cycles.
  *
  * All this needs to be taken into account when determining if a 'matching' bill run exists.
  *
@@ -40,22 +41,31 @@ const LAST_PRESROC_YEAR = 2022
  */
 async function go(session) {
   const toFinancialYearEnding = await _toFinancialYearEnding(session)
-  const matches = await _fetchMatchingBillRun(session, toFinancialYearEnding)
-  const trigger = _trigger(session, matches, toFinancialYearEnding)
+  const result = await _determineBlockingBillRun(session, toFinancialYearEnding)
 
-  return { matches, toFinancialYearEnding, trigger }
+  return result
 }
 
-async function _fetchMatchingBillRun(session, toFinancialYearEnding) {
+async function _determineBlockingBillRun(session, toFinancialYearEnding) {
   // If toFinancialYearEnding is 0 then we are dealing with the non-prod scenario of trying to create a supplementary in
   // a region with no bill run. There is no point checking for a blocking bill run in this case.
   if (toFinancialYearEnding === 0) {
-    return []
+    return { matches: [], toFinancialYearEnding, trigger: engineTriggers.neither }
   }
 
   const { region, season, type } = session
 
-  return DetermineBlockingBillRunService.go(region, type, toFinancialYearEnding, season)
+  if (type === 'supplementary') {
+    return DetermineBlockingSupplementaryService.go(region, toFinancialYearEnding)
+  }
+
+  if (type === 'two_part_tariff') {
+    const summer = season === 'summer'
+
+    return DetermineBlockingTwoPartAnnualService.go(region, toFinancialYearEnding, summer)
+  }
+
+  return DetermineBlockingAnnualService.go(region, toFinancialYearEnding)
 }
 
 /**
@@ -92,51 +102,6 @@ async function _toFinancialYearEnding(session) {
     // billing'. So, we now return 0 here when this happens, so the presenter can display a message to the user.
     return 0
   }
-}
-
-function _trigger(session, matches, toFinancialYearEnding) {
-  const { type: requestedBatchType } = session
-
-  // This will only hit in non-production environments where the user has requested supplementary but there is no annual
-  // bill run for the region. See notes in _toFinancialYearEnding()
-  if (toFinancialYearEnding === 0) {
-    return engineTriggers.neither
-  }
-
-  // No matches means we can trigger a bill run
-  if (matches.length === 0) {
-    // If the requested type is supplementary we need to trigger both bill run engines
-    if (requestedBatchType === 'supplementary') {
-      return engineTriggers.both
-    }
-
-    // This means the requested type is annual or two-part tariff, and year end is after PRESROC so trigger our engine
-    if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
-      return engineTriggers.current
-    }
-
-    // TODO: Remove once all PRESROC two-part tariff annual has been generated
-    // No annual request will get to here (all PRESROC annual bill runs have been generated). So, the user must be
-    // requesting a PRESROC two-part tariff annual
-    return engineTriggers.old
-  }
-
-  // One match means we might still trigger a bill run, but only if the request was for a supplementary
-  if (matches.length === 1) {
-    // It wasn't, so trigger neither. You can't generate these whilst another is in progress or one already exists
-    if (requestedBatchType === 'annual' || requestedBatchType === 'two_part_tariff') {
-      return engineTriggers.neither
-    }
-
-    // It was for supplementary, so we'll trigger the opposite of what is the match
-    if (matches[0].scheme === 'alcs') {
-      return engineTriggers.current
-    }
-
-    return engineTriggers.old
-  }
-
-  return engineTriggers.neither
 }
 
 module.exports = {
