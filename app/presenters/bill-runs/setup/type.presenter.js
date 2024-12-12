@@ -14,6 +14,7 @@
  */
 function go(session) {
   return {
+    pageTitle: 'Select the bill run type',
     sessionId: session.id,
     selectedType: session.type ? session.type : null
   }

@@ -20,7 +20,7 @@ const RegionModel = require('../../../../app/models/region.model.js')
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/bill-runs/setup/submit-check.service.js')
 
-describe('Bill Runs Setup Submit Check service', () => {
+describe('Bill Runs - Setup - Submit Check service', () => {
   const auth = {
     isValid: true,
     credentials: {

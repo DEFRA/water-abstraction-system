@@ -15,8 +15,9 @@
  */
 function go(session, regions) {
   return {
-    sessionId: session.id,
+    pageTitle: 'Select the region',
     regions,
+    sessionId: session.id,
     selectedRegion: session.region ? session.region : null
   }
 }

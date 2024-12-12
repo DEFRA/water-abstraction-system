@@ -22,7 +22,10 @@ async function go(sessionId) {
   const { region: regionId } = await SessionModel.query().findById(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 
-  return regionName
+  return {
+    pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
+    sessionId
+  }
 }
 
 module.exports = {

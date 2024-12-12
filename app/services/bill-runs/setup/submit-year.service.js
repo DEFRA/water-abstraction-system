@@ -45,11 +45,11 @@ async function go(sessionId, payload) {
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
   const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
 
-  const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
+  const pageData = YearPresenter.go(licenceSupplementaryYears, session)
 
   return {
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
