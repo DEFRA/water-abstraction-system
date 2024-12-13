@@ -25,28 +25,30 @@ function _returnsPeriod() {
 
   const [currentReturnPeriod, nextReturnPeriod] = determineUpcomingReturnPeriods(today)
 
-  const current = currentReturnPeriod.name !== 'summer' ? _quarter(currentReturnPeriod) : _summer(currentReturnPeriod)
-  const next = nextReturnPeriod.name !== 'summer' ? _quarter(nextReturnPeriod) : _summer(nextReturnPeriod)
-  return [current, next]
+  const currentOption = _option(currentReturnPeriod)
+  const nextOption = _option(nextReturnPeriod)
+
+  return [currentOption, nextOption]
 }
 
-function _quarter(returnPeriod) {
+function _option(returnPeriod) {
+  const textPrefix = _textPrefix(returnPeriod)
   return {
     value: returnPeriod.name,
-    text: `Quarterly ${formatLongDate(returnPeriod.startDate)} to ${formatLongDate(returnPeriod.endDate)}`,
+    text: `${textPrefix} ${formatLongDate(returnPeriod.startDate)} to ${formatLongDate(returnPeriod.endDate)}`,
     hint: {
       text: `Due date ${formatLongDate(returnPeriod.dueDate)}`
     }
   }
 }
 
-function _summer(returnPeriod) {
-  return {
-    value: returnPeriod.name,
-    text: `Summer annual ${formatLongDate(returnPeriod.startDate)} to ${formatLongDate(returnPeriod.endDate)}`,
-    hint: {
-      text: `Due date ${formatLongDate(returnPeriod.dueDate)}`
-    }
+function _textPrefix(returnPeriod) {
+  if (returnPeriod.name === 'allYear') {
+    return 'Winter and all year'
+  } else if (returnPeriod.name === 'summer') {
+    return 'Summer annual'
+  } else {
+    return 'Quarterly'
   }
 }
 
