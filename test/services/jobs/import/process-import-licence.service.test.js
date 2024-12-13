@@ -11,17 +11,19 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const DetermineSupplementaryBillingFlagsService = require('../../../../app/services/import/determine-supplementary-billing-flags.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/jobs/return-logs/process-licence-return-logs.service.js')
+const DetermineLicenceEndDateChangedService = require('../../../../app/services/import/determine-licence-end-date-changed.service')
+const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service')
+const GenerateReturnLogsService = require('../../../../app/services/import/generate-return-logs.service')
 
 // Thing under test
 const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')
 
-describe('Process Import Licence Service', () => {
+describe.only('Process Import Licence Service', () => {
   let licence
   let notifierStub
-  let stubDetermineSupplementaryBillingFlagsService
-  let stubProcessLicenceReturnLogsService
+  let stubDetermineLicenceEndDateChangedService
+  let stubProcessBillingFlagService
+  let stubGenerateReturnLogsService
 
   beforeEach(async () => {
     licence = _licence()
@@ -37,20 +39,31 @@ describe('Process Import Licence Service', () => {
 
   describe('when a licence has been process successfully', () => {
     beforeEach(() => {
-      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(
-        DetermineSupplementaryBillingFlagsService,
-        'go'
-      ).resolves()
-      stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+      stubDetermineLicenceEndDateChangedService = Sinon.stub(DetermineLicenceEndDateChangedService, 'go').resolves(true)
+      stubProcessBillingFlagService = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+      stubGenerateReturnLogsService = Sinon.stub(GenerateReturnLogsService, 'go').resolves()
     })
 
-    it('should call the "ProcessLicenceReturnLogsService" service ', async () => {
+    it('should call the "DetermineLicenceEndDateChangedService" service ', async () => {
       await ProcessImportLicence.go(licence)
 
-      expect(stubProcessLicenceReturnLogsService.calledWithExactly(licence.id)).to.be.true()
+      const expectedPaylod = {
+        expiredDate: licence.expired_date,
+        lapsedDate: licence.lapsed_date,
+        revokedDate: licence.revoked_date,
+        licenceId: licence.id
+      }
+
+      expect(stubDetermineLicenceEndDateChangedService.calledWithExactly(expectedPaylod)).to.be.true()
     })
 
-    it('should call the "DetermineSupplementaryBillingFlagsService" service ', async () => {
+    it('should call the "ProcessBillingFlagService" service ', async () => {
+      await ProcessImportLicence.go(licence)
+
+      expect(stubProcessBillingFlagService.calledWithExactly(licence.id)).to.be.true()
+    })
+
+    it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
       await ProcessImportLicence.go(licence)
 
       const licenceFormattedForSupplementary = {
@@ -59,32 +72,17 @@ describe('Process Import Licence Service', () => {
         revokedDate: licence.revoked_date
       }
 
-      expect(
-        stubDetermineSupplementaryBillingFlagsService.calledWithExactly(licenceFormattedForSupplementary, licence.id)
-      ).to.be.true()
-    })
-
-    it('should format the licence for the Determine Supplementary Billing Flags Service', async () => {
-      await ProcessImportLicence.go(licence)
-
-      expect(
-        stubDetermineSupplementaryBillingFlagsService
-          .getCall(0)
-          .calledWithExactly(
-            { expiredDate: licence.expired_date, lapsedDate: licence.lapsed_date, revokedDate: licence.revoked_date },
-            licence.id
-          )
-      ).to.be.true()
+      expect(stubGenerateReturnLogsService.calledWithExactly(licence.id, licenceFormattedForSupplementary)).to.be.true()
     })
   })
 
   describe('when processing a licence fails', () => {
     beforeEach(() => {
-      stubDetermineSupplementaryBillingFlagsService = Sinon.stub(
-        DetermineSupplementaryBillingFlagsService,
-        'go'
-      ).rejects(new Error('Test error'))
-      stubProcessLicenceReturnLogsService = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+      stubDetermineLicenceEndDateChangedService = Sinon.stub(DetermineLicenceEndDateChangedService, 'go').rejects(
+        new Error('Test error')
+      )
+      stubProcessBillingFlagService = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+      stubGenerateReturnLogsService = Sinon.stub(GenerateReturnLogsService, 'go').resolves()
     })
 
     it('should catch the error', async () => {

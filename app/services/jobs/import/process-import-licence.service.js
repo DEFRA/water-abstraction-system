@@ -5,8 +5,9 @@
  * @module ProcessImportLicence
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../../import/determine-supplementary-billing-flags.service.js')
-const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-return-logs.service.js')
+const DetermineLicenceEndDateChangedService = require('../../import/determine-licence-end-date-changed.service')
+const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service')
+const GenerateReturnLogsService = require('../../import/generate-return-logs.service')
 
 /**
  * Process licence for the licences imported from NALD
@@ -20,15 +21,19 @@ const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-
  */
 async function go(licence) {
   try {
-    const endDates = {
+    const payload = {
       expiredDate: licence.expired_date,
       lapsedDate: licence.lapsed_date,
-      revokedDate: licence.revoked_date
+      revokedDate: licence.revoked_date,
+      licenceId: licence.id
     }
 
-    await DetermineSupplementaryBillingFlagsService.go(endDates, licence.id)
+    const licenceEndDateChanged = await DetermineLicenceEndDateChangedService.go(payload, licence.id)
 
-    await ProcessLicenceReturnLogsService.go(licence.id)
+    if (licenceEndDateChanged) {
+      ProcessBillingFlagService.go(payload)
+      GenerateReturnLogsService.go(licence.id, payload)
+    }
   } catch (error) {
     global.GlobalNotifier.omfg(`Importing licence ${licence.id}`, null, error)
   }
