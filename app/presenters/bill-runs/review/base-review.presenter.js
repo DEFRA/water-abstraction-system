@@ -204,7 +204,7 @@ function formatIssues(issues) {
  *
  * @param {Array} purposes - the purposes taken from the return logs metadata
  *
- * @returns {string} the purpose descriptions presented as a comma separated string
+ * @returns {string} the purpose descriptions as a string, separated by commas if more than one description exists
  */
 function formatPurposes(purposes) {
   const purposeDescriptionArray = purposes.map((purpose) => {
