@@ -2,42 +2,25 @@
 
 /**
  * Determines if an imported licence has a new end date
- * @module DetermineSupplementaryBillingFlagsService
+ * @module DetermineLicenceEndDateChangedService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
-const ProcessBillingFlagService = require('../licences/supplementary/process-billing-flag.service.js')
 
 /**
  * Determines if an imported licence has a new end date.
  *
- * This service is responsible for determining whether a licence imported has a new end day and therefore should be
- * flagged for supplementary billing.
+ * This service is responsible for determining whether a licence imported has a new end date.
  *
  * It compares the licences end dates (such as lapsed, revoked or expired dates) between WRLS licence and the imported
- * data, and if there is a change in the dates allows the licence to go on to determining the flags.
+ * data.
  *
  * @param {object} importedLicence - The imported licence
  * @param {string} licenceId - The UUID of the licence being updated by the import
+ *
+ * @returns {Promise<boolean>}
  */
 async function go(importedLicence, licenceId) {
-  try {
-    const licenceChanged = await _licenceChanged(importedLicence, licenceId)
-
-    if (licenceChanged) {
-      const payload = {
-        importedLicence,
-        licenceId
-      }
-
-      await ProcessBillingFlagService.go(payload)
-    }
-  } catch (error) {
-    global.GlobalNotifier.omfg('Determine supplementary billing flags on import failed ', { licenceId }, error)
-  }
-}
-
-async function _licenceChanged(importedLicence, licenceId) {
   const query = LicenceModel.query().select(['id']).where('id', licenceId)
 
   _whereClauses(query, importedLicence)

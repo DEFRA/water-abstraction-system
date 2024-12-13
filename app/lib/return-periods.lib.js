@@ -6,7 +6,6 @@
  */
 
 const { returnPeriodDates } = require('./static-lookups.lib.js')
-const { determineCycleStartDate, determineCycleEndDate, determineCycleDueDate } = require('./return-cycle-dates.lib')
 
 /**
  * Determine return periods.
@@ -24,14 +23,14 @@ const { determineCycleStartDate, determineCycleEndDate, determineCycleDueDate } 
 function determineReturnsPeriods(determinationDate = new Date()) {
   return {
     allYear: {
-      startDate: determineCycleStartDate(false, determinationDate),
-      endDate: determineCycleEndDate(false, determinationDate),
-      dueDate: determineCycleDueDate(false, determinationDate)
+      startDate: _cycleStartDate(determinationDate, returnPeriodDates.allYear),
+      endDate: _endDate(determinationDate, returnPeriodDates.allYear),
+      dueDate: _dueDate(determinationDate, returnPeriodDates.allYear)
     },
     summer: {
-      startDate: determineCycleStartDate(true, determinationDate),
-      endDate: determineCycleEndDate(true, determinationDate),
-      dueDate: determineCycleDueDate(true, determinationDate)
+      startDate: _cycleStartDate(determinationDate, returnPeriodDates.summer),
+      endDate: _endDate(determinationDate, returnPeriodDates.summer),
+      dueDate: _dueDate(determinationDate, returnPeriodDates.summer)
     },
     quarterOne: {
       startDate: _startDate(determinationDate, returnPeriodDates.quarterOne),
@@ -327,6 +326,28 @@ function _sortByDueDate(toSort) {
     }
     return a.dueDate.getTime() - b.dueDate.getTime()
   })
+}
+
+/**
+ * Calculates the start date for a given period (return cycle) based on the determination date.
+ *
+ * The start date is determined using the period's start day and month. If the determination date
+ * indicates that the period is due, the year is the current year; otherwise, it is the previous year.
+ *
+ * @param {Date} determinationDate - The base date used to calculate the period's start date.
+ * @param {object} period - An object containing the start date information for the period.
+ *
+ * @returns {Date} A `Date` object representing the calculated start date of the period.
+ * @private
+ */
+function _cycleStartDate(determinationDate, period) {
+  const currentYear = determinationDate.getFullYear()
+
+  const startDay = period.startDate.day
+  const startMonth = period.startDate.month + 1
+  const startYear = _isDue(determinationDate, period) ? currentYear : currentYear - 1
+
+  return new Date(`${startYear}-${startMonth}-${startDay}`)
 }
 
 module.exports = {

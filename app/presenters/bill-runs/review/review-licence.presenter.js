@@ -5,7 +5,12 @@
  * @module ReviewLicencePresenter
  */
 
-const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+const {
+  formatAbstractionPeriod,
+  formatFinancialYear,
+  formatLongDate,
+  generateBillRunTitle
+} = require('../../base.presenter.js')
 const {
   calculateTotalBillableReturns,
   determineReturnLink,
@@ -41,6 +46,7 @@ function go(reviewLicence) {
 
   return {
     billRunId: billRun.id,
+    billRunTitle: generateBillRunTitle(billRun.region.displayName, billRun.batchType, billRun.scheme, billRun.summer),
     chargeVersions: _chargeVersions(reviewChargeVersions, billRun.toFinancialYearEnding),
     elementsInReview: _elementsInReview(reviewChargeVersions),
     licenceHolder,
@@ -49,7 +55,6 @@ function go(reviewLicence) {
     matchedReturns,
     pageTitle: `Licence ${licenceRef}`,
     progress,
-    region: billRun.region.displayName,
     reviewLicenceId,
     status,
     unmatchedReturns
