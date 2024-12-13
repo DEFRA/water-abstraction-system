@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe.only('Notifications Setup - Returns Period presenter', () => {
+describe('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
@@ -185,8 +185,8 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(firstOption).to.equal({
-              value: 'currentPeriod',
-              text: `Summer annual 1st November ${previousYear} to 31st October ${currentYear}`,
+              value: 'summer',
+              text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
               hint: {
                 text: `Due date 28 November ${currentYear}`
               }
@@ -201,8 +201,8 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(secondOption).to.equal({
-              value: 'nextPeriod',
-              text: `Quarterly 1st October ${currentYear} to 31st December ${currentYear}`,
+              value: 'quarterFour',
+              text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
                 text: `Due date 28 January ${nextYear}`
               }
@@ -212,10 +212,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
       })
       describe('and the date is 28th November', () => {
         beforeEach(() => {
-          month = 10
-          day = 28
-
-          testDate = new Date(currentYear, month, day)
+          testDate = new Date(`${currentYear}-11-28`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -242,7 +239,7 @@ describe.only('Notifications Setup - Returns Period presenter', () => {
             } = ReturnsPeriodPresenter.go()
 
             expect(secondOption).to.equal({
-              value: 'quarterOne',
+              value: 'quarterFour',
               text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
               hint: {
                 text: `Due date 28 January ${nextYear}`
