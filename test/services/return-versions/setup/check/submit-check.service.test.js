@@ -14,7 +14,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Things we need to stub
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/persist-return-version.service.js')
-
+const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
 // Thing under test
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
 
@@ -43,7 +43,13 @@ describe('Return Versions Setup - Submit Check service', () => {
     })
     sessionId = session.id
 
-    Sinon.stub(GenerateReturnVersionService, 'go').resolves('returnVersionData')
+    Sinon.stub(GenerateReturnVersionService, 'go').resolves({
+      returnVersion: {
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
+      }
+    })
+    Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
     Sinon.stub(PersistReturnVersionService, 'go').resolves()
   })
 

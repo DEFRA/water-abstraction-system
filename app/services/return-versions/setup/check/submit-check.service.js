@@ -7,6 +7,7 @@
 
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const PersistReturnVersionService = require('./persist-return-version.service.js')
+const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
@@ -28,6 +29,12 @@ async function go(sessionId, userId) {
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
 
   await PersistReturnVersionService.go(returnVersionData)
+
+  const dateOffset = 24 * 60 * 60 * 1000
+  const changeDate = new Date(returnVersionData.returnVersion.startDate)
+  changeDate.setTime(changeDate.getTime() - dateOffset)
+
+  await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
 
   await SessionModel.query().deleteById(sessionId)
 
