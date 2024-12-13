@@ -44,6 +44,7 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
 
         expect(result).to.equal({
           billRunId: 'b21bd372-cd04-405d-824e-5180d854121c',
+          billRunTitle: 'Southern (Test Replica) two-part tariff',
           region: 'Southern (Test replica)',
           status: 'review',
           dateCreated: '17 January 2024',
@@ -178,10 +179,12 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
 function _testBillRun() {
   return {
     id: 'b21bd372-cd04-405d-824e-5180d854121c',
-    createdAt: new Date('2024-01-17'),
-    status: 'review',
-    toFinancialYearEnding: 2023,
     batchType: 'two_part_tariff',
+    createdAt: new Date('2024-01-17'),
+    scheme: 'sroc',
+    status: 'review',
+    summer: false,
+    toFinancialYearEnding: 2023,
     region: {
       displayName: 'Southern (Test replica)'
     },

@@ -192,7 +192,10 @@ describe('Bill Runs Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions('no-licences')
 
-        Sinon.stub(NoLicencesService, 'go').resolves('Test')
+        Sinon.stub(NoLicencesService, 'go').resolves({
+          pageTitle: 'There are no licences marked for two-part tariff supplementary billing in the Test region',
+          sessionId: '173ad76b-8400-43fb-a8d6-323d318a511e'
+        })
       })
 
       describe('when the request succeeds', () => {
@@ -214,11 +217,12 @@ describe('Bill Runs Setup controller', () => {
         options = _getOptions('region')
 
         Sinon.stub(RegionService, 'go').resolves({
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          pageTitle: 'Select the region',
           regions: [
             { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
             { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' }
           ],
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
           selectedRegion: null
         })
       })
@@ -275,10 +279,11 @@ describe('Bill Runs Setup controller', () => {
           options = _postOptions('region', { region: '' })
 
           Sinon.stub(SubmitRegionService, 'go').resolves({
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            error: { text: 'Select a region' },
+            pageTitle: 'Select a region',
             regions: [{ id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' }],
-            selectedRegion: null,
-            error: { text: 'Select a region' }
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedRegion: null
           })
         })
 
@@ -299,6 +304,7 @@ describe('Bill Runs Setup controller', () => {
         options = _getOptions('season')
 
         Sinon.stub(SeasonService, 'go').resolves({
+          pageTitle: 'Select the season',
           sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
           selectedSeason: null
         })
@@ -337,9 +343,10 @@ describe('Bill Runs Setup controller', () => {
           options = _postOptions('season', { type: '' })
 
           Sinon.stub(SubmitSeasonService, 'go').resolves({
+            error: { text: 'Select the season' },
+            pageTitle: 'Select the season',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedSeason: null,
-            error: { text: 'Select the season' }
+            selectedSeason: null
           })
         })
 
@@ -360,6 +367,7 @@ describe('Bill Runs Setup controller', () => {
         options = _getOptions('type')
 
         Sinon.stub(TypeService, 'go').resolves({
+          pageTitle: 'Select the bill run type',
           sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
           selectedType: null
         })
@@ -370,7 +378,7 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select bill run type')
+          expect(response.payload).to.contain('Select the bill run type')
         })
       })
     })
@@ -398,9 +406,10 @@ describe('Bill Runs Setup controller', () => {
           options = _postOptions('type', { type: '' })
 
           Sinon.stub(SubmitTypeService, 'go').resolves({
+            error: { text: 'Select the bill run type' },
+            pageTitle: 'Select the bill run type',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedType: null,
-            error: { text: 'Select a bill run type' }
+            selectedType: null
           })
         })
 
@@ -408,7 +417,7 @@ describe('Bill Runs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select a bill run type')
+          expect(response.payload).to.contain('Select the bill run type')
           expect(response.payload).to.contain('There is a problem')
         })
       })
@@ -431,6 +440,7 @@ describe('Bill Runs Setup controller', () => {
                 checked: false
               }
             ],
+            pageTitle: 'Select the financial year',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
             selectedYear: null
           })
@@ -506,9 +516,10 @@ describe('Bill Runs Setup controller', () => {
           options = _postOptions('year', { year: '' })
 
           Sinon.stub(SubmitYearService, 'go').resolves({
+            error: { text: 'Select a financial year' },
+            pageTitle: 'Select the financial year',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedYear: null,
-            error: { text: 'Select a financial year' }
+            selectedYear: null
           })
         })
 

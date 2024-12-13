@@ -13,7 +13,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Thing under test
 const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
-describe('Bill Runs Setup - Fetch Regions service', () => {
+describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
   describe('when called', () => {
     it('returns the ID and display name for each region ordered by display name', async () => {
       const results = await FetchRegionsService.go()

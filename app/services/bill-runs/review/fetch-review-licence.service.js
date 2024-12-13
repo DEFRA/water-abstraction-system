@@ -28,7 +28,7 @@ async function _fetch(reviewLicenceId) {
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (billRunBuilder) => {
       billRunBuilder
-        .select(['id', 'toFinancialYearEnding'])
+        .select(['id', 'batchType', 'scheme', 'summer', 'toFinancialYearEnding'])
         .withGraphFetched('region')
         .modifyGraph('region', (regionBuilder) => {
           regionBuilder.select(['id', 'displayName'])

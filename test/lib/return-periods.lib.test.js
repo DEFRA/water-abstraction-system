@@ -21,6 +21,7 @@ describe('Return Period lib', () => {
   let clock
   let testDate
   let dates
+  let dueDateNextYear
 
   beforeEach(() => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
@@ -32,53 +33,33 @@ describe('Return Period lib', () => {
 
   describe('determineReturnsPeriods', () => {
     describe('"allYear"', () => {
-      let startDate, endDate, dueDate
-
       beforeEach(() => {
-        startDate = new Date(
-          `${lastYear}-${returnPeriodDates.allYear.startDate.month + 1}-${returnPeriodDates.allYear.startDate.day}`
-        )
-        endDate = new Date(
-          `${year}-${returnPeriodDates.allYear.endDate.month + 1}-${returnPeriodDates.allYear.endDate.day}`
-        )
-        dueDate = new Date(
-          `${year}-${returnPeriodDates.allYear.dueDate.month + 1}-${returnPeriodDates.allYear.dueDate.day}`
-        )
+        dates = _getAllYearDates(year, lastYear)
       })
 
       it('should return the "allYear" period', () => {
         const result = ReturnPeriodLib.determineReturnsPeriods()
 
         expect(result.allYear).to.equal({
-          dueDate,
-          endDate,
-          startDate
+          dueDate: dates.dueDate,
+          endDate: dates.endDate,
+          startDate: dates.startDate
         })
       })
     })
 
     describe('"summer"', () => {
-      let startDate, endDate, dueDate
-
       beforeEach(() => {
-        startDate = new Date(
-          `${lastYear}-${returnPeriodDates.summer.startDate.month + 1}-${returnPeriodDates.summer.startDate.day}`
-        )
-        endDate = new Date(
-          `${year}-${returnPeriodDates.summer.endDate.month + 1}-${returnPeriodDates.summer.endDate.day}`
-        )
-        dueDate = new Date(
-          `${year}-${returnPeriodDates.summer.dueDate.month + 1}-${returnPeriodDates.summer.dueDate.day}`
-        )
+        dates = _getSummerDates(year, lastYear)
       })
 
       it('should return the "summer" period', () => {
         const result = ReturnPeriodLib.determineReturnsPeriods()
 
         expect(result.summer).to.equal({
-          dueDate,
-          endDate,
-          startDate
+          dueDate: dates.dueDate,
+          endDate: dates.endDate,
+          startDate: dates.startDate
         })
       })
     })
@@ -252,7 +233,6 @@ describe('Return Period lib', () => {
     })
 
     describe('"quarterFour": 1 October - 31 December (Due date 28 January) ', () => {
-      let dueDateNextYear
       describe('when it is currently "quarterFour" (Between October and December)', () => {
         beforeEach(() => {
           dates = _getPeriodDates(returnPeriodDates.quarterFour, year)
@@ -341,6 +321,240 @@ describe('Return Period lib', () => {
       })
     })
   })
+
+  describe('determineUpcomingReturnPeriods', () => {
+    describe('When the period is due for "quarterOne"', () => {
+      describe('and the current date is between 29 January - 28 April', () => {
+        beforeEach(() => {
+          dates = testDate = new Date(`${year}-01-29`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, year),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(year, lastYear),
+              name: 'allYear'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
+              name: 'quarterTwo'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, year),
+              name: 'quarterThree'
+            },
+            {
+              ..._getSummerDates(year, lastYear),
+              name: 'summer'
+            },
+            {
+              ..._getPeriodDatesQuarterFour(year),
+              name: 'quarterFour'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('When the period is due for "quarterTwo"', () => {
+      describe('and the current date is between 29 April - 28 July', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-04-29`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
+              name: 'quarterTwo'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, year),
+              name: 'quarterThree'
+            },
+            {
+              ..._getSummerDates(year, lastYear),
+              name: 'summer'
+            },
+            {
+              ..._getPeriodDatesQuarterFour(year),
+              name: 'quarterFour'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(nextYear, year),
+              name: 'allYear'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('When the current period is due for "quarterThree"', () => {
+      describe('and the current date is between 29 July - 28 October', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-10-01`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, year),
+              name: 'quarterThree'
+            },
+            {
+              ..._getSummerDates(year, lastYear),
+              name: 'summer'
+            },
+            {
+              ..._getPeriodDatesQuarterFour(year),
+              name: 'quarterFour'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(nextYear, year),
+              name: 'allYear'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
+              name: 'quarterTwo'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('When the current period is due for "summer"', () => {
+      describe('and the current date is between 29 October - 28 November', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-10-29`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getSummerDates(year, lastYear),
+              name: 'summer'
+            },
+            {
+              ..._getPeriodDatesQuarterFour(year),
+              name: 'quarterFour'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(nextYear, year),
+              name: 'allYear'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
+              name: 'quarterTwo'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, nextYear),
+              name: 'quarterThree'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('When the current period is due for "quarterFour"', () => {
+      describe('and the current date is between 29 November - 31 December', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-11-29`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getPeriodDatesQuarterFour(year),
+              name: 'quarterFour'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(nextYear, year),
+              name: 'allYear'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
+              name: 'quarterTwo'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, nextYear),
+              name: 'quarterThree'
+            },
+            {
+              ..._getSummerDates(nextYear, year),
+              name: 'summer'
+            }
+          ])
+        })
+      })
+
+      describe('and the current date is between 01 January - 28 January', () => {
+        beforeEach(() => {
+          testDate = new Date(`${year}-01-01`)
+        })
+
+        it('should return the return periods with the name and dates', () => {
+          const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+          expect(result).to.equal([
+            {
+              ..._getPeriodDatesQuarterFour(lastYear),
+              name: 'quarterFour'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterOne, year),
+              name: 'quarterOne'
+            },
+            {
+              ..._getAllYearDates(year, lastYear),
+              name: 'allYear'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
+              name: 'quarterTwo'
+            },
+            {
+              ..._getPeriodDates(returnPeriodDates.quarterThree, year),
+              name: 'quarterThree'
+            },
+            {
+              ..._getSummerDates(year, lastYear),
+              name: 'summer'
+            }
+          ])
+        })
+      })
+    })
+  })
 })
 
 function _getPeriodDates(period, year) {
@@ -348,5 +562,36 @@ function _getPeriodDates(period, year) {
     startDate: new Date(`${year}-${period.startDate.month + 1}-${period.startDate.day}`),
     endDate: new Date(`${year}-${period.endDate.month + 1}-${period.endDate.day}`),
     dueDate: new Date(`${year}-${period.dueDate.month + 1}-${period.dueDate.day}`)
+  }
+}
+
+function _getPeriodDatesQuarterFour(year) {
+  const period = returnPeriodDates.quarterFour
+  return {
+    startDate: new Date(`${year}-${period.startDate.month + 1}-${period.startDate.day}`),
+    endDate: new Date(`${year}-${period.endDate.month + 1}-${period.endDate.day}`),
+    dueDate: new Date(`${year + 1}-${period.dueDate.month + 1}-${period.dueDate.day}`)
+  }
+}
+
+function _getSummerDates(year, lastYear) {
+  return {
+    startDate: new Date(
+      `${lastYear}-${returnPeriodDates.summer.startDate.month + 1}-${returnPeriodDates.summer.startDate.day}`
+    ),
+    endDate: new Date(`${year}-${returnPeriodDates.summer.endDate.month + 1}-${returnPeriodDates.summer.endDate.day}`),
+    dueDate: new Date(`${year}-${returnPeriodDates.summer.dueDate.month + 1}-${returnPeriodDates.summer.dueDate.day}`)
+  }
+}
+
+function _getAllYearDates(year, startDateYear) {
+  return {
+    startDate: new Date(
+      `${startDateYear}-${returnPeriodDates.allYear.startDate.month + 1}-${returnPeriodDates.allYear.startDate.day}`
+    ),
+    endDate: new Date(
+      `${year}-${returnPeriodDates.allYear.endDate.month + 1}-${returnPeriodDates.allYear.endDate.day}`
+    ),
+    dueDate: new Date(`${year}-${returnPeriodDates.allYear.dueDate.month + 1}-${returnPeriodDates.allYear.dueDate.day}`)
   }
 }

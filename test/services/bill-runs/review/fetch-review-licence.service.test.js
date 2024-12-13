@@ -135,6 +135,9 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
         progress: false,
         billRun: {
           id: billRun.id,
+          batchType: 'two_part_tariff',
+          scheme: 'sroc',
+          summer: false,
           toFinancialYearEnding: 2023,
           region: {
             id: region.id,

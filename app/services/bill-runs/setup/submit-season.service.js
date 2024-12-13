@@ -39,11 +39,11 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = SeasonPresenter.go(session)
+  const pageData = SeasonPresenter.go(session)
 
   return {
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
