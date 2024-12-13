@@ -12,14 +12,14 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const InitiateSessionService = require('../../app/services/notifications/ad-hoc-returns/initiate-session.service.js')
+const LicenceService = require('../../app/services/notifications/ad-hoc-returns/licence.service.js')
 const SubmitLicenceService = require('../../app/services/notifications/ad-hoc-returns/submit-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Notifications Ad Hoc Returns controller', () => {
-  const basePath = '/notifications/ad-hoc-returns'
-
   let options
   let server
 
@@ -41,19 +41,46 @@ describe('Notifications Ad Hoc Returns controller', () => {
     Sinon.restore()
   })
 
-  describe('notifications/ad-hoc-returns/licence', () => {
-    const path = '/licence'
-
+  describe('notifications/ad-hoc-returns/setup', () => {
     describe('GET', () => {
+      const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
+
       beforeEach(async () => {
         options = {
           method: 'GET',
-          url: basePath + path,
+          url: '/notifications/ad-hoc-returns/setup',
           auth: {
             strategy: 'session',
             credentials: { scope: ['returns'] }
           }
         }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/notifications/ad-hoc-returns/${session.id}/licence`)
+        })
+      })
+    })
+  })
+
+  describe('notifications/ad-hoc-returns/{sessionId}/licence', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('licence')
+
+        Sinon.stub(LicenceService, 'go').resolves({
+          sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+          activeNavBar: 'manage',
+          pageTitle: 'Enter a licence number'
+        })
       })
 
       describe('when a request is valid', () => {
@@ -75,6 +102,8 @@ describe('Notifications Ad Hoc Returns controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
+          options = _postOptions('licence', { licenceRef: '01/115' }, 'returns')
+
           Sinon.stub(SubmitLicenceService, 'go').resolves({
             pageTitle: 'Check return details',
             activeNavBar: 'manage'
@@ -82,15 +111,19 @@ describe('Notifications Ad Hoc Returns controller', () => {
         })
 
         it('returns the same page', async () => {
-          const response = await server.inject(postRequestOptions(`${basePath}${path}`, {}, 'returns'))
+          const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Enter a licence number')
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/system/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/check-returns'
+          )
         })
       })
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
+          options = _postOptions('licence', { licenceRef: '' }, 'returns')
+
           Sinon.stub(SubmitLicenceService, 'go').resolves({
             activeNavBar: 'manage',
             licenceRef: '01/115',
@@ -100,7 +133,7 @@ describe('Notifications Ad Hoc Returns controller', () => {
         })
 
         it('re-renders the page with an error message', async () => {
-          const response = await server.inject(postRequestOptions(`${basePath}${path}`, {}, 'returns'))
+          const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Please enter a Licence number')
@@ -110,3 +143,22 @@ describe('Notifications Ad Hoc Returns controller', () => {
     })
   })
 })
+
+function _getOptions(path) {
+  return {
+    method: 'GET',
+    url: `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['returns'] }
+    }
+  }
+}
+
+function _postOptions(path, payload, scope) {
+  return postRequestOptions(
+    `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
+    payload,
+    scope
+  )
+}
