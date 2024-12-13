@@ -32,12 +32,11 @@ async function check(request, h) {
 async function noLicences(request, h) {
   const { sessionId } = request.params
 
-  const regionName = await NoLicencesService.go(sessionId)
+  const pageData = await NoLicencesService.go(sessionId)
 
   return h.view('bill-runs/setup/no-licences.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
-    sessionId
+    ...pageData
   })
 }
 
@@ -48,7 +47,6 @@ async function region(request, h) {
 
   return h.view('bill-runs/setup/region.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: 'Select the region',
     ...pageData
   })
 }
@@ -60,7 +58,6 @@ async function season(request, h) {
 
   return h.view('bill-runs/setup/season.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: 'Select the season',
     ...pageData
   })
 }
@@ -94,7 +91,6 @@ async function submitRegion(request, h) {
   if (pageData.error) {
     return h.view('bill-runs/setup/region.njk', {
       activeNavBar: 'bill-runs',
-      pageTitle: 'Select a region',
       ...pageData
     })
   }
@@ -114,7 +110,6 @@ async function submitSeason(request, h) {
   if (pageData.error) {
     return h.view('bill-runs/setup/season.njk', {
       activeNavBar: 'bill-runs',
-      pageTitle: 'Select the season',
       ...pageData
     })
   }
@@ -130,7 +125,6 @@ async function submitType(request, h) {
   if (pageData.error) {
     return h.view('bill-runs/setup/type.njk', {
       activeNavBar: 'bill-runs',
-      pageTitle: 'Select a bill run type',
       ...pageData
     })
   }
@@ -146,7 +140,6 @@ async function submitYear(request, h) {
   if (pageData.error) {
     return h.view('bill-runs/setup/year.njk', {
       activeNavBar: 'bill-runs',
-      pageTitle: 'Select the financial year',
       ...pageData
     })
   }
@@ -165,7 +158,6 @@ async function type(request, h) {
 
   return h.view('bill-runs/setup/type.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: 'Select bill run type',
     ...pageData
   })
 }
@@ -181,7 +173,6 @@ async function year(request, h) {
 
   return h.view('bill-runs/setup/year.njk', {
     activeNavBar: 'bill-runs',
-    pageTitle: 'Select the financial year',
     ...pageData
   })
 }

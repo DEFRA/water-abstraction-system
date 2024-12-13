@@ -20,11 +20,11 @@ const StartBillRunProcessService = require('../../../../app/services/bill-runs/s
 // Thing under test
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
 
-describe('Bill Runs Setup Create service', () => {
+describe('Bill Runs - Setup - Create service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
   const user = { username: 'carol.shaw@atari.com' }
 
-  let existsResults
+  let blockingResults
   let legacyCreateBillRunRequestStub
   let session
   let startBillRunProcessServiceStub
@@ -38,7 +38,7 @@ describe('Bill Runs Setup Create service', () => {
     Sinon.restore()
   })
 
-  describe('when the "existsResults" determines both bill runs should be triggered', () => {
+  describe('when the "blockingResults" determines both bill runs should be triggered', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: { region: regionId, type: 'supplementary' }
@@ -48,11 +48,11 @@ describe('Bill Runs Setup Create service', () => {
       // itself. Without this the tests fail though the service works fine.
       session.$afterFind()
 
-      existsResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.both }
+      blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.both }
     })
 
     it('triggers both bill run engines', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       expect(
         startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)
@@ -61,7 +61,7 @@ describe('Bill Runs Setup Create service', () => {
     })
 
     it('deletes the setup session', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       const findSessionResults = await SessionModel.query().where('id', session.id)
 
@@ -69,7 +69,7 @@ describe('Bill Runs Setup Create service', () => {
     })
   })
 
-  describe('when the "existsResults" determines only the "current" bill run should be triggered', () => {
+  describe('when the "blockingResults" determines only the "current" bill run should be triggered', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: { region: regionId, type: 'annual' }
@@ -79,18 +79,18 @@ describe('Bill Runs Setup Create service', () => {
       // itself. Without this the tests fail though the service works fine.
       session.$afterFind()
 
-      existsResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
+      blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
     })
 
     it('triggers only the "current" bill run engine', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       expect(startBillRunProcessServiceStub.calledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)).to.be.true()
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
     })
 
     it('deletes the setup session', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       const findSessionResults = await SessionModel.query().where('id', session.id)
 
@@ -98,7 +98,7 @@ describe('Bill Runs Setup Create service', () => {
     })
   })
 
-  describe('when the "existsResults" determines only the "old" bill run should be triggered', () => {
+  describe('when the "blockingResults" determines only the "old" bill run should be triggered', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
         data: { region: regionId, type: 'two_part_tariff', summer: true }
@@ -108,18 +108,18 @@ describe('Bill Runs Setup Create service', () => {
       // itself. Without this the tests fail though the service works fine.
       session.$afterFind()
 
-      existsResults = { matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old }
+      blockingResults = { matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old }
     })
 
     it('triggers only the "old" bill run engine', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       expect(startBillRunProcessServiceStub.called).to.be.false()
       expect(legacyCreateBillRunRequestStub.calledWith('two_part_tariff', regionId, 2022, user, true)).to.be.true()
     })
 
     it('deletes the setup session', async () => {
-      await CreateService.go(session, existsResults, user)
+      await CreateService.go(session, blockingResults, user)
 
       const findSessionResults = await SessionModel.query().where('id', session.id)
 

@@ -27,7 +27,7 @@ describe('Bill Runs Setup Type validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a bill run type')
+        expect(result.error.details[0].message).to.equal('Select the bill run type')
       })
     })
 
@@ -37,7 +37,7 @@ describe('Bill Runs Setup Type validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a bill run type')
+        expect(result.error.details[0].message).to.equal('Select the bill run type')
       })
     })
   })

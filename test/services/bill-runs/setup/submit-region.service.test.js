@@ -18,7 +18,7 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 // Thing under test
 const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
 
-describe('Bill Runs Setup Submit Region service', () => {
+describe('Bill Runs - Setup - Submit Region service', () => {
   let payload
   let region
   let regions
@@ -103,12 +103,13 @@ describe('Bill Runs Setup Submit Region service', () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           expect(result).to.equal({
-            sessionId: session.id,
-            regions,
-            selectedRegion: null,
             error: {
               text: 'Select the region'
-            }
+            },
+            pageTitle: 'Select the region',
+            regions,
+            sessionId: session.id,
+            selectedRegion: null
           })
         })
       })
