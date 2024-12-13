@@ -20,7 +20,7 @@ const StartBillRunProcessService = require('../../../../app/services/bill-runs/s
 // Thing under test
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
 
-describe('Bill Runs Setup Create service', () => {
+describe('Bill Runs - Setup - Create service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
   const user = { username: 'carol.shaw@atari.com' }
 

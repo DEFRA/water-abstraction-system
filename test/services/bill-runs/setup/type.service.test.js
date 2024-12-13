@@ -17,7 +17,7 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 // Thing under test
 const TypeService = require('../../../../app/services/bill-runs/setup/type.service.js')
 
-describe('Bill Runs Setup Type service', () => {
+describe('Bill Runs - Setup - Type service', () => {
   let session
 
   beforeEach(async () => {
@@ -37,6 +37,7 @@ describe('Bill Runs Setup Type service', () => {
 
       expect(result).to.equal({
         enableTwoPartTariffSupplementary: false,
+        pageTitle: 'Select the bill run type',
         sessionId: session.id,
         selectedType: 'annual'
       })
