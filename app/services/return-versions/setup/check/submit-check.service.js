@@ -30,9 +30,9 @@ async function go(sessionId, userId) {
 
   await PersistReturnVersionService.go(returnVersionData)
 
-  const dateOffset = 24 * 60 * 60 * 1000
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000
   const changeDate = new Date(returnVersionData.returnVersion.startDate)
-  changeDate.setTime(changeDate.getTime() - dateOffset)
+  changeDate.setTime(changeDate.getTime() - oneDayInMilliseconds)
 
   await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
 
