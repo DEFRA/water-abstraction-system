@@ -43,10 +43,9 @@ describe('Dates lib', () => {
         dates = [null, undefined]
       })
 
-      it('throws an error', () => {
-        expect(() => {
-          return DateLib.determineEarliestDate(dates)
-        }).to.throw('No dates provided to determine earliest')
+      it('returns null', () => {
+        const result = DateLib.determineEarliestDate(dates)
+        expect(result).to.equal(null)
       })
     })
 
@@ -55,10 +54,9 @@ describe('Dates lib', () => {
         dates = []
       })
 
-      it('throws an error', () => {
-        expect(() => {
-          return DateLib.determineEarliestDate(dates)
-        }).to.throw('No dates provided to determine earliest')
+      it('returns null', () => {
+        const result = DateLib.determineEarliestDate(dates)
+        expect(result).to.equal(null)
       })
     })
   })
