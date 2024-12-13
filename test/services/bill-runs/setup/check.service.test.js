@@ -10,15 +10,16 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
-const ExistsService = require('../../../../app/services/bill-runs/setup/exists.service.js')
+const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
 const RegionModel = require('../../../../app/models/region.model.js')
 
 // Thing under test
 const CheckService = require('../../../../app/services/bill-runs/setup/check.service.js')
 
-describe('Bill Runs Setup Check service', () => {
+describe('Bill Runs - Setup - Check service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let session
@@ -26,7 +27,11 @@ describe('Bill Runs Setup Check service', () => {
   beforeEach(async () => {
     session = await SessionHelper.add({ data: { region: regionId, type: 'annual' } })
 
-    Sinon.stub(ExistsService, 'go').resolves({ matches: [], toFinancialYearEnding: 2025 })
+    Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+      matches: [],
+      toFinancialYearEnding: 2025,
+      trigger: engineTriggers.current
+    })
 
     Sinon.stub(RegionModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
