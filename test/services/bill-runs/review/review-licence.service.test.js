@@ -44,6 +44,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
         expect(result).to.equal({
           bannerMessage: 'This licence has been marked.',
           billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
+          billRunTitle: 'South West two-part tariff',
           chargeVersions: [
             {
               billingAccountDetails: {
@@ -110,7 +111,6 @@ describe('Bill Runs Review - Review Licence Service', () => {
           ],
           pageTitle: 'Licence 1/11/11/*11/1111',
           progress: false,
-          region: 'South West',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           status: 'review',
           unmatchedReturns: [
@@ -142,6 +142,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
         expect(result).to.equal({
           bannerMessage: undefined,
           billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
+          billRunTitle: 'South West two-part tariff',
           chargeVersions: [
             {
               billingAccountDetails: {
@@ -208,7 +209,6 @@ describe('Bill Runs Review - Review Licence Service', () => {
           ],
           pageTitle: 'Licence 1/11/11/*11/1111',
           progress: false,
-          region: 'South West',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           status: 'review',
           unmatchedReturns: [
