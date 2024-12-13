@@ -441,6 +441,81 @@ describe('Return Period lib', () => {
     })
 
     describe('When the current period is due for "summer"', () => {
+      describe('broken when date nov and the current date is between 29 October - 28 November', () => {
+        describe('and the date is 29 October', () => {
+          beforeEach(() => {
+            testDate = new Date(`${year}-10-29`)
+          })
+
+          it('should return the return periods with the name and dates', () => {
+            const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+            expect(result).to.equal([
+              {
+                ..._getSummerDates(year, lastYear),
+                name: 'summer'
+              },
+              {
+                ..._getPeriodDatesQuarterFour(year),
+                name: 'quarterFour'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+                name: 'quarterOne'
+              },
+              {
+                ..._getAllYearDates(nextYear, year),
+                name: 'allYear'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
+                name: 'quarterTwo'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterThree, nextYear),
+                name: 'quarterThree'
+              }
+            ])
+          })
+        })
+
+        describe('and the date is 28 November', () => {
+          beforeEach(() => {
+            testDate = new Date(`${year}-11-28`)
+          })
+
+          it('should return the return periods with the name and dates', () => {
+            const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
+
+            expect(result).to.equal([
+              {
+                ..._getSummerDates(year, lastYear),
+                name: 'summer'
+              },
+              {
+                ..._getPeriodDatesQuarterFour(year),
+                name: 'quarterFour'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterOne, nextYear),
+                name: 'quarterOne'
+              },
+              {
+                ..._getAllYearDates(nextYear, year),
+                name: 'allYear'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterTwo, nextYear),
+                name: 'quarterTwo'
+              },
+              {
+                ..._getPeriodDates(returnPeriodDates.quarterThree, nextYear),
+                name: 'quarterThree'
+              }
+            ])
+          })
+        })
+      })
       describe('and the current date is between 29 October - 28 November', () => {
         beforeEach(() => {
           testDate = new Date(`${year}-10-29`)
