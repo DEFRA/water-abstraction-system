@@ -40,7 +40,6 @@ async function _fetch(licenceId, changeDate) {
     ])
     .whereExists(
       ReturnVersionModel.query()
-        .select(1)
         .innerJoinRelated('licence')
         .where('licence.id', licenceId)
         .where('returnVersions.status', 'current')

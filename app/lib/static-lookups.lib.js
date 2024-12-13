@@ -8,21 +8,6 @@ const contactTypes = ['person', 'department']
 
 const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
 
-/*
- * Helper map for Months of the Year in integer format
- *
- * The getMonth() method of Date instances returns the month for this date according to local time,
- * as a zero-based value (where zero indicates the first month of the year).
- *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
- */
-const monthsAsIntegers = {
-  january: 0,
-  october: 9,
-  november: 10,
-  december: 11
-}
-
 /**
  * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
  *
@@ -150,7 +135,6 @@ module.exports = {
   companyTypes,
   contactTypes,
   engineTriggers,
-  monthsAsIntegers,
   naldRegions,
   organisationTypes,
   returnCycleDates,
