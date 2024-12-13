@@ -14,6 +14,7 @@
  */
 function go(session) {
   return {
+    pageTitle: 'Select the season',
     sessionId: session.id,
     selectedSeason: session.season ? session.season : null
   }

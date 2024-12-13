@@ -63,6 +63,8 @@ async function returnLogs(request, h) {
 
   let licenceReference
 
+  ProcessReturnLogsService.go(cycle)
+
   if (h.request.payload !== null && h.request.payload.licenceReference) {
     licenceReference = h.request.payload.licenceReference
   }

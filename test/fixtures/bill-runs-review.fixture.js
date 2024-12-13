@@ -167,6 +167,9 @@ function reviewLicence() {
     progress: false,
     billRun: {
       id: '287aeb25-cf11-429d-8c6f-f98f06db021d',
+      batchType: 'two_part_tariff',
+      scheme: 'sroc',
+      summer: false,
       toFinancialYearEnding: 2024,
       region: {
         id: '4ccf3c5b-ab4e-48e1-afa8-3b18b5d07fab',

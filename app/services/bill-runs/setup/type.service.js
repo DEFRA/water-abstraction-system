@@ -22,11 +22,12 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = TypePresenter.go(session)
+
+  const pageData = TypePresenter.go(session)
 
   return {
     enableTwoPartTariffSupplementary: FeatureFlagsConfig.enableTwoPartTariffSupplementary,
-    ...formattedData
+    ...pageData
   }
 }
 

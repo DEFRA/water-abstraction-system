@@ -20,9 +20,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/check/licence-return-logs',
+    path: '/check/licence-return-logs/{licenceId}',
     options: {
-      handler: CheckController.returnLogsForLicence,
+      handler: CheckController.licenceReturnLogs,
       app: {
         excludeFromProd: true,
         plainOutput: true

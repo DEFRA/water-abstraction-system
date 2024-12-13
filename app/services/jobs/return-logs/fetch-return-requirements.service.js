@@ -1,130 +1,118 @@
 'use strict'
 
 /**
- * Fetches data needed for generating return logs
+ * Fetches the matching return requirements for a given return cycle
  * @module FetchReturnRequirementsService
  */
 
+const { db } = require('../../../../db/db.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
 const ReturnVersionModel = require('../../../models/return-version.model.js')
 
-const { db } = require('../../../../db/db.js')
-const { cycleEndDateAsISO, cycleStartDateAsISO } = require('../../../lib/return-cycle-dates.lib.js')
-
 /**
- * Fetch all return requirements that need return logs created.
+ * Fetches the matching return requirements for a given return cycle
  *
- * @param {boolean} summer - are we running summer cycle or all year
- * @param {string} licenceReference - if provided only do the return log for that licence reference
+ * @param {module:ReturnCycleModel} returnCycle - the `ReturnCycleModel` to fetch return requirements for
  *
- * @returns {Promise<Array>} the list of return requirement ids
+ * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the given return cycle
  */
-async function go(summer, licenceReference) {
-  return _fetchReturnRequirements(summer, licenceReference)
+async function go(returnCycle) {
+  return _fetch(returnCycle)
 }
 
-async function _fetchExternalIds(cycleStartDate) {
-  const externalIds = await ReturnLogModel.query()
-    .select(['licenceRef', db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference) as externalid")])
-    .where('startDate', '>=', cycleStartDate)
-
-  const externalIdsArray = externalIds.map((item) => {
-    return item.externalid
-  })
-
-  return externalIdsArray
-}
-
-async function _fetchReturnRequirements(summer, licenceReference) {
-  const _cycleEndDate = cycleEndDateAsISO(summer)
-  const _cycleStartDate = cycleStartDateAsISO(summer)
-  const externalIds = await _fetchExternalIds(_cycleStartDate)
+async function _fetch(returnCycle) {
+  const { id: returnCycleId, endDate: cycleEndDate, startDate: cycleStartDate, summer } = returnCycle
 
   return ReturnRequirementModel.query()
     .select([
-      'id',
-      'returnVersionId',
-      'summer',
-      'upload',
-      'abstractionPeriodStartDay',
-      'abstractionPeriodStartMonth',
       'abstractionPeriodEndDay',
       'abstractionPeriodEndMonth',
-      'siteDescription',
-      'legacyId',
+      'abstractionPeriodStartDay',
+      'abstractionPeriodStartMonth',
       'externalId',
+      'id',
+      'legacyId',
       'reportingFrequency',
-      'twoPartTariff'
+      'returnVersionId',
+      'siteDescription',
+      'summer',
+      'twoPartTariff',
+      'upload'
     ])
-    .whereNotIn('returnRequirements.externalId', externalIds)
-    .whereExists(_whereExistsClause(licenceReference, _cycleStartDate, _cycleEndDate))
     .where('returnRequirements.summer', summer)
+    .whereNotExists(
+      ReturnLogModel.query()
+        .select(1)
+        .whereNot('status', 'void')
+        .where('returnCycleId', returnCycleId)
+        .whereColumn(
+          db.raw("concat(metadata->'nald'->>'regionCode', ':', return_reference)"),
+          'returnRequirements.externalId'
+        )
+    )
+    .whereExists(
+      ReturnVersionModel.query()
+        .select(1)
+        .innerJoinRelated('licence')
+        .where('returnVersions.startDate', '<=', cycleEndDate)
+        .where('returnVersions.status', 'current')
+        .where((builder) => {
+          builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
+        })
+        .where((builder) => {
+          builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
+        })
+        .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
+    )
     .withGraphFetched('returnVersion')
-    .modifyGraph('returnVersion', (builder) => {
-      builder.select(['endDate', 'id', 'startDate', 'reason'])
-    })
-    .withGraphFetched('returnVersion.licence')
-    .modifyGraph('returnVersion.licence', (builder) => {
-      builder.select([
-        'expiredDate',
-        'id',
-        'lapsedDate',
-        'licenceRef',
-        'revokedDate',
-        db.raw("regions->>'historicalAreaCode' as areacode")
-      ])
-    })
-    .withGraphFetched('returnVersion.licence.region')
-    .modifyGraph('returnVersion.licence.region', (builder) => {
-      builder.select(['id', 'naldRegionId'])
+    .modifyGraph('returnVersion', (returnVersionBuilder) => {
+      returnVersionBuilder
+        .select(['endDate', 'id', 'reason', 'startDate'])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder
+            .select([
+              'expiredDate',
+              'id',
+              'lapsedDate',
+              'licenceRef',
+              'revokedDate',
+              db.raw("regions->>'historicalAreaCode' as areacode")
+            ])
+            .withGraphFetched('region')
+            .modifyGraph('region', (regionBuilder) => {
+              regionBuilder.select(['id', 'naldRegionId'])
+            })
+        })
     })
     .withGraphFetched('points')
-    .modifyGraph('points', (builder) => {
-      builder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+    .modifyGraph('points', (pointsBuilder) => {
+      pointsBuilder.select(['points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     })
-    .withGraphFetched('returnRequirementPurposes.primaryPurpose')
-    .modifyGraph('returnRequirementPurposes.primaryPurpose', (builder) => {
-      builder.select(['legacyId', 'description'])
+    .withGraphFetched('returnRequirementPurposes')
+    .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+      returnRequirementPurposesBuilder
+        .select(['alias', 'id'])
+        .withGraphFetched('primaryPurpose')
+        .modifyGraph('primaryPurpose', (primaryPurposeBuilder) => {
+          primaryPurposeBuilder.select(['description', 'id', 'legacyId'])
+        })
+        .withGraphFetched('purpose')
+        .modifyGraph('purpose', (purposeBuilder) => {
+          purposeBuilder.select(['description', 'id', 'legacyId'])
+        })
+        .withGraphFetched('secondaryPurpose')
+        .modifyGraph('secondaryPurpose', (secondaryPurposeBuilder) => {
+          secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
+        })
     })
-    .withGraphFetched('returnRequirementPurposes.secondaryPurpose')
-    .modifyGraph('returnRequirementPurposes.secondaryPurpose', (builder) => {
-      builder.select(['legacyId', 'description'])
-    })
-    .withGraphFetched('returnRequirementPurposes.purpose')
-    .modifyGraph('returnRequirementPurposes.purpose', (builder) => {
-      builder.select(['legacyId', 'description'])
-    })
-}
-
-function _whereExistsClause(licenceReference, cycleStartDate, cycleEndDate) {
-  const query = ReturnVersionModel.query().select(1)
-
-  query
-    .select(1)
-    .innerJoinRelated('licence')
-    .where('returnVersions.startDate', '<=', cycleEndDate)
-    .where('returnVersions.status', 'current')
-    .where((builder) => {
-      builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', cycleStartDate)
-    })
-    .where((builder) => {
-      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', cycleStartDate)
-    })
-
-  query.whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
-
-  if (licenceReference) {
-    query.where('licence.licenceRef', licenceReference)
-  }
-
-  return query
 }
 
 module.exports = {

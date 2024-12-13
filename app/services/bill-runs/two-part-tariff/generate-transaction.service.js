@@ -63,7 +63,7 @@ function _description(chargeReference) {
     return `Water abstraction charge: ${chargeReference.description}`
   }
 
-  return `Two-part tariff basic water abstraction charge: ${chargeReference.description}`
+  return `Two-part tariff second part water abstraction charge: ${chargeReference.description}`
 }
 
 /**

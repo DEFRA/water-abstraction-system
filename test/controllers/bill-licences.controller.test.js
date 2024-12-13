@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,10 +24,12 @@ describe('Bill Licences controller', () => {
   let options
   let server
 
-  beforeEach(async () => {
-    // Create server before each test
+  // Create server before running the tests
+  before(async () => {
     server = await init()
+  })
 
+  beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -232,7 +234,7 @@ function _srocPageData() {
         chargeType: 'standard',
         creditAmount: '',
         debitAmount: '£1,787.00',
-        description: 'Two-part tariff basic water abstraction charge: Borehole at Muckton - Sussex',
+        description: 'Two-part tariff first part water abstraction charge: Borehole at Muckton - Sussex',
         quantity: '150ML'
       },
       {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,13 +20,33 @@ const ReviewChargeElementModel = require('../../app/models/review-charge-element
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 
 describe('Charge Element model', () => {
+  let testChargeReference
   let testRecord
+  let testReviewChargeElements
+  let testPurpose
+
+  before(async () => {
+    // Link charge reference
+    testChargeReference = await ChargeReferenceHelper.add()
+    const { id: chargeReferenceId } = testChargeReference
+
+    // Link purpose
+    testPurpose = PurposeHelper.select()
+    const { id: purposeId } = testPurpose
+
+    // Test record
+    testRecord = await ChargeElementHelper.add({ chargeReferenceId, purposeId })
+
+    // Link review charge elements
+    testReviewChargeElements = []
+    for (let i = 0; i < 2; i++) {
+      const reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId: testRecord.id })
+
+      testReviewChargeElements.push(reviewChargeElement)
+    }
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ChargeElementHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ChargeElementModel.query().findById(testRecord.id)
 
@@ -37,16 +57,6 @@ describe('Charge Element model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge reference', () => {
-      let testChargeReference
-
-      beforeEach(async () => {
-        testChargeReference = await ChargeReferenceHelper.add()
-
-        const { id: chargeReferenceId } = testChargeReference
-
-        testRecord = await ChargeElementHelper.add({ chargeReferenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('chargeReference')
 
@@ -65,16 +75,6 @@ describe('Charge Element model', () => {
     })
 
     describe('when linking to purpose', () => {
-      let testPurpose
-
-      beforeEach(async () => {
-        testPurpose = PurposeHelper.select()
-
-        const { id: purposeId } = testPurpose
-
-        testRecord = await ChargeElementHelper.add({ purposeId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('purpose')
 
@@ -93,19 +93,6 @@ describe('Charge Element model', () => {
     })
 
     describe('when linking to review charge elements', () => {
-      let testReviewChargeElements
-
-      beforeEach(async () => {
-        testRecord = await ChargeElementHelper.add()
-
-        testReviewChargeElements = []
-        for (let i = 0; i < 2; i++) {
-          const reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId: testRecord.id })
-
-          testReviewChargeElements.push(reviewChargeElement)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('reviewChargeElements')
 

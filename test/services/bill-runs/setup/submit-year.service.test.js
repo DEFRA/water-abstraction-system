@@ -17,7 +17,7 @@ const FetchLicenceSupplementaryYearsService = require('../../../../app/services/
 // Thing under test
 const SubmitYearService = require('../../../../app/services/bill-runs/setup/submit-year.service.js')
 
-describe('Bill Runs Setup Submit Year service', () => {
+describe('Bill Runs - Setup - Submit Year service', () => {
   let payload
   let session
 
@@ -64,24 +64,6 @@ describe('Bill Runs Setup Submit Year service', () => {
           expect(result.setupComplete).to.be.false()
         })
       })
-
-      describe('and the type is two-part tariff supplementary', () => {
-        beforeEach(async () => {
-          payload = {
-            year: '2023'
-          }
-          session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
-        })
-
-        it('saves the submitted value and returns an object to redirect the user to the Bill Runs page', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
-
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.year).to.equal('2023')
-          expect(result.goBackToBillRuns).to.be.true()
-        })
-      })
     })
 
     describe('with an invalid payload', () => {
@@ -103,6 +85,7 @@ describe('Bill Runs Setup Submit Year service', () => {
 
           expect(result).to.equal({
             financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: false }],
+            pageTitle: 'Select the financial year',
             sessionId: session.id,
             selectedYear: null,
             error: {

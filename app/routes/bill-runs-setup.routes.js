@@ -5,9 +5,21 @@ const BillRunsSetupController = require('../controllers/bill-runs-setup.controll
 const routes = [
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/create',
+    path: '/bill-runs/setup/{sessionId}/check',
     options: {
-      handler: BillRunsSetupController.create,
+      handler: BillRunsSetupController.check,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/setup/{sessionId}/check',
+    options: {
+      handler: BillRunsSetupController.submitCheck,
       auth: {
         access: {
           scope: ['billing']

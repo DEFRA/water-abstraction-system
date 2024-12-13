@@ -15,7 +15,6 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Things we need to stub
 const ChargingModuleCreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
 const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
-const DetermineBlockingBillRunService = require('../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
 
 // Thing under test
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
@@ -49,8 +48,6 @@ describe('Initiate Bill Run service', () => {
 
     beforeEach(() => {
       batchType = 'supplementary'
-
-      Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
 
       Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
         succeeded: true,
@@ -96,8 +93,6 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
-
         Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
           succeeded: false,
           response: {
@@ -125,22 +120,6 @@ describe('Initiate Bill Run service', () => {
         expect(result.batchType).to.equal('supplementary')
         expect(result.status).to.equal('error')
         expect(result.errorCode).to.equal(50)
-      })
-    })
-
-    describe('because a live bill run already exists for this region, financial year and type', () => {
-      beforeEach(() => {
-        batchType = 'annual'
-
-        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{ id: 'becf430d-f6dd-45a3-b943-42683f7bb889' }])
-      })
-
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)).to.reject()
-
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal('Batch already live for region')
-        expect(err.billRunId).to.equal('becf430d-f6dd-45a3-b943-42683f7bb889')
       })
     })
   })

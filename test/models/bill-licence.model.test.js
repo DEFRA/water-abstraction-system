@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,10 +20,32 @@ const TransactionModel = require('../../app/models/transaction.model.js')
 const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 
 describe('Bill Licence model', () => {
+  let testBill
+  let testLicence
   let testRecord
+  let testTransactions
 
-  beforeEach(async () => {
-    testRecord = await BillLicenceHelper.add()
+  before(async () => {
+    // Link bills
+    testBill = await BillHelper.add()
+    const { id: billId } = testBill
+
+    // Linking licences
+    testLicence = await LicenceHelper.add()
+
+    const { id: licenceId } = testLicence
+
+    // Test record
+    testRecord = await BillLicenceHelper.add({ billId, licenceId })
+    const { id } = testRecord
+
+    // Link transactions
+    testTransactions = []
+    for (let i = 0; i < 2; i++) {
+      const transaction = await TransactionHelper.add({ billLicenceId: id })
+
+      testTransactions.push(transaction)
+    }
   })
 
   describe('Basic query', () => {
@@ -37,16 +59,6 @@ describe('Bill Licence model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill', () => {
-      let testBill
-
-      beforeEach(async () => {
-        testBill = await BillHelper.add()
-
-        const { id: billId } = testBill
-
-        testRecord = await BillLicenceHelper.add({ billId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillLicenceModel.query().innerJoinRelated('bill')
 
@@ -65,20 +77,6 @@ describe('Bill Licence model', () => {
     })
 
     describe('when linking to transactions', () => {
-      let testTransactions
-
-      beforeEach(async () => {
-        testRecord = await BillLicenceHelper.add()
-        const { id } = testRecord
-
-        testTransactions = []
-        for (let i = 0; i < 2; i++) {
-          const transaction = await TransactionHelper.add({ billLicenceId: id })
-
-          testTransactions.push(transaction)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillLicenceModel.query().innerJoinRelated('transactions')
 
@@ -99,16 +97,6 @@ describe('Bill Licence model', () => {
     })
 
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-
-        testRecord = await BillLicenceHelper.add({ licenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillLicenceModel.query().innerJoinRelated('licence')
 
