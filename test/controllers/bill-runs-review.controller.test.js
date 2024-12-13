@@ -68,6 +68,7 @@ describe('Bill Runs Review controller', () => {
           dateCreated: '6 November 2023',
           financialYear: '2021 to 2022',
           billRunType: 'two-part tariff',
+          billRunTitle: 'Southern (Test Replica) two-part tariff',
           numberOfLicencesDisplayed: 2,
           numberOfLicencesToReview: 1,
           totalNumberOfLicences: 2,
@@ -106,7 +107,7 @@ describe('Bill Runs Review controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Southern (Test replica) two-part tariff bill run')
+            expect(response.payload).to.contain('Southern (Test Replica) two-part tariff')
             expect(response.payload).to.contain('Showing all 2 licences')
           })
         })
@@ -120,7 +121,7 @@ describe('Bill Runs Review controller', () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Southern (Test replica) two-part tariff bill run')
+            expect(response.payload).to.contain('Southern (Test Replica) two-part tariff')
             expect(response.payload).to.contain('Showing all 2 licences')
           })
         })
