@@ -7,7 +7,7 @@ const basePath = '/notifications/ad-hoc-returns/'
 const routes = [
   {
     method: 'GET',
-    path: basePath + 'licence',
+    path: basePath + '{sessionId}/licence',
     options: {
       handler: NotificationsAdHocReturnsController.licence,
       auth: {
@@ -18,8 +18,20 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + 'setup',
+    options: {
+      handler: NotificationsAdHocReturnsController.setup,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
-    path: basePath + 'licence',
+    path: basePath + '{sessionId}/licence',
     options: {
       handler: NotificationsAdHocReturnsController.submitLicence,
       auth: {
