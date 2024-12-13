@@ -23,15 +23,15 @@ function go() {
 function _returnsPeriod() {
   const today = new Date()
 
-  const [currentReturnPeriod, nextReturnPeriod] = determineUpcomingReturnPeriods(today)
+  const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today)
 
-  const currentOption = _option(currentReturnPeriod)
-  const nextOption = _option(nextReturnPeriod)
+  const currentReturnPeriod = _formatReturnPeriod(firstReturnPeriod)
+  const nextReturnPeriod = _formatReturnPeriod(secondReturnPeriod)
 
-  return [currentOption, nextOption]
+  return [currentReturnPeriod, nextReturnPeriod]
 }
 
-function _option(returnPeriod) {
+function _formatReturnPeriod(returnPeriod) {
   const textPrefix = _textPrefix(returnPeriod)
   return {
     value: returnPeriod.name,
