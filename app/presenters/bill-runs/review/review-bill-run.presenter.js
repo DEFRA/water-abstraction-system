@@ -5,7 +5,7 @@
  * @module ReviewBillRunPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, generateBillRunTitle } = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run, licence and filter data for presentation
@@ -88,14 +88,15 @@ function _prepareLicences(licences) {
 function _prepareBillRun(billRun, preparedLicences) {
   return {
     billRunId: billRun.id,
-    region: billRun.region.displayName,
-    status: billRun.status,
+    billRunTitle: generateBillRunTitle(billRun.region.displayName, billRun.batchType, billRun.scheme, billRun.summer),
+    billRunType: 'two-part tariff',
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
     numberOfLicencesToReview: billRun.reviewLicences[0].numberOfLicencesToReview,
+    region: billRun.region.displayName,
     reviewMessage: _prepareReviewMessage(billRun.reviewLicences[0].numberOfLicencesToReview),
+    status: billRun.status,
     totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
 }
