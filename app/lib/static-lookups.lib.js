@@ -8,21 +8,6 @@ const contactTypes = ['person', 'department']
 
 const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
 
-/*
- * Helper map for Months of the Year in integer format
- *
- * The getMonth() method of Date instances returns the month for this date according to local time,
- * as a zero-based value (where zero indicates the first month of the year).
- *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
- */
-const monthsAsIntegers = {
-  january: 0,
-  october: 9,
-  november: 10,
-  december: 11
-}
-
 /**
  * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
  *
@@ -51,6 +36,50 @@ const returnCycleDates = {
     dueDate: { day: 28, month: 10 },
     endDate: { day: 31, month: 9 },
     startDate: { day: 1, month: 10 }
+  }
+}
+
+/**
+ * An object defining the return periods / cycles with their respective start dates, end dates, and due dates.
+ *
+ * Each period / cycle is represented with the following properties:
+ * - `startDate`: The starting date of the period (day and month).
+ * - `endDate`: The ending date of the period (day and month).
+ * - `dueDate`: The due date for the period (day and month).
+ *
+ * Months are zero-based, where January = 0, February = 1, ..., December = 11.
+ *
+ * | Name         | Start Date    | End Date      | Due Date       |
+ * |--------------|---------------|---------------|----------------|
+ * | Quarter One  | 1 January     | 31 March      | 28th April     |
+ * | All Year     | 1 April       | 31 March      | 28th April     |
+ * | Quarter Two  | 1 April       | 30 June       | 28th July      |
+ * | Quarter Three| 1 July        | 30 September  | 28th October   |
+ * | Quarter Four | 1 October     | 31 December   | 28th January   |
+ * | Summer       | 1 November    | 31 October    | 28th November  |
+ *
+ */
+const returnPeriodDates = {
+  ...returnCycleDates,
+  quarterOne: {
+    dueDate: { day: 28, month: 3 },
+    endDate: { day: 31, month: 2 },
+    startDate: { day: 1, month: 0 }
+  },
+  quarterTwo: {
+    dueDate: { day: 28, month: 6 },
+    endDate: { day: 30, month: 5 },
+    startDate: { day: 1, month: 3 }
+  },
+  quarterThree: {
+    dueDate: { day: 28, month: 9 },
+    endDate: { day: 30, month: 8 },
+    startDate: { day: 1, month: 6 }
+  },
+  quarterFour: {
+    dueDate: { day: 28, month: 0 },
+    endDate: { day: 31, month: 11 },
+    startDate: { day: 1, month: 9 }
   }
 }
 
@@ -106,10 +135,10 @@ module.exports = {
   companyTypes,
   contactTypes,
   engineTriggers,
-  monthsAsIntegers,
   naldRegions,
   organisationTypes,
   returnCycleDates,
+  returnPeriodDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
   sources,

@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitTypeService = require('../../../../app/services/bill-runs/setup/submit-type.service.js')
 
-describe('Bill Runs Setup Submit Type service', () => {
+describe('Bill Runs - Setup - Submit Type service', () => {
   let payload
   let session
 
@@ -54,11 +54,12 @@ describe('Bill Runs Setup Submit Type service', () => {
           const result = await SubmitTypeService.go(session.id, payload)
 
           expect(result).to.equal({
-            sessionId: session.id,
-            selectedType: null,
             error: {
-              text: 'Select a bill run type'
-            }
+              text: 'Select the bill run type'
+            },
+            pageTitle: 'Select the bill run type',
+            sessionId: session.id,
+            selectedType: null
           })
         })
       })

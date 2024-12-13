@@ -5,9 +5,11 @@
  * @module ImportLegacyProcessLicenceService
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../determine-supplementary-billing-flags.service.js')
+const DetermineLicenceEndDateChangedService = require('../determine-licence-end-date-changed.service.js')
+const GenerateReturnLogsService = require('../generate-return-logs.service.js')
 const LicenceStructureValidator = require('../../../validators/import/licence-structure.validator.js')
 const PersistImportService = require('../persist-import.service.js')
+const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
 const TransformAddressesService = require('./transform-addresses.service.js')
 const TransformLicenceDocumentService = require('./transform-licence-document.service.js')
 const TransformLicenceDocumentRolesService = require('./transform-licence-document-roles.service.js')
@@ -35,12 +37,6 @@ async function go(licenceRef) {
     const { naldLicenceId, regionCode, transformedLicence, wrlsLicenceId } =
       await TransformLicenceService.go(licenceRef)
 
-    // We have other services that need to know when a licence has been imported. However, they only care about changes
-    // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
-    if (wrlsLicenceId) {
-      DetermineSupplementaryBillingFlagsService.go(transformedLicence, wrlsLicenceId)
-    }
-
     // Pass the transformed licence through each transformation step, building the licence as we go
     await TransformLicenceVersionsService.go(regionCode, naldLicenceId, transformedLicence)
     await TransformLicenceVersionPurposesService.go(regionCode, naldLicenceId, transformedLicence)
@@ -63,6 +59,22 @@ async function go(licenceRef) {
 
     // Either insert or update the licence in WRLS
     const licenceId = await PersistImportService.go(transformedLicence, transformedCompanies)
+
+    // We have other services that need to know when a licence has been imported. However, they only care about changes
+    // to existing licences. So, if wrlsLicenceId is populated it means the import is updating an existing licence.
+    if (wrlsLicenceId) {
+      const licenceEndDateChanged = await DetermineLicenceEndDateChangedService.go(transformedLicence, wrlsLicenceId)
+
+      if (licenceEndDateChanged) {
+        const payload = {
+          transformedLicence,
+          licenceId: wrlsLicenceId
+        }
+
+        ProcessBillingFlagService.go(payload)
+        GenerateReturnLogsService.go(wrlsLicenceId, transformedLicence)
+      }
+    }
 
     calculateAndLogTimeTaken(startTime, 'Legacy licence import complete', { licenceId, licenceRef })
   } catch (error) {
