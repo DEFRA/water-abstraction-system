@@ -14,7 +14,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Thing under test
 const FetchLiveBillRunsService = require('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
 
-describe('Bill Runs Setup Fetch Live Bill Run service', () => {
+describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
   const differentRegion = RegionHelper.select(0)
   const matchingRegion = RegionHelper.select(1)
   const toFinancialYearEnding = 2025

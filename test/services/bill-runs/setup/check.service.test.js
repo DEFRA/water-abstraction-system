@@ -19,7 +19,7 @@ const RegionModel = require('../../../../app/models/region.model.js')
 // Thing under test
 const CheckService = require('../../../../app/services/bill-runs/setup/check.service.js')
 
-describe('Bill Runs Setup Check service', () => {
+describe('Bill Runs - Setup - Check service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let session

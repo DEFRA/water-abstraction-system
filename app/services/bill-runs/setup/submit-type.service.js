@@ -39,11 +39,11 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = TypePresenter.go(session)
+  const pageData = TypePresenter.go(session)
 
   return {
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
