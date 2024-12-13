@@ -5,6 +5,7 @@
  * @module ReturnLogService
  */
 
+const FetchReturnLogService = require('./fetch-return-log.service.js')
 const LegacyRequest = require('../../requests/legacy.request.js')
 const ReturnLogPresenter = require('../../presenters/return-logs/view.presenter.js')
 
@@ -19,6 +20,9 @@ const ReturnLogPresenter = require('../../presenters/return-logs/view.presenter.
 async function go(request, returnId) {
   const { id: userId } = request.auth.credentials.user
 
+  const returnLog = await FetchReturnLogService.go(returnId)
+  console.log('🚀 ~ go ~ returnLog:', returnLog)
+
   const result = await LegacyRequest.get('water', 'returns?returnId=' + returnId, userId)
 
   const { body } = result.response
@@ -27,7 +31,10 @@ async function go(request, returnId) {
 
   // TODO: Check licence in CRM to ensure user has access
 
-  return pageData
+  return {
+    pageTitle: 'Abstraction return',
+    ...pageData
+  }
 }
 
 module.exports = {

@@ -1,13 +1,13 @@
 'use strict'
 
-const ReturnsController = require('../controllers/returns.controller.js')
+const ReturnLogsController = require('../controllers/return-logs.controller.js')
 
 const routes = [
   {
     method: 'GET',
-    path: '/returns/return-log',
+    path: '/return-logs',
     options: {
-      handler: ReturnsController.returnLog,
+      handler: ReturnLogsController.view,
       app: {
         plainOutput: true
       },
