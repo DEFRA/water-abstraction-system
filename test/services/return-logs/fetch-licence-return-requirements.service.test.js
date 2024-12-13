@@ -30,6 +30,9 @@ const FetchLicenceReturnRequirementsService = require('../../../app/services/ret
 let licence
 let point
 let primaryPurpose
+let previousReturnRequirementPurpose
+let previousReturnRequirement
+let previousReturnVersion
 let purpose
 let region
 let returnRequirement
@@ -39,6 +42,7 @@ let secondaryPurpose
 
 describe('Return Logs - Fetch Licence Return Requirements service', () => {
   const changeDate = new Date('2024-12-04')
+  const dayAfterChangeDate = new Date('2024-12-05')
 
   describe('when the given licence exists', () => {
     before(async () => {
@@ -90,6 +94,72 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
             const expectedResult = _expectedResult()
 
             expect(results).to.include(expectedResult)
+          })
+        })
+      })
+
+      describe('and it has two return versions that have no end date, or ends on or after the change date', () => {
+        before(async () => {
+          returnVersion = await ReturnVersionHelper.add({ startDate: dayAfterChangeDate, licenceId: licence.id })
+          previousReturnVersion = await ReturnVersionHelper.add({ endDate: changeDate, licenceId: licence.id })
+        })
+
+        describe('and the return version has a return requirement', () => {
+          before(async () => {
+            returnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: returnVersion.id,
+              summer: true
+            })
+            previousReturnRequirement = await ReturnRequirementHelper.add({
+              regionId: region.naldRegionId,
+              returnVersionId: previousReturnVersion.id,
+              summer: true
+            })
+
+            primaryPurpose = PrimaryPurposeHelper.select()
+            purpose = PurposeHelper.select()
+            secondaryPurpose = SecondaryPurposeHelper.select()
+
+            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Summer purpose alias for testing',
+              returnRequirementId: returnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+            previousReturnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+              alias: 'Summer purpose alias for testing',
+              returnRequirementId: previousReturnRequirement.id,
+              primaryPurposeId: primaryPurpose.id,
+              purposeId: purpose.id,
+              secondaryPurposeId: secondaryPurpose.id
+            })
+
+            point = await PointHelper.add({
+              description: 'Summer cycle - live licence - live return version - summer return requirement'
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: returnRequirement.id,
+              pointId: point.id
+            })
+            await ReturnRequirementPointHelper.add({
+              returnRequirementId: previousReturnRequirement.id,
+              pointId: point.id
+            })
+          })
+
+          it('returns the return requirement and all related data needed to generate a return log', async () => {
+            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+            const returnVersionExpectedResult = _expectedResult()
+            const previousReturnVersionExpectedResult = _expectedResult(
+              previousReturnRequirementPurpose,
+              previousReturnRequirement,
+              previousReturnVersion
+            )
+
+            expect(results).to.includes([returnVersionExpectedResult, previousReturnVersionExpectedResult])
           })
         })
       })
@@ -203,26 +273,30 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
   })
 })
 
-function _expectedResult() {
+function _expectedResult(
+  _returnRequirementPurpose = returnRequirementPurpose,
+  _returnRequirement = returnRequirement,
+  _returnVersion = returnVersion
+) {
   return ReturnRequirementModel.fromJson({
-    abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
-    abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
-    abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-    abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-    externalId: returnRequirement.externalId,
-    id: returnRequirement.id,
-    legacyId: returnRequirement.legacyId,
-    reportingFrequency: returnRequirement.reportingFrequency,
-    returnVersionId: returnRequirement.returnVersionId,
-    siteDescription: returnRequirement.siteDescription,
-    summer: returnRequirement.summer,
-    twoPartTariff: returnRequirement.twoPartTariff,
-    upload: returnRequirement.upload,
+    abstractionPeriodEndDay: _returnRequirement.abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: _returnRequirement.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: _returnRequirement.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: _returnRequirement.abstractionPeriodStartMonth,
+    externalId: _returnRequirement.externalId,
+    id: _returnRequirement.id,
+    legacyId: _returnRequirement.legacyId,
+    reportingFrequency: _returnRequirement.reportingFrequency,
+    returnVersionId: _returnRequirement.returnVersionId,
+    siteDescription: _returnRequirement.siteDescription,
+    summer: _returnRequirement.summer,
+    twoPartTariff: _returnRequirement.twoPartTariff,
+    upload: _returnRequirement.upload,
     returnVersion: {
-      endDate: returnVersion.endDate,
-      id: returnVersion.id,
-      reason: returnVersion.reason,
-      startDate: returnVersion.startDate,
+      endDate: _returnVersion.endDate,
+      id: _returnVersion.id,
+      reason: _returnVersion.reason,
+      startDate: _returnVersion.startDate,
       licence: {
         expiredDate: licence.expiredDate,
         id: licence.id,
@@ -247,8 +321,8 @@ function _expectedResult() {
     ],
     returnRequirementPurposes: [
       {
-        alias: returnRequirementPurpose.alias,
-        id: returnRequirementPurpose.id,
+        alias: _returnRequirementPurpose.alias,
+        id: _returnRequirementPurpose.id,
         primaryPurpose: {
           description: primaryPurpose.description,
           id: primaryPurpose.id,
