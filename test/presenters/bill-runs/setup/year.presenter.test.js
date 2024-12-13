@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const YearPresenter = require('../../../../app/presenters/bill-runs/setup/year.presenter.js')
 
-describe('Bill Runs Setup Year presenter', () => {
+describe('Bill Runs - Setup - Year presenter', () => {
   let licenceSupplementaryYears
   let session
 
@@ -41,6 +41,7 @@ describe('Bill Runs Setup Year presenter', () => {
               checked: false
             }
           ],
+          pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedYear: null
         })
@@ -68,6 +69,7 @@ describe('Bill Runs Setup Year presenter', () => {
               checked: true
             }
           ],
+          pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedYear: '2022'
         })
@@ -90,6 +92,7 @@ describe('Bill Runs Setup Year presenter', () => {
 
         expect(result).to.equal({
           financialYearsData: _financialYearsData(null),
+          pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedYear: null
         })
@@ -106,6 +109,7 @@ describe('Bill Runs Setup Year presenter', () => {
 
         expect(result).to.equal({
           financialYearsData: _financialYearsData('2022'),
+          pageTitle: 'Select the financial year',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedYear: '2022'
         })

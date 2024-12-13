@@ -23,9 +23,9 @@ function go(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select a bill run type',
-        'any.only': 'Select a bill run type',
-        'string.empty': 'Select a bill run type'
+        'any.required': 'Select the bill run type',
+        'any.only': 'Select the bill run type',
+        'string.empty': 'Select the bill run type'
       })
   })
 
