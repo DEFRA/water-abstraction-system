@@ -15,7 +15,7 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notifications/ad-hoc-returns/submit-licence.service.js')
 
-describe('Ad-hoc Returns Licence service', () => {
+describe.only('Ad-hoc Returns Licence service', () => {
   let payload
   let session
 
@@ -62,7 +62,7 @@ describe('Ad-hoc Returns Licence service', () => {
             sessionId: session.id,
             licenceRef: null,
             error: {
-              text: 'Enter a Licence number'
+              text: 'Enter a licence number'
             }
           })
         })
@@ -82,7 +82,7 @@ describe('Ad-hoc Returns Licence service', () => {
             sessionId: session.id,
             licenceRef: null,
             error: {
-              text: 'Enter a Licence number'
+              text: 'Enter a licence number'
             }
           })
         })

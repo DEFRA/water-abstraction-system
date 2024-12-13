@@ -77,7 +77,7 @@ async function _validate(payload) {
   }
 
   return {
-    text: 'Enter a Licence number'
+    text: 'Enter a licence number'
   }
 }
 
