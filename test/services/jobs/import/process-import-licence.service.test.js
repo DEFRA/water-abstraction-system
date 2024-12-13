@@ -108,13 +108,13 @@ describe('Process Import Licence Service', () => {
         expect(stubDetermineLicenceEndDateChangedService.calledWithExactly(expectedPayload, licence.id)).to.be.true()
       })
 
-      it('should call the "ProcessBillingFlagService" service ', async () => {
+      it('should not call the "ProcessBillingFlagService" service ', async () => {
         await ProcessImportLicence.go(licence)
 
         expect(stubProcessBillingFlagService.called).to.be.false()
       })
 
-      it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
+      it('should not call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
         await ProcessImportLicence.go(licence)
 
         expect(stubGenerateReturnLogsService.called).to.be.false()
