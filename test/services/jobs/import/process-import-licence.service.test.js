@@ -18,7 +18,7 @@ const GenerateReturnLogsService = require('../../../../app/services/import/gener
 // Thing under test
 const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')
 
-describe.only('Process Import Licence Service', () => {
+describe('Process Import Licence Service', () => {
   let licence
   let notifierStub
   let stubDetermineLicenceEndDateChangedService
@@ -38,41 +38,87 @@ describe.only('Process Import Licence Service', () => {
   })
 
   describe('when a licence has been process successfully', () => {
-    beforeEach(() => {
-      stubDetermineLicenceEndDateChangedService = Sinon.stub(DetermineLicenceEndDateChangedService, 'go').resolves(true)
-      stubProcessBillingFlagService = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
-      stubGenerateReturnLogsService = Sinon.stub(GenerateReturnLogsService, 'go').resolves()
+    describe('and the licence end date has changed', () => {
+      beforeEach(() => {
+        stubDetermineLicenceEndDateChangedService = Sinon.stub(DetermineLicenceEndDateChangedService, 'go').resolves(
+          true
+        )
+        stubProcessBillingFlagService = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+        stubGenerateReturnLogsService = Sinon.stub(GenerateReturnLogsService, 'go').resolves()
+      })
+
+      it('should call the "DetermineLicenceEndDateChangedService" service ', async () => {
+        await ProcessImportLicence.go(licence)
+
+        const expectedPayload = {
+          expiredDate: licence.expired_date,
+          lapsedDate: licence.lapsed_date,
+          revokedDate: licence.revoked_date,
+          licenceId: licence.id
+        }
+
+        expect(stubDetermineLicenceEndDateChangedService.calledWithExactly(expectedPayload, licence.id)).to.be.true()
+      })
+
+      it('should call the "ProcessBillingFlagService" service ', async () => {
+        await ProcessImportLicence.go(licence)
+
+        const expectedPayload = {
+          expiredDate: licence.expired_date,
+          lapsedDate: licence.lapsed_date,
+          revokedDate: licence.revoked_date,
+          licenceId: licence.id
+        }
+
+        expect(stubProcessBillingFlagService.calledWithExactly(expectedPayload)).to.be.true()
+      })
+
+      it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
+        await ProcessImportLicence.go(licence)
+
+        const expectedPayload = {
+          expiredDate: licence.expired_date,
+          lapsedDate: licence.lapsed_date,
+          revokedDate: licence.revoked_date,
+          licenceId: licence.id
+        }
+
+        expect(stubGenerateReturnLogsService.calledWithExactly(licence.id, expectedPayload)).to.be.true()
+      })
     })
+    describe('and the licence end date has not changed', () => {
+      beforeEach(() => {
+        stubDetermineLicenceEndDateChangedService = Sinon.stub(DetermineLicenceEndDateChangedService, 'go').resolves(
+          false
+        )
+        stubProcessBillingFlagService = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+        stubGenerateReturnLogsService = Sinon.stub(GenerateReturnLogsService, 'go').resolves()
+      })
 
-    it('should call the "DetermineLicenceEndDateChangedService" service ', async () => {
-      await ProcessImportLicence.go(licence)
+      it('should call the "DetermineLicenceEndDateChangedService" service ', async () => {
+        await ProcessImportLicence.go(licence)
 
-      const expectedPaylod = {
-        expiredDate: licence.expired_date,
-        lapsedDate: licence.lapsed_date,
-        revokedDate: licence.revoked_date,
-        licenceId: licence.id
-      }
+        const expectedPayload = {
+          expiredDate: licence.expired_date,
+          lapsedDate: licence.lapsed_date,
+          revokedDate: licence.revoked_date,
+          licenceId: licence.id
+        }
 
-      expect(stubDetermineLicenceEndDateChangedService.calledWithExactly(expectedPaylod)).to.be.true()
-    })
+        expect(stubDetermineLicenceEndDateChangedService.calledWithExactly(expectedPayload, licence.id)).to.be.true()
+      })
 
-    it('should call the "ProcessBillingFlagService" service ', async () => {
-      await ProcessImportLicence.go(licence)
+      it('should call the "ProcessBillingFlagService" service ', async () => {
+        await ProcessImportLicence.go(licence)
 
-      expect(stubProcessBillingFlagService.calledWithExactly(licence.id)).to.be.true()
-    })
+        expect(stubProcessBillingFlagService.called).to.be.false()
+      })
 
-    it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
-      await ProcessImportLicence.go(licence)
+      it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
+        await ProcessImportLicence.go(licence)
 
-      const licenceFormattedForSupplementary = {
-        expiredDate: licence.expired_date,
-        lapsedDate: licence.lapsed_date,
-        revokedDate: licence.revoked_date
-      }
-
-      expect(stubGenerateReturnLogsService.calledWithExactly(licence.id, licenceFormattedForSupplementary)).to.be.true()
+        expect(stubGenerateReturnLogsService.called).to.be.false()
+      })
     })
   })
 
