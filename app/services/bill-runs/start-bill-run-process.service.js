@@ -18,7 +18,7 @@ const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bi
  * @param {string} regionId - Id of the region the bill run is for
  * @param {string} batchType - Type of bill run, for example, supplementary
  * @param {string} userEmail - Email address of the user who initiated the bill run
- * @param {number} financialYearEnding - End year of the bill run. Only populated for two-part-tariff
+ * @param {number} financialYearEnding - The financial year end that will be used for the bill run
  *
  * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
