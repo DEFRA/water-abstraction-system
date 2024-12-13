@@ -207,19 +207,11 @@ function formatIssues(issues) {
  * @returns {string} the purpose descriptions presented as a comma separated string
  */
 function formatPurposes(purposes) {
-  const firstPurposeDescription = purposes[0].tertiary.description
+  const purposeDescriptionArray = purposes.map((purpose) => {
+    return purpose.tertiary.description
+  })
 
-  if (purposes.length === 1) {
-    return firstPurposeDescription
-  }
-
-  let commaSeparatedPurposeDescriptions = firstPurposeDescription
-
-  for (let i = 1; i < purposes.length; i++) {
-    commaSeparatedPurposeDescriptions = `${commaSeparatedPurposeDescriptions}, ${purposes[i].tertiary.description}`
-  }
-
-  return commaSeparatedPurposeDescriptions
+  return purposeDescriptionArray.join(', ')
 }
 
 /**
