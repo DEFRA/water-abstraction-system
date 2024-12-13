@@ -31,9 +31,7 @@ describe('Notifications Ad-hoc Returns - Licence service', () => {
 
       expect(result).to.equal({
         sessionId: session.id,
-        licenceRef: '01/111',
-        activeNavBar: 'manage',
-        pageTitle: 'Enter a licence number'
+        licenceRef: '01/111'
       })
     })
   })

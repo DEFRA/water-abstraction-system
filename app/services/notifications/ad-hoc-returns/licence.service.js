@@ -5,6 +5,7 @@
  * @module LicenceService
  */
 
+const LicencePresenter = require('../../../presenters/notifications/ad-hoc-returns/licence.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -19,12 +20,10 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const formattedData = LicencePresenter.go(session)
 
   return {
-    sessionId: session.id,
-    licenceRef: session.licenceRef ? session.licenceRef : null,
-    activeNavBar: 'manage',
-    pageTitle: 'Enter a licence number'
+    ...formattedData
   }
 }
 
