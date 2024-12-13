@@ -87,6 +87,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
     const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
     generatedReturnLogIds.push(...returnLogIds)
   }
 
