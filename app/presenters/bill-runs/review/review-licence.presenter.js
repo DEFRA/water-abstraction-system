@@ -41,7 +41,6 @@ function go(reviewLicence) {
     reviewReturns,
     status
   } = reviewLicence
-  console.log('🚀 ~ go ~ billRun:', billRun)
   const { matchedReturns, unmatchedReturns } = _formatReviewReturns(reviewReturns)
 
   return {
