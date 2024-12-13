@@ -7,7 +7,6 @@
 
 const AnnualProcessBillRunService = require('./annual/process-bill-run.service.js')
 const DetermineBillingPeriodsService = require('./determine-billing-periods.service.js')
-const CreateBillRunPresenter = require('../../presenters/bill-runs/create-bill-run.presenter.js')
 const InitiateBillRunService = require('./initiate-bill-run.service.js')
 const NoBillingPeriodsError = require('../../errors/no-billing-periods.error.js')
 const SupplementaryProcessBillRunService = require('./supplementary/process-bill-run.service.js')
@@ -34,8 +33,6 @@ async function go(regionId, batchType, userEmail, financialYearEnding) {
   const billRun = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, userEmail)
 
   _processBillRun(billRun, billingPeriods)
-
-  return _response(billRun)
 }
 
 function _financialYearEndings(billingPeriods) {
@@ -59,10 +56,6 @@ function _processBillRun(billRun, billingPeriods) {
       TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
       break
   }
-}
-
-function _response(billRun) {
-  return CreateBillRunPresenter.go(billRun)
 }
 
 module.exports = {
