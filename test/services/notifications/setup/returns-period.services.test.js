@@ -35,17 +35,17 @@ describe('Notifications Setup - Returns Period service', () => {
         returnsPeriod: [
           {
             hint: {
-              text: 'Due date 28 Jan 2025'
+              text: 'Due date 28 January 2025'
             },
-            text: 'Quarterly 1st October 2024 to 31st December 2024',
-            value: 'currentPeriod'
+            text: 'Quarterly 1 October 2024 to 31 December 2024',
+            value: 'quarterFour'
           },
           {
             hint: {
               text: 'Due date 28 April 2025'
             },
-            text: 'Quarterly 1st January 2025 to 31st March 2025',
-            value: 'nextPeriod'
+            text: 'Quarterly 1 January 2025 to 31 March 2025',
+            value: 'quarterOne'
           }
         ]
       })
