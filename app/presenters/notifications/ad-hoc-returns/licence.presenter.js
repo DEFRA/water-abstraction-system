@@ -15,7 +15,7 @@
 function go(session) {
   return {
     sessionId: session.id,
-    licenceRef: session.licenceRef ? session.licenceRef : null
+    licenceRef: session.licenceRef ?? null
   }
 }
 

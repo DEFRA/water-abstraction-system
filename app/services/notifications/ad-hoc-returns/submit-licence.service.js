@@ -37,7 +37,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const dueReturns = await _fetchDueReturns(payload.licenceRef)
+  const dueReturns = await _dueReturnsExist(payload.licenceRef)
   if (!dueReturns) {
     return {
       notification: `There are no returns due for licence ${payload.licenceRef}`,
@@ -49,13 +49,13 @@ async function go(sessionId, payload) {
   return {}
 }
 
-async function _fetchDueReturns(licenceRef) {
+async function _dueReturnsExist(licenceRef) {
   const dueReturns = await ReturnLogModel.query().where('licenceRef', licenceRef).where('status', 'due').first()
 
   return !!dueReturns
 }
 
-async function _fetchLicence(licenceRef) {
+async function _licenceExists(licenceRef) {
   const licence = await LicenceModel.query().where('licenceRef', licenceRef).first()
 
   return !!licence
@@ -69,7 +69,7 @@ async function _save(session, payload) {
 
 async function _validate(payload) {
   if (payload.licenceRef) {
-    const licenceExists = await _fetchLicence(payload.licenceRef)
+    const licenceExists = await _licenceExists(payload.licenceRef)
 
     if (licenceExists) {
       return null
