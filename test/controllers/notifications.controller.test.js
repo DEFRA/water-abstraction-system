@@ -8,8 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
+const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -17,7 +20,8 @@ const { init } = require('../../app/server.js')
 describe('Notifications Setup controller', () => {
   const basePath = '/notifications/setup'
 
-  let options
+  let getOptions
+  let postOptions
   let server
 
   // Create server before running the tests
@@ -41,7 +45,7 @@ describe('Notifications Setup controller', () => {
   describe('notifications/setup/returns-period', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = {
+        getOptions = {
           method: 'GET',
           url: basePath + '/returns-period',
           auth: {
@@ -50,20 +54,54 @@ describe('Notifications Setup controller', () => {
           }
         }
       })
-
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(ReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
         })
 
         it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+          const response = await server.inject(getOptions)
 
           const pageData = _viewReturnsPeriod()
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({
+              ..._viewReturnsPeriod(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + '/returns-period', {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({ redirect: 'send-notice' })
+            postOptions = postRequestOptions(basePath + '/returns-period', {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/notifications/setup/send-notice')
+          })
         })
       })
     })
