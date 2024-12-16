@@ -5,8 +5,6 @@
  * @module DetermineBillingPeriodsService
  */
 
-const { determineCurrentFinancialYear } = require('../../lib/general.lib.js')
-
 // NOTE: Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
 // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
 const APRIL = 3
@@ -29,7 +27,7 @@ const SROC_FIRST_FIN_YEAR_END = 2023
  * Our 3 billing engines then use these periods to generate the bill run.
  *
  * @param {string} billRunType - The type of bill run, for example, 'annual' or 'supplementary'
- * @param {number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
+ * @param {number} financialYearEnding - The financial year end that will be used for the bill run
  *
  * @returns {object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
@@ -58,10 +56,10 @@ function _billingPeriods(billRunType, financialYear) {
     return billingPeriods
   }
 
-  // For example, years.endYear is 2024. So Math.max(2023, 2019) results in 2023 being the earliest year
-  // If years.endYear is 2029. So Math.max(2023, 2024) results in 2024 being the earliest year we go back to
-  // It means we'll never pick a PRESROC for our billing periods. But also we are future proofed should we still be
-  // here in 2029!
+  // We are trying to determine whats the earliest date we can go back to, without resulting in a PRESROC start date.
+  // For example, if `years.endYear` is 2024 then `Math.max(2023, 2019)` results in 2023 being the earliest year
+  // we can go back to. But if `years.endYear` is 2029 then `Math.max(2023, 2024)` results in 2024 being the earliest
+  // year.
   const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, years.endYear - NO_OF_YEARS_TO_LOOK_BACK)
 
   while (earliestSrocFinYearEnd <= years.endYear) {
@@ -74,22 +72,11 @@ function _billingPeriods(billRunType, financialYear) {
   return billingPeriods
 }
 
-/**
- * TODO: Whilst we still have `POST /bill-runs` to support bill runs created using the legacy setup bill run journey we
- * can receive requests where financialYearEnding has not been set. This exists to handle that scenario and can be
- * deleted when we are confident we can delete that end point.
- *
- * @private
- */
 function _financialYear(financialYearEnding) {
-  if (financialYearEnding) {
-    return {
-      startDate: new Date(financialYearEnding - 1, APRIL, 1),
-      endDate: new Date(financialYearEnding, MARCH, 31)
-    }
+  return {
+    startDate: new Date(financialYearEnding - 1, APRIL, 1),
+    endDate: new Date(financialYearEnding, MARCH, 31)
   }
-
-  return determineCurrentFinancialYear()
 }
 
 module.exports = {

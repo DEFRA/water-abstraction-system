@@ -73,20 +73,6 @@ describe('Start Bill Run Process service', () => {
         expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
-      it('returns a response containing details of the new bill run', async () => {
-        const result = await StartBillRunProcessService.go(regionId, batchType, userEmail)
-
-        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
-        // billingBatchId
-        expect(result.billingBatchId).to.equal(billRun.id)
-        expect(result.region).to.equal(billRun.regionId)
-        expect(result.scheme).to.equal(billRun.scheme)
-        expect(result.batchType).to.equal(batchType)
-        expect(result.status).to.equal(billRun.status)
-        expect(result.externalId).to.equal(billRun.externalId)
-        expect(result.errorCode).to.equal(billRun.errorCode)
-      })
-
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
@@ -116,20 +102,6 @@ describe('Start Bill Run Process service', () => {
         expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
-      it('returns a response containing details of the new bill run', async () => {
-        const result = await StartBillRunProcessService.go(regionId, userEmail)
-
-        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
-        // billingBatchId
-        expect(result.billingBatchId).to.equal(billRun.id)
-        expect(result.region).to.equal(billRun.regionId)
-        expect(result.scheme).to.equal(billRun.scheme)
-        expect(result.batchType).to.equal(batchType)
-        expect(result.status).to.equal(billRun.status)
-        expect(result.externalId).to.equal(billRun.externalId)
-        expect(result.errorCode).to.equal(billRun.errorCode)
-      })
-
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
@@ -157,20 +129,6 @@ describe('Start Bill Run Process service', () => {
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
         expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
-      })
-
-      it('returns a response containing details of the new bill run', async () => {
-        const result = await StartBillRunProcessService.go(regionId, batchType, userEmail)
-
-        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
-        // billingBatchId
-        expect(result.billingBatchId).to.equal(billRun.id)
-        expect(result.region).to.equal(billRun.regionId)
-        expect(result.scheme).to.equal(billRun.scheme)
-        expect(result.batchType).to.equal(batchType)
-        expect(result.status).to.equal(billRun.status)
-        expect(result.externalId).to.equal(billRun.externalId)
-        expect(result.errorCode).to.equal(billRun.errorCode)
       })
 
       it('starts processing the bill run', async () => {
