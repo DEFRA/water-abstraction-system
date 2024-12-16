@@ -1,0 +1,28 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+      text: 'Back',
+      href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+
+            {{ govukButton({ text: "Send returns", preventDoubleClick: true }) }}
+          </div>
+        </div>
+    </form>
+  </div>
+{% endblock %}
