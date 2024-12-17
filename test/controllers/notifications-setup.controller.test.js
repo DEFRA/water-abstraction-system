@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
@@ -40,6 +41,36 @@ describe('Notifications Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('notifications/setup', () => {
+    describe('GET', () => {
+      const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
+
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: '/notifications/setup',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        })
+
+        it('redirects successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/returns-period`)
+        })
+      })
+    })
   })
 
   describe('notifications/setup/returns-period', () => {
