@@ -8,13 +8,19 @@ const Sinon = require('sinon')
 const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+
 // Thing under test
 const ReturnsPeriodService = require('../../../../app/services/notifications/setup/returns-period.service.js')
 
 describe('Notifications Setup - Returns Period service', () => {
   let clock
+  let session
 
-  before(() => {
+  before(async () => {
+    session = await SessionHelper.add()
+
     const testDate = new Date('2024-12-01')
 
     clock = Sinon.useFakeTimers(testDate)
@@ -25,8 +31,8 @@ describe('Notifications Setup - Returns Period service', () => {
   })
 
   describe('when provided no params', () => {
-    it('correctly presents the data', () => {
-      const result = ReturnsPeriodService.go()
+    it('correctly presents the data', async () => {
+      const result = await ReturnsPeriodService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'manage',
@@ -34,6 +40,7 @@ describe('Notifications Setup - Returns Period service', () => {
         pageTitle: 'Select the returns periods for the invitations',
         returnsPeriod: [
           {
+            checked: false,
             hint: {
               text: 'Due date 28 January 2025'
             },
@@ -41,6 +48,7 @@ describe('Notifications Setup - Returns Period service', () => {
             value: 'quarterFour'
           },
           {
+            checked: false,
             hint: {
               text: 'Due date 28 April 2025'
             },

@@ -8,14 +8,18 @@ const Sinon = require('sinon')
 const { describe, it, after, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+
 // Thing under test
 const SubmitReturnsPeriodService = require('../../../../app/services/notifications/setup/submit-returns-period.service.js')
 
 describe('Notifications Setup - Submit Returns Period service', () => {
   let clock
   let payload
+  let session
 
-  before(() => {
+  before(async () => {
     const testDate = new Date('2024-12-01')
 
     clock = Sinon.useFakeTimers(testDate)
@@ -26,11 +30,22 @@ describe('Notifications Setup - Submit Returns Period service', () => {
   })
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {
-      beforeEach(() => {
-        payload = { returnsPeriod: 'summer' }
+      beforeEach(async () => {
+        session = await SessionHelper.add()
+
+        payload = { returnsPeriod: 'quarterFour' }
       })
+
+      it('saves the submitted value', async () => {
+        await SubmitReturnsPeriodService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.returnsPeriod).to.equal('quarterFour')
+      })
+
       it('returns the redirect route', async () => {
-        const result = await SubmitReturnsPeriodService.go(payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload)
 
         expect(result).to.equal({
           redirect: 'send-notice'
@@ -39,11 +54,12 @@ describe('Notifications Setup - Submit Returns Period service', () => {
     })
 
     describe('fails validation', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        session = await SessionHelper.add()
         payload = {}
       })
       it('correctly presents the data with the error', async () => {
-        const result = await SubmitReturnsPeriodService.go(payload)
+        const result = await SubmitReturnsPeriodService.go(session.id, payload)
 
         expect(result).to.equal({
           activeNavBar: 'manage',
@@ -54,6 +70,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
           pageTitle: 'Select the returns periods for the invitations',
           returnsPeriod: [
             {
+              checked: false,
               hint: {
                 text: 'Due date 28 January 2025'
               },
@@ -61,6 +78,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
               value: 'quarterFour'
             },
             {
+              checked: false,
               hint: {
                 text: 'Due date 28 April 2025'
               },

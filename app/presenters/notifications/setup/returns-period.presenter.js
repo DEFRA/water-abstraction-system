@@ -11,34 +11,37 @@ const { formatLongDate } = require('../../base.presenter')
 /**
  * Formats data for the `/notifications/setup/returns-period` page
  *
+ * @param {module:SessionModel} session - The session instance to format
+ *
  * @returns {object} - The data formatted for the view template
  */
-function go() {
+function go(session) {
   return {
     backLink: '/manage',
-    returnsPeriod: _returnsPeriod()
+    returnsPeriod: _returnsPeriod(session)
   }
 }
 
-function _returnsPeriod() {
+function _returnsPeriod(session) {
   const today = new Date()
 
   const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today)
 
-  const currentReturnPeriod = _formatReturnPeriod(firstReturnPeriod)
-  const nextReturnPeriod = _formatReturnPeriod(secondReturnPeriod)
+  const currentReturnPeriod = _formatReturnPeriod(firstReturnPeriod, session)
+  const nextReturnPeriod = _formatReturnPeriod(secondReturnPeriod, session)
 
   return [currentReturnPeriod, nextReturnPeriod]
 }
 
-function _formatReturnPeriod(returnPeriod) {
-  const textPrefix = _textPrefix(returnPeriod)
+function _formatReturnPeriod(returnsPeriod, session) {
+  const textPrefix = _textPrefix(returnsPeriod)
   return {
-    value: returnPeriod.name,
-    text: `${textPrefix} ${formatLongDate(returnPeriod.startDate)} to ${formatLongDate(returnPeriod.endDate)}`,
+    value: returnsPeriod.name,
+    text: `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`,
     hint: {
-      text: `Due date ${formatLongDate(returnPeriod.dueDate)}`
-    }
+      text: `Due date ${formatLongDate(returnsPeriod.dueDate)}`
+    },
+    checked: returnsPeriod.name === session?.returnsPeriod
   }
 }
 
