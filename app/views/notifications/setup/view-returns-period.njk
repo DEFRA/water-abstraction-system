@@ -1,6 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -10,21 +12,36 @@
 {% endblock %}
 
 {% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#returnsPeriod-error"
+        }
+      ]
+    }) }}
+  {% endif %}
 
-  {% from "govuk/components/radios/macro.njk" import govukRadios %}
+  <div class="govuk-body">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-  {{ govukRadios({
-    name: "whichReturnsPeriod",
-    fieldset: {
-      legend: {
-        text: pageTitle,
-        isPageHeading: true,
-        classes: "govuk-fieldset__legend--l"
-      }
-    },
-    items: returnsPeriod
-  }) }}
+      {{ govukRadios({
+        name: "returnsPeriod",
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        items: returnsPeriod
+      }) }}
 
-  {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
 {% endblock %}

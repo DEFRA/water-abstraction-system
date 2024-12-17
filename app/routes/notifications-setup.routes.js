@@ -16,6 +16,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: basePath + 'returns-period',
+    options: {
+      handler: NotificationsSetupController.submitReturnsPeriod,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 
