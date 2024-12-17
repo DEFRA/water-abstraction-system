@@ -100,7 +100,7 @@ describe('Notifications Setup controller', () => {
             const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/notifications/setup/send-notice')
+            expect(response.headers.location).to.equal('/system/notifications/setup/send-notice')
           })
         })
       })

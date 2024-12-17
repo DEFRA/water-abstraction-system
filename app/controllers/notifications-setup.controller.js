@@ -29,7 +29,7 @@ async function submitReturnsPeriod(request, h) {
     })
   }
 
-  return h.redirect(`/notifications/setup/${pageData.redirect}`)
+  return h.redirect(`/system/${basePath}/${pageData.redirect}`)
 }
 
 module.exports = {
