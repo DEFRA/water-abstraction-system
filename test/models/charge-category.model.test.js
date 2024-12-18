@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,10 +16,20 @@ const ChargeReferenceModel = require('../../app/models/charge-reference.model.js
 const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
 
 describe('Charge Category model', () => {
+  let testChargeReferences
   let testRecord
 
-  beforeEach(() => {
+  before(async () => {
     testRecord = ChargeCategoryHelper.select()
+    const { id } = testRecord
+
+    // Link charge references
+    testChargeReferences = []
+    for (let i = 0; i < 2; i++) {
+      const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeCategoryId: id })
+
+      testChargeReferences.push(chargeReference)
+    }
   })
 
   describe('Basic query', () => {
@@ -33,19 +43,6 @@ describe('Charge Category model', () => {
 
   describe('Relationships', () => {
     describe('when linking to charge references', () => {
-      let testChargeReferences
-
-      beforeEach(async () => {
-        const { id } = testRecord
-
-        testChargeReferences = []
-        for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeCategoryId: id })
-
-          testChargeReferences.push(chargeReference)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ChargeCategoryModel.query().innerJoinRelated('chargeReferences')
 

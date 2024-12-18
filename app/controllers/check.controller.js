@@ -5,8 +5,8 @@
  * @module CheckController
  */
 
-const DetermineSupplementaryBillingFlagsService = require('../services/import/determine-supplementary-billing-flags.service.js')
-const ProcessLicenceReturnLogsService = require('../services/jobs/return-logs/process-licence-return-logs.service.js')
+const ProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
+const ProcessLicenceReturnLogsService = require('../services/return-logs/process-licence-return-logs.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 
@@ -25,13 +25,14 @@ const NO_CONTENT_STATUS_CODE = 204
 async function flagForBilling(request, h) {
   const { licenceId, expiredDate, lapsedDate, revokedDate } = request.payload
 
-  const transformedLicence = {
+  const payload = {
     expiredDate: expiredDate ? new Date(expiredDate) : null,
     lapsedDate: lapsedDate ? new Date(lapsedDate) : null,
+    licenceId,
     revokedDate: revokedDate ? new Date(revokedDate) : null
   }
 
-  await DetermineSupplementaryBillingFlagsService.go(transformedLicence, licenceId)
+  await ProcessBillingFlagService.go(payload)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -39,26 +40,20 @@ async function flagForBilling(request, h) {
 /**
  * A test end point to create return logs for a given licence reference
  *
- * @param _request - the hapi request object
+ * @param request - the hapi request object
  * @param h - the hapi response object
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function returnLogsForLicence(_request, h) {
-  let licenceReference
+async function licenceReturnLogs(request, h) {
+  const { licenceId } = request.params
 
-  if (h.request.payload !== null && h.request.payload.licenceReference) {
-    licenceReference = h.request.payload.licenceReference
-  } else {
-    return h.response().code(404)
-  }
-
-  ProcessLicenceReturnLogsService.go(licenceReference)
+  await ProcessLicenceReturnLogsService.go(licenceId)
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
 module.exports = {
   flagForBilling,
-  returnLogsForLicence
+  licenceReturnLogs
 }

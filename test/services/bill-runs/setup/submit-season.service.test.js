@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitSeasonService = require('../../../../app/services/bill-runs/setup/submit-season.service.js')
 
-describe('Bill Runs Setup Submit Season service', () => {
+describe('Bill Runs - Setup - Submit Season service', () => {
   let payload
   let session
 
@@ -54,11 +54,12 @@ describe('Bill Runs Setup Submit Season service', () => {
           const result = await SubmitSeasonService.go(session.id, payload)
 
           expect(result).to.equal({
-            sessionId: session.id,
-            selectedSeason: null,
             error: {
               text: 'Select the season'
-            }
+            },
+            pageTitle: 'Select the season',
+            sessionId: session.id,
+            selectedSeason: null
           })
         })
       })

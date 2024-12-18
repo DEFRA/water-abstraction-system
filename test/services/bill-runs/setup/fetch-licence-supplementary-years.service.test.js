@@ -15,7 +15,7 @@ const LicenceSupplementaryYearModel = require('../../../../app/models/licence-su
 // Thing under test
 const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
 
-describe('Fetch Licence Supplementary Years service', () => {
+describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => {
   const regionId = 'acbfbba3-d5ac-422e-9e48-8683c1797e86'
 
   let licence

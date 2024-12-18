@@ -47,23 +47,28 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const legacyId = data.legacyId ? data.legacyId : generateLegacyId()
+  const regionId = data.regionId ? data.regionId : '9'
 
   const defaults = {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    externalId: `9:${legacyId}`,
+    externalId: `${regionId}:${legacyId}`,
     legacyId,
     returnsFrequency: 'day',
     returnVersionId: generateUUID(),
     siteDescription: 'BOREHOLE AT AVALON'
   }
 
-  return {
+  const returnRequirement = {
     ...defaults,
     ...data
   }
+
+  delete returnRequirement.regionId
+
+  return returnRequirement
 }
 
 /**

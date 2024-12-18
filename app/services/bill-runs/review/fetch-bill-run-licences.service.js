@@ -77,7 +77,7 @@ function _applyFilters(
 async function _fetchBillRun(id) {
   return BillRunModel.query()
     .findById(id)
-    .select('id', 'createdAt', 'status', 'toFinancialYearEnding', 'batchType')
+    .select('id', 'batchType', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select('id', 'displayName')

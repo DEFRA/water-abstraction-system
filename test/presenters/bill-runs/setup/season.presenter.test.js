@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SeasonPresenter = require('../../../../app/presenters/bill-runs/setup/season.presenter.js')
 
-describe('Bill Runs Setup Season presenter', () => {
+describe('Bill Runs - Setup - Season presenter', () => {
   let session
 
   describe('when provided with a bill run setup session record', () => {
@@ -26,6 +26,7 @@ describe('Bill Runs Setup Season presenter', () => {
         const result = SeasonPresenter.go(session)
 
         expect(result).to.equal({
+          pageTitle: 'Select the season',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedSeason: null
         })
@@ -41,6 +42,7 @@ describe('Bill Runs Setup Season presenter', () => {
         const result = SeasonPresenter.go(session)
 
         expect(result).to.equal({
+          pageTitle: 'Select the season',
           sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
           selectedSeason: 'summer'
         })

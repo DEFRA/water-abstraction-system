@@ -234,7 +234,7 @@ function _srocPageData() {
         chargeType: 'standard',
         creditAmount: '',
         debitAmount: '£1,787.00',
-        description: 'Two-part tariff basic water abstraction charge: Borehole at Muckton - Sussex',
+        description: 'Two-part tariff first part water abstraction charge: Borehole at Muckton - Sussex',
         quantity: '150ML'
       },
       {

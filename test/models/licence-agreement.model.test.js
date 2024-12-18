@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,13 +20,24 @@ const LicenceAgreementModel = require('../../app/models/licence-agreement.model.
 const FINANCIAL_AGREEMENT_MCHG_INDEX = 6
 
 describe('Licence Agreement model', () => {
+  let testFinancialAgreement
+  let testLicence
   let testRecord
 
-  describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceAgreementHelper.add()
-    })
+  before(async () => {
+    // Link to financial agreement
+    testFinancialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MCHG_INDEX)
+    const { id: financialAgreementId } = testFinancialAgreement
 
+    // Link to licence
+    testLicence = await LicenceHelper.add()
+    const { licenceRef } = testLicence
+
+    // Test record
+    testRecord = await LicenceAgreementHelper.add({ financialAgreementId, licenceRef })
+  })
+
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceAgreementModel.query().findById(testRecord.id)
 
@@ -37,16 +48,6 @@ describe('Licence Agreement model', () => {
 
   describe('Relationships', () => {
     describe('when linking to financial agreement', () => {
-      let testFinancialAgreement
-
-      before(async () => {
-        testFinancialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MCHG_INDEX)
-
-        const { id: financialAgreementId } = testFinancialAgreement
-
-        testRecord = await LicenceAgreementHelper.add({ financialAgreementId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceAgreementModel.query().innerJoinRelated('financialAgreement')
 
@@ -67,16 +68,6 @@ describe('Licence Agreement model', () => {
     })
 
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { licenceRef } = testLicence
-
-        testRecord = await LicenceAgreementHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceAgreementModel.query().innerJoinRelated('licence')
 

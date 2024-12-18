@@ -5,62 +5,57 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { monthsAsIntegers } = require('../../../lib/static-lookups.lib')
-
-const currentPeriod = 'currentPeriod'
-const nextPeriod = 'nextPeriod'
-const twentyEighth = 28
+const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib')
+const { formatLongDate } = require('../../base.presenter')
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page
  *
+ * @param {module:SessionModel} session - The session instance to format
+ * @param {module:SessionModel} session.returnsPeriod - The returns period saved from a previous submission
+ *
  * @returns {object} - The data formatted for the view template
  */
-function go() {
+function go(session) {
+  const savedReturnsPeriod = session.returnsPeriod ?? null
+
   return {
     backLink: '/manage',
-    returnsPeriod: _returnsPeriod()
+    returnsPeriod: _returnsPeriod(savedReturnsPeriod)
   }
 }
 
-function _returnsPeriod() {
+function _returnsPeriod(savedReturnsPeriod) {
   const today = new Date()
-  const currentYear = today.getFullYear()
-  const previousYear = currentYear - 1
 
-  if (_dayIsInJanuary(today)) {
-    return _dayIsInJanuaryOptions(currentYear, previousYear)
-  }
+  const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today)
 
-  return []
+  const currentReturnPeriod = _formatReturnPeriod(firstReturnPeriod, savedReturnsPeriod)
+  const nextReturnPeriod = _formatReturnPeriod(secondReturnPeriod, savedReturnsPeriod)
+
+  return [currentReturnPeriod, nextReturnPeriod]
 }
 
-/*
- *  Checks if a date is in January (Before the 29th)
- *
- *  A date is in January if it is between 1st January - 28th January
- */
-function _dayIsInJanuary(date) {
-  return date.getMonth() === monthsAsIntegers.january && date.getDate() <= twentyEighth
-}
-
-function _dayIsInJanuaryOptions(currentYear, previousYear) {
-  return [
-    {
-      value: currentPeriod,
-      text: `Quarterly 1st October ${previousYear} to 31st December ${previousYear}`,
-      hint: {
-        text: `Due date 28 Jan ${currentYear}`
-      }
+function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
+  const textPrefix = _textPrefix(returnsPeriod)
+  return {
+    value: returnsPeriod.name,
+    text: `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`,
+    hint: {
+      text: `Due date ${formatLongDate(returnsPeriod.dueDate)}`
     },
-    {
-      value: nextPeriod,
-      text: `Quarterly 1st January ${currentYear} to 31st March ${currentYear}`,
-      hint: {
-        text: `Due date 28 April ${currentYear}`
-      }
-    }
-  ]
+    checked: returnsPeriod.name === savedReturnsPeriod
+  }
+}
+
+function _textPrefix(returnPeriod) {
+  if (returnPeriod.name === 'allYear') {
+    return 'Winter and all year'
+  } else if (returnPeriod.name === 'summer') {
+    return 'Summer annual'
+  } else {
+    return 'Quarterly'
+  }
 }
 
 module.exports = {

@@ -30,6 +30,7 @@ function go(licenceSupplementaryYears, session) {
 
   return {
     financialYearsData,
+    pageTitle: 'Select the financial year',
     sessionId: session.id,
     selectedYear
   }

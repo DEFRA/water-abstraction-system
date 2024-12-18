@@ -13,6 +13,8 @@ exports.up = function (knex) {
     table.string('description').notNullable()
     table.string('subcode_description').notNullable()
     table.string('display_title').notNullable()
+    table.string('param_1_label')
+    table.string('param_2_label')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
