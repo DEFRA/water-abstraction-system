@@ -11,8 +11,12 @@ const InitiateSessionService = require('../services/notifications/setup/initiate
 
 const basePath = 'notifications/setup'
 
-async function viewReturnsPeriod(_request, h) {
-  const pageData = ReturnsPeriodService.go()
+async function viewReturnsPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ReturnsPeriodService.go(sessionId)
 
   return h.view(`${basePath}/view-returns-period.njk`, {
     ...pageData
@@ -26,9 +30,12 @@ async function setup(_request, h) {
 }
 
 async function submitReturnsPeriod(request, h) {
-  const { payload } = request
+  const {
+    payload,
+    params: { sessionId }
+  } = request
 
-  const pageData = await SubmitReturnsPeriodService.go(payload)
+  const pageData = await SubmitReturnsPeriodService.go(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`${basePath}/view-returns-period.njk`, {

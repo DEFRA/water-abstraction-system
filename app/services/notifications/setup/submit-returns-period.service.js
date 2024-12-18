@@ -7,30 +7,42 @@
 
 const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../validators/notifications/setup/returns-periods.validator.js')
+const SessionModel = require('../../../models/session.model')
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page
  *
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload
  * @returns {object} The view data for the returns period page, inc error/redirect when applicable
  */
-async function go(payload) {
+async function go(sessionId, payload) {
+  const session = await SessionModel.query().findById(sessionId)
+
   const validationResult = _validate(payload)
 
-  if (!validationResult) {
+  if (validationResult) {
+    const formattedData = NotificationsPresenter.go(session)
+
     return {
-      redirect: 'send-notice'
+      activeNavBar: 'manage',
+      error: validationResult,
+      pageTitle: 'Select the returns periods for the invitations',
+      ...formattedData
     }
   }
 
-  const formattedData = NotificationsPresenter.go()
+  await _save(session, payload)
 
   return {
-    activeNavBar: 'manage',
-    error: validationResult,
-    pageTitle: 'Select the returns periods for the invitations',
-    ...formattedData
+    redirect: 'send-notice'
   }
+}
+
+async function _save(session, payload) {
+  session.returnsPeriod = payload.returnsPeriod
+
+  return session.$update()
 }
 
 function _validate(payload) {
