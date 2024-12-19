@@ -1,0 +1,73 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+    {{ pageTitle }}
+  </h1>
+
+  {{ govukWarningText({
+    text: "We may not be able to show a full list of your conditions, because we do
+      not hold all of your licence information on our system yet. You must refer
+      to the paper copy of your licence to view and comply with all of your conditions.",
+    iconFallbackText: "Warning"
+  }) }}
+
+  {% for condition in conditions %}
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: condition.displayTitle,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+        }
+      },
+      rows: [
+        {
+          key: {
+            text: "Abstraction point"
+          },
+          value: {
+            text: condition.point
+          }
+        },
+        {
+          key: {
+            text: "Purpose"
+          },
+          value: {
+            text: condition.purpose
+          }
+        },
+        {
+          key: {
+            text: "Notes"
+          },
+          value: {
+            text: condition.notes
+          }
+        },
+        {
+          key: {
+            text: "Condition type"
+          },
+          value: {
+            text: condition.conditionTypeDescription
+          }
+        },
+        {
+          key: {
+            text: "Subcode description"
+          },
+          value: {
+            text: condition.subcodeDescription
+          }
+        }
+      ]
+    }) }}
+  {% endfor %}
+{% endblock %}
