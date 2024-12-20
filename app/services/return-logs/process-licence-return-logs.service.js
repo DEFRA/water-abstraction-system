@@ -68,7 +68,11 @@ async function _fetchReturnCycles(changeDate) {
 async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef) {
   // Determine if we have any return requirements that match the cycle being processed
   const requirementsToProcess = returnRequirements.filter((returnRequirement) => {
-    return returnRequirement.summer === returnCycle.summer
+    return (
+      returnRequirement.summer === returnCycle.summer &&
+      (returnRequirement.returnVersion.endDate >= returnCycle.startDate ||
+        returnRequirement.returnVersion.endDate === null)
+    )
   })
 
   if (requirementsToProcess.length === 0) {
