@@ -40,6 +40,18 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: basePath + '{sessionId}/check-returns',
+    options: {
+      handler: NotificationsAdHocReturnsController.checkReturns,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
   }
 ]
 
