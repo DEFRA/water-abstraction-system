@@ -13,7 +13,8 @@ const {
   returnCycle,
   returnCycles,
   returnRequirement,
-  returnRequirements
+  returnRequirements,
+  returnRequirementsAcrossReturnVersions
 } = require('../../fixtures/return-logs.fixture.js')
 
 // Things we need to stub
@@ -100,6 +101,29 @@ describe('Process licence return logs service', () => {
 
           expect(voidReturnLogsStub.callCount).to.equal(1)
           expect(voidReturnLogArgs[0]).to.equal(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+        })
+      })
+    })
+
+    describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
+      beforeEach(() => {
+        fetchReturnRequirementsStub.resolves(returnRequirementsAcrossReturnVersions())
+      })
+
+      describe('and the change date means multiple return cycles need processing', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves(returnCycles())
+
+          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-05-26'])
+          createReturnLogsStub.onCall(2).resolves(['v1:4:01/25/90/3242:16999652:2024-05-27:2025-03-31'])
+        })
+
+        it('processes all the return requirements for the licence', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+          expect(createReturnLogsStub.callCount).to.equal(3)
+          expect(voidReturnLogsStub.callCount).to.equal(2)
         })
       })
     })
