@@ -3,7 +3,17 @@
 module.exports = {
   verbose: true,
   coverage: true,
-  'coverage-exclude': ['db/seeds'],
+  'coverage-exclude': [
+    'db/seeds',
+    'app/controllers/check.controller.js', // Test helper endpoints
+    // Most plugins are not tested directly (but are inherently tested by other tests loading the web server)
+    // The plugins below do no get 100% coverage, this comment is here to highlight this.
+    'app/plugins/airbrake.plugin.js',
+    'app/plugins/auth.plugin.js',
+    'app/plugins/hapi-pino.plugin.js',
+    'app/plugins/stop.plugin.js',
+    'app/plugins/views.plugin.js'
+  ],
   // lcov reporter required for SonarQube
   reporter: ['console', 'html', 'lcov'],
   output: ['stdout', 'coverage/coverage.html', 'coverage/lcov.info'],
