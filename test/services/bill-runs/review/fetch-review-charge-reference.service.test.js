@@ -105,7 +105,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
           volume: 6.819,
           loss: 'low',
           supportedSourceName: 'Foo source',
-          waterCompanyCharge: 'true',
+          waterCompanyCharge: true,
           chargeCategory: {
             id: chargeCategory.id,
             reference: chargeCategory.reference,
