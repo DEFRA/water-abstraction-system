@@ -26,21 +26,56 @@ async function _fetchLicence(licenceId) {
   return LicenceModel.query().findById(licenceId).select('id', 'licenceRef')
 }
 
+// async function _fetchConditions(licenceId) {
+//   return await db
+//     .select(
+//       'lvpct.displayTitle',
+//       db.raw(`ARRAY_AGG(DISTINCT ROW( \
+//         lvpct.description,  \
+//         lvpct.subcode_description,  \
+//         lvpc.param_1,  \
+//         lvpc.param_2,  \
+//         lvpc.notes,  \
+//         po.description,  \
+//         po.ngr_1,  \
+//         po.ngr_2,  \
+//         po.ngr_3,  \
+//         po.ngr_4,  \
+//         pu.description \
+//       )) AS linked_conditions`)
+//     )
+//     .from('licence_version_purpose_condition_types AS lvpct')
+//     .innerJoin(
+//       'licence_version_purpose_conditions AS lvpc',
+//       'lvpct.id',
+//       'lvpc.licence_version_purpose_condition_type_id'
+//     )
+//     .innerJoin('licence_version_purposes AS lvp', 'lvpc.licence_version_purpose_id', 'lvp.id')
+//     .innerJoin('licence_version_purpose_points AS lvpp', 'lvpp.licence_version_purpose_id', 'lvp.id')
+//     .innerJoin('points AS po', 'po.id', 'lvpp.point_id')
+//     .innerJoin('purposes AS pu', 'pu.id', 'lvp.purpose_id')
+//     .innerJoin('licence_versions AS lv', 'lvp.licence_version_id', 'lv.id')
+//     .innerJoin('licences AS l', 'lv.licence_id', 'l.id')
+//     .where('l.id', licenceId)
+//     .andWhere('lv.status', 'current')
+//     .groupBy('lvpct.displayTitle')
+// }
+
 async function _fetchConditions(licenceId) {
   return await db
-    .distinct(
+    .select(
       'lvpct.displayTitle',
       'lvpct.description AS conditionTypeDescription',
       'lvpct.subcodeDescription',
       'lvpc.param1',
       'lvpc.param2',
       'lvpc.notes',
-      'p.description AS pointDescription',
-      'p.ngr1',
-      'p.ngr2',
-      'p.ngr3',
-      'p.ngr4',
-      'p2.description AS purposeDescription'
+      'po.description AS pointDescription',
+      'po.ngr1',
+      'po.ngr2',
+      'po.ngr3',
+      'po.ngr4',
+      'pu.description AS purposeDescription'
     )
     .from('licence_version_purpose_condition_types AS lvpct')
     .innerJoin(
@@ -50,8 +85,8 @@ async function _fetchConditions(licenceId) {
     )
     .innerJoin('licence_version_purposes AS lvp', 'lvpc.licence_version_purpose_id', 'lvp.id')
     .innerJoin('licence_version_purpose_points AS lvpp', 'lvpp.licence_version_purpose_id', 'lvp.id')
-    .innerJoin('points AS p', 'p.id', 'lvpp.point_id')
-    .innerJoin('purposes as p2', 'p2.id', 'lvp.purpose_id')
+    .innerJoin('points AS po', 'po.id', 'lvpp.point_id')
+    .innerJoin('purposes as pu', 'pu.id', 'lvp.purpose_id')
     .innerJoin('licence_versions AS lv', 'lvp.licence_version_id', 'lv.id')
     .innerJoin('licences AS l', 'lv.licence_id', 'l.id')
     .where('l.id', licenceId)
