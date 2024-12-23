@@ -69,7 +69,7 @@ async function _fetch(reviewChargeReferenceId) {
           'volume',
           'loss',
           ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
-          ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
+          ref('chargeReferences.additionalCharges:isSupplyPublicWater').castBool().as('waterCompanyCharge')
         ])
         .withGraphFetched('chargeCategory')
         .modifyGraph('chargeCategory', (chargeCategoryBuilder) => {
