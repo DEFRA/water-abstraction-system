@@ -1,0 +1,88 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+      text: 'Back',
+      href: backLink
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1>{{pageTitle}}</h1>
+          </div>
+        </div>
+
+        {% set returnSummary %}
+          {% for return in returnLogs %}
+            <div>{{return}}</div>
+          {% endfor %}
+        {% endset %}
+
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Licence " + licenceRef
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "Licence holder"
+              },
+              value: {
+                text: licenceHolder
+              }
+            },
+            {
+              key: {
+                text: "Return reference and due date"
+              },
+              value: {
+                html: returnSummary
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "returns"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Send to"
+              },
+              value: {
+                html: "UK national resident in UK"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "send to"
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukButton({ text: "Send returns", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

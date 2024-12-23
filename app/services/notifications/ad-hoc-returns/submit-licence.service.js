@@ -30,9 +30,9 @@ async function go(sessionId, payload) {
   const validationResult = await _validate(payload)
   const formattedData = LicencePresenter.go(session)
 
-  if (validationResult) {
+  if (validationResult.text) {
     return {
-      error: validationResult,
+      error: validationResult.text,
       ...formattedData
     }
   }
@@ -45,7 +45,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  await _save(session, payload)
+  await _save(session, payload, validationResult.licenceId)
   return {}
 }
 
@@ -55,24 +55,23 @@ async function _dueReturnsExist(licenceRef) {
   return !!dueReturns
 }
 
-async function _licenceExists(licenceRef) {
-  const licence = await LicenceModel.query().where('licenceRef', licenceRef).first()
-
-  return !!licence
+async function _fetchLicence(licenceRef) {
+  return LicenceModel.query().where('licenceRef', licenceRef).first().select('id')
 }
 
-async function _save(session, payload) {
+async function _save(session, payload, licenceId) {
   session.licenceRef = payload.licenceRef
+  session.licenceId = licenceId
 
   return session.$update()
 }
 
 async function _validate(payload) {
   if (payload.licenceRef) {
-    const licenceExists = await _licenceExists(payload.licenceRef)
+    const licence = await _fetchLicence(payload.licenceRef)
 
-    if (licenceExists) {
-      return null
+    if (licence) {
+      return { licenceId: licence.id }
     }
   }
 

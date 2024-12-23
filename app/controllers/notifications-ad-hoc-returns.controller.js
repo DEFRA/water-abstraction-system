@@ -5,11 +5,24 @@
  * @module NotificationsAdHocReturnsController
  */
 
+const CheckReturnsService = require('../services/notifications/ad-hoc-returns/check-returns.service.js')
 const InitiateSessionService = require('../services/notifications/ad-hoc-returns/initiate-session.service.js')
 const LicenceService = require('../services/notifications/ad-hoc-returns/licence.service.js')
 const SubmitLicenceService = require('../services/notifications/ad-hoc-returns/submit-licence.service.js')
 
 const basePath = 'notifications/ad-hoc-returns'
+
+async function checkReturns(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await CheckReturnsService.go(sessionId)
+
+  return h.view(`${basePath}/check-returns.njk`, {
+    activeNavBar: 'manage',
+    pageTitle: 'Check return details',
+    ...pageData
+  })
+}
 
 async function licence(request, h) {
   const { sessionId } = request.params
@@ -46,6 +59,7 @@ async function submitLicence(request, h) {
 }
 
 module.exports = {
+  checkReturns,
   licence,
   setup,
   submitLicence
