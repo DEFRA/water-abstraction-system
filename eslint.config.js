@@ -36,11 +36,14 @@ module.exports = [
     ignores: ['docs/**/*'],
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
-      jsdoc: jsdocPlugin
+      jsdoc: jsdocPlugin,
+      import: neostandard.plugins['import-x']
     },
     rules: {
       // Enforce braces around the function body of arrow functions
       'arrow-body-style': ['error', 'always'],
+      // Enforce .js extension when requiring files
+      'import/extensions': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
       strict: ['error', 'global'],
       'jsdoc/check-alignment': 'error',
