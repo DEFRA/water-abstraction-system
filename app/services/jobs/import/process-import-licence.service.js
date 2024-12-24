@@ -5,7 +5,7 @@
  * @module ProcessImportLicence
  */
 
-const DetermineLicenceEndDateChangedService = require('../../import/determine-licence-end-date-changed.service')
+const DetermineLicenceEndDateChangedService = require('./determine-licence-end-date-changed.service')
 const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service')
 const GenerateReturnLogsService = require('../../import/generate-return-logs.service')
 
