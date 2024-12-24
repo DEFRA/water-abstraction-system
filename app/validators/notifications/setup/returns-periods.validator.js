@@ -6,7 +6,7 @@
  */
 
 const Joi = require('joi')
-const { returnPeriodDates } = require('../../../lib/static-lookups.lib')
+const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
 
 const errorMessage = 'Select the returns periods for the invitations'
 

@@ -2,8 +2,8 @@
 
 const jsdocPlugin = require('eslint-plugin-jsdoc')
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const neostandard = require('neostandard')
 const globals = require('globals')
+const neostandard = require('neostandard')
 
 module.exports = [
   // Start with neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
@@ -36,11 +36,14 @@ module.exports = [
     ignores: ['docs/**/*'],
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
-      jsdoc: jsdocPlugin
+      jsdoc: jsdocPlugin,
+      import: neostandard.plugins['import-x']
     },
     rules: {
       // Enforce braces around the function body of arrow functions
       'arrow-body-style': ['error', 'always'],
+      // Enforce .js extension when requiring files
+      'import/extensions': ['error', 'always'],
       // Enforce 'use strict' declarations in all modules
       strict: ['error', 'global'],
       'jsdoc/check-alignment': 'error',

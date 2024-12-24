@@ -7,7 +7,7 @@
 
 const NotificationsPresenter = require('../../../presenters/notifications/setup/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../validators/notifications/setup/returns-periods.validator.js')
-const SessionModel = require('../../../models/session.model')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Formats data for the `/notifications/setup/returns-period` page

@@ -2,7 +2,7 @@
 
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
-const InitiateSessionService = require('../services/notifications/setup/initiate-session.service')
+const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
 
 /**
  * Controller for /notifications/setup endpoints
