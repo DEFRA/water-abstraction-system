@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Things we need to stub
 const DetermineLicenceEndDateChangedService = require('../../../../app/services/jobs/import/determine-licence-end-date-changed.service.js')
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service')
-const GenerateReturnLogsService = require('../../../../app/services/import/generate-return-logs.service')
+const GenerateReturnLogsService = require('../../../../app/services/jobs/import/generate-return-logs.service.js')
 
 // Thing under test
 const ProcessImportLicence = require('../../../../app/services/jobs/import/process-import-licence.service.js')

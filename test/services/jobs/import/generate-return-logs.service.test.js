@@ -12,10 +12,10 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
+const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 // Thing under test
-const GenerateReturnLogsService = require('../../../app/services/import/generate-return-logs.service.js')
+const GenerateReturnLogsService = require('../../../../app/services/jobs/import/generate-return-logs.service.js')
 
 describe('Generate Return Logs Service', () => {
   const changeDate = new Date('2024-05-26')

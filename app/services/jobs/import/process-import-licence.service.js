@@ -7,7 +7,7 @@
 
 const DetermineLicenceEndDateChangedService = require('./determine-licence-end-date-changed.service')
 const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service')
-const GenerateReturnLogsService = require('../../import/generate-return-logs.service')
+const GenerateReturnLogsService = require('./generate-return-logs.service')
 
 /**
  * Process licence for the licences imported from NALD
