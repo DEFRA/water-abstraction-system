@@ -2,8 +2,8 @@
 
 const jsdocPlugin = require('eslint-plugin-jsdoc')
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const neostandard = require('neostandard')
 const globals = require('globals')
+const neostandard = require('neostandard')
 
 module.exports = [
   // Start with neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
