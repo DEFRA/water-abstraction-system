@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
