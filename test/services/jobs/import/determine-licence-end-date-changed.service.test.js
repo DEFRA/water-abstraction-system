@@ -9,10 +9,10 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const DetermineLicenceEndDateChangedService = require('../../../app/services/import/determine-licence-end-date-changed.service.js')
+const DetermineLicenceEndDateChangedService = require('../../../../app/services/jobs/import/determine-licence-end-date-changed.service.js')
 
 describe('Determine Licence End Date Changed Service', () => {
   const lapsedDate = new Date('2023-01-01')

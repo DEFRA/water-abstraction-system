@@ -5,7 +5,7 @@
  * @module DetermineLicenceEndDateChangedService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Determines if an imported licence has a new end date.
