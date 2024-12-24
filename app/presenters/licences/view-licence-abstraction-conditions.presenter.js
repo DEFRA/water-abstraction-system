@@ -1,6 +1,6 @@
 'use strict'
 
-// const util = require('util')
+const util = require('util')
 const PointModel = require('../../models/point.model.js')
 
 /**
@@ -10,10 +10,14 @@ const PointModel = require('../../models/point.model.js')
  */
 function go(data) {
   const conditions = _formatAbstractionConditions(data.conditions)
-  console.log('🚀🚀🚀 ~ conditions:', conditions)
+  // console.log('🚀🚀🚀 ~ conditions:', conditions)
   const groupedConditions = _groupAbstractionConditions(conditions)
-  console.log('🚀🚀🚀 ~ groupedConditions:', groupedConditions)
-  // console.log('🚀🚀🚀 ~ Formatted conditions: ', util.inspect(conditions, false, null, true /* enable colors */))
+  // console.log('🚀🚀🚀 ~ groupedConditions:', groupedConditions)
+  // console.log('🚀🚀🚀 ~ GroupedConditions: ', util.inspect(groupedConditions, false, null, true /* enable colors */))
+
+  // for (const [displayTitle, groupedCondition] of Object.entries(groupedConditions)) {
+  //   console.log('🚀🚀🚀 ~ groupedCondition:', groupedCondition)
+  // }
 
   return {
     conditions,
@@ -27,9 +31,11 @@ function _formatAbstractionConditions(conditions) {
   return conditions.map((condition) => {
     return {
       displayTitle: condition.displayTitle,
-      point: formatPoint(condition),
+      point: _formatPoint(condition),
       purpose: condition.purposeDescription,
-      notes: condition.notes,
+      param1: _formatParam(condition.param1Label, condition.param1),
+      param2: _formatParam(condition.param2Label, condition.param2),
+      otherInformation: condition.notes,
       conditionTypeDescription: condition.conditionTypeDescription,
       subcodeDescription: condition.subcodeDescription
     }
@@ -48,10 +54,28 @@ function _groupAbstractionConditions(conditions) {
   }, {})
 }
 
-function formatPoint(condition) {
+function _formatPoint(condition) {
   const point = PointModel.fromJson(condition)
 
   return point.$describe()
+}
+
+function _formatParam(paramLabel, param) {
+  if ((!paramLabel && !param) || (paramLabel && !param)) {
+    return null
+  }
+
+  if (!paramLabel && param) {
+    return {
+      paramLabel: 'Param label',
+      param
+    }
+  }
+
+  return {
+    paramLabel,
+    param
+  }
 }
 
 module.exports = {

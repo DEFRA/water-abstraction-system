@@ -18,6 +18,113 @@
   }) }}
 
   {% for condition in conditions %}
+    {# Set an easier to use index. #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set tableRows = [] %}
+
+    {# Abstraction point cell #}
+    {% set abstractionPointsRow = {
+      key: {
+        text: "Abstraction point",
+        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
+      },
+      value: {
+        html: condition.point,
+        attributes: { 'data-test': 'abstraction-point-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
+
+    {# Condition type cell #}
+    {% set conditionTypeRow = {
+      key: {
+        text: "Condition type",
+        attributes: { 'data-test': 'condition-type-title-' + rowIndex }
+      },
+      value: {
+        html: condition.conditionTypeDescription,
+        attributes: { 'data-test': 'condition-type-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(conditionTypeRow), tableRows) %}
+
+    {# Purpose cell #}
+    {% set purposeRow = {
+      key: {
+        text: "Purpose",
+        attributes: { 'data-test': 'purpose-title-' + rowIndex }
+      },
+      value: {
+        html: condition.purpose,
+        attributes: { 'data-test': 'purpose-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(purposeRow), tableRows) %}
+
+    {# Subcode description cell #}
+    {% set subcodeDescriptionRow = {
+      key: {
+        text: "Subcode description",
+        attributes: { 'data-test': 'subcode-description-title-' + rowIndex }
+      },
+      value: {
+        html: condition.subcodeDescription,
+        attributes: { 'data-test': 'subcode-description-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(subcodeDescriptionRow), tableRows) %}
+
+    {# Param1 cell #}
+    {% if condition.param1 %}
+      {% set param1Row = {
+        key: {
+          text: condition.param1.paramLabel,
+          attributes: { 'data-test': 'param-1-title-' + rowIndex }
+        },
+        value: {
+          html: condition.param1.param,
+          attributes: { 'data-test': 'param-1-' + rowIndex }
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(param1Row), tableRows) %}
+    {% endif %}
+
+    {# Param2 cell #}
+    {% if condition.param2 %}
+      {% set param2Row = {
+        key: {
+          text: condition.param2.paramLabel,
+          attributes: { 'data-test': 'param-2-title-' + rowIndex }
+        },
+        value: {
+          html: condition.param2.param,
+          attributes: { 'data-test': 'param-2-' + rowIndex }
+        }
+      } %}
+
+      {% set tableRows = (tableRows.push(param2Row), tableRows) %}
+    {% endif %}
+
+    {# Other information cell #}
+    {% set otherInformationRow = {
+      key: {
+        text: "Other information",
+        attributes: { 'data-test': 'other-information-title-' + rowIndex }
+      },
+      value: {
+        html: condition.otherInformation,
+        attributes: { 'data-test': 'other-information-' + rowIndex }
+      }
+    } %}
+
+    {% set tableRows = (tableRows.push(otherInformationRow), tableRows) %}
+
     {# Summary card #}
     {{ govukSummaryList({
       card: {
@@ -26,48 +133,7 @@
           classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
         }
       },
-      rows: [
-        {
-          key: {
-            text: "Abstraction point"
-          },
-          value: {
-            text: condition.point
-          }
-        },
-        {
-          key: {
-            text: "Purpose"
-          },
-          value: {
-            text: condition.purpose
-          }
-        },
-        {
-          key: {
-            text: "Notes"
-          },
-          value: {
-            text: condition.notes
-          }
-        },
-        {
-          key: {
-            text: "Condition type"
-          },
-          value: {
-            text: condition.conditionTypeDescription
-          }
-        },
-        {
-          key: {
-            text: "Subcode description"
-          },
-          value: {
-            text: condition.subcodeDescription
-          }
-        }
-      ]
+      rows: tableRows
     }) }}
   {% endfor %}
 {% endblock %}
