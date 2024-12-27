@@ -74,6 +74,15 @@ module.exports = [
       'jsdoc/require-jsdoc': 'off'
     }
   },
+  // This section adds another override to the configuration object above. It tells the import/extensions plugin to
+  // ignore this file. The plugin flags `eslint-plugin-prettier/recommended` as a violation, even though it is not and
+  // adding `.js` causes it to break
+  {
+    files: ['eslint.config.js'],
+    rules: {
+      'import/extensions': 'off'
+    }
+  },
   // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared
   // above that conflict with prettier. That shouldn't be any, as we tell neostandard not to include any style rules
   // and the ones we've declared we've done as per eslint-config-prettier docs on special rules. As recommended by
