@@ -95,7 +95,7 @@ function _transaction(reviewChargeReference) {
     supportedSourceName: chargeReference.supportedSourceName,
     // If `twoPartTariff` is `true` then `section127Agreement` must also be `true`
     twoPartTariff: section127Agreement,
-    waterCompanyCharge: chargeReference.waterCompanyCharge !== null,
+    waterCompanyCharge: !!chargeReference.waterCompanyCharge,
     waterUndertaker: reviewChargeVersion.reviewLicence.licence.waterUndertaker,
     winterOnly
   }

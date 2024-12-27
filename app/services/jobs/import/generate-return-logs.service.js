@@ -5,9 +5,9 @@
  * @module GenerateReturnLogsService
  */
 
-const { determineEarliestDate } = require('../../lib/dates.lib.js')
-const LicenceModel = require('../../models/licence.model.js')
-const ProcessLicenceReturnLogsService = require('../return-logs/process-licence-return-logs.service.js')
+const { determineEarliestDate } = require('../../../lib/dates.lib.js')
+const LicenceModel = require('../../../models/licence.model.js')
+const ProcessLicenceReturnLogsService = require('../../return-logs/process-licence-return-logs.service.js')
 
 /**
  * Determines if an imported licence has a changed end date.

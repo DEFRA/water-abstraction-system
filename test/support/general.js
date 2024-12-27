@@ -42,7 +42,7 @@
 function postRequestOptions(
   path,
   payload = {},
-  scope = ['billing'],
+  scope = ['billing', 'returns'],
   crumb = 'WYuCN5hiKnNkLpmUrEQj6Xer49FqfBPv20VO1C5wQHk'
 ) {
   const options = {
