@@ -23,7 +23,7 @@ async function submitEdit(request, h) {
   if (!howToEdit) {
     return h.view('return-logs/edit.njk', {
       activeNavBar: 'search',
-      error: 'Select how would you like to edit this return',
+      error: { text: 'Select how would you like to edit this return' },
       ...pageData
     })
   }
