@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
@@ -13,6 +14,19 @@
 {% endblock %}
 
 {% block content %}
+  {# Error message #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error,
+          href: '#'
+        }
+      ]
+      }) }}
+  {% endif %}
+
   {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -92,6 +106,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
       name: "howToEdit",
+      errorMessage: error,
       fieldset: {
         legend: {
           text: "How would you like to edit this return?",
@@ -113,7 +128,7 @@
           text: "Enter a nil return"
         },
         {
-          value: '/return-logs/edit/query?returnLogId=' + returnLogId,
+          value: 'query',
           text: queryText
         }
       ]
