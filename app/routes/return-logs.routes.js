@@ -17,6 +17,21 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/edit',
+    options: {
+      handler: ReturnLogsController.submitEdit,
+      app: {
+        plainOutput: true
+      },
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
