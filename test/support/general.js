@@ -6,6 +6,23 @@
  */
 
 /**
+ * Extracts an array of IDs from a collection of objects
+ *
+ * Added to support us moving away from checking, for example, `role.users.length === 1` in tests and instead verify
+ * that an instance's child property includes the record we expect by using `expect(userIds).to.include(testUser.id)`
+ * instead.
+ *
+ * @param {object[]} collectionToExtractIdsFrom - The collection of objects to extract IDs from
+ *
+ * @returns {string[]} An array of IDs extracted from the collection
+ */
+function ids(collectionToExtractIdsFrom) {
+  return collectionToExtractIdsFrom.map((item) => {
+    return item.id
+  })
+}
+
+/**
  * Generate the POST request options needed for `server.inject()`
  *
  * When testing controllers we simulate a request to the app using
@@ -111,6 +128,7 @@ function randomRegionCode() {
 }
 
 module.exports = {
+  ids,
   postRequestOptions,
   randomInteger,
   randomRegionCode,
