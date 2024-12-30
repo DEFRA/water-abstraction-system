@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
@@ -15,6 +12,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -38,6 +36,10 @@ describe('Fetch Billing Accounts service', () => {
 
   before(async () => {
     minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the billing account should NOT be considered for the annual bill run', () => {

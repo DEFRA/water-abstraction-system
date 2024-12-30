@@ -1,18 +1,17 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
+// Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
 const BillRunVolumeHelper = require('../../../support/helpers/bill-run-volume.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
 const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
@@ -47,6 +46,10 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the bill run exists', () => {

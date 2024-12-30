@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
+const { closeConnection } = require('../../support/database.js')
 
 // Things we need to stub
 const LegacyDeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
@@ -37,6 +35,10 @@ describe('Submit Remove Bill Licence service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
@@ -54,6 +52,10 @@ describe('Return Versions Setup - Fetch Purposes service', () => {
       LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[1].id }),
       LicenceVersionPurposeHelper.add({ licenceVersionId, purposeId: purposes[2].id })
     ])
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called with a valid licenceId', () => {

@@ -1,19 +1,21 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
 
 describe('Fetch Billing Accounts service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when the service is called with an array of charge version', () => {
     let expectedResult
     let billingAccounts

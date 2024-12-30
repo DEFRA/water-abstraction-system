@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../support/database.js')
 
 // Thing under test
 const DetermineMinimumChargeService = require('../../../app/services/bill-runs/determine-minimum-charge.service.js')
@@ -30,6 +28,10 @@ describe('Determine Minimum Charge service', () => {
   before(() => {
     minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
     noMinimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_CHARGE_CANCELLED_INDEX)
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('where the charge version start date is the same as the charge period', () => {

@@ -1,14 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
@@ -20,6 +17,7 @@ const LicenceVersionPurposeConditionHelper = require('../../support/helpers/lice
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
+const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -102,6 +100,10 @@ describe('Fetch Licence Summary service', () => {
       monitoringStationId: monitoringStation.id,
       licenceId: licence.id
     })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

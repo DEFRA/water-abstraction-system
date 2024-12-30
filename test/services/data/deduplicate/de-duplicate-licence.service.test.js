@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -35,6 +33,10 @@ describe('De-duplicate Licence service', () => {
     validLicences.push(licence.id)
     licence = await LicenceHelper.add({ licenceRef: generateLicenceRef() })
     validLicences.push(licence.id)
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there is a duplicate licence', () => {

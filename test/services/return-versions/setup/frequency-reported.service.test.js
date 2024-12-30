@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -44,6 +42,10 @@ describe('Return Versions Setup - Frequency Reported service', () => {
         reason: 'major-change'
       }
     })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

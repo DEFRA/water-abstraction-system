@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
@@ -18,6 +16,10 @@ const UnflagUnbilledLicencesService = require('../../../../app/services/bill-run
 
 describe('Unflag unbilled licences service', () => {
   let billRun
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when there are licences flagged for SROC supplementary billing', () => {
     let allLicenceIds

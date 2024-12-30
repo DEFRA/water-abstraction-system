@@ -1,14 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, before, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -39,6 +37,10 @@ describe('Determine Licence End Date Changed Service', () => {
 
   afterEach(async () => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the existing version of the licence', () => {

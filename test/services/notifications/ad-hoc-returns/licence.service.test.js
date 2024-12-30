@@ -1,14 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -23,6 +21,10 @@ describe('Notifications Ad-hoc Returns - Licence service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

@@ -1,16 +1,20 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
+// Test helpers
+const { closeConnection } = require('../../../support/database.js')
 
 // Thing under test
 const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
 
 describe('Fetch table names', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when given a schema name', () => {
     it('returns a list of the schemas table names', async () => {
       const result = await FetchTableNamesService.go('water')

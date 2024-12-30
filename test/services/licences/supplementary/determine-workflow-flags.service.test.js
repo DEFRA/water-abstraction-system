@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, before, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -19,16 +17,20 @@ const FetchLicenceService = require('../../../../app/services/licences/supplemen
 const DetermineWorkflowFlagsService = require('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
 
 describe('Determine Workflow Flags Service', () => {
+  const currentFinancialYear = determineCurrentFinancialYear()
+  const workflowId = '1c995768-35fe-45c4-bb80-dc242052e94d'
+
+  let licenceData
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when passed a workflowId', () => {
-    const currentFinancialYear = determineCurrentFinancialYear()
-    const workflowId = '1c995768-35fe-45c4-bb80-dc242052e94d'
-
-    let licenceData
-
-    afterEach(() => {
-      Sinon.restore()
-    })
-
     describe('for a licence that is already flagged', () => {
       before(() => {
         licenceData = {

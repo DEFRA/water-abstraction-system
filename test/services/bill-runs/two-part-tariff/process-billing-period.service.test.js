@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillModel = require('../../../../app/models/bill.model.js')
 const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -50,6 +48,10 @@ describe('Two-part Tariff - Process Billing Period service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the service is called', () => {

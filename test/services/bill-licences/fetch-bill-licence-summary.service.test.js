@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
@@ -15,6 +12,7 @@ const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js'
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
@@ -86,6 +84,10 @@ describe('Fetch Bill Licence Summary service', () => {
     const transaction = await TransactionHelper.add({ billLicenceId: billLicence.id, netAmount: 1000.1 })
 
     transactionId = transaction.id
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when a bill licence with a matching ID exists', () => {

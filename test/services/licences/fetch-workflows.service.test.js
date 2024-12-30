@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
@@ -23,6 +21,10 @@ describe('Fetch Workflows service', () => {
       deletedAt: new Date(),
       licenceId: testRecord.licenceId
     })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the licence has workflow data', () => {

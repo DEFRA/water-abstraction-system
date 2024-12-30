@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../../support/database.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
 const ReturnRequirementModel = require('../../../../../app/models/return-requirement.model.js')
@@ -25,6 +23,10 @@ describe('Return Versions Setup - Persist Return Version service', () => {
     beforeEach(() => {
       licenceId = generateUUID()
       returnVersionData = _generateReturnVersionData(licenceId)
+    })
+
+    after(async () => {
+      await closeConnection()
     })
 
     it('persists the data to the tables required to create a new Return Version', async () => {

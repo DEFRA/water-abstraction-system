@@ -1,14 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
@@ -26,6 +24,10 @@ describe('Bill Runs Review - Fetch Remove Review Licence service', () => {
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
 
     reviewLicence = await ReviewLicenceHelper.add({ billRunId: billRun.id })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when a matching review licence exists', () => {

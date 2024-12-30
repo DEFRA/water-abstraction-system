@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
@@ -19,6 +17,10 @@ const FetchLicenceService = require('../../../../app/services/licences/supplemen
 
 describe('Fetch Licence Service', () => {
   let workflow
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when passed a valid workflow id', () => {
     let licence

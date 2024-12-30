@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
@@ -18,6 +15,7 @@ const ChargeElementHelper = require('../../support/helpers/charge-element.helper
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
+const { closeConnection } = require('../../support/database.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../../app/models/purpose.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
@@ -38,6 +36,10 @@ describe('Fetch Bill Licence service', () => {
     linkedBill = await BillHelper.add({ billRunId: linkedBillRun.id })
 
     testBillLicence = await BillLicenceHelper.add({ billId: linkedBill.id })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when a bill licence with a matching ID exists', () => {

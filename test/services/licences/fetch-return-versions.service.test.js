@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
@@ -20,6 +18,10 @@ describe('Fetch Return Versions service', () => {
   let currentReturnVersion
   let currentReturnVersionModLog
   let supersededReturnVersion
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when the licence has return versions data', () => {
     beforeEach(async () => {

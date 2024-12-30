@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
@@ -17,8 +14,12 @@ const ViewLicenceContactDetailsService = require('../../../app/services/licences
 describe('View Licence Contact Details service', () => {
   const licenceId = 'fea88a95-d81f-4c5c-b497-00e5891a5861'
 
-  before(() => {
+  beforeEach(() => {
     Sinon.stub(FetchLicenceContactDetailsService, 'go').returns(_testFetchLicenceContactDetailsData())
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a licence with a matching ID exists', () => {

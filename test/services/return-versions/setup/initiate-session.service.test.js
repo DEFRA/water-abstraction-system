@@ -1,20 +1,17 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const ModLogHelper = require('../../../support/helpers/mod-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/return-versions/setup/initiate-session.service.js')
@@ -29,8 +26,12 @@ describe('Return Versions Setup - Initiate Session service', () => {
   beforeEach(async () => {
     // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
     // 'ends' information
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
     licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
@@ -24,6 +22,10 @@ describe('Fetch Licence Updates service', () => {
 
   beforeEach(async () => {
     licence = await LicenceHelper.add()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are matching licence version records', () => {

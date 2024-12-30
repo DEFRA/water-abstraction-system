@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -17,6 +15,10 @@ const FetchLicenceReturnsService = require('../../../app/services/licences/fetch
 
 describe('Fetch licence returns service', () => {
   let licenceId
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when the licence has return logs', () => {
     const dueDate = new Date('2020-04-01')

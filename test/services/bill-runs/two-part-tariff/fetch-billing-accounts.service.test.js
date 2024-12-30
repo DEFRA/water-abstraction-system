@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
@@ -15,6 +12,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
@@ -75,6 +73,10 @@ describe('Fetch Billing Accounts service', () => {
     const { id: chargeElementId } = chargeElement
 
     reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId, reviewChargeReferenceId })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are billing accounts that are linked to a two-part tariff bill run', () => {

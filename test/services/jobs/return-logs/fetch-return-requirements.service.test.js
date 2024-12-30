@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PointHelper = require('../../../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
@@ -41,6 +39,10 @@ let returnVersion
 let secondaryPurpose
 
 describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when the return cycle is "summer', () => {
     before(async () => {
       returnCycle = await ReturnCycleHelper.select(0, true)

@@ -1,17 +1,15 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
@@ -61,6 +59,10 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
       chargeElementId: chargeElement.id,
       reviewChargeReferenceId: reviewChargeReference.id
     })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when a matching review charge reference exists', () => {

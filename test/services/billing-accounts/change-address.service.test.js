@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
@@ -17,6 +14,7 @@ const BillingAccountHelper = require('../../support/helpers/billing-account.help
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
 const ContactModel = require('../../../app/models/contact.model.js')
+const { closeConnection } = require('../../support/database.js')
 
 // Things we need to stub
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
@@ -36,6 +34,10 @@ describe('Change address service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the request to the Charging Module API succeeds', () => {

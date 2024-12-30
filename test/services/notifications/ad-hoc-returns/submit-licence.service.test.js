@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notifications/ad-hoc-returns/submit-licence.service.js')
@@ -21,6 +19,10 @@ describe('Ad-hoc Returns Licence service', () => {
 
   beforeEach(async () => {
     session = await SessionHelper.add({ data: {} })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

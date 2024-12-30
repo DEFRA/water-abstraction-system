@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -30,6 +28,10 @@ describe('Return Logs - Void Licence Return Logs service', () => {
   let existingReturnLog
   let reissuedReturnLog1
   let reissuedReturnLog2
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when we are reissuing return logs because a licence end date has changed', () => {
     before(async () => {

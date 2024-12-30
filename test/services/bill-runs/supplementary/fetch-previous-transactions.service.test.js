@@ -1,17 +1,15 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
@@ -36,6 +34,10 @@ describe('Fetch Previous Transactions service', () => {
     licenceRef = LicenceHelper.generateLicenceRef()
 
     billRunSetupValues = { billingAccountId, accountNumber, licenceId, licenceRef }
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are no transactions', () => {
