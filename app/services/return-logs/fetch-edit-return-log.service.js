@@ -25,9 +25,12 @@ async function _fetch(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
+      'licence.id as licenceId',
+      'licence.licenceRef',
+      'returnLogs.id as returnLogId',
       'returnLogs.startDate',
       'returnLogs.endDate',
-      'returnLogs.status',
+      'returnLogs.returnReference',
       'returnLogs.underQuery',
       ref('returnLogs.metadata:nald.periodStartDay').castInt().as('periodStartDay'),
       ref('returnLogs.metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
@@ -35,9 +38,7 @@ async function _fetch(returnLogId) {
       ref('returnLogs.metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       ref('returnLogs.metadata:description').as('siteDescription'),
       ref('returnLogs.metadata:purposes').as('purposes'),
-      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff'),
-      'licence.id as licenceId',
-      'licence.licenceRef'
+      ref('returnLogs.metadata:isTwoPartTariff').as('twoPartTariff')
     )
     .innerJoinRelated('licence')
     .where('returnLogs.id', returnLogId)

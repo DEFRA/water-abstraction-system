@@ -6,6 +6,7 @@
  */
 
 const FetchEditReturnLogService = require('./fetch-edit-return-log.service.js')
+const EditReturnLogPresenter = require('../../presenters/return-logs/edit-return-log.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the how to edit an abstraction return page
@@ -16,21 +17,9 @@ const FetchEditReturnLogService = require('./fetch-edit-return-log.service.js')
  */
 async function go(returnLogId) {
   const editReturnLog = await FetchEditReturnLogService.go(returnLogId)
-  console.log('🚀 ~ go ~ editReturnLog:', editReturnLog)
+  const pageData = EditReturnLogPresenter.go(editReturnLog)
 
-  return {
-    returnLogId,
-    pageTitle: 'Abstraction return',
-    licenceRef: '12/345',
-    returnReference: '123456789',
-    siteDescription: 'River Swale - Helperby SP1,2,3,4,5 (GW)',
-    purposes: 'Potable Water Supply Direct',
-    returnsPeriod: 'From 1 July 2024 to 30 September 2024',
-    abstractionPeriod: 'From 1 April to 31 March',
-    tariffType: 'Standard tariff',
-    queryText: 'Record under query',
-    licenceId: 'd4ba7029-8716-4538-8092-0f39a196f132'
-  }
+  return pageData
 }
 
 module.exports = {
