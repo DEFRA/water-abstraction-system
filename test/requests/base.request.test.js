@@ -1,13 +1,10 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 const Nock = require('nock')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const requestConfig = require('../../config/request.config.js')
@@ -204,9 +201,7 @@ describe('Base Request', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .delete(() => {
@@ -484,9 +479,7 @@ describe('Base Request', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to allow it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .get(() => {
@@ -764,9 +757,7 @@ describe('Base Request', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .patch(() => {
@@ -1044,9 +1035,7 @@ describe('Base Request', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .post(() => {
