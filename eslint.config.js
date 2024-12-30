@@ -2,7 +2,6 @@
 
 const jsdocPlugin = require('eslint-plugin-jsdoc')
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const globals = require('globals')
 const neostandard = require('neostandard')
 
 module.exports = [
@@ -26,9 +25,12 @@ module.exports = [
     languageOptions: {
       ecmaVersion: 'latest',
       // Needed so ESlint knows it is checking Node code. For example, without it all uses of `console.log()` and
-      // `process.env()` would be flagged by the 'no-undef' rule
+      // `process.env()` would be flagged by the 'no-undef' rule.
+      // The source for how to set this we took from https://github.com/sindresorhus/globals/blob/main/globals.json
+      // and https://eslint.org/docs/latest/use/configure/language-options#predefined-global-variables
       globals: {
-        ...globals.node
+        console: 'readable',
+        process: 'readable'
       },
       sourceType: 'commonjs'
     },
