@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const RoleModel = require('../../app/models/role.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
@@ -29,6 +27,10 @@ describe('User Role model', () => {
     testRole = RoleHelper.select(ROLE_RENEWAL_NOTIFICATIONS_INDEX)
     testUser = UserHelper.select(USER_NPS_INDEX)
     testRecord = await UserRoleHelper.add({ roleId: testRole.id, userId: testUser.id })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
+const { closeConnection } = require('../support/database.js')
 
 // Thing under test
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
@@ -32,6 +30,10 @@ describe('Change Reason model', () => {
 
       testChargeVersions.push(chargeVersion)
     }
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

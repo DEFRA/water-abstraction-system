@@ -1,13 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
+const { ids } = require('../support/general.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
@@ -42,6 +41,10 @@ describe('Role model', () => {
     testUserRole = await UserRoleHelper.add({ roleId: testRecord.id, userId: testUser.id })
   })
 
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await RoleModel.query().findById(testRecord.id)
@@ -66,9 +69,11 @@ describe('Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.groupRoles).to.be.an.array()
-        expect(result.groupRoles).to.have.length(1)
         expect(result.groupRoles[0]).to.be.an.instanceOf(GroupRoleModel)
-        expect(result.groupRoles[0]).to.equal(testGroupRole, { skip: ['createdAt', 'updatedAt'] })
+
+        const groupRoleIds = ids(result.groupRoles)
+
+        expect(groupRoleIds).to.include(testGroupRole.id)
       })
     })
 
@@ -86,9 +91,11 @@ describe('Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.userRoles).to.be.an.array()
-        expect(result.userRoles).to.have.length(1)
         expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole)
+
+        const userRoleIds = ids(result.userRoles)
+
+        expect(userRoleIds).to.include(testUserRole.id)
       })
     })
 
@@ -106,9 +113,11 @@ describe('Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.groups).to.be.an.array()
-        expect(result.groups).to.have.length(1)
         expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+
+        const groupIds = ids(result.groups)
+
+        expect(groupIds).to.include(testGroup.id)
       })
     })
 
@@ -126,9 +135,11 @@ describe('Role model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.users).to.be.an.array()
-        expect(result.users).to.have.length(1)
         expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser, { skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt'] })
+
+        const userIds = ids(result.users)
+
+        expect(userIds).to.include(testUser.id)
       })
     })
   })

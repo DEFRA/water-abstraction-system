@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
@@ -14,6 +11,7 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
+const { closeConnection } = require('../support/database.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
@@ -52,6 +50,10 @@ const LicenceModel = require('../../app/models/licence.model.js')
 
 describe('Licence model', () => {
   let testRecord
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

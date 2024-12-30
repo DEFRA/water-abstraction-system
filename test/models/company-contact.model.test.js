@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
@@ -13,6 +10,7 @@ const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
+const { closeConnection } = require('../support/database.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 
@@ -40,6 +38,10 @@ describe('Company Contacts model', () => {
 
     // Test record
     testRecord = await CompanyContactHelper.add({ companyId, contactId, licenceRoleId })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const EventHelper = require('../support/helpers/event.helper.js')
 const EventModel = require('../../app/models/event.model.js')
 const ScheduledNotificationHelper = require('../support/helpers/scheduled-notification.helper.js')
@@ -17,6 +15,10 @@ const ScheduledNotificationModel = require('../../app/models/scheduled-notificat
 
 describe('Scheduled Notification model', () => {
   let testRecord
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
