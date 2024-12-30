@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
@@ -32,6 +29,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
     }
 
     Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with a session', () => {

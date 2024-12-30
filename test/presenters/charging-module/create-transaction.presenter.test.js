@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { ref } = require('objection')
@@ -23,6 +21,10 @@ describe('Charging Module Create Transaction presenter', () => {
   let transaction
   let licence
   let region
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {
