@@ -5,6 +5,8 @@
  * @module EditReturnLogService
  */
 
+const FetchEditReturnLogService = require('./fetch-edit-return-log.service.js')
+
 /**
  * Orchestrates fetching and presenting the data needed for the how to edit an abstraction return page
  *
@@ -13,6 +15,9 @@
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(returnLogId) {
+  const editReturnLog = await FetchEditReturnLogService.go(returnLogId)
+  console.log('🚀 ~ go ~ editReturnLog:', editReturnLog)
+
   return {
     returnLogId,
     pageTitle: 'Abstraction return',

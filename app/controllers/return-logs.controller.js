@@ -8,7 +8,7 @@ const EditReturnLogService = require('../services/return-logs/edit-return-log.se
  */
 
 async function edit(request, h) {
-  const { returnLogId } = request.params
+  const { returnLogId } = request.query
   const pageData = await EditReturnLogService.go(returnLogId)
 
   return h.view('return-logs/edit.njk', { activeNavBar: 'search', ...pageData })

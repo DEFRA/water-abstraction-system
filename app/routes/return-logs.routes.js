@@ -5,7 +5,7 @@ const ReturnLogsController = require('../controllers/return-logs.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/return-logs/{returnLogId}/edit',
+    path: '/return-logs/edit',
     options: {
       handler: ReturnLogsController.edit,
       app: {
