@@ -411,15 +411,15 @@ describe('Base presenter', () => {
       })
     })
 
-    describe('when the value is all capitals', () => {
+    describe('when the value has a mix of capitals and lower case', () => {
       beforeEach(() => {
-        valueToTitleCase = 'SPRAY IRRIGATION'
+        valueToTitleCase = 'sPrAy iRRIGATION'
       })
 
-      it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
+      it('correctly returns the value in title case', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('SPRAY IRRIGATION')
+        expect(result).to.equal('Spray Irrigation')
       })
     })
   })
