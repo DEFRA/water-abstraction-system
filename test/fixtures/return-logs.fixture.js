@@ -41,6 +41,28 @@ function returnCycles() {
   ]
 }
 
+function returnCyclesAcrossReturnVersions() {
+  return [
+    ...returnCycles(),
+    {
+      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b5',
+      startDate: new Date('2023-11-01'),
+      endDate: new Date('2024-10-31'),
+      dueDate: new Date('2024-11-28'),
+      summer: true,
+      submittedInWrls: true
+    },
+    {
+      id: '6889b98d-964f-4966-b6d6-bf511d6526a2',
+      startDate: new Date('2023-04-01'),
+      endDate: new Date('2024-03-31'),
+      dueDate: new Date('2024-04-28'),
+      summer: false,
+      submittedInWrls: true
+    }
+  ]
+}
+
 /**
  * Represents a single result from either `FetchReturnRequirementsService` or
  * `FetchLicenceReturnRequirementsService`
@@ -209,7 +231,7 @@ function returnRequirementsAcrossReturnVersions() {
       abstractionPeriodStartMonth: 5,
       externalId: '4:16999652',
       id: '3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2',
-      legacyId: 16999652,
+      legacyId: 16999642,
       reportingFrequency: 'day',
       returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
       siteDescription: 'PUMP AT TINTAGEL',
@@ -270,9 +292,9 @@ function returnRequirementsAcrossReturnVersions() {
       abstractionPeriodEndMonth: 3,
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 4,
-      externalId: '4:16999651',
+      externalId: '4:16999641',
       id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
-      legacyId: 16999651,
+      legacyId: 16999641,
       reportingFrequency: 'day',
       returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
       siteDescription: 'BOREHOLE AT AVALON',
@@ -334,6 +356,7 @@ function returnRequirementsAcrossReturnVersions() {
 module.exports = {
   returnCycle,
   returnCycles,
+  returnCyclesAcrossReturnVersions,
   returnRequirement,
   returnRequirements,
   returnRequirementsAcrossReturnVersions
