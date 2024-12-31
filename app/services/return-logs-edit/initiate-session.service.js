@@ -5,6 +5,8 @@
  * @module InitiateSessionService
  */
 
+const { ref } = require('objection')
+
 const ReturnLogModel = require('../../models/return-log.model.js')
 const SessionModel = require('../../models/session.model.js')
 
