@@ -7,7 +7,7 @@ const basePath = '/return-log-edit/'
 const routes = [
   {
     method: 'GET',
-    path: basePath,
+    path: basePath + 'setup',
     options: {
       handler: ReturnLogsEditController.setup,
       auth: {
