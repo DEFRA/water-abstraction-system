@@ -117,19 +117,23 @@
       items: [
         {
           value: 'individual',
-          text: "Enter individual volumes"
+          text: "Enter individual volumes",
+          checked: selectedOption === 'individual'
         },
         {
           value: 'new',
-          text: "Enter new volumes or readings"
+          text: "Enter new volumes or readings",
+          checked: selectedOption === 'new'
         },
         {
           value: 'nil',
-          text: "Enter a nil return"
+          text: "Enter a nil return",
+          checked: selectedOption === 'nil'
         },
         {
           value: 'query',
-          text: queryText
+          text: queryText,
+          checked: selectedOption === 'query'
         }
       ]
     }) }}

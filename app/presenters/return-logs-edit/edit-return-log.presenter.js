@@ -17,6 +17,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.j
 function go(session) {
   const {
     endDate,
+    howToEdit,
     licenceId,
     licenceRef,
     periodStartDay,
@@ -47,6 +48,7 @@ function go(session) {
     returnLogId,
     returnsPeriod: `From ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReference,
+    selectedOption: howToEdit ?? howToEdit,
     siteDescription,
     tariffType: twoPartTariff ? 'Two part tariff' : 'Standard tariff'
   }
