@@ -16,6 +16,36 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: basePath + '{sessionId}/how-to-edit',
+    options: {
+      handler: ReturnLogsEditController.edit,
+      app: {
+        plainOutput: true
+      },
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '{sessionId}/how-to-edit',
+    options: {
+      handler: ReturnLogsEditController.submitEdit,
+      app: {
+        plainOutput: true
+      },
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
