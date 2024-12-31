@@ -5,6 +5,8 @@
  * @module ReturnLogsEditController
  */
 
+const InitiateSessionService = require('../services/return-logs-edit/initiate-session.service.js')
+
 const basePath = 'return-log-edit'
 
 async function setup(request, h) {
