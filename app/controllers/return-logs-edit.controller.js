@@ -7,6 +7,7 @@
 
 const EditReturnLogService = require('../services/return-logs-edit/edit-return-log.service.js')
 const InitiateSessionService = require('../services/return-logs-edit/initiate-session.service.js')
+const SubmitEditReturnLogService = require('../services/return-logs-edit/submit-edit-return-log.service.js')
 
 const basePath = '/system/return-log-edit'
 
@@ -26,19 +27,17 @@ async function setup(request, h) {
 
 async function submitEdit(request, h) {
   const { sessionId } = request.params
-  const { howToEdit } = request.payload
 
-  const pageData = await EditReturnLogService.go(sessionId)
+  const pageData = await SubmitEditReturnLogService.go(sessionId, request.payload)
 
-  if (!howToEdit) {
+  if (pageData.error) {
     return h.view('return-logs-edit/how-to-edit.njk', {
       activeNavBar: 'search',
-      error: { text: 'Select how would you like to edit this return' },
       ...pageData
     })
   }
 
-  return h.redirect(`${basePath}/${sessionId}/${howToEdit}`)
+  return h.redirect(`${basePath}/${sessionId}/${pageData.howToEdit}`)
 }
 
 module.exports = {
