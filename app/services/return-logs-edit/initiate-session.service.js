@@ -21,6 +21,8 @@ const SessionModel = require('../../models/session.model.js')
  * At the end when the journey is complete the data from the session will be used to create the edited return log
  * and the session record itself deleted.
  *
+ * @param {string} returnLogId - The UUID of the return log to be fetched
+ *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(returnLogId) {

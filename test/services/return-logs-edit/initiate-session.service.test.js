@@ -31,14 +31,14 @@ describe('Return Logs Edit - Initiate Session service', () => {
         nald: {
           regionCode: 9,
           areaCode: 'ARCA',
-          formatId:'1234567',
+          formatId: '1234567',
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 28,
           periodEndMonth: 4
         },
         points: [],
-        purposes: [ { tertiary: { description: 'Test description' } }],
+        purposes: [{ tertiary: { description: 'Test description' } }],
         version: 1
       }
 
