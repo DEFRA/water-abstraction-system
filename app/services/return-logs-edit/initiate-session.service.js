@@ -5,8 +5,8 @@
  * @module InitiateSessionService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
+const SessionModel = require('../../models/session.model.js')
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
