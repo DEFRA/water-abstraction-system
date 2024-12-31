@@ -5,14 +5,14 @@
  * @module ReturnLogsEditController
  */
 
-const EditReturnLogService = require('../services/return-logs/edit-return-log.service.js')
+const EditReturnLogService = require('../services/return-logs-edit/edit-return-log.service.js')
 const InitiateSessionService = require('../services/return-logs-edit/initiate-session.service.js')
 
-const basePath = 'return-log-edit'
+const basePath = '/system/return-log-edit'
 
 async function edit(request, h) {
-  const { returnLogId } = request.query
-  const pageData = await EditReturnLogService.go(returnLogId)
+  const { sessionId } = request.params
+  const pageData = await EditReturnLogService.go(sessionId)
 
   return h.view('return-logs-edit/how-to-edit.njk', { activeNavBar: 'search', ...pageData })
 }
@@ -21,14 +21,14 @@ async function setup(request, h) {
   const { returnLogId } = request.query
   const session = await InitiateSessionService.go(returnLogId)
 
-  return h.redirect(`/system/${basePath}/${session.id}/how-to-edit`)
+  return h.redirect(`${basePath}/${session.id}/how-to-edit`)
 }
 
 async function submitEdit(request, h) {
-  const { returnLogId } = request.query
+  const { sessionId } = request.params
   const { howToEdit } = request.payload
 
-  const pageData = await EditReturnLogService.go(returnLogId)
+  const pageData = await EditReturnLogService.go(sessionId)
 
   if (!howToEdit) {
     return h.view('return-logs-edit/how-to-edit.njk', {
@@ -38,11 +38,7 @@ async function submitEdit(request, h) {
     })
   }
 
-  if (howToEdit === 'query') {
-    // TODO: Set/unset the query flag
-  }
-
-  return h.redirect(`/system/return-logs/edit/${howToEdit}?returnLogId=${returnLogId}`)
+  return h.redirect(`${basePath}/${sessionId}/${howToEdit}`)
 }
 
 module.exports = {
