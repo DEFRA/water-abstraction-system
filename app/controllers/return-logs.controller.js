@@ -29,11 +29,10 @@ async function submitEdit(request, h) {
   }
 
   if (howToEdit === 'query') {
-    // Do set/unset the query flag and show confirmation screen
-    return h.redirect(`/system/return-logs/edit?returnLogId=${returnLogId}`)
+    // TODO: Set/unset the query flag
   }
 
-  return h.redirect(howToEdit)
+  return h.redirect(`/system/return-logs/edit/${howToEdit}?returnLogId=${returnLogId}`)
 }
 
 module.exports = {
