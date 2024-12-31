@@ -59,6 +59,9 @@ module.exports = {
     // whilst avoiding having to pass it around
     'GlobalNotifier',
     // HapiServerMethods is added by us in a server plugin to allow us to access server methods globally.
-    'HapiServerMethods'
+    'HapiServerMethods',
+    // Caused by eslint-plugin-import-x which is a dependence of Neostandard we rely on to ensure the team adds the .js
+    // extension to files when requiring them
+    '__rewriteRelativeImportExtension'
   ].join(',')
 }
