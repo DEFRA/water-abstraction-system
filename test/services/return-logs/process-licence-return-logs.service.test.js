@@ -12,7 +12,6 @@ const { expect } = Code
 const {
   returnCycle,
   returnCycles,
-  returnCyclesAcrossReturnVersions,
   returnRequirement,
   returnRequirements,
   returnRequirementsAcrossReturnVersions
@@ -136,7 +135,7 @@ describe('Process licence return logs service', () => {
 
       describe('and the change date replaces the earliest return version', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(returnCyclesAcrossReturnVersions())
+          returnCycleModelStub.resolves(returnCycles(4))
 
           createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999652:2024-11-01:2025-10-31'])
           createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31'])

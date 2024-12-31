@@ -20,8 +20,8 @@ function returnCycle(summer = false) {
  *
  * @returns {object[]} an array of objects, each representing a return cycle
  */
-function returnCycles() {
-  return [
+function returnCycles(numberOfCycles = 2) {
+  const cycles = [
     {
       id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
       startDate: new Date('2024-11-01'),
@@ -37,13 +37,7 @@ function returnCycles() {
       dueDate: new Date('2025-04-28'),
       summer: false,
       submittedInWrls: true
-    }
-  ]
-}
-
-function returnCyclesAcrossReturnVersions() {
-  return [
-    ...returnCycles(),
+    },
     {
       id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b5',
       startDate: new Date('2023-11-01'),
@@ -61,6 +55,8 @@ function returnCyclesAcrossReturnVersions() {
       submittedInWrls: true
     }
   ]
+
+  return cycles.slice(0, numberOfCycles)
 }
 
 /**
@@ -356,7 +352,6 @@ function returnRequirementsAcrossReturnVersions() {
 module.exports = {
   returnCycle,
   returnCycles,
-  returnCyclesAcrossReturnVersions,
   returnRequirement,
   returnRequirements,
   returnRequirementsAcrossReturnVersions
