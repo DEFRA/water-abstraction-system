@@ -18,7 +18,7 @@ function returnCycle(summer = false) {
 /**
  * Represents a list of return cycles from the database, as fetched in `ProcessLicenceReturnLogsService`
  *
- * @param {number} [numberOfCycles=2] - the number of return cycles to return - defautls to the first two
+ * @param {number} [numberOfCycles=2] - the number of return cycles to return - defaults to the first two
  * @returns {object[]} an array of objects, each representing a return cycle
  */
 function returnCycles(numberOfCycles = 2) {
