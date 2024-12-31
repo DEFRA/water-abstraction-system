@@ -47,7 +47,7 @@ async function _save(session, howToEdit) {
 function _validate(howToEdit) {
   if (!howToEdit) {
     return { text: 'Select how would you like to edit this return' }
-    }
+  }
 
   return null
 }
