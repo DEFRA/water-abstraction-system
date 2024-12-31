@@ -128,6 +128,33 @@ describe('Process licence return logs service', () => {
       })
     })
 
+    describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
+      beforeEach(() => {
+        fetchReturnRequirementsStub.resolves(returnRequirementsAcrossReturnVersions())
+      })
+
+      describe('and the change date replaces the earliest return version', () => {
+        beforeEach(() => {
+          returnCycleModelStub.resolves(returnCycles(4))
+
+          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999652:2024-11-01:2025-10-31'])
+          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31'])
+          createReturnLogsStub.onCall(2).resolves(['v1:4:01/25/90/3242:16999641:2024-04-01:2025-03-31'])
+          createReturnLogsStub.onCall(3).resolves(['v1:4:01/25/90/3242:16999652:2023-11-01:2024-10-31'])
+          createReturnLogsStub.onCall(4).resolves(['v1:4:01/25/90/3242:16999642:2023-11-01:2024-10-31'])
+          createReturnLogsStub.onCall(5).resolves(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
+        })
+
+        it('processes all the return requirements for the licence', async () => {
+          const oldestReturnVersionStartDate = new Date('2022-04-01')
+          await ProcessLicenceReturnLogsService.go(licenceId, oldestReturnVersionStartDate)
+
+          expect(createReturnLogsStub.callCount).to.equal(6)
+          expect(voidReturnLogsStub.callCount).to.equal(4)
+        })
+      })
+    })
+
     describe('and the licence has only a "summer" return requirement', () => {
       beforeEach(() => {
         fetchReturnRequirementsStub.resolves([returnRequirement(true)])
