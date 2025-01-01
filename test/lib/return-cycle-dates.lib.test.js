@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, before, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { afterEach, describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
+// Test helpers
 const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
 
 // Thing under test

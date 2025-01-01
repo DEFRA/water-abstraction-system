@@ -1,14 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -26,6 +24,10 @@ describe('Mark For Supplementary Billing Service', () => {
   afterEach(() => {
     Sinon.restore()
     clock.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called with a valid licence ID', () => {

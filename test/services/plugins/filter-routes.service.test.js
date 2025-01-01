@@ -1,12 +1,10 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it } = require('node:test')
+const { expect } = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
+// test helpers
 const Hoek = require('@hapi/hoek')
 
 // Thing under test

@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const ReturnSubmissionLineHelper = require('../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
@@ -17,6 +15,10 @@ const ReturnSubmissionLineModel = require('../../app/models/return-submission-li
 
 describe('Return Submission Line model', () => {
   let testRecord
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {

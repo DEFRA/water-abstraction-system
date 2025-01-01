@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const { closeConnection } = require('../../support/database.js')
 
 // Thing under test
 const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
@@ -30,6 +28,10 @@ describe('Handle Errored Bill Run service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the service is called successfully', () => {

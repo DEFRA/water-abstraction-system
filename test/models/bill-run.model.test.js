@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillHelper = require('../support/helpers/bill.helper.js')
@@ -13,6 +10,7 @@ const BillModel = require('../../app/models/bill.model.js')
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
+const { closeConnection } = require('../support/database.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
@@ -60,6 +58,10 @@ describe('Bill Run model', () => {
 
       testReviewLicences.push(reviewLicence)
     }
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

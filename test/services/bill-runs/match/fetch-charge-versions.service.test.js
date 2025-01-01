@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
@@ -13,6 +10,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
@@ -50,6 +48,10 @@ describe('Fetch Charge Versions service', () => {
     purpose = PurposeHelper.select(PURPOSE_SPRAY_IRRIGATION_INDEX)
     chargeCategory = ChargeCategoryHelper.select()
     changeReason = ChangeReasonHelper.select(CHANGE_NEW_AGREEMENT_INDEX)
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are no applicable charge versions', () => {

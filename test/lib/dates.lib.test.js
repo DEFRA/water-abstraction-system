@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Thing under test
 const DateLib = require('../../app/lib/dates.lib.js')

@@ -1,19 +1,21 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/notifications/ad-hoc-returns/initiate-session.service.js')
 
 describe('Ad-hoc Returns Initiate Session service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when called', () => {
     it('creates a new session record with an empty data property', async () => {
       const result = await InitiateSessionService.go()

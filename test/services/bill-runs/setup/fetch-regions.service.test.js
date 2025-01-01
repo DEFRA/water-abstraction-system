@@ -1,19 +1,21 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helper
+const { closeConnection } = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
 const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
 describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when called', () => {
     it('returns the ID and display name for each region ordered by display name', async () => {
       const results = await FetchRegionsService.go()

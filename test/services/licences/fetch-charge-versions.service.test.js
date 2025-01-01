@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -23,6 +21,10 @@ describe('Fetch Charge Versions service', () => {
   let currentChargeVersionWithoutEndDateId
   let supersededChargeVersionWithEndDateId
   let supersededChargeVersionWithoutEndDateId
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {

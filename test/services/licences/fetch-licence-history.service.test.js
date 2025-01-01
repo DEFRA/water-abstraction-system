@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChargeVersionNoteHelper = require('../../support/helpers/charge-version-note.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
@@ -28,6 +26,10 @@ describe('Fetch Licence History service', () => {
   let licenceVersionModLog
   let returnVersion
   let returnVersionModLog
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when the licence has licence versions, charge versions and return versions', () => {
     before(async () => {

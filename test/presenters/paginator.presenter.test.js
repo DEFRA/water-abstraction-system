@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const DatabaseConfig = require('../../config/database.config.js')

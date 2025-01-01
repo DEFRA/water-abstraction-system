@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
@@ -18,6 +15,7 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 const ChargingModuleReissueBillRequest = require('../../../../app/requests/charging-module/reissue-bill.request.js')
 const ChargingModuleViewBillRequest = require('../../../../app/requests/charging-module/view-bill.request.js')
 const ChargingModuleViewBillRunStatusRequest = require('../../../../app/requests/charging-module/view-bill-run-status.request.js')
+const { closeConnection } = require('../../../support/database.js')
 
 // Thing under test
 const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
@@ -157,6 +155,10 @@ describe('Reissue Bill service', () => {
     await sourceBill.$query().delete()
 
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the service is called', () => {

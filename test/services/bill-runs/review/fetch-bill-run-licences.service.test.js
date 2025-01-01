@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
@@ -29,6 +27,10 @@ describe('Bill Runs Review - Fetch Bill Run Licences service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there is a valid bill run', () => {

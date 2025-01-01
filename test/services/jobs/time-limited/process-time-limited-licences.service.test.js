@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
-const WorkflowModel = require('../../../../app/models/workflow.model.js')
+const { closeConnection } = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const WorkflowModel = require('../../../../app/models/workflow.model.js')
 
 // Things we need to stub
 const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
@@ -32,6 +30,10 @@ describe('Process Time Limited Licences service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are licences with time limited charge elements', () => {

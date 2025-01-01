@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
@@ -18,6 +16,10 @@ describe('Bill Runs - Setup - No Licences service', () => {
   const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
   let sessionId
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when called with a valid session id', () => {
     beforeEach(async () => {

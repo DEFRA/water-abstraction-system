@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
@@ -31,6 +29,10 @@ describe('Group Role model', () => {
 
     testGroup = GroupHelper.select(GROUP_BILLING_DATA_INDEX)
     testRole = RoleHelper.select(ROLE_BILLING_INDEX)
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

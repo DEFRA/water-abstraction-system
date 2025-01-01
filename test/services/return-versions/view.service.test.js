@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ContactModel = require('../../../app/models/contact.model.js')
+const { closeConnection } = require('../../support/database.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
@@ -28,6 +26,10 @@ describe('Return Versions - View service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

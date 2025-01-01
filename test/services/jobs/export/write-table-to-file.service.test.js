@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Code = require('@hapi/code')
-const Lab = require('@hapi/lab')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { data: chargeCategories } = require('../../../../db/seeds/data/charge-categories.js')
+const { closeConnection } = require('../../../support/database.js')
 const { db } = require('../../../../db/db.js')
 const fs = require('fs')
 const path = require('path')
@@ -63,6 +61,10 @@ const csvHeaders =
 
 describe('Write table to file service', () => {
   let filePath
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when successful', () => {
     beforeEach(async () => {

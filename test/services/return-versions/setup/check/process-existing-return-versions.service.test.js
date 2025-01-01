@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../../support/database.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const ReturnVersionHelper = require('../../../../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
@@ -19,6 +17,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
   let existingReturnVersionId
   let licenceId
   let newVersionStartDate
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('When a "current" return version has a "startDate" < "newVersionStartDate" and no "endDate"', () => {
     beforeEach(async () => {

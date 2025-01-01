@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const { randomInteger } = require('../../support/general.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
@@ -29,6 +27,10 @@ describe('Monitoring Stations - Fetch Monitoring Station service', () => {
   let licenceWithoutConditions
   let licenceWithConditionPurpose
   let licenceWithConditionPurposeCondition
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when a matching monitoring station exists', () => {
     describe('and it has no tagged licences with restrictions', () => {

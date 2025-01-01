@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 
@@ -21,6 +19,10 @@ describe('Return Versions - Fetch Return Version service', () => {
   let seededReturnRequirementTwo
   let seededReturnVersion
   let seededUser
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {

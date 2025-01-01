@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRolesHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -23,6 +21,10 @@ describe('Fetch Licence Contacts service', () => {
   let licenceId
   let companyId
   let contactId
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when the licence has contact details', () => {
     beforeEach(async () => {

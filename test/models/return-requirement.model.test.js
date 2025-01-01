@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
@@ -43,6 +41,10 @@ describe('Return Requirement model', () => {
 
       testReturnRequirementPurposes.push(returnRequirementPurpose)
     }
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

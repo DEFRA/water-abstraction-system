@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const GlobalNotifierLib = require('../../app/lib/global-notifier.lib.js')
@@ -14,7 +11,7 @@ const GlobalNotifierLib = require('../../app/lib/global-notifier.lib.js')
 const { init } = require('../../app/server.js')
 
 describe('Global Notifier plugin', () => {
-  beforeEach(async () => {
+  before(async () => {
     // Create server before each test
     await init()
   })

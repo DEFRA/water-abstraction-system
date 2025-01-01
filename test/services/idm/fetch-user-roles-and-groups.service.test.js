@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../support/database.js')
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
@@ -38,6 +36,10 @@ describe('Fetch User Roles And Groups service', () => {
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the user exists', () => {

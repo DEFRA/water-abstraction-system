@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
@@ -15,6 +12,7 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Things we need to stub
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
+const { closeConnection } = require('../../../support/database.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
@@ -57,6 +55,10 @@ describe('Supplementary Process Bill Run service', () => {
   afterEach(() => {
     Sinon.restore()
     delete global.GlobalNotifier
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the service is called', () => {

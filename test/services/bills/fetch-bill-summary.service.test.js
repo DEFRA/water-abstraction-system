@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
@@ -15,6 +12,7 @@ const BillingAccountAddressHelper = require('../../support/helpers/billing-accou
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
+const { closeConnection } = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -84,6 +82,10 @@ describe('Fetch Bill Summary service', () => {
 
       billLicences.push(billLicence)
     }
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when a bill with a matching ID exists', () => {

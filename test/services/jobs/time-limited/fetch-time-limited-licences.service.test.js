@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -29,6 +27,10 @@ describe('Fetch Time Limited Licences service', () => {
     const region = RegionHelper.select()
 
     regionId = region.id
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there are licences with elements due to expire in < 50 days that should be added to workflow', () => {

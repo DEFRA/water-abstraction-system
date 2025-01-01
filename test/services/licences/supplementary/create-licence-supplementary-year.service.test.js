@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
 const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
@@ -19,6 +17,10 @@ describe('Create Licence Supplementary Years Service', () => {
   let licenceId
   let twoPartTariff
   let financialYearEnds
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when provided a licenceId, years and twoPartTariff data', () => {
     beforeEach(async () => {

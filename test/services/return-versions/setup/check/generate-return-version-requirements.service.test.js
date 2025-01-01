@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../../support/database.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../../support/helpers/licence-version.helper.js')
@@ -30,6 +28,10 @@ describe('Return Versions Setup - Generate Return Version Requirements service',
     const testLicence = await LicenceHelper.add({ regionId: region.id })
 
     licenceId = testLicence.id
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called with a single requirement, purpose and point with no exemptions set', () => {

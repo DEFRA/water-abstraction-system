@@ -51,6 +51,14 @@ async function clean() {
 }
 
 /**
+ * Close the connection to the database
+ *
+ */
+async function closeConnection() {
+  await db.destroy()
+}
+
+/**
  * Call to wipe the database of all tables, views and legacy schemas
  *
  * In order to test our code we have to recreate the legacy tables in our test DB. It is not uncommon for us to make
@@ -124,14 +132,6 @@ async function _viewNames(schema) {
   return result.map((view) => {
     return `"${schema}".${view.viewname}`
   })
-}
-
-/**
- * Close the connection to the database
- *
- */
-async function closeConnection() {
-  await db.destroy()
 }
 
 module.exports = {

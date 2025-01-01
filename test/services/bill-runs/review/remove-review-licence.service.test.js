@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
@@ -25,6 +23,10 @@ const ReviewReturnModel = require('../../../../app/models/review-return.model.js
 const RemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/remove-review-licence.service.js')
 
 describe('Bill Runs Review - Remove Review Licence service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when called', () => {
     let reviewChargeElementId
     let reviewChargeElementReturnId

@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
@@ -13,6 +10,7 @@ const BillRunModel = require('../../app/models/bill-run.model.js')
 const BillRunChargeVersionYearHelper = require('../support/helpers/bill-run-charge-version-year.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
+const { closeConnection } = require('../support/database.js')
 
 // Thing under test
 const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
@@ -33,6 +31,10 @@ describe('Bill Run Charge Version Year model', () => {
 
     // Test record
     testRecord = await BillRunChargeVersionYearHelper.add({ billRunId, chargeVersionId })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

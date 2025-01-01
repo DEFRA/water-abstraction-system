@@ -1,15 +1,13 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
+const { closeConnection } = require('../../support/database.js')
 
 // Thing under test
 const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
@@ -33,6 +31,10 @@ describe('Calculate Authorised and Billable days service', () => {
 
   beforeEach(async () => {
     chargeReference = await ChargeReferenceHelper.add()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there is a single abstraction period (charge element)', () => {

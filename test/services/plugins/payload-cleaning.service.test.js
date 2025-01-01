@@ -1,11 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Thing under test
 const PayloadCleaningService = require('../../../app/services/plugins/payload-cleaning.service.js')

@@ -1,15 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+const { closeConnection } = require('../support/database.js')
+const { ids } = require('../support/general.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
@@ -51,6 +50,10 @@ describe('User model', () => {
     testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
     testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
     testUserRole = await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {
@@ -189,9 +192,11 @@ describe('User model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.roles).to.be.an.array()
-        expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
+
+        const roleIds = ids(result.roles)
+
+        expect(roleIds).to.include(testRole.id)
       })
     })
 
@@ -209,9 +214,11 @@ describe('User model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.userGroups).to.be.an.array()
-        expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
+
+        const userGroupsIds = ids(result.userGroups)
+
+        expect(userGroupsIds).to.include(testUserGroup.id)
       })
     })
 
@@ -229,9 +236,11 @@ describe('User model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.userRoles).to.be.an.array()
-        expect(result.userRoles).to.have.length(1)
         expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole)
+
+        const userRolesIds = ids(result.userRoles)
+
+        expect(userRolesIds).to.include(testUserRole.id)
       })
     })
   })

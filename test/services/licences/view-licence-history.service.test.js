@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
@@ -28,6 +25,10 @@ describe('View Licence History service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchLicenceHistoryService, 'go').returns(_testFetchLicenceHistory())
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a licence with a matching ID exists', () => {

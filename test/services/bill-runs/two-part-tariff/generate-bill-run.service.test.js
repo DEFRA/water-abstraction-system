@@ -1,12 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { setTimeout } = require('timers/promises')
@@ -14,6 +11,7 @@ const { setTimeout } = require('timers/promises')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
+const { closeConnection } = require('../../../support/database.js')
 const ExpandedErrorError = require('../../../../app/errors/expanded.error.js')
 
 // Things we need to stub
@@ -52,6 +50,10 @@ describe('Generate Bill Run Service', () => {
   afterEach(() => {
     Sinon.restore()
     delete global.GlobalNotifier
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when called', () => {

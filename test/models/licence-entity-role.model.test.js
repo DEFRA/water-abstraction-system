@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../support/database.js')
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
@@ -35,6 +33,10 @@ describe('Licence Entity Role model', () => {
       licenceEntityId: testLicenceEntity.id,
       regimeEntityId: testRegimeEntity.id
     })
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('Basic query', () => {

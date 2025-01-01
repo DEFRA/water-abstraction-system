@@ -1,14 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
@@ -55,6 +53,10 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
 
   afterEach(async () => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when there is a matching bill run', () => {

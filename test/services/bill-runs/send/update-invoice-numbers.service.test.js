@@ -1,18 +1,16 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, beforeEach, afterEach } = require('node:test')
+const { expect } = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+// Test helpers
 const ExpandedError = require('../../../../app/errors/expanded.error.js')
 
 // Things we need to stub
+const BillModel = require('../../../../app/models/bill.model.js')
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleSendBillRunRequest = require('../../../../app/requests/charging-module/send-bill-run.request.js')
 const ChargingModuleViewBillRunRequest = require('../../../../app/requests/charging-module/view-bill-run.request.js')
 const UnflagBilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')

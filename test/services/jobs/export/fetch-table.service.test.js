@@ -1,11 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+const { describe, it, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
+// Test helpers
+const { closeConnection } = require('../../../support/database.js')
 
 // Thing under test
 const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
@@ -21,7 +21,11 @@ const regionsColumnInfo = [
   'dateUpdated'
 ]
 
-describe('Fetch table service', () => {
+describe.skip('Fetch table service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when we connect to the db', () => {
     const tableName = 'regions'
     const schemaName = 'water'

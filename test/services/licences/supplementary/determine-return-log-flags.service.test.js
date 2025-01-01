@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, before, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
@@ -15,6 +13,10 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
 
 describe('Determine Return Log Flags Service', () => {
+  after(async () => {
+    await closeConnection()
+  })
+
   describe('when given a returnLogId', () => {
     let returnLog
     let licence

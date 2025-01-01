@@ -1,13 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
+const { closeConnection } = require('../../../support/database.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
@@ -17,7 +15,12 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+
   let returnLogRecord
+
+  after(async () => {
+    await closeConnection()
+  })
 
   describe('when there are valid return logs that should be considered', () => {
     beforeEach(async () => {

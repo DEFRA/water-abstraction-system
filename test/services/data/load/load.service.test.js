@@ -1,16 +1,14 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
+const { describe, it, beforeEach, after } = require('node:test')
+const { expect } = require('@hapi/code')
 
 // Test helpers
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
+const { closeConnection } = require('../../../support/database.js')
 const { db } = require('../../../../db/db.js')
 const ExpandedError = require('../../../../app/errors/expanded.error.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -28,6 +26,10 @@ describe('Load service', () => {
   beforeEach(() => {
     licenceRef = LicenceHelper.generateLicenceRef()
     region = RegionHelper.select()
+  })
+
+  after(async () => {
+    await closeConnection()
   })
 
   describe('when the service is called', () => {
