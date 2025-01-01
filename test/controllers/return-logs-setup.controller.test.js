@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/return-logs-edit/initiate-session.service.js')
+const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')

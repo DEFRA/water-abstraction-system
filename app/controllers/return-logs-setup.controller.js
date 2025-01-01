@@ -5,7 +5,7 @@
  * @module ReturnLogsSetupController
  */
 
-const InitiateSessionService = require('../services/return-logs-edit/initiate-session.service.js')
+const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 
 async function setup(request, h) {
   const { returnLogId } = request.query
