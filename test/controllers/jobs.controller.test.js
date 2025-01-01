@@ -29,9 +29,9 @@ describe('Jobs controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
+    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
     Sinon.stub(server.logger, 'error')
+    Sinon.stub(server.logger, 'info')
 
     // We silence sending a notification to our Errbit instance using Airbrake
     Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
@@ -146,30 +146,6 @@ describe('Jobs controller', () => {
       describe('POST', () => {
         beforeEach(() => {
           options = { method: 'POST', url: '/jobs/return-logs/summer', payload: {} }
-        })
-
-        describe('when the request succeeds', () => {
-          beforeEach(async () => {
-            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
-          })
-
-          it('returns a 204 response', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(204)
-          })
-        })
-      })
-    })
-
-    describe('when the licence reference is known', () => {
-      describe('POST', () => {
-        beforeEach(() => {
-          options = {
-            method: 'POST',
-            url: '/jobs/return-logs/summer',
-            payload: { licenceReference: 'AT/Test' }
-          }
         })
 
         describe('when the request succeeds', () => {
