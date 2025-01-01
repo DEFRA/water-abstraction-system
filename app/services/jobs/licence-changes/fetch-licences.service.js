@@ -1,18 +1,19 @@
 'use strict'
 
 /**
- * Fetches all licences that are in NALD and WRLS
+ * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
  * @module FetchLicences
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches all licences that are in NALD and WRLS
+ * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
  *
  * A licence is valid if at least one licence version is not in draft
  *
- * @returns {Promise<object[]>} - An array of licences
+ * @returns {Promise<object[]>} - An array of objects representing each licence, including end dates for both and the
+ * WRLS ID
  */
 async function go() {
   const query = `
