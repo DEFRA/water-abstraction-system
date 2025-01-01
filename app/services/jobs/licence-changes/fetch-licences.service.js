@@ -30,7 +30,7 @@ async function go() {
         AND nal."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
       INNER JOIN
         public.licences l ON l.licence_ref = nal."LIC_NO"
-    WHERE nalv."STATUS" <> 'DRAFT'
+    WHERE nalv."STATUS" = 'CURR';
   `
 
   const { rows } = await db.raw(query)
