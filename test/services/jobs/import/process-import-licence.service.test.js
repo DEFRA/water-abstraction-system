@@ -72,19 +72,6 @@ describe('Process Import Licence Service', () => {
 
         expect(stubProcessBillingFlagService.calledWithExactly(expectedPayload)).to.be.true()
       })
-
-      it('should call the "stubDetermineLicenceEndDateChangedService" service ', async () => {
-        await ProcessImportLicence.go(licence)
-
-        const expectedPayload = {
-          expiredDate: licence.expired_date,
-          lapsedDate: licence.lapsed_date,
-          revokedDate: licence.revoked_date,
-          licenceId: licence.id
-        }
-
-        expect(stubGenerateReturnLogsService.calledWithExactly(licence.id, expectedPayload)).to.be.true()
-      })
     })
     describe('and the licence end date has not changed', () => {
       beforeEach(() => {

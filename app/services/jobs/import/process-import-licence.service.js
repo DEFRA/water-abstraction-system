@@ -7,7 +7,6 @@
 
 const DetermineLicenceEndDateChangedService = require('./determine-licence-end-date-changed.service.js')
 const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
-const GenerateReturnLogsService = require('./generate-return-logs.service.js')
 
 /**
  * Process licence for the licences imported from NALD
@@ -32,7 +31,6 @@ async function go(licence) {
 
     if (licenceEndDateChanged) {
       ProcessBillingFlagService.go(payload)
-      GenerateReturnLogsService.go(licence.id, payload)
     }
   } catch (error) {
     global.GlobalNotifier.omfg(`Importing licence ${licence.id}`, null, error)
