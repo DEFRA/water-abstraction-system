@@ -9,13 +9,12 @@ const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { determineCycleEndDate } = require('../../../../app/lib/return-cycle-dates.lib.js')
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
 
 // Thing under test
 const FetchCurrentReturnCycleService = require('../../../../app/services/jobs/return-logs/fetch-current-return-cycle.service.js')
 
-describe.only('Jobs - Return Logs - Fetch Current Return Cycle service', () => {
+describe('Jobs - Return Logs - Fetch Current Return Cycle service', () => {
   const today = new Date()
   const year = today.getFullYear()
 
