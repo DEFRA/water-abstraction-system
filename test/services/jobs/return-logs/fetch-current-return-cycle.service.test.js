@@ -9,7 +9,6 @@ const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { determineCycleEndDate } = require('../../../../app/lib/return-cycle-dates.lib.js')
 const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
 
 // Thing under test
