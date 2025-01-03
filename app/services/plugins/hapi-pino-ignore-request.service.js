@@ -10,18 +10,6 @@
  *
  * Used by `app/plugins/hapi_pino.plugin.js` to control what does and doesn't get added to our log output.
  *
- * ## import licence endpoint
- *
- * The import licence endpoint (`/import/licence`) is intended to be used when we switch from importing licences from
- * NALD to ReSP. In ReSp we will be 'pinged' when a licence is added or changed. Hence we've built an endpoint we expect
- * to be hit sporadically on any given day.
- *
- * However, until then we are migrating the legacy NALD licence import over bit by bit. It runs through _all_ licences
- * each night, which means we are seeing almost 80K entries daily in the logs!
- *
- * We silence it until we have switched to ReSP else we risk breaking our environments because our logs have eaten up
- * all disk space.
- *
  * ## status endpoint
  *
  * We built `/status` to support AWS load balancer health checks which fire approximately every 500ms. If we logged
@@ -54,7 +42,7 @@
  * @returns {boolean} true if the request should be ignored, else false
  */
 function go(options, request) {
-  const staticPaths = ['/', '/import/licence/legacy', '/status', '/favicon.ico']
+  const staticPaths = ['/', '/status', '/favicon.ico']
 
   // If request is a known path ignore it
   if (staticPaths.includes(request.path)) {

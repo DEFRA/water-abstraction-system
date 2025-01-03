@@ -18,7 +18,6 @@ const config = {
   enableReissuingBillingBatches: String(process.env.ENABLE_REISSUING_BILLING_BATCHES) === 'true' || false,
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,
   enableSystemLicenceView: String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true' || false,
-  enableSystemImportLegacyLicence: String(process.env.ENABLE_IMPORT_LEGACY_LICENCE) === 'true' || false,
   enableTwoPartTariffSupplementary: String(process.env.ENABLE_TWO_PART_TARIFF_SUPPLEMENTARY) === 'true' || false
 }
 
