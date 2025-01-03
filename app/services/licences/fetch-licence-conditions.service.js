@@ -1,16 +1,29 @@
 'use strict'
 
+/**
+ * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ * @module FetchLicenceConditionsService
+ */
+
 const LicenceVersionPurposeConditionTypeModel = require('../../models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
+/**
+ * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ *
+ * @param {string} licenceId - The UUID of the licence
+ *
+ * @returns {Promise<object>} An object containing the condition types, and their related purposes and points data
+ * needed for the licence conditions page
+ */
 async function go(licenceId) {
   return _fetch(licenceId)
 }
 
 async function _fetch(licenceId) {
   return LicenceVersionPurposeConditionTypeModel.query()
-    .select(['id', 'displayTitle', 'description', 'subcodeDescription', 'param1Label', 'param2Label'])
+    .select(['id', 'displayTitle', 'description', 'param1Label', 'param2Label'])
     .whereExists(
       LicenceVersionPurposeConditionModel.query()
         .select(1)
@@ -30,8 +43,6 @@ async function _fetch(licenceId) {
       licenceVersionPurposeConditionsBuilder
         .select([
           'licenceVersionPurposeConditions.id',
-          'licenceVersionPurposeConditions.param1',
-          'licenceVersionPurposeConditions.param2',
           'licenceVersionPurposeConditions.param1',
           'licenceVersionPurposeConditions.param2',
           'licenceVersionPurposeConditions.notes'
@@ -67,6 +78,15 @@ async function _fetch(licenceId) {
                 .withGraphFetched('point')
                 .modifyGraph('point', (pointBuilder) => {
                   pointBuilder.select(['id', 'description', 'ngr1', 'ngr2', 'ngr3', 'ngr4'])
+                })
+            })
+            .withGraphFetched('licenceVersion')
+            .modifyGraph('licenceVersion', (licenceVersionBuilder) => {
+              licenceVersionBuilder
+                .select(['id'])
+                .withGraphFetched('licence')
+                .modifyGraph('licence', (licenceBuilder) => {
+                  licenceBuilder.select(['id', 'licenceRef'])
                 })
             })
         })

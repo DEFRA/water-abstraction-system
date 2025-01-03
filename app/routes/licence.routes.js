@@ -24,7 +24,7 @@ const routes = [
     method: 'GET',
     path: '/licences/{id}/conditions',
     options: {
-      handler: LicencesController.viewLicenceAbstractionConditions
+      handler: LicencesController.viewLicenceConditions
     }
   },
   {
