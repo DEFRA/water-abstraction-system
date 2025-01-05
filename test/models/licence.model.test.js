@@ -23,6 +23,8 @@ const LicenceDocumentModel = require('../../app/models/licence-document.model.js
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceEndDateChangeHelper = require('../support/helpers/licence-end-date-change.helper.js')
+const LicenceEndDateChangeModel = require('../../app/models/licence-end-date-change.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
@@ -225,6 +227,39 @@ describe('Licence model', () => {
 
         expect(result.licenceDocumentHeader).to.be.an.instanceOf(LicenceDocumentHeaderModel)
         expect(result.licenceDocumentHeader).to.equal(testLicenceDocumentHeader)
+      })
+    })
+
+    describe('when linking to licence end date changes', () => {
+      let testLicenceEndDateChanges
+
+      beforeEach(async () => {
+        testRecord = await LicenceHelper.add()
+
+        testLicenceEndDateChanges = []
+        for (let i = 0; i < 2; i++) {
+          const licenceEndDateChange = await LicenceEndDateChangeHelper.add({ licenceId: testRecord.id })
+
+          testLicenceEndDateChanges.push(licenceEndDateChange)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query().innerJoinRelated('licenceEndDateChanges')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence end date changes', async () => {
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceEndDateChanges')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceEndDateChanges).to.be.an.array()
+        expect(result.licenceEndDateChanges[0]).to.be.an.instanceOf(LicenceEndDateChangeModel)
+        expect(result.licenceEndDateChanges).to.include(testLicenceEndDateChanges[0])
+        expect(result.licenceEndDateChanges).to.include(testLicenceEndDateChanges[1])
       })
     })
 

@@ -56,6 +56,14 @@ class LicenceModel extends BaseModel {
           to: 'licenceDocumentHeaders.licenceRef'
         }
       },
+      licenceEndDateChanges: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-end-date-change.model',
+        join: {
+          from: 'licences.id',
+          to: 'licenceEndDateChanges.licenceId'
+        }
+      },
       licenceMonitoringStations: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-monitoring-station.model',
