@@ -5,10 +5,8 @@
  * @module ConfirmationService
  */
 
-const { ref } = require('objection')
-
 const ConfirmationPresenter = require('../../../presenters/return-logs/setup/confirmation.presenter.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/confirmation` page
