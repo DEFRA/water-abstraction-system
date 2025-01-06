@@ -1,10 +1,23 @@
 'use strict'
 
+/**
+ * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ * @module FetchLicenceConditionsService
+ */
+
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionPurposeConditionTypeModel = require('../../models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
+/**
+ * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ *
+ * @param {string} licenceId - The UUID of the licence
+ *
+ * @returns {Promise<object>} An object containing the license and condition types, along with their related purposes
+ * and points data, required for the license conditions page
+ */
 async function go(licenceId) {
   const conditions = await _fetchConditions(licenceId)
   const licence = await _fetchLicence(licenceId)
@@ -41,8 +54,6 @@ async function _fetchConditions(licenceId) {
       licenceVersionPurposeConditionsBuilder
         .select([
           'licenceVersionPurposeConditions.id',
-          'licenceVersionPurposeConditions.param1',
-          'licenceVersionPurposeConditions.param2',
           'licenceVersionPurposeConditions.param1',
           'licenceVersionPurposeConditions.param2',
           'licenceVersionPurposeConditions.notes'
