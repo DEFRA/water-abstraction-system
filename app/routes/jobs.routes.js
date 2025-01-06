@@ -19,9 +19,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/import-licences',
+    path: '/jobs/licence-changes',
     options: {
-      handler: JobsController.ImportLicences,
+      handler: JobsController.licenceChanges,
       app: {
         plainOutput: true
       },
