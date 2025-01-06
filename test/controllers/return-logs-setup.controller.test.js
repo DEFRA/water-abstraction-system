@@ -9,12 +9,12 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/return-logs-edit/initiate-session.service.js')
+const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Return Logs Edit controller', () => {
+describe('Return Logs Setup controller', () => {
   let options
   let server
 
@@ -36,14 +36,14 @@ describe('Return Logs Edit controller', () => {
     Sinon.restore()
   })
 
-  describe('return-log-edit/setup', () => {
+  describe('return-logs/setup', () => {
     describe('GET', () => {
       const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
 
       beforeEach(async () => {
         options = {
           method: 'GET',
-          url: '/return-log-edit/setup?returnLogId=v1:1:123:10021668:2022-04-01:2023-03-31',
+          url: '/return-logs/setup?returnLogId=v1:1:123:10021668:2022-04-01:2023-03-31',
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -60,7 +60,7 @@ describe('Return Logs Edit controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-log-edit/${session.id}/how-to-edit`)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/how-to-edit`)
         })
       })
     })

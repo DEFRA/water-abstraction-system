@@ -21,7 +21,7 @@ const PersistSupplementaryBillingFlagsService = require('../../../../app/service
 // Thing under test
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
-describe('Process Billing Flag Service', () => {
+describe('Licences - Supplementary - Process Billing Flag service', () => {
   let notifierStub
   let payload
 
@@ -254,8 +254,12 @@ describe('Process Billing Flag Service', () => {
     describe('with an importedLicence', () => {
       before(() => {
         payload = {
-          importedLicence: {
-            licenceData: true
+          licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea',
+          changedDateDetails: {
+            changeDate: new Date('2024-07-01'),
+            dateType: 'revoked',
+            naldDate: new Date('2024-07-01'),
+            wrlsDate: null
           }
         }
       })

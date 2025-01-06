@@ -10,8 +10,8 @@
 require('dotenv').config()
 
 const config = {
-  importLicence: {
-    batchSize: parseInt(process.env.IMORT_LICENCE_BATCH_SIZE) || 10
+  licenceChanges: {
+    batchSize: parseInt(process.env.JOBS_LICENCE_CHANGES_BATCH_SIZE) || 10
   }
 }
 
