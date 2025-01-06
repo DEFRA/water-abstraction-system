@@ -18,7 +18,7 @@ const FetchLicenceConditionsService = require('../../../app/services/licences/fe
 // Thing under test
 const ViewLicenceConditionsService = require('../../../app/services/licences/view-licence-conditions.service.js')
 
-describe.only('View Licence Conditions service', () => {
+describe('View Licence Conditions service', () => {
   beforeEach(() => {
     Sinon.stub(FetchLicenceConditionsService, 'go').returns(_testFetchLicenceConditions())
   })
