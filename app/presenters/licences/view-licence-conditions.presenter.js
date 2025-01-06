@@ -1,90 +1,82 @@
 'use strict'
 
-const util = require('util')
-const PointModel = require('../../models/point.model.js')
+/**
+ * Formats the licence and related conditions data for the view licence conditions page
+ * @module ViewLicenceConditionsPresenter
+ */
 
 /**
- * Formats the licence data
- * @param {string} data
- * @returns
+ * Formats the licence and related conditions data for the view licence conditions page
+ *
+ * @param {object} licenceVersionPurposeConditionTypes - The licence and related conditions data returned by `FetchLicenceConditionsService`
+ *
+ * @returns {object} licence and conditions data needed by the view template
  */
-function go(data) {
-  const conditions = _formatAbstractionConditions(data.conditions)
-  // console.log('🚀🚀🚀 ~ conditions:', conditions)
-  const groupedConditions = _groupAbstractionConditions(conditions)
-  // console.log('🚀🚀🚀 ~ groupedConditions:', groupedConditions)
-  // console.log('🚀🚀🚀 ~ GroupedConditions: ', util.inspect(groupedConditions, false, null, true /* enable colors */))
-
-  // for (const [displayTitle, groupedCondition] of Object.entries(groupedConditions)) {
-  //   console.log('🚀🚀🚀 ~ groupedCondition:', groupedCondition)
-  // }
+function go(licenceVersionPurposeConditionTypes) {
+  const { id: licenceId, licenceRef } = licenceVersionPurposeConditionTypes.licence
+  const conditionTypes = _conditionTypes(licenceVersionPurposeConditionTypes.conditions)
 
   return {
-    conditions,
-    pageTitle: 'Licence abstraction conditions',
-    licenceId: data.licence.id,
-    licenceRef: data.licence.licenceRef
+    conditionTypes,
+    licenceId,
+    licenceRef,
+    pageTitle: 'Licence abstraction conditions'
   }
 }
 
-function _formatAbstractionConditions(conditions) {
-  return conditions.map((condition) => {
+function _abstractionPoints(licenceVersionPurposePoints) {
+  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.point.$describe()
+  })
+
+  return {
+    label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points',
+    descriptions
+  }
+}
+
+function _conditionTypes(licenceVersionPurposeConditionTypes) {
+  return licenceVersionPurposeConditionTypes.map((licenceVersionPurposeConditionType) => {
+    const { displayTitle, licenceVersionPurposeConditions } = licenceVersionPurposeConditionType
+
+    const conditions = _formatConditions(licenceVersionPurposeConditions, licenceVersionPurposeConditionType)
+
     return {
-      displayTitle: condition.displayTitle,
-      point: _formatPoint(condition),
-      purpose: condition.purposeDescription,
-      param1: _formatParam(condition.param1Label, condition.param1),
-      param2: _formatParam(condition.param2Label, condition.param2),
-      otherInformation: condition.notes,
-      conditionTypeDescription: condition.conditionTypeDescription,
-      subcodeDescription: condition.subcodeDescription
+      conditions,
+      displayTitle
     }
   })
 }
 
-function _groupAbstractionConditions(conditions) {
-  return conditions.reduce((grouped, condition) => {
-    const { displayTitle } = condition
-    if (!grouped[displayTitle]) {
-      grouped[displayTitle] = []
+function _formatConditions(licenceVersionPurposeConditions, conditionType) {
+  const { description, param1Label, param2Label } = conditionType
+
+  return licenceVersionPurposeConditions.map((licenceVersionPurposeCondition) => {
+    const { licenceVersionPurpose, notes, param1, param2 } = licenceVersionPurposeCondition
+
+    return {
+      abstractionPoints: _abstractionPoints(licenceVersionPurpose.licenceVersionPurposePoints),
+      conditionType: description,
+      otherInformation: notes ? notes.trim() : null,
+      param1: _param(param1Label, param1, 1),
+      param2: _param(param2Label, param2, 2),
+      purpose: licenceVersionPurpose.purpose.description
     }
-
-    grouped[displayTitle].push(condition)
-    return grouped
-  }, {})
+  })
 }
 
-function _formatPoint(condition) {
-  const point = PointModel.fromJson(condition)
-
-  return point.$describe()
-}
-
-function _formatParam(paramLabel, param) {
-  if ((!paramLabel && !param) || (paramLabel && !param)) {
+function _param(paramLabel, param, noteNumber) {
+  // Label nor value set then we don't display the param
+  if (!paramLabel && !param) {
     return null
   }
 
-  if (!paramLabel && param) {
-    return {
-      paramLabel: 'Param label',
-      param
-    }
-  }
-
   return {
-    paramLabel,
-    param
+    label: paramLabel ?? `Note ${noteNumber}`,
+    value: param
   }
 }
 
 module.exports = {
   go
 }
-
-/*
-	Within the area formed by the straight lines running between National Grid References TQ 781 788, TQ 798 768,
-  TQ 778 752 and TQ 757 767 (INLAND WATER DITCHES AND DRAINS KNOWN AS THE LIPWELL STREAM)
-  Within the area formed by the straight lines running between National Grid References TQ 781 788, TQ 798 768,
-  TQ 778 752 and TQ 757 767 (INLAND WATER DITCHES AND DRAINS KNWON AS THE LIPWELL STREAM)
-*/
