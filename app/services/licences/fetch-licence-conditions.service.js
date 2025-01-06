@@ -1,14 +1,25 @@
 'use strict'
 
+const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionPurposeConditionTypeModel = require('../../models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 async function go(licenceId) {
-  return _fetch(licenceId)
+  const conditions = await _fetchConditions(licenceId)
+  const licence = await _fetchLicence(licenceId)
+
+  return {
+    conditions,
+    licence
+  }
 }
 
-async function _fetch(licenceId) {
+async function _fetchLicence(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
+}
+
+async function _fetchConditions(licenceId) {
   return LicenceVersionPurposeConditionTypeModel.query()
     .select(['id', 'displayTitle', 'description', 'subcodeDescription', 'param1Label', 'param2Label'])
     .whereExists(

@@ -11,7 +11,7 @@ const MarkedForSupplementaryBillingService = require('../services/licences/suppl
 const MarkForSupplementaryBillingService = require('../services/licences/supplementary/mark-for-supplementary-billing.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
-const ViewAbstractionConditionsService = require('../services/licences/view-licence-abstraction-conditions.service.js')
+const ViewLicenceConditionsService = require('../services/licences/view-licence-conditions.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
 const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
@@ -110,10 +110,10 @@ async function viewCommunications(request, h) {
   })
 }
 
-async function viewLicenceAbstractionConditions(request, h) {
+async function viewLicenceConditions(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewAbstractionConditionsService.go(id)
+  const pageData = await ViewLicenceConditionsService.go(id)
 
   return h.view('licences/conditions.njk', {
     ...pageData
@@ -227,7 +227,7 @@ module.exports = {
   viewCommunications,
   viewLicenceContacts,
   viewHistory,
-  viewLicenceAbstractionConditions,
+  viewLicenceConditions,
   viewLicenceContactDetails,
   viewLicencePoints,
   viewLicencePurposes,
