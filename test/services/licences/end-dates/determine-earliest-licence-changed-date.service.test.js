@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const DetermineEarliestLicenceChangedDateService = require('../../../../app/services/jobs/licence-changes/determine-earliest-licence-changed-date.service.js')
+const DetermineEarliestLicenceChangedDateService = require('../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js')
 
-describe('Jobs - Licence Changes - Determine Earliest Licence Changed Date service', () => {
+describe('Licences - End Dates - Determine Earliest Licence Changed Date service', () => {
   let licence
 
   beforeEach(() => {

@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const ProcessLicenceChanges = require('../../app/services/jobs/licence-changes/process-licence-changes.service.js')
+const ProcessLicenceChanges = require('../../app/services/licences/end-dates/process-licence-changes.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')

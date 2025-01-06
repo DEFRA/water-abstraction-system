@@ -9,7 +9,7 @@ const FetchLicences = require('./fetch-licences.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const ProcessLicenceService = require('./process-licence.service.js')
 
-const JobConfig = require('../../../../config/jobs.config.js')
+const LicencesConfig = require('../../../../config/licences.config.js')
 
 /**
  * Compares all licences in the NALD extract with those in WRLS and processes any with changed end dates
@@ -73,7 +73,7 @@ async function _processLicences(licences) {
   // app/requests/base.request.js
   const pMap = (await import('p-map')).default
 
-  await pMap(licences, ProcessLicenceService.go, { concurrency: JobConfig.licenceChanges.batchSize })
+  await pMap(licences, ProcessLicenceService.go, { concurrency: LicencesConfig.endDates.batchSize })
 }
 
 module.exports = {

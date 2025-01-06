@@ -5,7 +5,7 @@
  * @module LicencesEndDatesController
  */
 
-const ProcessLicenceChanges = require('../services/jobs/licence-changes/process-licence-changes.service.js')
+const ProcessLicenceChanges = require('../services/licences/end-dates/process-licence-changes.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 

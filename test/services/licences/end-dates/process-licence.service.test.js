@@ -9,14 +9,14 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 // Thing under test
-const ProcessLicenceService = require('../../../../app/services/jobs/licence-changes/process-licence.service.js')
+const ProcessLicenceService = require('../../../app/services/licences/end-dates/process-licence.service.js')
 
-describe('Jobs - Licence Changes - Process Licence service', () => {
+describe('Licences - End Dates - Process Licence service', () => {
   let licence
   let notifierStub
   let processBillingFlagsStub

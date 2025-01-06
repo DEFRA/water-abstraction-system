@@ -9,15 +9,15 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicencesService = require('../../../../app/services/jobs/licence-changes/fetch-licences.service.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const JobsConfig = require('../../../../config/jobs.config.js')
-const ProcessLicenceService = require('../../../../app/services/jobs/licence-changes/process-licence.service.js')
+const FetchLicencesService = require('../../../app/services/licences/end-dates/fetch-licences.service.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const LicencesConfig = require('../../../config/licences.config.js')
+const ProcessLicenceService = require('../../../app/services/licences/end-dates/process-licence.service.js')
 
 // Thing under test
-const ProcessLicenceChangesService = require('../../../../app/services/jobs/licence-changes/process-licence-changes.service.js')
+const ProcessLicenceChangesService = require('../../../app/services/licences/end-dates/process-licence-changes.service.js')
 
-describe('Jobs - Licence Changes - Process Licence Changes service', () => {
+describe('Licences - End Dates - Process Licence Changes service', () => {
   const batchSize = 10
 
   let licences
@@ -29,7 +29,7 @@ describe('Jobs - Licence Changes - Process Licence Changes service', () => {
 
     // NOTE: We set our batch size to ensure consistency within the tests. Depending on who or where the tests are being
     // run, might mean this value is different.
-    Sinon.stub(JobsConfig, 'licenceChanges').value({ batchSize })
+    Sinon.stub(LicencesConfig, 'endDates').value({ batchSize })
 
     Sinon.stub(FetchLicencesService, 'go').resolves(licences)
 
