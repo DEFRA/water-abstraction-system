@@ -3,7 +3,7 @@
 
 {% block content %}
   {% set returnDetails %}
-    <div data-test="licenceNumber">Licence number <strong>{{ returnLog.licenceReference }}</strong></div><br>
+    <div data-test="licenceNumber">Licence number <strong>{{ licenceRef }}</strong></div><br>
     <div data-test="siteDescription">Site description <strong>{{ returnLog.siteDescription }}</strong></div><br>
     <div data-test="purpose">Purpose <strong>{{ returnLog.purpose }}</strong></div>
   {% endset %}
@@ -19,6 +19,6 @@
 </div>
 
 <p class="govuk-body">
-  <a class="govuk-link" href="/system/licences/{{ licenceId }}/returns">View returns for {{returnLog.licenceReference}}</a>
+  <a class="govuk-link" href="/system/licences/{{ licenceId }}/returns">View returns for {{ licenceRef }}</a>
 </p>
 {% endblock %}

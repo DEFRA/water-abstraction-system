@@ -18,19 +18,18 @@ function go(session) {
     licence: { id: licenceId, licenceRef },
     underQuery,
     purposes,
-    description
+    description,
+    returnLogId
   } = session
-
-  // const { id, licenceRef, licence, underQuery, purposes, description } = returnLog
 
   return {
     sessionId,
     returnLog: {
       returnLogId,
       purpose: purposes[0].tertiary.description,
-      siteDescription: description,
-      licenceReference: licenceRef
+      siteDescription: description
     },
+    licenceRef,
     licenceId,
     pageTitle: underQuery ? 'Query recorded' : 'Query resolved'
   }
