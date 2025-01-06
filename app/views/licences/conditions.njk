@@ -1,8 +1,22 @@
 {% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + licenceId + '/summary'
+  }) }}
+{% endblock %}
 
 {% block content %}
   <h1 class="govuk-heading-l">
@@ -11,129 +25,95 @@
   </h1>
 
   {{ govukWarningText({
-    text: "We may not be able to show a full list of your conditions, because we do
-      not hold all of your licence information on our system yet. You must refer
-      to the paper copy of your licence to view and comply with all of your conditions.",
+    text: "We may not be able to show a full list of the conditions, because we do not hold all of the licence
+    information on our system yet. You should refer to the paper copy of the licence to view all conditions.",
     iconFallbackText: "Warning"
   }) }}
 
-  {% for condition in conditions %}
-    {# Set an easier to use index. #}
-    {% set rowIndex = loop.index0 %}
+  <div class="govuk-grid-row ">
+    <div class="govuk-grid-column-full">
+      {% for conditionType in conditionTypes %}
+        {% set topAttr = 'condition-type-' + loop.index0 %}
 
-    {% set tableRows = [] %}
+        <div class="govuk-grid-row govuk-!-margin-bottom-3">
 
-    {# Abstraction point cell #}
-    {% set abstractionPointsRow = {
-      key: {
-        text: "Abstraction point",
-        attributes: { 'data-test': 'abstraction-point-title-' + rowIndex }
-      },
-      value: {
-        html: condition.point,
-        attributes: { 'data-test': 'abstraction-point-' + rowIndex }
-      }
-    } %}
+            <div class="govuk-summary-card ">
+              <div class="govuk-summary-card__title-wrapper ">
+                <h2 class="govuk-summary-card__title govuk-table__caption--m govuk-!-margin-bottom-0">{{ conditionType.displayTitle }}</h2>
+              </div>
 
-    {% set tableRows = (tableRows.push(abstractionPointsRow), tableRows) %}
+              <div class="govuk-summary-card__content govuk-!-padding-top-0">
+                {% for condition in conditionType.conditions %}
+                  {% set conditionIndex = loop.index0 %}
 
-    {# Condition type cell #}
-    {% set conditionTypeRow = {
-      key: {
-        text: "Condition type",
-        attributes: { 'data-test': 'condition-type-title-' + rowIndex }
-      },
-      value: {
-        html: condition.conditionTypeDescription,
-        attributes: { 'data-test': 'condition-type-' + rowIndex }
-      }
-    } %}
+                  {{ govukSummaryList({
+                    classes: "govuk-summary-list--no-border",
+                    rows: [
+                      {
+                        key: {
+                          text: 'Condition type',
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-type' }
+                        },
+                        value: {
+                          text: condition.conditionType
+                        }
+                      },
+                      {
+                        key: {
+                          text: condition.param1.label,
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-param-1' }
+                        },
+                        value: {
+                          text: condition.param1.value
+                        }
+                      } if condition.param1,
+                      {
+                        key: {
+                          text: condition.param2.label,
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-param-2' }
+                        },
+                        value: {
+                          text: condition.param2.value
+                        }
+                      } if condition.param2,
+                      {
+                        key: {
+                          text: 'Other information',
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-other-information' }
+                        },
+                        value: {
+                          text: condition.otherInformation
+                        }
+                      },
+                      {
+                        key: {
+                          text: 'Purpose',
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-purpose' }
+                        },
+                        value: {
+                          text: condition.purpose
+                        }
+                      },
+                      {
+                        key: {
+                          text: condition.abstractionPoints.label,
+                          attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-purpose' }
+                        },
+                        value: {
+                          html: newLine(condition.abstractionPoints.descriptions)
+                        }
+                      }
+                    ]
+                  }) }}
 
-    {% set tableRows = (tableRows.push(conditionTypeRow), tableRows) %}
-
-    {# Purpose cell #}
-    {% set purposeRow = {
-      key: {
-        text: "Purpose",
-        attributes: { 'data-test': 'purpose-title-' + rowIndex }
-      },
-      value: {
-        html: condition.purpose,
-        attributes: { 'data-test': 'purpose-' + rowIndex }
-      }
-    } %}
-
-    {% set tableRows = (tableRows.push(purposeRow), tableRows) %}
-
-    {# Subcode description cell #}
-    {% set subcodeDescriptionRow = {
-      key: {
-        text: "Subcode description",
-        attributes: { 'data-test': 'subcode-description-title-' + rowIndex }
-      },
-      value: {
-        html: condition.subcodeDescription,
-        attributes: { 'data-test': 'subcode-description-' + rowIndex }
-      }
-    } %}
-
-    {% set tableRows = (tableRows.push(subcodeDescriptionRow), tableRows) %}
-
-    {# Param1 cell #}
-    {% if condition.param1 %}
-      {% set param1Row = {
-        key: {
-          text: condition.param1.paramLabel,
-          attributes: { 'data-test': 'param-1-title-' + rowIndex }
-        },
-        value: {
-          html: condition.param1.param,
-          attributes: { 'data-test': 'param-1-' + rowIndex }
-        }
-      } %}
-
-      {% set tableRows = (tableRows.push(param1Row), tableRows) %}
-    {% endif %}
-
-    {# Param2 cell #}
-    {% if condition.param2 %}
-      {% set param2Row = {
-        key: {
-          text: condition.param2.paramLabel,
-          attributes: { 'data-test': 'param-2-title-' + rowIndex }
-        },
-        value: {
-          html: condition.param2.param,
-          attributes: { 'data-test': 'param-2-' + rowIndex }
-        }
-      } %}
-
-      {% set tableRows = (tableRows.push(param2Row), tableRows) %}
-    {% endif %}
-
-    {# Other information cell #}
-    {% set otherInformationRow = {
-      key: {
-        text: "Other information",
-        attributes: { 'data-test': 'other-information-title-' + rowIndex }
-      },
-      value: {
-        html: condition.otherInformation,
-        attributes: { 'data-test': 'other-information-' + rowIndex }
-      }
-    } %}
-
-    {% set tableRows = (tableRows.push(otherInformationRow), tableRows) %}
-
-    {# Summary card #}
-    {{ govukSummaryList({
-      card: {
-        title: {
-          text: condition.displayTitle,
-          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
-        }
-      },
-      rows: tableRows
-    }) }}
-  {% endfor %}
+                  {% if conditionIndex < conditionType.conditions.length - 1 %}
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
