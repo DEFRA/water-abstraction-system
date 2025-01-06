@@ -67,7 +67,7 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
-  describe.only('return-logs/setup/{sessionId}/confirmation', () => {
+  describe('return-logs/setup/{sessionId}/confirmation', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
