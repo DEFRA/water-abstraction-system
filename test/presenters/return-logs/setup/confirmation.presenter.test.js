@@ -22,7 +22,7 @@ describe('Return Logs Setup - Confirmation presenter', () => {
         returnLogId: 'v1:6:01/01:10059108:2023-04-01:2024-03-31',
         underQuery: true,
         siteDescription: 'Addington Sandpits',
-        purposes: 'Mineral Washing',
+        purposes: 'Mineral Washing'
       }
     }
   })
