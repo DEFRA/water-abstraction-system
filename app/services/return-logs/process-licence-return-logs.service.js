@@ -70,6 +70,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   const requirementsToProcess = returnRequirements.filter((returnRequirement) => {
     return (
       returnRequirement.summer === returnCycle.summer &&
+      returnRequirement.returnVersion.startDate <= returnCycle.endDate &&
       (returnRequirement.returnVersion.endDate >= returnCycle.startDate ||
         returnRequirement.returnVersion.endDate === null)
     )
