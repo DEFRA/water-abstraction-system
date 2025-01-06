@@ -8,14 +8,14 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const SessionModel = require('../../../app/models/session.model.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
-const InitiateSessionService = require('../../../app/services/return-logs-edit/initiate-session.service.js')
+const InitiateSessionService = require('../../../../app/services/return-logs/setup/initiate-session.service.js')
 
-describe('Return Logs Edit - Initiate Session service', () => {
+describe('Return Logs - Setup - Initiate Session service', () => {
   describe('when called', () => {
     let licence
     let returnLog

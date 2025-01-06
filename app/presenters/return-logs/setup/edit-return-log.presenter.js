@@ -5,7 +5,7 @@
  * @module EditReturnLogPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats the data ready for presenting in the abstraction return page

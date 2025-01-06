@@ -1,15 +1,13 @@
 'use strict'
 
-const ReturnLogsEditController = require('../controllers/return-logs-edit.controller.js')
-
-const basePath = '/return-log-edit/'
+const ReturnLogsSetupController = require('../controllers/return-logs-setup.controller.js')
 
 const routes = [
   {
     method: 'GET',
-    path: basePath + 'setup',
+    path: '/return-logs/setup',
     options: {
-      handler: ReturnLogsEditController.setup,
+      handler: ReturnLogsSetupController.setup,
       auth: {
         access: {
           scope: ['billing']
@@ -19,9 +17,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '{sessionId}/how-to-edit',
+    path: '/return-logs/setup/{sessionId}/how-to-edit',
     options: {
-      handler: ReturnLogsEditController.edit,
+      handler: ReturnLogsSetupController.edit,
       app: {
         plainOutput: true
       },
@@ -34,9 +32,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: basePath + '{sessionId}/how-to-edit',
+    path: '/return-logs/setup/{sessionId}/how-to-edit',
     options: {
-      handler: ReturnLogsEditController.submitEdit,
+      handler: ReturnLogsSetupController.submitEdit,
       app: {
         plainOutput: true
       },

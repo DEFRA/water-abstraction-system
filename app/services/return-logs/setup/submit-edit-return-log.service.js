@@ -5,8 +5,8 @@
  * @module SubmitEditReturnLogService
  */
 
-const SessionModel = require('../../models/session.model.js')
-const EditReturnLogPresenter = require('../../presenters/return-logs-edit/edit-return-log.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
+const EditReturnLogPresenter = require('../../../presenters/return-logs/setup/edit-return-log.presenter.js')
 
 /**
  * Handles the user submission for the `/return-log-edit/{sessionId}/how-to-edit` page

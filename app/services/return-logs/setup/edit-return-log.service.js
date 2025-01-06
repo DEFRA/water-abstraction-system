@@ -5,8 +5,8 @@
  * @module EditReturnLogService
  */
 
-const SessionModel = require('../../models/session.model.js')
-const EditReturnLogPresenter = require('../../presenters/return-logs-edit/edit-return-log.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
+const EditReturnLogPresenter = require('../../../presenters/return-logs/setup/edit-return-log.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the how to edit an abstraction return page
