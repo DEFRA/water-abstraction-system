@@ -13,21 +13,14 @@
  * @returns {object} page data needed by the view template
  */
 function go(session) {
-  const {
-    id: sessionId,
-    licence: { id: licenceId, licenceRef },
-    underQuery,
-    purposes,
-    description,
-    returnLogId
-  } = session
+  const { id: sessionId, data: { licenceId, licenceRef, underQuery, purposes, siteDescription, returnLogId }}  = session
 
   return {
     sessionId,
     returnLog: {
       returnLogId,
-      purpose: purposes[0].tertiary.description,
-      siteDescription: description
+      purposes,
+      siteDescription,
     },
     licenceRef,
     licenceId,
