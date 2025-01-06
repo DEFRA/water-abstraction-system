@@ -5,7 +5,7 @@
  * @module UpdateUnderQueryService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
+const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
  * Updates the under query flag on a return log
