@@ -25,12 +25,11 @@ async function go() {
       l.expired_date AS wrls_expired_date,
       l.lapsed_date AS wrls_lapsed_date,
       l.revoked_date AS wrls_revoked_date
-    FROM "import"."NALD_ABS_LIC_VERSIONS" nalv
-      INNER JOIN "import"."NALD_ABS_LICENCES" nal
-        ON nal."ID" = nalv."AABL_ID"
-        AND nal."FGAC_REGION_CODE" = nalv."FGAC_REGION_CODE"
-      INNER JOIN
-        public.licences l ON l.licence_ref = nal."LIC_NO"
+    FROM "import"."NALD_ABS_LICENCES" nal
+    INNER JOIN "import"."NALD_ABS_LIC_VERSIONS" nalv
+      ON nalv."AABL_ID" = nal."ID" AND nalv."FGAC_REGION_CODE" = nal."FGAC_REGION_CODE"
+    INNER JOIN public.licences l
+      ON l.licence_ref = nal."LIC_NO"
     WHERE nalv."STATUS" = 'CURR';
   `
 
