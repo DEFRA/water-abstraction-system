@@ -15,6 +15,11 @@ async function check(_request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
+async function process(_request, h) {
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
 module.exports = {
-  check
+  check,
+  process
 }

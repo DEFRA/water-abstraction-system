@@ -55,4 +55,20 @@ describe('Licences End Dates controller', () => {
       })
     })
   })
+
+  describe('/licences/end-dates/process', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/licences/end-dates/process' }
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
 })

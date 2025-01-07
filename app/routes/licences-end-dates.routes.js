@@ -16,6 +16,20 @@ const routes = [
         crumb: false
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/licences/end-dates/process',
+    options: {
+      handler: LicencesEndDatesController.process,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
   }
 ]
 
