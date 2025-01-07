@@ -8,8 +8,13 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { postRequestOptions } = require('../support/general.js')
+
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
+const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
+const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -65,4 +70,83 @@ describe('Return Logs Setup controller', () => {
       })
     })
   })
+
+  describe('return-logs/setup/{sessionId}/received', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(ReceivedService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'When was the return received?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('When was the return received?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('received', {})
+        })
+
+        describe('and the received date is entered', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({})
+          })
+
+          it('redirects to the "reported" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('received')
+
+          Sinon.stub(SubmitReceivedService, 'go').resolves({
+            error: { message: 'Enter a real received date' },
+            pageTitle: 'When was the return received?',
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter a real received date')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
 })
+
+function _postOptions(path, payload) {
+  return postRequestOptions(`/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`, payload)
+}
