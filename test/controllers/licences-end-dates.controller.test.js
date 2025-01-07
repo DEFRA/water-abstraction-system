@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
-const ProcessLicenceChanges = require('../../app/services/licences/end-dates/process-licence-changes.service.js')
+const CheckAllLicenceEndDatesService = require('../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -44,7 +44,7 @@ describe('Licences End Dates controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(ProcessLicenceChanges, 'go').resolves()
+          Sinon.stub(CheckAllLicenceEndDatesService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {

@@ -9,15 +9,15 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicencesService = require('../../../app/services/licences/end-dates/fetch-licences.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicencesConfig = require('../../../config/licences.config.js')
-const ProcessLicenceService = require('../../../app/services/licences/end-dates/process-licence.service.js')
+const FetchLicencesService = require('../../../../app/services/licences/end-dates/fetch-licences.service.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const LicencesConfig = require('../../../../config/licences.config.js')
+const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
 
 // Thing under test
-const ProcessLicenceChangesService = require('../../../app/services/licences/end-dates/process-licence-changes.service.js')
+const CheckAllLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
 
-describe('Licences - End Dates - Process Licence Changes service', () => {
+describe('Licences - End Dates - Check All Licence End Dates service', () => {
   const batchSize = 10
 
   let licences
@@ -47,11 +47,11 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
 
   describe('when processing the licences', () => {
     beforeEach(() => {
-      processLicenceStub = Sinon.stub(ProcessLicenceService, 'go').resolves()
+      processLicenceStub = Sinon.stub(CheckLicenceEndDatesService, 'go').resolves()
     })
 
     it('processes all licences with a current licence version in NALD and a matching record in WRLS', async () => {
-      await ProcessLicenceChangesService.go()
+      await CheckAllLicenceEndDatesService.go()
 
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
@@ -62,7 +62,7 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
     })
 
     it('processes them in batches', async () => {
-      await ProcessLicenceChangesService.go()
+      await CheckAllLicenceEndDatesService.go()
 
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licences.length / batchSize)
@@ -71,11 +71,11 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessLicenceChangesService.go()
+      await CheckAllLicenceEndDatesService.go()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Licence changes job complete')).to.be.true()
+      expect(notifierStub.omg.calledWith('Check all licence end dates complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -96,7 +96,7 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
     beforeEach(() => {
       const delayInMilliseconds = 250 // 0.25 seconds
 
-      processLicenceStub = Sinon.stub(ProcessLicenceService, 'go').callsFake(() => {
+      processLicenceStub = Sinon.stub(CheckLicenceEndDatesService, 'go').callsFake(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
@@ -106,7 +106,7 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
     })
 
     it('takes less time to complete the job than doing them one at a time', { timeout: 4000 }, async () => {
-      await ProcessLicenceChangesService.go()
+      await CheckAllLicenceEndDatesService.go()
 
       const args = notifierStub.omg.firstCall.args
 
@@ -116,15 +116,15 @@ describe('Licences - End Dates - Process Licence Changes service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      Sinon.stub(ProcessLicenceService, 'go').rejects()
+      Sinon.stub(CheckLicenceEndDatesService, 'go').rejects()
     })
 
     it('handles the error', async () => {
-      await ProcessLicenceChangesService.go()
+      await CheckAllLicenceEndDatesService.go()
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Licence changes job failed')
+      expect(args[0]).to.equal('Check all licence end dates failed')
       expect(args[1]).to.be.null()
       expect(args[2]).to.be.an.error()
     })
