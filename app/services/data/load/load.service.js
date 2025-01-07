@@ -30,6 +30,7 @@ const LicenceAgreementHelper = require('../../../../test/support/helpers/licence
 const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
 const LicenceDocumentRoleHelper = require('../../../../test/support/helpers/licence-document-role.helper.js')
 const LicenceDocumentHelper = require('../../../../test/support/helpers/licence-document.helper.js')
+const LicenceEndDateChangeHelper = require('../../../../test/support/helpers/licence-end-date-change.helper.js')
 const LicenceEntityRoleHelper = require('../../../../test/support/helpers/licence-entity-role.helper.js')
 const LicenceEntityHelper = require('../../../../test/support/helpers/licence-entity.helper.js')
 const LicenceMonitoringStationHelper = require('../../../../test/support/helpers/licence-monitoring-station.helper.js')
@@ -130,6 +131,7 @@ const LOAD_HELPERS = {
     test: true,
     legacy: { schema: 'crm_v2', table: 'documents', id: 'document_id' }
   },
+  licenceEndDateChanges: { helper: LicenceEndDateChangeHelper, test: false },
   licenceEntityRoles: { helper: LicenceEntityRoleHelper, test: false },
   licenceEntities: { helper: LicenceEntityHelper, test: false },
   licenceMonitoringStations: {

@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Config values used for jobs
- * @module JobsConfig
+ * Config values used for licence features
+ * @module LicencesConfig
  */
 
 // We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
@@ -10,8 +10,8 @@
 require('dotenv').config()
 
 const config = {
-  licenceChanges: {
-    batchSize: parseInt(process.env.JOBS_LICENCE_CHANGES_BATCH_SIZE) || 10
+  endDates: {
+    batchSize: parseInt(process.env.LICENCE_END_DATES_BATCH_SIZE) || 10
   }
 }
 
