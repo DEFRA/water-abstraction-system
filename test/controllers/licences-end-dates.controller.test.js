@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const CheckAllLicenceEndDatesService = require('../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
+const ProcessLicenceEndDateChangesService = require('../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -63,6 +64,10 @@ describe('Licences End Dates controller', () => {
       })
 
       describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessLicenceEndDateChangesService, 'go').resolves()
+        })
+
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
