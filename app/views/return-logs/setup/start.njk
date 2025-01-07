@@ -121,15 +121,21 @@
           checked: selectedOption === 'enter'
         },
         {
+          divider: 'or'
+        } if displayRecordReceipt === false,
+        {
           value: 'nil',
           text: "Enter a nil return",
           checked: selectedOption === 'nil'
         },
         {
+          divider: 'or'
+        } if displayRecordReceipt === true,
+        {
           value: 'receipt',
           text: 'Record receipt',
           checked: selectedOption === 'receipt'
-        }
+        } if displayRecordReceipt === true
       ]
     }) }}
 

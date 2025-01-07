@@ -24,10 +24,12 @@ function go(session) {
     periodEndDay,
     periodEndMonth,
     purposes,
+    receivedDate,
     returnLogId,
     returnReference,
     siteDescription,
     startDate,
+    status,
     twoPartTariff,
     underQuery,
     whatToDo
@@ -40,6 +42,7 @@ function go(session) {
       periodEndDay,
       periodEndMonth
     )}`,
+    displayRecordReceipt: receivedDate === null,
     licenceId,
     licenceRef,
     pageTitle: 'Abstraction return',
@@ -50,6 +53,7 @@ function go(session) {
     returnReference,
     selectedOption: whatToDo ?? whatToDo,
     siteDescription,
+    status,
     tariffType: twoPartTariff ? 'Two part tariff' : 'Standard tariff'
   }
 }
