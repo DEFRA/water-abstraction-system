@@ -238,7 +238,11 @@ describe('Licence model', () => {
 
         testLicenceEndDateChanges = []
         for (let i = 0; i < 2; i++) {
-          const licenceEndDateChange = await LicenceEndDateChangeHelper.add({ licenceId: testRecord.id })
+          const dateTypes = ['expired', 'revoked']
+          const licenceEndDateChange = await LicenceEndDateChangeHelper.add({
+            licenceId: testRecord.id,
+            dateType: dateTypes[i]
+          })
 
           testLicenceEndDateChanges.push(licenceEndDateChange)
         }
