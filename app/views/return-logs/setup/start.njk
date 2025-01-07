@@ -105,25 +105,20 @@
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
-      name: "howToEdit",
+      name: "whatToDo",
       errorMessage: error,
       fieldset: {
         legend: {
-          text: "How would you like to edit this return?",
+          text: "What do you want to do with this return?",
           isPageHeading: true,
           classes: "govuk-fieldset__legend--l"
         }
       },
       items: [
         {
-          value: 'individual',
-          text: "Enter individual volumes",
-          checked: selectedOption === 'individual'
-        },
-        {
-          value: 'new',
-          text: "Enter new volumes or readings",
-          checked: selectedOption === 'new'
+          value: 'enter',
+          text: "Enter and submit",
+          checked: selectedOption === 'enter'
         },
         {
           value: 'nil',
@@ -131,9 +126,9 @@
           checked: selectedOption === 'nil'
         },
         {
-          value: 'query',
-          text: queryText,
-          checked: selectedOption === 'query'
+          value: 'receipt',
+          text: 'Record receipt',
+          checked: selectedOption === 'receipt'
         }
       ]
     }) }}
