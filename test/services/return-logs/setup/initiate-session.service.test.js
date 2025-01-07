@@ -57,6 +57,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         licenceRef: licence.licenceRef,
         startDate: '2022-04-01T00:00:00.000Z',
         endDate: '2023-03-31T00:00:00.000Z',
+        receivedDate: returnLog.receivedDate,
         returnReference: returnLog.returnReference,
         status: returnLog.status,
         underQuery: returnLog.underQuery,

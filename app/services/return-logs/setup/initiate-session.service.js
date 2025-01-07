@@ -49,6 +49,7 @@ async function _fetchReturnLog(returnLogId) {
       'returnLogs.id as returnLogId',
       'returnLogs.startDate',
       'returnLogs.endDate',
+      'returnLogs.receivedDate',
       'returnLogs.returnReference',
       'returnLogs.status',
       'returnLogs.underQuery',
