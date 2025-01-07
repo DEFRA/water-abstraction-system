@@ -60,7 +60,7 @@ describe('Return Logs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/how-to-edit`)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/start`)
         })
       })
     })
