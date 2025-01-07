@@ -17,9 +17,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/{sessionId}/how-to-edit',
+    path: '/return-logs/setup/{sessionId}/start',
     options: {
-      handler: ReturnLogsSetupController.edit,
+      handler: ReturnLogsSetupController.start,
       app: {
         plainOutput: true
       },
@@ -32,9 +32,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-logs/setup/{sessionId}/how-to-edit',
+    path: '/return-logs/setup/{sessionId}/start',
     options: {
-      handler: ReturnLogsSetupController.submitEdit,
+      handler: ReturnLogsSetupController.submitStart,
       app: {
         plainOutput: true
       },

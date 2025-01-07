@@ -5,41 +5,41 @@
  * @module ReturnLogsSetupController
  */
 
-const EditReturnLogService = require('../services/return-logs/setup/edit-return-log.service.js')
+const StartService = require('../services/return-logs/setup/start.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
-const SubmitEditReturnLogService = require('../services/return-logs/setup/submit-edit-return-log.service.js')
-
-async function edit(request, h) {
-  const { sessionId } = request.params
-  const pageData = await EditReturnLogService.go(sessionId)
-
-  return h.view('return-logs/setup/how-to-edit.njk', { activeNavBar: 'search', ...pageData })
-}
+const SubmitStartService = require('../services/return-logs/setup/submit-start.service.js')
 
 async function setup(request, h) {
   const { returnLogId } = request.query
   const session = await InitiateSessionService.go(returnLogId)
 
-  return h.redirect(`/system/return-logs/setup/${session.id}/how-to-edit`)
+  return h.redirect(`/system/return-logs/setup/${session.id}/start`)
 }
 
-async function submitEdit(request, h) {
+async function start(request, h) {
+  const { sessionId } = request.params
+  const pageData = await StartService.go(sessionId)
+
+  return h.view('return-logs/setup/start.njk', { activeNavBar: 'search', ...pageData })
+}
+
+async function submitStart(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitEditReturnLogService.go(sessionId, request.payload)
+  const pageData = await SubmitStartService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('return-logs/setup/how-to-edit.njk', {
+    return h.view('return-logs/setup/start.njk', {
       activeNavBar: 'search',
       ...pageData
     })
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.howToEdit}`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.whatToDo}`)
 }
 
 module.exports = {
-  edit,
   setup,
-  submitEdit
+  start,
+  submitStart
 }

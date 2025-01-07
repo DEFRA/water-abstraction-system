@@ -1,23 +1,22 @@
 'use strict'
 
 /**
- * Formats the data ready for presenting in the abstraction return page
+ * Formats the data ready for presenting in the `/return-log-edit/{sessionId}/start` page
  * @module EditReturnLogPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats the data ready for presenting in the abstraction return page
+ * Formats the data ready for presenting in the `/return-log-edit/{sessionId}/start` page
  *
  * @param {module:SessionModel} session - The session instance to format
  *
- * @returns {object} page date needed for the abstraction return page
+ * @returns {object} page data needed for the `/return-log-edit/{sessionId}/start` page
  */
 function go(session) {
   const {
     endDate,
-    howToEdit,
     licenceId,
     licenceRef,
     periodStartDay,
@@ -30,7 +29,8 @@ function go(session) {
     siteDescription,
     startDate,
     twoPartTariff,
-    underQuery
+    underQuery,
+    whatToDo
   } = session
 
   return {
@@ -48,7 +48,7 @@ function go(session) {
     returnLogId,
     returnsPeriod: `From ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReference,
-    selectedOption: howToEdit ?? howToEdit,
+    selectedOption: whatToDo ?? whatToDo,
     siteDescription,
     tariffType: twoPartTariff ? 'Two part tariff' : 'Standard tariff'
   }
