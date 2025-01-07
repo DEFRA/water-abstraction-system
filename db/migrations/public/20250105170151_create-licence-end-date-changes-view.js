@@ -7,7 +7,7 @@ exports.up = function (knex) {
     view.as(
       knex('licence_end_date_changes')
         .withSchema('water')
-        .select(['id', 'licence_id', 'date_type', 'nald_date', 'wrls_date', 'created_at', 'updated_at'])
+        .select(['id', 'licence_id', 'date_type', 'change_date', 'nald_date', 'wrls_date', 'created_at', 'updated_at'])
     )
   })
 }

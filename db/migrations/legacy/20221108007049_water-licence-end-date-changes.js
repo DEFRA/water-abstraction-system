@@ -9,13 +9,17 @@ exports.up = function (knex) {
 
     // Data
     table.uuid('licence_id').notNullable()
-    table.string('date_type').notNullable()
+    table.text('date_type').notNullable()
+    table.date('change_date').notNullable()
     table.date('nald_date')
     table.date('wrls_date')
 
     // Timestamps
     table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     table.timestamp('updated_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+
+    // Constraints
+    table.unique(['licence_id', 'date_type'], { useConstraint: true })
   })
 }
 
