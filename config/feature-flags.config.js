@@ -12,6 +12,7 @@ require('dotenv').config()
 const config = {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
   // converting the env var to a boolean
+  enableLicenceConditionsView: String(process.env.ENABLE_LICENCE_CONDITIONS_VIEW) === 'true' || false,
   enableLicencePointsView: String(process.env.ENABLE_LICENCE_POINTS_VIEW) === 'true' || false,
   enableLicencePurposesView: String(process.env.ENABLE_LICENCE_PURPOSES_VIEW) === 'true' || false,
   enableMonitoringStationsView: String(process.env.ENABLE_MONITORING_STATIONS_VIEW) === 'true' || false,
