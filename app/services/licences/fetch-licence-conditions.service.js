@@ -1,7 +1,8 @@
 'use strict'
 
 /**
- * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ * Fetches the licence condition types, along with the related purpose and points data required for the licence
+ * conditions page
  * @module FetchLicenceConditionsService
  */
 
@@ -11,12 +12,13 @@ const LicenceVersionPurposeConditionModel = require('../../models/licence-versio
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 /**
- * Fetches a licence's condition types their related purpose and points data needed for the licence conditions page
+ * Fetches the licence condition types, along with the related purpose and points data required for the licence
+ * conditions page
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<object>} An object containing the license and condition types, along with their related purposes
- * and points data, required for the license conditions page
+ * @returns {Promise<object>} An object containing the licence and condition types, along with their related purposes
+ * and points data, required for the licence conditions page
  */
 async function go(licenceId) {
   const conditions = await _fetchConditions(licenceId)
