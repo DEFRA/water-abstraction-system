@@ -96,7 +96,7 @@ describe('Licences controller', () => {
         }
       })
 
-      describe('when a request is valid and has contacts', () => {
+      describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
           Sinon.stub(ViewLicenceConditionsService, 'go').resolves(_viewLicenceConditions())
         })
