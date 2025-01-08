@@ -23,7 +23,7 @@
       errorList: [
         {
           text: error.text,
-          href: '#howToEdit'
+          href: '#whatToDo'
         }
       ]
       }) }}
@@ -36,7 +36,7 @@
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
 
       {# Return status #}
-      <p>{{ statusTag(status) }}</p>
+      <p data-test="return-status">{{ statusTag(status) }}</p>
 
       {# Bill run meta-data #}
       {{ govukSummaryList({
