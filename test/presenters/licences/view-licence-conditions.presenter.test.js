@@ -46,7 +46,8 @@ describe('View Licence Conditions presenter', () => {
                   label: 'End date',
                   value: '30/09'
                 },
-                purpose: 'Animal Watering & General Use In Non Farming Situations'
+                purpose: 'Animal Watering & General Use In Non Farming Situations',
+                subcodeDescription: 'Political - Hosepipe Ban'
               }
             ],
             displayTitle: 'Political cessation condition'
@@ -217,6 +218,14 @@ describe('View Licence Conditions presenter', () => {
           expect(result.conditionTypes[0].conditions[0].purpose).to.equal(
             'Animal Watering & General Use In Non Farming Situations'
           )
+        })
+      })
+
+      describe('the "subcodeDescription" property', () => {
+        it('returns the licences subcode description value', () => {
+          const result = ViewLicenceConditionsPresenter.go(data)
+
+          expect(result.conditionTypes[0].conditions[0].subcodeDescription).to.equal('Political - Hosepipe Ban')
         })
       })
     })

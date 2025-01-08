@@ -48,7 +48,8 @@ describe('View Licence Conditions service', () => {
                 label: 'End date',
                 value: '30/09'
               },
-              purpose: 'Animal Watering & General Use In Non Farming Situations'
+              purpose: 'Animal Watering & General Use In Non Farming Situations',
+              subcodeDescription: 'Political - Hosepipe Ban'
             }
           ],
           displayTitle: 'Political cessation condition'
