@@ -116,25 +116,25 @@
       },
       items: [
         {
-          value: 'enter',
+          value: 'enterReturn',
           text: "Enter and submit",
-          checked: selectedOption === 'enter'
+          checked: selectedOption === 'enterReturn'
         },
         {
           divider: 'or'
         } if displayRecordReceipt === false,
         {
-          value: 'nil',
+          value: 'nilReturn',
           text: "Enter a nil return",
-          checked: selectedOption === 'nil'
+          checked: selectedOption === 'nilReturn'
         },
         {
           divider: 'or'
         } if displayRecordReceipt === true,
         {
-          value: 'receipt',
+          value: 'recordReceipt',
           text: 'Record receipt',
-          checked: selectedOption === 'receipt'
+          checked: selectedOption === 'recordReceipt'
         } if displayRecordReceipt === true
       ]
     }) }}
