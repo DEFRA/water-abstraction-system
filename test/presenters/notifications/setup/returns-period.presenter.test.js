@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notifications/setup/returns-period.presenter.js')
 
-describe('Notifications Setup - Returns Period presenter', () => {
+describe.only('Notifications Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
@@ -42,7 +42,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
       beforeEach(() => {
         session = { returnsPeriod: 'quarterOne' }
 
-        testDate = new Date(`${currentYear}-01-29`)
+        testDate = new Date(`${currentYear}-04-29`)
         clock = Sinon.useFakeTimers(testDate)
       })
 
@@ -54,26 +54,26 @@ describe('Notifications Setup - Returns Period presenter', () => {
         expect(currentReturnPeriod).to.equal({
           checked: true,
           value: 'quarterOne',
-          text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
-          hint: { text: `Due date 28 April ${currentYear}` }
+          text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
+          hint: { text: `Due date 28 July ${currentYear}` }
         })
       })
     })
-    describe('When the current period is due for "quarterOne"', () => {
+    describe('When the current period is due for "quarterFour"', () => {
       describe('and the current date is between 29 January - 28 April', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-01-29`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        it('returns the current return period as "quarterOne"', () => {
+        it('returns the current return period as "quarterFour"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
           expect(currentReturnPeriod).to.equal({
             checked: false,
-            value: 'quarterOne',
+            value: 'quarterFour',
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
             hint: { text: `Due date 28 April ${currentYear}` }
           })
@@ -94,10 +94,45 @@ describe('Notifications Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('When the current period is due for "quarterTwo"', () => {
+    describe('When the current period is due for "quarterOne"', () => {
       describe('and the current date is between 29 April - 28 July', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-04-29`)
+          clock = Sinon.useFakeTimers(testDate)
+        })
+
+        it('returns the current return period as "quarterOne"', () => {
+          const {
+            returnsPeriod: [currentReturnPeriod]
+          } = ReturnsPeriodPresenter.go(session)
+
+          expect(currentReturnPeriod).to.equal({
+            checked: false,
+            value: 'quarterOne',
+            text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
+            hint: { text: `Due date 28 July ${currentYear}` }
+          })
+        })
+
+        it('returns the next return period as "quarterTwo"', () => {
+          const {
+            returnsPeriod: [, nextReturnPeriod]
+          } = ReturnsPeriodPresenter.go(session)
+
+          expect(nextReturnPeriod).to.equal({
+            checked: false,
+            value: 'quarterTwo',
+            text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
+            hint: { text: `Due date 28 October ${currentYear}` }
+          })
+        })
+      })
+    })
+
+    describe('When the current period is due for "quarterTwo"', () => {
+      describe('and the current date is between 29 July - 28 October', () => {
+        beforeEach(() => {
+          testDate = new Date(`${currentYear}-07-29`)
           clock = Sinon.useFakeTimers(testDate)
         })
 
@@ -109,41 +144,6 @@ describe('Notifications Setup - Returns Period presenter', () => {
           expect(currentReturnPeriod).to.equal({
             checked: false,
             value: 'quarterTwo',
-            text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
-            hint: { text: `Due date 28 July ${currentYear}` }
-          })
-        })
-
-        it('returns the next return period as "quarterThree"', () => {
-          const {
-            returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
-
-          expect(nextReturnPeriod).to.equal({
-            checked: false,
-            value: 'quarterThree',
-            text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
-            hint: { text: `Due date 28 October ${currentYear}` }
-          })
-        })
-      })
-    })
-
-    describe('When the current period is due for "quarterThree"', () => {
-      describe('and the current date is between 29 July - 28 October', () => {
-        beforeEach(() => {
-          testDate = new Date(`${currentYear}-07-29`)
-          clock = Sinon.useFakeTimers(testDate)
-        })
-
-        it('returns the current return period as "quarterThree"', () => {
-          const {
-            returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
-
-          expect(currentReturnPeriod).to.equal({
-            checked: false,
-            value: 'quarterThree',
             text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
             hint: { text: `Due date 28 October ${currentYear}` }
           })
@@ -184,6 +184,41 @@ describe('Notifications Setup - Returns Period presenter', () => {
           })
         })
 
+        it('returns the next return period as "quarterThree"', () => {
+          const {
+            returnsPeriod: [, nextReturnPeriod]
+          } = ReturnsPeriodPresenter.go(session)
+
+          expect(nextReturnPeriod).to.equal({
+            checked: false,
+            value: 'quarterThree',
+            text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
+            hint: { text: `Due date 28 January ${nextYear}` }
+          })
+        })
+      })
+    })
+
+    describe('When the current period is due for "quarterThree"', () => {
+      describe('and the current date is between 29 November - 31 December', () => {
+        beforeEach(() => {
+          testDate = new Date(`${currentYear}-11-29`)
+          clock = Sinon.useFakeTimers(testDate)
+        })
+
+        it('returns the current return period as "quarterThree"', () => {
+          const {
+            returnsPeriod: [currentReturnPeriod]
+          } = ReturnsPeriodPresenter.go(session)
+
+          expect(currentReturnPeriod).to.equal({
+            checked: false,
+            value: 'quarterThree',
+            text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
+            hint: { text: `Due date 28 January ${nextYear}` }
+          })
+        })
+
         it('returns the next return period as "quarterFour"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
@@ -192,41 +227,6 @@ describe('Notifications Setup - Returns Period presenter', () => {
           expect(nextReturnPeriod).to.equal({
             checked: false,
             value: 'quarterFour',
-            text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
-            hint: { text: `Due date 28 January ${nextYear}` }
-          })
-        })
-      })
-    })
-
-    describe('When the current period is due for "quarterFour"', () => {
-      describe('and the current date is between 29 November - 31 December', () => {
-        beforeEach(() => {
-          testDate = new Date(`${currentYear}-11-29`)
-          clock = Sinon.useFakeTimers(testDate)
-        })
-
-        it('returns the current return period as "quarterFour"', () => {
-          const {
-            returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
-
-          expect(currentReturnPeriod).to.equal({
-            checked: false,
-            value: 'quarterFour',
-            text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
-            hint: { text: `Due date 28 January ${nextYear}` }
-          })
-        })
-
-        it('returns the next return period as "quarterOne"', () => {
-          const {
-            returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
-
-          expect(nextReturnPeriod).to.equal({
-            checked: false,
-            value: 'quarterOne',
             text: `Quarterly 1 January ${nextYear} to 31 March ${nextYear}`,
             hint: { text: `Due date 28 April ${nextYear}` }
           })
@@ -239,14 +239,14 @@ describe('Notifications Setup - Returns Period presenter', () => {
           clock = Sinon.useFakeTimers(testDate)
         })
 
-        it('returns the current return period as "quarterFour" - with the start and end date in the previous year', () => {
+        it('returns the current return period as "quarterThree" - with the start and end date in the previous year', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
           expect(currentReturnPeriod).to.equal({
             checked: false,
-            value: 'quarterFour',
+            value: 'quarterThree',
             text: `Quarterly 1 October ${previousYear} to 31 December ${previousYear}`,
             hint: { text: `Due date 28 January ${currentYear}` }
           })
@@ -259,7 +259,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).to.equal({
             checked: false,
-            value: 'quarterOne',
+            value: 'quarterFour',
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
             hint: { text: `Due date 28 April ${currentYear}` }
           })
