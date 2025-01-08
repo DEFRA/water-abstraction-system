@@ -5,7 +5,7 @@
  * @module ReturnLogsSetupController
  */
 
-const StartService = require('../services/return-logs/setup/start.js')
+const StartService = require('../services/return-logs/setup/start.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const SubmitStartService = require('../services/return-logs/setup/submit-start.service.js')
 
@@ -35,7 +35,7 @@ async function submitStart(request, h) {
     })
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.whatToDo}`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/received`)
 }
 
 module.exports = {
