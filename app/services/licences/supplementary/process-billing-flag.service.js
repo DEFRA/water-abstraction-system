@@ -60,8 +60,8 @@ async function go(payload) {
  * @private
  */
 async function _determineFlags(payload) {
-  if (payload.importedLicence) {
-    return DetermineImportedLicenceFlagsService.go(payload.importedLicence, payload.licenceId)
+  if (payload.changedDateDetails) {
+    return DetermineImportedLicenceFlagsService.go(payload.licenceId, payload.changedDateDetails.changeDate)
   }
   if (payload.chargeVersionId) {
     return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)

@@ -6,7 +6,6 @@
  */
 
 const ExportService = require('../services/jobs/export/export.service.js')
-const ImportLicence = require('../services/jobs/import/import-licences.service.js')
 const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-licence-updates.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
@@ -26,12 +25,6 @@ const NOT_FOUND_STATUS_CODE = 404
  */
 async function exportDb(_request, h) {
   ExportService.go()
-
-  return h.response().code(NO_CONTENT_STATUS_CODE)
-}
-
-async function ImportLicences(_request, h) {
-  ImportLicence.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
@@ -68,7 +61,6 @@ async function returnLogs(request, h) {
 
 module.exports = {
   exportDb,
-  ImportLicences,
   licenceUpdates,
   returnLogs,
   sessionCleanup,
