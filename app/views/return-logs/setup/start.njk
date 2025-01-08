@@ -5,6 +5,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% from "macros/review-status-tag.njk" import statusTag %}
+
 {% block breadcrumbs %}
   {# Back link #}
   {{ govukBackLink({
@@ -32,6 +34,9 @@
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+
+      {# Return status #}
+      <p>{{ statusTag(status) }}</p>
 
       {# Bill run meta-data #}
       {{ govukSummaryList({
