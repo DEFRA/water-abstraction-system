@@ -5,7 +5,7 @@
  * @module CreateQuarterlyReturnCycleService
  */
 
-const { quarterlyReturnPeriods } = require('../../../lib/static-lookups.lib.js')
+const { determineReturnsPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
  * Given a return cycle, generate each quarterly return period
@@ -19,56 +19,36 @@ function go(returnCycle) {
     return []
   }
 
-  const year = returnCycle.startDate.getFullYear()
+  // To reuse as much code as possible we use two dates to determine the quarterly return periods
+  // The first one uses the start date of the return cycle, and the second uses the end date
+  // This enables us to get the correct year for quarter four while reusing exisitng code
+  const quarterlyReturnPeriods = determineReturnsPeriods(returnCycle.startDate)
+  const quarterFourReturnPeriod = determineReturnsPeriods(returnCycle.endDate)
 
   return [
     {
-      dueDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterOne.dueDate.month + 1}-${quarterlyReturnPeriods.quarterOne.dueDate.day}`
-      ),
-      endDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterOne.endDate.month + 1}-${quarterlyReturnPeriods.quarterOne.endDate.day}`
-      ),
+      dueDate: quarterlyReturnPeriods.quarterOne.dueDate,
+      endDate: quarterlyReturnPeriods.quarterOne.endDate,
       id: returnCycle.id,
-      startDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterOne.startDate.month + 1}-${quarterlyReturnPeriods.quarterOne.startDate.day}`
-      )
+      startDate: quarterlyReturnPeriods.quarterOne.startDate
     },
     {
-      dueDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterTwo.dueDate.month + 1}-${quarterlyReturnPeriods.quarterTwo.dueDate.day}`
-      ),
-      endDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterTwo.endDate.month + 1}-${quarterlyReturnPeriods.quarterTwo.endDate.day}`
-      ),
+      dueDate: quarterlyReturnPeriods.quarterTwo.dueDate,
+      endDate: quarterlyReturnPeriods.quarterTwo.endDate,
       id: returnCycle.id,
-      startDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterTwo.startDate.month + 1}-${quarterlyReturnPeriods.quarterTwo.startDate.day}`
-      )
+      startDate: quarterlyReturnPeriods.quarterTwo.startDate
     },
     {
-      dueDate: new Date(
-        `${year + 1}-${quarterlyReturnPeriods.quarterThree.dueDate.month + 1}-${quarterlyReturnPeriods.quarterThree.dueDate.day}`
-      ),
-      endDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterThree.endDate.month + 1}-${quarterlyReturnPeriods.quarterThree.endDate.day}`
-      ),
+      dueDate: quarterlyReturnPeriods.quarterThree.dueDate,
+      endDate: quarterlyReturnPeriods.quarterThree.endDate,
       id: returnCycle.id,
-      startDate: new Date(
-        `${year}-${quarterlyReturnPeriods.quarterThree.startDate.month + 1}-${quarterlyReturnPeriods.quarterThree.startDate.day}`
-      )
+      startDate: quarterlyReturnPeriods.quarterThree.startDate
     },
     {
-      dueDate: new Date(
-        `${year + 1}-${quarterlyReturnPeriods.quarterFour.dueDate.month + 1}-${quarterlyReturnPeriods.quarterFour.dueDate.day}`
-      ),
-      endDate: new Date(
-        `${year + 1}-${quarterlyReturnPeriods.quarterFour.endDate.month + 1}-${quarterlyReturnPeriods.quarterFour.endDate.day}`
-      ),
+      dueDate: quarterFourReturnPeriod.quarterFour.dueDate,
+      endDate: quarterFourReturnPeriod.quarterFour.endDate,
       id: returnCycle.id,
-      startDate: new Date(
-        `${year + 1}-${quarterlyReturnPeriods.quarterFour.startDate.month + 1}-${quarterlyReturnPeriods.quarterFour.startDate.day}`
-      )
+      startDate: quarterFourReturnPeriod.quarterFour.startDate
     }
   ]
 }
