@@ -49,7 +49,7 @@ function _conditionTypes(licenceVersionPurposeConditionTypes) {
 }
 
 function _formatConditions(licenceVersionPurposeConditions, conditionType) {
-  const { description, param1Label, param2Label } = conditionType
+  const { description, param1Label, param2Label, subcodeDescription } = conditionType
 
   return licenceVersionPurposeConditions.map((licenceVersionPurposeCondition) => {
     const { licenceVersionPurpose, notes, param1, param2 } = licenceVersionPurposeCondition
@@ -60,7 +60,8 @@ function _formatConditions(licenceVersionPurposeConditions, conditionType) {
       otherInformation: notes ? notes.trim() : null,
       param1: _param(param1Label, param1, 1),
       param2: _param(param2Label, param2, 2),
-      purpose: licenceVersionPurpose.purpose.description
+      purpose: licenceVersionPurpose.purpose.description,
+      subcodeDescription
     }
   })
 }
