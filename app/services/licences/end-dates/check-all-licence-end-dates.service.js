@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Compares all licences in the NALD extract with those in WRLS and processes any with changed end dates
- * @module ProcessLicenceChangesService
+ * Checks all licences in the NALD extract against those in WRLS and records any with changed end dates
+ * @module CheckAllLicenceEndDatesService
  */
 
 const FetchLicences = require('./fetch-licences.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const ProcessLicenceService = require('./process-licence.service.js')
+const CheckLicenceEndDatesService = require('./check-licence-end-dates.service.js')
 
-const JobConfig = require('../../../../config/jobs.config.js')
+const LicencesConfig = require('../../../../config/licences.config.js')
 
 /**
- * Compares all licences in the NALD extract with those in WRLS and processes any with changed end dates
+ * Checks all licences in the NALD extract against those in WRLS and records any with changed end dates
  *
  * Overnight the {@link https://github.com/DEFRA/water-abstraction-import | water-abstraction-import} app imports each
  * abstraction licence found in NALD. New licences are added, existing ones are updated.
@@ -25,12 +25,12 @@ const JobConfig = require('../../../../config/jobs.config.js')
  * return logs.
  *
  * Because we are migrating from the legacy apps we couldn't trigger these processes in **water-abstraction-import**.
- * Instead, we have this job. The one caveat is that it needs to be scheduled to run _after_ the
- * {@link https://github.com/DEFRA/water-abstraction-team/blob/main/jobs/import.md#nald-import | NALD import job},
- * (specifically once the NALD data has been extracted and imported into the `import` schema), but _before_ the
+ * Instead, we have this, which is triggered from the
+ * {@link https://github.com/DEFRA/water-abstraction-team/blob/main/jobs/import.md#nald-import | NALD import job}.
+ *
+ * It compares the records and logs the details of changed licences in `water.licence_end_date_changes. Later, when the
  * {@link https://github.com/DEFRA/water-abstraction-team/blob/main/jobs/import.md#nald-import | Licence import job}
- * runs. This is so these processes can see the differences between the NALD licence record and ours, to determine
- * if and what they need to do.
+ * runs it will trigger our `/process` end point that will iterate over the changes and process them.
  *
  * > If a licence in NALD does not have a status of DRAFT, and at least one current licence version then it will be
  * excluded
@@ -42,19 +42,19 @@ async function go() {
     // Fetch all licences from NALD and WRLS
     const licences = await FetchLicences.go()
 
-    // Process any licences that have changed end dates
-    await _processLicences(licences)
+    // Check for any licences with changed end dates
+    await _checkLicences(licences)
 
-    // Log the time it took to complete the job
-    calculateAndLogTimeTaken(startTime, 'Licence changes job complete', { count: licences.length })
+    // Log the time it took to complete
+    calculateAndLogTimeTaken(startTime, 'Check all licence end dates complete', { count: licences.length })
   } catch (error) {
     // Log any errors that occur
-    global.GlobalNotifier.omfg('Licence changes job failed', null, error)
+    global.GlobalNotifier.omfg('Check all licence end dates failed', null, error)
   }
 }
 
 /**
- * Iterate over the licences in batches and process them
+ * Iterate over the licences in batches and check them
  *
  * {@link https://github.com/sindresorhus/p-map | p-map} is a dependency built by the same person who built
  * {@link https://github.com/sindresorhus/got | Got}.
@@ -67,13 +67,13 @@ async function go() {
  *
  * @private
  */
-async function _processLicences(licences) {
+async function _checkLicences(licences) {
   // The pMap dependency does not support CJS modules. This causes us a problem as we are locked into
   // using these for the time being. We've used the same workaround we used for Got (built by the same person) in
   // app/requests/base.request.js
   const pMap = (await import('p-map')).default
 
-  await pMap(licences, ProcessLicenceService.go, { concurrency: JobConfig.licenceChanges.batchSize })
+  await pMap(licences, CheckLicenceEndDatesService.go, { concurrency: LicencesConfig.endDates.batchSize })
 }
 
 module.exports = {
