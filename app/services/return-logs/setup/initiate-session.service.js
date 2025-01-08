@@ -51,6 +51,7 @@ async function _fetchReturnLog(returnLogId) {
       'returnLogs.endDate',
       'returnLogs.receivedDate',
       'returnLogs.returnReference',
+      'returnLogs.dueDate',
       'returnLogs.status',
       'returnLogs.underQuery',
       ref('returnLogs.metadata:nald.periodStartDay').castInt().as('periodStartDay'),

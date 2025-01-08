@@ -59,6 +59,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         endDate: '2023-03-31T00:00:00.000Z',
         receivedDate: returnLog.receivedDate,
         returnReference: returnLog.returnReference,
+        dueDate: '2023-04-28T00:00:00.000Z',
         status: returnLog.status,
         underQuery: returnLog.underQuery,
         periodStartDay: returnLog.metadata.nald.periodStartDay,
