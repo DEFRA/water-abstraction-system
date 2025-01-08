@@ -17,7 +17,7 @@ describe('Return Logs Setup - Received presenter', () => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
       data: {
-        licenceRef: '01/01'
+        returnReference: '012345'
       }
     }
   })
@@ -28,7 +28,7 @@ describe('Return Logs Setup - Received presenter', () => {
 
       expect(result).to.equal({
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        licenceRef: '01/01',
+        returnReference: '012345',
         receivedDateOption: null,
         receivedDateDay: null,
         receivedDateMonth: null,

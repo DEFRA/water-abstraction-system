@@ -20,7 +20,7 @@ describe('Return Logs Setup - Received service', () => {
     session = await SessionHelper.add({
       data: {
         licenceId: '736144f1-203d-46bb-9968-5137ae06a7bd',
-        licenceRef: '01/01'
+        returnReference: '012345'
       },
       id: 'd958333a-4acd-4add-9e2b-09e14c6b72f3'
     })
@@ -40,12 +40,12 @@ describe('Return Logs Setup - Received service', () => {
         {
           activeNavBar: 'search',
           pageTitle: 'When was the return received?',
-          licenceRef: '01/01',
+          returnReference: '012345',
           backLink: `/system/return-logs/setup/${session.id}/start`,
           receivedDateOption: null,
-          anotherReceivedDateDay: null,
-          anotherReceivedDateMonth: null,
-          anotherReceivedDateYear: null
+          receivedDateDay: null,
+          receivedDateMonth: null,
+          receivedDateYear: null
         },
         { skip: ['sessionId'] }
       )
