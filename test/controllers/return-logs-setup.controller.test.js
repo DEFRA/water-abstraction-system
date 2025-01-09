@@ -28,7 +28,7 @@ describe('Return Logs Setup controller', () => {
     server = await init()
   })
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -45,7 +45,7 @@ describe('Return Logs Setup controller', () => {
     describe('GET', () => {
       const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         options = {
           method: 'GET',
           url: '/return-logs/setup?returnLogId=v1:1:123:10021668:2022-04-01:2023-03-31',
@@ -57,7 +57,7 @@ describe('Return Logs Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
         })
 
@@ -73,7 +73,7 @@ describe('Return Logs Setup controller', () => {
 
   describe('return-logs/setup/{sessionId}/received', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = {
           method: 'GET',
           url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received',
@@ -85,7 +85,7 @@ describe('Return Logs Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ReceivedService, 'go').resolves({
             sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
@@ -104,12 +104,12 @@ describe('Return Logs Setup controller', () => {
 
     describe('POST', () => {
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           options = _postOptions('received', {})
         })
 
         describe('and the received date is entered', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
 
@@ -125,7 +125,7 @@ describe('Return Logs Setup controller', () => {
       })
 
       describe('when a request is invalid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           options = _postOptions('received')
 
           Sinon.stub(SubmitReceivedService, 'go').resolves({
