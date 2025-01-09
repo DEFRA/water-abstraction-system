@@ -48,21 +48,17 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   const selectedOption = payload['received-date-options']
-
   session.receivedDateOptions = selectedOption
+  const todaysDate = new Date(new Date().setHours(0, 0, 0, 0))
 
   if (selectedOption === 'today') {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    session.receivedDate = today
+    session.receivedDate = todaysDate
   } else if (selectedOption === 'yesterday') {
     // The setDate method updates the date object in place and returns a timestamp,
     // not the updated date object itself. To ensure we store the correct date,
     // we first modify the 'yesterday' variable and then assign it to session.receivedDate.
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    yesterday.setHours(0, 0, 0, 0)
-    session.receivedDate = yesterday
+    todaysDate.setDate(todaysDate.getDate() - 1)
+    session.receivedDate = todaysDate
   } else {
     session.receivedDateDay = payload['received-date-day']
     session.receivedDateMonth = payload['received-date-month']
