@@ -26,31 +26,20 @@ function go(returnCycle) {
   const quarterFourReturnPeriod = determineReturnsPeriods(returnCycle.endDate)
 
   return [
-    {
-      dueDate: quarterlyReturnPeriods.quarterOne.dueDate,
-      endDate: quarterlyReturnPeriods.quarterOne.endDate,
-      id: returnCycle.id,
-      startDate: quarterlyReturnPeriods.quarterOne.startDate
-    },
-    {
-      dueDate: quarterlyReturnPeriods.quarterTwo.dueDate,
-      endDate: quarterlyReturnPeriods.quarterTwo.endDate,
-      id: returnCycle.id,
-      startDate: quarterlyReturnPeriods.quarterTwo.startDate
-    },
-    {
-      dueDate: quarterlyReturnPeriods.quarterThree.dueDate,
-      endDate: quarterlyReturnPeriods.quarterThree.endDate,
-      id: returnCycle.id,
-      startDate: quarterlyReturnPeriods.quarterThree.startDate
-    },
-    {
-      dueDate: quarterFourReturnPeriod.quarterFour.dueDate,
-      endDate: quarterFourReturnPeriod.quarterFour.endDate,
-      id: returnCycle.id,
-      startDate: quarterFourReturnPeriod.quarterFour.startDate
-    }
+    _returnPeriod(returnCycle, quarterlyReturnPeriods.quarterOne),
+    _returnPeriod(returnCycle, quarterlyReturnPeriods.quarterTwo),
+    _returnPeriod(returnCycle, quarterlyReturnPeriods.quarterThree),
+    _returnPeriod(returnCycle, quarterFourReturnPeriod.quarterFour)
   ]
+}
+
+function _returnPeriod(returnCycle, periodDetails) {
+  return {
+    dueDate: periodDetails.dueDate,
+    endDate: periodDetails.endDate,
+    id: returnCycle.id,
+    startDate: periodDetails.startDate
+  }
 }
 
 module.exports = {
