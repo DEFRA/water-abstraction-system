@@ -1,0 +1,35 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: "returns-period"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#returnsPeriod-error"
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <div class="govuk-body">
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
+
+      {{ govukButton({ text: "Send x invitations", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}
