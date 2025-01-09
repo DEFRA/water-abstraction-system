@@ -52,13 +52,16 @@ async function _save(session, payload) {
   session.receivedDateOptions = selectedOption
 
   if (selectedOption === 'today') {
-    session.receivedDate = new Date()
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    session.receivedDate = today
   } else if (selectedOption === 'yesterday') {
     // The setDate method updates the date object in place and returns a timestamp,
     // not the updated date object itself. To ensure we store the correct date,
     // we first modify the 'yesterday' variable and then assign it to session.receivedDate.
     const yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - 1)
+    yesterday.setHours(0, 0, 0, 0)
     session.receivedDate = yesterday
   } else {
     session.receivedDateDay = payload['received-date-day']
