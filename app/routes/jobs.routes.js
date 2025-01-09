@@ -19,20 +19,6 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/import-licences',
-    options: {
-      handler: JobsController.ImportLicences,
-      app: {
-        plainOutput: true
-      },
-      auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
     path: '/jobs/licence-updates',
     options: {
       handler: JobsController.licenceUpdates,

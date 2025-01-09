@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
-const ImportLicence = require('../../app/services/jobs/import/import-licences.service.js')
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../../app/services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
@@ -29,9 +28,9 @@ describe('Jobs controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
+    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
     Sinon.stub(server.logger, 'error')
+    Sinon.stub(server.logger, 'info')
 
     // We silence sending a notification to our Errbit instance using Airbrake
     Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
@@ -50,26 +49,6 @@ describe('Jobs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ExportService, 'go').resolves()
-        })
-
-        it('returns a 204 response', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(204)
-        })
-      })
-    })
-  })
-
-  describe('/jobs/import-licence', () => {
-    describe('POST', () => {
-      beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/import-licences' }
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          Sinon.stub(ImportLicence, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {
@@ -146,30 +125,6 @@ describe('Jobs controller', () => {
       describe('POST', () => {
         beforeEach(() => {
           options = { method: 'POST', url: '/jobs/return-logs/summer', payload: {} }
-        })
-
-        describe('when the request succeeds', () => {
-          beforeEach(async () => {
-            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
-          })
-
-          it('returns a 204 response', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(204)
-          })
-        })
-      })
-    })
-
-    describe('when the licence reference is known', () => {
-      describe('POST', () => {
-        beforeEach(() => {
-          options = {
-            method: 'POST',
-            url: '/jobs/return-logs/summer',
-            payload: { licenceReference: 'AT/Test' }
-          }
         })
 
         describe('when the request succeeds', () => {

@@ -1,8 +1,7 @@
 'use strict'
 
 /**
- * Determines if a licence should be flagged for supplementary billing based on changes to the expired/lapsed/revoked
- * dates
+ * Determines if a licence should be flagged for supplementary billing based on changes to its 'end dates'
  * @module DetermineImportedLicenceFlagsService
  */
 
@@ -12,8 +11,7 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 const SROC_START_DATE = new Date('2022-04-01')
 
 /**
- * Determines if a licence should be flagged for supplementary billing based on changes to the expired/lapsed/revoked
- * dates
+ * Determines if a licence should be flagged for supplementary billing based on changes to its 'end dates'
  *
  * This service is triggered when an end date change has already been confirmed and determines the appropriate
  * supplementary billing flags (Pre-SROC, SROC, or two-part tariff) for the licence. It compares the updated end
@@ -34,21 +32,20 @@ const SROC_START_DATE = new Date('2022-04-01')
  * licence doesn't have the correct charge versions to get picked up in a bill run. The service this passes
  * back to always persists the flags it receives so we do this check before we check the dates.
  *
- * @param {object} importedLicence - Object representing the updated licence being imported
- * @param {string} licenceId - The UUID of the licence being imported
+ * @param {string} licenceId - The UUID of the imported licence with a changed end date
+ * @param {Date} changeDate - The date of the change
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go(importedLicence, licenceId) {
+async function go(licenceId, changeDate) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
   const { endDate } = determineCurrentFinancialYear()
-  const earliestChangedDate = _earliestChangedDate(importedLicence, existingLicenceDetails, endDate)
   const { flagForSrocSupplementary, flagForPreSrocSupplementary } = _determineExistingFlags(existingLicenceDetails)
 
   const result = {
     licenceId: existingLicenceDetails.id,
     regionId: existingLicenceDetails.region_id,
-    startDate: earliestChangedDate,
+    startDate: changeDate > endDate ? null : changeDate,
     endDate,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
@@ -57,11 +54,11 @@ async function go(importedLicence, licenceId) {
 
   // If not set it means none of the dates changed were before the current financial year end so there is no reason
   // to change anything on the flags
-  if (!earliestChangedDate) {
+  if (!result.startDate) {
     return result
   }
 
-  _updateFlags(earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result)
+  _updateFlags(existingLicenceDetails, flagForPreSrocSupplementary, result)
 
   return result
 }
@@ -87,39 +84,6 @@ function _determineExistingFlags(existingLicenceDetails) {
   return { flagForSrocSupplementary, flagForPreSrocSupplementary }
 }
 
-function _earliestChangedDate(importedLicence, existingLicenceDetails, currentFinancialYearEndDate) {
-  const changedDates = []
-
-  let date
-
-  // NOTE: In JavaScript, comparing date objects directly can lead to incorrect results, as two date objects, even with
-  // the same date and time, are treated as different objects. To avoid this, we convert the dates to strings for
-  // comparison. Normally, you might use getTime() to compare dates, but since any of these values can be null, calling
-  // getTime() on a null value would result in an error. Using strings safely handles null values.
-  if (String(importedLicence.expiredDate) !== String(existingLicenceDetails.expired_date)) {
-    date = importedLicence.expiredDate ?? existingLicenceDetails.expired_date
-    changedDates.push(date)
-  }
-
-  if (String(importedLicence.lapsedDate) !== String(existingLicenceDetails.lapsed_date)) {
-    date = importedLicence.lapsedDate ?? existingLicenceDetails.lapsed_date
-    changedDates.push(date)
-  }
-
-  if (String(importedLicence.revokedDate) !== String(existingLicenceDetails.revoked_date)) {
-    date = importedLicence.revokedDate ?? existingLicenceDetails.revoked_date
-    changedDates.push(date)
-  }
-
-  // Filter out those greater than the current financial year end date
-  const filteredDates = changedDates.filter((changedDate) => {
-    return changedDate < currentFinancialYearEndDate
-  })
-
-  // Now work out the earliest end date from those that have changed
-  return filteredDates.length > 0 ? new Date(Math.min(...filteredDates)) : null
-}
-
 /**
  * Updates the supplementary billing flags for a licence based on the earliest changed date and existing licence details
  *
@@ -139,11 +103,11 @@ function _earliestChangedDate(importedLicence, existingLicenceDetails, currentFi
  *
  * @private
  */
-function _updateFlags(earliestChangedDate, existingLicenceDetails, flagForPreSrocSupplementary, result) {
+function _updateFlags(existingLicenceDetails, flagForPreSrocSupplementary, result) {
   if (!flagForPreSrocSupplementary) {
     const { pre_sroc_charge_versions: chargeVersions } = existingLicenceDetails
 
-    result.flagForPreSrocSupplementary = chargeVersions && earliestChangedDate < SROC_START_DATE
+    result.flagForPreSrocSupplementary = chargeVersions && result.startDate < SROC_START_DATE
   }
 
   result.flagForSrocSupplementary = existingLicenceDetails.sroc_charge_versions
