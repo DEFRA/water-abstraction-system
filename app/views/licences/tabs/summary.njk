@@ -145,7 +145,13 @@
             {{ abstractionConditions[0] }}
           {% endif %}
         </div>
-        <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>
+        <div>
+          {% if enableLicenceConditionsView %}
+            <a href="/system/licences/{{ licenceId }}/conditions">View details of the abstraction conditions</a>
+          {% else %}
+            <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>
+          {% endif %}
+        </div>
       </dd>
     </div>
   {% endif %}
