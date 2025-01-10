@@ -12,6 +12,7 @@ const MarkForSupplementaryBillingService = require('../services/licences/supplem
 const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
+const ViewLicenceConditionsService = require('../services/licences/view-licence-conditions.service.js')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
 const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
@@ -105,6 +106,16 @@ async function viewCommunications(request, h) {
   const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
 
   return h.view(ViewLicencePage, {
+    ...pageData
+  })
+}
+
+async function viewLicenceConditions(request, h) {
+  const { id } = request.params
+
+  const pageData = await ViewLicenceConditionsService.go(id)
+
+  return h.view('licences/conditions.njk', {
     ...pageData
   })
 }
@@ -216,6 +227,7 @@ module.exports = {
   viewCommunications,
   viewLicenceContacts,
   viewHistory,
+  viewLicenceConditions,
   viewLicenceContactDetails,
   viewLicencePoints,
   viewLicencePurposes,
