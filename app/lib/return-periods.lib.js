@@ -16,30 +16,35 @@ const { returnPeriodDates } = require('./static-lookups.lib.js')
  *
  * @param {object} returnCycle - The return cycle to be broken into periods.
  *
- * @returns {array<object>} An object containing calculated dates for all return periods
+ * @returns {Array<object>} An object containing calculated dates for all return periods
  */
 function determineReturnsPeriods(returnCycle) {
-  return [{
+  return [
+    {
       startDate: _startDate(returnCycle.startDate, returnPeriodDates.quarterOne),
       endDate: _endDate(returnCycle.startDate, returnPeriodDates.quarterOne),
       id: returnCycle.id,
       dueDate: _dueDate(returnCycle.startDate, returnPeriodDates.quarterOne)
-    }, {
+    },
+    {
       startDate: _startDate(returnCycle.startDate, returnPeriodDates.quarterTwo),
       endDate: _endDate(returnCycle.startDate, returnPeriodDates.quarterTwo),
       id: returnCycle.id,
       dueDate: _dueDate(returnCycle.startDate, returnPeriodDates.quarterTwo)
-    }, {
+    },
+    {
       startDate: _startDateQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree),
       endDate: _endDateQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree),
       id: returnCycle.id,
       dueDate: _dueQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree)
-    }, {
+    },
+    {
       startDate: _startDate(returnCycle.endDate, returnPeriodDates.quarterFour),
       endDate: _endDate(returnCycle.endDate, returnPeriodDates.quarterFour),
       id: returnCycle.id,
       dueDate: _dueDate(returnCycle.endDate, returnPeriodDates.quarterFour)
-    }]
+    }
+  ]
 }
 
 /**
