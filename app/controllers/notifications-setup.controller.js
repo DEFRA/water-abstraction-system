@@ -31,7 +31,7 @@ async function viewReview(request, h) {
 
   const pageData = await ReviewService.go(sessionId)
 
-  return h.view(`${basePath}/view-review.njk`, {
+  return h.view(`${basePath}/review.njk`, {
     ...pageData
   })
 }
