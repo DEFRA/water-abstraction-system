@@ -14,6 +14,21 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/confirmation',
+    options: {
+      handler: ReturnLogsSetupController.confirmation,
+      app: {
+        plainOutput: true
+      },
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
