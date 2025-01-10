@@ -2,11 +2,11 @@
 
 /**
  * Handles the user submission for the `/return-log-edit/{sessionId}/start` page
- * @module SubmitEditReturnLogService
+ * @module SubmitStartService
  */
 
 const SessionModel = require('../../../models/session.model.js')
-const EditReturnLogPresenter = require('../../../presenters/return-logs/setup/start.presenter.js')
+const StartPresenter = require('../../../presenters/return-logs/setup/start.presenter.js')
 
 /**
  * Handles the user submission for the `/return-log-edit/{sessionId}/start` page
@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     return { whatToDo }
   }
 
-  const formattedData = EditReturnLogPresenter.go(session)
+  const formattedData = StartPresenter.go(session)
 
   return {
     error: validationResult,

@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const StartPresenter = require('../../../../app/presenters/return-logs/setup/start.presenter.js')
 
-describe('Start presenter', () => {
+describe('Return Logs Setup - Start presenter', () => {
   let session
 
   describe('when provided with a populated session', () => {
