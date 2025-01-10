@@ -72,10 +72,10 @@ async function _save(session, payload) {
 }
 
 function _submittedSessionData(session, payload) {
-  session.receivedDateDay = payload['received-date-day'] ? payload['received-date-day'] : null
-  session.receivedDateMonth = payload['received-date-month'] ? payload['received-date-month'] : null
-  session.receivedDateYear = payload['received-date-year'] ? payload['received-date-year'] : null
-  session.receivedDateOptions = payload['received-date-options'] ? payload['received-date-options'] : null
+  session.receivedDateDay = payload['received-date-day'] ?? null
+  session.receivedDateMonth = payload['received-date-month'] ?? null
+  session.receivedDateYear = payload['received-date-year'] ?? null
+  session.receivedDateOptions = payload['received-date-options'] ?? null
 
   const data = ReceivedPresenter.go(session)
   return data
@@ -90,6 +90,10 @@ function _validate(payload, startDate) {
 
   const { message, type } = validation.error.details[0]
 
+  // There are only two possible error scenarios: either a radio button has not been selected, in which case the date
+  // isn't visible so there cannot be an "invalid date" error; or an invalid date has been entered, in which case the
+  // date *is* visible so there cannot be a "radio button not selected" error. We identify the former by checking if the
+  // error type is `any.required`; and so if an error is present which isn't of this type, it must be a date error.
   return {
     message,
     radioFormElement: type === 'any.required' ? { text: message } : null,
