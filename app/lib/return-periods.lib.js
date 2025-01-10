@@ -8,6 +8,41 @@
 const { returnPeriodDates } = require('./static-lookups.lib.js')
 
 /**
+ * Determine return periods for a given return cycle.
+ *
+ * This function calculates the upcoming return periods for the provided return cycle.
+ *
+ * The result includes the start date, end date, and due date for each period as well as the return cycle id.
+ *
+ * @param {object} returnCycle - The return cycle to be broken into periods.
+ *
+ * @returns {array<object>} An object containing calculated dates for all return periods
+ */
+function determineReturnsPeriods(returnCycle) {
+  return [{
+      startDate: _startDate(returnCycle.startDate, returnPeriodDates.quarterOne),
+      endDate: _endDate(returnCycle.startDate, returnPeriodDates.quarterOne),
+      id: returnCycle.id,
+      dueDate: _dueDate(returnCycle.startDate, returnPeriodDates.quarterOne)
+    }, {
+      startDate: _startDate(returnCycle.startDate, returnPeriodDates.quarterTwo),
+      endDate: _endDate(returnCycle.startDate, returnPeriodDates.quarterTwo),
+      id: returnCycle.id,
+      dueDate: _dueDate(returnCycle.startDate, returnPeriodDates.quarterTwo)
+    }, {
+      startDate: _startDateQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree),
+      endDate: _endDateQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree),
+      id: returnCycle.id,
+      dueDate: _dueQuarterThree(returnCycle.startDate, returnPeriodDates.quarterThree)
+    }, {
+      startDate: _startDate(returnCycle.endDate, returnPeriodDates.quarterFour),
+      endDate: _endDate(returnCycle.endDate, returnPeriodDates.quarterFour),
+      id: returnCycle.id,
+      dueDate: _dueDate(returnCycle.endDate, returnPeriodDates.quarterFour)
+    }]
+}
+
+/**
  * Determine return periods.
  *
  * This function calculates the upcoming return periods based on the given date or the current date.
@@ -20,7 +55,7 @@ const { returnPeriodDates } = require('./static-lookups.lib.js')
  *
  * @returns {object} An object containing calculated dates for all return periods
  */
-function determineReturnsPeriods(determinationDate = new Date()) {
+function determineUpcomingReturnsPeriods(determinationDate = new Date()) {
   return {
     allYear: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.allYear),
@@ -278,7 +313,7 @@ function _newYearElapsedQuarterThreeDueDate(determinationDate, period) {
  * @returns {object[]} - An array of return periods
  */
 function determineUpcomingReturnPeriods(determinationDate = new Date()) {
-  const returnPeriods = determineReturnsPeriods(determinationDate)
+  const returnPeriods = determineUpcomingReturnsPeriods(determinationDate)
   const mappedReturnPeriods = _mapReturnsPeriods(returnPeriods)
   return _sortByDueDate(mappedReturnPeriods)
 }
@@ -351,5 +386,6 @@ function _cycleStartDate(determinationDate, period) {
 
 module.exports = {
   determineReturnsPeriods,
+  determineUpcomingReturnsPeriods,
   determineUpcomingReturnPeriods
 }
