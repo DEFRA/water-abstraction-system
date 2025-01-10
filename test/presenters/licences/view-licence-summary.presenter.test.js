@@ -21,6 +21,7 @@ describe('View Licence Summary presenter', () => {
 
   beforeEach(() => {
     licence = _licence()
+    Sinon.stub(FeatureFlagsConfig, 'enableLicenceConditionsView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableLicencePointsView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableLicencePurposesView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
@@ -41,6 +42,7 @@ describe('View Licence Summary presenter', () => {
         abstractionPointsLinkText: 'View details of the abstraction point',
         activeTab: 'summary',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+        enableLicenceConditionsView: true,
         enableLicencePointsView: true,
         enableLicencePurposesView: true,
         enableMonitoringStationsView: true,
