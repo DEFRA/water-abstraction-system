@@ -19,6 +19,7 @@ const MarkedForSupplementaryBillingService = require('../../app/services/licence
 const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
+const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
@@ -77,6 +78,34 @@ describe('Licences controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Bills')
+        })
+      })
+    })
+  })
+
+  describe('/licences/{id}/conditions', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/conditions',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+      })
+
+      describe('when a request is valid and has conditions', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewLicenceConditionsService, 'go').resolves(_viewLicenceConditions())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Licence abstraction conditions')
         })
       })
     })
@@ -597,6 +626,45 @@ function _viewLicenceBills() {
     ...commonLicenceData,
     activeTab: 'bills',
     bills: [{ id: 'bills-id' }]
+  }
+}
+
+function _viewLicenceConditions() {
+  const commonLicenceData = _viewLicence()
+
+  return {
+    ...commonLicenceData,
+    activeTab: 'search',
+    conditionTypes: [
+      {
+        conditions: [
+          {
+            abstractionPoints: {
+              label: 'Abstraction point',
+              descriptions: [
+                'Within the area formed by the straight lines running between National Grid References TQ 78157 78848, TQ 79800 76896, TQ 77808 75242 and TQ 75736 76766 (INLAND WATER DITCHES AND DRAINS KNOWN AS THE LIPWELL STREAM)'
+              ]
+            },
+            conditionType: 'Aggregate',
+            otherInformation:
+              'Aggregate quantity across purposes 4.1(i), 4.1(ii), and 4.1(iii):\n' +
+              '455 cubic metres per hour\n' +
+              '10,920 cubic metres per day\n' +
+              '165,000 cubic metres per year.',
+            param1: null,
+            param2: {
+              label: 'Aggregate quantity',
+              value: '455/hr;10920/d;165000/y'
+            },
+            purpose: 'Make-Up Or Top Up Water'
+          }
+        ],
+        displayTitle: 'Aggregate condition purpose to purpose within a licence'
+      }
+    ],
+    licenceId: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
+    licenceRef: '01/140/R01',
+    pageTitle: 'Licence abstraction conditions'
   }
 }
 
