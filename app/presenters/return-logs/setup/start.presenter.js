@@ -2,7 +2,7 @@
 
 /**
  * Formats the data ready for presenting in the `/return-log-edit/{sessionId}/start` page
- * @module EditReturnLogPresenter
+ * @module StartPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
@@ -32,7 +32,6 @@ function go(session) {
     startDate,
     status,
     twoPartTariff,
-    underQuery,
     whatToDo
   } = session
 
@@ -48,7 +47,6 @@ function go(session) {
     licenceRef,
     pageTitle: 'Abstraction return',
     purposes,
-    queryText: underQuery ? 'Resolve query' : 'Record under query',
     returnLogId,
     returnsPeriod: `From ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReference,
