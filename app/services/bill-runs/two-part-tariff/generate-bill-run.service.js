@@ -51,7 +51,9 @@ async function go(billRunId) {
   }
 
   await _updateStatus(billRunId, 'processing')
-  await _generateBillRun(billRun)
+
+  // NOTE: We do not await this call intentionally. We don't want to block the user while we generate the bill run
+  _generateBillRun(billRun)
 }
 
 /**
