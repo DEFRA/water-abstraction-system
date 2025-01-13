@@ -38,6 +38,54 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/reported',
+    options: {
+      handler: ReturnLogsSetupController.reported,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/reported',
+    options: {
+      handler: ReturnLogsSetupController.submitReported,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/units',
+    options: {
+      handler: ReturnLogsSetupController.units,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/units',
+    options: {
+      handler: ReturnLogsSetupController.submitUnits,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
