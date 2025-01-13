@@ -45,7 +45,7 @@ async function submitReceived(request, h) {
     return h.view('return-logs/setup/received.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
 }
 
 async function submitReported(request, h) {
