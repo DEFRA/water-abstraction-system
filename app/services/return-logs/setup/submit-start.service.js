@@ -10,7 +10,7 @@ const StartPresenter = require('../../../presenters/return-logs/setup/start.pres
 const StartValidator = require('../../../validators/return-logs/setup/start.validator.js')
 
 /**
- * Handles the user submission for the `/return-log-edit/{sessionId}/start` page
+ * Handles the user submission for the `/return-logs/setup/{sessionId}/start` page
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  * @param {object} payload - The submitted form data
