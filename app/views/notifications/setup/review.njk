@@ -14,10 +14,62 @@
 {% block content %}
   <div class="govuk-body">
     <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+
+    {% from "govuk/components/table/macro.njk" import govukTable %}
+
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">
+Recipients</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header govuk-!-width-one-third"> Recipient</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-third">Licence numbers</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-third">Method</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {%for recipient in recipients %}
+          <tr class="govuk-table__row">
+            <td scope="row" class="govuk-table__cell">
+              {{ recipient.contact.join("<br>") | safe }}
+            </td>
+            <td class="govuk-table__cell">
+              {% set firstFive = recipient
+                .licences
+                .slice(0, 5) %}
+              {% set rest = recipient
+                .licences
+                .slice(5) %}
+              {% for licence in firstFive %}
+                <p>
+                  {{licence}}
+                </p>
+              {% endfor %}
+              {% if rest.length > 5%}
+                <details class="govuk-details">
+                  <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                   more...
+                  </span>
+                  </summary>
+                  {% for licence in rest%}
+                    <div class="govuk-details__text">
+                      {{licence}}
+                    </div>
+                  {% endfor %}
+                </details>
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">{{ recipient.method }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-      {{ govukButton({ text: "Send x invitations", preventDoubleClick: true }) }}
+      {{ govukButton({ text: "Send " + recipientsAmount + " invitations", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}

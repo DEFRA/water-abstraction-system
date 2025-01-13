@@ -17,7 +17,7 @@ describe('Notifications Setup - Review service', () => {
   let session
 
   before(async () => {
-    session = await SessionHelper.add()
+    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
   })
 
   describe('when provided no params', () => {
@@ -26,7 +26,9 @@ describe('Notifications Setup - Review service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'manage',
-        pageTitle: 'Review the mailing list'
+        pageTitle: 'Review the mailing list',
+        recipients: [],
+        recipientsAmount: 0
       })
     })
   })
