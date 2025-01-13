@@ -12,7 +12,7 @@ const StartValidator = require('../../../validators/return-logs/setup/start.vali
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/start` page
  *
- * @param {string} sessionId - The UUID for setup bill run session record
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} An object with a `whatToDo:` property if there are no errors else the page data for
