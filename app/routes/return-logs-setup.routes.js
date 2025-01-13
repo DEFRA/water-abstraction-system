@@ -44,9 +44,6 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/start',
     options: {
       handler: ReturnLogsSetupController.start,
-      app: {
-        plainOutput: true
-      },
       auth: {
         access: {
           scope: ['billing']
@@ -59,9 +56,6 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/start',
     options: {
       handler: ReturnLogsSetupController.submitStart,
-      app: {
-        plainOutput: true
-      },
       auth: {
         access: {
           scope: ['billing']
