@@ -10,7 +10,7 @@ const Joi = require('joi')
 const VALID_VALUES = ['enterReturn', 'nilReturn', 'recordReceipt']
 
 /**
- * Validates data submitted for the `/return-log-edit/{sessionId}/start` page
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
