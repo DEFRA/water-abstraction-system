@@ -8,7 +8,7 @@
 const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats the data ready for presenting in the `/return-log-edit/{sessionId}/start` page
+ * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start` page
  *
  * @param {module:SessionModel} session - The session instance to format
  *
