@@ -11,7 +11,7 @@ const StartPresenter = require('../../../presenters/return-logs/setup/start.pres
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/start` page
  *
- * @param {string} sessionId - The UUID for setup bill run session record
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} page data needed by the view template
  */
