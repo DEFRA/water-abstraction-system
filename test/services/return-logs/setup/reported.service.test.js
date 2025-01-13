@@ -20,8 +20,7 @@ describe('Return Logs Setup - Reported service', () => {
     session = await SessionHelper.add({
       data: {
         returnReference: '012345'
-      },
-      id: 'db2811e7-8d89-419e-80e6-b954e1bb8c5b'
+      }
     })
   })
 

@@ -185,7 +185,7 @@ describe('Return Logs Setup controller', () => {
           options = _postOptions('reported', {})
         })
 
-        describe('and the reported date is entered', () => {
+        describe('and the reported type is entered', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReportedService, 'go').resolves({})
           })

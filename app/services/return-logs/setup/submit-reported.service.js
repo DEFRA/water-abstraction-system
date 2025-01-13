@@ -5,8 +5,8 @@
  * @module SubmitReportedService
  */
 
-const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
 const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
+const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
