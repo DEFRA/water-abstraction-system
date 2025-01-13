@@ -531,7 +531,8 @@ function _expectedResult() {
           id: region.id,
           naldRegionId: region.naldRegionId
         }
-      }
+      },
+      quarterlyReturns: returnVersion.quarterlyReturns
     },
     points: [
       {
