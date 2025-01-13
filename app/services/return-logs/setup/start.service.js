@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-log-edit/{sessionId}/start` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/start` page
  * @module StartService
  */
 
