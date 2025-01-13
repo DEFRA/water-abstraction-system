@@ -9,7 +9,7 @@ const SessionModel = require('../../../models/session.model.js')
 const StartPresenter = require('../../../presenters/return-logs/setup/start.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-log-edit/{sessionId}/start` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/start` page
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
