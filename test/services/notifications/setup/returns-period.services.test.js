@@ -45,7 +45,7 @@ describe('Notifications Setup - Returns Period service', () => {
               text: 'Due date 28 January 2025'
             },
             text: 'Quarterly 1 October 2024 to 31 December 2024',
-            value: 'quarterFour'
+            value: 'quarterThree'
           },
           {
             checked: false,
@@ -53,7 +53,7 @@ describe('Notifications Setup - Returns Period service', () => {
               text: 'Due date 28 April 2025'
             },
             text: 'Quarterly 1 January 2025 to 31 March 2025',
-            value: 'quarterOne'
+            value: 'quarterFour'
           }
         ]
       })

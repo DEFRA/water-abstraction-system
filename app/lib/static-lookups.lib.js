@@ -26,6 +26,9 @@ const naldRegions = {
 
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
+/**
+ * The start, end and due dates for each return cycle
+ */
 const returnCycleDates = {
   allYear: {
     dueDate: { day: 28, month: 3 },
@@ -36,6 +39,32 @@ const returnCycleDates = {
     dueDate: { day: 28, month: 10 },
     endDate: { day: 31, month: 9 },
     startDate: { day: 1, month: 10 }
+  }
+}
+
+/**
+ * The start, end and due dates for each quarterly return period
+ */
+const quarterlyReturnPeriods = {
+  quarterOne: {
+    dueDate: { day: 28, month: 6 },
+    endDate: { day: 30, month: 5 },
+    startDate: { day: 1, month: 3 }
+  },
+  quarterTwo: {
+    dueDate: { day: 28, month: 9 },
+    endDate: { day: 30, month: 8 },
+    startDate: { day: 1, month: 6 }
+  },
+  quarterThree: {
+    dueDate: { day: 28, month: 0 },
+    endDate: { day: 31, month: 11 },
+    startDate: { day: 1, month: 9 }
+  },
+  quarterFour: {
+    dueDate: { day: 28, month: 3 },
+    endDate: { day: 31, month: 2 },
+    startDate: { day: 1, month: 0 }
   }
 }
 
@@ -61,26 +90,7 @@ const returnCycleDates = {
  */
 const returnPeriodDates = {
   ...returnCycleDates,
-  quarterOne: {
-    dueDate: { day: 28, month: 3 },
-    endDate: { day: 31, month: 2 },
-    startDate: { day: 1, month: 0 }
-  },
-  quarterTwo: {
-    dueDate: { day: 28, month: 6 },
-    endDate: { day: 30, month: 5 },
-    startDate: { day: 1, month: 3 }
-  },
-  quarterThree: {
-    dueDate: { day: 28, month: 9 },
-    endDate: { day: 30, month: 8 },
-    startDate: { day: 1, month: 6 }
-  },
-  quarterFour: {
-    dueDate: { day: 28, month: 0 },
-    endDate: { day: 31, month: 11 },
-    startDate: { day: 1, month: 9 }
-  }
+  ...quarterlyReturnPeriods
 }
 
 const returnRequirementFrequencies = {
@@ -142,5 +152,6 @@ module.exports = {
   returnRequirementFrequencies,
   returnRequirementReasons,
   sources,
-  twoPartTariffReviewIssues
+  twoPartTariffReviewIssues,
+  quarterlyReturnPeriods
 }
