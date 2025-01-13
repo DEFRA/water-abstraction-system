@@ -41,6 +41,7 @@ async function submitReceived(request, h) {
   } = request
 
   const pageData = await SubmitReceivedService.go(sessionId, payload)
+
   if (pageData.error) {
     return h.view('return-logs/setup/received.njk', pageData)
   }
