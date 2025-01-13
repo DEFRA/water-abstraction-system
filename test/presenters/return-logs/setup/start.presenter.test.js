@@ -90,6 +90,18 @@ describe('Return Logs Setup - Start presenter', () => {
           expect(result.status).to.equal('due')
         })
       })
+
+      describe('when the status is "overdue"', () => {
+        beforeEach(() => {
+          session.dueDate = new Date('2023-04-28')
+        })
+
+        it('returns the status as "overdue', () => {
+          const result = StartPresenter.go(session)
+
+          expect(result.status).to.equal('overdue')
+        })
+      })
     })
 
     describe('the "tariffType" property', () => {
