@@ -93,6 +93,7 @@ describe('Return Logs Setup - Start presenter', () => {
 
       describe('when the status is "overdue"', () => {
         beforeEach(() => {
+          // The due date is less than today's date
           session.dueDate = new Date('2023-04-28')
         })
 
