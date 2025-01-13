@@ -61,7 +61,7 @@ describe('Return Logs Setup - Submit Start service', () => {
           returnLogId: 'v1:6:01/111:2222:2022-04-01:2005-03-31',
           returnsPeriod: 'From 1 April 2022 to 31 March 2023',
           returnReference: '1234',
-          selectedOption: undefined,
+          selectedOption: null,
           siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
           status: 'overdue',
           tariffType: 'Standard tariff'
