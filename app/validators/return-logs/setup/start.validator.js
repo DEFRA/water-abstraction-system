@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/return-log-edit/{sessionId}/start` page
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
  * @module StartValidator
  */
 
