@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats the data ready for presenting in the `/return-log-edit/{sessionId}/start` page
+ * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start` page
  * @module StartPresenter
  */
 
