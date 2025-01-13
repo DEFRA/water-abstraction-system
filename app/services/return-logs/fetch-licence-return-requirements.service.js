@@ -60,7 +60,7 @@ async function _fetch(licenceId, changeDate) {
     .withGraphFetched('returnVersion')
     .modifyGraph('returnVersion', (returnVersionBuilder) => {
       returnVersionBuilder
-        .select(['endDate', 'id', 'reason', 'startDate'])
+        .select(['endDate', 'id', 'reason', 'startDate', 'quarterlyReturns'])
         .withGraphFetched('licence')
         .modifyGraph('licence', (licenceBuilder) => {
           licenceBuilder

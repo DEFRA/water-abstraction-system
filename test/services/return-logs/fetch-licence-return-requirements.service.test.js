@@ -308,7 +308,8 @@ function _expectedResult(
           id: region.id,
           naldRegionId: region.naldRegionId
         }
-      }
+      },
+      quarterlyReturns: _returnVersion.quarterlyReturns
     },
     points: [
       {
