@@ -7,7 +7,7 @@
 
 const SessionModel = require('../../../models/session.model.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const ReturnsPeriodService = require('./recipients.service.js')
+const RecipientsService = require('./recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 
 /**
@@ -24,7 +24,7 @@ async function go(sessionId) {
 
   const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
 
-  const recipients = await ReturnsPeriodService.go(selectedReturnsPeriod.dueDate, 'true')
+  const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, 'true')
 
   const recipientData = ReviewPresenter.go(recipients)
 

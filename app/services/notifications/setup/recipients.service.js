@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/returns-period` page
- * @module ReturnsPeriodService
+ * Formats data for the `/notifications/setup/review` page
+ * @module RecipientsService
  */
 
 const { db } = require('../../../../db/db.js')
@@ -23,8 +23,7 @@ async function go(dueDate, isSummer) {
 //  isSummer may need to be a string
 async function _fetch(dueDate, isSummer) {
   const query = _query()
-  // return db.raw(query, [dueDate, isSummer, dueDate, isSummer])
-  return db.raw(query)
+  return db.raw(query, [dueDate, isSummer, dueDate, isSummer, dueDate, isSummer])
 }
 
 function _query() {
@@ -54,9 +53,9 @@ FROM (
   INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
   WHERE
     rl.status = 'due'
-    AND rl.due_date = '2024-11-28'
+    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = 'true'
+    AND rl.metadata->>'isSummer' = ?
     AND contacts->>'role' IN ('Licence holder', 'Returns to')
     AND NOT EXISTS (
       SELECT
@@ -82,9 +81,9 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = '2024-11-28'
+    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = 'true'
+    AND rl.metadata->>'isSummer' = ?
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -101,9 +100,9 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = '2024-11-28'
+    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = 'true'
+    AND rl.metadata->>'isSummer' = ?
 ) recipients
 GROUP BY
   message_type,
