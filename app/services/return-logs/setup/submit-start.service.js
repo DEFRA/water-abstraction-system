@@ -7,6 +7,7 @@
 
 const SessionModel = require('../../../models/session.model.js')
 const StartPresenter = require('../../../presenters/return-logs/setup/start.presenter.js')
+const StartValidator = require('../../../validators/return-logs/setup/start.validator.js')
 
 /**
  * Handles the user submission for the `/return-log-edit/{sessionId}/start` page
@@ -19,13 +20,12 @@ const StartPresenter = require('../../../presenters/return-logs/setup/start.pres
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  const { whatToDo } = payload
-  const validationResult = _validate(whatToDo)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, whatToDo)
+    await _save(session, payload)
 
-    return { whatToDo }
+    return {}
   }
 
   const formattedData = StartPresenter.go(session)
@@ -36,20 +36,24 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, whatToDo) {
-  const currentData = session
+async function _save(session, payload) {
+  session.whatToDo = payload.whatToDo
 
-  currentData.whatToDo = whatToDo
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
-function _validate(whatToDo) {
-  if (!whatToDo) {
-    return { text: 'Select what you want to do with this return' }
+function _validate(payload) {
+  const validation = StartValidator.go(payload)
+
+  if (!validation.error) {
+    return null
   }
 
-  return null
+  const { message } = validation.error.details[0]
+
+  return {
+    text: message
+  }
 }
 
 module.exports = {

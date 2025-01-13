@@ -28,11 +28,11 @@ describe('Return Logs Setup - Submit Start service', () => {
       })
 
       it('saves and returns the submitted option', async () => {
-        const result = await SubmitStartService.go(session.id, payload)
+        await SubmitStartService.go(session.id, payload)
+
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.whatToDo).to.equal('enterReturn')
-        expect(result.whatToDo).to.equal('enterReturn')
       })
     })
 
