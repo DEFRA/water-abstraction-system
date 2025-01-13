@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Handles the user submission for the `/return-log-edit/{sessionId}/start` page
+ * Handles the user submission for the `/return-logs/setup/{sessionId}/start` page
  * @module SubmitStartService
  */
 
