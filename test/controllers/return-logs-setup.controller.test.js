@@ -267,12 +267,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitUnitsService, 'go').resolves({})
           })
 
-          it('redirects to the "meter" page', async () => {
+          it('redirects to the "meter provided" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-provided'
             )
           })
         })
