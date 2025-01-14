@@ -83,7 +83,7 @@ async function units(request, h) {
   const { sessionId } = request.params
   const pageData = await UnitsService.go(sessionId)
 
-  return h.view('return-logs/setup/units.njk', { ...pageData })
+  return h.view('return-logs/setup/units.njk', pageData)
 }
 
 module.exports = {
