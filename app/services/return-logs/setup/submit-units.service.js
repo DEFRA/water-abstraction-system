@@ -37,7 +37,6 @@ async function go(sessionId, payload) {
   const formattedData = UnitsPresenter.go(session)
 
   return {
-    pageTitle: 'Which units were used?',
     activeNavBar: 'search',
     error: validationResult,
     ...formattedData

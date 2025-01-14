@@ -20,6 +20,7 @@ function go(session) {
   } = session
 
   return {
+    pageTitle: 'Which units were used?',
     units: units ?? null,
     sessionId,
     returnReference,

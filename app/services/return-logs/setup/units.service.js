@@ -24,7 +24,6 @@ async function go(sessionId) {
   const formattedData = UnitsPresenter.go(session)
 
   return {
-    pageTitle: 'Which units were used?',
     activeNavBar: 'search',
     ...formattedData
   }

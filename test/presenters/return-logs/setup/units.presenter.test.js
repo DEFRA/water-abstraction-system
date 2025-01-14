@@ -27,6 +27,7 @@ describe('Return Logs Setup - Units presenter', () => {
       const result = UnitsPresenter.go(session)
 
       expect(result).to.equal({
+        pageTitle: 'Which units were used?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         returnReference: '012345',
         units: null,
