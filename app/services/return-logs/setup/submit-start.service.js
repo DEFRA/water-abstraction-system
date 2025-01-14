@@ -31,6 +31,7 @@ async function go(sessionId, payload) {
   const formattedData = StartPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

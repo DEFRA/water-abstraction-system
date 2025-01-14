@@ -53,10 +53,7 @@ async function submitStart(request, h) {
   const pageData = await SubmitStartService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('return-logs/setup/start.njk', {
-      activeNavBar: 'search',
-      ...pageData
-    })
+    return h.view('return-logs/setup/start.njk', pageData)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/received`)

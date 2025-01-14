@@ -51,9 +51,10 @@ describe('Return Logs Setup - Submit Start service', () => {
         const result = await SubmitStartService.go(session.id, payload)
 
         expect(result).to.equal({
-          error: { text: 'Select what you want to do with this return' },
           abstractionPeriod: 'From 1 January to 31 December',
+          activeNavBar: 'search',
           displayRecordReceipt: true,
+          error: { text: 'Select what you want to do with this return' },
           licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
           licenceRef: '01/111',
           pageTitle: 'Abstraction return',
