@@ -42,10 +42,7 @@ async function factors(request, h) {
 
   const pageData = await FactorsService.go(reviewChargeReferenceId)
 
-  return h.view('bill-runs/review/factors.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/factors.njk', pageData)
 }
 
 async function preview(request, h) {
