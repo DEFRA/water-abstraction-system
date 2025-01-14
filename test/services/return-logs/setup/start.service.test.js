@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const StartService = require('../../../../app/services/return-logs/setup/start.service.js')
 
-describe.only('Return Logs Setup - Start service', () => {
+describe('Return Logs Setup - Start service', () => {
   let sessionId
 
   before(async () => {
