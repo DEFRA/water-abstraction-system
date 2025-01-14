@@ -26,10 +26,11 @@ async function viewReturnsPeriod(request, h) {
 
 async function viewReview(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    query: { page = 1 }
   } = request
 
-  const pageData = await ReviewService.go(sessionId)
+  const pageData = await ReviewService.go(sessionId, page)
 
   return h.view(`${basePath}/review.njk`, {
     ...pageData

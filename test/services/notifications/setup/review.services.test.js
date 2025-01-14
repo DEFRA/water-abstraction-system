@@ -27,6 +27,9 @@ describe('Notifications Setup - Review service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         pageTitle: 'Review the mailing list',
+        pagination: {
+          numberOfPages: 0
+        },
         recipients: [],
         recipientsAmount: 0
       })
