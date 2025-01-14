@@ -125,7 +125,7 @@ describe('Determine Charge Version Flags Service', () => {
             const result = await DetermineChargeVersionFlagsService.go(chargeVersion.id)
 
             expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
+            expect(result.flagForSrocSupplementary).to.equal(true)
             expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
           })
         })
