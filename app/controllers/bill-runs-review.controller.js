@@ -99,10 +99,7 @@ async function submitAuthorised(request, h) {
   const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/authorised.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/authorised.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
