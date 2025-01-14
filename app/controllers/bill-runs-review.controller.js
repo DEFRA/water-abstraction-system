@@ -58,10 +58,7 @@ async function remove(request, h) {
 
   const pageData = await RemoveService.go(reviewLicenceId)
 
-  return h.view('bill-runs/review/remove.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/remove.njk', pageData)
 }
 
 async function reviewBillRun(request, h) {
