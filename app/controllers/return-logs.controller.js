@@ -7,18 +7,16 @@
 
 const Boom = require('@hapi/boom')
 
-const ReturnLogService = require('../services/return-logs/return-log.service.js')
+const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
 
 async function view(request, h) {
-  // TODO: Consider whether we want to read the id as a query param or if we want to pass it in the route itself. This
-  // would require URL-encoding and -decoding it since ids can contain slashes.
-  const { id } = request.query
+  const { auth, query } = request
 
-  if (!id) {
+  if (!query.id) {
     return Boom.badImplementation('Id is required')
   }
 
-  const pageData = await ReturnLogService.go(request, id)
+  const pageData = await ViewReturnLogService.go(query.id, auth)
 
   return h.view('return-logs/view.njk', { activeNavBar: 'search', ...pageData })
 }

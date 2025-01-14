@@ -206,6 +206,14 @@ function formatMoney(valueInPence, signed = false) {
   return `${sign}£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
+function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 3) {
+  if (!number) {
+    return null
+  }
+
+  return number.toLocaleString('en-GB', { minimumFractionDigits, maximumFractionDigits })
+}
+
 /**
  * Formats a number, which represents a value in pence to pounds, for example, 12776805 as '127768.05'
  *
@@ -280,6 +288,7 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatMoney,
+  formatNumber,
   formatPounds,
   leftPadZeroes,
   sentenceCase,

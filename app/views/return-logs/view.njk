@@ -1,76 +1,274 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/return-log-status-tag.njk" import statusTag %}
 
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Go back to summary',
+    href: '/system/licences/' + licenceId + '/summary'
+  }) }}
+{% endblock %}
+
 {% block content %}
-  <div class="govuk-body">
-    <span class="govuk-caption-l">Licence {{ licenceNumber }}</span>
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">Licence {{ licenceRef }}</span>{{ pageTitle }}
+      </h1>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+
+      {# Status tag #}
       <p class="govuk-body">
-        {{ statusTag(status, true) }}
+        {{ statusTag(status, false) }}
       </p>
-      <dl class="meta govuk-!-margin-bottom-4">
-      <div class="meta__row">
-        <dt class="meta__key">
-          Site description
-        </dt>
-        <dd class="meta__value">
-          {% if description != 'null' %}
-            {{ description }}
-          {% endif %}
-        </dd>
-      </div>
-      <div class="meta__row">
-        <dt class="meta__key">
-          Purpose
-        </dt>
-        <dd class="meta__value">
-          {{ returnPurpose }}
-        </dd>
-      </div>
-      <div class="meta__row">
-        <dt class="meta__key">
-          Return period
-        </dt>
-        <dd class="meta__value">
-          {{ returnPeriod }}
-        </dd>
-      </div>
-      <div class="meta__row">
-        <dt class="meta__key">
-          Abstraction period
-        </dt>
-        <dd class="meta__value">
-          {{ abstractionPeriod }}
-        </dd>
-      </div>
-      <div class="meta__row">
-        <dt class="meta__key">
-          TARIFF
-        </dt>
-      </div>
-    </dl>
 
-    {{ govukTable({
-      firstCellIsHeader: true,
-      head: [
-        {
-          text: "Month"
-        },
-        {
-          text: "Total cubic metres"
-        },
-        {
-          text: "Details"
-        }
-      ],
-      rows: tableRows
-    }) }}
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          attributes: {
+            'data-test': 'meta-data'
+          },
+          rows: [
+            {
+              key: { text: "Return reference", classes: "meta-data__label" },
+              value: { html: '<span data-test="return-reference">' + returnReference + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Site description", classes: "meta-data__label" },
+              value: { html: '<span data-test="site-description">' + siteDescription + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Purpose", classes: "meta-data__label" },
+              value: { html: '<span data-test="purpose">' + purpose + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Return period", classes: "meta-data__label" },
+              value: { html: '<span data-test="returns-period">' + returnPeriod + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Abstraction period", classes: "meta-data__label" },
+              value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Tariff", classes: "meta-data__label" },
+              value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
+            }
+          ]
+        })
+      }}
+    </div>
+  </div>
 
-    <pre>
-      {{ dataString }}
-    </pre>
+  {# Return log total #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      {% if nilReturn %}
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
+        </h2>
+      {% else %}
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
+          <br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
+        </h2>
+      {% endif %}
+
+      {% if editReturn %}
+        {{
+          govukButton({
+            text: "Edit return",
+            preventDoubleClick: true,
+            href: editReturnLink
+          })
+        }}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="divider govuk-!-margin-bottom-7"></div>
+
+  {# Meter details #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      <h3 class="govuk-heading-l">{{ tableTitle }}</h3>
+
+      {{
+        govukButton({
+          classes: "govuk-button--secondary",
+          text: "Download this return",
+          preventDoubleClick: true,
+          href: '#'
+        })
+      }}
+
+      {% if meterDetails %}
+        {% set meterDetailsSummaryList %}
+          {{
+            govukSummaryList({
+              classes: 'govuk-summary-list--no-border govuk-!-margin-bottom-2',
+              attributes: {
+                'data-test': 'meter-details'
+              },
+              rows: [
+                {
+                  key: { text: "Make", classes: "meta-data__label" },
+                  value: { html: '<span data-test="make">' + meterDetails.make + '</span>', classes: "meta-data__value" }
+                },
+                {
+                  key: { text: "Serial number", classes: "meta-data__label" },
+                  value: { html: '<span data-test="site-description">' + meterDetails.serialNumber + '</span>', classes: "meta-data__value" }
+                },
+                {
+                  key: { html: "&times;10 display", classes: "meta-data__label" },
+                  value: { html: '<span data-test="site-description">' + meterDetails.xDisplay + '</span>', classes: "meta-data__value" }
+                }
+              ]
+            })
+          }}
+        {% endset %}
+
+        {{
+          govukDetails({
+            summaryText: 'Meter details',
+            html: meterDetailsSummaryList
+          })
+        }}
+      {% endif %}
+
+      {% if startReading %}
+        {% set startReadingHtml %}
+          {{ govukSummaryList({
+            classes: 'govuk-summary-list--no-border govuk-!-margin-top-0 govuk-!-margin-bottom-0',
+            rows: [
+              {
+                key: {
+                  text: "Start Reading"
+                },
+                value: {
+                  text: startReading
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ govukInsetText({
+          classes: "govuk-!-margin-bottom-2 govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0",
+          html: startReadingHtml
+        }) }}
+      {% endif %}
+    </div>
+  </div>
+
+  {# Display the table using a GOVUK table component #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {% set tableRows = [] %}
+
+      {% for summaryTableRow in summaryTableRows %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
+
+        {# Create the summary row #}
+        {% set tableRow = [
+          {
+            text: summaryTableRow.month,
+            attributes: { 'data-test': 'month-' + rowIndex }
+          }
+        ] %}
+
+        {% if displayReadings %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: summaryTableRow.reading,
+              format: 'numeric',
+              attributes: { 'data-test': 'reading-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
+        {% if displayUnits %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: summaryTableRow.unitTotal,
+              format: 'numeric',
+              attributes: { 'data-test': 'unit-total-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
+        {# Total cubic metres column #}
+        {% set tableRow = (tableRow.push(
+          {
+            text: summaryTableRow.monthlyTotal,
+            format: 'numeric',
+            attributes: { 'data-test': 'monthly-total-' + rowIndex }
+          }
+        ), tableRow) %}
+
+        {# Action column but only for weekly and monthly returns #}
+        {% if summaryTableRow.link %}
+          {% set actionLink %}
+            <a class="govuk-link" href="{{ summaryTableRow.link.href }}">{{ summaryTableRow.link.text }}<span class="govuk-visually-hidden"> for {{ summaryTableRow.month }}</span></a>
+          {% endset %}
+
+          {% set tableRow = (tableRow.push(
+            {
+              html: actionLink,
+              format: 'numeric',
+              attributes: { 'data-test': 'action-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
+        {# Push our row into the table rows array #}
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endfor %}
+
+      {{
+        govukTable({
+          firstCellIsHeader: false,
+          attributes: { 'data-test': 'monthly-summaries'},
+          head: summaryTableHeaders,
+          rows: tableRows
+        })
+      }}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-full">
+      <h3 class="govuk-heading-m">Submitted by</h3>
+
+      {% for version in versions %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
+
+        {% if version.current %}
+          {% set selectedClass = 'inset-text__selected-version' %}
+        {% else %}
+          {% set selectedClass = '' %}
+        {% endif %}
+
+        {{ govukInsetText({
+          classes: selectedClass,
+          html: '<p class="govuk-!-margin-0">' + version.user + '</p><p class="govuk-!-margin-0">' + version.createdAt +'</p>'
+        }) }}
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

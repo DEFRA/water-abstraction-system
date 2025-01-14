@@ -8,6 +8,8 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { formatDateObjectToISO } = require('../lib/dates.lib.js')
+const { unitNames } = require('../lib/static-lookups.lib.js')
 
 class ReturnSubmissionModel extends BaseModel {
   static get tableName() {
@@ -38,6 +40,47 @@ class ReturnSubmissionModel extends BaseModel {
         }
       }
     }
+  }
+
+  $applyReadings() {
+    const meter = this.$meter()
+
+    if (!this.returnSubmissionLines || !meter || !meter.readings) {
+      return
+    }
+
+    for (const line of this.returnSubmissionLines) {
+      const { startDate, endDate } = line
+      const key = `${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}`
+
+      const reading = meter?.readings[key]
+
+      line.reading = reading ?? null
+    }
+  }
+
+  $meter() {
+    if (!this.metadata?.meters) {
+      return null
+    }
+
+    return this.metadata.meters[0]
+  }
+
+  $method() {
+    if (!this.metadata?.method) {
+      return 'abstractionVolumes'
+    }
+
+    return this.metadata.method
+  }
+
+  $units() {
+    if (!this.metadata?.units) {
+      return unitNames.CUBIC_METRES
+    }
+
+    return this.metadata.units
   }
 }
 
