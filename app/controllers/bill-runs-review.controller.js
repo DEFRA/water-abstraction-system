@@ -67,10 +67,7 @@ async function reviewBillRun(request, h) {
 
   const pageData = await ReviewBillRunService.go(billRunId, page, request.yar)
 
-  return h.view('bill-runs/review/review.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review.njk', pageData)
 }
 
 async function reviewChargeElement(request, h) {
