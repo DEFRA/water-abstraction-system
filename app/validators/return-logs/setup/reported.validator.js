@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const VALID_VALUES = ['meter-readings', 'abstraction-volumes']
+
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/reported` page
  *
@@ -18,7 +20,6 @@ const Joi = require('joi')
 function go(payload) {
   const reported = payload.reported
 
-  const VALID_VALUES = ['meter-readings', 'abstraction-volumes']
   const errorMessage = 'Select how this return was reported'
 
   const schema = Joi.object({
