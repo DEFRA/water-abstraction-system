@@ -60,27 +60,46 @@ function generateSummaryTableHeaders(method, frequency, units) {
 }
 
 function generateSummaryTableRows(id, method, frequency, lines, rootPath = '/system/return-submissions') {
+  let rowData
+
+  if (frequency === 'month') {
+    rowData = lines
+  }
+
   if (frequency === 'week') {
     return []
   }
 
-  const rows = lines.reduce((acc, line) => {
-    const { endDate, quantity } = line
-    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
+  if (frequency === 'day') {
+    const rowsObject = lines.reduce((acc, line) => {
+      const { endDate, month, quantity, userUnit } = line
+      const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
-    if (acc[key]) {
-      acc[key].quantity += quantity
-    } else {
-      acc[key].quantity = quantity
-    }
+      if (acc[key]) {
+        acc[key].quantity += quantity
+      } else {
+        acc[key] = {
+          endDate,
+          month,
+          quantity,
+          userUnit
+        }
+      }
 
-    if (line.reading) {
-      acc[key].reading = line.reading
-    }
+      if (line.reading) {
+        acc[key].reading = reading
+      }
 
-    return acc
-  }, {})
+      return acc
+    }, {})
 
+    rowData = Object.values(rowsObject)
+  }
+
+  return _formatRows(rowData, method, frequency, id, rootPath)
+}
+
+function _formatRows (lines, method, frequency, id, rootPath) {
   return lines.map((line) => {
     const { endDate, quantity, userUnit } = line
 
