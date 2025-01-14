@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const StartService = require('../../../../app/services/return-logs/setup/start.service.js')
 
-describe('Return Logs Setup - Start service', () => {
+describe.only('Return Logs Setup - Start service', () => {
   let sessionId
 
   before(async () => {
@@ -29,6 +29,7 @@ describe('Return Logs Setup - Start service', () => {
         abstractionPeriod: 'From 1 January to 31 December',
         activeNavBar: 'search',
         displayRecordReceipt: true,
+        journey: null,
         licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
         licenceRef: '01/111',
         pageTitle: 'Abstraction return',
@@ -36,7 +37,6 @@ describe('Return Logs Setup - Start service', () => {
         returnLogId: 'v1:6:01/111:2222:2022-04-01:2005-03-31',
         returnsPeriod: 'From 1 April 2022 to 31 March 2023',
         returnReference: '1234',
-        selectedOption: null,
         siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
         status: 'overdue',
         tariffType: 'Standard tariff'

@@ -13,7 +13,7 @@ const StartValidator = require('../../../../app/validators/return-logs/setup/sta
 describe('Return Logs Setup - Start validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = StartValidator.go({ journey: 'enterReturn' })
+      const result = StartValidator.go({ journey: 'enter-return' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()

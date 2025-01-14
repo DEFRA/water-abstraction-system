@@ -24,6 +24,7 @@ describe('Return Logs Setup - Start presenter', () => {
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',
         displayRecordReceipt: true,
+        journey: null,
         licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
         licenceRef: '01/111',
         pageTitle: 'Abstraction return',
@@ -31,7 +32,6 @@ describe('Return Logs Setup - Start presenter', () => {
         returnLogId: 'v1:6:01/111:2222:2022-04-01:2005-03-31',
         returnsPeriod: 'From 1 April 2022 to 31 March 2023',
         returnReference: '1234',
-        selectedOption: null,
         siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
         status: 'overdue',
         tariffType: 'Standard tariff'
@@ -52,16 +52,16 @@ describe('Return Logs Setup - Start presenter', () => {
       })
     })
 
-    describe('the "selectedOption" property', () => {
+    describe('the "journey" property', () => {
       describe('when an option has been selected and submitted', () => {
         beforeEach(() => {
-          session.journey = 'enterReturn'
+          session.journey = 'enter-return'
         })
 
         it('returns the selected option', () => {
           const result = StartPresenter.go(session)
 
-          expect(result.selectedOption).to.equal('enterReturn')
+          expect(result.journey).to.equal('enter-return')
         })
       })
     })

@@ -118,25 +118,25 @@
       },
       items: [
         {
-          value: 'enterReturn',
+          value: "enter-return",
           text: "Enter and submit",
-          checked: selectedOption === 'enterReturn'
+          checked: journey === "enter-return"
         },
         {
-          divider: 'or'
+          divider: "or"
         } if displayRecordReceipt === false,
         {
-          value: 'nilReturn',
+          value: "nil-return",
           text: "Enter a nil return",
-          checked: selectedOption === 'nilReturn'
+          checked: journey === "nil-return"
         },
         {
-          divider: 'or'
+          divider: "or"
         } if displayRecordReceipt === true,
         {
-          value: 'recordReceipt',
-          text: 'Record receipt',
-          checked: selectedOption === 'recordReceipt'
+          value: "record-receipt",
+          text: "Record receipt",
+          checked: journey === "record-receipt"
         } if displayRecordReceipt === true
       ]
     }) }}

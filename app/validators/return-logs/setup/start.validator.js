@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['enterReturn', 'nilReturn', 'recordReceipt']
+const VALID_VALUES = ['enter-return', 'nil-return', 'record-receipt']
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page

@@ -24,7 +24,7 @@ describe('Return Logs Setup - Submit Start service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
-        payload = { journey: 'enterReturn' }
+        payload = { journey: 'enter-return' }
       })
 
       it('saves and returns the submitted option', async () => {
@@ -32,7 +32,7 @@ describe('Return Logs Setup - Submit Start service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.journey).to.equal('enterReturn')
+        expect(refreshedSession.journey).to.equal('enter-return')
       })
     })
 
@@ -55,6 +55,7 @@ describe('Return Logs Setup - Submit Start service', () => {
           activeNavBar: 'search',
           displayRecordReceipt: true,
           error: { text: 'Select what you want to do with this return' },
+          journey: null,
           licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
           licenceRef: '01/111',
           pageTitle: 'Abstraction return',
@@ -62,7 +63,6 @@ describe('Return Logs Setup - Submit Start service', () => {
           returnLogId: 'v1:6:01/111:2222:2022-04-01:2005-03-31',
           returnsPeriod: 'From 1 April 2022 to 31 March 2023',
           returnReference: '1234',
-          selectedOption: null,
           siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
           status: 'overdue',
           tariffType: 'Standard tariff'

@@ -18,6 +18,7 @@ function go(session) {
   const {
     dueDate,
     endDate,
+    journey,
     licenceId,
     licenceRef,
     periodStartDay,
@@ -31,8 +32,7 @@ function go(session) {
     siteDescription,
     startDate,
     status,
-    twoPartTariff,
-    journey
+    twoPartTariff
   } = session
 
   return {
@@ -43,6 +43,7 @@ function go(session) {
       periodEndMonth
     )}`,
     displayRecordReceipt: receivedDate === null,
+    journey: journey ?? null,
     licenceId,
     licenceRef,
     pageTitle: 'Abstraction return',
@@ -50,7 +51,6 @@ function go(session) {
     returnLogId,
     returnsPeriod: `From ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReference,
-    selectedOption: journey ?? null,
     siteDescription,
     status: _status(status, dueDate),
     tariffType: twoPartTariff ? 'Two part tariff' : 'Standard tariff'
