@@ -75,10 +75,7 @@ async function reviewChargeElement(request, h) {
 
   const pageData = await ReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
 
-  return h.view('bill-runs/review/review-charge-element.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-charge-element.njk', pageData)
 }
 
 async function reviewChargeReference(request, h) {
