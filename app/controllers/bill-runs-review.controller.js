@@ -122,10 +122,7 @@ async function submitFactors(request, h) {
   const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/factors.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/factors.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
