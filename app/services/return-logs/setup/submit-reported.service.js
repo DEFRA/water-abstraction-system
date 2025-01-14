@@ -37,7 +37,6 @@ async function go(sessionId, payload) {
   const formattedData = ReportedPresenter.go(session)
 
   return {
-    pageTitle: 'How was this return reported?',
     activeNavBar: 'search',
     error: validationResult,
     ...formattedData

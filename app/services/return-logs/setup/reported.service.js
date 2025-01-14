@@ -24,7 +24,6 @@ async function go(sessionId) {
   const formattedData = ReportedPresenter.go(session)
 
   return {
-    pageTitle: 'How was this return reported?',
     activeNavBar: 'search',
     ...formattedData
   }

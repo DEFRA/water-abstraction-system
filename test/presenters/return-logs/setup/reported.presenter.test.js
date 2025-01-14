@@ -27,6 +27,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       const result = ReportedPresenter.go(session)
 
       expect(result).to.equal({
+        pageTitle: 'How was this return reported?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         returnReference: '012345',
         reported: null,

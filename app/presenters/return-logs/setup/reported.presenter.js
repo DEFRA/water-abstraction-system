@@ -20,6 +20,7 @@ function go(session) {
   } = session
 
   return {
+    pageTitle: 'How was this return reported?',
     reported: reported ?? null,
     sessionId,
     returnReference,
