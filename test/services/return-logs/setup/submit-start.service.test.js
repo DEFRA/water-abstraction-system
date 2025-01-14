@@ -24,7 +24,7 @@ describe('Return Logs Setup - Submit Start service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
-        payload = { whatToDo: 'enterReturn' }
+        payload = { journey: 'enterReturn' }
       })
 
       it('saves and returns the submitted option', async () => {
@@ -32,7 +32,7 @@ describe('Return Logs Setup - Submit Start service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.whatToDo).to.equal('enterReturn')
+        expect(refreshedSession.journey).to.equal('enterReturn')
       })
     })
 

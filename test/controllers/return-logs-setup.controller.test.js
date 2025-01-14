@@ -103,7 +103,7 @@ describe('Return Logs Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = _postOptions('start', { whatToDo: 'selectedOption' })
+          options = _postOptions('start', { journey: 'selectedOption' })
         })
 
         describe('and an option is selected', () => {

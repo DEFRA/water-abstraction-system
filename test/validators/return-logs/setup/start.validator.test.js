@@ -13,7 +13,7 @@ const StartValidator = require('../../../../app/validators/return-logs/setup/sta
 describe('Return Logs Setup - Start validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = StartValidator.go({ whatToDo: 'enterReturn' })
+      const result = StartValidator.go({ journey: 'enterReturn' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -21,9 +21,9 @@ describe('Return Logs Setup - Start validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe('because no "whatToDo" is given', () => {
+    describe('because no "journey" is given', () => {
       it('fails validation', () => {
-        const result = StartValidator.go({ whatToDo: '' })
+        const result = StartValidator.go({ journey: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -33,7 +33,7 @@ describe('Return Logs Setup - Start validator', () => {
 
     describe('because an unknown "type" is given', () => {
       it('fails validation', () => {
-        const result = StartValidator.go({ whatToDo: 'invalid' })
+        const result = StartValidator.go({ journey: 'invalid' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

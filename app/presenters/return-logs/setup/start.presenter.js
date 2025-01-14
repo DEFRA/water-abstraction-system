@@ -32,7 +32,7 @@ function go(session) {
     startDate,
     status,
     twoPartTariff,
-    whatToDo
+    journey
   } = session
 
   return {
@@ -50,7 +50,7 @@ function go(session) {
     returnLogId,
     returnsPeriod: `From ${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReference,
-    selectedOption: whatToDo ?? null,
+    selectedOption: journey ?? null,
     siteDescription,
     status: _status(status, dueDate),
     tariffType: twoPartTariff ? 'Two part tariff' : 'Standard tariff'

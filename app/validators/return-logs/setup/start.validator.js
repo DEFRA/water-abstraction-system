@@ -21,7 +21,7 @@ function go(payload) {
   const errorMessage = 'Select what you want to do with this return'
 
   const schema = Joi.object({
-    whatToDo: Joi.string()
+    journey: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({

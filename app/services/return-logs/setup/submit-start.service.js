@@ -15,7 +15,7 @@ const StartValidator = require('../../../validators/return-logs/setup/start.vali
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
- * @returns {Promise<object>} An object with a `whatToDo:` property if there are no errors else the page data for
+ * @returns {Promise<object>} An object with a `journey:` property if there are no errors else the page data for
  * the abstraction return page including the validation error details
  */
 async function go(sessionId, payload) {
@@ -38,7 +38,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.whatToDo = payload.whatToDo
+  session.journey = payload.journey
 
   return session.$update()
 }

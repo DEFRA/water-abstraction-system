@@ -55,7 +55,7 @@ describe('Return Logs Setup - Start presenter', () => {
     describe('the "selectedOption" property', () => {
       describe('when an option has been selected and submitted', () => {
         beforeEach(() => {
-          session.whatToDo = 'enterReturn'
+          session.journey = 'enterReturn'
         })
 
         it('returns the selected option', () => {
