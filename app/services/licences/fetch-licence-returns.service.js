@@ -36,7 +36,7 @@ async function _fetch(licenceId, page) {
     ])
     .innerJoinRelated('licence')
     .where('licence.id', licenceId)
-    .orderBy([{ column: 'dueDate', order: 'desc' }])
+    .orderBy([{ column: 'dueDate', order: 'desc' }, { column: 'returnReference' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
