@@ -91,10 +91,7 @@ async function reviewLicence(request, h) {
 
   const pageData = await ReviewLicenceService.go(reviewLicenceId, request.yar)
 
-  return h.view('bill-runs/review/review-licence.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-licence.njk', pageData)
 }
 
 async function submitAuthorised(request, h) {
