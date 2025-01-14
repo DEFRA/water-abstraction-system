@@ -13,6 +13,10 @@ function formatQuantity(units, quantity) {
   return formatNumber(convertedQuantity)
 }
 
+/**
+ *
+ * @param meter
+ */
 function formatMeterDetails(meter) {
   if (!meter || !meter?.manufacturer) {
     return null
@@ -27,6 +31,10 @@ function formatMeterDetails(meter) {
   }
 }
 
+/**
+ *
+ * @param meter
+ */
 function formatStartReading(meter) {
   if (!meter) {
     return null
@@ -35,6 +43,12 @@ function formatStartReading(meter) {
   return meter.startReading ?? null
 }
 
+/**
+ *
+ * @param method
+ * @param frequency
+ * @param units
+ */
 function generateSummaryTableHeaders(method, frequency, units) {
   const headers = [{ text: 'Month' }]
 
@@ -59,69 +73,54 @@ function generateSummaryTableHeaders(method, frequency, units) {
   return headers
 }
 
+/**
+ *
+ * @param id
+ * @param method
+ * @param frequency
+ * @param lines
+ * @param rootPath
+ */
 function generateSummaryTableRows(id, method, frequency, lines, rootPath = '/system/return-submissions') {
-  let rowData
+  const rowsObject = lines.reduce((acc, line) => {
+    const { endDate, quantity, reading, userUnit } = line
+    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
-  if (frequency === 'month') {
-    rowData = lines
-  }
-
-  if (frequency === 'week') {
-    return []
-  }
-
-  if (frequency === 'day') {
-    const rowsObject = lines.reduce((acc, line) => {
-      const { endDate, month, quantity, userUnit } = line
-      const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
-
-      if (acc[key]) {
-        acc[key].quantity += quantity
-      } else {
-        acc[key] = {
-          endDate,
-          month,
-          quantity,
-          userUnit
-        }
-      }
-
-      if (line.reading) {
-        acc[key].reading = reading
-      }
-
-      return acc
-    }, {})
-
-    rowData = Object.values(rowsObject)
-  }
-
-  return _formatRows(rowData, method, frequency, id, rootPath)
-}
-
-function _formatRows (lines, method, frequency, id, rootPath) {
-  return lines.map((line) => {
-    const { endDate, quantity, userUnit } = line
-
-    const rowData = {
-      month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-      monthlyTotal: formatNumber(quantity)
+    if (acc[key]) {
+      acc[key].quantity += quantity
+    } else {
+      acc[key] = _initialiseRow(endDate, quantity, userUnit, method)
     }
 
-    if (method !== 'abstractionVolumes') {
-      rowData.reading = line.reading
+    acc[key].monthlyTotal = formatNumber(acc[key].quantity)
+
+    if (userUnit !== unitNames.CUBIC_METRES) {
+      acc[key].unitTotal = formatQuantity(userUnit, quantity)
+    }
+
+    if (line.reading) {
+      acc[key].reading = reading
     }
 
     if (frequency !== 'month') {
-      rowData.link = _linkDetails(id, method, frequency, endDate, rootPath)
+      acc[key].link = _linkDetails(id, method, frequency, endDate, rootPath)
     }
 
-    if (userUnit !== unitNames.CUBIC_METRES) {
-      rowData.unitTotal = formatQuantity(userUnit, quantity)
-    }
+    return acc
+  }, {})
 
-    return rowData
-  })
+  return Object.values(rowsObject)
+}
+
+function _initialiseRow(endDate, quantity, userUnit) {
+  const row = {
+    endDate,
+    month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
+    quantity,
+    userUnit
+  }
+
+  return row
 }
 
 function _linkDetails(id, method, frequency, endDate, rootPath) {
