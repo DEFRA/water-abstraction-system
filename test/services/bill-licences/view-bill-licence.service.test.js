@@ -37,6 +37,7 @@ describe('View Bill Licence service', () => {
       const result = await ViewBillLicenceService.go(testId)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
       })
 
