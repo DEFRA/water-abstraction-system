@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const VALID_VALUES = ['cubic-meters', 'litres', 'mega-litres', 'gallons']
+
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/units` page
  *
@@ -18,7 +20,6 @@ const Joi = require('joi')
 function go(payload) {
   const units = payload.units
 
-  const VALID_VALUES = ['cubic-meters', 'litres', 'mega-litres', 'gallons']
   const errorMessage = 'Select which units were used'
 
   const schema = Joi.object({
