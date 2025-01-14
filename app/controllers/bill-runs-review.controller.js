@@ -26,10 +26,7 @@ async function authorised(request, h) {
 
   const pageData = await AuthorisedService.go(reviewChargeReferenceId)
 
-  return h.view('bill-runs/review/authorised.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/authorised.njk', pageData)
 }
 
 async function edit(request, h) {
@@ -37,10 +34,7 @@ async function edit(request, h) {
 
   const pageData = await EditService.go(reviewChargeElementId, elementIndex)
 
-  return h.view('bill-runs/review/edit.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/edit.njk', pageData)
 }
 
 async function factors(request, h) {
