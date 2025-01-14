@@ -38,6 +38,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/reported',
+    options: {
+      handler: ReturnLogsSetupController.reported,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/reported',
+    options: {
+      handler: ReturnLogsSetupController.submitReported,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
