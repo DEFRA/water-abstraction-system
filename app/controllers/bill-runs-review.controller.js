@@ -111,10 +111,7 @@ async function submitEdit(request, h) {
   const pageData = await SubmitEditService.go(reviewChargeElementId, elementIndex, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/edit.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/edit.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-element/${reviewChargeElementId}/${elementIndex}`)

@@ -112,6 +112,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
 
           // Check we return page data including error (controller knows POST failed so re-renders)
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             customQuantitySelected: false,
             customQuantityValue: undefined,
             error: {
@@ -152,6 +153,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
 
           // Check we return page data including error (controller knows POST failed so re-renders)
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             customQuantitySelected: true,
             customQuantityValue: -0.1,
             error: {
