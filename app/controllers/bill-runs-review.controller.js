@@ -83,10 +83,7 @@ async function reviewChargeReference(request, h) {
 
   const pageData = await ReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
 
-  return h.view('bill-runs/review/review-charge-reference.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-charge-reference.njk', pageData)
 }
 
 async function reviewLicence(request, h) {

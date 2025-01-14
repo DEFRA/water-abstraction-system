@@ -46,6 +46,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
         const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           pageTitle: 'Review charge reference',
           bannerMessage: 'The authorised volume for this licence have been updated',
           chargeMessage: undefined,
@@ -82,6 +83,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
         const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           pageTitle: 'Review charge reference',
           bannerMessage: undefined,
           chargeMessage: 'Based on this information the example charge is £256.48.',
@@ -118,6 +120,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
         const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           pageTitle: 'Review charge reference',
           bannerMessage: undefined,
           chargeMessage: undefined,
