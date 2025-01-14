@@ -18,7 +18,12 @@ const StartPresenter = require('../../../presenters/return-logs/setup/start.pres
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return StartPresenter.go(session)
+  const formattedData = StartPresenter.go(session)
+
+  return {
+    activeNavBar: 'search',
+    ...formattedData
+  }
 }
 
 module.exports = {

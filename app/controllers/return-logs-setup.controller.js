@@ -29,7 +29,7 @@ async function start(request, h) {
   const { sessionId } = request.params
   const pageData = await StartService.go(sessionId)
 
-  return h.view('return-logs/setup/start.njk', { activeNavBar: 'search', ...pageData })
+  return h.view('return-logs/setup/start.njk', pageData)
 }
 
 async function submitReceived(request, h) {

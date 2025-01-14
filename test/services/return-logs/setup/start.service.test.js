@@ -27,6 +27,7 @@ describe('Return Logs Setup - Start service', () => {
 
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',
+        activeNavBar: 'search',
         displayRecordReceipt: true,
         licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
         licenceRef: '01/111',
