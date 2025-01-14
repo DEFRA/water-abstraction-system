@@ -36,6 +36,7 @@ function go(reviewChargeElement, elementIndex) {
     financialPeriod: formatFinancialYear(
       reviewChargeReference.reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding
     ),
+    pageTitle: 'Set the billable returns quantity for this bill run',
     reviewChargeElementId
   }
 }
