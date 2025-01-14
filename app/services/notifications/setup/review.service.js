@@ -28,7 +28,7 @@ async function go(sessionId, page) {
 
   const { recipients, total } = await RecipientsService.go(selectedReturnsPeriod.dueDate, 'true', page)
 
-  const recipientData = ReviewPresenter.go(recipients)
+  const recipientData = ReviewPresenter.go(recipients, total)
 
   const pagination = PaginatorPresenter.go(total, Number(page), `/system/notifications/setup/${sessionId}/review`)
 

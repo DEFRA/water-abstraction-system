@@ -9,11 +9,12 @@
  * Formats data for the `/notifications/setup/review` page
  *
  * @param recipients
+ * @param total
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients) {
+function go(recipients, total) {
   return {
-    recipientsAmount: recipients.length,
+    recipientsAmount: total,
     recipients: _recipients(recipients)
   }
 }
