@@ -13,32 +13,17 @@ const { db } = require('../../../../db/db.js')
  * @param {string} dueDate
  * @param {string} isSummer
  *
- * @param page
  * @returns {object} A list of recipients
  */
-async function go(dueDate, isSummer, page = 1) {
-  const { rows } = await _fetch('2024-11-28', 'true', page)
-  const counter = await _count('2024-11-28', 'true')
-  return {
-    recipients: rows,
-    total: counter.rows.length
-  }
-}
-
-//  temp count
-async function _count(dueDate, isSummer) {
-  const query = _query()
-  const limit = 100000000
-  const offset = 1
-  return db.raw(query, [dueDate, isSummer, dueDate, isSummer, dueDate, isSummer, limit, offset])
+async function go(dueDate, isSummer) {
+  const { rows } = await _fetch('2024-11-28', 'true')
+  return rows
 }
 
 //  isSummer may need to be a string
-async function _fetch(dueDate, isSummer, page) {
+async function _fetch(dueDate, isSummer) {
   const query = _query()
-  const limit = 20
-  const offset = 20 * Number(page)
-  return db.raw(query, [dueDate, isSummer, dueDate, isSummer, dueDate, isSummer, limit, offset])
+  return db.raw(query, [dueDate, isSummer, dueDate, isSummer, dueDate, isSummer])
 }
 
 function _query() {
@@ -124,9 +109,7 @@ GROUP BY
   recipient,
   contact,
   contact_hash_id
-ORDER BY all_licences
-LIMIT ?
-OFFSET ?;`
+ORDER BY all_licences;`
 }
 
 module.exports = {

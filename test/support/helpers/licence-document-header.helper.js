@@ -84,7 +84,8 @@ function _metadata() {
         addressLine4: null
       }
     ],
-    IsCurrent: true,
+    isCurrent: true,
+    isSummer: true,
     Salutation: '',
     AddressLine1: 'ENVIRONMENT AGENCY',
     AddressLine2: 'HORIZON HOUSE',

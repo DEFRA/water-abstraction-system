@@ -9,24 +9,42 @@
  * Formats data for the `/notifications/setup/review` page
  *
  * @param recipients
- * @param total
+ * @param page
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, total) {
+function go(recipients, page = 1) {
   return {
-    recipientsAmount: total,
-    recipients: _recipients(recipients)
+    pageTitle: 'Review the mailing list',
+    recipientsAmount: recipients.length,
+    recipients: _recipients(recipients, page)
   }
 }
 
-function _recipients(recipients) {
-  return recipients.map((recipient) => {
+function _recipients(recipients, page) {
+  const paginatedRecipients = _pagination(recipients, page)
+  return paginatedRecipients.map((recipient) => {
     return {
       contact: _contact(recipient.contact),
       licences: _licences(recipient.all_licences),
       method: recipient.message_type
     }
   })
+}
+
+/**
+ * Due to the complexity of the query to get the recipients data
+ *
+ * We need to handle the pagination in the presenter. This is all that is needed and work with the
+ * existing pagination patterns
+ *
+ * @param recipients
+ * @param page
+ * @returns {object} - recipients limited to the pagination amount
+ * @private
+ */
+function _pagination(recipients, page) {
+  const pageNumber = Number(page) * 25
+  return recipients.slice(pageNumber - 25, pageNumber)
 }
 
 function _licences(licences) {
