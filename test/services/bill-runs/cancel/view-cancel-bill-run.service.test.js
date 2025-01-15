@@ -55,6 +55,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
       const result = await ViewCancelBillRunService.go(billRunId)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         backLink: `/system/bill-runs/${billRunId}`,
         billRunId,
         billRunNumber: 10101,
@@ -63,6 +64,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
         chargeScheme: 'Current',
         dateCreated: '28 February 2024',
         financialYear: '2024 to 2025',
+        pageTitle: "You're about to cancel this bill run",
         region: 'Avalon'
       })
     })

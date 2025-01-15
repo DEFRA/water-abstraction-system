@@ -22,9 +22,12 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
 async function go(id) {
   const result = await FetchBillRunService.go(id)
 
-  const pageData = _pageData(result)
+  const formattedData = _pageData(result)
 
-  return pageData
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 function _pageData(fetchResult) {
