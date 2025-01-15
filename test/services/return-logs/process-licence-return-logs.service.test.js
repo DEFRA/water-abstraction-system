@@ -49,8 +49,7 @@ describe('Process licence return logs service', () => {
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
-      orderBy: returnCycleModelStub,
-
+      orderBy: returnCycleModelStub
     })
   })
 

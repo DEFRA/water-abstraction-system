@@ -54,7 +54,7 @@ async function go(licenceId, changeDate = null) {
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
   const returnCycles = await _fetchReturnCycles(changeDate, licenceEndDate)
-console.log(returnCycles)
+
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef)
   }
@@ -63,11 +63,7 @@ console.log(returnCycles)
 function _endDate(returnVersion) {
   const { licence } = returnVersion
 
-  return determineEarliestDate([
-    licence.expiredDate,
-    licence.lapsedDate,
-    licence.revokedDate,
-  ])
+  return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
 async function _fetchReturnCycles(changeDate, licenceEndDate) {
