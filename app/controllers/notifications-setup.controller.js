@@ -1,6 +1,7 @@
 'use strict'
 
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
+const ReviewService = require('../services/notifications/setup/review.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
 
@@ -19,6 +20,18 @@ async function viewReturnsPeriod(request, h) {
   const pageData = await ReturnsPeriodService.go(sessionId)
 
   return h.view(`${basePath}/view-returns-period.njk`, {
+    ...pageData
+  })
+}
+
+async function viewReview(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ReviewService.go(sessionId)
+
+  return h.view(`${basePath}/review.njk`, {
     ...pageData
   })
 }
@@ -48,6 +61,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   viewReturnsPeriod,
+  viewReview,
   setup,
   submitReturnsPeriod
 }

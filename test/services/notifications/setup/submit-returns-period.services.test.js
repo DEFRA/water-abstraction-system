@@ -48,7 +48,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirect: 'send-notice'
+          redirect: `${session.id}/review`
         })
       })
     })
@@ -75,7 +75,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
                 text: 'Due date 28 January 2025'
               },
               text: 'Quarterly 1 October 2024 to 31 December 2024',
-              value: 'quarterFour'
+              value: 'quarterThree'
             },
             {
               checked: false,
@@ -83,7 +83,7 @@ describe('Notifications Setup - Submit Returns Period service', () => {
                 text: 'Due date 28 April 2025'
               },
               text: 'Quarterly 1 January 2025 to 31 March 2025',
-              value: 'quarterOne'
+              value: 'quarterFour'
             }
           ]
         })

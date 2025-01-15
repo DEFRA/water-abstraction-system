@@ -13,6 +13,7 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
+const ReviewService = require('../../app/services/notifications/setup/review.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
 // For running our service
@@ -138,6 +139,37 @@ describe('Notifications Setup controller', () => {
       })
     })
   })
+
+  describe('notifications/setup/review', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/review`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(ReviewService, 'go').returns(_viewReview())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewReview()
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
+        })
+      })
+    })
+  })
 })
 
 function _viewReturnsPeriod() {
@@ -146,5 +178,12 @@ function _viewReturnsPeriod() {
     backLink: '/manage',
     activeNavBar: 'manage',
     returnsPeriod: []
+  }
+}
+
+function _viewReview() {
+  return {
+    pageTitle: 'Review the mailing listr',
+    activeNavBar: 'manage'
   }
 }

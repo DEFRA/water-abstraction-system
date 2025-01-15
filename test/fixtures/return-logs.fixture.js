@@ -24,6 +24,22 @@ function returnCycle(summer = false) {
 function returnCycles(numberOfCycles = 2) {
   const cycles = [
     {
+      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
+      startDate: new Date('2025-11-01'),
+      endDate: new Date('2026-10-31'),
+      dueDate: new Date('2026-11-28'),
+      summer: true,
+      submittedInWrls: true
+    },
+    {
+      id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
+      startDate: new Date('2025-04-01'),
+      endDate: new Date('2026-03-31'),
+      dueDate: new Date('2026-04-28'),
+      summer: false,
+      submittedInWrls: true
+    },
+    {
       id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
       startDate: new Date('2024-11-01'),
       endDate: new Date('2025-10-31'),
@@ -176,7 +192,8 @@ function returnRequirements() {
             id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
             naldRegionId: 4
           }
-        }
+        },
+        quarterlyReturns: true
       },
       points: [
         {

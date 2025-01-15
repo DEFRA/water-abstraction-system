@@ -30,6 +30,18 @@ const routes = [
     }
   },
   {
+    method: 'GET',
+    path: basePath + '/{sessionId}/review',
+    options: {
+      handler: NotificationsSetupController.viewReview,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
     method: 'POST',
     path: basePath + '/{sessionId}/returns-period',
     options: {

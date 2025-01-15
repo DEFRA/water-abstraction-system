@@ -6,6 +6,7 @@
  */
 
 const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
 const GenerateReturnLogService = require('./generate-return-log.service.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
 
@@ -42,9 +43,20 @@ async function go(returnRequirement, returnCycle) {
  * @private
  */
 function _generateReturnLogs(returnRequirement, returnCycle) {
-  const returnLog = GenerateReturnLogService.go(returnRequirement, returnCycle)
+  const isQuarterlyReturn = returnRequirement.returnVersion.quarterlyReturns
+  const returnLogs = []
 
-  return [returnLog]
+  if (isQuarterlyReturn && returnCycle.startDate >= new Date('2025-04-01')) {
+    const quarterlyReturnPeriods = determineReturnsPeriods(returnCycle)
+
+    for (const quarterlyReturnPeriod of quarterlyReturnPeriods) {
+      returnLogs.push(GenerateReturnLogService.go(returnRequirement, quarterlyReturnPeriod))
+    }
+  } else {
+    returnLogs.push(GenerateReturnLogService.go(returnRequirement, returnCycle))
+  }
+
+  return returnLogs
 }
 
 async function _persistReturnLogs(returnLogs) {
