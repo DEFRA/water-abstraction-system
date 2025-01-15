@@ -62,7 +62,9 @@ async function submitMeterProvided(request, h) {
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-provided.njk', pageData)
-  } else if (pageData.meterProvided === 'no') {
+  }
+
+  if (pageData.meterProvided === 'no') {
     return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
   }
 
