@@ -8,7 +8,6 @@
 const { formatAbstractionPeriod, formatLongDate, formatNumber } = require('../base.presenter.js')
 const {
   formatMeterDetails,
-  formatStartReading,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } = require('./base-return-logs.presenter.js')
