@@ -17,8 +17,8 @@ const ReceivedService = require('../../app/services/return-logs/setup/received.s
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const StartService = require('../../app/services/return-logs/setup/start.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
-const SubmitStartService = require('../../app/services/return-logs/setup/submit-start.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
+const SubmitStartService = require('../../app/services/return-logs/setup/submit-start.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
 
@@ -72,80 +72,6 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/start`)
-        })
-      })
-    })
-  })
-
-  describe('/return-logs/setup/{sessionId}/start', () => {
-    describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
-        }
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(StartService, 'go').resolves({ pageTitle: 'Abstraction return' })
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Abstraction return')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          options = _postOptions('start', { journey: 'selectedOption' })
-        })
-
-        describe('and an option is selected', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({})
-          })
-
-          it('redirects to the "received" page', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received'
-            )
-          })
-        })
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          options = _postOptions('start', {})
-        })
-
-        describe('and the validation fails as no option has been selected', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({
-              pageTitle: 'Abstraction return',
-              error: { text: 'Select what you want to do with this return' }
-            })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Select what you want to do with this return')
-            expect(response.payload).to.contain('Abstraction return')
-          })
         })
       })
     })
@@ -296,6 +222,80 @@ describe('Return Logs Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select how this return was reported')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('/return-logs/setup/{sessionId}/start', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(StartService, 'go').resolves({ pageTitle: 'Abstraction return' })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Abstraction return')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          options = _postOptions('start', { journey: 'selectedOption' })
+        })
+
+        describe('and an option is selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStartService, 'go').resolves({})
+          })
+
+          it('redirects to the "received" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received'
+            )
+          })
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          options = _postOptions('start', {})
+        })
+
+        describe('and the validation fails as no option has been selected', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitStartService, 'go').resolves({
+              pageTitle: 'Abstraction return',
+              error: { text: 'Select what you want to do with this return' }
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select what you want to do with this return')
+            expect(response.payload).to.contain('Abstraction return')
+          })
         })
       })
     })
