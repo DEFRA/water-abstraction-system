@@ -32,7 +32,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      ...payload
+      meterProvided: session.meterProvided
     }
   }
 
