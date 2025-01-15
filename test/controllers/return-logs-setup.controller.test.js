@@ -14,7 +14,11 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
+const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
+const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
+const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
+const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -140,6 +144,156 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter a real received date')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/reported', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(ReportedService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'How was this return reported?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('How was this return reported?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('reported', {})
+        })
+
+        describe('and the reported type is entered', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({})
+          })
+
+          it('redirects to the "units" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/units'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('reported')
+
+          Sinon.stub(SubmitReportedService, 'go').resolves({
+            error: { text: 'Select how this return was reported' },
+            pageTitle: 'How was this return reported?',
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select how this return was reported')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/units', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/units',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(UnitsService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'Which units were used?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Which units were used?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('units', {})
+        })
+
+        describe('and the unit type is entered', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({})
+          })
+
+          it('redirects to the "meter provided" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-provided'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('units')
+
+          Sinon.stub(SubmitUnitsService, 'go').resolves({
+            error: { text: 'Select which units were used' },
+            pageTitle: 'Which units were used?',
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select which units were used')
           expect(response.payload).to.contain('There is a problem')
         })
       })
