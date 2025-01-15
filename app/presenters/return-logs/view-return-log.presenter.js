@@ -25,6 +25,7 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
 function go(returnLog, auth) {
   const {
     endDate,
+    id,
     licence,
     periodEndDay,
     periodEndMonth,
@@ -37,66 +38,82 @@ function go(returnLog, auth) {
     siteDescription,
     status,
     startDate,
-    twoPartTariff
+    twoPartTariff,
+    versions
   } = returnLog
 
-  const currentReturnSubmission = _currentReturnSubmission(returnSubmissions)
-  const editReturn = _editReturn(auth, status)
+  const selectedReturnSubmission = returnSubmissions[0]
+  const latest = _latest(versions, selectedReturnSubmission)
+  const editReturn = _editReturn(latest, auth, status)
 
-  const method = currentReturnSubmission.$method()
-  const units = currentReturnSubmission.$units()
+  const method = selectedReturnSubmission.$method()
+  const units = selectedReturnSubmission.$units()
   const summaryTableHeaders = generateSummaryTableHeaders(method, returnsFrequency, units)
   const summaryTableRows = generateSummaryTableRows(
-    currentReturnSubmission.id,
     method,
     returnsFrequency,
-    currentReturnSubmission.returnSubmissionLines
+    selectedReturnSubmission.returnSubmissionLines,
+    selectedReturnSubmission.id
   )
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
     displayUnits: units !== unitNames.CUBIC_METRES,
     editReturn,
-    editReturnLink: editReturn ? `/return-logs/setup/${returnLog.id}` : null,
-    licenceId: licence.id,
+    editReturnLink: editReturn ? `/return/internal?returnId=${returnLog.id}` : null,
+    latest,
     licenceRef: licence.licenceRef,
-    meterDetails: formatMeterDetails(currentReturnSubmission.$meter()),
+    meterDetails: formatMeterDetails(selectedReturnSubmission.$meter()),
     method,
-    nilReturn: currentReturnSubmission.nilReturn,
+    nilReturn: selectedReturnSubmission.nilReturn,
     purpose: _purpose(purposes),
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     siteDescription,
-    startReading: formatStartReading(currentReturnSubmission.$meter()),
+    startReading: selectedReturnSubmission.$meter()?.startReading,
     status,
     summaryTableHeaders,
     summaryTableRows,
     tableTitle: _tableTitle(returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
-    total: _total(currentReturnSubmission),
-    versions: _versions(currentReturnSubmission)
+    total: _total(selectedReturnSubmission),
+    versions: _versions(selectedReturnSubmission.id, versions, id)
   }
 }
 
-function _currentReturnSubmission(returnSubmissions) {
-  if (returnSubmissions.length === 0) {
-    return null
+function _backLink(returnId, licenceId, latest) {
+  if (latest) {
+    return {
+      href: `/system/licences/${licenceId}/summary`,
+      text: 'Go back to summary'
+    }
   }
 
-  return returnSubmissions[0]
+  return {
+    href: `/system/return-logs?id=${returnId}`,
+    text: 'Go back to the latest version'
+  }
 }
 
-function _editReturn(auth, status) {
+function _latest(versions, selectedReturnSubmission) {
+  return versions[0].id === selectedReturnSubmission.id
+}
+
+function _editReturn(latest, auth, status) {
+  // You cannot edit a previous version
+  if (!latest) {
+    return false
+  }
+
+  // You cannot edit if you do not have permission to
   if (!auth.credentials.scope.includes('returns')) {
     return false
   }
 
-  if (status === 'void' || status === 'due') {
-    return false
-  }
-
-  return true
+  // You can only edit (add a new submission) to a completed or received return
+  return ['completed', 'received'].includes(status)
 }
 
 function _purpose(purposes) {
@@ -112,12 +129,12 @@ function _tableTitle(returnsFrequency, method) {
   return `Summary of ${frequency} ${postfix}`
 }
 
-function _total(currentReturnSubmission) {
-  if (currentReturnSubmission.nilReturn) {
+function _total(selectedReturnSubmission) {
+  if (selectedReturnSubmission.nilReturn) {
     return 0
   }
 
-  const total = currentReturnSubmission.returnSubmissionLines.reduce((total, line) => {
+  const total = selectedReturnSubmission.returnSubmissionLines.reduce((total, line) => {
     const quantity = line.quantity ?? 0
 
     return total + quantity
@@ -126,16 +143,17 @@ function _total(currentReturnSubmission) {
   return formatNumber(total)
 }
 
-function _versions(currentReturnSubmission) {
-  const { createdAt, userId } = currentReturnSubmission
+function _versions(selectedReturnSubmissionId, versions, returnLogId) {
+  return versions.map((version) => {
+    const { createdAt, id, userId: user, version: number } = version
 
-  return [
-    {
-      createdAt: formatLongDate(createdAt),
-      current: true,
-      user: userId
+    return {
+      createdAt: `${formatLongDate(createdAt)} v${number}`,
+      link: `/system/return-logs?id=${returnLogId}&version=${number}`,
+      selected: id === selectedReturnSubmissionId,
+      user
     }
-  ]
+  })
 }
 
 module.exports = {

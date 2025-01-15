@@ -206,8 +206,19 @@ function formatMoney(valueInPence, signed = false) {
   return `${sign}£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
+/**
+ * Formats a number as a string with commas and decimal places, for example, 1000 as '1,000.000'
+ *
+ * @param {number} number - The number to format
+ * @param {number} [minimumFractionDigits=0] - Minimum number of digits after the decimal point
+ * @param {number} [maximumFractionDigits=3] - Maximum number of digits after the decimal point
+ *
+ * @returns {string|null} The formatted number or null if the number is null or undefined
+ */
 function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 3) {
-  if (!number) {
+  // NOTE: We don't use !number because that would match 0, which for this helper is a valid number and something we
+  // want to format
+  if (number === null) {
     return null
   }
 

@@ -16,7 +16,9 @@ async function view(request, h) {
     return Boom.badImplementation('Id is required')
   }
 
-  const pageData = await ViewReturnLogService.go(query.id, auth)
+  const version = query.version ? Number(query.version) : 0
+
+  const pageData = await ViewReturnLogService.go(query.id, version, auth)
 
   return h.view('return-logs/view.njk', { activeNavBar: 'search', ...pageData })
 }

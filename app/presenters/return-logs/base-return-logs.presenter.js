@@ -3,6 +3,14 @@
 const { formatNumber, sentenceCase } = require('../base.presenter.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
+/**
+ * Converts a quantity from a given unit to cubic meters and formats it
+ *
+ * @param {string} units - the unit of the quantity
+ * @param {number} quantity - the quantity to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
 function formatQuantity(units, quantity) {
   if (!quantity) {
     return null
@@ -14,8 +22,11 @@ function formatQuantity(units, quantity) {
 }
 
 /**
+ * Formats the details of a return submission meter
  *
- * @param meter
+ * @param {object} meter - the meter to be formatted
+ *
+ * @returns {object|null} The formatted meter or null if the meter is null or undefined
  */
 function formatMeterDetails(meter) {
   if (!meter || !meter?.manufacturer) {
@@ -32,22 +43,13 @@ function formatMeterDetails(meter) {
 }
 
 /**
+ * Generates the table headers for a return log monthly summary table
  *
- * @param meter
- */
-function formatStartReading(meter) {
-  if (!meter) {
-    return null
-  }
-
-  return meter.startReading ?? null
-}
-
-/**
+ * @param {string} method - whether the submission used abstraction volumes or readings
+ * @param {string} frequency - the reporting frequency of the return log
+ * @param {string} units - the units used for the return log's selected return submission
  *
- * @param method
- * @param frequency
- * @param units
+ * @returns {object[]} The table headers for the summary table
  */
 function generateSummaryTableHeaders(method, frequency, units) {
   const headers = [{ text: 'Month' }]
@@ -74,53 +76,110 @@ function generateSummaryTableHeaders(method, frequency, units) {
 }
 
 /**
+ * Generates the table rows for a return log monthly summary table
  *
- * @param id
- * @param method
- * @param frequency
- * @param lines
- * @param rootPath
+ * When viewing a return log, or reviewing a return submission on its `/check` page, we are expected to display a
+ * monthly summary.
+ *
+ * For example, if a the return log is 'daily', for each month it covers we are required to summary the daily line
+ * entries into a single 'monthly summary'.
+ *
+ * But there are a number of things we have to take into account
+ *
+ * - if the user did not enter anything, the line's quantity will be null and not 0
+ * - the total quantity for a month can also be null (no quantities were entered)
+ * - if readings instead of abstraction volumes were used, we have to find the last reading for the month
+ * - if the frequency is daily or weekly, we have to generate links to view the line details for each month
+ * - if the submission does not use cubic metres, we also have to convert the monthly quantity into the selected unit
+ *
+ * So, we use `_groupLinesByMonth()` to group the lines by month. For each month the return log covers, a group will be
+ * generated. This includes summing the quantity and determining the last meter reading. Then we iterate through the
+ * groups to generate the table rows to be used in the views.
+ *
+ * @param {string} method - Indicates if the submission used abstraction volumes or readings.
+ * @param {string} frequency - The reporting frequency of the return log.
+ * @param {object[]} lines - The individual submission lines to be grouped and formatted into table rows
+ * @param {string} [id=null] - The ID to use in the link to view the daily/weekly details for a month
+ * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view details
+ *
+ * @returns {object[]} An array of row data objects for the summary table, each containing details like month,
+ * total quantity, reading, and unit totals.
  */
-function generateSummaryTableRows(id, method, frequency, lines, rootPath = '/system/return-submissions') {
-  const rowsObject = lines.reduce((acc, line) => {
-    const { endDate, quantity, reading, userUnit } = line
-    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
+function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
+  const groups = _groupLinesByMonth(lines)
 
-    if (acc[key]) {
-      acc[key].quantity += quantity
-    } else {
-      acc[key] = _initialiseRow(endDate, quantity, userUnit, method)
+  return groups.map((group) => {
+    const { endDate, quantity, reading, userUnit } = group
+
+    const rowData = {
+      month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
+      monthlyTotal: formatNumber(quantity)
     }
 
-    acc[key].monthlyTotal = formatNumber(acc[key].quantity)
-
-    if (userUnit !== unitNames.CUBIC_METRES) {
-      acc[key].unitTotal = formatQuantity(userUnit, quantity)
-    }
-
-    if (line.reading) {
-      acc[key].reading = reading
+    if (method !== 'abstractionVolumes') {
+      rowData.reading = reading
     }
 
     if (frequency !== 'month') {
-      acc[key].link = _linkDetails(id, method, frequency, endDate, rootPath)
+      rowData.link = _linkDetails(id, method, frequency, endDate, rootPath)
+    }
+
+    if (userUnit !== unitNames.CUBIC_METRES) {
+      rowData.unitTotal = formatQuantity(userUnit, quantity)
+    }
+
+    return rowData
+  })
+}
+
+/**
+ * Fortunately, each line has a start and end date based on the return log's frequency. For example, if the frequency is
+ * daily, the start and end dates will be the same. If the frequency is monthly, the start and end dates will be the
+ * first and last day of the month.
+ *
+ * If the frequency is weekly, the start and end dates will be the first (Sunday) and last (Saturday) day of the week.
+ *
+ * For each line we extract the end date and use it to generate a 'key'. We use the end date because for the purposes of
+ * return submissions, it is the end date that governs when the water was abstracted.
+ *
+ * For example, if the line was for week commencing Sunday 30 March 2025, then the end date will be Saturday 5 April.
+ * This means water will be deemed to have been extracted in April 2025, not March.
+ *
+ * > Daily and monthly are simple, because the start and end date is always in the same month!
+ *
+ * The key is formed from the year and month of the end date. We iterate the lines, generating the key and checking if
+ * we already have a group with the matching key. If we do, we add to its quantity. Else, we create a new group,
+ * assigning the end date, user unit, and initial quantity ready for the next step, where we format each group as a
+ * summary row for the table.
+ *
+ * The final step is to check if a reading has been entered by a user. If it has we assign that to the group,
+ * overwriting whatever entry was previously captured. In this way when we move to the next group, we'll know we have
+ * captured the 'end reading' for the month.
+ *
+ * @private
+ */
+function _groupLinesByMonth(lines) {
+  const groupedLines = lines.reduce((acc, line) => {
+    const { endDate, quantity, reading, userUnit } = line
+    const key = `${endDate.getFullYear()}-${endDate.getMonth()}`
+
+    if (!acc[key]) {
+      acc[key] = {
+        endDate,
+        quantity: 0,
+        userUnit
+      }
+    }
+    acc[key].quantity += quantity
+
+    if (reading) {
+      acc[key].reading = reading
     }
 
     return acc
   }, {})
 
-  return Object.values(rowsObject)
-}
-
-function _initialiseRow(endDate, quantity, userUnit) {
-  const row = {
-    endDate,
-    month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-    quantity,
-    userUnit
-  }
-
-  return row
+  return Object.values(groupedLines)
 }
 
 function _linkDetails(id, method, frequency, endDate, rootPath) {
@@ -136,7 +195,6 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 
 module.exports = {
   formatMeterDetails,
-  formatStartReading,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 }
