@@ -68,6 +68,7 @@ function go(returnLog, auth) {
     meterDetails: formatMeterDetails(selectedReturnSubmission.$meter()),
     method,
     nilReturn: selectedReturnSubmission.nilReturn,
+    pageTitle: 'Abstraction return',
     purpose: _purpose(purposes),
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,

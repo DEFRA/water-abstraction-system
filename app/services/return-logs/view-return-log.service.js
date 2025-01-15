@@ -23,7 +23,7 @@ async function go(returnId, version, auth) {
   const pageData = ViewReturnLogPresenter.go(returnLog, auth)
 
   return {
-    pageTitle: 'Abstraction return',
+    activeNavBar: 'search',
     ...pageData
   }
 }
