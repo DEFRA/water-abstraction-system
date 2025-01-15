@@ -35,6 +35,7 @@ function go(reviewChargeReference) {
     chargePeriod: formatChargePeriod(reviewChargeVersion),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     otherAdjustments: [...additionalCharges, ...adjustments],
+    pageTitle: 'Set the adjustment factors',
     reviewChargeReferenceId
   }
 }

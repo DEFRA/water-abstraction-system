@@ -16,10 +16,7 @@ async function remove(request, h) {
 
   const pageData = await RemoveBillLicenceService.go(id)
 
-  return h.view('bill-licences/remove.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-licences/remove.njk', pageData)
 }
 
 async function submitRemove(request, h) {
@@ -41,11 +38,7 @@ async function view(request, h) {
 
   const view = pageData.scheme === 'sroc' ? 'view-sroc.njk' : 'view-presroc.njk'
 
-  return h.view(`bill-licences/${view}`, {
-    pageTitle: `Transactions for ${pageData.licenceRef}`,
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view(`bill-licences/${view}`, pageData)
 }
 
 module.exports = {

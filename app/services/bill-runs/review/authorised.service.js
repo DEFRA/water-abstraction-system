@@ -19,11 +19,11 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
 async function go(reviewChargeReferenceId) {
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
 
-  const pageData = AuthorisedPresenter.go(reviewChargeReference)
+  const formattedData = AuthorisedPresenter.go(reviewChargeReference)
 
   return {
-    pageTitle: 'Set the authorised volume',
-    ...pageData
+    activeNavBar: 'bill-runs',
+    ...formattedData
   }
 }
 
