@@ -10,6 +10,8 @@ const ReceivedService = require('../services/return-logs/setup/received.service.
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
+const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
+const UnitsService = require('../services/return-logs/setup/units.service.js')
 
 async function received(request, h) {
   const { sessionId } = request.params
@@ -62,10 +64,34 @@ async function submitReported(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
+async function submitUnits(request, h) {
+  const {
+    params: { sessionId },
+    payload
+  } = request
+
+  const pageData = await SubmitUnitsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/units.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
+}
+
+async function units(request, h) {
+  const { sessionId } = request.params
+  const pageData = await UnitsService.go(sessionId)
+
+  return h.view('return-logs/setup/units.njk', pageData)
+}
+
 module.exports = {
   received,
   reported,
   setup,
   submitReceived,
-  submitReported
+  submitReported,
+  submitUnits,
+  units
 }
