@@ -51,6 +51,7 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
             returnTotal: '0 ML / 0 ML'
           }
         ],
+        pageTitle: 'Review charge element',
         reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
         reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
         status: 'review'

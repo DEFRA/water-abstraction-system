@@ -32,14 +32,14 @@ async function go(reviewChargeElementId, elementIndex, yar, payload) {
   }
 
   const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const formattedData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
+    activeNavBar: 'bill-runs',
     customQuantitySelected: payload.quantityOptions === 'customQuantity',
     customQuantityValue: payload.customQuantity,
     error: validationResult,
-    pageTitle: 'Set the billable returns quantity for this bill run',
-    ...pageData
+    ...formattedData
   }
 }
 

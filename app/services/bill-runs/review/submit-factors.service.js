@@ -40,14 +40,14 @@ async function go(reviewChargeReferenceId, yar, payload) {
   }
 
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
-  const pageData = FactorsPresenter.go(reviewChargeReference)
+  const formattedData = FactorsPresenter.go(reviewChargeReference)
 
   return {
+    activeNavBar: 'bill-runs',
     amendedAggregate: payload.amendedAggregate,
     amendedChargeAdjustment: payload.amendedChargeAdjustment,
     error: validationResult,
-    pageTitle: 'Set the adjustment factors',
-    ...pageData
+    ...formattedData
   }
 }
 

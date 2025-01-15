@@ -83,6 +83,7 @@ describe('Bill Runs Review - Submit Factors Service', () => {
 
         // Check we return page data including error (controller knows POST failed so re-renders)
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           amendedAggregate: 0.333333333,
           amendedChargeAdjustment: 1,
           error: {

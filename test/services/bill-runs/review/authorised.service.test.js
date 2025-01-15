@@ -35,6 +35,7 @@ describe('Bill Runs Review - Authorised Service', () => {
       const result = await AuthorisedService.go(reviewChargeReference.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         pageTitle: 'Set the authorised volume',
         amendedAuthorisedVolume: 9.092,
         chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',

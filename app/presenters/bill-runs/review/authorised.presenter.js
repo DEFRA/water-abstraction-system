@@ -31,6 +31,7 @@ function go(reviewChargeReference) {
     chargePeriod: formatChargePeriod(reviewChargeVersion),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
     reviewChargeReferenceId,
+    pageTitle: 'Set the authorised volume',
     totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)
   }
 }

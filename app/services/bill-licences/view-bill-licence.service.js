@@ -19,7 +19,12 @@ const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bi
 async function go(id) {
   const billLicence = await FetchBillLicenceService.go(id)
 
-  return ViewBillLicencePresenter.go(billLicence)
+  const formattedData = ViewBillLicencePresenter.go(billLicence)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {
