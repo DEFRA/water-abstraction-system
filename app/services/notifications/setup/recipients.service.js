@@ -16,7 +16,7 @@ const { db } = require('../../../../db/db.js')
  * @returns {object} A list of recipients
  */
 async function go(dueDate, isSummer) {
-  const { rows } = await _fetch('2024-11-28', 'true')
+  const { rows } = await _fetch(dueDate, isSummer)
   return rows
 }
 
