@@ -23,10 +23,7 @@ async function check(request, h) {
 
   const pageData = await CheckService.go(sessionId)
 
-  return h.view('bill-runs/setup/check.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/check.njk', pageData)
 }
 
 async function noLicences(request, h) {
@@ -34,10 +31,7 @@ async function noLicences(request, h) {
 
   const pageData = await NoLicencesService.go(sessionId)
 
-  return h.view('bill-runs/setup/no-licences.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/no-licences.njk', pageData)
 }
 
 async function region(request, h) {
@@ -45,10 +39,7 @@ async function region(request, h) {
 
   const pageData = await RegionService.go(sessionId)
 
-  return h.view('bill-runs/setup/region.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/region.njk', pageData)
 }
 
 async function season(request, h) {
@@ -56,10 +47,7 @@ async function season(request, h) {
 
   const pageData = await SeasonService.go(sessionId)
 
-  return h.view('bill-runs/setup/season.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/season.njk', pageData)
 }
 
 async function setup(_request, h) {
@@ -74,10 +62,7 @@ async function submitCheck(request, h) {
   const pageData = await SubmitCheckService.go(sessionId, request.auth)
 
   if (pageData.error) {
-    return h.view('bill-runs/setup/check.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/setup/check.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs`)
@@ -89,10 +74,7 @@ async function submitRegion(request, h) {
   const pageData = await SubmitRegionService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/setup/region.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/setup/region.njk', pageData)
   }
 
   if (pageData.setupComplete) {
@@ -108,10 +90,7 @@ async function submitSeason(request, h) {
   const pageData = await SubmitSeasonService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/setup/season.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/setup/season.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
@@ -123,10 +102,7 @@ async function submitType(request, h) {
   const pageData = await SubmitTypeService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/setup/type.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/setup/type.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
@@ -138,10 +114,7 @@ async function submitYear(request, h) {
   const pageData = await SubmitYearService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/setup/year.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/setup/year.njk', pageData)
   }
 
   if (pageData.setupComplete) {
@@ -156,10 +129,7 @@ async function type(request, h) {
 
   const pageData = await TypeService.go(sessionId)
 
-  return h.view('bill-runs/setup/type.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/type.njk', pageData)
 }
 
 async function year(request, h) {
@@ -171,10 +141,7 @@ async function year(request, h) {
     return h.redirect(`/system/bill-runs/setup/${sessionId}/no-licences`)
   }
 
-  return h.view('bill-runs/setup/year.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/setup/year.njk', pageData)
 }
 
 module.exports = {

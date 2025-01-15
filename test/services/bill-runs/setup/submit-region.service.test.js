@@ -103,6 +103,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             error: {
               text: 'Select the region'
             },

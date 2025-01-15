@@ -48,6 +48,7 @@ async function go(sessionId, payload) {
   const pageData = YearPresenter.go(licenceSupplementaryYears, session)
 
   return {
+    activeNavBar: 'bill-runs',
     error: validationResult,
     ...pageData
   }

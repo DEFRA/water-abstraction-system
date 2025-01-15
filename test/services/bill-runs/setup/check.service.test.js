@@ -48,6 +48,7 @@ describe('Bill Runs - Setup - Check service', () => {
       const result = await CheckService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         backLink: `/system/bill-runs/setup/${session.id}/region`,
         billRunLink: null,
         billRunNumber: null,

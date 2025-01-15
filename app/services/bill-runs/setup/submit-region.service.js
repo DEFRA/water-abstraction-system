@@ -46,6 +46,7 @@ async function go(sessionId, payload) {
   const formattedData = RegionPresenter.go(session, regions)
 
   return {
+    activeNavBar: 'bill-runs',
     error: validationResult,
     ...formattedData
   }

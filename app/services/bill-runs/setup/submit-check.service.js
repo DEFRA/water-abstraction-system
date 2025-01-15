@@ -58,6 +58,7 @@ async function go(sessionId, auth) {
   const pageData = await CheckPresenter.go(session, blockingResults)
 
   return {
+    activeNavBar: 'bill-runs',
     error: true,
     ...pageData
   }

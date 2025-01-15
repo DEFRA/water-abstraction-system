@@ -84,6 +84,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
           expect(yearsStub.calledWith(regionId, true)).to.be.true()
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: false }],
             pageTitle: 'Select the financial year',
             sessionId: session.id,
