@@ -30,9 +30,9 @@ describe('Notifications Setup - Review presenter', () => {
   })
 
   describe('the "recipientsAmount" property', () => {
-    it('should return the size of the recipients array', () => {
+    it('should return the size of the recipients array (with duplicate contacts removed)', () => {
       const result = ReviewPresenter.go(recipients, page)
-      expect(result.recipientsAmount).to.equal(recipients.length)
+      expect(result.recipientsAmount).to.equal(recipients.length - 1)
     })
   })
 
@@ -49,7 +49,7 @@ describe('Notifications Setup - Review presenter', () => {
         it('should return the remaining recipients', () => {
           const result = ReviewPresenter.go(recipients, 2)
 
-          expect(result.recipients.length).to.equal(5)
+          expect(result.recipients.length).to.equal(4)
         })
       })
     })
@@ -68,8 +68,9 @@ describe('Notifications Setup - Review presenter', () => {
 
         beforeEach(() => {
           additionalLicence = '123/456/D'
-          allLicences = recipients[0].all_licences
+
           recipients = RecipientsFixture.recipients()
+          allLicences = recipients[0].all_licences
 
           recipients[0].all_licences = `${allLicences},${additionalLicence}`
         })
@@ -118,6 +119,21 @@ describe('Notifications Setup - Review presenter', () => {
           'Little Whinging',
           'Person'
         ])
+      })
+    })
+
+    describe('dedup contact hash', () => {
+      let licenceNumber
+      beforeEach(() => {
+        licenceNumber = recipients[0].all_licences
+      })
+
+      it('should only contain one instance of a contact hash id', () => {
+        const result = ReviewPresenter.go(recipients, page)
+
+        const expectedRecipients = result.recipients.filter((res) => res.licences.includes(licenceNumber))
+
+        expect(expectedRecipients.length).to.equal(1)
       })
     })
   })

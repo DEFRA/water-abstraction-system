@@ -8,11 +8,20 @@
 function recipients() {
   const recipients = []
 
-  for (let index = 0; index < 30; index++) {
+  for (let index = 0; index < 29; index++) {
     recipients.push(_recipients(index))
   }
 
+  recipients.splice(1, 0, _addReturnTo(recipients))
   return recipients
+}
+
+function _addReturnTo(recipients) {
+  return {
+    ...recipients[0],
+    message_type: 'Letter - Returns To',
+    contact: { ...recipients[0].contact, role: 'Returns to' }
+  }
 }
 
 function _recipients(index) {

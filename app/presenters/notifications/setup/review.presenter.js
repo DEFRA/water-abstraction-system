@@ -15,13 +15,36 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @returns {object} - The data formatted for the view template
  */
 function go(recipients, page = 1) {
+  const uniqueRecipients = _normalise(recipients)
   return {
     pageTitle: 'Review the mailing list',
-    recipientsAmount: recipients.length,
-    recipients: _recipients(recipients, page)
+    recipientsAmount: uniqueRecipients.length,
+    recipients: _recipients(uniqueRecipients, page)
   }
 }
 
+//  do you need to map fist for licence numbers ?
+function _normalise(recipients) {
+  return Object.values(
+    recipients.reduce((acc, obj) => {
+      if (!acc[obj.contact_hash_id]) {
+        acc[obj.contact_hash_id] = obj
+      } else {
+        // If a contact has already exists
+        const rolePreference = ['Primary user', 'Licence holder', 'Returns to']
+        const existingRoleIndex = rolePreference.indexOf(acc[obj.contact_hash_id].contact.role)
+        const newRoleIndex = rolePreference.indexOf(obj.contact.role)
+
+        if (newRoleIndex !== -1 && (existingRoleIndex === -1 || newRoleIndex < existingRoleIndex)) {
+          acc[obj.contact_hash_id] = obj
+        }
+      }
+      return acc
+    }, {})
+  )
+}
+
+// We need to map to dedup and the paginatae other wiose the total is off
 function _recipients(recipients, page) {
   const paginatedRecipients = _pagination(recipients, page)
   return paginatedRecipients.map((recipient) => {
