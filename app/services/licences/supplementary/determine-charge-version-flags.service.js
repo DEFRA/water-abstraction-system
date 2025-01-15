@@ -51,7 +51,7 @@ async function go(chargeVersionId) {
     result.flagForPreSrocSupplementary = true
   }
 
-  if (!twoPartTariff && scheme === 'sroc') {
+  if (scheme === 'sroc') {
     result.flagForSrocSupplementary = true
   }
 
