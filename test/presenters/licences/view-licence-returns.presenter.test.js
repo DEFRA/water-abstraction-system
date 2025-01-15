@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
@@ -29,6 +33,12 @@ describe('View Licence returns presenter', () => {
 
     hasRequirements = true
     returnLogs = _returnLogs()
+
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with returns data', () => {
@@ -52,7 +62,7 @@ describe('View Licence returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2012',
-            link: '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01',
+            link: '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01',
             purpose: 'SPRAY IRRIGATION',
             reference: '10046820',
             returnLogId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
@@ -109,7 +119,7 @@ describe('View Licence returns presenter', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
             expect(result.returns[1].link).to.equal(
-              '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+              '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
             )
           })
         })
@@ -137,7 +147,7 @@ describe('View Licence returns presenter', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
             expect(result.returns[1].link).to.equal(
-              '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+              '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
             )
           })
         })

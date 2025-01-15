@@ -5,6 +5,7 @@
  * @module ViewLicenceReturnsPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -34,7 +35,11 @@ function _link(status, returnLogId, canManageReturns) {
   }
 
   if (canManageReturns) {
-    return `/return/internal?returnId=${returnLogId}`
+    if (FeatureFlagsConfig.enableSystemReturnsView) {
+      return `/system/return-logs/setup?returnLogId=${returnLogId}`
+    } else {
+      return `/return/internal?returnId=${returnLogId}`
+    }
   }
 
   return null
