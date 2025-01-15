@@ -57,7 +57,7 @@ function _licences(licences) {
  * Remove any null fields
  *
  * @param {object} contact
- * @returns {Array[object]}
+ * @returns {object[]}
  */
 function _contact(contact) {
   return Object.values(contact).filter((n) => n)
