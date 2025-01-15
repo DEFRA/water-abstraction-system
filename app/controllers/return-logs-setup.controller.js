@@ -62,10 +62,11 @@ async function submitMeterProvided(request, h) {
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-provided.njk', pageData)
+  } else if (pageData.meterProvided === 'no') {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
   }
 
-  // Work out route for next page
-  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-details`)
 }
 
 async function submitReceived(request, h) {
