@@ -30,6 +30,10 @@ function go(returnLogs, hasRequirements, auth) {
 }
 
 function _link(status, returnLogId, canManageReturns) {
+  if (FeatureFlagsConfig.enableSystemReturnsView) {
+    return `/system/return-logs?id=${returnLogId}`
+  }
+
   if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }

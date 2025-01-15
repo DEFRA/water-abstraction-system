@@ -8,7 +8,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% from "macros/return-log-status-tag.njk" import statusTag %}
+{% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -71,6 +71,10 @@
               value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
             },
             {
+              key: { text: "Received date", classes: "meta-data__label" },
+              value: { html: '<span data-test="received-date">' + receivedDate + '</span>', classes: "meta-data__value" }
+            } if receivedDate,
+            {
               key: { text: "Tariff", classes: "meta-data__label" },
               value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
             }
@@ -81,36 +85,43 @@
   </div>
 
   {# Return log total #}
-  <div class="govuk-grid-row govuk-!-margin-bottom-3">
-    <div class="govuk-grid-column-full">
-      {% if nilReturn %}
-        <h2>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
-        </h2>
-      {% else %}
-        <h2>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
-          <br>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
-        </h2>
-      {% endif %}
-
-      {% if editReturn %}
-        {{
-          govukButton({
-            text: "Edit return",
-            preventDoubleClick: true,
-            href: editReturnLink
-          })
-        }}
-      {% endif %}
+  {% if displayTotal %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-full">
+        {% if nilReturn %}
+          <h2>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">Nil return</span>
+          </h2>
+        {% else %}
+          <h2>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="total">{{ total }}</span>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">cubic metres</span>
+            <br>
+            <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total amount of water abstracted</span>
+          </h2>
+        {% endif %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 
-  <div class="divider govuk-!-margin-bottom-7"></div>
+  {# Submit/Edit return button #}
+  {% if actionButton %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-full">
+        {{
+            govukButton({
+              text: actionButton.text,
+              preventDoubleClick: true,
+              href: actionButton.href
+            })
+          }}
+      </div>
+    </div>
+  {% endif %}
 
-  {% if nilReturn == false %}
+  {# Selected return submission details #}
+  {% if displayTable %}
+    <div class="divider govuk-!-margin-bottom-7"></div>
     {# Meter details #}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
@@ -189,14 +200,14 @@
       <div class="govuk-grid-column-full">
         {% set tableRows = [] %}
 
-        {% for summaryTableRow in summaryTableRows %}
+        {% for row in summaryTableData.rows %}
           {# Set an easier to use index #}
           {% set rowIndex = loop.index0 %}
 
           {# Create the summary row #}
           {% set tableRow = [
             {
-              text: summaryTableRow.month,
+              text: row.month,
               attributes: { 'data-test': 'month-' + rowIndex }
             }
           ] %}
@@ -204,7 +215,7 @@
           {% if displayReadings %}
             {% set tableRow = (tableRow.push(
               {
-                text: summaryTableRow.reading,
+                text: row.reading,
                 format: 'numeric',
                 attributes: { 'data-test': 'reading-' + rowIndex }
               }
@@ -214,7 +225,7 @@
           {% if displayUnits %}
             {% set tableRow = (tableRow.push(
               {
-                text: summaryTableRow.unitTotal,
+                text: row.unitTotal,
                 format: 'numeric',
                 attributes: { 'data-test': 'unit-total-' + rowIndex }
               }
@@ -224,16 +235,16 @@
           {# Total cubic metres column #}
           {% set tableRow = (tableRow.push(
             {
-              text: summaryTableRow.monthlyTotal,
+              text: row.monthlyTotal,
               format: 'numeric',
               attributes: { 'data-test': 'monthly-total-' + rowIndex }
             }
           ), tableRow) %}
 
           {# Action column but only for weekly and monthly returns #}
-          {% if summaryTableRow.link %}
+          {% if row.link %}
             {% set actionLink %}
-              <a class="govuk-link" href="{{ summaryTableRow.link.href }}">{{ summaryTableRow.link.text }}<span class="govuk-visually-hidden"> for {{ summaryTableRow.month }}</span></a>
+              <a class="govuk-link" href="{{ row.link.href }}">{{ row.link.text }}<span class="govuk-visually-hidden"> for {{ row.month }}</span></a>
             {% endset %}
 
             {% set tableRow = (tableRow.push(
@@ -253,7 +264,7 @@
           govukTable({
             firstCellIsHeader: false,
             attributes: { 'data-test': 'monthly-summaries'},
-            head: summaryTableHeaders,
+            head: summaryTableData.headers,
             rows: tableRows
           })
         }}
@@ -261,33 +272,37 @@
     </div>
   {% endif %}
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-3">
-    <div class="govuk-grid-column-full">
-      <h3 class="govuk-heading-m">Submitted by</h3>
+  {% if versions %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-m">Submitted by</h3>
 
-      {% for version in versions %}
-        {# Set an easier to use index #}
-        {% set rowIndex = loop.index0 %}
+        {% for version in versions %}
+          {# Set an easier to use index #}
+          {% set rowIndex = loop.index0 %}
 
-        {% if version.selected %}
-          {% set selectedClass = 'inset-text__selected-version' %}
-          {% set versionHtml %}
-            <p class="govuk-!-margin-0">{{ version.user }}</p>
-            <p class="govuk-!-margin-0">{{ version.createdAt }}</p>
-          {% endset %}
-        {% else %}
-          {% set selectedClass = '' %}
-          {% set versionHtml %}
-            <p class="govuk-!-margin-0">{{ version.user }}</p>
-            <p class="govuk-!-margin-0"><a href="{{ version.link }}">{{ version.createdAt }}</a></p>
-          {% endset %}
-        {% endif %}
+          {% if version.selected %}
+            {% set selectedClass = 'inset-text__selected-version' %}
+            {% set versionHtml %}
+              <p class="govuk-!-margin-0">Viewing version {{ version.version }}</p>
+              <p class="govuk-!-margin-0">{{ version.user }}</p>
+              <p class="govuk-!-margin-0">{{ version.createdAt }}</p>
+            {% endset %}
+          {% else %}
+            {% set selectedClass = '' %}
+            {% set versionHtml %}
+              <p class="govuk-!-margin-0">Version {{ version.version }}</p>
+              <p class="govuk-!-margin-0">{{ version.user }}</p>
+              <p class="govuk-!-margin-0"><a href="{{ version.link }}">{{ version.createdAt }}</a></p>
+            {% endset %}
+          {% endif %}
 
-        {{ govukInsetText({
-          classes: selectedClass,
-          html: versionHtml
-        }) }}
-      {% endfor %}
+          {{ govukInsetText({
+            classes: selectedClass,
+            html: versionHtml
+          }) }}
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 {% endblock %}

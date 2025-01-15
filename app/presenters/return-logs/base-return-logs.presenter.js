@@ -4,24 +4,6 @@ const { formatNumber, sentenceCase } = require('../base.presenter.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Converts a quantity from a given unit to cubic meters and formats it
- *
- * @param {string} units - the unit of the quantity
- * @param {number} quantity - the quantity to be formatted
- *
- * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
- */
-function formatQuantity(units, quantity) {
-  if (!quantity) {
-    return null
-  }
-
-  const convertedQuantity = quantity * returnUnits[units].multiplier
-
-  return formatNumber(convertedQuantity)
-}
-
-/**
  * Formats the details of a return submission meter
  *
  * @param {object} meter - the meter to be formatted
@@ -40,6 +22,58 @@ function formatMeterDetails(meter) {
     serialNumber,
     xDisplay: multiplier === 1 ? 'No' : 'Yes'
   }
+}
+
+/**
+ * Converts a quantity from a given unit to cubic meters and formats it
+ *
+ * @param {string} units - the unit of the quantity
+ * @param {number} quantity - the quantity to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
+function formatQuantity(units, quantity) {
+  if (!quantity) {
+    return null
+  }
+
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
+}
+
+/**
+ * Formats the status for a return log, adjusting for specific conditions.
+ *
+ * If the return log's status is 'completed', it will be displayed as 'complete'. If the status is 'due' and the due
+ * date has passed, it will be displayed as 'overdue'. For all other cases, it will return the status as is.
+ *
+ * @param {module:ReturnLogModel} returnLog - The return log containing status and due date information
+ *
+ * @returns {string} The formatted status for display.
+ */
+function formatStatus(returnLog) {
+  const { status, dueDate } = returnLog
+
+  // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
+  // statues
+  if (status === 'completed') {
+    return 'complete'
+  }
+
+  // Work out if the return is overdue (status is still 'due' and it is past the due date)
+  const today = new Date()
+
+  // The due date held in the record is date-only. If we compared it against 'today' without this step any return due
+  // 'today' would be flagged as overdue when it is still due (just!)
+  today.setHours(0, 0, 0, 0)
+
+  if (status === 'due' && dueDate < today) {
+    return 'overdue'
+  }
+
+  // For all other cases we can just return the status and the return-status-tag macro will know how to display it
+  return status
 }
 
 /**
@@ -195,6 +229,8 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 
 module.exports = {
   formatMeterDetails,
+  formatQuantity,
+  formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 }

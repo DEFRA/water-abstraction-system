@@ -21,6 +21,7 @@ async function go(returnId, version, auth) {
   const returnLog = await FetchReturnLogService.go(returnId, version)
 
   const pageData = ViewReturnLogPresenter.go(returnLog, auth)
+  console.log('🚀 ~ go ~ pageData:', pageData)
 
   return {
     activeNavBar: 'search',

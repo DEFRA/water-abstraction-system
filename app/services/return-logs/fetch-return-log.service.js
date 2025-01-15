@@ -17,24 +17,26 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
  * @param {number} [version=0] - Optional version number of the submission to display. Defaults to 0 which means
  * 'current'
  *
- * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission and
- * licence data
+ * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
+ * and licence data
  */
 async function go(returnId, version = 0) {
   const allReturnSubmissions = await _fetchAllReturnSubmissions(returnId)
 
-  const returnSubmissionId = _returnSubmissionId(allReturnSubmissions, version)
+  const selectedReturnSubmission = _returnSubmissionId(allReturnSubmissions, version)
 
-  const returnLog = await _fetch(returnId, returnSubmissionId)
+  const returnLog = await _fetch(returnId, selectedReturnSubmission)
 
-  returnLog.returnSubmissions[0].$applyReadings()
+  if (selectedReturnSubmission) {
+    returnLog.returnSubmissions[0].$applyReadings()
+  }
   returnLog.versions = allReturnSubmissions
 
   return returnLog
 }
 
-async function _fetch(returnId, returnSubmissionId) {
-  return ReturnLogModel.query()
+async function _fetch(returnId, selectedReturnSubmission) {
+  const query = ReturnLogModel.query()
     .findById(returnId)
     .select([
       'dueDate',
@@ -58,10 +60,11 @@ async function _fetch(returnId, returnSubmissionId) {
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
-    .withGraphFetched('returnSubmissions')
-    .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
+
+  if (selectedReturnSubmission) {
+    query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
       returnSubmissionsBuilder
-        .findById(returnSubmissionId)
+        .findById(selectedReturnSubmission.id)
         .select(['createdAt', 'id', 'metadata', 'nilReturn', 'userId', 'userType', 'version'])
         .withGraphFetched('returnSubmissionLines')
         .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
@@ -70,6 +73,9 @@ async function _fetch(returnId, returnSubmissionId) {
             .orderBy('startDate', 'asc')
         })
     })
+  }
+
+  return query
 }
 
 async function _fetchAllReturnSubmissions(returnId) {
@@ -80,16 +86,21 @@ async function _fetchAllReturnSubmissions(returnId) {
 }
 
 function _returnSubmissionId(allReturnSubmissions, version) {
+  // We are dealing with a due or received return log that has no submissions yet
+  if (allReturnSubmissions.length === 0) {
+    return null
+  }
+
   // If version is 0, it means a previous version has not been selected so we want the latest i.e. the 'current' version
   if (version === 0) {
-    return allReturnSubmissions[0].id
+    return allReturnSubmissions[0]
   }
 
   const selectedReturnSubmission = allReturnSubmissions.find((returnSubmission) => {
     return returnSubmission.version === version
   })
 
-  return selectedReturnSubmission.id
+  return selectedReturnSubmission
 }
 
 module.exports = {
