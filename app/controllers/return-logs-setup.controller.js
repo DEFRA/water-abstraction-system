@@ -19,14 +19,14 @@ async function received(request, h) {
   const { sessionId } = request.params
   const pageData = await ReceivedService.go(sessionId)
 
-  return h.view('return-logs/setup/received.njk', { ...pageData })
+  return h.view('return-logs/setup/received.njk', pageData)
 }
 
 async function reported(request, h) {
   const { sessionId } = request.params
   const pageData = await ReportedService.go(sessionId)
 
-  return h.view('return-logs/setup/reported.njk', { ...pageData })
+  return h.view('return-logs/setup/reported.njk', pageData)
 }
 
 async function setup(request, h) {
