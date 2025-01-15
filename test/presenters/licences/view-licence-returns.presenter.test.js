@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -35,6 +35,10 @@ describe('View Licence returns presenter', () => {
     returnLogs = _returnLogs()
 
     Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with returns data', () => {
