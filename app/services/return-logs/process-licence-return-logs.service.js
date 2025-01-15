@@ -5,6 +5,7 @@
  * @module ProcessLicenceReturnLogsService
  */
 
+const { determineEarliestDate } = require('../../lib/dates.lib.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchLicenceReturnRequirementsService = require('./fetch-licence-return-requirements.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
@@ -51,18 +52,34 @@ async function go(licenceId, changeDate = null) {
   }
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
-  const returnCycles = await _fetchReturnCycles(changeDate)
-
+  const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
+  const returnCycles = await _fetchReturnCycles(changeDate, licenceEndDate)
+console.log(returnCycles)
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef)
   }
 }
 
-async function _fetchReturnCycles(changeDate) {
-  return ReturnCycleModel.query()
+function _endDate(returnVersion) {
+  const { licence } = returnVersion
+
+  return determineEarliestDate([
+    licence.expiredDate,
+    licence.lapsedDate,
+    licence.revokedDate,
+  ])
+}
+
+async function _fetchReturnCycles(changeDate, licenceEndDate) {
+  const query = ReturnCycleModel.query()
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>=', changeDate)
-    .orderBy('endDate', 'desc')
+
+  if (licenceEndDate) {
+    query.where('startDate', '<=', licenceEndDate)
+  }
+
+  return query.orderBy('endDate', 'desc')
 }
 
 async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef) {
