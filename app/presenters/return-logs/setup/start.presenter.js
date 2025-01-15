@@ -12,7 +12,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  *
  * @param {module:SessionModel} session - The session instance to format
  *
- * @returns {object} page data needed for the `/return-log-edit/{sessionId}/start` page
+ * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/start` page
  */
 function go(session) {
   const {
