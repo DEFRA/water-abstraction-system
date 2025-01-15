@@ -5,6 +5,8 @@
  * @module ReviewPresenter
  */
 
+const { defaultPageSize } = require('../../../../config/database.config.js')
+
 /**
  * Formats data for the `/notifications/setup/review` page
  *
@@ -43,8 +45,8 @@ function _recipients(recipients, page) {
  * @private
  */
 function _pagination(recipients, page) {
-  const pageNumber = Number(page) * 25
-  return recipients.slice(pageNumber - 25, pageNumber)
+  const pageNumber = Number(page) * defaultPageSize
+  return recipients.slice(pageNumber - defaultPageSize, pageNumber)
 }
 
 function _licences(licences) {

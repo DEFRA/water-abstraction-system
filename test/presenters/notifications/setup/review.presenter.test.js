@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixture.js')
 // Thing under test
 const ReviewPresenter = require('../../../../app/presenters/notifications/setup/review.presenter.js')
 
-describe.only('Notifications Setup - Review presenter', () => {
+describe('Notifications Setup - Review presenter', () => {
   let recipients
   let page
 
