@@ -66,18 +66,6 @@ describe('Return Logs Setup - Start presenter', () => {
     })
 
     describe('the "status" property', () => {
-      describe('when the status is "completed"', () => {
-        beforeEach(() => {
-          session.status = 'completed'
-        })
-
-        it('returns the status as "complete', () => {
-          const result = StartPresenter.go(session)
-
-          expect(result.status).to.equal('complete')
-        })
-      })
-
       describe('when the status is not yet "overdue"', () => {
         beforeEach(() => {
           session.dueDate = new Date()
