@@ -24,7 +24,6 @@ async function go(sessionId) {
   const formattedData = MeterProvidedPresenter.go(session)
 
   return {
-    pageTitle: 'Have meter details been provided?',
     activeNavBar: 'search',
     ...formattedData
   }

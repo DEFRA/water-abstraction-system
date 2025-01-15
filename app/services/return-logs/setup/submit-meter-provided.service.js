@@ -31,13 +31,14 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      ...payload
+    }
   }
 
   const formattedData = MeterProvidedPresenter.go(session)
 
   return {
-    pageTitle: 'Have meter details been provided?',
     activeNavBar: 'search',
     error: validationResult,
     ...formattedData
