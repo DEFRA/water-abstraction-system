@@ -18,11 +18,11 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
 async function go(reviewChargeReferenceId) {
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
 
-  const pageData = FactorsPresenter.go(reviewChargeReference)
+  const formattedData = FactorsPresenter.go(reviewChargeReference)
 
   return {
-    pageTitle: 'Set the adjustment factors',
-    ...pageData
+    activeNavBar: 'bill-runs',
+    ...formattedData
   }
 }
 

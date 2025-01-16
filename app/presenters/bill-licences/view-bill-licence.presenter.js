@@ -36,6 +36,7 @@ function go(billLicence) {
     licenceRef,
     removeLicenceLink: _removeLicenceLink(bill.billRun, billLicenceId),
     scheme: bill.billRun.scheme,
+    pageTitle: `Transactions for ${licenceRef}`,
     tableCaption: _tableCaption(transactions),
     transactions: _transactions(transactions),
     transactionsTotal: total

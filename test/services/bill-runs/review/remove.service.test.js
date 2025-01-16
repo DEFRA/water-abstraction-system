@@ -35,6 +35,7 @@ describe('Bill Runs Review - Remove service', () => {
       const result = await RemoveService.go(removeReviewLicence.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         billRunNumber: 10001,
         billRunStatus: 'review',
         dateCreated: '22 October 2024',

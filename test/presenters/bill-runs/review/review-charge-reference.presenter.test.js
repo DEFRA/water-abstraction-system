@@ -37,6 +37,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
         chargePeriod: '1 April 2023 to 31 March 2024',
         financialPeriod: '2023 to 2024',
+        pageTitle: 'Review charge reference',
         reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
         reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
         totalBillableReturns: 0

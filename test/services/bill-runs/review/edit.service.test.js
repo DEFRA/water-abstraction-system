@@ -37,6 +37,7 @@ describe('Bill Runs Review - Edit Service', () => {
       const result = await EditService.go(reviewChargeElement.id, elementIndex)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         pageTitle: 'Set the billable returns quantity for this bill run',
         authorisedQuantity: 9.092,
         billableReturns: 0,

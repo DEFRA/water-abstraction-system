@@ -20,11 +20,11 @@ const FetchReviewChargeElementService = require('./fetch-review-charge-element.s
 async function go(reviewChargeElementId, elementIndex) {
   const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
 
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const formattedData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
-    pageTitle: 'Set the billable returns quantity for this bill run',
-    ...pageData
+    activeNavBar: 'bill-runs',
+    ...formattedData
   }
 }
 

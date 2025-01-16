@@ -19,7 +19,12 @@ const RemoveBillLicencePresenter = require('../../presenters/bill-licences/remov
 async function go(billLicenceId) {
   const billLicence = await FetchBillLicenceSummaryService.go(billLicenceId)
 
-  return RemoveBillLicencePresenter.go(billLicence)
+  const formattedData = RemoveBillLicencePresenter.go(billLicence)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {

@@ -26,10 +26,7 @@ async function authorised(request, h) {
 
   const pageData = await AuthorisedService.go(reviewChargeReferenceId)
 
-  return h.view('bill-runs/review/authorised.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/authorised.njk', pageData)
 }
 
 async function edit(request, h) {
@@ -37,10 +34,7 @@ async function edit(request, h) {
 
   const pageData = await EditService.go(reviewChargeElementId, elementIndex)
 
-  return h.view('bill-runs/review/edit.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/edit.njk', pageData)
 }
 
 async function factors(request, h) {
@@ -48,10 +42,7 @@ async function factors(request, h) {
 
   const pageData = await FactorsService.go(reviewChargeReferenceId)
 
-  return h.view('bill-runs/review/factors.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/factors.njk', pageData)
 }
 
 async function preview(request, h) {
@@ -67,10 +58,7 @@ async function remove(request, h) {
 
   const pageData = await RemoveService.go(reviewLicenceId)
 
-  return h.view('bill-runs/review/remove.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/remove.njk', pageData)
 }
 
 async function reviewBillRun(request, h) {
@@ -79,10 +67,7 @@ async function reviewBillRun(request, h) {
 
   const pageData = await ReviewBillRunService.go(billRunId, page, request.yar)
 
-  return h.view('bill-runs/review/review.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review.njk', pageData)
 }
 
 async function reviewChargeElement(request, h) {
@@ -90,10 +75,7 @@ async function reviewChargeElement(request, h) {
 
   const pageData = await ReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
 
-  return h.view('bill-runs/review/review-charge-element.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-charge-element.njk', pageData)
 }
 
 async function reviewChargeReference(request, h) {
@@ -101,10 +83,7 @@ async function reviewChargeReference(request, h) {
 
   const pageData = await ReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
 
-  return h.view('bill-runs/review/review-charge-reference.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-charge-reference.njk', pageData)
 }
 
 async function reviewLicence(request, h) {
@@ -112,10 +91,7 @@ async function reviewLicence(request, h) {
 
   const pageData = await ReviewLicenceService.go(reviewLicenceId, request.yar)
 
-  return h.view('bill-runs/review/review-licence.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/review/review-licence.njk', pageData)
 }
 
 async function submitAuthorised(request, h) {
@@ -123,10 +99,7 @@ async function submitAuthorised(request, h) {
   const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/authorised.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/authorised.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
@@ -138,10 +111,7 @@ async function submitEdit(request, h) {
   const pageData = await SubmitEditService.go(reviewChargeElementId, elementIndex, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/edit.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/edit.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-element/${reviewChargeElementId}/${elementIndex}`)
@@ -152,10 +122,7 @@ async function submitFactors(request, h) {
   const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
-    return h.view('bill-runs/review/factors.njk', {
-      activeNavBar: 'bill-runs',
-      ...pageData
-    })
+    return h.view('bill-runs/review/factors.njk', pageData)
   }
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)

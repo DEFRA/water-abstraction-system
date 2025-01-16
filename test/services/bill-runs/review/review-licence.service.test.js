@@ -42,6 +42,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
         const result = await ReviewLicenceService.go(reviewLicence.id, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           bannerMessage: 'This licence has been marked.',
           billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
           billRunTitle: 'South West two-part tariff',
@@ -140,6 +141,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
         const result = await ReviewLicenceService.go(reviewLicence.id, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           bannerMessage: undefined,
           billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
           billRunTitle: 'South West two-part tariff',
