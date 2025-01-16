@@ -22,7 +22,7 @@ function go(recipients) {
 function _recipients(recipients) {
   return recipients.map((recipient) => {
     return {
-      contact: _contact(recipient.contact),
+      contact: _contact(recipient),
       licences: _licences(recipient.all_licences),
       method: recipient.message_type
     }
@@ -40,15 +40,22 @@ function _licences(licences) {
 }
 
 /**
- * Convert the contact json object to an array
+ * Contact can be an email or an address (letter)
  *
- * Remove any null fields
+ * If it is an address then we convert the contact json object to an array removing any null fields
  *
- * @param {object} contact
+ * If it is an email we return the email in array for the UI to have consistent formatting
+ *
+ * @param {object} recipient
+ *
  * @returns {string[]}
  */
-function _contact(contact) {
-  return Object.values(contact).filter((n) => n)
+function _contact(recipient) {
+  if (recipient.recipient) {
+    return [recipient.recipient]
+  } else {
+    return Object.values(recipient.contact).filter((n) => n)
+  }
 }
 
 module.exports = {

@@ -1,40 +1,80 @@
 'use strict'
 
+const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+
 /**
  * Create recipients test data
  *
- * @returns {object[]}
+ * @returns {object} - Returns recipients for
+ * primaryUser, returnsAgent, licenceHolder, returnsTo
+ * and licenceHolderWithMultipleLicences
  */
 function recipients() {
-  const recipients = []
-
-  for (let index = 0; index < 29; index++) {
-    recipients.push(_recipients(index))
-  }
-
-  recipients.splice(1, 0, _addReturnTo(recipients))
-  return recipients
-}
-
-function _addReturnTo(recipients) {
   return {
-    ...recipients[0],
-    message_type: 'Letter - Returns To',
-    contact: { ...recipients[0].contact, role: 'Returns to' }
+    primaryUser: _addPrimaryUser(),
+    returnsAgent: _addReturnsAgent(),
+    licenceHolder: _addLicenceHolder(),
+    returnsTo: _addReturnTo(),
+    licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences()
   }
 }
 
-function _recipients(index) {
+function _addLicenceHolder() {
   return {
-    all_licences: `01/1234/${index}`,
+    all_licences: generateLicenceRef(),
     message_type: 'Letter - licence holder',
-    recipient: null,
     contact: {
-      name: `Harry ${index}`,
-      role: 'Licence holder',
-      ..._address()
+      name: `Licence Guy`,
+      ..._address(),
+      role: 'Licence holder'
     },
-    contact_hash_id: 185890350 + index
+    contact_hash_id: -1672785580
+  }
+}
+
+function _addPrimaryUser() {
+  return {
+    all_licences: generateLicenceRef(),
+    contact: null,
+    contact_hash_id: 1178136542,
+    message_type: 'Email - primary user',
+    recipient: 'primary.user@important.com'
+  }
+}
+
+function _addReturnsAgent() {
+  return {
+    all_licences: generateLicenceRef(),
+    contact: null,
+    contact_hash_id: -370722837,
+    message_type: 'Email - returns agent',
+    recipient: 'returns.agent@important.com'
+  }
+}
+
+function _addReturnTo() {
+  return {
+    all_licences: generateLicenceRef(),
+    message_type: 'Letter - Returns To',
+    contact: {
+      name: `Returner Guy`,
+      ..._address(),
+      role: 'Returns to'
+    },
+    contact_hash_id: 123223
+  }
+}
+
+function _addLicenceHolderWithMultipleLicences() {
+  return {
+    all_licences: `${generateLicenceRef()}, ${generateLicenceRef()}`,
+    message_type: 'Letter - licence holder',
+    contact: {
+      name: `Multiple Licence Guy`,
+      ..._address(),
+      role: 'Licence holder'
+    },
+    contact_hash_id: -167278576
   }
 }
 

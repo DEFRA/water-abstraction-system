@@ -5,6 +5,8 @@
  */
 
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
+const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
+const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const ReturnLogHelper = require('../helpers/return-log.helper.js')
 
 /**
@@ -13,7 +15,12 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
 async function seed() {
-  return [await _addLicenceHolder(), await _addLicenceHolderAndReturnToSameRef()]
+  return {
+    licenceHolder: await _addLicenceHolder(),
+    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(),
+    primaryUser: await _addPrimaryUser(),
+    userReturns: await _addUserReturns()
+  }
 }
 
 async function _addLicenceHolder() {
@@ -39,6 +46,63 @@ async function _addLicenceHolderAndReturnToSameRef() {
       ..._metadata(name),
       contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
     }
+  })
+
+  await ReturnLogHelper.add({
+    licenceRef: licenceDocumentHeader.licenceRef
+  })
+
+  return licenceDocumentHeader
+}
+
+async function _addPrimaryUser() {
+  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+  const name = 'Primary User test'
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: companyEntity.id,
+    metadata: {
+      ..._metadata(name),
+      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+    }
+  })
+
+  const licenceEntity = await LicenceEntityHelper.add({
+    name: 'primary.user@important.com'
+  })
+
+  await LicenceEntityRoleHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceEntityId: licenceEntity.id
+  })
+
+  await ReturnLogHelper.add({
+    licenceRef: licenceDocumentHeader.licenceRef
+  })
+
+  return licenceDocumentHeader
+}
+
+async function _addUserReturns() {
+  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+  const name = 'Primary User test'
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: companyEntity.id,
+    metadata: {
+      ..._metadata(name),
+      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+    }
+  })
+
+  const licenceEntity = await LicenceEntityHelper.add({
+    name: 'returns.agent@important.com'
+  })
+
+  await LicenceEntityRoleHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceEntityId: licenceEntity.id,
+    role: 'user_returns'
   })
 
   await ReturnLogHelper.add({
@@ -87,8 +151,5 @@ function _address() {
 }
 
 module.exports = {
-  seed,
-  data: {
-    address: _address
-  }
+  seed
 }

@@ -17,29 +17,69 @@ describe('Notifications Setup - Recipients service', () => {
   let dueDate
   let isSummer
   let recipients
-  let address // This is boilerplate to make the code readable
 
   before(async () => {
     dueDate = '2023-04-28' // matches return log date
     isSummer = 'false'
-    address = RecipientsSeeder.data.address()
 
     recipients = await RecipientsSeeder.seed()
+  })
+
+  describe('when there is a "primary user"', () => {
+    it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
+      const result = await RecipientsService.go(dueDate, isSummer)
+
+      const [testRecipient] = result.filter((res) => res.all_licences.includes(recipients.primaryUser.licenceRef))
+
+      expect(testRecipient).to.equal({
+        all_licences: recipients.primaryUser.licenceRef,
+        contact: null,
+        contact_hash_id: 1178136542,
+        message_type: 'Email - primary user',
+        recipient: 'primary.user@important.com'
+      })
+    })
+  })
+
+  describe('when there is a "user_returns"', () => {
+    it('correctly returns the "user_returns" instead of the "Licence holder"', async () => {
+      const result = await RecipientsService.go(dueDate, isSummer)
+
+      const [testRecipient] = result.filter((res) => res.all_licences.includes(recipients.userReturns.licenceRef))
+
+      expect(testRecipient).to.equal({
+        all_licences: recipients.userReturns.licenceRef,
+        contact: null,
+        contact_hash_id: -370722837,
+        message_type: 'Email - returns agent',
+        recipient: 'returns.agent@important.com'
+      })
+    })
   })
 
   describe('when the licence number only has one recipient which has the "licence holder" role', () => {
     it('correctly returns the licence holder data', async () => {
       const result = await RecipientsService.go(dueDate, isSummer)
 
-      const [savedRecipient] = recipients
-      const [licenceHolder] = result.filter((res) => res.all_licences.includes(savedRecipient.licenceRef))
+      const [testRecipient] = result.filter((res) => res.all_licences.includes(recipients.licenceHolder.licenceRef))
 
-      expect(licenceHolder).to.equal({
-        all_licences: savedRecipient.licenceRef,
+      expect(testRecipient).to.equal({
+        all_licences: recipients.licenceHolder.licenceRef,
         contact: {
-          ...address,
+          addressLine1: '4',
+          addressLine2: 'Privet Drive',
+          addressLine3: null,
+          addressLine4: null,
+          country: null,
+          county: 'Surrey',
+          forename: 'Harry',
+          initials: 'J',
           name: 'Licence holder only',
-          role: 'Licence holder'
+          postcode: 'WD25 7LR',
+          role: 'Licence holder',
+          salutation: null,
+          town: 'Little Whinging',
+          type: 'Person'
         },
         contact_hash_id: -1672785580,
         message_type: 'Letter - licence holder',
@@ -52,27 +92,49 @@ describe('Notifications Setup - Recipients service', () => {
     it('correctly returns the licence holder and returns to data', async () => {
       const result = await RecipientsService.go(dueDate, isSummer)
 
-      const [, savedRecipient] = recipients
-      const [licenceHolder, returnsTo] = result.filter((res) => res.all_licences.includes(savedRecipient.licenceRef))
+      const [licenceHolder, returnsTo] = result.filter((res) =>
+        res.all_licences.includes(recipients.licenceHolderAndReturnTo.licenceRef)
+      )
 
       expect(licenceHolder).to.equal({
-        all_licences: savedRecipient.licenceRef,
+        all_licences: recipients.licenceHolderAndReturnTo.licenceRef,
         contact: {
-          ...address,
+          addressLine1: '4',
+          addressLine2: 'Privet Drive',
+          addressLine3: null,
+          addressLine4: null,
+          country: null,
+          county: 'Surrey',
+          forename: 'Harry',
+          initials: 'J',
           name: 'Licence holder and returns to',
+          postcode: 'WD25 7LR',
           role: 'Licence holder',
+          salutation: null,
+          town: 'Little Whinging',
           type: 'Person'
         },
         contact_hash_id: -617218923,
         message_type: 'Letter - licence holder',
         recipient: null
       })
+
       expect(returnsTo).to.equal({
-        all_licences: savedRecipient.licenceRef,
+        all_licences: recipients.licenceHolderAndReturnTo.licenceRef,
         contact: {
-          ...address,
+          addressLine1: '4',
+          addressLine2: 'Privet Drive',
+          addressLine3: null,
+          addressLine4: null,
+          country: null,
+          county: 'Surrey',
+          forename: 'Harry',
+          initials: 'J',
           name: 'Licence holder and returns to',
+          postcode: 'WD25 7LR',
           role: 'Returns to',
+          salutation: null,
+          town: 'Little Whinging',
           type: 'Person'
         },
         contact_hash_id: -617218923,

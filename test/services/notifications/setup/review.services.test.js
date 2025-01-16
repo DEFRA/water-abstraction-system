@@ -9,23 +9,28 @@ const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const RecipientsService = require('../../../../app/services/notifications/setup/recipients.service.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ReviewService = require('../../../../app/services/notifications/setup/review.service.js')
 
 describe('Notifications Setup - Review service', () => {
+  const year = 2025
+
   let clock
   let session
-  const year = 2025
+  let testRecipients
 
   before(async () => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
 
     session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
 
-    Sinon.stub(RecipientsService, 'go').resolves([])
+    testRecipients = RecipientsFixture.recipients()
+
+    Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
   })
 
   afterEach(() => {
@@ -38,8 +43,14 @@ describe('Notifications Setup - Review service', () => {
     expect(result).to.equal({
       activeNavBar: 'manage',
       pageTitle: 'Send returns invitations',
-      recipients: [],
-      recipientsAmount: 0
+      recipients: [
+        {
+          contact: ['primary.user@important.com'],
+          licences: [`${testRecipients.primaryUser.all_licences}`],
+          method: 'Email - primary user'
+        }
+      ],
+      recipientsAmount: 1
     })
   })
 

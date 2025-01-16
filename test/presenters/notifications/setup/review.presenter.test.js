@@ -14,100 +14,148 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReviewPresenter = require('../../../../app/presenters/notifications/setup/review.presenter.js')
 
 describe('Notifications Setup - Review presenter', () => {
-  let recipients
+  let testRecipients
+  let testInput
 
   beforeEach(() => {
-    recipients = RecipientsFixture.recipients()
+    testRecipients = RecipientsFixture.recipients()
+    testInput = Object.values(testRecipients)
   })
 
   describe('the "pageTitle" property', () => {
     it('should return page title', () => {
-      const result = ReviewPresenter.go(recipients)
+      const result = ReviewPresenter.go(testInput)
       expect(result.pageTitle).to.equal('Send returns invitations')
     })
   })
 
   describe('the "recipientsAmount" property', () => {
     it('should return the size of the recipients array', () => {
-      const result = ReviewPresenter.go(recipients)
-      expect(result.recipientsAmount).to.equal(recipients.length)
+      const result = ReviewPresenter.go(testInput)
+      expect(result.recipientsAmount).to.equal(testInput.length)
     })
   })
 
   describe('the "recipients" property', () => {
-    describe('format recipient', () => {
-      it('should return a formatted recipient', () => {
-        const result = ReviewPresenter.go(recipients)
+    describe('format all recipient types', () => {
+      it('should return the formatted recipients', () => {
+        const result = ReviewPresenter.go(testInput)
 
-        const [testRecipient] = result.recipients
-
-        expect(testRecipient).to.equal({
-          contact: [
-            'Harry 0',
-            'Licence holder',
-            'undefined',
-            'Privet Drive',
-            'Surrey',
-            'Harry',
-            'J',
-            'WD25 7LR',
-            'Little Whinging',
-            'Person'
-          ],
-          licences: ['01/1234/0'],
-          method: 'Letter - licence holder'
-        })
+        expect(result.recipients).to.equal([
+          {
+            licences: [`${testRecipients.primaryUser.all_licences}`],
+            method: 'Email - primary user',
+            contact: ['primary.user@important.com']
+          },
+          {
+            licences: [`${testRecipients.returnsAgent.all_licences}`],
+            method: 'Email - returns agent',
+            contact: ['returns.agent@important.com']
+          },
+          {
+            licences: [`${testRecipients.licenceHolder.all_licences}`],
+            method: 'Letter - licence holder',
+            contact: [
+              'Licence Guy',
+              'undefined',
+              'Privet Drive',
+              'Surrey',
+              'Harry',
+              'J',
+              'WD25 7LR',
+              'Little Whinging',
+              'Person',
+              'Licence holder'
+            ]
+          },
+          {
+            licences: [`${testRecipients.returnsTo.all_licences}`],
+            method: 'Letter - Returns To',
+            contact: [
+              'Returner Guy',
+              'undefined',
+              'Privet Drive',
+              'Surrey',
+              'Harry',
+              'J',
+              'WD25 7LR',
+              'Little Whinging',
+              'Person',
+              'Returns to'
+            ]
+          },
+          {
+            licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
+            method: 'Letter - licence holder',
+            contact: [
+              'Multiple Licence Guy',
+              'undefined',
+              'Privet Drive',
+              'Surrey',
+              'Harry',
+              'J',
+              'WD25 7LR',
+              'Little Whinging',
+              'Person',
+              'Licence holder'
+            ]
+          }
+        ])
       })
 
       describe('the "contact" property', () => {
         it('should strip "null" keys/values from the contact object', () => {
-          const result = ReviewPresenter.go(recipients)
+          const result = ReviewPresenter.go(testInput)
 
-          const [testRecipient] = result.recipients
+          const testRecipient = result.recipients.find((recipient) =>
+            recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+          )
 
-          expect(testRecipient.contact).to.equal([
-            'Harry 0',
-            'Licence holder',
-            'undefined',
-            'Privet Drive',
-            'Surrey',
-            'Harry',
-            'J',
-            'WD25 7LR',
-            'Little Whinging',
-            'Person'
-          ])
+          expect(testRecipient).to.equal({
+            licences: [`${testRecipients.licenceHolder.all_licences}`],
+            method: 'Letter - licence holder',
+            contact: [
+              'Licence Guy',
+              'undefined',
+              'Privet Drive',
+              'Surrey',
+              'Harry',
+              'J',
+              'WD25 7LR',
+              'Little Whinging',
+              'Person',
+              'Licence holder'
+            ]
+          })
         })
       })
 
       describe('the "licences" property', () => {
-        describe('when the recipient has a  single licence number', () => {
+        describe('when the recipient has a single licence number', () => {
           it('should return licence numbers as an array', () => {
-            const result = ReviewPresenter.go(recipients)
+            const result = ReviewPresenter.go(testInput)
 
-            const [testRecipient] = result.recipients
-            expect(testRecipient.licences).to.equal(['01/1234/0'])
+            const testRecipient = result.recipients.find((recipient) =>
+              recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+            )
+
+            expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.all_licences])
           })
         })
 
         describe('when the recipient has multiple licence numbers', () => {
-          let additionalLicence
-          let allLicences
-
-          beforeEach(() => {
-            additionalLicence = '123/456/D'
-
-            recipients = RecipientsFixture.recipients()
-            allLicences = recipients[0].all_licences
-
-            recipients[0].all_licences = `${allLicences},${additionalLicence}`
-          })
-
           it('should return licence numbers as an array', () => {
-            const result = ReviewPresenter.go(recipients)
+            const result = ReviewPresenter.go(testInput)
 
-            const [testRecipient] = result.recipients
-            expect(testRecipient.licences).to.equal([allLicences, additionalLicence])
+            const testRecipient = result.recipients.find(
+              (recipient) =>
+                JSON.stringify(recipient.licences) ===
+                JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','))
+            )
+
+            expect(testRecipient.licences).to.equal(
+              testRecipients.licenceHolderWithMultipleLicences.all_licences.split(',')
+            )
           })
         })
       })
