@@ -8,9 +8,9 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/return-logs/view.presenter.js')
+const ViewPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
 
-describe('View presenter', () => {
+describe('View Return Log presenter', () => {
   const data = {
     returnId: 'RETURN_ID',
     licenceNumber: 'LICENCE_NUMBER',
