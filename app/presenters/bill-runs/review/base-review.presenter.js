@@ -36,11 +36,7 @@ function determineReturnLink(reviewReturn) {
   }
 
   if (['due', 'received'].includes(returnStatus)) {
-    if (FeatureFlagsConfig.enableSystemReturnsView) {
-      return `/system/return-logs/setup?returnLogId=${returnId}`
-    } else {
-      return `/return/internal?returnId=${returnId}`
-    }
+    return `/return/internal?returnId=${returnId}`
   }
 
   return `/returns/return?id=${returnId}`

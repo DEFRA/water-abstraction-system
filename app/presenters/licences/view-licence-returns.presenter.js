@@ -39,11 +39,7 @@ function _link(status, returnLogId, canManageReturns) {
   }
 
   if (canManageReturns) {
-    if (FeatureFlagsConfig.enableSystemReturnsView) {
-      return `/system/return-logs/setup?returnLogId=${returnLogId}`
-    } else {
-      return `/return/internal?returnId=${returnLogId}`
-    }
+    return `/return/internal?returnId=${returnLogId}`
   }
 
   return null
