@@ -23,7 +23,7 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 async function go(returnId, version = 0) {
   const allReturnSubmissions = await _fetchAllReturnSubmissions(returnId)
 
-  const selectedReturnSubmission = _returnSubmissionId(allReturnSubmissions, version)
+  const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
 
   const returnLog = await _fetch(returnId, selectedReturnSubmission)
 
@@ -85,7 +85,7 @@ async function _fetchAllReturnSubmissions(returnId) {
     .orderBy('version', 'desc')
 }
 
-function _returnSubmissionId(allReturnSubmissions, version) {
+function _returnSubmission(allReturnSubmissions, version) {
   // We are dealing with a due or received return log that has no submissions yet
   if (allReturnSubmissions.length === 0) {
     return null
