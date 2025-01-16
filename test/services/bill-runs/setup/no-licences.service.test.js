@@ -30,6 +30,7 @@ describe('Bill Runs - Setup - No Licences service', () => {
       const result = await NoLicencesService.go(sessionId)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         sessionId,
         pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${region.displayName} region`
       })

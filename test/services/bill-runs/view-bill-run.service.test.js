@@ -35,6 +35,7 @@ describe('View Bill Run service', () => {
         const result = await ViewBillRunService.go(testId)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           billRunNumber: 10003,
           billRunStatus: 'empty',
@@ -61,6 +62,7 @@ describe('View Bill Run service', () => {
         const result = await ViewBillRunService.go(testId)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           billRunNumber: 10003,
           billRunStatus: 'error',
@@ -87,6 +89,7 @@ describe('View Bill Run service', () => {
           const result = await ViewBillRunService.go(testId)
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             billsCount: '2 Annual bills',
             billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
             billRunNumber: 10003,
@@ -152,6 +155,7 @@ describe('View Bill Run service', () => {
           const result = await ViewBillRunService.go(testId)
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             billsCount: '1 Annual bill',
             billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
             billRunNumber: 10003,

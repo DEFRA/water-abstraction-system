@@ -26,6 +26,7 @@ async function go(sessionId) {
   const pageData = TypePresenter.go(session)
 
   return {
+    activeNavBar: 'bill-runs',
     enableTwoPartTariffSupplementary: FeatureFlagsConfig.enableTwoPartTariffSupplementary,
     ...pageData
   }

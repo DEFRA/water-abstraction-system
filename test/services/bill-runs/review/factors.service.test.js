@@ -35,6 +35,7 @@ describe('Bill Runs Review - Factors Service', () => {
       const result = await FactorsService.go(reviewChargeReference.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         pageTitle: 'Set the adjustment factors',
         amendedAggregate: 0.333333333,
         amendedChargeAdjustment: 1,

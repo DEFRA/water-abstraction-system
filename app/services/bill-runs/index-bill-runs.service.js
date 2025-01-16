@@ -36,6 +36,7 @@ async function go(page) {
   const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
 
   return {
+    activeNavBar: 'bill-runs',
     billRuns,
     busy: busyResult,
     pageTitle,

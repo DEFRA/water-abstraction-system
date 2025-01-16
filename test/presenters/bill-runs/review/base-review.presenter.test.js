@@ -3,17 +3,29 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 // Thing under test
 const BaseReviewPresenter = require('../../../../app/presenters/bill-runs/review/base-review.presenter.js')
 
 describe('Bill Runs Review - Base Review presenter', () => {
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('#calculateTotalBillableReturns()', () => {
     const reviewChargeElements = [
       { amendedAllocated: 11.513736 },
@@ -43,7 +55,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns the link to edit the return', () => {
         const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
 
-        expect(result).to.equal(`/return/internal?returnId=${returnId}`)
+        expect(result).to.equal(`/system/return-logs/setup?returnLogId=${returnId}`)
       })
     })
 
@@ -55,7 +67,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns the link to edit the return', () => {
         const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
 
-        expect(result).to.equal(`/return/internal?returnId=${returnId}`)
+        expect(result).to.equal(`/system/return-logs/setup?returnLogId=${returnId}`)
       })
     })
 

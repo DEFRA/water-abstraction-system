@@ -45,6 +45,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
         const result = await ReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           bannerMessage: 'The billable returns for this licence have been updated',
           pageTitle: 'Review charge element',
           authorisedVolume: 9.092,
@@ -87,6 +88,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
         const result = await ReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           bannerMessage: undefined,
           pageTitle: 'Review charge element',
           authorisedVolume: 9.092,

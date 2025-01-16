@@ -43,6 +43,7 @@ function go(reviewChargeReference) {
     chargeDescription: chargeReference.chargeCategory.shortDescription,
     chargePeriod: formatChargePeriod(reviewChargeVersion),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
+    pageTitle: 'Review charge reference',
     reviewChargeReferenceId,
     reviewLicenceId: reviewChargeVersion.reviewLicence.id,
     totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)

@@ -48,7 +48,7 @@ async function go(id, page, yar) {
 
   const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
 
-  return { bannerMessage, ...pageData, pageTitle, pagination }
+  return { activeNavBar: 'bill-runs', bannerMessage, ...pageData, pageTitle, pagination }
 }
 
 function _getFilters(id, yar) {

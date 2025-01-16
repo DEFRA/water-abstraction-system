@@ -83,6 +83,7 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
 
         // Check we return page data including error (controller knows POST failed so re-renders)
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           amendedAuthorisedVolume: 9.092,
           error: { text: 'The authorised volume must be greater than 9.092' },
           pageTitle: 'Set the authorised volume',
