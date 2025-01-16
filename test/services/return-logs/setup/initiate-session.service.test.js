@@ -18,10 +18,11 @@ const InitiateSessionService = require('../../../../app/services/return-logs/set
 describe('Return Logs - Setup - Initiate Session service', () => {
   describe('when called', () => {
     let licence
+    let metadata
     let returnLog
 
     before(async () => {
-      const metadata = {
+      metadata = {
         description: 'BOREHOLE AT AVALON',
         isCurrent: true,
         isFinal: false,
@@ -43,32 +44,60 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       }
 
       licence = await LicenceHelper.add()
-      returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata })
     })
 
-    it('creates a new session record containing details of the return log', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+    describe('and the return log has NOT been received', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata, receivedDate: null })
+      })
 
-      const matchingSession = await SessionModel.query().findById(result.id)
+      it('creates a new session record containing details of the return log', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
 
-      expect(matchingSession.data).to.equal({
-        returnLogId: returnLog.id,
-        licenceId: licence.id,
-        licenceRef: licence.licenceRef,
-        startDate: '2022-04-01T00:00:00.000Z',
-        endDate: '2023-03-31T00:00:00.000Z',
-        receivedDate: returnLog.receivedDate,
-        returnReference: returnLog.returnReference,
-        dueDate: '2023-04-28T00:00:00.000Z',
-        status: returnLog.status,
-        underQuery: returnLog.underQuery,
-        periodStartDay: returnLog.metadata.nald.periodStartDay,
-        periodStartMonth: returnLog.metadata.nald.periodStartMonth,
-        periodEndDay: returnLog.metadata.nald.periodEndDay,
-        periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-        siteDescription: returnLog.metadata.description,
-        purposes: 'Test description',
-        twoPartTariff: returnLog.metadata.isTwoPartTariff
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data).to.equal({
+          beenReceived: false,
+          dueDate: '2023-04-28T00:00:00.000Z',
+          endDate: '2023-03-31T00:00:00.000Z',
+          licenceId: licence.id,
+          licenceRef: licence.licenceRef,
+          periodStartDay: returnLog.metadata.nald.periodStartDay,
+          periodStartMonth: returnLog.metadata.nald.periodStartMonth,
+          periodEndDay: returnLog.metadata.nald.periodEndDay,
+          periodEndMonth: returnLog.metadata.nald.periodEndMonth,
+          purposes: 'Test description',
+          receivedDate: returnLog.receivedDate,
+          returnLogId: returnLog.id,
+          returnReference: returnLog.returnReference,
+          siteDescription: returnLog.metadata.description,
+          startDate: '2022-04-01T00:00:00.000Z',
+          status: returnLog.status,
+          twoPartTariff: returnLog.metadata.isTwoPartTariff,
+          underQuery: returnLog.underQuery
+        })
+      })
+
+      it('sets "beenReceived" to "false"', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.beenReceived).to.be.false()
+      })
+    })
+
+    describe('and the return log has been received', () => {
+      before(async () => {
+        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata, receivedDate: new Date() })
+      })
+
+      it('sets "beenReceived" to "true"', async () => {
+        const result = await InitiateSessionService.go(returnLog.id)
+
+        const matchingSession = await SessionModel.query().findById(result.id)
+
+        expect(matchingSession.data.beenReceived).to.be.true()
       })
     })
   })
