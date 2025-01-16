@@ -29,6 +29,7 @@ describe('Bill Runs - View Send Bill Run presenter', () => {
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         financialYear: '2023 to 2024',
+        pageTitle: "You're about to send this bill run",
         region: 'Wales'
       })
     })

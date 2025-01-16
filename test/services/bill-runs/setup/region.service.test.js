@@ -41,6 +41,7 @@ describe('Bill Runs - Setup - Region service', () => {
       const result = await RegionService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         pageTitle: 'Select the region',
         regions,
         sessionId: session.id,

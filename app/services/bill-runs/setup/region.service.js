@@ -23,7 +23,12 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const regions = await FetchRegionsService.go()
 
-  return RegionPresenter.go(session, regions)
+  const formattedData = RegionPresenter.go(session, regions)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {

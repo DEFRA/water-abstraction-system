@@ -19,9 +19,12 @@ const ViewSendBillRunPresenter = require('../../../presenters/bill-runs/view-sen
 async function go(id) {
   const billRun = await _fetchBillRun(id)
 
-  const pageData = ViewSendBillRunPresenter.go(billRun)
+  const formattedData = ViewSendBillRunPresenter.go(billRun)
 
-  return pageData
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 async function _fetchBillRun(id) {

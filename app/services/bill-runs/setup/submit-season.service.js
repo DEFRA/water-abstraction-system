@@ -42,6 +42,7 @@ async function go(sessionId, payload) {
   const pageData = SeasonPresenter.go(session)
 
   return {
+    activeNavBar: 'bill-runs',
     error: validationResult,
     ...pageData
   }
