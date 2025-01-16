@@ -56,37 +56,16 @@ async function _addLicenceHolderAndReturnToSameRef() {
 }
 
 async function _addPrimaryUser() {
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-  const name = 'Primary User test'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
-    }
-  })
-
-  const licenceEntity = await LicenceEntityHelper.add({
-    name: 'primary.user@important.com'
-  })
-
-  await LicenceEntityRoleHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceEntityId: licenceEntity.id
-  })
-
-  await ReturnLogHelper.add({
-    licenceRef: licenceDocumentHeader.licenceRef
-  })
-
-  return licenceDocumentHeader
+  return _addEntity('Primary User test', 'primary.user@important.com', 'primary_user')
 }
 
 async function _addUserReturns() {
+  return _addEntity('User Returns test', 'returns.agent@important.com', 'user_returns')
+}
+
+async function _addEntity(name, email, role) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
-  const name = 'Primary User test'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.id,
     metadata: {
@@ -96,13 +75,13 @@ async function _addUserReturns() {
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
-    name: 'returns.agent@important.com'
+    name: email
   })
 
   await LicenceEntityRoleHelper.add({
     companyEntityId: companyEntity.id,
     licenceEntityId: licenceEntity.id,
-    role: 'user_returns'
+    role
   })
 
   await ReturnLogHelper.add({
