@@ -31,12 +31,12 @@ function calculateTotalBillableReturns(reviewChargeElements) {
 function determineReturnLink(reviewReturn) {
   const { returnId, returnStatus } = reviewReturn
 
+  if (FeatureFlagsConfig.enableSystemReturnsView) {
+    return `/system/return-logs?id=${returnId}`
+  }
+
   if (['due', 'received'].includes(returnStatus)) {
-    if (FeatureFlagsConfig.enableSystemReturnsView) {
-      return `/system/return-logs/setup?returnLogId=${returnId}`
-    } else {
-      return `/return/internal?returnId=${returnId}`
-    }
+    return `/return/internal?returnId=${returnId}`
   }
 
   return `/returns/return?id=${returnId}`

@@ -20,7 +20,7 @@ async function view(request, h) {
 
   const pageData = await ViewReturnLogService.go(query.id, version, auth)
 
-  return h.view('return-logs/view.njk', { activeNavBar: 'search', ...pageData })
+  return h.view('return-logs/view.njk', pageData)
 }
 
 module.exports = {

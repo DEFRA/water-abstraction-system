@@ -8,6 +8,7 @@
 const { formatAbstractionPeriod, formatLongDate, formatNumber } = require('../base.presenter.js')
 const {
   formatMeterDetails,
+  formatStatus,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } = require('./base-return-logs.presenter.js')
@@ -31,6 +32,7 @@ function go(returnLog, auth) {
     periodStartDay,
     periodStartMonth,
     purposes,
+    receivedDate,
     returnReference,
     returnsFrequency,
     returnSubmissions,
@@ -41,52 +43,76 @@ function go(returnLog, auth) {
     versions
   } = returnLog
 
-  const selectedReturnSubmission = returnSubmissions[0]
+  const selectedReturnSubmission = _selectedReturnSubmission(returnSubmissions)
   const latest = _latest(versions, selectedReturnSubmission)
-  const editReturn = _editReturn(latest, auth, status)
 
-  const method = selectedReturnSubmission.$method()
-  const units = selectedReturnSubmission.$units()
-  const summaryTableHeaders = generateSummaryTableHeaders(method, returnsFrequency, units)
-  const summaryTableRows = generateSummaryTableRows(
-    method,
-    returnsFrequency,
-    selectedReturnSubmission.returnSubmissionLines,
-    selectedReturnSubmission.id
-  )
+  const method = selectedReturnSubmission?.$method()
+  const units = selectedReturnSubmission?.$units()
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    actionButton: _actionButton(latest, auth, returnLog.id, status),
     backLink: _backLink(returnLog.id, licence.id, latest),
     displayReadings: method !== 'abstractionVolumes',
+    displayTable: _displayTable(selectedReturnSubmission),
+    displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
-    editReturn,
-    editReturnLink: editReturn ? `/return/internal?returnId=${returnLog.id}` : null,
     latest,
     licenceRef: licence.licenceRef,
-    meterDetails: formatMeterDetails(selectedReturnSubmission.$meter()),
+    meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
-    nilReturn: selectedReturnSubmission.nilReturn,
+    nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
     pageTitle: 'Abstraction return',
     purpose: _purpose(purposes),
+    receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     siteDescription,
-    startReading: selectedReturnSubmission.$meter()?.startReading,
-    status,
-    summaryTableHeaders,
-    summaryTableRows,
+    startReading: _startReading(selectedReturnSubmission),
+    status: formatStatus(returnLog),
+    summaryTableData: _summaryTableData(selectedReturnSubmission, returnsFrequency),
     tableTitle: _tableTitle(returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
-    versions: _versions(selectedReturnSubmission.id, versions, id)
+    versions: _versions(selectedReturnSubmission, versions, id)
+  }
+}
+
+function _actionButton(latest, auth, returnLogId, status) {
+  // You cannot edit a previous version
+  if (!latest) {
+    return null
+  }
+
+  // You cannot edit a void return
+  if (status === 'void') {
+    return null
+  }
+
+  // You cannot submit or edit if you do not have permission to
+  if (!auth.credentials.scope.includes('returns')) {
+    return null
+  }
+
+  // You can only edit a completed return
+  if (status === 'completed') {
+    return {
+      href: `/return/internal?returnId=${returnLogId}`,
+      text: 'Edit return'
+    }
+  }
+
+  // Else you have a due or received return so can only submit the first return submission
+  return {
+    href: `/system/return-logs/setup?returnLogId=${returnLogId}`,
+    text: 'Submit return'
   }
 }
 
 function _backLink(returnId, licenceId, latest) {
   if (latest) {
     return {
-      href: `/system/licences/${licenceId}/summary`,
+      href: `/system/licences/${licenceId}/returns`,
       text: 'Go back to summary'
     }
   }
@@ -97,29 +123,60 @@ function _backLink(returnId, licenceId, latest) {
   }
 }
 
-function _latest(versions, selectedReturnSubmission) {
-  return versions[0].id === selectedReturnSubmission.id
+function _displayTable(selectedReturnSubmission) {
+  // We are dealing with a due or received return log so there are no submissions.
+  if (!selectedReturnSubmission) {
+    return false
+  }
+
+  return !selectedReturnSubmission.nilReturn
 }
 
-function _editReturn(latest, auth, status) {
-  // You cannot edit a previous version
-  if (!latest) {
-    return false
+function _latest(versions, selectedReturnSubmission) {
+  // We are dealing with a due or received return log so there are no submissions. We treat this as 'latest' to avoid
+  // displaying the warning message
+  if (!selectedReturnSubmission) {
+    return true
   }
 
-  // You cannot edit if you do not have permission to
-  if (!auth.credentials.scope.includes('returns')) {
-    return false
-  }
-
-  // You can only edit (add a new submission) to a completed or received return
-  return ['completed', 'received'].includes(status)
+  return versions[0].id === selectedReturnSubmission.id
 }
 
 function _purpose(purposes) {
   const [firstPurpose] = purposes
 
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
+}
+
+function _selectedReturnSubmission(returnSubmissions) {
+  if (!returnSubmissions) {
+    return null
+  }
+
+  return returnSubmissions[0]
+}
+
+function _startReading(selectedReturnSubmission) {
+  if (!selectedReturnSubmission) {
+    return null
+  }
+
+  return selectedReturnSubmission.$meter()?.startReading
+}
+
+function _summaryTableData(selectedReturnSubmission, returnsFrequency) {
+  if (!selectedReturnSubmission) {
+    return null
+  }
+
+  const { id: returnSubmissionId, returnSubmissionLines } = selectedReturnSubmission
+  const method = selectedReturnSubmission.$method()
+  const units = selectedReturnSubmission.$units()
+
+  return {
+    headers: generateSummaryTableHeaders(method, returnsFrequency, units),
+    rows: generateSummaryTableRows(method, returnsFrequency, returnSubmissionLines, returnSubmissionId)
+  }
 }
 
 function _tableTitle(returnsFrequency, method) {
@@ -130,7 +187,7 @@ function _tableTitle(returnsFrequency, method) {
 }
 
 function _total(selectedReturnSubmission) {
-  if (selectedReturnSubmission.nilReturn) {
+  if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return 0
   }
 
@@ -143,14 +200,20 @@ function _total(selectedReturnSubmission) {
   return formatNumber(total)
 }
 
-function _versions(selectedReturnSubmissionId, versions, returnLogId) {
+function _versions(selectedReturnSubmission, versions, returnLogId) {
+  // We are dealing with a due or received return log so there are no submissions, which means no versions to display
+  if (!selectedReturnSubmission) {
+    return null
+  }
+
   return versions.map((version) => {
     const { createdAt, id, userId: user, version: number } = version
 
     return {
-      createdAt: `${formatLongDate(createdAt)} v${number}`,
+      createdAt: `${formatLongDate(createdAt)}`,
       link: `/system/return-logs?id=${returnLogId}&version=${number}`,
-      selected: id === selectedReturnSubmissionId,
+      selected: id === selectedReturnSubmission.id,
+      version: number,
       user
     }
   })
