@@ -32,6 +32,7 @@ describe('Remove Bill Licence service', () => {
       expect(result).to.equal({
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
+        activeNavBar: 'bill-runs',
         billLicenceId: testId,
         billRunNumber: 10010,
         billRunStatus: 'ready',

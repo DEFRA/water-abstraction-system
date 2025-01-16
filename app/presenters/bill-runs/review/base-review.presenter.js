@@ -4,6 +4,7 @@ const Big = require('big.js')
 
 const { formatLongDate } = require('../../base.presenter.js')
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Calculates the total allocated volume across all review change elements
@@ -31,7 +32,11 @@ function determineReturnLink(reviewReturn) {
   const { returnId, returnStatus } = reviewReturn
 
   if (['due', 'received'].includes(returnStatus)) {
-    return `/return/internal?returnId=${returnId}`
+    if (FeatureFlagsConfig.enableSystemReturnsView) {
+      return `/system/return-logs/setup?returnLogId=${returnId}`
+    } else {
+      return `/return/internal?returnId=${returnId}`
+    }
   }
 
   return `/returns/return?id=${returnId}`

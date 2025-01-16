@@ -65,6 +65,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/start',
+    options: {
+      handler: ReturnLogsSetupController.start,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/start',
+    options: {
+      handler: ReturnLogsSetupController.submitStart,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/units',
     options: {
       handler: ReturnLogsSetupController.units,

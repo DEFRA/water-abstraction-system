@@ -49,6 +49,7 @@ function go(reviewChargeElement, elementIndex) {
     issues: formatIssues(issues),
     licenceId: reviewChargeReference.reviewChargeVersion.reviewLicence.licenceId,
     matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns),
+    pageTitle: 'Review charge element',
     reviewChargeElementId,
     reviewLicenceId: reviewChargeReference.reviewChargeVersion.reviewLicence.id,
     status
