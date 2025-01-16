@@ -56,6 +56,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
       const result = await ViewSendBillRunService.go(billRunId)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         billRunId,
         billRunNumber: 10101,
         billRunStatus: 'ready',
@@ -63,6 +64,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
         chargeScheme: 'Current',
         dateCreated: '28 February 2024',
         financialYear: '2024 to 2025',
+        pageTitle: "You're about to send this bill run",
         region: 'Avalon'
       })
     })

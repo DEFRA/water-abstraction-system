@@ -20,8 +20,12 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const blockingResults = await DetermineBlockingBillRunService.go(session)
+  const formattedData = await CheckPresenter.go(session, blockingResults)
 
-  return CheckPresenter.go(session, blockingResults)
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {

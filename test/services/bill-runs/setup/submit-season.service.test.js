@@ -54,6 +54,7 @@ describe('Bill Runs - Setup - Submit Season service', () => {
           const result = await SubmitSeasonService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             error: {
               text: 'Select the season'
             },

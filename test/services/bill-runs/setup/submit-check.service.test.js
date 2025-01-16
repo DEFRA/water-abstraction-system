@@ -93,6 +93,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
         const result = await SubmitCheckService.go(session.id, auth)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           error: true,
           backLink: `/system/bill-runs/setup/${session.id}/region`,
           billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',

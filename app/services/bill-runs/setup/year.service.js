@@ -26,7 +26,12 @@ async function go(sessionId) {
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
   const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
 
-  return YearPresenter.go(licenceSupplementaryYears, session)
+  const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {
