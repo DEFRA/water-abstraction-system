@@ -15,6 +15,10 @@ const SubmitStartService = require('../services/return-logs/setup/submit-start.s
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
 
+async function guidance(request, h) {
+  return h.view('return-logs/setup/guidance.njk')
+}
+
 async function received(request, h) {
   const { sessionId } = request.params
   const pageData = await ReceivedService.go(sessionId)
@@ -108,6 +112,7 @@ async function units(request, h) {
 }
 
 module.exports = {
+  guidance,
   received,
   reported,
   setup,
