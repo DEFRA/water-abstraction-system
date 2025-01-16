@@ -6,6 +6,9 @@
  */
 
 const SessionModel = require('../../../models/session.model.js')
+const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+const RecipientsService = require('./recipients.service.js')
+const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/review` page
@@ -17,13 +20,27 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  // eslint-disable-next-line no-unused-vars
   const { returnsPeriod } = session
+  const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
+  const isSummer = _isSummer(returnsPeriod)
+
+  const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, isSummer)
+
+  const pageData = ReviewPresenter.go(recipients)
 
   return {
     activeNavBar: 'manage',
-    pageTitle: 'Review the mailing list'
+    ...pageData
   }
+}
+
+function _isSummer(returnsPeriod) {
+  return returnsPeriod === 'summer' ? 'true' : 'false'
+}
+
+function _extractReturnPeriod(returnsPeriod) {
+  const periods = determineUpcomingReturnPeriods()
+  return periods.find((period) => period.name === returnsPeriod)
 }
 
 module.exports = {
