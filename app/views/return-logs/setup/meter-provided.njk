@@ -23,7 +23,7 @@
       errorList: [
         {
           text: error.text,
-          href: "#units-error"
+          href: "#meter-provided-error"
         }
       ]
     }) }}
@@ -39,7 +39,7 @@
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {{ govukRadios({
-        name: "units",
+        name: "meterProvided",
         errorMessage: error,
         fieldset: {
           legend: {
@@ -48,24 +48,14 @@
         },
         items: [
           {
-            value: "cubic-meters",
-            text: "Cubic Meters",
-            checked: "cubic-meters" == units
+            value: "yes",
+            text: "Yes",
+            checked: "yes" == meterProvided
           },
           {
-            value: "litres",
-            text: "Litres",
-            checked: "litres" == units
-          },
-          {
-            value: "mega-litres",
-            text: "Mega litres",
-            checked: "mega-litres" == units
-          },
-          {
-            value: "gallons",
-            text: "Gallons",
-            checked: "gallons" == units
+            value: "no",
+            text: "No",
+            checked: "no" == meterProvided
           }
         ]
       }) }}
