@@ -44,6 +44,10 @@ function go(payload, startDate) {
 function _fullDate(payload) {
   const { 'received-date-day': day, 'received-date-month': month, 'received-date-year': year } = payload
 
+  if (!year && !month && !day) {
+    return null
+  }
+
   const paddedMonth = month ? leftPadZeroes(month, 2) : ''
   const paddedDay = day ? leftPadZeroes(day, 2) : ''
 

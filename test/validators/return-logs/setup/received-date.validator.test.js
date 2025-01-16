@@ -88,11 +88,11 @@ describe('Return Logs Setup - Received Date validator', () => {
           payload['received-date-year'] = null
         })
 
-        it('fails validation with the message "Enter a real received date"', () => {
+        it('fails validation with the message "Enter a return received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error.details[0].message).to.equal('Enter a return received date')
         })
       })
 
