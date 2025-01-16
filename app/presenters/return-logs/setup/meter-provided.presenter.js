@@ -20,7 +20,7 @@ function go(session) {
   } = session
 
   return {
-    backLink: `/system/return-logs/setup/${session.id}/units`,
+    backLink: `/system/return-logs/setup/${sessionId}/units`,
     meterProvided: meterProvided ?? null,
     pageTitle: 'Have meter details been provided?',
     returnReference,
