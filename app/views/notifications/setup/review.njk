@@ -6,6 +6,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -14,12 +15,7 @@
   }) }}
 {% endblock %}
 
-{% macro newLine(array) %}
-  {% for item in array %}
-    <p class="govuk-!-margin-bottom-1">
-      {{ item }}</p>
-  {% endfor %}
-{% endmacro %}
+
 
 {% set rows = [] %}
 
@@ -30,17 +26,17 @@
       govukDetails({
         classes: 'govuk-!-margin-bottom-0',
         summaryText: recipient.licences.length + ' licence numbers',
-        html: newLine(recipient.licences)
+        html: newLineArrayItems(recipient.licences)
       })
       }}
     {% else %}
-      {{ newLine(recipient.licences)  }}
+      {{ newLineArrayItems(recipient.licences)  }}
     {% endif %}
   {% endset %}
 
   {% set rows = (rows.push([
     {
-      text: newLine(recipient.contact)
+      text: newLineArrayItems(recipient.contact)
     }, {
       html: licenceNumbers
     }, {
