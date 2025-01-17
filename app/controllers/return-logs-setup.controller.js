@@ -21,7 +21,7 @@ async function meterProvided(request, h) {
   const { sessionId } = request.params
   const pageData = await MeterProvidedService.go(sessionId)
 
-  return h.view('return-logs/setup/meter-provided.njk', { ...pageData })
+  return h.view('return-logs/setup/meter-provided.njk', pageData)
 }
 
 async function received(request, h) {

@@ -33,11 +33,7 @@ async function submitDeduplicate(request, h) {
   const pageData = await SubmitDeduplicateService.go(request.payload)
 
   if (pageData.error) {
-    return h.view('data/deduplicate.njk', {
-      pageTitle: 'De-duplicate a licence',
-      activeNavBar: 'search',
-      ...pageData
-    })
+    return h.view('data/deduplicate.njk', pageData)
   }
 
   return h.redirect(`/licences?query=${pageData.licenceRef}`)

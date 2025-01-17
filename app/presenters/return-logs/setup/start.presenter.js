@@ -16,6 +16,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  */
 function go(session) {
   const {
+    beenReceived,
     dueDate,
     endDate,
     journey,
@@ -26,7 +27,6 @@ function go(session) {
     periodEndDay,
     periodEndMonth,
     purposes,
-    receivedDate,
     returnReference,
     siteDescription,
     startDate,
@@ -41,7 +41,7 @@ function go(session) {
       periodEndDay,
       periodEndMonth
     )}`,
-    displayRecordReceipt: receivedDate === null,
+    beenReceived,
     journey: journey ?? null,
     licenceId,
     licenceRef,

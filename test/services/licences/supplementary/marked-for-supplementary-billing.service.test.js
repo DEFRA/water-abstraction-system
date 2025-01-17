@@ -24,8 +24,12 @@ describe('Marked For Supplementary Billing Service', () => {
     it('returns page data for the view', async () => {
       const result = await MarkedForSupplementaryBillingService.go(licence.id)
 
-      expect(result.licenceId).to.equal(licence.id)
-      expect(result.licenceRef).to.equal(licence.licenceRef)
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef,
+        pageTitle: "You've marked this licence for the next supplementary bill run"
+      })
     })
   })
 })
