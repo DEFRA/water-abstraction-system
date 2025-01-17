@@ -15,7 +15,8 @@
 function go(session) {
   return {
     sessionId: session.id,
-    licenceRef: session.licenceRef ?? null
+    licenceRef: session.licenceRef ?? null,
+    pageTitle: 'Enter a licence number'
   }
 }
 

@@ -27,7 +27,8 @@ describe('Ad-hoc Returns Licence presenter', () => {
 
         expect(result).to.equal({
           sessionId: '86d7555c-0518-4f9c-9148-38f71fd4f6e7',
-          licenceRef: null
+          licenceRef: null,
+          pageTitle: 'Enter a licence number'
         })
       })
     })
@@ -42,7 +43,8 @@ describe('Ad-hoc Returns Licence presenter', () => {
 
         expect(result).to.equal({
           sessionId: '86d7555c-0518-4f9c-9148-38f71fd4f6e7',
-          licenceRef: '01/111'
+          licenceRef: '01/111',
+          pageTitle: 'Enter a licence number'
         })
       })
     })
