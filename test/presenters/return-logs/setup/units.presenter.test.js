@@ -16,9 +16,7 @@ describe('Return Logs Setup - Units presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      data: {
-        returnReference: '012345'
-      }
+      returnReference: '012345'
     }
   })
 

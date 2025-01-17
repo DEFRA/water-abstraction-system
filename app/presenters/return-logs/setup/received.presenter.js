@@ -15,7 +15,7 @@
 function go(session) {
   const {
     id: sessionId,
-    data: { returnReference },
+    returnReference,
     receivedDateOptions,
     receivedDateDay,
     receivedDateMonth,
@@ -29,7 +29,7 @@ function go(session) {
     receivedDateYear: receivedDateYear ?? null,
     sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${session.id}/start`
+    backLink: `/system/return-logs/setup/${sessionId}/start`
   }
 }
 
