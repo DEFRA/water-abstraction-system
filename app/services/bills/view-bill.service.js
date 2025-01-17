@@ -51,6 +51,7 @@ async function go(id) {
   }
 
   return {
+    activeNavBar: 'bill-runs',
     ...billAndBillingAccountData,
     ...additionalData
   }

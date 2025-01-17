@@ -48,6 +48,7 @@ describe('View Bill presenter', () => {
         displayCreditDebitTotals: false,
         financialYear: '2022 to 2023',
         flaggedForReissue: false,
+        pageTitle: 'Bill for Wessex Water Services Ltd',
         region: 'South West',
         transactionFile: 'nalei50002t'
       })
