@@ -23,7 +23,7 @@ describe('Return Logs Setup - Start presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',
-        displayRecordReceipt: true,
+        beenReceived: false,
         journey: null,
         licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
         licenceRef: '01/111',
@@ -34,20 +34,6 @@ describe('Return Logs Setup - Start presenter', () => {
         siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
         status: 'overdue',
         tariffType: 'Standard tariff'
-      })
-    })
-
-    describe('the "displayRecordReceipt" property', () => {
-      describe('when the return log has a received date', () => {
-        beforeEach(() => {
-          session.receivedDate = '2023-04-27T00:00:00.000Z'
-        })
-
-        it('sets the property to false', () => {
-          const result = StartPresenter.go(session)
-
-          expect(result.displayRecordReceipt).to.be.false()
-        })
       })
     })
 
@@ -110,21 +96,21 @@ describe('Return Logs Setup - Start presenter', () => {
 
 function _testSession() {
   return {
-    status: 'due',
+    beenReceived: false,
     dueDate: '2023-04-28T00:00:00.000Z',
     endDate: '2023-03-31T00:00:00.000Z',
-    purposes: 'Evaporative Cooling',
     licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
-    startDate: '2022-04-01T00:00:00.000Z',
     licenceRef: '01/111',
-    underQuery: false,
     periodEndDay: 31,
-    receivedDate: null,
-    twoPartTariff: false,
     periodEndMonth: 12,
     periodStartDay: 1,
+    periodStartMonth: 1,
+    purposes: 'Evaporative Cooling',
     returnReference: '1234',
     siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
-    periodStartMonth: 1
+    startDate: '2022-04-01T00:00:00.000Z',
+    status: 'due',
+    twoPartTariff: false,
+    underQuery: false
   }
 }
