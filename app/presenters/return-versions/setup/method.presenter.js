@@ -20,6 +20,7 @@ function go(session) {
     displayCopyExisting: licence.returnVersions.length > 0,
     licenceRef: licence.licenceRef,
     method: method ?? null,
+    pageTitle: 'How do you want to set up the requirements for returns?',
     sessionId
   }
 }

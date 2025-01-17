@@ -49,7 +49,6 @@ async function go(sessionId, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select any additional submission options for the return requirements',
     ...submittedSessionData
   }
 }

@@ -32,6 +32,7 @@ function go(session) {
     noAdditionalOptions,
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     quarterlyReturns,
+    pageTitle: 'Select any additional submission options for the return requirements',
     sessionId
   }
 }

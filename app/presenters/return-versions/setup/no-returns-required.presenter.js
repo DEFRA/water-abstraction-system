@@ -19,6 +19,7 @@ function go(session) {
     backLink: _backLink(session),
     licenceRef: licence.licenceRef,
     reason: reason || null,
+    pageTitle: 'Why are no returns required?',
     sessionId
   }
 }
