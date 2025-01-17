@@ -19,7 +19,12 @@ const RemoveBillPresenter = require('../../presenters/bills/remove-bill.presente
 async function go(billId) {
   const bill = await FetchBillSummaryService.go(billId)
 
-  return RemoveBillPresenter.go(bill)
+  const formattedData = RemoveBillPresenter.go(bill)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {

@@ -41,6 +41,8 @@ async function go(payload) {
   await DeDuplicateService.go(parsedLicenceRef)
 
   return {
+    pageTitle: 'De-duplicate a licence',
+    activeNavBar: 'search',
     licenceRef: parsedLicenceRef
   }
 }

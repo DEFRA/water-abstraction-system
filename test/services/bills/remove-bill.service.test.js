@@ -33,6 +33,7 @@ describe('Remove Bill service', () => {
       const result = await RemoveBillService.go(testId)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
         billId: testId,

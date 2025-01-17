@@ -13,18 +13,14 @@
  * @returns {object} page data needed by the view template
  */
 function go(session) {
-  const {
-    id: sessionId,
-    data: { returnReference },
-    units
-  } = session
+  const { id: sessionId, returnReference, units } = session
 
   return {
     pageTitle: 'Which units were used?',
     units: units ?? null,
     sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${session.id}/reported`
+    backLink: `/system/return-logs/setup/${sessionId}/reported`
   }
 }
 
