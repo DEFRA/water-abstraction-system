@@ -3,20 +3,7 @@
 {% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
 
 {% block head %}
-  <!--[if !IE 8]><!-->
     <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
-  <!--<![endif]-->
-
-  {# For Internet Explorer 8, you need to compile specific stylesheet #}
-  {# see https://github.com/alphagov/govuk-frontend/blob/master/docs/installation/supporting-internet-explorer-8.md #}
-  <!--[if IE 8]>
-    <link href="{{ assetPath }}/govuk-frontend/all-ie8.css" rel="stylesheet" />
-  <![endif]-->
-
-  {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
-  <!--[if lt IE 9]>
-    <script src="/html5-shiv/html5shiv.js"></script>
-  <![endif]-->
 {% endblock %}
 
 {% block header %}
@@ -30,26 +17,53 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-width-container">
-    <span class="govuk-caption-xl">Guidance</span>
-    <h1 class="govuk-heading-l">Help to enter multiple volumes or readings into a return</h1>
+  <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">Guidance</span>
+        <h1 class="govuk-heading-l">Help to enter multiple volumes or readings into a return</h1>
+      </div>
 
+      <div class="govuk-grid-column-two-thirds">
+        <p class="gem-c-lead-paragraph">You can enter mulitple values into a return by copying and pasting from a document on your device. For example, from an Excel spreadsheet or a text file.</p>
 
-    <p class="govuk-body-s">You can enter mulitple values into a return by copying and pasting from a document on your device. For example, from an Excel spreadsheet or a text file.</p>
+        <p>If you're using a spreadsheet, each of the values should be in one column. They should be in date order.</p>
 
-    <p class="govuk-body-s">If you're using a spreadsheet, each of the values should be in one column. They should be in date order.</p>
+        <div>
+          <figure style="margin-left: 0">
+            <image src="../../../public/static/example-excel-01-min.png" width="300px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 1: an Excel spreadsheet with 2 columns, one for dates and one for volumes or readings.</figcaption>
+          </figure>
+        </div>
 
-    <p class="govuk-body-s">Select and then copy the values column. You do not need the dates.</p>
+        <p>Select and then copy the values column. You do not need the dates.</p>
 
-    <p class="govuk-body-s">Paste the values into the box on the form. The values will appear in a column.</p>
+        <div>
+          <figure style="margin-left: 0">
+            <image src="../../public/static/example-excel-02-min.png" width="300px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 2: an Excel spreadsheet with the values column selected.</figcaption>
+          </figure>
+        </div>
 
-    <p class="govuk-body-s">For this form to work, values must:</p>
+        <p>Paste the values into the box on the form. The values will appear in a column.</p>
 
-    <ul class="govuk-body-s">
-      <li>either be on separate lines or be separated by a comma</li>
-      <li>cover the entire return period - if a value is missing, use a zero to fill the gap</li>
-      <li>run sequentially to match the return period dates</li>
-    </ul>
+        <div>
+          <figure style="margin-left: 0">
+            <image src="../../public/static/example-input-02-min.png" width="500px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 3: how readings or volumes look after being pasted into the box.</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <p>For this form to work, values should:</p>
+          <ul>
+            <li>either be on separate lines or be separated by a comma</li>
+            <li>cover the entire return period - if a value is missing, use a <span style="padding: 0.2em; background-color: #f3f2f1; color: #900;"><code>x</code></span> to fill the gap</li>
+            <li>run sequentially to match the return period dates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
 
