@@ -16,6 +16,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  */
 function go(session) {
   const {
+    id: sessionId,
     beenReceived,
     dueDate,
     endDate,
@@ -41,6 +42,7 @@ function go(session) {
       periodEndDay,
       periodEndMonth
     )}`,
+    backLink: `/system/return-logs/setup/${sessionId}/received`,
     beenReceived,
     journey: journey ?? null,
     licenceId,
