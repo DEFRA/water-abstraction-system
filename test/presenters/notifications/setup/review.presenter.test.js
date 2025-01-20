@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const ReviewPresenter = require('../../../../app/presenters/notifications/setup/review.presenter.js')
 
-describe.only('Notifications Setup - Review presenter', () => {
+describe('Notifications Setup - Review presenter', () => {
   let testRecipients
   let testInput
 
@@ -30,22 +30,6 @@ describe.only('Notifications Setup - Review presenter', () => {
         pageTitle: 'Send returns invitations',
         recipients: [
           {
-            licences: [`${testRecipients.returnsTo.all_licences}`],
-            method: 'Letter - Returns To',
-            contact: [
-              'Returner Guy',
-              'undefined',
-              'Privet Drive',
-              'Surrey',
-              'Harry',
-              'J',
-              'WD25 7LR',
-              'Little Whinging',
-              'Person',
-              'Returns to'
-            ]
-          },
-          {
             licences: [`${testRecipients.primaryUser.all_licences}`],
             method: 'Email - primary user',
             contact: ['primary.user@important.com']
@@ -60,7 +44,7 @@ describe.only('Notifications Setup - Review presenter', () => {
             method: 'Letter - licence holder',
             contact: [
               'Licence Guy',
-              'undefined',
+              '1',
               'Privet Drive',
               'Surrey',
               'Harry',
@@ -69,6 +53,22 @@ describe.only('Notifications Setup - Review presenter', () => {
               'Little Whinging',
               'Person',
               'Licence holder'
+            ]
+          },
+          {
+            licences: [`${testRecipients.returnsTo.all_licences}`],
+            method: 'Letter - Returns To',
+            contact: [
+              'Returner Guy',
+              '2',
+              'Privet Drive',
+              'Surrey',
+              'Harry',
+              'J',
+              'WD25 7LR',
+              'Little Whinging',
+              'Person',
+              'Returns to'
             ]
           },
           {
@@ -76,23 +76,7 @@ describe.only('Notifications Setup - Review presenter', () => {
             method: 'Letter - licence holder',
             contact: [
               'Multiple Licence Guy',
-              'undefined',
-              'Privet Drive',
-              'Surrey',
-              'Harry',
-              'J',
-              'WD25 7LR',
-              'Little Whinging',
-              'Person',
-              'Licence holder'
-            ]
-          },
-          {
-            licences: [`${testRecipients.duplicateLicenceHolder.all_licences}`],
-            method: 'Letter - licence holder',
-            contact: [
-              'Duplicate contact Licence',
-              'undefined',
+              '3',
               'Privet Drive',
               'Surrey',
               'Harry',
@@ -104,7 +88,7 @@ describe.only('Notifications Setup - Review presenter', () => {
             ]
           }
         ],
-        recipientsAmount: 6
+        recipientsAmount: 5
       })
     })
 
@@ -116,10 +100,9 @@ describe.only('Notifications Setup - Review presenter', () => {
     })
 
     describe('the "recipientsAmount" property', () => {
-      it('should return the size of the recipients array (with duplicates removed)', () => {
-        const expectedDuplicatesToRemove = 1
+      it('should return the size of the recipients array', () => {
         const result = ReviewPresenter.go(testInput)
-        expect(result.recipientsAmount).to.equal(testInput.length - expectedDuplicatesToRemove)
+        expect(result.recipientsAmount).to.equal(testInput.length)
       })
     })
 
@@ -129,22 +112,6 @@ describe.only('Notifications Setup - Review presenter', () => {
           const result = ReviewPresenter.go(testInput)
 
           expect(result.recipients).to.equal([
-            {
-              licences: [`${testRecipients.returnsTo.all_licences}`],
-              method: 'Letter - Returns To',
-              contact: [
-                'Returner Guy',
-                'undefined',
-                'Privet Drive',
-                'Surrey',
-                'Harry',
-                'J',
-                'WD25 7LR',
-                'Little Whinging',
-                'Person',
-                'Returns to'
-              ]
-            },
             {
               licences: [`${testRecipients.primaryUser.all_licences}`],
               method: 'Email - primary user',
@@ -160,7 +127,7 @@ describe.only('Notifications Setup - Review presenter', () => {
               method: 'Letter - licence holder',
               contact: [
                 'Licence Guy',
-                'undefined',
+                '1',
                 'Privet Drive',
                 'Surrey',
                 'Harry',
@@ -169,6 +136,22 @@ describe.only('Notifications Setup - Review presenter', () => {
                 'Little Whinging',
                 'Person',
                 'Licence holder'
+              ]
+            },
+            {
+              licences: [`${testRecipients.returnsTo.all_licences}`],
+              method: 'Letter - Returns To',
+              contact: [
+                'Returner Guy',
+                '2',
+                'Privet Drive',
+                'Surrey',
+                'Harry',
+                'J',
+                'WD25 7LR',
+                'Little Whinging',
+                'Person',
+                'Returns to'
               ]
             },
             {
@@ -176,23 +159,7 @@ describe.only('Notifications Setup - Review presenter', () => {
               method: 'Letter - licence holder',
               contact: [
                 'Multiple Licence Guy',
-                'undefined',
-                'Privet Drive',
-                'Surrey',
-                'Harry',
-                'J',
-                'WD25 7LR',
-                'Little Whinging',
-                'Person',
-                'Licence holder'
-              ]
-            },
-            {
-              licences: [`${testRecipients.duplicateLicenceHolder.all_licences}`],
-              method: 'Letter - licence holder',
-              contact: [
-                'Duplicate contact Licence',
-                'undefined',
+                '3',
                 'Privet Drive',
                 'Surrey',
                 'Harry',
@@ -236,7 +203,7 @@ describe.only('Notifications Setup - Review presenter', () => {
                 method: 'Letter - licence holder',
                 contact: [
                   'Licence Guy',
-                  'undefined',
+                  '1',
                   'Privet Drive',
                   'Surrey',
                   'Harry',

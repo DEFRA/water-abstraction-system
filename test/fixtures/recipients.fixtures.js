@@ -9,14 +9,23 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
  * licenceHolderWithMultipleLicences
  */
 function recipients() {
-  const duplicateLicenceRef = generateLicenceRef()
-
   return {
     primaryUser: _addPrimaryUser(),
     returnsAgent: _addReturnsAgent(),
     licenceHolder: _addLicenceHolder(),
     returnsTo: _addReturnTo(),
-    licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences(),
+    licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences()
+  }
+}
+
+/**
+ * Create duplicate by contact hash recipients
+ *
+ * @returns {object} - Returns duplicate contact hash recipients
+ */
+function duplicateRecipients() {
+  const duplicateLicenceRef = generateLicenceRef()
+  return {
     duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
     duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef)
   }
@@ -27,8 +36,8 @@ function _addDuplicateLicenceHolder(licenceRef) {
     all_licences: licenceRef,
     message_type: 'Letter - licence holder',
     contact: {
-      name: `Duplicate contact Licence`,
-      ..._address(),
+      name: `Duplicate contact`,
+      ..._address('4'),
       role: 'Licence holder'
     },
     contact_hash_id: 167278556784
@@ -40,8 +49,8 @@ function _addDuplicateReturnsTo(licenceRef) {
     all_licences: licenceRef,
     message_type: 'Letter - Returns To',
     contact: {
-      name: `Duplicate contact Returns To`,
-      ..._address(),
+      name: `Duplicate contact`,
+      ..._address('4'),
       role: 'Returns to'
     },
     contact_hash_id: 167278556784
@@ -54,7 +63,7 @@ function _addLicenceHolder() {
     message_type: 'Letter - licence holder',
     contact: {
       name: `Licence Guy`,
-      ..._address(),
+      ..._address('1'),
       role: 'Licence holder'
     },
     contact_hash_id: -1672785580
@@ -87,7 +96,7 @@ function _addReturnTo() {
     message_type: 'Letter - Returns To',
     contact: {
       name: `Returner Guy`,
-      ..._address(),
+      ..._address('2'),
       role: 'Returns to'
     },
     contact_hash_id: 123223
@@ -100,7 +109,7 @@ function _addLicenceHolderWithMultipleLicences() {
     message_type: 'Letter - licence holder',
     contact: {
       name: `Multiple Licence Guy`,
-      ..._address(),
+      ..._address('3'),
       role: 'Licence holder'
     },
     contact_hash_id: -167278576
@@ -125,5 +134,6 @@ function _address(line1) {
 }
 
 module.exports = {
-  recipients
+  recipients,
+  duplicateRecipients
 }
