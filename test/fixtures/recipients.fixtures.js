@@ -9,12 +9,42 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
  * licenceHolderWithMultipleLicences
  */
 function recipients() {
+  const duplicateLicenceRef = generateLicenceRef()
+
   return {
     primaryUser: _addPrimaryUser(),
     returnsAgent: _addReturnsAgent(),
     licenceHolder: _addLicenceHolder(),
     returnsTo: _addReturnTo(),
-    licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences()
+    licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences(),
+    duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
+    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef)
+  }
+}
+
+function _addDuplicateLicenceHolder(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    message_type: 'Letter - licence holder',
+    contact: {
+      name: `Duplicate contact Licence`,
+      ..._address(),
+      role: 'Licence holder'
+    },
+    contact_hash_id: 167278556784
+  }
+}
+
+function _addDuplicateReturnsTo(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    message_type: 'Letter - Returns To',
+    contact: {
+      name: `Duplicate contact Returns To`,
+      ..._address(),
+      role: 'Returns to'
+    },
+    contact_hash_id: 167278556784
   }
 }
 
@@ -77,9 +107,9 @@ function _addLicenceHolderWithMultipleLicences() {
   }
 }
 
-function _address(index) {
+function _address(line1) {
   return {
-    addressLine1: `${index}`,
+    addressLine1: `${line1}`,
     addressLine2: 'Privet Drive',
     addressLine3: null,
     addressLine4: null,
