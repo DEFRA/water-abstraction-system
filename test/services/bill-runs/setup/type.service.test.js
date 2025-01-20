@@ -36,6 +36,7 @@ describe('Bill Runs - Setup - Type service', () => {
       const result = await TypeService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'bill-runs',
         enableTwoPartTariffSupplementary: false,
         pageTitle: 'Select the bill run type',
         sessionId: session.id,

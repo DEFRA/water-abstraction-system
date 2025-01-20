@@ -49,7 +49,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Enter the abstraction period for the requirements for returns',
     ...submittedSessionData
   }
 }

@@ -43,7 +43,6 @@ async function go(sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'How do you want to set up the requirements for returns?',
     ...formattedData
   }
 }

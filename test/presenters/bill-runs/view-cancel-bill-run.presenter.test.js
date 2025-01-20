@@ -30,6 +30,7 @@ describe('Bill Runs - View Cancel Bill Run presenter', () => {
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         financialYear: '2023 to 2024',
+        pageTitle: "You're about to cancel this bill run",
         region: 'Wales'
       })
     })

@@ -20,11 +20,7 @@ async function cancel(request, h) {
 
   const pageData = await ViewCancelBillRunService.go(id)
 
-  return h.view('bill-runs/cancel.njk', {
-    pageTitle: "You're about to cancel this bill run",
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/cancel.njk', pageData)
 }
 
 async function index(request, h) {
@@ -32,10 +28,7 @@ async function index(request, h) {
 
   const pageData = await IndexBillRunsService.go(page)
 
-  return h.view('bill-runs/index.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/index.njk', pageData)
 }
 
 async function send(request, h) {
@@ -43,11 +36,7 @@ async function send(request, h) {
 
   const pageData = await ViewSendBillRunService.go(id)
 
-  return h.view('bill-runs/send.njk', {
-    pageTitle: "You're about to send this bill run",
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bill-runs/send.njk', pageData)
 }
 
 async function submitCancel(request, h) {
@@ -91,10 +80,7 @@ async function view(request, h) {
 
   const pageData = await ViewBillRunService.go(id)
 
-  return h.view(pageData.view, {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view(pageData.view, pageData)
 }
 
 module.exports = {

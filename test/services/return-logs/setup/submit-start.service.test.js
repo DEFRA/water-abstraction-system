@@ -53,7 +53,7 @@ describe('Return Logs Setup - Submit Start service', () => {
         expect(result).to.equal({
           abstractionPeriod: 'From 1 January to 31 December',
           activeNavBar: 'search',
-          displayRecordReceipt: true,
+          beenReceived: false,
           error: { text: 'Select what you want to do with this return' },
           journey: null,
           licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
@@ -74,22 +74,22 @@ describe('Return Logs Setup - Submit Start service', () => {
 async function _session() {
   const session = SessionHelper.add({
     data: {
-      status: 'due',
-      dueDate: new Date('2023-04-28'),
-      endDate: new Date('2023-03-31'),
-      purposes: 'Evaporative Cooling',
+      beenReceived: false,
+      dueDate: '2023-04-28T00:00:00.000Z',
+      endDate: '2023-03-31T00:00:00.000Z',
       licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
-      startDate: new Date('2022-04-01'),
       licenceRef: '01/111',
-      underQuery: false,
       periodEndDay: 31,
-      receivedDate: null,
-      twoPartTariff: false,
       periodEndMonth: 12,
       periodStartDay: 1,
+      periodStartMonth: 1,
+      purposes: 'Evaporative Cooling',
       returnReference: '1234',
       siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
-      periodStartMonth: 1
+      startDate: '2022-04-01T00:00:00.000Z',
+      status: 'due',
+      twoPartTariff: false,
+      underQuery: false
     }
   })
 

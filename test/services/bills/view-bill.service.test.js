@@ -69,6 +69,7 @@ describe('View Bill service', () => {
         const result = await ViewBillService.go(testId)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
           billLicences: [
             {
@@ -111,6 +112,7 @@ describe('View Bill service', () => {
         const result = await ViewBillService.go(testId)
 
         expect(result).to.equal({
+          activeNavBar: 'bill-runs',
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
           tableCaption: '2 transactions',
           transactions: [{ chargeType: 'standard' }, { chargeType: 'compensation' }]

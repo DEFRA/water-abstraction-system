@@ -24,6 +24,7 @@ function go(session, requirementIndex) {
     backLink: _backLink(session),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'You are about to remove these requirements for returns',
     returnRequirement: _formattedReturnRequirement(requirement),
     sessionId,
     startDate: _startDate(session)

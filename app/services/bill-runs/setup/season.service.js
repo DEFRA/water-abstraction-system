@@ -21,7 +21,12 @@ const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.pres
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return SeasonPresenter.go(session)
+  const formattedData = SeasonPresenter.go(session)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
 }
 
 module.exports = {

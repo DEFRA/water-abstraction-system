@@ -31,6 +31,7 @@ function go(billRun) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
+    pageTitle: "You're about to send this bill run",
     region: titleCase(region.displayName)
   }
 }

@@ -54,6 +54,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
           const result = await SubmitTypeService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'bill-runs',
             error: {
               text: 'Select the bill run type'
             },

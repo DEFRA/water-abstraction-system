@@ -49,7 +49,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select the returns cycle for the requirements for returns',
     ...formattedData
   }
 }

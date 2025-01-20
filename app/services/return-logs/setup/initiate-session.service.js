@@ -35,6 +35,8 @@ async function go(returnLogId) {
 
 function _data(returnLog) {
   const formattedPurposes = _formatPurposes(returnLog.purposes)
+
+  returnLog.beenReceived = returnLog.receivedDate !== null
   returnLog.purposes = formattedPurposes
 
   return returnLog

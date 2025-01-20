@@ -19,8 +19,10 @@ async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   return {
+    activeNavBar: 'search',
     licenceRef: licenceData.licenceRef,
-    licenceId: licenceData.id
+    licenceId: licenceData.id,
+    pageTitle: "You've marked this licence for the next supplementary bill run"
   }
 }
 
