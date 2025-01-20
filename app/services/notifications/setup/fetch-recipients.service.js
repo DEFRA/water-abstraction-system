@@ -31,6 +31,7 @@ async function go(dueDate, summer) {
  */
 async function _fetch(dueDate, summer) {
   const query = _query()
+
   return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
 }
 
@@ -140,8 +141,7 @@ GROUP BY
   message_type,
   recipient,
   contact,
-  contact_hash_id
-ORDER BY all_licences;`
+  contact_hash_id;`
 }
 
 module.exports = {
