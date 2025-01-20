@@ -18,8 +18,7 @@ async function seed() {
   return {
     licenceHolder: await _addLicenceHolder(),
     licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(),
-    primaryUser: await _addPrimaryUser(),
-    userReturns: await _addUserReturns()
+    primaryUser: await _addPrimaryUser()
   }
 }
 
@@ -56,32 +55,46 @@ async function _addLicenceHolderAndReturnToSameRef() {
 }
 
 async function _addPrimaryUser() {
-  return _addEntity('Primary User test', 'primary.user@important.com', 'primary_user')
-}
+  const primaryUser = {
+    name: 'Primary User test',
+    email: 'primary.user@important.com',
+    role: 'primary_user'
+  }
 
-async function _addUserReturns() {
-  return _addEntity('User Returns test', 'returns.agent@important.com', 'user_returns')
-}
+  const userReturns = {
+    name: 'User Returns test',
+    email: 'returns.agent@important.com',
+    role: 'user_returns'
+  }
 
-async function _addEntity(name, email, role) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.id,
     metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+      ..._metadata(primaryUser.name),
+      contacts: [_contact(primaryUser.name, 'Licence holder'), _contact(primaryUser.name, 'Returns to')]
     }
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
-    name: email
+    name: primaryUser.email
+  })
+
+  const licenceEntityReturns = await LicenceEntityHelper.add({
+    name: userReturns.email
   })
 
   await LicenceEntityRoleHelper.add({
     companyEntityId: companyEntity.id,
     licenceEntityId: licenceEntity.id,
-    role
+    role: primaryUser.role
+  })
+
+  await LicenceEntityRoleHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceEntityId: licenceEntityReturns.id,
+    role: userReturns.role
   })
 
   await ReturnLogHelper.add({

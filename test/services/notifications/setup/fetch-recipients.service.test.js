@@ -39,20 +39,22 @@ describe('Notifications Setup - Recipients service', () => {
         recipient: 'primary.user@important.com'
       })
     })
-  })
 
-  describe('when there is a "user_returns"', () => {
-    it('correctly returns the "user_returns" instead of the "Licence holder"', async () => {
-      const result = await RecipientsService.go(dueDate, isSummer)
+    describe('and there is a "returns agent" (known as userReturns in the DB)', () => {
+      it('correctly returns the "returns agent" as well as the primary user', async () => {
+        const result = await RecipientsService.go(dueDate, isSummer)
 
-      const [testRecipient] = result.filter((res) => res.all_licences.includes(recipients.userReturns.licenceRef))
+        const [_, testRecipientReturnsAgent] = result.filter((res) =>
+          res.all_licences.includes(recipients.primaryUser.licenceRef)
+        )
 
-      expect(testRecipient).to.equal({
-        all_licences: recipients.userReturns.licenceRef,
-        contact: null,
-        contact_hash_id: -370722837,
-        message_type: 'Email - returns agent',
-        recipient: 'returns.agent@important.com'
+        expect(testRecipientReturnsAgent).to.equal({
+          all_licences: recipients.primaryUser.licenceRef,
+          contact: null,
+          contact_hash_id: -370722837,
+          message_type: 'Email - returns agent',
+          recipient: 'returns.agent@important.com'
+        })
       })
     })
   })
