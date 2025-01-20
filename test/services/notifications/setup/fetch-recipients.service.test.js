@@ -44,7 +44,7 @@ describe('Notifications Setup - Recipients service', () => {
       it('correctly returns the "returns agent" as well as the primary user', async () => {
         const result = await RecipientsService.go(dueDate, isSummer)
 
-        const [_, testRecipientReturnsAgent] = result.filter((res) =>
+        const [, testRecipientReturnsAgent] = result.filter((res) =>
           res.all_licences.includes(recipients.primaryUser.licenceRef)
         )
 
