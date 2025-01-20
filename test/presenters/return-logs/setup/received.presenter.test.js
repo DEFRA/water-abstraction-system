@@ -25,6 +25,7 @@ describe('Return Logs Setup - Received presenter', () => {
       const result = ReceivedPresenter.go(session)
 
       expect(result).to.equal({
+        pageTitle: 'When was the return received?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         returnReference: '012345',
         receivedDateOption: null,

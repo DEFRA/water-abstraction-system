@@ -27,7 +27,6 @@ async function go(sessionId, requirementIndex) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'You are about to remove these requirements for returns',
     ...formattedData
   }
 }

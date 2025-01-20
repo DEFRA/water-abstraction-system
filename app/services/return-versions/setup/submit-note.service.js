@@ -47,7 +47,6 @@ async function go(sessionId, payload, user, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Add a note',
     ...submittedSessionData
   }
 }

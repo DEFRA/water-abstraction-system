@@ -40,6 +40,7 @@ describe('Return Versions Setup - Note presenter', () => {
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceRef: '01/ABC',
         note: null,
+        pageTitle: 'Add a note',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

@@ -52,7 +52,6 @@ async function go(sessionId, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select the start date for the requirements for returns',
     ...submittedSessionData
   }
 }

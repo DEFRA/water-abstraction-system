@@ -77,7 +77,8 @@ describe('Notifications Ad Hoc Returns controller', () => {
         options = _getOptions('licence')
 
         Sinon.stub(LicenceService, 'go').resolves({
-          sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+          pageTitle: 'Enter a licence number'
         })
       })
 
@@ -85,14 +86,8 @@ describe('Notifications Ad Hoc Returns controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          const pageData = {
-            pageTitle: 'Enter a licence number',
-            activeNavBar: 'manage'
-          }
-
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain(pageData.activeNavBar)
-          expect(response.payload).to.contain(pageData.pageTitle)
+          expect(response.payload).to.contain('Enter a licence number')
         })
       })
     })
