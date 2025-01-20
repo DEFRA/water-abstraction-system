@@ -26,7 +26,6 @@ async function go(sessionId, requirementIndex) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Select the returns cycle for the requirements for returns',
     ...formattedData
   }
 }

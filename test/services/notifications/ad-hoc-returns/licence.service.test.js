@@ -30,8 +30,10 @@ describe('Notifications Ad-hoc Returns - Licence service', () => {
       const result = await LicenceService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         sessionId: session.id,
-        licenceRef: '01/111'
+        licenceRef: '01/111',
+        pageTitle: 'Enter a licence number'
       })
     })
   })

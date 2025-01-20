@@ -39,7 +39,6 @@ async function go(sessionId, payload) {
   const formattedData = _submittedSessionData(session, payload)
 
   return {
-    pageTitle: 'When was the return received?',
     activeNavBar: 'search',
     error: validationResult,
     ...formattedData

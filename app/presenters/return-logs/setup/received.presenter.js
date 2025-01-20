@@ -23,6 +23,7 @@ function go(session) {
   } = session
 
   return {
+    pageTitle: 'When was the return received?',
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,

@@ -49,7 +49,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select how often readings or volumes are reported',
     ...formattedData
   }
 }

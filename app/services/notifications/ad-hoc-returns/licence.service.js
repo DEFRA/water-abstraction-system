@@ -23,6 +23,7 @@ async function go(sessionId) {
   const formattedData = LicencePresenter.go(session)
 
   return {
+    activeNavBar: 'manage',
     ...formattedData
   }
 }
