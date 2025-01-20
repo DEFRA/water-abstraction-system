@@ -17,16 +17,17 @@ const ReturnSubmissionHelper = require('../../support/helpers/return-submission.
 const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
-describe('View Return Log presenter', () => {
+describe.only('View Return Log presenter', () => {
+  let auth
   let testReturnLog
 
-  const auth = {
-    credentials: {
-      scope: ['returns']
-    }
-  }
-
   beforeEach(async () => {
+    auth = {
+      credentials: {
+        scope: ['returns']
+      }
+    }
+
     testReturnLog = await ReturnLogHelper.add({
       metadata: {
         ...ReturnLogHelper.defaults().metadata,
@@ -42,6 +43,52 @@ describe('View Return Log presenter', () => {
     testReturnLog.purposes = testReturnLog.metadata.purposes
     testReturnLog.twoPartTariff = testReturnLog.metadata.isTwoPartTariff
     testReturnLog.licence = await LicenceHelper.add()
+  })
+
+  describe('the "abstractionPeriod" property', () => {
+    it('returns the correctly-formatted date', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+    })
+  })
+
+  describe('the "actionButton" property', () => {
+    it('returns null if this is a void return', () => {
+      testReturnLog.status = 'void'
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal(null)
+    })
+
+    it("returns null if auth credentials don't include returns", () => {
+      auth.credentials.scope = ['NOT_RETURNS']
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal(null)
+    })
+
+    it('returns the expected "Edit return" result if the return is completed', () => {
+      testReturnLog.status = 'completed'
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal({
+        href: `/return/internal?returnId=${testReturnLog.id}`,
+        text: 'Edit return'
+      })
+    })
+
+    it('returns the expected "Submit return" result if the return is due', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal({
+        href: `/system/return-logs/setup?returnLogId=${testReturnLog.id}`,
+        text: 'Submit return'
+      })
+    })
   })
 
   describe('the "latest" property', () => {
