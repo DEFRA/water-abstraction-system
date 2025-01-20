@@ -4,12 +4,7 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-
-{% macro newLine(array) %}
-  {% for item in array %}
-    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
-  {% endfor %}
-{% endmacro %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -109,7 +104,7 @@
                         attributes: { 'data-test': topAttr + '-condition-' + conditionTypeIndex + '-points' }
                       },
                       value: {
-                        html: newLine(condition.abstractionPoints.descriptions)
+                        html: newLineArrayItems(condition.abstractionPoints.descriptions)
                       }
                     }
                   ]
