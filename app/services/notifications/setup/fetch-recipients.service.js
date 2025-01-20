@@ -8,23 +8,56 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches recipient data for the `/notifications/setup/review` page
+ * Fetches recipient data for the `/notifications/setup/review` page.
  *
- * @param {string} dueDate
- * @param {string} summer
+ * @param {string} dueDate - The due date for the return (used to filter records).
+ * @param {string} summer - A flag indicating whether the return is for the summer period (used to filter records).
  *
- * @returns {object} A list of recipients
+ * @returns {Promise<Recipient[]>} - A promise that resolves to a list of recipients.
  */
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)
   return rows
 }
 
+/**
+ * Internal function that executes the database query to retrieve the recipient data.
+ *
+ * @param {string} dueDate - The due date for the return (used to filter records).
+ * @param {string} summer - A flag indicating whether the return is for the summer period (used to filter records).
+ *
+ * @returns {Promise<object>} The raw database result containing the list of recipients.
+ * @private
+ */
 async function _fetch(dueDate, summer) {
   const query = _query()
   return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
 }
 
+/**
+ * Constructs the SQL query string to fetch the recipient data.
+ *
+ * The query is designed to return recipients based on the due date and summer flag. It fetches:
+ * - Recipients who are associated with a 'Licence holder' or 'Returns to' role and their contact details.
+ * - Primary users, who are considered recipients for email notifications.
+ * - Returns agents, who are also considered recipients for email notifications.
+ *
+ * The query differentiates between different types of recipients (and methods of contact):
+ * - **Letter - licence holder**: Only returned for recipients with the 'Licence holder' role.
+ * - **Letter - returns to**: Returned for recipients with the 'Returns to' role.
+ * - **Email - primary user**: Returned for users with the 'primary_user' role (only email, no contact).
+ * - **Email - returns agent**: Returned for users with the 'user_returns' role (only email, no contact).
+ *
+ * The output will include:
+ * - A comma-separated list of licence references.
+ * - The message type, which will indicate the mode of communication (either 'Letter' or 'Email').
+ * - The recipient’s name (if applicable) or `null` (if the recipient is based on contact data).
+ * - The recipient's contact details (only available for roles like 'Licence holder' and 'Returns to').
+ * - A unique hash ID for the contact, generated from their details.
+ *
+ * @returns {string} The SQL query string.
+ * @private
+ */
 function _query() {
   return `SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS all_licences,
@@ -114,3 +147,12 @@ ORDER BY all_licences;`
 module.exports = {
   go
 }
+
+/**
+ * @typedef {object} Recipient
+ * @property {string} all_licences - A comma-separated list of licences with the same contact.
+ * @property {string} message_type - The type of message (e.g., 'Letter - licence holder', 'Email - primary user').
+ * @property {string|null} recipient - The name of the recipient, or `null` if not applicable.
+ * @property {object | null} contact - The contact details, or `null` if not applicable.
+ * @property {string} contact_hash_id - A unique hash ID for the contact, generated from their details.
+ */
