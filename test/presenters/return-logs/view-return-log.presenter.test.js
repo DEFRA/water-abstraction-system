@@ -4,217 +4,78 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
+const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
+
+// Test helpers
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
+const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 describe('View Return Log presenter', () => {
-  const data = {
-    returnId: 'RETURN_ID',
-    licenceNumber: 'LICENCE_NUMBER',
-    receivedDate: '2023-11-06',
-    startDate: '2022-11-01',
-    endDate: '2023-10-31',
-    dueDate: '2023-11-28',
-    frequency: 'month',
-    isNil: false,
-    status: 'completed',
-    versionNumber: 1,
-    isCurrent: true,
-    reading: {
-      type: null,
-      method: null,
-      units: null,
-      totalFlag: false,
-      total: null,
-      totalCustomDates: false,
-      totalCustomDateStart: null,
-      totalCustomDateEnd: null
-    },
-    meters: [],
-    requiredLines: null,
-    lines: [
-      {
-        startDate: '2022-04-30',
-        endDate: '2022-04-30',
-        quantity: 111,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2022-05-31',
-        endDate: '2022-05-31',
-        quantity: 222,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2022-06-30',
-        endDate: '2022-06-30',
-        quantity: 333,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2022-07-31',
-        endDate: '2022-07-31',
-        quantity: 444,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2022-08-31',
-        endDate: '2022-08-31',
-        quantity: 555,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2022-09-30',
-        endDate: '2022-09-30',
-        quantity: 666,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-01-31',
-        endDate: '2023-01-31',
-        quantity: 777,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-02-28',
-        endDate: '2023-02-28',
-        quantity: 888,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-05-31',
-        endDate: '2023-05-31',
-        quantity: 999,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-06-30',
-        endDate: '2023-06-30',
-        quantity: 1010,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-07-31',
-        endDate: '2023-07-31',
-        quantity: 1111,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-08-31',
-        endDate: '2023-08-31',
-        quantity: 1212,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-09-30',
-        endDate: '2023-09-30',
-        quantity: 1313,
-        timePeriod: 'month',
-        readingType: 'measured'
-      },
-      {
-        startDate: '2023-10-31',
-        endDate: '2023-10-31',
-        quantity: 1414,
-        timePeriod: 'month',
-        readingType: 'measured'
-      }
-    ],
-    metadata: {
-      nald: {
-        periodEndDay: '31',
-        periodEndMonth: '10',
-        periodStartDay: '1',
-        periodStartMonth: '4'
-      },
-      isFinal: false,
-      version: 1,
-      isSummer: true,
-      isUpload: false,
-      purposes: [
-        {
-          alias: 'PURPOSE_ALIAS',
-          primary: {
-            code: 'I',
-            description: 'Industrial, Commercial And Public Services'
-          },
-          tertiary: {
-            code: '400',
-            description: 'Spray Irrigation - Direct'
-          },
-          secondary: {
-            code: 'GOF',
-            description: 'Golf Courses'
-          }
-        }
-      ],
-      isCurrent: true,
-      description: 'DESCRIPTION',
-      isTwoPartTariff: true
-    },
-    versions: [
-      {
-        versionNumber: 1,
-        email: 'imported@from.nald',
-        createdAt: '2023-12-18T00:56:23.000Z',
-        isCurrent: true
-      }
-    ],
-    isUnderQuery: false
+  let testReturnLog
+
+  const auth = {
+    credentials: {
+      scope: ['returns']
+    }
   }
 
-  describe('the "description" property', () => {
-    describe('when data is provided', () => {
-      it('returns the description from the metadata', () => {
-        const result = ViewPresenter.go(data)
-
-        expect(result.description).to.equal('DESCRIPTION')
-      })
+  beforeEach(async () => {
+    testReturnLog = await ReturnLogHelper.add({
+      metadata: {
+        ...ReturnLogHelper.defaults().metadata,
+        purposes: [{ alias: 'PURPOSE_ALIAS' }]
+      }
     })
+
+    testReturnLog.siteDescription = testReturnLog.metadata.description
+    testReturnLog.periodStartDay = testReturnLog.metadata.nald.periodStartDay
+    testReturnLog.periodStartMonth = testReturnLog.metadata.nald.periodStartMonth
+    testReturnLog.periodEndDay = testReturnLog.metadata.nald.periodEndDay
+    testReturnLog.periodEndMonth = testReturnLog.metadata.nald.periodEndMonth
+    testReturnLog.purposes = testReturnLog.metadata.purposes
+    testReturnLog.twoPartTariff = testReturnLog.metadata.isTwoPartTariff
+    testReturnLog.licence = await LicenceHelper.add()
   })
 
-  describe('the "purposes" property', () => {
-    describe('when data is provided', () => {
-      it('returns an array of purposes', () => {
-        const result = ViewPresenter.go(data)
+  describe('the "latest" property', () => {
+    it('returns true when this is the latest return log', async () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        expect(result.purposes).to.be.an.array()
-      })
+      expect(result.latest).to.equal(true)
     })
-  })
 
-  describe('the "returnPeriod" property', () => {
-    describe('when data is provided', () => {
-      it('returns the return period from the metadata', () => {
-        const result = ViewPresenter.go(data)
+    it("returns false when this isn't the latest return log", async () => {
+      testReturnLog.versions = [
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+      ]
 
-        expect(result.returnPeriod).to.equal('1 November 2022 to 31 October 2023')
-      })
-    })
-  })
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+      ]
 
-  describe('the "abstractionPeriod property', () => {
-    describe('when data is provided', () => {
-      it('returns the abstraction period from the metadata', () => {
-        const result = ViewPresenter.go(data)
+      for (const returnSubmission of testReturnLog.returnSubmissions) {
+        returnSubmission.returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: returnSubmission.id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
+        ]
+      }
 
-        expect(result.abstractionPeriod).to.equal('1 April to 31 October')
-      })
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.latest).to.equal(false)
     })
   })
 })
