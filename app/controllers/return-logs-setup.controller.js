@@ -149,8 +149,7 @@ async function submitUnits(request, h) {
     return h.view('return-logs/setup/units.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-details`)
-  // return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
 }
 
 async function units(request, h) {
