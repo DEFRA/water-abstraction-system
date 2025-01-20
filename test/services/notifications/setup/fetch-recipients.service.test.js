@@ -88,7 +88,7 @@ describe('Notifications Setup - Recipients service', () => {
     })
   })
 
-  describe('when the licence number has one recipient which has the "licence holder" and "Returns to" role', () => {
+  describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
     it('correctly returns the licence holder and returns to data', async () => {
       const result = await RecipientsService.go(dueDate, isSummer)
 
