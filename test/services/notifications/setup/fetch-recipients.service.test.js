@@ -11,7 +11,7 @@ const { expect } = Code
 const RecipientsSeeder = require('../../../support/seeders/recipients.seeder.js')
 
 // Thing under test
-const RecipientsService = require('../../../../app/services/notifications/setup/recipients.service.js')
+const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 
 describe('Notifications Setup - Recipients service', () => {
   let dueDate

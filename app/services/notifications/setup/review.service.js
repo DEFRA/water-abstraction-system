@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Orchestrates fetching and presenting the data needed for the notifications setup review page
  * @module ReviewService
  */
 
+const RecipientsService = require('./fetch-recipients.service.js')
+const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const RecipientsService = require('./recipients.service.js')
-const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Orchestrates fetching and presenting the data needed for the notifications setup review page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  *
@@ -22,9 +22,9 @@ async function go(sessionId) {
 
   const { returnsPeriod } = session
   const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
-  const isSummer = _isSummer(returnsPeriod)
+  const summer = _summer(returnsPeriod)
 
-  const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, isSummer)
+  const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
   const pageData = ReviewPresenter.go(recipients)
 
@@ -34,13 +34,16 @@ async function go(sessionId) {
   }
 }
 
-function _isSummer(returnsPeriod) {
+function _summer(returnsPeriod) {
   return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 function _extractReturnPeriod(returnsPeriod) {
   const periods = determineUpcomingReturnPeriods()
-  return periods.find((period) => period.name === returnsPeriod)
+
+  return periods.find((period) => {
+    return period.name === returnsPeriod
+  })
 }
 
 module.exports = {

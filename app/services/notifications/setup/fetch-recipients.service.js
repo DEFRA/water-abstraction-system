@@ -11,19 +11,18 @@ const { db } = require('../../../../db/db.js')
  * Fetches recipient data for the `/notifications/setup/review` page
  *
  * @param {string} dueDate
- * @param {string} isSummer
+ * @param {string} summer
  *
  * @returns {object} A list of recipients
  */
-async function go(dueDate, isSummer) {
-  const { rows } = await _fetch(dueDate, isSummer)
+async function go(dueDate, summer) {
+  const { rows } = await _fetch(dueDate, summer)
   return rows
 }
 
-//  isSummer may need to be a string
-async function _fetch(dueDate, isSummer) {
+async function _fetch(dueDate, summer) {
   const query = _query()
-  return db.raw(query, [dueDate, isSummer, dueDate, isSummer, dueDate, isSummer])
+  return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
 }
 
 function _query() {

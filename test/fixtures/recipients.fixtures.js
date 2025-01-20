@@ -5,9 +5,8 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 /**
  * Create recipients test data
  *
- * @returns {object} - Returns recipients for
- * primaryUser, returnsAgent, licenceHolder, returnsTo
- * and licenceHolderWithMultipleLicences
+ * @returns {object} - Returns recipients for primaryUser, returnsAgent, licenceHolder, returnsTo and
+ * licenceHolderWithMultipleLicences
  */
 function recipients() {
   return {

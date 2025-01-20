@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const RecipientsService = require('../../../../app/services/notifications/setup/recipients.service.js')
+const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
