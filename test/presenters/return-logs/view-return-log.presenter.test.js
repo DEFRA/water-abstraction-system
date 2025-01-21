@@ -140,16 +140,14 @@ describe.only('View Return Log presenter', () => {
         await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
       ]
 
-      for (const returnSubmission of testReturnLog.returnSubmissions) {
-        returnSubmission.returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: returnSubmission.id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
-        ]
-      }
+      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+        await ReturnSubmissionLineHelper.add({
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+          startDate: new Date(`2022-01-01`),
+          endDate: new Date(`2022-02-07`),
+          quantity: 1234
+        })
+      ]
     })
 
     it('returns false when the return submission method is abstractionVolumes', async () => {
@@ -173,38 +171,87 @@ describe.only('View Return Log presenter', () => {
     })
   })
 
-  describe('the "latest" property', () => {
-    it('returns true when this is the latest return log', async () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+  describe('the "displayTable" property', () => {
+    describe('when there are no return submissions', () => {
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.latest).to.equal(true)
+        expect(result.displayTable).to.equal(false)
+      })
     })
 
-    it("returns false when this isn't the latest return log", async () => {
-      testReturnLog.versions = [
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
-      ]
+    describe('when there is a return submission', () => {
+      beforeEach(async () => {
+        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
 
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
-      ]
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
+        ]
 
-      for (const returnSubmission of testReturnLog.returnSubmissions) {
-        returnSubmission.returnSubmissionLines = [
+        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
           await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: returnSubmission.id,
+            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
             startDate: new Date(`2022-01-01`),
             endDate: new Date(`2022-02-07`),
             quantity: 1234
           })
         ]
-      }
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        describe('which is a nil return', () => {
+          it('returns false', () => {
+            testReturnLog.returnSubmissions[0].nilReturn = true
 
-      expect(result.latest).to.equal(false)
+            const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+            expect(result.displayTable).to.equal(false)
+          })
+        })
+
+        describe('which is not a nil return', () => {
+          it('returns true', () => {
+            testReturnLog.returnSubmissions[0].nilReturn = false
+
+            const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+            expect(result.displayTable).to.equal(true)
+          })
+        })
+      })
+    })
+
+    describe('the "latest" property', () => {
+      it('returns true when this is the latest return log', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.latest).to.equal(true)
+      })
+
+      it("returns false when this isn't the latest return log", async () => {
+        testReturnLog.versions = [
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+        ]
+
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+        ]
+
+        for (const returnSubmission of testReturnLog.returnSubmissions) {
+          returnSubmission.returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: returnSubmission.id,
+              startDate: new Date(`2022-01-01`),
+              endDate: new Date(`2022-02-07`),
+              quantity: 1234
+            })
+          ]
+        }
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.latest).to.equal(false)
+      })
     })
   })
 })
