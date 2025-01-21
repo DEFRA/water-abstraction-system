@@ -95,6 +95,7 @@ describe('Notifications Setup - Review presenter', () => {
     describe('the "pageTitle" property', () => {
       it('should return page title', () => {
         const result = ReviewPresenter.go(testInput)
+
         expect(result.pageTitle).to.equal('Send returns invitations')
       })
     })
