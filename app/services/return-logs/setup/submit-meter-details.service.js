@@ -5,9 +5,9 @@
  * @module SubmitMeterDetailsService
  */
 
-const SessionModel = require('../../../models/session.model.js')
 const MeterDetailsPresenter = require('../../../presenters/return-logs/setup/meter-details.presenter.js')
 const MeterDetailsValidator = require('../../../validators/return-logs/setup/meter-details.validator.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
