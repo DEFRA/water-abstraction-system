@@ -1,0 +1,123 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{# If there is a meterDetailsMake error, the error message is set  #}
+{% if error.text.meterDetailsMakeResult %}
+  {% set meterDetailsMakeResultErrorMessage = { text: error.text.meterDetailsMakeResult } %}
+{% else %}
+  {% set meterDetailsMakeResultErrorMessage = null %}
+{% endif %}
+
+{# If there is a meterDetailsSerialNumber error, the error message is set #}
+{% if error.text.meterDetailsSerialNumberResult %}
+    {% set meterDetailsSerialNumberResultErrorMessage = { text: error.text.meterDetailsSerialNumberResult } %}
+{% else %}
+  {% set meterDetailsSerialNumberResultErrorMessage = null %}
+{% endif %}
+
+{# If there is a meterDetails10TimesDisplay error, the error message is set #}
+{% if error.text.meterDetails10TimesDisplayResult %}
+    {% set meterDetails10TimesDisplayResultErrorMessage = { text: error.text.meterDetails10TimesDisplayResult } %}
+{% else %}
+  {% set meterDetails10TimesDisplayResultErrorClass = "" %}
+{% endif %}
+
+{% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text.meterDetailsMakeResult,
+          href: "#meter-details-make-error"
+        },
+        {
+          text: error.text.meterDetailsSerialNumberResult,
+          href: "#meter-details-serial-number-error"
+        },
+        {
+          text: error.text.meterDetails10TimesDisplayResult,
+          href: "#meter-details-10-times-display-error"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  </div>
+  <div>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukInput({
+        label: {
+          text: "Make"
+        },
+        classes: "govuk-input--width-10",
+        id: "meter-details-make",
+        name: "meterDetailsMake",
+        value: meterDetailsMake,
+        errorMessage: meterDetailsMakeResultErrorMessage
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Serial number"
+        },
+        classes: "govuk-input--width-10",
+        id: "meter-details-serial-number",
+        name: "meterDetailsSerialNumber",
+        value: meterDetailsSerialNumber,
+        errorMessage: meterDetailsSerialNumberResultErrorMessage
+      }) }}
+
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        name: "meterDetails10TimesDisplay",
+        errorMessage: meterDetails10TimesDisplayResultErrorMessage,
+        fieldset: {
+          legend: {
+            text: "Does this meter have a ×10 display",
+            classes: "govuk-body"
+          }
+        },
+        hint: {
+          text: "This will not recalculate any of the volumes provided"
+        },
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: "yes" === meterDetails10TimesDisplay
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: "no" === meterDetails10TimesDisplay
+          }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}
