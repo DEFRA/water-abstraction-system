@@ -79,6 +79,30 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
+  describe('return-logs/setup/guidance', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/guidance',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        it('redirects to the "guidance" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+        })
+      })
+    })
+  })
+
   describe('return-logs/setup/{sessionId}/received', () => {
     describe('GET', () => {
       beforeEach(() => {
