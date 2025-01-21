@@ -25,7 +25,7 @@ describe('Notifications Setup - De Dupe recipients service', () => {
   })
 
   describe('when provided with "recipients"', () => {
-    it('correctly de dupes the data', () => {
+    it('correctly de dupes the data and leaves none duplicates as there are', () => {
       const result = DeDupeRecipientsService.go(testInput)
 
       expect(result).to.equal([
@@ -138,7 +138,7 @@ describe('Notifications Setup - De Dupe recipients service', () => {
     })
 
     describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
-      it('correctly returns only the "primary user"', () => {
+      it('correctly returns only the "primary user" with the "message_type" Email - both', () => {
         const result = DeDupeRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
           testDuplicateRecipients.duplicateReturnsAgent
@@ -155,7 +155,7 @@ describe('Notifications Setup - De Dupe recipients service', () => {
         ])
       })
 
-      it('correctly returns only the "primary user" (irrelevant of order)', () => {
+      it('correctly returns only the "primary user" with the "message_type" Email - both (irrelevant of order)', () => {
         const result = DeDupeRecipientsService.go([
           testDuplicateRecipients.duplicateReturnsAgent,
           testDuplicateRecipients.duplicatePrimaryUser
@@ -174,24 +174,66 @@ describe('Notifications Setup - De Dupe recipients service', () => {
     })
 
     describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
-      it('correctly changes the "message_type" to "Letter - both" ', () => {
+      it('correctly returns only the "licence holder" with the "message_type" Letter - both', () => {
         const result = DeDupeRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
         ])
 
-        const duplicateLicenceHolder = result[result.length - 1]
-        expect(duplicateLicenceHolder.message_type).to.equal('Letter - both')
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Duplicate contact',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: 167278556784,
+            message_type: 'Letter - both'
+          }
+        ])
       })
 
-      it('correctly changes the "message_type" to "Letter - both" (irrelevant of order)', () => {
+      it('correctly returns only the "licence holder" with the "message_type" Letter - both (irrelevant of order)', () => {
         const result = DeDupeRecipientsService.go([
           testDuplicateRecipients.duplicateReturnsTo,
           testDuplicateRecipients.duplicateLicenceHolder
         ])
 
-        const duplicateLicenceHolder = result[result.length - 1]
-        expect(duplicateLicenceHolder.message_type).to.equal('Letter - both')
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
+            contact: {
+              addressLine1: '4',
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'J',
+              name: 'Duplicate contact',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: null,
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: 167278556784,
+            message_type: 'Letter - both'
+          }
+        ])
       })
     })
   })
