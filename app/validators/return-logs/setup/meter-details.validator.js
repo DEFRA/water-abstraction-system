@@ -18,8 +18,6 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  console.log('🚀  payload:', payload)
-  // {meterDetailsMake: 'a', meterDetailsSerialNumber: 'a', meterDetails10TimesDisplay: 'yes'}
   const { meterDetailsMake, meterDetailsSerialNumber, meterDetails10TimesDisplay } = payload
 
   const result = {
@@ -28,41 +26,7 @@ function go(payload) {
     meterDetails10TimesDisplayResult: _validateMeterDetails10TimesDisplay(meterDetails10TimesDisplay)
   }
 
-  console.log('🚀  result:', result)
-
   return result
-}
-
-function _validateMeterDetailsSerialNumber(meterDetailsSerialNumber) {
-  const errorMessage = {
-    empty: 'Enter a serial number',
-    big: 'Serial number must be 180 characters or less'
-  }
-
-  const schema = Joi.object({
-    meterDetailsSerialNumber: Joi.string().required().max(310).messages({
-      'any.required': errorMessage.empty,
-      'string.max': errorMessage.big
-    })
-  })
-
-  return schema.validate({ meterDetailsSerialNumber }, { abortEarly: false })
-}
-
-function _validateMeterDetailsMake(meterDetailsMake) {
-  const errorMessage = {
-    empty: 'Enter the make of the meter',
-    big: 'Make must be 310 characters or less'
-  }
-
-  const schema = Joi.object({
-    meterDetailsMake: Joi.string().required().max(310).messages({
-      'any.required': errorMessage.empty,
-      'string.max': errorMessage.big
-    })
-  })
-
-  return schema.validate({ meterDetailsMake }, { abortEarly: false })
 }
 
 function _validateMeterDetails10TimesDisplay(meterDetails10TimesDisplay) {
@@ -82,17 +46,38 @@ function _validateMeterDetails10TimesDisplay(meterDetails10TimesDisplay) {
   return schema.validate({ meterDetails10TimesDisplay }, { abortEarly: false })
 }
 
+function _validateMeterDetailsMake(meterDetailsMake) {
+  const errorMessage = {
+    empty: 'Enter the make of the meter',
+    big: 'Make must be 310 characters or less'
+  }
+
+  const schema = Joi.object({
+    meterDetailsMake: Joi.string().required().max(310).messages({
+      'any.required': errorMessage.empty,
+      'string.max': errorMessage.big
+    })
+  })
+
+  return schema.validate({ meterDetailsMake }, { abortEarly: false })
+}
+
+function _validateMeterDetailsSerialNumber(meterDetailsSerialNumber) {
+  const errorMessage = {
+    empty: 'Enter a serial number',
+    big: 'Serial number must be 180 characters or less'
+  }
+
+  const schema = Joi.object({
+    meterDetailsSerialNumber: Joi.string().required().max(180).messages({
+      'any.required': errorMessage.empty,
+      'string.max': errorMessage.big
+    })
+  })
+
+  return schema.validate({ meterDetailsSerialNumber }, { abortEarly: false })
+}
+
 module.exports = {
   go
 }
-
-// Validation
-// Both make and serial number must be entered
-// 10 times display must be selected yes or no (cannot be left blank)
-// Make has a character limit of 310
-// Longest 304
-
-// Serial number has a character limit of 180
-// Longest 176
-
-// Hi can I please just confirm for ticket 4809 the validation. Ive got both make and serial number must be entered. The longest make recorded in the DB is 304 characters, so a maximum character length of 310 for this (just a guess?). The longest serial in the DB recorded at 176, so a maximum character length of 180 for this (just a guess?). The 10 times display must be selected yes or no (cannot be left blank).
