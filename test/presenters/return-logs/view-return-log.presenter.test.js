@@ -91,6 +91,88 @@ describe.only('View Return Log presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    it('returns the expected "Go back to summary" result when this is the latest return log', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.backLink).to.equal({
+        href: `/system/licences/${testReturnLog.licence.id}/returns`,
+        text: 'Go back to summary'
+      })
+    })
+
+    it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', async () => {
+      testReturnLog.versions = [
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+      ]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+      ]
+
+      for (const returnSubmission of testReturnLog.returnSubmissions) {
+        returnSubmission.returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: returnSubmission.id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
+        ]
+      }
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.backLink).to.equal({
+        href: `/system/return-logs?id=${testReturnLog.id}`,
+        text: 'Go back to the latest version'
+      })
+    })
+  })
+
+  describe('the "displayReadings" property', () => {
+    beforeEach(async () => {
+      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
+      ]
+
+      for (const returnSubmission of testReturnLog.returnSubmissions) {
+        returnSubmission.returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: returnSubmission.id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
+        ]
+      }
+    })
+
+    it('returns false when the return submission method is abstractionVolumes', async () => {
+      testReturnLog.returnSubmissions[0].metadata = {
+        method: 'abstractionVolumes'
+      }
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayReadings).to.equal(false)
+    })
+
+    it("returns true when the return submission method isn't abstractionVolumes", async () => {
+      testReturnLog.returnSubmissions[0].metadata = {
+        method: 'NOT_ABSTRACTION_VOLUMES'
+      }
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayReadings).to.equal(true)
+    })
+  })
+
   describe('the "latest" property', () => {
     it('returns true when this is the latest return log', async () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
