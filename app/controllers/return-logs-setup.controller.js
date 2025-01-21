@@ -17,7 +17,7 @@ const SubmitStartService = require('../services/return-logs/setup/submit-start.s
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
 
-async function guidance(request, h) {
+async function guidance(_request, h) {
   return h.view('return-logs/setup/guidance.njk')
 }
 
