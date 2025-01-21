@@ -2,14 +2,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/return-version-status-tag.njk" import statusTag %}
-
-{% macro newLine(array) %}
-  {% for item in array %}
-    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
-  {% endfor %}
-{% endmacro %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -78,7 +72,7 @@
     <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     <p>
-      {{ newLine(notes) }}
+      {{ newLineArrayItems(notes) }}
     </p>
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
@@ -114,7 +108,7 @@
         {% set pointCell %}
           {% set pointsList %}
             {% set count = requirement.points | length %}
-            {{ newLine(requirement.points) }}
+            {{ newLineArrayItems(requirement.points) }}
           {% endset %}
 
           {% if count > 5 %}
@@ -151,7 +145,7 @@
                     text: "Purpose"
                   },
                   value: {
-                    html: '<span data-test="purposes-' + rowIndex + '">' + newLine(requirement.purposes) + '</span>'
+                    html: '<span data-test="purposes-' + rowIndex + '">' + newLineArrayItems(requirement.purposes) + '</span>'
                   }
                 },
                 {

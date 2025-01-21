@@ -9,10 +9,12 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {{ govukBackLink({
-      text: 'Go back to summary',
-      href: '/system/licences/'+ licenceId +'/returns'
-  }) }}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
 {% endblock %}
 
 {% block content %}
@@ -124,7 +126,7 @@
         },
         {
           divider: "or"
-        } if displayRecordReceipt === false,
+        } if beenReceived === true,
         {
           value: "nil-return",
           text: "Enter a nil return",
@@ -132,12 +134,12 @@
         },
         {
           divider: "or"
-        } if displayRecordReceipt === true,
+        } if beenReceived === false,
         {
           value: "record-receipt",
           text: "Record receipt",
           checked: journey === "record-receipt"
-        } if displayRecordReceipt === true
+        } if beenReceived === false
       ]
     }) }}
 

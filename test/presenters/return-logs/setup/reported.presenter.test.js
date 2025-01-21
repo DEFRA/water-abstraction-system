@@ -16,9 +16,7 @@ describe('Return Logs Setup - Reported presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      data: {
-        returnReference: '012345'
-      }
+      returnReference: '012345'
     }
   })
 
@@ -31,7 +29,7 @@ describe('Return Logs Setup - Reported presenter', () => {
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         returnReference: '012345',
         reported: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/received'
+        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start'
       })
     })
   })

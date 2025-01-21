@@ -13,9 +13,11 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
+const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const StartService = require('../../app/services/return-logs/setup/start.service.js')
+const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
 const SubmitStartService = require('../../app/services/return-logs/setup/submit-start.service.js')
@@ -67,11 +69,11 @@ describe('Return Logs Setup controller', () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
         })
 
-        it('returns the page successfully', async () => {
+        it('redirects to the "received" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/start`)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/received`)
         })
       })
     })
@@ -119,12 +121,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
 
-          it('redirects to the "reported" page', async () => {
+          it('redirects to the "start" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start'
             )
           })
         })
@@ -265,12 +267,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitStartService, 'go').resolves({})
           })
 
-          it('redirects to the "received" page', async () => {
+          it('redirects to the "reported" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported'
             )
           })
         })
@@ -370,6 +372,96 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select which units were used')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/meter-provided', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-provided',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(MeterProvidedService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
+            pageTitle: 'Have meter details been provided?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Have meter details been provided?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-provided', {})
+        })
+
+        describe('and a meter was provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'yes' })
+          })
+
+          it('redirects to the "meter provided" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-details'
+            )
+          })
+        })
+
+        describe('and a meter was not provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no' })
+          })
+
+          it('redirects to the "meter provided" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-readings'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-provided')
+
+          Sinon.stub(SubmitMeterProvidedService, 'go').resolves({
+            error: { text: 'Select if meter details have been provided' },
+            pageTitle: 'Have meter details been provided?',
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select if meter details have been provided')
           expect(response.payload).to.contain('There is a problem')
         })
       })

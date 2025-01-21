@@ -22,6 +22,7 @@ function go(session, requirementIndex) {
     agreementsExceptions: requirement?.agreementsExceptions ? requirement.agreementsExceptions : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'Select agreements and exceptions for the requirements for returns',
     sessionId
   }
 }

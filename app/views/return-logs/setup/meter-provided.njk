@@ -1,0 +1,66 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#meter-provided-error"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  </div>
+  <div>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukRadios({
+        name: "meterProvided",
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: "yes" == meterProvided
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: "no" == meterProvided
+          }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

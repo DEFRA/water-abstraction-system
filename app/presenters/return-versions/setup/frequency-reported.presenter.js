@@ -22,6 +22,7 @@ function go(session, requirementIndex) {
     frequencyReported: requirement?.frequencyReported ? requirement.frequencyReported : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'Select how often readings or volumes are reported',
     sessionId
   }
 }

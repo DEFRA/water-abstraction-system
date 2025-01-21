@@ -122,6 +122,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.meterProvided,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterProvided,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 

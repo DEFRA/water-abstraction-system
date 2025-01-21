@@ -28,7 +28,6 @@ async function go(sessionId, requirementIndex) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Select the points for the requirements for returns',
     ...formattedData
   }
 }

@@ -58,7 +58,8 @@ describe('Mark For Supplementary Billing presenter', () => {
               hint: { text: 'Old charge scheme' },
               attributes: { 'data-test': 'pre-sroc-years' }
             }
-          ]
+          ],
+          pageTitle: 'Mark for the supplementary bill run'
         })
       })
     })
@@ -89,7 +90,8 @@ describe('Mark For Supplementary Billing presenter', () => {
               hint: { text: 'Old charge scheme' },
               attributes: { 'data-test': 'pre-sroc-years' }
             }
-          ]
+          ],
+          pageTitle: 'Mark for the supplementary bill run'
         })
       })
     })
@@ -117,7 +119,8 @@ describe('Mark For Supplementary Billing presenter', () => {
             { text: '2024 to 2025', value: 2025, attributes: { 'data-test': 'sroc-years-2025' } },
             { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
             { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } }
-          ]
+          ],
+          pageTitle: 'Mark for the supplementary bill run'
         })
       })
     })

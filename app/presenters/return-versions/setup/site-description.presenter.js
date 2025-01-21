@@ -21,6 +21,7 @@ function go(session, requirementIndex) {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'Enter a site description for the requirements for returns',
     sessionId,
     siteDescription: requirement?.siteDescription ? requirement.siteDescription : null
   }

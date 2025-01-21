@@ -19,6 +19,7 @@ function go(session) {
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceRef: licence.licenceRef,
     note: note ? note.content : null,
+    pageTitle: 'Add a note',
     sessionId
   }
 }

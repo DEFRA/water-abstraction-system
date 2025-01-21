@@ -22,7 +22,8 @@ function go(licence) {
   return {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    financialYears: _yearsToDisplay()
+    financialYears: _yearsToDisplay(),
+    pageTitle: 'Mark for the supplementary bill run'
   }
 }
 

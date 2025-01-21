@@ -58,6 +58,7 @@ describe('Return Versions Setup - Remove presenter', () => {
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
+        pageTitle: 'You are about to remove these requirements for returns',
         returnRequirement: 'Winter and all year monthly requirements for returns, Bore hole in rear field.',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023'

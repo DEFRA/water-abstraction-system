@@ -1,0 +1,5 @@
+{% macro newLineArrayItems(array) %}
+  {% for item in array %}
+    <p class="govuk-!-margin-bottom-1"> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}

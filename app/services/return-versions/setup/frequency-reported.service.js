@@ -26,7 +26,6 @@ async function go(sessionId, requirementIndex) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Select how often readings or volumes are reported',
     ...formattedData
   }
 }

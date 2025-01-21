@@ -3,22 +3,17 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{% macro newLine(array) %}
-  {% for item in array %}
-    <div class="govuk-!-margin-bottom-1"> {{ item }}</div>
-  {% endfor %}
-{% endmacro %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% macro abstractionPointsCell(abstractionPoints, purposeDescription) %}
   {% if abstractionPoints.length > 5 %}
     {{ govukDetails({
       summaryText: "View your " + abstractionPoints.length + " abstraction points for " + purposeDescription | lower,
-      html: newLine(abstractionPoints) | safe,
+      html: newLineArrayItems(abstractionPoints) | safe,
       classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
     }) }}
   {% else %}
-    {{ newLine(abstractionPoints) | safe }}
+    {{ newLineArrayItems(abstractionPoints) | safe }}
   {% endif %}
 {% endmacro %}
 
@@ -90,7 +85,7 @@
         attributes: { 'data-test': 'abstraction-amount-title-' + rowIndex }
       },
       value: {
-        text: newLine(licencePurpose.abstractionAmounts),
+        text: newLineArrayItems(licencePurpose.abstractionAmounts),
         attributes: { 'data-test': 'abstraction-amount-' + rowIndex },
         classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0"
       }
