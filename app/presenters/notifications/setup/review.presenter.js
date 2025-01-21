@@ -14,29 +14,9 @@
 function go(recipients) {
   return {
     pageTitle: 'Send returns invitations',
-    recipientsAmount: recipients.length,
-    recipients: _recipients(recipients)
+    recipients: _recipients(recipients),
+    recipientsAmount: recipients.length
   }
-}
-
-function _recipients(recipients) {
-  return recipients.map((recipient) => {
-    return {
-      contact: _contact(recipient),
-      licences: _licences(recipient.all_licences),
-      method: recipient.message_type
-    }
-  })
-}
-
-/**
- * Convert the licence CSV string to an array
- *
- * @param {string} licences
- * @returns {string[]}
- */
-function _licences(licences) {
-  return licences.split(',')
 }
 
 /**
@@ -54,9 +34,29 @@ function _contact(recipient) {
   if (recipient.recipient) {
     return [recipient.recipient]
   }
-  
+
   return Object.values(recipient.contact).filter((n) => {
     return n
+  })
+}
+
+/**
+ * Convert the licence CSV string to an array
+ *
+ * @param {string} licences
+ * @returns {string[]}
+ */
+function _licences(licences) {
+  return licences.split(',')
+}
+
+function _recipients(recipients) {
+  return recipients.map((recipient) => {
+    return {
+      contact: _contact(recipient),
+      licences: _licences(recipient.all_licences),
+      method: recipient.message_type
+    }
   })
 }
 

@@ -34,16 +34,16 @@ async function go(sessionId) {
   }
 }
 
-function _summer(returnsPeriod) {
-  return returnsPeriod === 'summer' ? 'true' : 'false'
-}
-
 function _extractReturnPeriod(returnsPeriod) {
   const periods = determineUpcomingReturnPeriods()
 
   return periods.find((period) => {
     return period.name === returnsPeriod
   })
+}
+
+function _summer(returnsPeriod) {
+  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 module.exports = {
