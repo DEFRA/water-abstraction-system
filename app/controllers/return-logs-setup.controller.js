@@ -9,11 +9,11 @@ const InitiateSessionService = require('../services/return-logs/setup/initiate-s
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
-const StartService = require('../services/return-logs/setup/start.service.js')
+const SubmissionService = require('../services/return-logs/setup/submission.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
-const SubmitStartService = require('../services/return-logs/setup/submit-start.service.js')
+const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
 
@@ -45,11 +45,11 @@ async function setup(request, h) {
   return h.redirect(`/system/return-logs/setup/${session.id}/received`)
 }
 
-async function start(request, h) {
+async function submission(request, h) {
   const { sessionId } = request.params
-  const pageData = await StartService.go(sessionId)
+  const pageData = await SubmissionService.go(sessionId)
 
-  return h.view('return-logs/setup/start.njk', pageData)
+  return h.view('return-logs/setup/submission.njk', pageData)
 }
 
 async function submitMeterProvided(request, h) {
@@ -83,7 +83,7 @@ async function submitReceived(request, h) {
     return h.view('return-logs/setup/received.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/start`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/submission`)
 }
 
 async function submitReported(request, h) {
@@ -101,13 +101,13 @@ async function submitReported(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
-async function submitStart(request, h) {
+async function submitSubmission(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitStartService.go(sessionId, request.payload)
+  const pageData = await SubmitSubmissionService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('return-logs/setup/start.njk', pageData)
+    return h.view('return-logs/setup/submission.njk', pageData)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
@@ -140,11 +140,11 @@ module.exports = {
   received,
   reported,
   setup,
-  start,
+  submission,
   submitMeterProvided,
   submitReceived,
   submitReported,
-  submitStart,
+  submitSubmission,
   submitUnits,
   units
 }

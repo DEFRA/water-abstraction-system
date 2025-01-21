@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitStartService = require('../../../../app/services/return-logs/setup/submit-start.service.js')
+const SubmitSubmissionService = require('../../../../app/services/return-logs/setup/submit-submission.service.js')
 
-describe('Return Logs Setup - Submit Start service', () => {
+describe('Return Logs Setup - Submit Submission service', () => {
   let payload
   let session
 
@@ -28,7 +28,7 @@ describe('Return Logs Setup - Submit Start service', () => {
       })
 
       it('saves and returns the submitted option', async () => {
-        await SubmitStartService.go(session.id, payload)
+        await SubmitSubmissionService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
@@ -42,13 +42,13 @@ describe('Return Logs Setup - Submit Start service', () => {
       })
 
       it('includes an error for the radio form element', async () => {
-        const result = await SubmitStartService.go(session.id, payload)
+        const result = await SubmitSubmissionService.go(session.id, payload)
 
         expect(result.error).to.equal({ text: 'Select what you want to do with this return' })
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitStartService.go(session.id, payload)
+        const result = await SubmitSubmissionService.go(session.id, payload)
 
         expect(result).to.equal({
           abstractionPeriod: 'From 1 January to 31 December',

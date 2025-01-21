@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start` page
- * @module StartPresenter
+ * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page
+ * @module SubmissionPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start` page
+ * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page
  *
  * @param {module:SessionModel} session - The session instance to format
  *
- * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/start` page
+ * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/submission` page
  */
 function go(session) {
   const {

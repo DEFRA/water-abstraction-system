@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const StartService = require('../../../../app/services/return-logs/setup/start.service.js')
+const SubmissionService = require('../../../../app/services/return-logs/setup/submission.service.js')
 
-describe('Return Logs Setup - Start service', () => {
+describe('Return Logs Setup - Submission service', () => {
   let sessionId
 
   before(async () => {
@@ -23,7 +23,7 @@ describe('Return Logs Setup - Start service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await StartService.go(sessionId)
+      const result = await SubmissionService.go(sessionId)
 
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',

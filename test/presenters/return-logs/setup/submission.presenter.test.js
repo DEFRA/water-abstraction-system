@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const StartPresenter = require('../../../../app/presenters/return-logs/setup/start.presenter.js')
+const SubmissionPresenter = require('../../../../app/presenters/return-logs/setup/submission.presenter.js')
 
-describe('Return Logs Setup - Start presenter', () => {
+describe('Return Logs Setup - Submission presenter', () => {
   let session
 
   describe('when provided with a populated session', () => {
@@ -19,7 +19,7 @@ describe('Return Logs Setup - Start presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = StartPresenter.go(session)
+      const result = SubmissionPresenter.go(session)
 
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',
@@ -45,7 +45,7 @@ describe('Return Logs Setup - Start presenter', () => {
         })
 
         it('returns the selected option', () => {
-          const result = StartPresenter.go(session)
+          const result = SubmissionPresenter.go(session)
 
           expect(result.journey).to.equal('enter-return')
         })
@@ -59,7 +59,7 @@ describe('Return Logs Setup - Start presenter', () => {
         })
 
         it('returns the status as "due', () => {
-          const result = StartPresenter.go(session)
+          const result = SubmissionPresenter.go(session)
 
           expect(result.status).to.equal('due')
         })
@@ -72,7 +72,7 @@ describe('Return Logs Setup - Start presenter', () => {
         })
 
         it('returns the status as "overdue', () => {
-          const result = StartPresenter.go(session)
+          const result = SubmissionPresenter.go(session)
 
           expect(result.status).to.equal('overdue')
         })
@@ -86,7 +86,7 @@ describe('Return Logs Setup - Start presenter', () => {
         })
 
         it('returns the correct tariff type', () => {
-          const result = StartPresenter.go(session)
+          const result = SubmissionPresenter.go(session)
 
           expect(result.tariffType).to.equal('Two part tariff')
         })

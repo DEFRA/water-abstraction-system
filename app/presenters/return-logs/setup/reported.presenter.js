@@ -20,7 +20,7 @@ function go(session) {
     reported: reported ?? null,
     sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${sessionId}/start`
+    backLink: `/system/return-logs/setup/${sessionId}/submission`
   }
 }
 
