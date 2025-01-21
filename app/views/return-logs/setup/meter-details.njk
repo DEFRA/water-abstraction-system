@@ -15,25 +15,25 @@
   }}
 {% endblock %}
 
-{# If there is a meterDetailsMake error, the error message is set  #}
-{% if error.text.meterDetailsMakeResult %}
-  {% set meterDetailsMakeResultErrorMessage = { text: error.text.meterDetailsMakeResult } %}
+{# If there is a meterMake error, the error message is set  #}
+{% if error.text.meterMakeResult %}
+  {% set meterMakeResultErrorMessage = { text: error.text.meterMakeResult } %}
 {% else %}
-  {% set meterDetailsMakeResultErrorMessage = null %}
+  {% set meterMakeResultErrorMessage = null %}
 {% endif %}
 
-{# If there is a meterDetailsSerialNumber error, the error message is set #}
-{% if error.text.meterDetailsSerialNumberResult %}
-    {% set meterDetailsSerialNumberResultErrorMessage = { text: error.text.meterDetailsSerialNumberResult } %}
+{# If there is a meterSerialNumber error, the error message is set #}
+{% if error.text.meterSerialNumberResult %}
+    {% set meterSerialNumberResultErrorMessage = { text: error.text.meterSerialNumberResult } %}
 {% else %}
-  {% set meterDetailsSerialNumberResultErrorMessage = null %}
+  {% set meterSerialNumberResultErrorMessage = null %}
 {% endif %}
 
-{# If there is a meterDetails10TimesDisplay error, the error message is set #}
-{% if error.text.meterDetails10TimesDisplayResult %}
-    {% set meterDetails10TimesDisplayResultErrorMessage = { text: error.text.meterDetails10TimesDisplayResult } %}
+{# If there is a meter10TimesDisplay error, the error message is set #}
+{% if error.text.meter10TimesDisplayResult %}
+    {% set meter10TimesDisplayResultErrorMessage = { text: error.text.meter10TimesDisplayResult } %}
 {% else %}
-  {% set meterDetails10TimesDisplayResultErrorClass = "" %}
+  {% set meter10TimesDisplayResultErrorClass = "" %}
 {% endif %}
 
 {% block content %}
@@ -43,16 +43,16 @@
       titleText: "There is a problem",
       errorList: [
         {
-          text: error.text.meterDetailsMakeResult,
-          href: "#meter-details-make-error"
+          text: error.text.meterMakeResult,
+          href: "#meter-make-error"
         },
         {
-          text: error.text.meterDetailsSerialNumberResult,
-          href: "#meter-details-serial-number-error"
+          text: error.text.meterSerialNumberResult,
+          href: "#meter-serial-number-error"
         },
         {
-          text: error.text.meterDetails10TimesDisplayResult,
-          href: "#meter-details-10-times-display-error"
+          text: error.text.meter10TimesDisplayResult,
+          href: "#meter-10-times-display-error"
         }
       ]
     }) }}
@@ -72,10 +72,10 @@
           text: "Make"
         },
         classes: "govuk-input--width-10",
-        id: "meter-details-make",
-        name: "meterDetailsMake",
-        value: meterDetailsMake,
-        errorMessage: meterDetailsMakeResultErrorMessage
+        id: "meter-make",
+        name: "meterMake",
+        value: meterMake,
+        errorMessage: meterMakeResultErrorMessage
       }) }}
 
       {{ govukInput({
@@ -83,16 +83,16 @@
           text: "Serial number"
         },
         classes: "govuk-input--width-10",
-        id: "meter-details-serial-number",
-        name: "meterDetailsSerialNumber",
-        value: meterDetailsSerialNumber,
-        errorMessage: meterDetailsSerialNumberResultErrorMessage
+        id: "meter-serial-number",
+        name: "meterSerialNumber",
+        value: meterSerialNumber,
+        errorMessage: meterSerialNumberResultErrorMessage
       }) }}
 
       {{ govukRadios({
         classes: "govuk-radios--inline",
-        name: "meterDetails10TimesDisplay",
-        errorMessage: meterDetails10TimesDisplayResultErrorMessage,
+        name: "meter10TimesDisplay",
+        errorMessage: meter10TimesDisplayResultErrorMessage,
         fieldset: {
           legend: {
             text: "Does this meter have a ×10 display",
@@ -106,12 +106,12 @@
           {
             value: "yes",
             text: "Yes",
-            checked: "yes" === meterDetails10TimesDisplay
+            checked: "yes" === meter10TimesDisplay
           },
           {
             value: "no",
             text: "No",
-            checked: "no" === meterDetails10TimesDisplay
+            checked: "no" === meter10TimesDisplay
           }
         ]
       }) }}

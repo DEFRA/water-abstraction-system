@@ -509,9 +509,9 @@ describe('Return Logs Setup controller', () => {
         describe('and a meter details were provided', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-              meterDetailsMake: 'Meter',
-              meterDetailsSerialNumber: '1234',
-              meterDetails10TimesDisplay: 'no'
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
             })
           })
 
@@ -531,7 +531,7 @@ describe('Return Logs Setup controller', () => {
           options = _postOptions('meter-details')
 
           Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-            error: { text: { meterDetailsMakeResult: 'Enter the make of the meter' } },
+            error: { text: { meterMakeResult: 'Enter the make of the meter' } },
             pageTitle: 'Have meter details been provided?',
             sessionId: 'Meter details'
           })

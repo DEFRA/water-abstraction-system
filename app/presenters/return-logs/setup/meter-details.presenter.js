@@ -13,19 +13,13 @@
  * @returns {object} page data needed by the view template
  */
 function go(session) {
-  const {
-    id: sessionId,
-    returnReference,
-    meterDetailsMake,
-    meterDetailsSerialNumber,
-    meterDetails10TimesDisplay
-  } = session
+  const { id: sessionId, returnReference, meterMake, meterSerialNumber, meter10TimesDisplay } = session
 
   return {
     backLink: `/system/return-logs/setup/${sessionId}/meter-provided`,
-    meterDetailsMake: meterDetailsMake ?? null,
-    meterDetailsSerialNumber: meterDetailsSerialNumber ?? null,
-    meterDetails10TimesDisplay: meterDetails10TimesDisplay ?? null,
+    meterMake: meterMake ?? null,
+    meterSerialNumber: meterSerialNumber ?? null,
+    meter10TimesDisplay: meter10TimesDisplay ?? null,
     pageTitle: 'Meter details',
     returnReference,
     sessionId

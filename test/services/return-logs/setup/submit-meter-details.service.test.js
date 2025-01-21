@@ -32,9 +32,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
     describe('with a valid payload', () => {
       beforeEach(async () => {
         payload = {
-          meterDetailsMake: 'WATER',
-          meterDetailsSerialNumber: '123',
-          meterDetails10TimesDisplay: 'yes'
+          meterMake: 'WATER',
+          meterSerialNumber: '123',
+          meter10TimesDisplay: 'yes'
         }
       })
 
@@ -43,9 +43,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.meterDetailsMake).to.equal('WATER')
-        expect(refreshedSession.meterDetailsSerialNumber).to.equal('123')
-        expect(refreshedSession.meterDetails10TimesDisplay).to.equal('yes')
+        expect(refreshedSession.meterMake).to.equal('WATER')
+        expect(refreshedSession.meterSerialNumber).to.equal('123')
+        expect(refreshedSession.meter10TimesDisplay).to.equal('yes')
       })
     })
 
@@ -61,9 +61,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           {
             pageTitle: 'Meter details',
             activeNavBar: 'search',
-            meterDetailsMake: null,
-            meterDetailsSerialNumber: null,
-            meterDetails10TimesDisplay: null,
+            meterMake: null,
+            meterSerialNumber: null,
+            meter10TimesDisplay: null,
             backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
             returnReference: '12345'
           },
@@ -77,9 +77,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
           expect(result.error).to.equal({
             text: {
-              meterDetailsMakeResult: 'Enter the make of the meter',
-              meterDetailsSerialNumberResult: 'Enter a serial number',
-              meterDetails10TimesDisplayResult: 'Select if the meter has a ×10 display'
+              meterMakeResult: 'Enter the make of the meter',
+              meterSerialNumberResult: 'Enter a serial number',
+              meter10TimesDisplayResult: 'Select if the meter has a ×10 display'
             }
           })
         })
@@ -88,8 +88,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       describe('because the user has not entered the "make"', () => {
         beforeEach(async () => {
           payload = {
-            meterDetailsSerialNumber: '123',
-            meterDetails10TimesDisplay: 'yes'
+            meterSerialNumber: '123',
+            meter10TimesDisplay: 'yes'
           }
         })
 
@@ -98,9 +98,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
           expect(result.error).to.equal({
             text: {
-              meterDetailsMakeResult: 'Enter the make of the meter',
-              meterDetailsSerialNumberResult: null,
-              meterDetails10TimesDisplayResult: null
+              meterMakeResult: 'Enter the make of the meter',
+              meterSerialNumberResult: null,
+              meter10TimesDisplayResult: null
             }
           })
         })
@@ -109,8 +109,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       describe('because the user has not entered the "serial number"', () => {
         beforeEach(async () => {
           payload = {
-            meterDetailsMake: 'WATER',
-            meterDetails10TimesDisplay: 'yes'
+            meterMake: 'WATER',
+            meter10TimesDisplay: 'yes'
           }
         })
 
@@ -119,9 +119,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
           expect(result.error).to.equal({
             text: {
-              meterDetailsMakeResult: null,
-              meterDetailsSerialNumberResult: 'Enter a serial number',
-              meterDetails10TimesDisplayResult: null
+              meterMakeResult: null,
+              meterSerialNumberResult: 'Enter a serial number',
+              meter10TimesDisplayResult: null
             }
           })
         })
@@ -130,8 +130,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       describe('because the user has not selected the "times 10 display"', () => {
         beforeEach(async () => {
           payload = {
-            meterDetailsMake: 'WATER',
-            meterDetailsSerialNumber: '123'
+            meterMake: 'WATER',
+            meterSerialNumber: '123'
           }
         })
 
@@ -140,9 +140,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
           expect(result.error).to.equal({
             text: {
-              meterDetailsMakeResult: null,
-              meterDetailsSerialNumberResult: null,
-              meterDetails10TimesDisplayResult: 'Select if the meter has a ×10 display'
+              meterMakeResult: null,
+              meterSerialNumberResult: null,
+              meter10TimesDisplayResult: 'Select if the meter has a ×10 display'
             }
           })
         })

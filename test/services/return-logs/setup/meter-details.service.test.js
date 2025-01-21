@@ -40,9 +40,9 @@ describe('Return Logs Setup - Meter Details service', () => {
           activeNavBar: 'search',
           returnReference: '012345',
           backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
-          meterDetailsMake: null,
-          meterDetailsSerialNumber: null,
-          meterDetails10TimesDisplay: null
+          meterMake: null,
+          meterSerialNumber: null,
+          meter10TimesDisplay: null
         },
         { skip: ['sessionId'] }
       )

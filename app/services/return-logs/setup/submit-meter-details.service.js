@@ -44,39 +44,28 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.meterDetailsMake = payload.meterDetailsMake
-  session.meterDetailsSerialNumber = payload.meterDetailsSerialNumber
-  session.meterDetails10TimesDisplay = payload.meterDetails10TimesDisplay
+  session.meterMake = payload.meterMake
+  session.meterSerialNumber = payload.meterSerialNumber
+  session.meter10TimesDisplay = payload.meter10TimesDisplay
 
   return session.$update()
 }
 
 function _validate(payload) {
   const validation = MeterDetailsValidator.go(payload)
+  const { meterSerialNumberResult, meterMakeResult, meter10TimesDisplayResult } = validation
 
-  if (
-    !validation.meterDetailsSerialNumberResult.error &&
-    !validation.meterDetailsMakeResult.error &&
-    !validation.meterDetails10TimesDisplayResult.error
-  ) {
+  if (!meterSerialNumberResult.error && !meterMakeResult.error && !meter10TimesDisplayResult.error) {
     return null
   }
 
-  const meterDetailsMakeResult = validation.meterDetailsMakeResult.error
-    ? validation.meterDetailsMakeResult.error.details[0].message
-    : null
-  const meterDetailsSerialNumberResult = validation.meterDetailsSerialNumberResult.error
-    ? validation.meterDetailsSerialNumberResult.error.details[0].message
-    : null
-  const meterDetails10TimesDisplayResult = validation.meterDetails10TimesDisplayResult.error
-    ? validation.meterDetails10TimesDisplayResult.error.details[0].message
-    : null
-
   return {
     text: {
-      meterDetailsMakeResult,
-      meterDetailsSerialNumberResult,
-      meterDetails10TimesDisplayResult
+      meterMakeResult: meterMakeResult.error ? meterMakeResult.error.details[0].message : null,
+      meterSerialNumberResult: meterSerialNumberResult.error ? meterSerialNumberResult.error.details[0].message : null,
+      meter10TimesDisplayResult: meter10TimesDisplayResult.error
+        ? meter10TimesDisplayResult.error.details[0].message
+        : null
     }
   }
 }
