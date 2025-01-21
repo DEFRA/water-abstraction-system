@@ -16,7 +16,8 @@ describe('Return Logs Setup - Received presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345'
+      returnReference: '012345',
+      licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6'
     }
   })
 
@@ -32,7 +33,7 @@ describe('Return Logs Setup - Received presenter', () => {
         receivedDateDay: null,
         receivedDateMonth: null,
         receivedDateYear: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start'
+        backLink: '/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns'
       })
     })
   })

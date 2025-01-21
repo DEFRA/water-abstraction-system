@@ -23,6 +23,7 @@ describe('Return Logs Setup - Start presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: 'From 1 January to 31 December',
+        backLink: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
         beenReceived: false,
         journey: null,
         licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
@@ -96,6 +97,7 @@ describe('Return Logs Setup - Start presenter', () => {
 
 function _testSession() {
   return {
+    id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
     beenReceived: false,
     dueDate: '2023-04-28T00:00:00.000Z',
     endDate: '2023-03-31T00:00:00.000Z',

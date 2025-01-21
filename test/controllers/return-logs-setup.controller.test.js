@@ -69,11 +69,11 @@ describe('Return Logs Setup controller', () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
         })
 
-        it('returns the page successfully', async () => {
+        it('redirects to the "received" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/start`)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/received`)
         })
       })
     })
@@ -121,12 +121,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
 
-          it('redirects to the "reported" page', async () => {
+          it('redirects to the "start" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start'
             )
           })
         })
@@ -267,12 +267,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitStartService, 'go').resolves({})
           })
 
-          it('redirects to the "received" page', async () => {
+          it('redirects to the "reported" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/received'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/reported'
             )
           })
         })
