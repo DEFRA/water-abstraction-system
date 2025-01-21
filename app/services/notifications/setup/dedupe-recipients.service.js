@@ -24,30 +24,26 @@ function _removeDuplicateContactHash(acc, obj) {
   if (!acc[obj.contact_hash_id]) {
     acc[obj.contact_hash_id] = obj
   } else {
-    const currentRole = obj.contact.role
-    const existingRole = acc[obj.contact_hash_id].contact.role
-
-    if (_licenceHolderAndReturnToRoles(currentRole, existingRole)) {
-      acc[obj.contact_hash_id] = _handleDuplicateContactForBoth(obj)
-    }
+    acc[obj.contact_hash_id] = obj.contact
+      ? _duplicateLicenceHolderAndReturnsToContact(acc, obj)
+      : _duplicatePrimaryUserAndReturnsToContact(acc, obj)
   }
   return acc
 }
 
-function _licenceHolderAndReturnToRoles(currentRole, existingRole) {
-  const validRoles = ['Licence holder', 'Returns to']
-
-  return validRoles.includes(currentRole) && validRoles.includes(existingRole)
+function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
+  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.contact.role === 'Licence holder')
+  return {
+    ...recipient,
+    message_type: 'Letter - both'
+  }
 }
 
-function _handleDuplicateContactForBoth(obj) {
+function _duplicatePrimaryUserAndReturnsToContact(acc, obj) {
+  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Email - primary user')
   return {
-    ...obj,
-    message_type: 'Letter - both',
-    contact: {
-      ...obj.contact,
-      role: 'Licence holder'
-    }
+    ...recipient,
+    message_type: 'Email - both'
   }
 }
 

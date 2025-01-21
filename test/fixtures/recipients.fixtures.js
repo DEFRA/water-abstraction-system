@@ -27,7 +27,9 @@ function duplicateRecipients() {
   const duplicateLicenceRef = generateLicenceRef()
   return {
     duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
-    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef)
+    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef),
+    duplicatePrimaryUser: _addDuplicatePrimaryUser(duplicateLicenceRef),
+    duplicateReturnsAgent: _addDuplicateReturnsAgent(duplicateLicenceRef)
   }
 }
 
@@ -80,11 +82,31 @@ function _addPrimaryUser() {
   }
 }
 
+function _addDuplicatePrimaryUser(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    contact: null,
+    contact_hash_id: 14567627,
+    message_type: 'Email - primary user',
+    recipient: 'primary.user@important.com'
+  }
+}
+
 function _addReturnsAgent() {
   return {
     all_licences: generateLicenceRef(),
     contact: null,
     contact_hash_id: -370722837,
+    message_type: 'Email - returns agent',
+    recipient: 'returns.agent@important.com'
+  }
+}
+
+function _addDuplicateReturnsAgent(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    contact: null,
+    contact_hash_id: 14567627,
     message_type: 'Email - returns agent',
     recipient: 'returns.agent@important.com'
   }

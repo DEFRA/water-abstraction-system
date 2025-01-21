@@ -51,6 +51,13 @@ describe('Notifications Setup - De Dupe recipients service', () => {
           message_type: 'Letter - Returns To'
         },
         {
+          all_licences: testDuplicateRecipients.duplicatePrimaryUser.all_licences,
+          contact: null,
+          contact_hash_id: 14567627,
+          message_type: 'Email - both',
+          recipient: 'primary.user@important.com'
+        },
+        {
           all_licences: testRecipients.primaryUser.all_licences,
           contact: null,
           contact_hash_id: 1178136542,
@@ -128,6 +135,42 @@ describe('Notifications Setup - De Dupe recipients service', () => {
           message_type: 'Letter - both'
         }
       ])
+    })
+
+    describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
+      it('correctly returns only the "primary user"', () => {
+        const result = DeDupeRecipientsService.go([
+          testDuplicateRecipients.duplicatePrimaryUser,
+          testDuplicateRecipients.duplicateReturnsAgent
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicatePrimaryUser.all_licences,
+            contact: null,
+            contact_hash_id: 14567627,
+            message_type: 'Email - both',
+            recipient: 'primary.user@important.com'
+          }
+        ])
+      })
+
+      it('correctly returns only the "primary user" (irrelevant of order)', () => {
+        const result = DeDupeRecipientsService.go([
+          testDuplicateRecipients.duplicateReturnsAgent,
+          testDuplicateRecipients.duplicatePrimaryUser
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicatePrimaryUser.all_licences,
+            contact: null,
+            contact_hash_id: 14567627,
+            message_type: 'Email - both',
+            recipient: 'primary.user@important.com'
+          }
+        ])
+      })
     })
 
     describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
