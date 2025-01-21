@@ -89,7 +89,7 @@
             {% for requirement in requirements %}
               {% set requirementIndex = loop.index0 %}
               {% set bookmarkTitle %}
-                {% if requirement.siteDescription == '' %}
+                {% if requirement.siteDescription === '' %}
                   Return reference {{ requirement.returnReference }}
                 {% else %}
                   Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription | safe }}
