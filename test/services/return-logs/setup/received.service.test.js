@@ -41,7 +41,7 @@ describe('Return Logs Setup - Received service', () => {
           activeNavBar: 'search',
           pageTitle: 'When was the return received?',
           returnReference: '012345',
-          backLink: `/system/return-logs/setup/${session.id}/start`,
+          backLink: `/system/licences/736144f1-203d-46bb-9968-5137ae06a7bd/returns`,
           receivedDateOption: null,
           receivedDateDay: null,
           receivedDateMonth: null,

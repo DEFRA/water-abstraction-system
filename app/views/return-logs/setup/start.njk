@@ -9,10 +9,12 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {{ govukBackLink({
-      text: 'Go back to summary',
-      href: '/system/licences/'+ licenceId +'/returns'
-  }) }}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
 {% endblock %}
 
 {% block content %}
