@@ -17,6 +17,8 @@ const ReturnSubmissionHelper = require('../../support/helpers/return-submission.
 const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
+const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+
 describe.only('View Return Log presenter', () => {
   let auth
   let testReturnLog
@@ -217,6 +219,70 @@ describe.only('View Return Log presenter', () => {
           })
         })
       })
+    })
+  })
+
+  describe('the "displayTable" property', () => {
+    it('returns true when there are is a return submissions', async () => {
+      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
+      ]
+
+      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+        await ReturnSubmissionLineHelper.add({
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+          startDate: new Date(`2022-01-01`),
+          endDate: new Date(`2022-02-07`),
+          quantity: 1234
+        })
+      ]
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayTable).to.equal(true)
+    })
+
+    it('returns false when there is no return submissions', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayTable).to.equal(false)
+    })
+  })
+
+  describe('the "displayUnits" property', () => {
+    beforeEach(async () => {
+      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
+      ]
+
+      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+        await ReturnSubmissionLineHelper.add({
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+          startDate: new Date(`2022-01-01`),
+          endDate: new Date(`2022-02-07`),
+          quantity: 1234
+        })
+      ]
+    })
+
+    it('returns true when the unit is not cubic metres', () => {
+      testReturnLog.returnSubmissions[0].metadata.units = unitNames.GALLONS
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayUnits).to.equal(true)
+    })
+
+    it('returns false when the unit is cubic metres', () => {
+      testReturnLog.returnSubmissions[0].metadata.units = unitNames.CUBIC_METRES
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.displayUnits).to.equal(false)
     })
   })
 
