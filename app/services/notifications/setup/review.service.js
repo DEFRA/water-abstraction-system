@@ -26,16 +26,12 @@ async function go(sessionId) {
 
   const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const pageData = ReviewPresenter.go(recipients)
+  const formattedData = ReviewPresenter.go(recipients)
 
   return {
     activeNavBar: 'manage',
-    ...pageData
+    ...formattedData
   }
-}
-
-function _summer(returnsPeriod) {
-  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 function _extractReturnPeriod(returnsPeriod) {
@@ -44,6 +40,10 @@ function _extractReturnPeriod(returnsPeriod) {
   return periods.find((period) => {
     return period.name === returnsPeriod
   })
+}
+
+function _summer(returnsPeriod) {
+  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 module.exports = {

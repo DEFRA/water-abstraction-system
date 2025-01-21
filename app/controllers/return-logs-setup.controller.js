@@ -42,7 +42,7 @@ async function setup(request, h) {
   const { returnLogId } = request.query
   const session = await InitiateSessionService.go(returnLogId)
 
-  return h.redirect(`/system/return-logs/setup/${session.id}/start`)
+  return h.redirect(`/system/return-logs/setup/${session.id}/received`)
 }
 
 async function start(request, h) {
@@ -83,7 +83,7 @@ async function submitReceived(request, h) {
     return h.view('return-logs/setup/received.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/start`)
 }
 
 async function submitReported(request, h) {
@@ -110,7 +110,7 @@ async function submitStart(request, h) {
     return h.view('return-logs/setup/start.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/received`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
 }
 
 async function submitUnits(request, h) {

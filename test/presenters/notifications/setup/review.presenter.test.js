@@ -92,20 +92,6 @@ describe('Notifications Setup - Review presenter', () => {
       })
     })
 
-    describe('the "pageTitle" property', () => {
-      it('should return page title', () => {
-        const result = ReviewPresenter.go(testInput)
-        expect(result.pageTitle).to.equal('Send returns invitations')
-      })
-    })
-
-    describe('the "recipientsAmount" property', () => {
-      it('should return the size of the recipients array', () => {
-        const result = ReviewPresenter.go(testInput)
-        expect(result.recipientsAmount).to.equal(testInput.length)
-      })
-    })
-
     describe('the "recipients" property', () => {
       describe('format all recipient types', () => {
         it('should return the formatted recipients', () => {

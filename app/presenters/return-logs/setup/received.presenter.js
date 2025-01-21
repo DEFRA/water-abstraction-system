@@ -15,6 +15,7 @@
 function go(session) {
   const {
     id: sessionId,
+    licenceId,
     returnReference,
     receivedDateOptions,
     receivedDateDay,
@@ -23,14 +24,14 @@ function go(session) {
   } = session
 
   return {
+    backLink: `/system/licences/${licenceId}/returns`,
     pageTitle: 'When was the return received?',
-    receivedDateOption: receivedDateOptions ?? null,
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,
+    receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
-    sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${sessionId}/start`
+    sessionId
   }
 }
 

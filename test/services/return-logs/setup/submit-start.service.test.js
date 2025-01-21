@@ -53,6 +53,7 @@ describe('Return Logs Setup - Submit Start service', () => {
         expect(result).to.equal({
           abstractionPeriod: 'From 1 January to 31 December',
           activeNavBar: 'search',
+          backLink: `/system/return-logs/setup/${session.id}/received`,
           beenReceived: false,
           error: { text: 'Select what you want to do with this return' },
           journey: null,
