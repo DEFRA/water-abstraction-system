@@ -53,9 +53,11 @@ function _licences(licences) {
 function _contact(recipient) {
   if (recipient.recipient) {
     return [recipient.recipient]
-  } else {
-    return Object.values(recipient.contact).filter((n) => n)
   }
+  
+  return Object.values(recipient.contact).filter((n) => {
+    return n
+  })
 }
 
 module.exports = {
