@@ -30,7 +30,7 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'manage',
-    ...pageData
+    ...formattedData
   }
 }
 
