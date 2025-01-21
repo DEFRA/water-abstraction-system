@@ -26,7 +26,7 @@ async function go(sessionId) {
 
   const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const pageData = ReviewPresenter.go(recipients)
+  const formattedData = ReviewPresenter.go(recipients)
 
   return {
     activeNavBar: 'manage',
