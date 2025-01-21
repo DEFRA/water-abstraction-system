@@ -234,7 +234,7 @@
     </div>
   </div>
 
-  {% if matchedReturns === 0 and unmatchedReturns === 0 %}
+  {% if matchedReturns.length === 0 and unmatchedReturns.length === 0 %}
     {# No Returns #}
     <h2 class="govuk-heading-m">No two-part tariff returns</h2>
   {% else %}
