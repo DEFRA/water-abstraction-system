@@ -39,7 +39,16 @@ async function _fetch(dueDate, summer) {
 /**
  * Constructs the SQL query string to fetch the recipient data.
  *
- * The query is designed to return recipients based on the due date and summer flag. It fetches:
+ * WRLS has the concept of a registered and unregistered licence:
+ * - **Registered licences** are associated with a primary user who has an email address.
+ *   These licences may also have multiple returns agents, who may share the same or have different
+ *   email addresses compared to the primary user.
+ *
+ * - **Unregistered licences** are linked to a licence holder, who provides a contact address.
+ *   Additionally, unregistered licences may have a 'Returns to' contact, whose contact address
+ *   may be the same as, or different from, the licence holder’s.
+ *
+ * The query is designed to return recipients based on the due date and summer flag. It fetches (in order of preference):
  * - Recipients who are associated with a 'Licence holder' or 'Returns to' role and their contact details.
  * - Primary users, who are considered recipients for email notifications.
  * - Returns agents, who are also considered recipients for email notifications.
