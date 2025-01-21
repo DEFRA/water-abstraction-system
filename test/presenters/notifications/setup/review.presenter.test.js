@@ -103,6 +103,7 @@ describe('Notifications Setup - Review presenter', () => {
     describe('the "recipientsAmount" property', () => {
       it('should return the size of the recipients array', () => {
         const result = ReviewPresenter.go(testInput)
+
         expect(result.recipientsAmount).to.equal(testInput.length)
       })
     })
