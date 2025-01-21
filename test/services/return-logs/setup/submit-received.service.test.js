@@ -23,7 +23,8 @@ describe('Return Logs Setup - Submit Received service', () => {
     sessionData = {
       data: {
         returnReference: '12345',
-        startDate: '2023-04-01T00:00:00.000Z'
+        startDate: '2023-04-01T00:00:00.000Z',
+        licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8'
       }
     }
 
@@ -115,7 +116,7 @@ describe('Return Logs Setup - Submit Received service', () => {
             receivedDateMonth: null,
             receivedDateYear: null,
             receivedDateOption: null,
-            backLink: `/system/return-logs/setup/${session.id}/start`,
+            backLink: `/system/licences/cd190dc7-912a-46a5-9421-2750fb1c7ac8/returns`,
             returnReference: '12345'
           },
           { skip: ['sessionId', 'error'] }
