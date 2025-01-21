@@ -218,40 +218,40 @@ describe.only('View Return Log presenter', () => {
         })
       })
     })
+  })
 
-    describe('the "latest" property', () => {
-      it('returns true when this is the latest return log', async () => {
-        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+  describe('the "latest" property', () => {
+    it('returns true when this is the latest return log', async () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        expect(result.latest).to.equal(true)
-      })
+      expect(result.latest).to.equal(true)
+    })
 
-      it("returns false when this isn't the latest return log", async () => {
-        testReturnLog.versions = [
-          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
-          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+    it("returns false when this isn't the latest return log", async () => {
+      testReturnLog.versions = [
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+      ]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+      ]
+
+      for (const returnSubmission of testReturnLog.returnSubmissions) {
+        returnSubmission.returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: returnSubmission.id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
         ]
+      }
 
-        testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
-          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
-        ]
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        for (const returnSubmission of testReturnLog.returnSubmissions) {
-          returnSubmission.returnSubmissionLines = [
-            await ReturnSubmissionLineHelper.add({
-              returnSubmissionId: returnSubmission.id,
-              startDate: new Date(`2022-01-01`),
-              endDate: new Date(`2022-02-07`),
-              quantity: 1234
-            })
-          ]
-        }
-
-        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-        expect(result.latest).to.equal(false)
-      })
+      expect(result.latest).to.equal(false)
     })
   })
 })
