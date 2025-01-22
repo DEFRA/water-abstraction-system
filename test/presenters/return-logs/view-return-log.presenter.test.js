@@ -66,7 +66,7 @@ describe.only('View Return Log presenter', () => {
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.actionButton).to.equal(null)
+      expect(result.actionButton).to.be.null()
     })
 
     it("returns null if auth credentials don't include returns", () => {
@@ -74,7 +74,7 @@ describe.only('View Return Log presenter', () => {
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.actionButton).to.equal(null)
+      expect(result.actionButton).to.be.null()
     })
 
     it('returns the expected "Edit return" result if the return is completed', () => {
@@ -459,7 +459,7 @@ describe.only('View Return Log presenter', () => {
     it('returns null when no received date is present', () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.receivedDate).to.equal(null)
+      expect(result.receivedDate).to.be.null()
     })
   })
 
