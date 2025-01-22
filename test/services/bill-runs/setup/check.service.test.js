@@ -13,7 +13,6 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-const RegionModel = require('../../../../app/models/region.model.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
@@ -31,12 +30,7 @@ describe('Bill Runs - Setup - Check service', () => {
   let session
 
   beforeEach(async () => {
-    session = { id: sessionId, region: region.id }
-
-    Sinon.stub(RegionModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
-      findById: Sinon.stub().withArgs(region.id).resolves(region)
-    })
+    session = { id: sessionId, region: region.id, regionName: region.displayName }
   })
 
   afterEach(() => {
@@ -481,7 +475,7 @@ describe('Bill Runs - Setup - Check service', () => {
       })
 
       // NOTE: These would never happen in a 'real' environment
-      describe.only('Non-production scenarios (do not exist in production)', () => {
+      describe('Non-production scenarios (do not exist in production)', () => {
         describe('when there are no matches to block the bill runs', () => {
           // In production all regions have 'sent' annual bill runs so a result would always be found to get a financial
           // year from
