@@ -18,64 +18,26 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const { meterMake, meterSerialNumber, meter10TimesDisplay } = payload
-
-  const result = {
-    meterMakeResult: _validateMeterMake(meterMake),
-    meterSerialNumberResult: _validateMeterSerialNumber(meterSerialNumber),
-    meter10TimesDisplayResult: _validateMeter10TimesDisplay(meter10TimesDisplay)
-  }
-
-  return result
-}
-
-function _validateMeter10TimesDisplay(meter10TimesDisplay) {
-  const errorMessage = 'Select if the meter has a ×10 display'
-
   const schema = Joi.object({
+    meterMake: Joi.string().required().max(310).messages({
+      'any.required': 'Enter the make of the meter',
+      'string.max': 'Make must be 310 characters or less'
+    }),
+    meterSerialNumber: Joi.string().required().max(180).messages({
+      'any.required': 'Enter a serial number',
+      'string.max': 'Serial number must be 180 characters or less'
+    }),
     meter10TimesDisplay: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage
+        'any.required': 'Select if the meter has a ×10 display',
+        'any.only': 'Select if the meter has a ×10 display',
+        'string.empty': 'Select if the meter has a ×10 display'
       })
   })
 
-  return schema.validate({ meter10TimesDisplay }, { abortEarly: false })
-}
-
-function _validateMeterMake(meterMake) {
-  const errorMessage = {
-    empty: 'Enter the make of the meter',
-    big: 'Make must be 310 characters or less'
-  }
-
-  const schema = Joi.object({
-    meterMake: Joi.string().required().max(310).messages({
-      'any.required': errorMessage.empty,
-      'string.max': errorMessage.big
-    })
-  })
-
-  return schema.validate({ meterMake }, { abortEarly: false })
-}
-
-function _validateMeterSerialNumber(meterSerialNumber) {
-  const errorMessage = {
-    empty: 'Enter a serial number',
-    big: 'Serial number must be 180 characters or less'
-  }
-
-  const schema = Joi.object({
-    meterSerialNumber: Joi.string().required().max(180).messages({
-      'any.required': errorMessage.empty,
-      'string.max': errorMessage.big
-    })
-  })
-
-  return schema.validate({ meterSerialNumber }, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {

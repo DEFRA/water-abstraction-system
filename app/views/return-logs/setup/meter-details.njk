@@ -15,46 +15,12 @@
   }}
 {% endblock %}
 
-{# If there is a meterMake error, the error message is set  #}
-{% if error.text.meterMakeResult %}
-  {% set meterMakeResultErrorMessage = { text: error.text.meterMakeResult } %}
-{% else %}
-  {% set meterMakeResultErrorMessage = null %}
-{% endif %}
-
-{# If there is a meterSerialNumber error, the error message is set #}
-{% if error.text.meterSerialNumberResult %}
-    {% set meterSerialNumberResultErrorMessage = { text: error.text.meterSerialNumberResult } %}
-{% else %}
-  {% set meterSerialNumberResultErrorMessage = null %}
-{% endif %}
-
-{# If there is a meter10TimesDisplay error, the error message is set #}
-{% if error.text.meter10TimesDisplayResult %}
-    {% set meter10TimesDisplayResultErrorMessage = { text: error.text.meter10TimesDisplayResult } %}
-{% else %}
-  {% set meter10TimesDisplayResultErrorClass = "" %}
-{% endif %}
-
 {% block content %}
   {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text.meterMakeResult,
-          href: "#meter-make-error"
-        },
-        {
-          text: error.text.meterSerialNumberResult,
-          href: "#meter-serial-number-error"
-        },
-        {
-          text: error.text.meter10TimesDisplayResult,
-          href: "#meter-10-times-display-error"
-        }
-      ]
+      errorList: error.errorList
     }) }}
   {%endif%}
 
@@ -75,7 +41,9 @@
         id: "meter-make",
         name: "meterMake",
         value: meterMake,
-        errorMessage: meterMakeResultErrorMessage
+        errorMessage: {
+          text: error.meterMake.message
+        } if error.meterMake
       }) }}
 
       {{ govukInput({
@@ -86,13 +54,17 @@
         id: "meter-serial-number",
         name: "meterSerialNumber",
         value: meterSerialNumber,
-        errorMessage: meterSerialNumberResultErrorMessage
+        errorMessage: {
+          text: error.meterSerialNumber.message
+        } if error.meterSerialNumber
       }) }}
 
       {{ govukRadios({
         classes: "govuk-radios--inline",
         name: "meter10TimesDisplay",
-        errorMessage: meter10TimesDisplayResultErrorMessage,
+        errorMessage: {
+          text: error.meter10TimesDisplay.message
+        } if error.meter10TimesDisplay,
         fieldset: {
           legend: {
             text: "Does this meter have a ×10 display",

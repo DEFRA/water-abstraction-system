@@ -25,9 +25,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('confirms the data is valid', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.meterMakeResult.error).not.to.exist()
-      expect(result.meterSerialNumberResult.error).not.to.exist()
-      expect(result.meter10TimesDisplayResult.error).not.to.exist()
+      expect(result.error).not.to.exist()
     })
   })
 
@@ -48,9 +46,8 @@ describe('Return Logs Setup - Meter Details validator', () => {
       it('fails validation', () => {
         const result = MeterDetailsValidator.go(payload)
 
-        expect(result.meterMakeResult.error.details[0].message).to.equal('Make must be 310 characters or less')
-        expect(result.meterSerialNumberResult.error).not.to.exist()
-        expect(result.meter10TimesDisplayResult.error).not.to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Make must be 310 characters or less')
       })
     })
 
@@ -69,11 +66,8 @@ describe('Return Logs Setup - Meter Details validator', () => {
       it('fails validation', () => {
         const result = MeterDetailsValidator.go(payload)
 
-        expect(result.meterMakeResult.error).not.to.exist()
-        expect(result.meterSerialNumberResult.error.details[0].message).to.equal(
-          'Serial number must be 180 characters or less'
-        )
-        expect(result.meter10TimesDisplayResult.error).not.to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Serial number must be 180 characters or less')
       })
     })
   })
@@ -86,11 +80,10 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.meterMakeResult.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.meterSerialNumberResult.error.details[0].message).to.equal('Enter a serial number')
-      expect(result.meter10TimesDisplayResult.error.details[0].message).to.equal(
-        'Select if the meter has a ×10 display'
-      )
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
+      expect(result.error.details[1].message).to.equal('Enter a serial number')
+      expect(result.error.details[2].message).to.equal('Select if the meter has a ×10 display')
     })
   })
 
@@ -102,11 +95,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.meterMakeResult.error).to.not.exist()
-      expect(result.meterSerialNumberResult.error.details[0].message).to.equal('Enter a serial number')
-      expect(result.meter10TimesDisplayResult.error.details[0].message).to.equal(
-        'Select if the meter has a ×10 display'
-      )
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter a serial number')
+      expect(result.error.details[1].message).to.equal('Select if the meter has a ×10 display')
     })
   })
 
@@ -118,11 +109,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.meterMakeResult.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.meterSerialNumberResult.error).to.not.exist()
-      expect(result.meter10TimesDisplayResult.error.details[0].message).to.equal(
-        'Select if the meter has a ×10 display'
-      )
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
+      expect(result.error.details[1].message).to.equal('Select if the meter has a ×10 display')
     })
   })
 
@@ -134,9 +123,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.meterMakeResult.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.meterSerialNumberResult.error.details[0].message).to.equal('Enter a serial number')
-      expect(result.meter10TimesDisplayResult.error).to.not.exist()
+      expect(result.error).to.exist()
+      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
+      expect(result.error.details[1].message).to.equal('Enter a serial number')
     })
   })
 })

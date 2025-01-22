@@ -531,7 +531,10 @@ describe('Return Logs Setup controller', () => {
           options = _postOptions('meter-details')
 
           Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-            error: { text: { meterMakeResult: 'Enter the make of the meter' } },
+            error: {
+              errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
+              meterMake: { message: 'Enter the make of the meter' }
+            },
             pageTitle: 'Have meter details been provided?',
             sessionId: 'Meter details'
           })

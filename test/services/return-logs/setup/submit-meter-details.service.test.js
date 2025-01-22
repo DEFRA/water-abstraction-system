@@ -76,11 +76,17 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: {
-              meterMakeResult: 'Enter the make of the meter',
-              meterSerialNumberResult: 'Enter a serial number',
-              meter10TimesDisplayResult: 'Select if the meter has a ×10 display'
-            }
+            errorList: [
+              { href: '#meter-make', text: 'Enter the make of the meter' },
+              { href: '#meter-serial-number', text: 'Enter a serial number' },
+              {
+                href: '#meter-10-times-display',
+                text: 'Select if the meter has a ×10 display'
+              }
+            ],
+            meterMake: { message: 'Enter the make of the meter' },
+            meterSerialNumber: { message: 'Enter a serial number' },
+            meter10TimesDisplay: { message: 'Select if the meter has a ×10 display' }
           })
         })
       })
@@ -97,11 +103,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: {
-              meterMakeResult: 'Enter the make of the meter',
-              meterSerialNumberResult: null,
-              meter10TimesDisplayResult: null
-            }
+            errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
+            meterMake: { message: 'Enter the make of the meter' }
           })
         })
       })
@@ -118,11 +121,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: {
-              meterMakeResult: null,
-              meterSerialNumberResult: 'Enter a serial number',
-              meter10TimesDisplayResult: null
-            }
+            errorList: [{ href: '#meter-serial-number', text: 'Enter a serial number' }],
+            meterSerialNumber: { message: 'Enter a serial number' }
           })
         })
       })
@@ -139,11 +139,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
           const result = await SubmitMeterDetailsService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: {
-              meterMakeResult: null,
-              meterSerialNumberResult: null,
-              meter10TimesDisplayResult: 'Select if the meter has a ×10 display'
-            }
+            errorList: [{ href: '#meter-10-times-display', text: 'Select if the meter has a ×10 display' }],
+            meter10TimesDisplay: { message: 'Select if the meter has a ×10 display' }
           })
         })
       })

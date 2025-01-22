@@ -34,13 +34,27 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = MeterDetailsPresenter.go(session)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    ...formattedData
+    ...submittedSessionData
   }
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ *
+ * @private
+ */
+function _submittedSessionData(session, payload) {
+  session.meterMake = payload.meterMake ?? null
+  session.meterSerialNumber = payload.meterSerialNumber ?? null
+  session.meter10TimesDisplay = payload.meter10TimesDisplay ?? null
+
+  return MeterDetailsPresenter.go(session)
 }
 
 async function _save(session, payload) {
@@ -53,21 +67,35 @@ async function _save(session, payload) {
 
 function _validate(payload) {
   const validation = MeterDetailsValidator.go(payload)
-  const { meterSerialNumberResult, meterMakeResult, meter10TimesDisplayResult } = validation
 
-  if (!meterSerialNumberResult.error && !meterMakeResult.error && !meter10TimesDisplayResult.error) {
+  if (!validation.error) {
     return null
   }
 
-  return {
-    text: {
-      meterMakeResult: meterMakeResult.error ? meterMakeResult.error.details[0].message : null,
-      meterSerialNumberResult: meterSerialNumberResult.error ? meterSerialNumberResult.error.details[0].message : null,
-      meter10TimesDisplayResult: meter10TimesDisplayResult.error
-        ? meter10TimesDisplayResult.error.details[0].message
-        : null
-    }
+  const result = {
+    errorList: []
   }
+
+  validation.error.details.forEach((detail) => {
+    let href
+
+    if (detail.context.key === 'meterMake') {
+      href = '#meter-make'
+    } else if (detail.context.key === 'meterSerialNumber') {
+      href = '#meter-serial-number'
+    } else {
+      href = '#meter-10-times-display'
+    }
+
+    result.errorList.push({
+      href,
+      text: detail.message
+    })
+
+    result[detail.context.key] = { message: detail.message }
+  })
+
+  return result
 }
 
 module.exports = {
