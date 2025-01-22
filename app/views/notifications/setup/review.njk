@@ -1,8 +1,12 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
   {{ govukBackLink({
@@ -11,13 +15,78 @@
   }) }}
 {% endblock %}
 
+
+
+{% set rows = [] %}
+
+{%for recipient in recipients %}
+  {% set licenceNumbers %}
+    {% if recipient.licences.length > 5 %}
+      {{
+      govukDetails({
+        classes: 'govuk-!-margin-bottom-0',
+        summaryText: recipient.licences.length + ' licence numbers',
+        html: newLineArrayItems(recipient.licences)
+      })
+      }}
+    {% else %}
+      {{ newLineArrayItems(recipient.licences)  }}
+    {% endif %}
+  {% endset %}
+
+  {% set rows = (rows.push([
+    {
+      text: newLineArrayItems(recipient.contact)
+    }, {
+      html: licenceNumbers
+    }, {
+      text: recipient.method
+    }
+  ]), rows) %}
+{% endfor %}
+
 {% block content %}
   <div class="govuk-body">
     <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+
+    <p> Returns invitations are ready to send.</p>
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Download recipients",
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Remove licences",
+        classes: "govuk-button--secondary"
+      }) }}
+    </div>
+
+    {{ govukTable({
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Recipient",
+          classes: "govuk-!-width-one-third"
+        },
+        {
+          text: "Licence number",
+          classes: "govuk-!-width-one-third"
+        },
+        {
+          text: "Method",
+          classes: "govuk-!-width-one-third"
+        }
+      ],
+      rows: rows
+    }) }}
+
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
-      {{ govukButton({ text: "Send x invitations", preventDoubleClick: true }) }}
+      {{ govukButton({ text: "Send invitations", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}
