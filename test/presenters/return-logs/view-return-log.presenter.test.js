@@ -430,4 +430,44 @@ describe.only('View Return Log presenter', () => {
       })
     })
   })
+
+  describe('the "purpose" property', () => {
+    it('returns the alias when the first purpose has an alias', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.purpose).to.equal('PURPOSE_ALIAS')
+    })
+
+    it('returns the tertiary description when the first purpose has no alias ', () => {
+      testReturnLog.purposes.unshift({ tertiary: { description: 'TERTIARY_DESCRIPTION' } })
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.purpose).to.equal('TERTIARY_DESCRIPTION')
+    })
+  })
+
+  describe('the "receivedDate" property', () => {
+    it('returns the formatted date when a received date is present', () => {
+      testReturnLog.receivedDate = new Date(`2022-01-01`)
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.receivedDate).to.equal('1 January 2022')
+    })
+
+    it('returns null when no received date is present', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.receivedDate).to.equal(null)
+    })
+  })
+
+  describe('the "returnPeriod" property', () => {
+    it('returns the formatted return period', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.returnPeriod).to.equal('1 April 2022 to 31 March 2023')
+    })
+  })
 })
