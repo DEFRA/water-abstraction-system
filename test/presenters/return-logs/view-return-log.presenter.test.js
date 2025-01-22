@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -45,6 +46,10 @@ describe.only('View Return Log presenter', () => {
     testReturnLog.purposes = testReturnLog.metadata.purposes
     testReturnLog.twoPartTariff = testReturnLog.metadata.isTwoPartTariff
     testReturnLog.licence = await LicenceHelper.add()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('the "abstractionPeriod" property', () => {
@@ -153,9 +158,7 @@ describe.only('View Return Log presenter', () => {
     })
 
     it('returns false when the return submission method is abstractionVolumes', async () => {
-      testReturnLog.returnSubmissions[0].metadata = {
-        method: 'abstractionVolumes'
-      }
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
@@ -163,9 +166,7 @@ describe.only('View Return Log presenter', () => {
     })
 
     it("returns true when the return submission method isn't abstractionVolumes", async () => {
-      testReturnLog.returnSubmissions[0].metadata = {
-        method: 'NOT_ABSTRACTION_VOLUMES'
-      }
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
@@ -270,7 +271,7 @@ describe.only('View Return Log presenter', () => {
     })
 
     it('returns true when the unit is not cubic metres', () => {
-      testReturnLog.returnSubmissions[0].metadata.units = unitNames.GALLONS
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
@@ -278,7 +279,7 @@ describe.only('View Return Log presenter', () => {
     })
 
     it('returns false when the unit is cubic metres', () => {
-      testReturnLog.returnSubmissions[0].metadata.units = unitNames.CUBIC_METRES
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
 
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
