@@ -565,4 +565,49 @@ describe.only('View Return Log presenter', () => {
       })
     })
   })
+
+  describe('the "tableTitle" property', () => {
+    beforeEach(async () => {
+      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+      testReturnLog.returnSubmissions = [
+        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
+      ]
+
+      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+        await ReturnSubmissionLineHelper.add({
+          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+          startDate: new Date(`2022-01-01`),
+          endDate: new Date(`2022-02-07`),
+          quantity: 1234
+        })
+      ]
+    })
+
+    it('returns the frequency in the title', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.tableTitle).to.contain('monthly')
+    })
+
+    describe('when the method is abstractionVolumes', () => {
+      it("returns 'abstraction volumes' in the title", () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.tableTitle).to.contain('abstraction volumes')
+      })
+    })
+
+    describe('when the method is not abstractionVolumes', () => {
+      it("returns 'meter readings' in the title", () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.tableTitle).to.contain('meter readings')
+      })
+    })
+  })
 })
