@@ -5,6 +5,18 @@ const ReturnLogsSetupController = require('../controllers/return-logs-setup.cont
 const routes = [
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/check',
+    options: {
+      handler: ReturnLogsSetupController.check,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup',
     options: {
       handler: ReturnLogsSetupController.setup,

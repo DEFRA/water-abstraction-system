@@ -1,0 +1,26 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block content %}
+  {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  </div>
+
+  {# "Confirm" & "Cancel" buttons #}
+  <div>
+    {{ govukButton({
+      text: "Confirm",
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Cancel",
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true,
+      href: "/system/return-logs/setup/" + sessionId + "/cancel"
+    }) }}
+  </div>
+{% endblock %}
