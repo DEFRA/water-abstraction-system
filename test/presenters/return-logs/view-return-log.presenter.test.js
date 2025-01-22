@@ -470,4 +470,47 @@ describe.only('View Return Log presenter', () => {
       expect(result.returnPeriod).to.equal('1 April 2022 to 31 March 2023')
     })
   })
+
+  describe('the "startReading" property', () => {
+    describe('when there is a submission', () => {
+      it('returns the start reading when there is a submission', async () => {
+        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({
+            returnLogId: testReturnLog.id,
+            version: 1
+          })
+        ]
+
+        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
+        ]
+
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
+          manufacturer: 'MANUFACTURER',
+          multipler: 10,
+          serialNumber: 'SERIAL_NUMBER',
+          startReading: 1234
+        })
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.startReading).to.equal(1234)
+      })
+    })
+
+    describe('when there is no submission', () => {
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.startReading).to.be.null()
+      })
+    })
+  })
 })
