@@ -33,7 +33,7 @@
 
       {% set regionItems = [] %}
       {% for region in regions %}
-        {% set regionItem = { text: region.displayName, value: region.id, checked: region.id == selectedRegion } %}
+        {% set regionItem = { text: region.displayName, value: region.id, checked: region.id === selectedRegion } %}
 
         {# Push our item into the region items array #}
         {% set regionItems = (regionItems.push(regionItem), regionItems) %}
