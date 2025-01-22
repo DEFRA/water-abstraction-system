@@ -18,7 +18,7 @@ describe('Return Logs Setup - Submit Submission service', () => {
   let session
 
   beforeEach(async () => {
-    session = await _session()
+    session = await SessionHelper.add({ data: { beenReceived: false, returnReference: '1234' } })
   })
 
   describe('when called', () => {
@@ -51,48 +51,15 @@ describe('Return Logs Setup - Submit Submission service', () => {
         const result = await SubmitSubmissionService.go(session.id, payload)
 
         expect(result).to.equal({
-          abstractionPeriod: 'From 1 January to 31 December',
           activeNavBar: 'search',
           backLink: `/system/return-logs/setup/${session.id}/received`,
           beenReceived: false,
           error: { text: 'Select what you want to do with this return' },
           journey: null,
-          licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
-          licenceRef: '01/111',
-          pageTitle: 'Abstraction return',
-          purposes: 'Evaporative Cooling',
-          returnsPeriod: 'From 1 April 2022 to 31 March 2023',
-          returnReference: '1234',
-          siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
-          status: 'overdue',
-          tariffType: 'Standard tariff'
+          pageTitle: 'What do you want to do with this return?',
+          returnReference: '1234'
         })
       })
     })
   })
 })
-
-async function _session() {
-  const session = SessionHelper.add({
-    data: {
-      beenReceived: false,
-      dueDate: '2023-04-28T00:00:00.000Z',
-      endDate: '2023-03-31T00:00:00.000Z',
-      licenceId: 'db3731ae-3dde-4778-a81e-9be549cfc0e1',
-      licenceRef: '01/111',
-      periodEndDay: 31,
-      periodEndMonth: 12,
-      periodStartDay: 1,
-      periodStartMonth: 1,
-      purposes: 'Evaporative Cooling',
-      returnReference: '1234',
-      siteDescription: 'POINT A, TIDAL RIVER MEDWAY AT ISLE OF GRAIN',
-      startDate: '2022-04-01T00:00:00.000Z',
-      status: 'due',
-      twoPartTariff: false,
-      underQuery: false
-    }
-  })
-
-  return session
-}
