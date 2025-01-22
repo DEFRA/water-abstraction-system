@@ -18,6 +18,8 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
+  const meter10TimesDisplayErrorMessage = 'Select if the meter has a ×10 display'
+
   const schema = Joi.object({
     meterMake: Joi.string().required().max(310).messages({
       'any.required': 'Enter the make of the meter',
@@ -31,9 +33,9 @@ function go(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select if the meter has a ×10 display',
-        'any.only': 'Select if the meter has a ×10 display',
-        'string.empty': 'Select if the meter has a ×10 display'
+        'any.required': meter10TimesDisplayErrorMessage,
+        'any.only': meter10TimesDisplayErrorMessage,
+        'string.empty': meter10TimesDisplayErrorMessage
       })
   })
 
