@@ -4,6 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
+const Proxyquire = require('proxyquire')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -510,6 +511,57 @@ describe.only('View Return Log presenter', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.startReading).to.be.null()
+      })
+    })
+  })
+
+  describe('the "summaryTableData" property', () => {
+    describe('when there is no submission', () => {
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.summaryTableData).to.be.null()
+      })
+    })
+
+    describe('when there is a submission', () => {
+      let StubbedViewReturnLogPresenter
+
+      beforeEach(async () => {
+        // We have to use Proxyquire to stub BaseReturnLogsPresenter as Sinon cannot stub dependencies that are imported
+        // via destructuring
+        StubbedViewReturnLogPresenter = Proxyquire('../../../app/presenters/return-logs/view-return-log.presenter.js', {
+          './base-return-logs.presenter.js': {
+            generateSummaryTableHeaders: Sinon.stub().returns('GENERATED_HEADERS'),
+            generateSummaryTableRows: Sinon.stub().returns('GENERATED_ROWS')
+          }
+        })
+
+        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({
+            returnLogId: testReturnLog.id,
+            version: 1,
+            nilReturn: true
+          })
+        ]
+
+        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+            startDate: new Date(`2022-01-01`),
+            endDate: new Date(`2022-02-07`),
+            quantity: 1234
+          })
+        ]
+      })
+
+      it('returns generated headers and rows', async () => {
+        const result = StubbedViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.summaryTableData.headers).to.equal('GENERATED_HEADERS')
+        expect(result.summaryTableData.rows).to.equal('GENERATED_ROWS')
       })
     })
   })
