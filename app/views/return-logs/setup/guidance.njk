@@ -1,20 +1,6 @@
-{% extends "govuk/template.njk" %}
+{% extends 'layout.njk' %}
 
-{% block pageTitle %} Guidance - GOV.UK{% endblock %}
-
-{% block head %}
-    <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
-{% endblock %}
-
-{% block header %}
-  {{ govukHeader({
-    homepageUrl: "#",
-    containerClasses: "govuk-width-container",
-    serviceName: "Manage your water abstraction or impoundment licence",
-    serviceUrl: "/",
-    useTudorCrown: true
-  }) }}
-{% endblock %}
+{% set pageTitle = 'Guidance' %}
 
 {% block content %}
   <div class="govuk-width-container govuk-body">
@@ -65,26 +51,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-
-{% block footer %}
-  {{ govukFooter({
-    meta: {
-      items: [
-        {
-          href: "/cookies",
-          text: "Cookies"
-        },
-        {
-          href: "/privacy-policy",
-          text: "Privacy"
-        },
-        {
-          href: "/accessibility",
-          text: "Accessibility"
-        }
-      ]
-    }
-  }) }}
 {% endblock %}
