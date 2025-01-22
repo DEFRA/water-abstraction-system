@@ -37,11 +37,7 @@ function _addDuplicateLicenceHolder(licenceRef) {
   return {
     all_licences: licenceRef,
     message_type: 'Letter - licence holder',
-    contact: {
-      name: `Duplicate contact`,
-      ..._address('4'),
-      role: 'Licence holder'
-    },
+    contact: _contact('4'),
     contact_hash_id: 167278556784
   }
 }
@@ -50,11 +46,7 @@ function _addDuplicateReturnsTo(licenceRef) {
   return {
     all_licences: licenceRef,
     message_type: 'Letter - Returns To',
-    contact: {
-      name: `Duplicate contact`,
-      ..._address('4'),
-      role: 'Returns to'
-    },
+    contact: _contact('4'),
     contact_hash_id: 167278556784
   }
 }
@@ -63,11 +55,7 @@ function _addLicenceHolder() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - licence holder',
-    contact: {
-      name: `Licence Guy`,
-      ..._address('1'),
-      role: 'Licence holder'
-    },
+    contact: _contact('1'),
     contact_hash_id: -1672785580
   }
 }
@@ -116,11 +104,7 @@ function _addReturnTo() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - Returns To',
-    contact: {
-      name: `Returner Guy`,
-      ..._address('2'),
-      role: 'Returns to'
-    },
+    contact: _contact('2'),
     contact_hash_id: 123223
   }
 }
@@ -129,30 +113,23 @@ function _addLicenceHolderWithMultipleLicences() {
   return {
     all_licences: `${generateLicenceRef()}, ${generateLicenceRef()}`,
     message_type: 'Letter - licence holder',
-    contact: {
-      name: `Multiple Licence Guy`,
-      ..._address('3'),
-      role: 'Licence holder'
-    },
+    contact: _contact('3'),
     contact_hash_id: -167278576
   }
 }
 
-function _address(line1) {
-  return {
-    addressLine1: `${line1}`,
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    postcode: 'WD25 7LR',
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
+/**
+ * The fetch query handles duplicates by grouping them by a contact hash.
+ *
+ * This hash in unique to the contacts address. For the ease of testing we are only incrementing the street number
+ * and not using various addresses as we are only concerned with the contact hash id to dedupe.
+ *
+ * @param line1 - the unique contract address
+ * @returns {string} - a unique address
+ * @private
+ */
+function _contact(line1) {
+  return `harry,j,potter,${line1},privet drive,little whinging,surrey,wd25 7lr`
 }
 
 module.exports = {

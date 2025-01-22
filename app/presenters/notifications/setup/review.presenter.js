@@ -5,6 +5,8 @@
  * @module ReviewPresenter
  */
 
+const { defaultPageSize } = require('../../../../config/database.config.js')
+
 /**
  * Formats data for the `/notifications/setup/review` page
  *
@@ -13,6 +15,7 @@
  */
 function go(recipients) {
   return {
+    defaultPageSize,
     pageTitle: 'Send returns invitations',
     recipients: _recipients(recipients),
     recipientsAmount: recipients.length
@@ -35,9 +38,7 @@ function _contact(recipient) {
     return [recipient.recipient]
   }
 
-  return Object.values(recipient.contact).filter((n) => {
-    return n
-  })
+  return recipient.contact.split(',')
 }
 
 /**

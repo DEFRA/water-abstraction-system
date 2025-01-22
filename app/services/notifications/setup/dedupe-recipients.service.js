@@ -28,11 +28,12 @@ function _removeDuplicateContactHash(acc, obj) {
       ? _duplicateLicenceHolderAndReturnsToContact(acc, obj)
       : _duplicatePrimaryUserAndReturnsToContact(acc, obj)
   }
+
   return acc
 }
 
 function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
-  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.contact.role === 'Licence holder')
+  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Letter - licence holder')
   return {
     ...recipient,
     message_type: 'Letter - both'

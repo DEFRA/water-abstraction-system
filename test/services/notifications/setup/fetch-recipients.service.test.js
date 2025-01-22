@@ -67,22 +67,7 @@ describe('Notifications Setup - Recipients service', () => {
 
       expect(testRecipient).to.equal({
         all_licences: recipients.licenceHolder.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder only',
-          postcode: 'WD25 7LR',
-          role: 'Licence holder',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
+        contact: 'harry,j,licence holder only,4,privet drive,little whinging,surrey,wd25 7lr',
         contact_hash_id: -1672785580,
         message_type: 'Letter - licence holder',
         recipient: null
@@ -100,22 +85,7 @@ describe('Notifications Setup - Recipients service', () => {
 
       expect(licenceHolder).to.equal({
         all_licences: recipients.licenceHolderAndReturnTo.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder and returns to',
-          postcode: 'WD25 7LR',
-          role: 'Licence holder',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
+        contact: 'harry,j,licence holder and returns to,4,privet drive,little whinging,surrey,wd25 7lr',
         contact_hash_id: -617218923,
         message_type: 'Letter - licence holder',
         recipient: null
@@ -123,22 +93,7 @@ describe('Notifications Setup - Recipients service', () => {
 
       expect(returnsTo).to.equal({
         all_licences: recipients.licenceHolderAndReturnTo.licenceRef,
-        contact: {
-          addressLine1: '4',
-          addressLine2: 'Privet Drive',
-          addressLine3: null,
-          addressLine4: null,
-          country: null,
-          county: 'Surrey',
-          forename: 'Harry',
-          initials: 'J',
-          name: 'Licence holder and returns to',
-          postcode: 'WD25 7LR',
-          role: 'Returns to',
-          salutation: null,
-          town: 'Little Whinging',
-          type: 'Person'
-        },
+        contact: 'harry,j,licence holder and returns to,4,privet drive,little whinging,surrey,wd25 7lr',
         contact_hash_id: -617218923,
         message_type: 'Letter - returns to',
         recipient: null

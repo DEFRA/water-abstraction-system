@@ -27,6 +27,7 @@ describe('Notifications Setup - Review presenter', () => {
       const result = ReviewPresenter.go(testInput)
 
       expect(result).to.equal({
+        defaultPageSize: 25,
         pageTitle: 'Send returns invitations',
         recipients: [
           {
@@ -42,50 +43,17 @@ describe('Notifications Setup - Review presenter', () => {
           {
             licences: [`${testRecipients.licenceHolder.all_licences}`],
             method: 'Letter - licence holder',
-            contact: [
-              'Licence Guy',
-              '1',
-              'Privet Drive',
-              'Surrey',
-              'Harry',
-              'J',
-              'WD25 7LR',
-              'Little Whinging',
-              'Person',
-              'Licence holder'
-            ]
+            contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
           },
           {
             licences: [`${testRecipients.returnsTo.all_licences}`],
             method: 'Letter - Returns To',
-            contact: [
-              'Returner Guy',
-              '2',
-              'Privet Drive',
-              'Surrey',
-              'Harry',
-              'J',
-              'WD25 7LR',
-              'Little Whinging',
-              'Person',
-              'Returns to'
-            ]
+            contact: ['harry', 'j', 'potter', '2', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
           },
           {
             licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
             method: 'Letter - licence holder',
-            contact: [
-              'Multiple Licence Guy',
-              '3',
-              'Privet Drive',
-              'Surrey',
-              'Harry',
-              'J',
-              'WD25 7LR',
-              'Little Whinging',
-              'Person',
-              'Licence holder'
-            ]
+            contact: ['harry', 'j', 'potter', '3', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
           }
         ],
         recipientsAmount: 5
@@ -111,50 +79,17 @@ describe('Notifications Setup - Review presenter', () => {
             {
               licences: [`${testRecipients.licenceHolder.all_licences}`],
               method: 'Letter - licence holder',
-              contact: [
-                'Licence Guy',
-                '1',
-                'Privet Drive',
-                'Surrey',
-                'Harry',
-                'J',
-                'WD25 7LR',
-                'Little Whinging',
-                'Person',
-                'Licence holder'
-              ]
+              contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
             },
             {
               licences: [`${testRecipients.returnsTo.all_licences}`],
               method: 'Letter - Returns To',
-              contact: [
-                'Returner Guy',
-                '2',
-                'Privet Drive',
-                'Surrey',
-                'Harry',
-                'J',
-                'WD25 7LR',
-                'Little Whinging',
-                'Person',
-                'Returns to'
-              ]
+              contact: ['harry', 'j', 'potter', '2', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
             },
             {
               licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
               method: 'Letter - licence holder',
-              contact: [
-                'Multiple Licence Guy',
-                '3',
-                'Privet Drive',
-                'Surrey',
-                'Harry',
-                'J',
-                'WD25 7LR',
-                'Little Whinging',
-                'Person',
-                'Licence holder'
-              ]
+              contact: ['harry', 'j', 'potter', '3', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
             }
           ])
         })
@@ -177,7 +112,7 @@ describe('Notifications Setup - Review presenter', () => {
           })
 
           describe('when the contact is an address', () => {
-            it('should strip "null" keys/values from the contact object', () => {
+            it('should convert the contact into an array', () => {
               const result = ReviewPresenter.go(testInput)
 
               const testRecipient = result.recipients.find((recipient) =>
@@ -187,18 +122,7 @@ describe('Notifications Setup - Review presenter', () => {
               expect(testRecipient).to.equal({
                 licences: [`${testRecipients.licenceHolder.all_licences}`],
                 method: 'Letter - licence holder',
-                contact: [
-                  'Licence Guy',
-                  '1',
-                  'Privet Drive',
-                  'Surrey',
-                  'Harry',
-                  'J',
-                  'WD25 7LR',
-                  'Little Whinging',
-                  'Person',
-                  'Licence holder'
-                ]
+                contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
               })
             })
           })
