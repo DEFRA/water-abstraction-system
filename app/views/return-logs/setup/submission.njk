@@ -3,9 +3,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
-{% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -32,92 +29,17 @@
   {% endif %}
 
   {# Main heading #}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-
-      {# Return status #}
-      <p data-test="return-status">{{ statusTag(status) }}</p>
-
-      {# Return meta-data #}
-      {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: 'Return reference',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="return-reference">'+ returnReference +'</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Site description',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="site-description">'+ siteDescription +'</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Purposes',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="purposes">'+ purposes +'</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Returns period',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="returns-period">'+ returnsPeriod +'</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Abstraction period',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="abstraction-period">'+ abstractionPeriod +'</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: tariffType,
-                classes: "meta-data__label"
-              }
-            }
-          ]
-        }) }}
-    </div>
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
   </div>
 
-  {# Select how you would like to edit the return #}
+  {# Select what you want to do with this return #}
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
       name: "journey",
       errorMessage: error,
-      fieldset: {
-        legend: {
-          text: "What do you want to do with this return?",
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
-        }
-      },
       items: [
         {
           value: "enter-return",
@@ -125,16 +47,10 @@
           checked: journey === "enter-return"
         },
         {
-          divider: "or"
-        } if beenReceived === true,
-        {
           value: "nil-return",
           text: "Enter a nil return",
           checked: journey === "nil-return"
         },
-        {
-          divider: "or"
-        } if beenReceived === false,
         {
           value: "record-receipt",
           text: "Record receipt",
