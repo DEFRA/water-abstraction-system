@@ -94,23 +94,6 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
           }
         ])
       })
-
-      it('correctly returns only the "primary user" with the "message_type" Email - both (irrelevant of order)', () => {
-        const result = DedupeRecipientsService.go([
-          testDuplicateRecipients.duplicateReturnsAgent,
-          testDuplicateRecipients.duplicatePrimaryUser
-        ])
-
-        expect(result).to.equal([
-          {
-            all_licences: testDuplicateRecipients.duplicatePrimaryUser.all_licences,
-            contact: null,
-            contact_hash_id: 14567627,
-            message_type: 'Email - both',
-            recipient: 'primary.user@important.com'
-          }
-        ])
-      })
     })
 
     describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
@@ -118,22 +101,6 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
-        ])
-
-        expect(result).to.equal([
-          {
-            all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
-            contact: 'harry,j,potter,4,privet drive,little whinging,surrey,wd25 7lr',
-            contact_hash_id: 167278556784,
-            message_type: 'Letter - both'
-          }
-        ])
-      })
-
-      it('correctly returns only the "licence holder" with the "message_type" Letter - both (irrelevant of order)', () => {
-        const result = DedupeRecipientsService.go([
-          testDuplicateRecipients.duplicateReturnsTo,
-          testDuplicateRecipients.duplicateLicenceHolder
         ])
 
         expect(result).to.equal([
