@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 // Thing under test
 const DedupeRecipientsService = require('../../../../app/services/notifications/setup/dedupe-recipients.service.js')
 
-describe('Notifications Setup - De Dupe recipients service', () => {
+describe('Notifications Setup - Dedupe Recipients service', () => {
   let testRecipients
   let testDuplicateRecipients
   let testInput
