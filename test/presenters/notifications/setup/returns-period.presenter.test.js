@@ -87,7 +87,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
           expect(nextReturnPeriod).to.equal({
             checked: false,
             value: 'allYear',
-            text: `Winter and all year 1 April 2024 to 31 March ${currentYear}`,
+            text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
             hint: { text: `Due date 28 April ${currentYear}` }
           })
         })

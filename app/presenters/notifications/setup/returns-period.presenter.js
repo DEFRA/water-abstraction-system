@@ -50,7 +50,7 @@ function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
 
 function _textPrefix(returnPeriod) {
   if (returnPeriod.name === 'allYear') {
-    return 'Winter and all year'
+    return 'Winter and all year annual'
   } else if (returnPeriod.name === 'summer') {
     return 'Summer annual'
   } else {
