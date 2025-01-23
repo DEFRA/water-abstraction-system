@@ -610,4 +610,83 @@ describe.only('View Return Log presenter', () => {
       })
     })
   })
+
+  describe('the "total" property', () => {
+    describe('when there is no submission', () => {
+      it('returns 0', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.total).to.equal(0)
+      })
+    })
+
+    describe('when there is a submission', () => {
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          testReturnLog.versions = [
+            await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
+          ]
+
+          testReturnLog.returnSubmissions = [
+            await ReturnSubmissionHelper.add({
+              returnLogId: testReturnLog.id,
+              version: 1,
+              nilReturn: true
+            })
+          ]
+
+          testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+              startDate: new Date(`2022-01-01`),
+              endDate: new Date(`2022-02-07`),
+              quantity: 1234
+            })
+          ]
+        })
+
+        it('returns 0', () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.total).to.equal(0)
+        })
+      })
+
+      describe('which is not a nil return', () => {
+        beforeEach(async () => {
+          testReturnLog.versions = [
+            await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
+          ]
+
+          testReturnLog.returnSubmissions = [
+            await ReturnSubmissionHelper.add({
+              returnLogId: testReturnLog.id,
+              version: 1
+            })
+          ]
+
+          testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+              startDate: new Date(`2022-01-01`),
+              endDate: new Date(`2022-02-07`),
+              quantity: 1234
+            }),
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+              startDate: new Date(`2022-02-08`),
+              endDate: new Date(`2022-03-09`),
+              quantity: 1234
+            })
+          ]
+        })
+
+        it('returns the formatted total quantity', () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.total).to.equal('2,468')
+        })
+      })
+    })
+  })
 })
