@@ -53,13 +53,28 @@ describe('Base presenter', () => {
   })
 
   describe('#formatAbstractionDate()', () => {
-    const day = 12
-    const month = 9
+    let day
+    let month
 
-    it('correctly formats the given date, for example, 12 September', async () => {
-      const result = BasePresenter.formatAbstractionDate(day, month)
+    describe('when the abstraction day and month are not set', () => {
+      it('returns null', async () => {
+        const result = BasePresenter.formatAbstractionDate(day, month)
 
-      expect(result).to.equal('12 September')
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the abstraction day and month are set', () => {
+      beforeEach(() => {
+        day = 12
+        month = 9
+      })
+
+      it('correctly formats the given date, for example, 12 September', async () => {
+        const result = BasePresenter.formatAbstractionDate(day, month)
+
+        expect(result).to.equal('12 September')
+      })
     })
   })
 
