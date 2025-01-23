@@ -27,7 +27,7 @@ async function go(sessionId) {
 
   const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const dedupeRecipients = DeDupeRecipientsService.go(recipients)
+  const dedupeRecipients = DedupeRecipientsService.go(recipients)
 
   const formattedData = ReviewPresenter.go(dedupeRecipients)
 

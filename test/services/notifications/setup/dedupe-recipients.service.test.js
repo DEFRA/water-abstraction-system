@@ -26,7 +26,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly dedupes the data and leaves none duplicates as they are', () => {
-      const result = DeDupeRecipientsService.go(testInput)
+      const result = DedupeRecipientsService.go(testInput)
 
       expect(result).to.equal([
         {
@@ -79,7 +79,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
 
     describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
       it('correctly returns only the "primary user" with the "message_type" Email - both', () => {
-        const result = DeDupeRecipientsService.go([
+        const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
           testDuplicateRecipients.duplicateReturnsAgent
         ])
@@ -96,7 +96,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
 
       it('correctly returns only the "primary user" with the "message_type" Email - both (irrelevant of order)', () => {
-        const result = DeDupeRecipientsService.go([
+        const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateReturnsAgent,
           testDuplicateRecipients.duplicatePrimaryUser
         ])
@@ -115,7 +115,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
 
     describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
       it('correctly returns only the "licence holder" with the "message_type" Letter - both', () => {
-        const result = DeDupeRecipientsService.go([
+        const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
         ])
@@ -131,7 +131,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
 
       it('correctly returns only the "licence holder" with the "message_type" Letter - both (irrelevant of order)', () => {
-        const result = DeDupeRecipientsService.go([
+        const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateReturnsTo,
           testDuplicateRecipients.duplicateLicenceHolder
         ])

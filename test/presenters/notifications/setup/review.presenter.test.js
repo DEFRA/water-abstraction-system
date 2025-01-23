@@ -43,17 +43,17 @@ describe('Notifications Setup - Review presenter', () => {
           {
             licences: [`${testRecipients.licenceHolder.all_licences}`],
             method: 'Letter - licence holder',
-            contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+            contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
           },
           {
             licences: [`${testRecipients.returnsTo.all_licences}`],
             method: 'Letter - Returns To',
-            contact: ['harry', 'j', 'potter', '2', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+            contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
           },
           {
             licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
             method: 'Letter - licence holder',
-            contact: ['harry', 'j', 'potter', '3', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+            contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
           }
         ],
         recipientsAmount: 5
@@ -79,17 +79,17 @@ describe('Notifications Setup - Review presenter', () => {
             {
               licences: [`${testRecipients.licenceHolder.all_licences}`],
               method: 'Letter - licence holder',
-              contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+              contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
             },
             {
               licences: [`${testRecipients.returnsTo.all_licences}`],
               method: 'Letter - Returns To',
-              contact: ['harry', 'j', 'potter', '2', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+              contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
             },
             {
               licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
               method: 'Letter - licence holder',
-              contact: ['harry', 'j', 'potter', '3', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+              contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
             }
           ])
         })
@@ -122,7 +122,7 @@ describe('Notifications Setup - Review presenter', () => {
               expect(testRecipient).to.equal({
                 licences: [`${testRecipients.licenceHolder.all_licences}`],
                 method: 'Letter - licence holder',
-                contact: ['harry', 'j', 'potter', '1', 'privet drive', 'little whinging', 'surrey', 'wd25 7lr']
+                contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
               })
             })
           })

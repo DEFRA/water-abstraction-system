@@ -6,6 +6,7 @@
  */
 
 const { defaultPageSize } = require('../../../../config/database.config.js')
+const { titleCase } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/review` page
@@ -25,7 +26,7 @@ function go(recipients) {
 /**
  * Contact can be an email or an address (letter)
  *
- * If it is an address then we convert the contact json object to an array removing any null fields
+ * If it is an address then we convert the contact CSV string to an array
  *
  * If it is an email we return the email in array for the UI to have consistent formatting
  *
@@ -38,7 +39,7 @@ function _contact(recipient) {
     return [recipient.recipient]
   }
 
-  return recipient.contact.split(',')
+  return recipient.contact.split(',').map(titleCase)
 }
 
 /**
