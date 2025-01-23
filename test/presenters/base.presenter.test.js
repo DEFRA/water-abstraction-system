@@ -79,15 +79,32 @@ describe('Base presenter', () => {
   })
 
   describe('#formatAbstractionPeriod()', () => {
-    const startDay = 1
-    const startMonth = 4
-    const endDay = 12
-    const endMonth = 9
+    let startDay
+    let startMonth
+    let endDay
+    let endMonth
 
-    it('correctly formats the given period, for example, 1 April to 12 September', async () => {
-      const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+    describe('when the abstraction period is not set', () => {
+      it('returns the "Not given" message', async () => {
+        const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 
-      expect(result).to.equal('1 April to 12 September')
+        expect(result).to.equal('Not given')
+      })
+    })
+
+    describe('when the abstraction period is set', () => {
+      beforeEach(() => {
+        startDay = 1
+        startMonth = 4
+        endDay = 12
+        endMonth = 9
+      })
+
+      it('correctly formats the given period, for example, 1 April to 12 September', async () => {
+        const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+
+        expect(result).to.equal('1 April to 12 September')
+      })
     })
   })
 
