@@ -146,6 +146,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/meter-details',
+    options: {
+      handler: ReturnLogsSetupController.meterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-details',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
