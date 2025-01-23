@@ -85,10 +85,10 @@ describe('Base presenter', () => {
     let endMonth
 
     describe('when the abstraction period is not set', () => {
-      it('returns the "Not given" message', async () => {
+      it('returns null', async () => {
         const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 
-        expect(result).to.equal('Not given')
+        expect(result).to.be.null()
       })
     })
 
