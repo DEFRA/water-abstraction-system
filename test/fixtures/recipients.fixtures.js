@@ -18,15 +18,44 @@ function recipients() {
   }
 }
 
+/**
+ * Create duplicate by contact hash recipients
+ *
+ * @returns {object} - Returns duplicate contact hash recipients
+ */
+function duplicateRecipients() {
+  const duplicateLicenceRef = generateLicenceRef()
+  return {
+    duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
+    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef),
+    duplicatePrimaryUser: _addDuplicatePrimaryUser(duplicateLicenceRef),
+    duplicateReturnsAgent: _addDuplicateReturnsAgent(duplicateLicenceRef)
+  }
+}
+
+function _addDuplicateLicenceHolder(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    message_type: 'Letter - licence holder',
+    contact: _contact('4'),
+    contact_hash_id: 167278556784
+  }
+}
+
+function _addDuplicateReturnsTo(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    message_type: 'Letter - Returns To',
+    contact: _contact('4'),
+    contact_hash_id: 167278556784
+  }
+}
+
 function _addLicenceHolder() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - licence holder',
-    contact: {
-      name: `Licence Guy`,
-      ..._address(),
-      role: 'Licence holder'
-    },
+    contact: _contact('1'),
     contact_hash_id: -1672785580
   }
 }
@@ -36,6 +65,16 @@ function _addPrimaryUser() {
     all_licences: generateLicenceRef(),
     contact: null,
     contact_hash_id: 1178136542,
+    message_type: 'Email - primary user',
+    recipient: 'primary.user@important.com'
+  }
+}
+
+function _addDuplicatePrimaryUser(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    contact: null,
+    contact_hash_id: 14567627,
     message_type: 'Email - primary user',
     recipient: 'primary.user@important.com'
   }
@@ -51,15 +90,21 @@ function _addReturnsAgent() {
   }
 }
 
+function _addDuplicateReturnsAgent(licenceRef) {
+  return {
+    all_licences: licenceRef,
+    contact: null,
+    contact_hash_id: 14567627,
+    message_type: 'Email - returns agent',
+    recipient: 'returns.agent@important.com'
+  }
+}
+
 function _addReturnTo() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - Returns To',
-    contact: {
-      name: `Returner Guy`,
-      ..._address(),
-      role: 'Returns to'
-    },
+    contact: _contact('2'),
     contact_hash_id: 123223
   }
 }
@@ -68,32 +113,26 @@ function _addLicenceHolderWithMultipleLicences() {
   return {
     all_licences: `${generateLicenceRef()}, ${generateLicenceRef()}`,
     message_type: 'Letter - licence holder',
-    contact: {
-      name: `Multiple Licence Guy`,
-      ..._address(),
-      role: 'Licence holder'
-    },
+    contact: _contact('3'),
     contact_hash_id: -167278576
   }
 }
 
-function _address(index) {
-  return {
-    addressLine1: `${index}`,
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    postcode: 'WD25 7LR',
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
+/**
+ * The fetch query handles duplicates by grouping them by a contact hash.
+ *
+ * This hash is unique to the contact address. For ease of testing, we are only incrementing the street number
+ * and not using various addresses as we are only concerned with the contact hash ID to dedupe.
+ *
+ * @param line1 - the unique contract address
+ * @returns {string} - a unique address
+ * @private
+ */
+function _contact(line1) {
+  return `harry,j,potter,${line1},privet drive,little whinging,surrey,wd25 7lr`
 }
 
 module.exports = {
-  recipients
+  recipients,
+  duplicateRecipients
 }
