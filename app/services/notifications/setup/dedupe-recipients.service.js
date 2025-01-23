@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * De Duplicates recipients for sending notifications
- * @module DeDupeRecipientsService
+ * Dedupes the recipients fetched when sending notifications
+ * @module DedupeRecipientsService
  */
 
 /**
