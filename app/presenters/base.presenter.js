@@ -59,16 +59,23 @@ function formatAbstractionDate(abstractionDay, abstractionMonth) {
 /**
  * Formats an abstraction period into its string variant, for example, '1 April to 31 October'
  *
+ * If the provided abstraction data is null or undefined, it returns 'Not given'.
+ *
  * @param {number} startDay
  * @param {number} startMonth
  * @param {number} endDay
  * @param {number} endMonth
  *
- * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string
+ * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string, unless the abstraction period
+ * cannot be determined, in which case it returns 'Not given'
  */
 function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
   const startDate = formatAbstractionDate(startDay, startMonth)
   const endDate = formatAbstractionDate(endDay, endMonth)
+
+  if (!startDate || !endDate) {
+    return 'Not given'
+  }
 
   return `${startDate} to ${endDate}`
 }
