@@ -6,16 +6,25 @@
  */
 
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
+const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
+const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
+
+async function meterDetails(request, h) {
+  const { sessionId } = request.params
+  const pageData = await MeterDetailsService.go(sessionId)
+
+  return h.view('return-logs/setup/meter-details.njk', pageData)
+}
 
 async function meterProvided(request, h) {
   const { sessionId } = request.params
@@ -50,6 +59,21 @@ async function submission(request, h) {
   const pageData = await SubmissionService.go(sessionId)
 
   return h.view('return-logs/setup/submission.njk', pageData)
+}
+
+async function submitMeterDetails(request, h) {
+  const {
+    params: { sessionId },
+    payload
+  } = request
+
+  const pageData = await SubmitMeterDetailsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/meter-details.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
 }
 
 async function submitMeterProvided(request, h) {
@@ -136,11 +160,13 @@ async function units(request, h) {
 }
 
 module.exports = {
+  meterDetails,
   meterProvided,
   received,
   reported,
   setup,
   submission,
+  submitMeterDetails,
   submitMeterProvided,
   submitReceived,
   submitReported,
