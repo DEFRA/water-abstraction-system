@@ -47,7 +47,7 @@
 
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-l">{{ pageTitle }} (page {{ page }} of {{ pagination.numberOfPages }})</h1>
+    <h1 class="govuk-heading-l">{{ pageTitle }} {% if pagination.numberOfPages > 1 %} (page {{ page }} of {{ pagination.numberOfPages }}) {% endif %}</h1>
 
     <p> Returns invitations are ready to send.</p>
 

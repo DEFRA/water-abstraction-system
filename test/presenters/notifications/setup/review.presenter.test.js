@@ -159,5 +159,37 @@ describe('Notifications Setup - Review presenter', () => {
         })
       })
     })
+
+    describe('and there is pagination', () => {
+      describe('and there are <= 25 recipients ', () => {
+        it('should return the recipients', () => {
+          const result = ReviewPresenter.go(testInput)
+
+          expect(result.recipients.length).to.equal(testInput.length)
+        })
+      })
+
+      describe('and there are >= 25 recipients', () => {
+        beforeEach(() => {
+          testInput = [...testInput, ...testInput, ...testInput, ...testInput, ...testInput, ...testInput]
+        })
+
+        describe('and the page is 1', () => {
+          it('should only return 25 recipients', () => {
+            const result = ReviewPresenter.go(testInput)
+
+            expect(result.recipients.length).to.equal(25)
+          })
+
+          describe('and there is more than one page', () => {
+            it('should return the remaining recipients for the last page', () => {
+              const result = ReviewPresenter.go(testInput, '2')
+
+              expect(result.recipients.length).to.equal(5)
+            })
+          })
+        })
+      })
+    })
   })
 })
