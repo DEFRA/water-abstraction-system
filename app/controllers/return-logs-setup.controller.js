@@ -11,13 +11,13 @@ const MeterProvidedService = require('../services/return-logs/setup/meter-provid
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
-const StartService = require('../services/return-logs/setup/start.service.js')
+const SubmissionService = require('../services/return-logs/setup/submission.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
-const SubmitStartService = require('../services/return-logs/setup/submit-start.service.js')
+const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
 
@@ -67,11 +67,11 @@ async function singleVolume(request, h) {
   return h.view('return-logs/setup/single-volume.njk', pageData)
 }
 
-async function start(request, h) {
+async function submission(request, h) {
   const { sessionId } = request.params
-  const pageData = await StartService.go(sessionId)
+  const pageData = await SubmissionService.go(sessionId)
 
-  return h.view('return-logs/setup/start.njk', pageData)
+  return h.view('return-logs/setup/submission.njk', pageData)
 }
 
 async function submitMeterDetails(request, h) {
@@ -157,13 +157,13 @@ async function submitSingleVolume(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/period-used`)
 }
 
-async function submitStart(request, h) {
+async function submitSubmission(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitStartService.go(sessionId, request.payload)
+  const pageData = await SubmitSubmissionService.go(sessionId, request.payload)
 
   if (pageData.error) {
-    return h.view('return-logs/setup/start.njk', pageData)
+    return h.view('return-logs/setup/submission.njk', pageData)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
@@ -199,13 +199,13 @@ module.exports = {
   reported,
   setup,
   singleVolume,
-  start,
+  submission,
   submitMeterDetails,
   submitMeterProvided,
   submitReceived,
   submitReported,
   submitSingleVolume,
-  submitStart,
+  submitSubmission,
   submitUnits,
   units
 }
