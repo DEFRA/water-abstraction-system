@@ -179,7 +179,9 @@ function _isDue(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  const dueDate = new Date(`${year}-${periodDueMonth}-${periodDueDay}`)
+  const dueDate = new Date(
+    `${year}-${String(periodDueMonth).padStart(2, '0')}-${String(periodDueDay).padStart(2, '0')}T23:59:59.999Z`
+  )
 
   return dueDate.getTime() < determinationDate.getTime()
 }

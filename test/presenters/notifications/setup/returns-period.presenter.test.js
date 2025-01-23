@@ -59,6 +59,40 @@ describe('Notifications Setup - Returns Period presenter', () => {
         })
       })
     })
+
+    describe('when the current date is the same date but after 00:00 (hours/ minutes later in the day - node defaults to 00:00:00 not 23:59:00)', () => {
+      beforeEach(() => {
+        testDate = new Date(`${currentYear}-04-28T09:59:59.999Z`)
+        clock = Sinon.useFakeTimers(testDate)
+      })
+
+      it('returns the current return period as "quarterFour"', () => {
+        const {
+          returnsPeriod: [currentReturnPeriod]
+        } = ReturnsPeriodPresenter.go(session)
+
+        expect(currentReturnPeriod).to.equal({
+          checked: false,
+          value: 'quarterFour',
+          text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
+          hint: { text: `Due date 28 April ${currentYear}` }
+        })
+      })
+
+      it('returns the next return period as "allYear"', () => {
+        const {
+          returnsPeriod: [, nextReturnPeriod]
+        } = ReturnsPeriodPresenter.go(session)
+
+        expect(nextReturnPeriod).to.equal({
+          checked: false,
+          value: 'allYear',
+          text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
+          hint: { text: `Due date 28 April ${currentYear}` }
+        })
+      })
+    })
+
     describe('When the current period is due for "quarterFour"', () => {
       describe('and the current date is between 29 January - 28 April', () => {
         beforeEach(() => {
