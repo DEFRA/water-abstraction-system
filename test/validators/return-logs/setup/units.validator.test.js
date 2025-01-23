@@ -38,9 +38,9 @@ describe('Return Logs Setup - Units validator', () => {
       })
     })
 
-    describe('because the user selected the "mega-litres" option', () => {
+    describe('because the user selected the "megalitres" option', () => {
       beforeEach(() => {
-        payload = { units: 'mega-litres' }
+        payload = { units: 'megalitres' }
       })
 
       it('confirms the payload is valid', () => {
