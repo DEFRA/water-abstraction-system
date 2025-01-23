@@ -9,6 +9,7 @@ const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+const DedupeRecipientsService = require('./dedupe-recipients.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
@@ -26,7 +27,9 @@ async function go(sessionId) {
 
   const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const formattedData = ReviewPresenter.go(recipients)
+  const dedupeRecipients = DedupeRecipientsService.go(recipients)
+
+  const formattedData = ReviewPresenter.go(dedupeRecipients)
 
   return {
     activeNavBar: 'manage',

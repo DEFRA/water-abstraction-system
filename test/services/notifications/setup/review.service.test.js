@@ -42,6 +42,7 @@ describe('Notifications Setup - Review service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'manage',
+      defaultPageSize: 25,
       pageTitle: 'Send returns invitations',
       recipients: [
         {
