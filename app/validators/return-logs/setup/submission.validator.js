@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
- * @module StartValidator
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/submission` page
+ * @module SubmissionValidator
  */
 
 const Joi = require('joi')
@@ -10,7 +10,7 @@ const Joi = require('joi')
 const VALID_VALUES = ['enter-return', 'nil-return', 'record-receipt']
 
 /**
- * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/submission` page
  *
  * @param {object} payload - The payload from the request to be validated
  *

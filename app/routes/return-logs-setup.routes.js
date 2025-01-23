@@ -65,9 +65,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/{sessionId}/start',
+    path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.start,
+      handler: ReturnLogsSetupController.submission,
       auth: {
         access: {
           scope: ['billing']
@@ -77,9 +77,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-logs/setup/{sessionId}/start',
+    path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.submitStart,
+      handler: ReturnLogsSetupController.submitSubmission,
       auth: {
         access: {
           scope: ['billing']
