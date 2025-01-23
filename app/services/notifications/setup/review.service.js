@@ -9,7 +9,7 @@ const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const DeDupeRecipientsService = require('./dedupe-recipients.service.js')
+const DedupeRecipientsService = require('./dedupe-recipients.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
