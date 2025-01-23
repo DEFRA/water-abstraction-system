@@ -21,7 +21,7 @@ const ReturnVersionHelper = require('../../support/helpers/return-version.helper
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
-describe.only('View Return Log presenter', () => {
+describe('View Return Log presenter', () => {
   let auth
   let testReturnLog
 
@@ -111,22 +111,16 @@ describe.only('View Return Log presenter', () => {
 
     it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', async () => {
       testReturnLog.versions = [
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
       ]
 
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
-      ]
+      testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })]
 
       for (const returnSubmission of testReturnLog.returnSubmissions) {
         returnSubmission.returnSubmissionLines = [
           await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: returnSubmission.id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
+            returnSubmissionId: returnSubmission.id
           })
         ]
       }
@@ -142,36 +136,27 @@ describe.only('View Return Log presenter', () => {
 
   describe('the "displayReadings" property', () => {
     beforeEach(async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
-      ]
-
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
+      await setupSubmission(testReturnLog)
     })
 
-    it('returns false when the return submission method is abstractionVolumes', async () => {
-      Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+    describe('when the return submission method is abstractionVolumes', () => {
+      it('returns false', async () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.displayReadings).to.equal(false)
+        expect(result.displayReadings).to.equal(false)
+      })
     })
 
-    it("returns true when the return submission method isn't abstractionVolumes", async () => {
-      Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+    describe("when the return submission method isn't abstractionVolumes", () => {
+      it('returns true', async () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.displayReadings).to.equal(true)
+        expect(result.displayReadings).to.equal(true)
+      })
     })
   })
 
@@ -185,36 +170,21 @@ describe.only('View Return Log presenter', () => {
     })
 
     describe('when there is a return submission', () => {
-      beforeEach(async () => {
-        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog)
+        })
 
-        testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
-        ]
+        it('returns false', () => {
+          testReturnLog.returnSubmissions[0].nilReturn = true
 
-        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
-        ]
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        describe('which is a nil return', () => {
-          it('returns false', () => {
-            testReturnLog.returnSubmissions[0].nilReturn = true
-
-            const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-            expect(result.displayTable).to.equal(false)
-          })
+          expect(result.displayTable).to.equal(false)
         })
 
         describe('which is not a nil return', () => {
           it('returns true', () => {
-            testReturnLog.returnSubmissions[0].nilReturn = false
-
             const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
             expect(result.displayTable).to.equal(true)
@@ -225,101 +195,88 @@ describe.only('View Return Log presenter', () => {
   })
 
   describe('the "displayTable" property', () => {
-    it('returns true when there are is a return submissions', async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+    describe('when there is a return submission', () => {
+      beforeEach(async () => {
+        await setupSubmission(testReturnLog)
+      })
 
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
-      ]
+      it('returns true ', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
-
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-      expect(result.displayTable).to.equal(true)
+        expect(result.displayTable).to.equal(true)
+      })
     })
 
-    it('returns false when there is no return submissions', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when there is no return submission', () => {
+      it('returns false when there is no return submissions', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.displayTable).to.equal(false)
+        expect(result.displayTable).to.equal(false)
+      })
     })
   })
 
   describe('the "displayUnits" property', () => {
     beforeEach(async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
-      ]
-
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
+      await setupSubmission(testReturnLog)
     })
 
-    it('returns true when the unit is not cubic metres', () => {
-      Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
+    describe('when the unit is not cubic metres', () => {
+      it('returns true', () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.displayUnits).to.equal(true)
+        expect(result.displayUnits).to.equal(true)
+      })
     })
 
-    it('returns false when the unit is cubic metres', () => {
-      Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
+    describe('when the unit is not cubic metres', () => {
+      it('returns false', () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.displayUnits).to.equal(false)
+        expect(result.displayUnits).to.equal(false)
+      })
     })
   })
 
   describe('the "latest" property', () => {
-    it('returns true when this is the latest return log', async () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when this is the latest return log', () => {
+      it('returns true', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.latest).to.equal(true)
+        expect(result.latest).to.equal(true)
+      })
     })
 
-    it("returns false when this isn't the latest return log", async () => {
-      testReturnLog.versions = [
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 }),
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
-      ]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 }),
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
-      ]
-
-      for (const returnSubmission of testReturnLog.returnSubmissions) {
-        returnSubmission.returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: returnSubmission.id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
+    describe('when this is not the latest return log', () => {
+      beforeEach(async () => {
+        testReturnLog.versions = [
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
         ]
-      }
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id }),
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+        ]
 
-      expect(result.latest).to.equal(false)
+        for (const returnSubmission of testReturnLog.returnSubmissions) {
+          returnSubmission.returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: returnSubmission.id
+            })
+          ]
+        }
+      })
+
+      it('returns false', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.latest).to.equal(false)
+      })
     })
   })
 
@@ -332,31 +289,17 @@ describe.only('View Return Log presenter', () => {
   })
 
   describe('the "meterDetails" property', () => {
-    it('returns the formatted meter details', async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({
-          returnLogId: testReturnLog.id,
-          version: 1
-        })
-      ]
-
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
 
       Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
         manufacturer: 'MANUFACTURER',
         multipler: 10,
         serialNumber: 'SERIAL_NUMBER'
       })
+    })
 
+    it('returns the formatted meter details', async () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
       expect(result.meterDetails).to.equal({
@@ -368,27 +311,13 @@ describe.only('View Return Log presenter', () => {
   })
 
   describe('the "method" property', () => {
-    it('returns the submission method', async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({
-          returnLogId: testReturnLog.id,
-          version: 1
-        })
-      ]
-
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
 
       Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('METHOD')
+    })
 
+    it('returns the submission method', async () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
       expect(result.method).to.equal('METHOD')
@@ -397,29 +326,28 @@ describe.only('View Return Log presenter', () => {
 
   describe('the "nilReturn" property', () => {
     describe('when there is a submission', () => {
-      it("returns the submission's nilReturn property", async () => {
-        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog, true)
+        })
 
-        testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({
-            returnLogId: testReturnLog.id,
-            version: 1,
-            nilReturn: true
-          })
-        ]
+        it('returns true', async () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
-        ]
+          expect(result.nilReturn).to.equal(true)
+        })
+      })
 
-        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+      describe('which is not a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog)
+        })
 
-        expect(result.nilReturn).to.equal(true)
+        it('returns false', async () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.nilReturn).to.equal(false)
+        })
       })
     })
 
@@ -474,24 +402,8 @@ describe.only('View Return Log presenter', () => {
 
   describe('the "startReading" property', () => {
     describe('when there is a submission', () => {
-      it('returns the start reading when there is a submission', async () => {
-        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-        testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({
-            returnLogId: testReturnLog.id,
-            version: 1
-          })
-        ]
-
-        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
-        ]
+      beforeEach(async () => {
+        await setupSubmission(testReturnLog)
 
         Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
           manufacturer: 'MANUFACTURER',
@@ -499,7 +411,9 @@ describe.only('View Return Log presenter', () => {
           serialNumber: 'SERIAL_NUMBER',
           startReading: 1234
         })
+      })
 
+      it('returns the start reading', async () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.startReading).to.equal(1234)
@@ -537,24 +451,7 @@ describe.only('View Return Log presenter', () => {
           }
         })
 
-        testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-        testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({
-            returnLogId: testReturnLog.id,
-            version: 1,
-            nilReturn: true
-          })
-        ]
-
-        testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
-            returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-            startDate: new Date(`2022-01-01`),
-            endDate: new Date(`2022-02-07`),
-            quantity: 1234
-          })
-        ]
+        await setupSubmission(testReturnLog)
       })
 
       it('returns generated headers and rows', async () => {
@@ -568,20 +465,7 @@ describe.only('View Return Log presenter', () => {
 
   describe('the "tableTitle" property', () => {
     beforeEach(async () => {
-      testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })]
-
-      testReturnLog.returnSubmissions = [
-        await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1 })
-      ]
-
-      testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-        await ReturnSubmissionLineHelper.add({
-          returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-          startDate: new Date(`2022-01-01`),
-          endDate: new Date(`2022-02-07`),
-          quantity: 1234
-        })
-      ]
+      await setupSubmission(testReturnLog)
     })
 
     it('returns the frequency in the title', () => {
@@ -623,26 +507,7 @@ describe.only('View Return Log presenter', () => {
     describe('when there is a submission', () => {
       describe('which is a nil return', () => {
         beforeEach(async () => {
-          testReturnLog.versions = [
-            await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
-          ]
-
-          testReturnLog.returnSubmissions = [
-            await ReturnSubmissionHelper.add({
-              returnLogId: testReturnLog.id,
-              version: 1,
-              nilReturn: true
-            })
-          ]
-
-          testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-            await ReturnSubmissionLineHelper.add({
-              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-              startDate: new Date(`2022-01-01`),
-              endDate: new Date(`2022-02-07`),
-              quantity: 1234
-            })
-          ]
+          await setupSubmission(testReturnLog, true)
         })
 
         it('returns 0', () => {
@@ -654,29 +519,22 @@ describe.only('View Return Log presenter', () => {
 
       describe('which is not a nil return', () => {
         beforeEach(async () => {
-          testReturnLog.versions = [
-            await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
-          ]
+          testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
 
           testReturnLog.returnSubmissions = [
             await ReturnSubmissionHelper.add({
-              returnLogId: testReturnLog.id,
-              version: 1
+              returnLogId: testReturnLog.id
             })
           ]
 
           testReturnLog.returnSubmissions[0].returnSubmissionLines = [
             await ReturnSubmissionLineHelper.add({
-              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-              startDate: new Date(`2022-01-01`),
-              endDate: new Date(`2022-02-07`),
-              quantity: 1234
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id
             }),
             await ReturnSubmissionLineHelper.add({
               returnSubmissionId: testReturnLog.returnSubmissions[0].id,
-              startDate: new Date(`2022-02-08`),
-              endDate: new Date(`2022-03-09`),
-              quantity: 1234
+              startDate: new Date(`2022-01-02`),
+              endDate: new Date(`2022-02-08`)
             })
           ]
         })
@@ -684,9 +542,19 @@ describe.only('View Return Log presenter', () => {
         it('returns the formatted total quantity', () => {
           const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-          expect(result.total).to.equal('2,468')
+          expect(result.total).to.equal('8,760')
         })
       })
     })
   })
 })
+
+async function setupSubmission(testReturnLog, nilReturn = false) {
+  testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
+
+  testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, nilReturn })]
+
+  testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+    await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnLog.returnSubmissions[0].id })
+  ]
+}
