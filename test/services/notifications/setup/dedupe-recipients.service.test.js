@@ -11,7 +11,7 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const DeDupeRecipientsService = require('../../../../app/services/notifications/setup/dedupe-recipients.service.js')
+const DedupeRecipientsService = require('../../../../app/services/notifications/setup/dedupe-recipients.service.js')
 
 describe('Notifications Setup - De Dupe recipients service', () => {
   let testRecipients
