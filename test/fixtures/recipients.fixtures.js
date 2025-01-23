@@ -121,8 +121,8 @@ function _addLicenceHolderWithMultipleLicences() {
 /**
  * The fetch query handles duplicates by grouping them by a contact hash.
  *
- * This hash in unique to the contacts address. For the ease of testing we are only incrementing the street number
- * and not using various addresses as we are only concerned with the contact hash id to dedupe.
+ * This hash is unique to the contact address. For ease of testing, we are only incrementing the street number
+ * and not using various addresses as we are only concerned with the contact hash ID to dedupe.
  *
  * @param line1 - the unique contract address
  * @returns {string} - a unique address
