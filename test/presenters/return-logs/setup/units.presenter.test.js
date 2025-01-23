@@ -59,7 +59,7 @@ describe('Return Logs Setup - Units presenter', () => {
       })
     })
 
-    describe('when the user has previously selected "Mega litres" as the reported type', () => {
+    describe('when the user has previously selected "Megalitres" as the reported type', () => {
       beforeEach(() => {
         session.units = 'megalitres'
       })
