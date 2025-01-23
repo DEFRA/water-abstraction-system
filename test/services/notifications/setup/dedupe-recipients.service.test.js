@@ -25,7 +25,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
   })
 
   describe('when provided with "recipients"', () => {
-    it('correctly de dupes the data and leaves none duplicates as there are', () => {
+    it('correctly dedupes the data and leaves none duplicates as they are', () => {
       const result = DeDupeRecipientsService.go(testInput)
 
       expect(result).to.equal([
