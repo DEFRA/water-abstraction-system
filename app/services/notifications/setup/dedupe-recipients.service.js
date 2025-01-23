@@ -23,7 +23,7 @@
  * to be on the safe side, as it is the licence holder we are obligated to notify when sending comms.
  *
  * @param {object[]} recipients - The array of recipient objects to be deduplicated.
- * 
+ *
  * @returns {object[]} - A new array containing the deduplicated recipient objects, with the preferred roles chosen in
  * case of duplicates.
  */
