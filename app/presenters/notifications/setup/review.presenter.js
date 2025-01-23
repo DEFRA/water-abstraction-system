@@ -11,14 +11,16 @@ const { titleCase } = require('../../base.presenter.js')
 /**
  * Formats data for the `/notifications/setup/review` page
  *
- * @param recipients
+ * @param {object[]} recipients
+ * @param {number|string} page - The current page for the pagination service
+ *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients) {
+function go(recipients, page = 1) {
   return {
     defaultPageSize,
     pageTitle: 'Send returns invitations',
-    recipients: _recipients(recipients),
+    recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length
   }
 }
@@ -52,8 +54,26 @@ function _licences(licences) {
   return licences.split(',')
 }
 
-function _recipients(recipients) {
-  return recipients.map((recipient) => {
+/**
+ * Due to the complexity of the query to get the recipients data
+ *
+ * We need to handle the pagination in the presenter. This is all that is needed and work with the
+ * existing pagination patterns
+ *
+ * @param recipients
+ * @param page
+ * @returns {object} - recipients limited to the pagination amount
+ * @private
+ */
+function _pagination(recipients, page) {
+  const pageNumber = Number(page) * defaultPageSize
+  return recipients.slice(pageNumber - defaultPageSize, pageNumber)
+}
+
+function _recipients(recipients, page) {
+  const paginatedRecipients = _pagination(recipients, page)
+
+  return paginatedRecipients.map((recipient) => {
     return {
       contact: _contact(recipient),
       licences: _licences(recipient.all_licences),

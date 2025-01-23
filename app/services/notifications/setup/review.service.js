@@ -5,20 +5,22 @@
  * @module ReviewService
  */
 
+const DedupeRecipientsService = require('./dedupe-recipients.service.js')
+const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const DedupeRecipientsService = require('./dedupe-recipients.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {object} The view data for the review page
  */
-async function go(sessionId) {
+async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { returnsPeriod } = session
@@ -29,11 +31,19 @@ async function go(sessionId) {
 
   const dedupeRecipients = DedupeRecipientsService.go(recipients)
 
-  const formattedData = ReviewPresenter.go(dedupeRecipients)
+  const formattedData = ReviewPresenter.go(dedupeRecipients, page)
+
+  const pagination = PaginatorPresenter.go(
+    formattedData.recipientsAmount,
+    Number(page),
+    `/system/notifications/setup/${sessionId}/review`
+  )
 
   return {
     activeNavBar: 'manage',
-    ...formattedData
+    ...formattedData,
+    pagination,
+    page
   }
 }
 

@@ -44,6 +44,10 @@ describe('Notifications Setup - Review service', () => {
       activeNavBar: 'manage',
       defaultPageSize: 25,
       pageTitle: 'Send returns invitations',
+      page: 1,
+      pagination: {
+        numberOfPages: 1
+      },
       recipients: [
         {
           contact: ['primary.user@important.com'],
