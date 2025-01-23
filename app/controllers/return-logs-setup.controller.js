@@ -20,7 +20,7 @@ const UnitsService = require('../services/return-logs/setup/units.service.js')
 async function check(request, h) {
   const { sessionId } = request.params
   // const pageData = await CheckService.go(sessionId)
-  const pageData = { pageTitle: 'Check details and enter new volumes or readings', sessionId }
+  const pageData = { pageTitle: 'Check details and enter new volumes or readings', returnReference: '12345', sessionId }
 
   return h.view('return-logs/setup/check.njk', pageData)
 }
