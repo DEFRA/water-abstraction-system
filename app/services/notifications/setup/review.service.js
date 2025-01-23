@@ -27,9 +27,9 @@ async function go(sessionId) {
 
   const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const deDupeRecipientsS = DeDupeRecipientsService.go(recipients)
+  const dedupeRecipients = DeDupeRecipientsService.go(recipients)
 
-  const formattedData = ReviewPresenter.go(deDupeRecipientsS)
+  const formattedData = ReviewPresenter.go(dedupeRecipients)
 
   return {
     activeNavBar: 'manage',
