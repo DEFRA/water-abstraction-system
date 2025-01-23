@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Handles the user submission for the `/return-logs/setup/{sessionId}/start` page
- * @module SubmitStartService
+ * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
+ * @module SubmitSubmissionService
  */
 
 const SessionModel = require('../../../models/session.model.js')
-const StartPresenter = require('../../../presenters/return-logs/setup/start.presenter.js')
-const StartValidator = require('../../../validators/return-logs/setup/start.validator.js')
+const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
+const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
 
 /**
- * Handles the user submission for the `/return-logs/setup/{sessionId}/start` page
+ * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = StartPresenter.go(session)
+  const formattedData = SubmissionPresenter.go(session)
 
   return {
     activeNavBar: 'search',
@@ -44,7 +44,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = StartValidator.go(payload)
+  const validation = SubmissionValidator.go(payload)
 
   if (!validation.error) {
     return null

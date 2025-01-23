@@ -17,12 +17,12 @@ const MeterDetailsService = require('../../app/services/return-logs/setup/meter-
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
-const StartService = require('../../app/services/return-logs/setup/start.service.js')
+const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
-const SubmitStartService = require('../../app/services/return-logs/setup/submit-start.service.js')
+const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
 
@@ -81,6 +81,30 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
+  describe('return-logs/setup/guidance', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/guidance',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        it('redirects to the "guidance" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+        })
+      })
+    })
+  })
+
   describe('return-logs/setup/{sessionId}/received', () => {
     describe('GET', () => {
       beforeEach(() => {
@@ -123,12 +147,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
 
-          it('redirects to the "start" page', async () => {
+          it('redirects to the "submission" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/submission'
             )
           })
         })
@@ -231,12 +255,12 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
-  describe('/return-logs/setup/{sessionId}/start', () => {
+  describe('/return-logs/setup/{sessionId}/submission', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/submission',
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -246,7 +270,7 @@ describe('Return Logs Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(StartService, 'go').resolves({ pageTitle: 'Abstraction return' })
+          Sinon.stub(SubmissionService, 'go').resolves({ pageTitle: 'Abstraction return' })
         })
 
         it('returns the page successfully', async () => {
@@ -261,12 +285,12 @@ describe('Return Logs Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = _postOptions('start', { journey: 'selectedOption' })
+          options = _postOptions('submission', { journey: 'selectedOption' })
         })
 
         describe('and an option is selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({})
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({})
           })
 
           it('redirects to the "reported" page', async () => {
@@ -282,12 +306,12 @@ describe('Return Logs Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = _postOptions('start', {})
+          options = _postOptions('submission', {})
         })
 
         describe('and the validation fails as no option has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({
               pageTitle: 'Abstraction return',
               error: { text: 'Select what you want to do with this return' }
             })

@@ -20,7 +20,12 @@ const routes = [
     options: {
       handler: {
         directory: {
-          path: ['app/public/static', 'app/public/build', 'node_modules/govuk-frontend/govuk/assets']
+          path: [
+            'app/public/static',
+            'app/public/images',
+            'app/public/build',
+            'node_modules/govuk-frontend/govuk/assets'
+          ]
         }
       },
       app: {

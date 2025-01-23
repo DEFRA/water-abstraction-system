@@ -8,12 +8,12 @@ const { describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const StartValidator = require('../../../../app/validators/return-logs/setup/start.validator.js')
+const SubmissionValidator = require('../../../../app/validators/return-logs/setup/submission.validator.js')
 
-describe('Return Logs Setup - Start validator', () => {
+describe('Return Logs Setup - Submission validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = StartValidator.go({ journey: 'enter-return' })
+      const result = SubmissionValidator.go({ journey: 'enter-return' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -23,7 +23,7 @@ describe('Return Logs Setup - Start validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "journey" is given', () => {
       it('fails validation', () => {
-        const result = StartValidator.go({ journey: '' })
+        const result = SubmissionValidator.go({ journey: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -33,7 +33,7 @@ describe('Return Logs Setup - Start validator', () => {
 
     describe('because an unknown "type" is given', () => {
       it('fails validation', () => {
-        const result = StartValidator.go({ journey: 'invalid' })
+        const result = SubmissionValidator.go({ journey: 'invalid' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
