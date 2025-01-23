@@ -44,8 +44,6 @@ async function go(reviewChargeReferenceId, yar, payload) {
 
   return {
     activeNavBar: 'bill-runs',
-    amendedAggregate: payload.amendedAggregate,
-    amendedChargeAdjustment: payload.amendedChargeAdjustment,
     error: validationResult,
     ...formattedData
   }

@@ -13,10 +13,12 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
+const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const StartService = require('../../app/services/return-logs/setup/start.service.js')
+const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
@@ -462,6 +464,87 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select if meter details have been provided')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/meter-details', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-details',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(MeterDetailsService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            pageTitle: 'Meter details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Meter details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-details', {})
+        })
+
+        describe('and a meter details were provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
+            })
+          })
+
+          it('redirects to the "meter readings" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-readings'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-details')
+
+          Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            error: {
+              errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
+              meterMake: { message: 'Enter the make of the meter' }
+            },
+            pageTitle: 'Have meter details been provided?',
+            sessionId: 'Meter details'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter the make of the meter')
           expect(response.payload).to.contain('There is a problem')
         })
       })
