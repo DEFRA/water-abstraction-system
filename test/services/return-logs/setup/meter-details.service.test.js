@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ReportedService = require('../../../../app/services/return-logs/setup/reported.service.js')
+const MeterDetailsService = require('../../../../app/services/return-logs/setup/meter-details.service.js')
 
-describe('Return Logs Setup - Reported service', () => {
+describe('Return Logs Setup - Meter Details service', () => {
   let session
 
   before(async () => {
@@ -26,21 +26,23 @@ describe('Return Logs Setup - Reported service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ReportedService.go(session.id)
+      const result = await MeterDetailsService.go(session.id)
 
       expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ReportedService.go(session.id)
+      const result = await MeterDetailsService.go(session.id)
 
       expect(result).to.equal(
         {
-          pageTitle: 'How was this return reported?',
+          pageTitle: 'Meter details',
           activeNavBar: 'search',
           returnReference: '012345',
-          backLink: `/system/return-logs/setup/${session.id}/submission`,
-          reported: null
+          backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
+          meterMake: null,
+          meterSerialNumber: null,
+          meter10TimesDisplay: null
         },
         { skip: ['sessionId'] }
       )

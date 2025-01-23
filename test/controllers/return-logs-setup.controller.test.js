@@ -13,14 +13,16 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
+const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
-const StartService = require('../../app/services/return-logs/setup/start.service.js')
+const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
+const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
-const SubmitStartService = require('../../app/services/return-logs/setup/submit-start.service.js')
+const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
 
@@ -79,6 +81,30 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
+  describe('return-logs/setup/guidance', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/guidance',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        it('redirects to the "guidance" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+        })
+      })
+    })
+  })
+
   describe('return-logs/setup/{sessionId}/received', () => {
     describe('GET', () => {
       beforeEach(() => {
@@ -121,12 +147,12 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
 
-          it('redirects to the "start" page', async () => {
+          it('redirects to the "submission" page', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/submission'
             )
           })
         })
@@ -229,12 +255,12 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
-  describe('/return-logs/setup/{sessionId}/start', () => {
+  describe('/return-logs/setup/{sessionId}/submission', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/start',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/submission',
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -244,7 +270,7 @@ describe('Return Logs Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(StartService, 'go').resolves({ pageTitle: 'Abstraction return' })
+          Sinon.stub(SubmissionService, 'go').resolves({ pageTitle: 'Abstraction return' })
         })
 
         it('returns the page successfully', async () => {
@@ -259,12 +285,12 @@ describe('Return Logs Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = _postOptions('start', { journey: 'selectedOption' })
+          options = _postOptions('submission', { journey: 'selectedOption' })
         })
 
         describe('and an option is selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({})
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({})
           })
 
           it('redirects to the "reported" page', async () => {
@@ -280,12 +306,12 @@ describe('Return Logs Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = _postOptions('start', {})
+          options = _postOptions('submission', {})
         })
 
         describe('and the validation fails as no option has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartService, 'go').resolves({
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({
               pageTitle: 'Abstraction return',
               error: { text: 'Select what you want to do with this return' }
             })
@@ -462,6 +488,87 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select if meter details have been provided')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/meter-details', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-details',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(MeterDetailsService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            pageTitle: 'Meter details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Meter details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-details', {})
+        })
+
+        describe('and a meter details were provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
+            })
+          })
+
+          it('redirects to the "meter readings" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-readings'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('meter-details')
+
+          Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            error: {
+              errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
+              meterMake: { message: 'Enter the make of the meter' }
+            },
+            pageTitle: 'Have meter details been provided?',
+            sessionId: 'Meter details'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Enter the make of the meter')
           expect(response.payload).to.contain('There is a problem')
         })
       })
