@@ -158,9 +158,7 @@ describe('Notifications Setup - Review presenter', () => {
           })
         })
       })
-    })
 
-    describe('and there is pagination', () => {
       describe('and there are <= 25 recipients ', () => {
         it('should return the recipients', () => {
           const result = ReviewPresenter.go(testInput)

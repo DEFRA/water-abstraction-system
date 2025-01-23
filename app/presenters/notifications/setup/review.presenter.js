@@ -55,10 +55,7 @@ function _licences(licences) {
 }
 
 /**
- * Due to the complexity of the query to get the recipients data
- *
- * We need to handle the pagination in the presenter. This is all that is needed and work with the
- * existing pagination patterns
+ * Due to the complexity of the query to get the recipients data, we handle pagination in the presenter.
  *
  * @param recipients
  * @param page
