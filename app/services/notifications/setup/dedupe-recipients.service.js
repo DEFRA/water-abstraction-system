@@ -43,10 +43,44 @@ function _removeDuplicateContactHash(acc, obj) {
   return acc
 }
 
+/**
+ * This function processes two recipient objects (an account object `acc` and a given `obj`),
+ * and determines how to merge or update their details based on their message type and contact type.
+ *
+ * If only one recipient is of message type "Letter - licence holder", it updates the message type
+ * to "Letter - both". If there are both an organisation and a person recipient, it combines their
+ * `all_licences` values and updates the message type to "Letter - both", using the contact from the "Organisation" type.
+ *
+ * @param {object} acc - The account object containing the recipient data.
+ * @param {object} obj - The second recipient object to be checked and possibly merged.
+ *
+ * @returns {object} - The updated recipient
+ *
+ * @private
+ */
 function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
-  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Letter - licence holder')
+  const recipients = [acc[obj.contact_hash_id], obj].filter(
+    (recipient) => recipient.message_type === 'Letter - licence holder'
+  )
+
+  if (recipients.length === 1) {
+    return {
+      ...recipients[0],
+      message_type: 'Letter - both'
+    }
+  }
+
+  const recipientOrganisation = [acc[obj.contact_hash_id], obj].find(
+    (recipient) => recipient.contact.type.toLowerCase() === 'organisation'
+  )
+
+  const recipientPerson = [acc[obj.contact_hash_id], obj].find(
+    (recipient) => recipient.contact.type.toLowerCase() !== 'organisation'
+  )
+
   return {
-    ...recipient,
+    ...recipientOrganisation,
+    all_licences: recipientOrganisation.all_licences + ',' + recipientPerson.all_licences,
     message_type: 'Letter - both'
   }
 }

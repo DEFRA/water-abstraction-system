@@ -33,6 +33,16 @@ function duplicateRecipients() {
   }
 }
 
+/**
+ *
+ */
+function duplicateContactWithDifferentType() {
+  return {
+    duplicateContactOrganisationType: _addDuplicaateContactType('Organisation'),
+    duplicateContactPersonType: _addDuplicaateContactType('Person')
+  }
+}
+
 function _addDuplicateLicenceHolder(licenceRef) {
   return {
     all_licences: licenceRef,
@@ -57,6 +67,20 @@ function _addLicenceHolder() {
     message_type: 'Letter - licence holder',
     contact: _contact('1', 'Licence holder', 'Licence holder'),
     contact_hash_id: -1672785580
+  }
+}
+
+function _addDuplicaateContactType(type) {
+  const contact = _contact('5', 'Duplicate contact type', 'Licence holder')
+
+  return {
+    all_licences: generateLicenceRef(),
+    message_type: 'Letter - licence holder',
+    contact: {
+      ...contact,
+      type
+    },
+    contact_hash_id: 1234756
   }
 }
 
@@ -146,6 +170,7 @@ function _contact(line1, name, role) {
 }
 
 module.exports = {
-  recipients,
-  duplicateRecipients
+  duplicateContactWithDifferentType,
+  duplicateRecipients,
+  recipients
 }

@@ -16,11 +16,13 @@ const DedupeRecipientsService = require('../../../../app/services/notifications/
 describe('Notifications Setup - Dedupe Recipients service', () => {
   let testRecipients
   let testDuplicateRecipients
+  let testDuplicateContactWithDifferentType
   let testInput
 
   beforeEach(() => {
     testRecipients = RecipientsFixture.recipients()
     testDuplicateRecipients = RecipientsFixture.duplicateRecipients()
+    testDuplicateContactWithDifferentType = RecipientsFixture.duplicateContactWithDifferentType()
     testInput = [...Object.values(testRecipients), ...Object.values(testDuplicateRecipients)]
   })
 
@@ -183,6 +185,39 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
               type: 'Person'
             },
             contact_hash_id: 167278556784,
+            message_type: 'Letter - both'
+          }
+        ])
+      })
+    })
+
+    describe('when the recipient has a duplicate contact hash but a different "contact.type"', () => {
+      it('correctly returns the "Organisation" contact with the "message_type" Letter - both, and the both licences merged', () => {
+        const result = DedupeRecipientsService.go([
+          testDuplicateContactWithDifferentType.duplicateContactOrganisationType,
+          testDuplicateContactWithDifferentType.duplicateContactPersonType
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: `${testDuplicateContactWithDifferentType.duplicateContactOrganisationType.all_licences},${testDuplicateContactWithDifferentType.duplicateContactPersonType.all_licences}`,
+            contact: {
+              addressLine1: `5`,
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'H J',
+              name: 'Duplicate contact type',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: 'Mr',
+              town: 'Little Whinging',
+              type: 'Organisation'
+            },
+            contact_hash_id: 1234756,
             message_type: 'Letter - both'
           }
         ])
