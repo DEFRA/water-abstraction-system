@@ -12,6 +12,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const CheckService = require('../../app/services/return-logs/setup/check.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
@@ -76,6 +77,40 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/received`)
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/check', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e139b961-0aa0-4e58-afcd-a95ce7d0e21d/check',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(CheckService, 'go').resolves({
+            pageTitle: 'Check details and enter new volumes or readings',
+            returnReference: '1234567',
+            sessionId: 'e139b961-0aa0-4e58-afcd-a95ce7d0e21d'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check details and enter new volumes or readings')
+          expect(response.payload).to.contain('1234567')
+          expect(response.payload).to.contain('e139b961-0aa0-4e58-afcd-a95ce7d0e21d')
         })
       })
     })
