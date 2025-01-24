@@ -30,7 +30,7 @@ const UnitsService = require('../../app/services/return-logs/setup/units.service
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Return Logs Setup controller', () => {
+describe('Return Logs Setup controller', () => {
   let options
   let server
 
