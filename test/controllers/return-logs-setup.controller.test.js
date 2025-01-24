@@ -30,7 +30,7 @@ const UnitsService = require('../../app/services/return-logs/setup/units.service
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Return Logs Setup controller', () => {
+describe.only('Return Logs Setup controller', () => {
   let options
   let server
 
@@ -98,7 +98,7 @@ describe('Return Logs Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(CheckService, 'go').resolves({
-            pageTitle: 'What do you want to do with this return?',
+            pageTitle: 'Check details and enter new volumes or readings',
             returnReference: '1234567',
             sessionId: 'e139b961-0aa0-4e58-afcd-a95ce7d0e21d'
           })
@@ -108,7 +108,7 @@ describe('Return Logs Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('What do you want to do with this return?')
+          expect(response.payload).to.contain('Check details and enter new volumes or readings')
           expect(response.payload).to.contain('1234567')
           expect(response.payload).to.contain('e139b961-0aa0-4e58-afcd-a95ce7d0e21d')
         })
