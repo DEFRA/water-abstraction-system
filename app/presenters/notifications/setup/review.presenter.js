@@ -11,14 +11,17 @@ const { titleCase } = require('../../base.presenter.js')
 /**
  * Formats data for the `/notifications/setup/review` page
  *
- * @param recipients
+ * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
+ * @param {number|string} page - The currently selected page
+ * @param {object} pagination -
+ *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients) {
+function go(recipients, page, pagination) {
   return {
     defaultPageSize,
-    pageTitle: 'Send returns invitations',
-    recipients: _recipients(recipients),
+    pageTitle: _pageTitle(page, pagination),
+    recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length
   }
 }
@@ -52,8 +55,28 @@ function _licences(licences) {
   return licences.split(',')
 }
 
-function _recipients(recipients) {
-  return recipients.map((recipient) => {
+function _pageTitle(page, pagination) {
+  if (pagination.numberOfPages > 1) {
+    return `Send returns invitations (page ${page} of ${pagination.numberOfPages})`
+  }
+
+  return 'Send returns invitations'
+}
+
+/**
+ * Due to the complexity of the query to get the recipients data, we handle pagination in the presenter.
+ *
+ * @private
+ */
+function _pagination(recipients, page) {
+  const pageNumber = Number(page) * defaultPageSize
+  return recipients.slice(pageNumber - defaultPageSize, pageNumber)
+}
+
+function _recipients(recipients, page) {
+  const paginatedRecipients = _pagination(recipients, page)
+
+  return paginatedRecipients.map((recipient) => {
     return {
       contact: _contact(recipient),
       licences: _licences(recipient.all_licences),
