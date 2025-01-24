@@ -12,158 +12,164 @@
   </div>
 
   {# Notes #}
-  <dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key govuk-heading-m govuk-!-margin-bottom-4">Notes</dt>
-    </div>
-    <div class="govuk-summary-list__row">
-      <dd class="govuk-summary-list__value">No notes added</dd>
-      <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="#">Add a note<span class="govuk-visually-hidden">the note</span></a>
-      </dd>
-    </div>
-  </dl>
+  <div class="govuk-!-margin-bottom-9">
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-heading-m govuk-!-margin-bottom-4">Notes</dt>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dd class="govuk-summary-list__value">No notes added</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Add a note<span class="govuk-visually-hidden">the note</span></a>
+        </dd>
+      </div>
+    </dl>
+  </div>
 
   {# Reporting details #}
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Reporting details"
-      }
-    },
-    rows: [
-      {
-        key: {
-          text: "Return received"
-        },
-        value: {
-          html: "8 January 2025"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "return received date"
-            }
-          ]
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Reporting details"
         }
       },
-      {
-        key: {
-          text: "Reporting figures"
+      rows: [
+        {
+          key: {
+            text: "Return received"
+          },
+          value: {
+            html: "8 January 2025"
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "return received date"
+              }
+            ]
+          }
         },
-        value: {
-          html: "Volumes"
+        {
+          key: {
+            text: "Reporting figures"
+          },
+          value: {
+            html: "Volumes"
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "reporting figures"
+              }
+            ]
+          }
         },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "reporting figures"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Meter details"
+        {
+          key: {
+            text: "Meter details"
+          },
+          value: {
+            html: "<div>Meter make</div>" + "<div>Meter serial number</div>"
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "meter details"
+              }
+            ]
+          }
         },
-        value: {
-          html: "<div>Meter make</div>" + "<div>Meter serial number</div>"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "meter details"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Units"
-        },
-        value: {
-          html: "Cubic meters"
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "unit of measure"
-            }
-          ]
-        }
-      }  ]
-  }) }}
+        {
+          key: {
+            text: "Units"
+          },
+          value: {
+            html: "Cubic meters"
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "unit of measure"
+              }
+            ]
+          }
+        }  ]
+    }) }}
+  </div>
 
   {# Summary of daily volumes #}
-  {{ govukTable({
-    caption: "Summary of daily volumes",
-    captionClasses: "govuk-table__caption--m",
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: "Month"
-      },
-      {
-        text: "Total cubic meters",
-        format: "numeric"
-      },
-      {
-        text: "Details",
-        format: "numeric"
-      }
-    ],
-    rows: [
-      [
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukTable({
+      caption: "Summary of daily volumes",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      head: [
         {
-          text: "April 2024"
+          text: "Month"
         },
         {
-          text: "150.388",
+          text: "Total cubic meters",
           format: "numeric"
         },
         {
-          html: '<a href="#">Change daily volumes</a>',
-          classes: "govuk-link",
+          text: "Details",
           format: "numeric"
         }
       ],
-      [
-        {
-          text: "May 2024"
-        },
-        {
-          text: "155.403",
-          format: "numeric"
-        },
-        {
-          html: '<a href="#">Change daily volumes</a>',
-          classes: "govuk-link",
-          format: "numeric"
-        }
-      ],
-      [
-        {
-          text: "Total volume of water abstracted",
-          classes: "govuk-table__header"
-        },
-        {
-          html: "<strong>305.791</strong>",
-          format: "numeric"
-        },
-        {
-          text: ""
-        }
+      rows: [
+        [
+          {
+            text: "April 2024"
+          },
+          {
+            text: "150.388",
+            format: "numeric"
+          },
+          {
+            html: '<a href="#">Change daily volumes</a>',
+            classes: "govuk-link",
+            format: "numeric"
+          }
+        ],
+        [
+          {
+            text: "May 2024"
+          },
+          {
+            text: "155.403",
+            format: "numeric"
+          },
+          {
+            html: '<a href="#">Change daily volumes</a>',
+            classes: "govuk-link",
+            format: "numeric"
+          }
+        ],
+        [
+          {
+            text: "Total volume of water abstracted",
+            classes: "govuk-table__header"
+          },
+          {
+            html: "<strong>305.791</strong>",
+            format: "numeric"
+          },
+          {
+            text: ""
+          }
+        ]
       ]
-    ]
-  }) }}
+    }) }}
+  </div>
 
   {# "Confirm" & "Cancel" buttons #}
   <div>
