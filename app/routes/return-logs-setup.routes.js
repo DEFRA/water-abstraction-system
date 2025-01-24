@@ -170,6 +170,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.singleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.submitSingleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 
