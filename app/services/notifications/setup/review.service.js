@@ -16,7 +16,7 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
- * @param {number|string} page - The current page for the pagination service
+ * @param {number|string} [page=1] - The currently selected page (if paginated)
  *
  * @returns {object} The view data for the review page
  */
