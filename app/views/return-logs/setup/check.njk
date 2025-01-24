@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block content %}
   {# Main heading #}
@@ -13,7 +14,7 @@
   {# Notes #}
   <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key govuk-heading-l govuk-!-margin-bottom-4">Notes</dt>
+      <dt class="govuk-summary-list__key govuk-heading-m govuk-!-margin-bottom-4">Notes</dt>
     </div>
     <div class="govuk-summary-list__row">
       <dd class="govuk-summary-list__value">No notes added</dd>
@@ -22,6 +23,147 @@
       </dd>
     </div>
   </dl>
+
+  {# Reporting details #}
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Reporting details"
+      }
+    },
+    rows: [
+      {
+        key: {
+          text: "Return received"
+        },
+        value: {
+          html: "8 January 2025"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "return received date"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Reporting figures"
+        },
+        value: {
+          html: "Volumes"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "reporting figures"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Meter details"
+        },
+        value: {
+          html: "<div>Meter make</div>" + "<div>Meter serial number</div>"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "meter details"
+            }
+          ]
+        }
+      },
+      {
+        key: {
+          text: "Units"
+        },
+        value: {
+          html: "Cubic meters"
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "unit of measure"
+            }
+          ]
+        }
+      }  ]
+  }) }}
+
+  {# Summary of daily volumes #}
+  {{ govukTable({
+    caption: "Summary of daily volumes",
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: "Month"
+      },
+      {
+        text: "Total cubic meters",
+        format: "numeric"
+      },
+      {
+        text: "Details",
+        format: "numeric"
+      }
+    ],
+    rows: [
+      [
+        {
+          text: "April 2024"
+        },
+        {
+          text: "150.388",
+          format: "numeric"
+        },
+        {
+          html: '<a href="#">Change daily volumes</a>',
+          classes: "govuk-link",
+          format: "numeric"
+        }
+      ],
+      [
+        {
+          text: "May 2024"
+        },
+        {
+          text: "155.403",
+          format: "numeric"
+        },
+        {
+          html: '<a href="#">Change daily volumes</a>',
+          classes: "govuk-link",
+          format: "numeric"
+        }
+      ],
+      [
+        {
+          text: "Total volume of water abstracted",
+          classes: "govuk-table__header"
+        },
+        {
+          html: "<strong>305.791</strong>",
+          format: "numeric"
+        },
+        {
+          text: ""
+        }
+      ]
+    ]
+  }) }}
 
   {# "Confirm" & "Cancel" buttons #}
   <div>
