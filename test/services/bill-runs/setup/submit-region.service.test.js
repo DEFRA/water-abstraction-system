@@ -50,12 +50,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
           session = await SessionHelper.add({ data: { type: 'annual' } })
         })
 
-        it('saves the submitted value and returns an object confirming setup is complete', async () => {
+        it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.region).to.equal(region.id)
+          expect(refreshedSession.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.true()
         })
       })
@@ -65,12 +66,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
           session = await SessionHelper.add({ data: { type: 'two_part_tariff' } })
         })
 
-        it('saves the submitted value and returns an object confirming setup is not complete', async () => {
+        it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.region).to.equal(region.id)
+          expect(refreshedSession.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.false()
         })
       })
@@ -80,12 +82,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
           session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
         })
 
-        it('saves the submitted value and returns an object confirming setup is not complete', async () => {
+        it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.region).to.equal(region.id)
+          expect(refreshedSession.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.false()
         })
       })

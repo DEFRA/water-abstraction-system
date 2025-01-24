@@ -171,35 +171,38 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     })
   })
 
-  describe('when the last annual bill run for the region was not for the current financial year (it is outstanding)', () => {
-    beforeEach(() => {
-      lastAnnualMatch.toFinancialYearEnding = 2024
+  describe('when annual bill run for the current financial year is outstanding', () => {
+    describe('because the last one was for FY 2024 (SROC)', () => {
+      beforeEach(() => {
+        lastAnnualMatch.toFinancialYearEnding = 2024
 
-      billRunQueryStub.first = Sinon.stub()
-        // Find last annual bill run
-        .onFirstCall()
-        .resolves(lastAnnualMatch)
-        // Find matching SROC
-        .onSecondCall()
-        .resolves(null)
-        // Find matching PRESROC
-        .onThirdCall()
-        .resolves(null)
+        billRunQueryStub.first = Sinon.stub()
+          // Find last annual bill run
+          .onFirstCall()
+          .resolves(lastAnnualMatch)
+          // Find matching SROC
+          .onSecondCall()
+          .resolves(null)
+          // Find matching PRESROC
+          .onThirdCall()
+          .resolves(null)
 
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
-    })
+        Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      })
 
-    it("determines the 'toFinancialEndYear' to be the outstanding bill run's", async () => {
-      const result = await DetermineBlockingSupplementaryService.go(regionId)
+      it("determines the 'toFinancialEndYear' to be the outstanding bill run's but allows both to be triggered", async () => {
+        const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({ matches: [], toFinancialYearEnding: 2024, trigger: engineTriggers.both })
+        expect(result).to.equal({ matches: [], toFinancialYearEnding: 2024, trigger: engineTriggers.both })
+      })
     })
   })
 
-  // NOTE: This would never happen in a 'real' environment. All regions have 'sent' annual bill runs so a result would
-  // always be found
+  // NOTE: These would never happen in a 'real' environment
   describe('Non-production scenarios (do not exist in production)', () => {
-    describe('when the last annual bill run for the region was not for the current financial year (it is outstanding)', () => {
+    // In production all regions have 'sent' annual bill runs so a result would always be found to get a financial year
+    // from
+    describe('when there are no annual bill runs for the selected region', () => {
       beforeEach(() => {
         billRunQueryStub.first = Sinon.stub()
           // Find last annual bill run
@@ -219,6 +222,33 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
         const result = await DetermineBlockingSupplementaryService.go(regionId)
 
         expect(result).to.equal({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
+      })
+    })
+
+    // In production all regions have 'sent' annual bill runs for the SROC years. At worst it could be that this years
+    // SROC annual has not been run, so last year's is the latest. But never only PRESROC.
+    describe('when the last annual bill run for the selected region was for FY 2022 (PRESROC)', () => {
+      beforeEach(() => {
+        lastAnnualMatch.toFinancialYearEnding = 2022
+
+        billRunQueryStub.first = Sinon.stub()
+          // Find last annual bill run
+          .onFirstCall()
+          .resolves(lastAnnualMatch)
+          // Find matching SROC
+          .onSecondCall()
+          .resolves(null)
+          // Find matching PRESROC
+          .onThirdCall()
+          .resolves(null)
+
+        Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      })
+
+      it("determines the 'toFinancialEndYear' to be the outstanding bill run's and only allows 'old' to be triggered", async () => {
+        const result = await DetermineBlockingSupplementaryService.go(regionId)
+
+        expect(result).to.equal({ matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
       })
     })
   })
