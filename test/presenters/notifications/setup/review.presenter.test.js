@@ -160,7 +160,7 @@ describe('Notifications Setup - Review presenter', () => {
       })
 
       describe('and there are <= 25 recipients ', () => {
-        it('should return the recipients', () => {
+        it('returns all the recipients', () => {
           const result = ReviewPresenter.go(testInput)
 
           expect(result.recipients.length).to.equal(testInput.length)
