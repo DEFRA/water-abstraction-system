@@ -180,7 +180,7 @@ describe('Notifications Setup - Review presenter', () => {
           })
 
           describe('and there is more than one page', () => {
-            it('should return the remaining recipients for the last page', () => {
+            it('returns the remaining recipients', () => {
               const result = ReviewPresenter.go(testInput, '2')
 
               expect(result.recipients.length).to.equal(5)
