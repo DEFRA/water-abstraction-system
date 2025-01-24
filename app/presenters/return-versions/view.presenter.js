@@ -5,7 +5,7 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
@@ -39,13 +39,14 @@ function go(returnVersion) {
 }
 
 function _abstractionPeriod(requirement) {
-  const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
-    requirement
+  const abstractionPeriod = formatAbstractionPeriod(
+    requirement.abstractionPeriodStartDay,
+    requirement.abstractionPeriodStartMonth,
+    requirement.abstractionPeriodEndDay,
+    requirement.abstractionPeriodEndMonth
+  )
 
-  const startDate = formatAbstractionDate(abstractionPeriodStartDay, abstractionPeriodStartMonth)
-  const endDate = formatAbstractionDate(abstractionPeriodEndDay, abstractionPeriodEndMonth)
-
-  return `From ${startDate} to ${endDate}`
+  return abstractionPeriod ?? ''
 }
 
 function _agreementsExceptions(returnRequirement) {

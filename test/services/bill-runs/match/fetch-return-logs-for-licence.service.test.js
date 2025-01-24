@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,7 +18,21 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+
+  let notifierStub
   let returnLogRecord
+
+  beforeEach(() => {
+    // This depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when there are valid return logs that should be considered', () => {
     beforeEach(async () => {
@@ -222,6 +237,32 @@ describe('Fetch Return Logs for Licence service', () => {
 
         expect(result).to.have.length(0)
       })
+    })
+  })
+
+  // NOTE: Added after we had a bill run error because a licence was linked to a return log where the abstraction period
+  // data was all set to "null". It was set like this because the period had not been set against the return requirement
+  // the return log was generated from.
+  describe('when fetch errors because the return log is missing abstraction data', () => {
+    beforeEach(async () => {
+      const metadata = _metadata(true)
+      metadata.nald.periodEndDay = 'null'
+      metadata.nald.periodEndMonth = 'null'
+      metadata.nald.periodStartDay = 'null'
+      metadata.nald.periodStartMonth = 'null'
+
+      returnLogRecord = await ReturnLogHelper.add({ metadata })
+    })
+
+    it('logs and records the error then rethrows it', async () => {
+      const { licenceRef } = returnLogRecord
+
+      await expect(FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)).to.reject()
+
+      const logDataArg = notifierStub.omfg.args[0][1]
+
+      expect(notifierStub.omfg.calledWith('Bill run process fetch return logs for licence failed')).to.be.true()
+      expect(logDataArg).to.equal({ licenceRef, billingPeriod })
     })
   })
 })
