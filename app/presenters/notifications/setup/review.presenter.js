@@ -11,12 +11,12 @@ const { titleCase } = require('../../base.presenter.js')
 /**
  * Formats data for the `/notifications/setup/review` page
  *
- * @param {object[]} recipients
+ * @param {object[]} recipients - List of recipient objects, each containing recipient for either a primary user, returns agent, licence holder, returns to type.
  * @param {number|string} page - The current page for the pagination service
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page = 1) {
+function go(recipients, page) {
   return {
     defaultPageSize,
     pageTitle: 'Send returns invitations',
@@ -57,9 +57,6 @@ function _licences(licences) {
 /**
  * Due to the complexity of the query to get the recipients data, we handle pagination in the presenter.
  *
- * @param recipients
- * @param page
- * @returns {object} - recipients limited to the pagination amount
  * @private
  */
 function _pagination(recipients, page) {
