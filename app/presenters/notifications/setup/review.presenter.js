@@ -11,8 +11,8 @@ const { titleCase } = require('../../base.presenter.js')
 /**
  * Formats data for the `/notifications/setup/review` page
  *
- * @param {object[]} recipients - List of recipient objects, each containing recipient for either a primary user, returns agent, licence holder, returns to type.
- * @param {number|string} page - The current page for the pagination service
+ * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
+ * @param {number|string} page - The currently selected page
  *
  * @returns {object} - The data formatted for the view template
  */

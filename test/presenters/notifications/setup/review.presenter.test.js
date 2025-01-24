@@ -163,7 +163,7 @@ describe('Notifications Setup - Review presenter', () => {
       })
 
       describe('and there are <= 25 recipients ', () => {
-        it('should return the recipients', () => {
+        it('returns all the recipients', () => {
           const result = ReviewPresenter.go(testInput, page)
 
           expect(result.recipients.length).to.equal(testInput.length)
@@ -176,14 +176,14 @@ describe('Notifications Setup - Review presenter', () => {
         })
 
         describe('and the page is 1', () => {
-          it('should only return 25 recipients', () => {
+          it('returns the first 25 recipients', () => {
             const result = ReviewPresenter.go(testInput, page)
 
             expect(result.recipients.length).to.equal(25)
           })
 
           describe('and there is more than one page', () => {
-            it('should return the remaining recipients for the last page', () => {
+            it('returns the remaining recipients', () => {
               const result = ReviewPresenter.go(testInput, '2')
 
               expect(result.recipients.length).to.equal(5)
