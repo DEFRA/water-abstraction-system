@@ -12,7 +12,7 @@ const { titleCase } = require('../../base.presenter.js')
  * Formats data for the `/notifications/setup/review` page
  *
  * @param {object[]} recipients
- * @param {number|string} page - The current page for the pagination service
+ * @param {number|string} page - The currently selected page
  *
  * @returns {object} - The data formatted for the view template
  */
