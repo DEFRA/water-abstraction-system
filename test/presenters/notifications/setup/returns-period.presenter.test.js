@@ -60,7 +60,7 @@ describe('Notifications Setup - Returns Period presenter', () => {
       })
     })
 
-    describe('when the current date is the same date but after 00:00 (hours/ minutes later in the day - node defaults to 00:00:00 not 23:59:00)', () => {
+    describe('when the current date is the same date', () => {
       beforeEach(() => {
         testDate = new Date(`${currentYear}-04-28T09:59:59.999Z`)
         clock = Sinon.useFakeTimers(testDate)
