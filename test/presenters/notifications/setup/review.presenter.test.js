@@ -173,7 +173,7 @@ describe('Notifications Setup - Review presenter', () => {
         })
 
         describe('and the page is 1', () => {
-          it('should only return 25 recipients', () => {
+          it('returns the first 25 recipients', () => {
             const result = ReviewPresenter.go(testInput)
 
             expect(result.recipients.length).to.equal(25)
