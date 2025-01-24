@@ -31,13 +31,13 @@ async function go(sessionId, page = 1) {
 
   const dedupeRecipients = DedupeRecipientsService.go(recipients)
 
-  const formattedData = ReviewPresenter.go(dedupeRecipients, page)
-
   const pagination = PaginatorPresenter.go(
-    formattedData.recipientsAmount,
+    dedupeRecipients.length,
     Number(page),
     `/system/notifications/setup/${sessionId}/review`
   )
+
+  const formattedData = ReviewPresenter.go(dedupeRecipients, page, pagination)
 
   return {
     activeNavBar: 'manage',

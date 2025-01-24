@@ -13,13 +13,14 @@ const { titleCase } = require('../../base.presenter.js')
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
+ * @param {object} pagination -
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page) {
+function go(recipients, page, pagination) {
   return {
     defaultPageSize,
-    pageTitle: 'Send returns invitations',
+    pageTitle: _pageTitle(page, pagination),
     recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length
   }
@@ -52,6 +53,14 @@ function _contact(recipient) {
  */
 function _licences(licences) {
   return licences.split(',')
+}
+
+function _pageTitle(page, pagination) {
+  if (pagination.numberOfPages > 1) {
+    return `Send returns invitations (page ${page} of ${pagination.numberOfPages})`
+  }
+
+  return 'Send returns invitations'
 }
 
 /**

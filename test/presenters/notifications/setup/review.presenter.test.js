@@ -14,20 +14,24 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReviewPresenter = require('../../../../app/presenters/notifications/setup/review.presenter.js')
 
 describe('Notifications Setup - Review presenter', () => {
-  let testRecipients
-  let testInput
   let page
+  let pagination
+  let testInput
+  let testRecipients
 
   beforeEach(() => {
+    page = 1
+    pagination = {
+      numberOfPages: 1
+    }
+
     testRecipients = RecipientsFixture.recipients()
     testInput = Object.values(testRecipients)
-
-    page = 1
   })
 
   describe('when provided with "recipients"', () => {
     it('correctly presents the data', () => {
-      const result = ReviewPresenter.go(testInput, page)
+      const result = ReviewPresenter.go(testInput, page, pagination)
 
       expect(result).to.equal({
         defaultPageSize: 25,
@@ -66,7 +70,7 @@ describe('Notifications Setup - Review presenter', () => {
     describe('the "recipients" property', () => {
       describe('format all recipient types', () => {
         it('should return the formatted recipients', () => {
-          const result = ReviewPresenter.go(testInput, page)
+          const result = ReviewPresenter.go(testInput, page, pagination)
 
           expect(result.recipients).to.equal([
             {
@@ -100,7 +104,7 @@ describe('Notifications Setup - Review presenter', () => {
         describe('the "contact" property', () => {
           describe('when the contact is an email', () => {
             it('should return the email address', () => {
-              const result = ReviewPresenter.go(testInput, page)
+              const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
                 recipient.licences.includes(testRecipients.primaryUser.all_licences)
@@ -116,7 +120,7 @@ describe('Notifications Setup - Review presenter', () => {
 
           describe('when the contact is an address', () => {
             it('should convert the contact into an array', () => {
-              const result = ReviewPresenter.go(testInput, page)
+              const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
                 recipient.licences.includes(testRecipients.licenceHolder.all_licences)
@@ -134,7 +138,7 @@ describe('Notifications Setup - Review presenter', () => {
         describe('the "licences" property', () => {
           describe('when the recipient has a single licence number', () => {
             it('should return licence numbers as an array', () => {
-              const result = ReviewPresenter.go(testInput, page)
+              const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
                 recipient.licences.includes(testRecipients.licenceHolder.all_licences)
@@ -146,7 +150,7 @@ describe('Notifications Setup - Review presenter', () => {
 
           describe('when the recipient has multiple licence numbers', () => {
             it('should return licence numbers as an array', () => {
-              const result = ReviewPresenter.go(testInput, page)
+              const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find(
                 (recipient) =>
@@ -164,7 +168,7 @@ describe('Notifications Setup - Review presenter', () => {
 
       describe('and there are <= 25 recipients ', () => {
         it('returns all the recipients', () => {
-          const result = ReviewPresenter.go(testInput, page)
+          const result = ReviewPresenter.go(testInput, page, pagination)
 
           expect(result.recipients.length).to.equal(testInput.length)
         })
@@ -173,21 +177,41 @@ describe('Notifications Setup - Review presenter', () => {
       describe('and there are >= 25 recipients', () => {
         beforeEach(() => {
           testInput = [...testInput, ...testInput, ...testInput, ...testInput, ...testInput, ...testInput]
+
+          pagination = {
+            numberOfPages: 2
+          }
         })
 
         describe('and the page is 1', () => {
           it('returns the first 25 recipients', () => {
-            const result = ReviewPresenter.go(testInput, page)
+            const result = ReviewPresenter.go(testInput, page, pagination)
 
             expect(result.recipients.length).to.equal(25)
           })
 
-          describe('and there is more than one page', () => {
-            it('returns the remaining recipients', () => {
-              const result = ReviewPresenter.go(testInput, '2')
+          it('returns the updated "pageTitle"', () => {
+            const result = ReviewPresenter.go(testInput, page, pagination)
 
-              expect(result.recipients.length).to.equal(5)
-            })
+            expect(result.pageTitle).to.equal('Send returns invitations (page 1 of 2)')
+          })
+        })
+
+        describe('and there is more than one page', () => {
+          beforeEach(() => {
+            page = '2'
+          })
+
+          it('returns the remaining recipients', () => {
+            const result = ReviewPresenter.go(testInput, page, pagination)
+
+            expect(result.recipients.length).to.equal(5)
+          })
+
+          it('returns the updated "pageTitle"', () => {
+            const result = ReviewPresenter.go(testInput, page, pagination)
+
+            expect(result.pageTitle).to.equal('Send returns invitations (page 2 of 2)')
           })
         })
       })
