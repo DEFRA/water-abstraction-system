@@ -48,7 +48,7 @@ describe('Return Versions - View service', () => {
         reason: 'New licence',
         requirements: [
           {
-            abstractionPeriod: 'From 1 April to 31 October',
+            abstractionPeriod: '1 April to 31 October',
             agreementsExceptions: 'None',
             frequencyCollected: 'monthly',
             frequencyReported: 'monthly',
