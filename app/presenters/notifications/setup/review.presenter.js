@@ -6,6 +6,7 @@
  */
 
 const { defaultPageSize } = require('../../../../config/database.config.js')
+const { licenceContactDetails } = require('../..//contact.presenter.js')
 const { titleCase } = require('../../base.presenter.js')
 
 /**
@@ -42,7 +43,9 @@ function _contact(recipient) {
     return [recipient.recipient]
   }
 
-  return recipient.contact.split(',').map(titleCase)
+  const [contact] = licenceContactDetails([recipient.contact])
+
+  return [contact.name, ...contact.address]
 }
 
 /**
