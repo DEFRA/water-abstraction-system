@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/meter-details`,
+    backLink: `/system/return-logs/setup/${sessionId}/meter-provided`,
     pageTitle: 'Is it a single volume?',
     returnReference,
     sessionId,

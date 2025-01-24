@@ -65,18 +65,15 @@ function _validate(payload) {
     return null
   }
 
-  const { message, type } = validation.error.details[0]
+  const { message, path } = validation.error.details[0]
 
-  // There are only two possible error scenarios: either a radio button has not been selected, in which case the enter
-  // volume isn't visible so there cannot be an "invalid volume" error; or an invalid volume has been entered, in which
-  // case the singleVolume *is* visible so there cannot be a "radio button not selected" error. We identify the former
-  // by checking if the error type is `any.required`; and so if an error is present which isn't of this type, it must be
-  // a input error.
-  return {
+  const result = {
     message,
-    radioFormElement: type === 'any.required' ? { text: message } : null,
-    volumeInputFormElement: type === 'any.required' ? null : { text: message }
+    radioFormElement: path[0] === 'singleVolume' ? { text: message } : null,
+    volumeInputFormElement: path[0] === 'singleVolumeQuantity' ? { text: message } : null
   }
+
+  return result
 }
 
 module.exports = {

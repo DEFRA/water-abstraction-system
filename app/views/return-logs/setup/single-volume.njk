@@ -64,7 +64,8 @@
       {% endset %}
 
       {{ govukRadios({
-        name: "single-volume",
+        id: "single-volume",
+        name: "singleVolume",
         errorMessage: error.radioFormElement,
         fieldset: {
           legend: {
@@ -75,7 +76,7 @@
           {
             value: "yes",
             text: "Yes",
-            checked: singeVolume === 'yes',
+            checked: singleVolume === 'yes',
             conditional: {
               html: quantityInputHTML
             }
@@ -83,7 +84,7 @@
           {
             value: "no",
             text: "No",
-            checked: singeVolume === 'no'
+            checked: singleVolume === 'no'
           }
         ]
       }) }}
