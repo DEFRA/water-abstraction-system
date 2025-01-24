@@ -27,6 +27,15 @@ describe('Return Logs Setup - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        note: {
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
+        },
         pageTitle: 'Check details and enter new volumes or readings',
         returnReference: '1234',
         sessionId
