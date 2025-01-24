@@ -5,6 +5,7 @@
  * @module ReturnLogsSetupController
  */
 
+const CheckService = require('../services/return-logs/setup/check.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
@@ -21,8 +22,7 @@ const UnitsService = require('../services/return-logs/setup/units.service.js')
 
 async function check(request, h) {
   const { sessionId } = request.params
-  // const pageData = await CheckService.go(sessionId)
-  const pageData = { pageTitle: 'Check details and enter new volumes or readings', returnReference: '12345', sessionId }
+  const pageData = await CheckService.go(sessionId)
 
   return h.view('return-logs/setup/check.njk', pageData)
 }
