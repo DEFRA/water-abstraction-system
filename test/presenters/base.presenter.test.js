@@ -39,6 +39,14 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatNumber()', () => {
+    it('formats a number for display', () => {
+      const result = BasePresenter.formatNumber(12345.6789)
+
+      expect(result).to.equal('12,345.679')
+    })
+  })
+
   describe('#generateBillRunTitle()', () => {
     const regionName = 'anglian'
     const batchType = 'two_part_tariff'
