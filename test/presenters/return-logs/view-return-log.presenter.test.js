@@ -1,0 +1,560 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+const Proxyquire = require('proxyquire')
+
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Thing under test
+const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
+
+// Test helpers
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
+const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+
+const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+
+describe('View Return Log presenter', () => {
+  let auth
+  let testReturnLog
+
+  beforeEach(async () => {
+    auth = {
+      credentials: {
+        scope: ['returns']
+      }
+    }
+
+    testReturnLog = await ReturnLogHelper.add({
+      metadata: {
+        ...ReturnLogHelper.defaults().metadata,
+        purposes: [{ alias: 'PURPOSE_ALIAS' }]
+      }
+    })
+
+    testReturnLog.siteDescription = testReturnLog.metadata.description
+    testReturnLog.periodStartDay = testReturnLog.metadata.nald.periodStartDay
+    testReturnLog.periodStartMonth = testReturnLog.metadata.nald.periodStartMonth
+    testReturnLog.periodEndDay = testReturnLog.metadata.nald.periodEndDay
+    testReturnLog.periodEndMonth = testReturnLog.metadata.nald.periodEndMonth
+    testReturnLog.purposes = testReturnLog.metadata.purposes
+    testReturnLog.twoPartTariff = testReturnLog.metadata.isTwoPartTariff
+    testReturnLog.licence = await LicenceHelper.add()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('the "abstractionPeriod" property', () => {
+    it('returns the correctly-formatted date', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+    })
+  })
+
+  describe('the "actionButton" property', () => {
+    it('returns null if this is a void return', () => {
+      testReturnLog.status = 'void'
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.be.null()
+    })
+
+    it("returns null if auth credentials don't include returns", () => {
+      auth.credentials.scope = ['NOT_RETURNS']
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.be.null()
+    })
+
+    it('returns the expected "Edit return" result if the return is completed', () => {
+      testReturnLog.status = 'completed'
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal({
+        href: `/return/internal?returnId=${testReturnLog.id}`,
+        text: 'Edit return'
+      })
+    })
+
+    it('returns the expected "Submit return" result if the return is due', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.actionButton).to.equal({
+        href: `/system/return-logs/setup?returnLogId=${testReturnLog.id}`,
+        text: 'Submit return'
+      })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    it('returns the expected "Go back to summary" result when this is the latest return log', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.backLink).to.equal({
+        href: `/system/licences/${testReturnLog.licence.id}/returns`,
+        text: 'Go back to summary'
+      })
+    })
+
+    it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', async () => {
+      testReturnLog.versions = [
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
+        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
+      ]
+
+      testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })]
+
+      for (const returnSubmission of testReturnLog.returnSubmissions) {
+        returnSubmission.returnSubmissionLines = [
+          await ReturnSubmissionLineHelper.add({
+            returnSubmissionId: returnSubmission.id
+          })
+        ]
+      }
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.backLink).to.equal({
+        href: `/system/return-logs?id=${testReturnLog.id}`,
+        text: 'Go back to the latest version'
+      })
+    })
+  })
+
+  describe('the "displayReadings" property', () => {
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
+    })
+
+    describe('when the return submission method is abstractionVolumes', () => {
+      it('returns false', async () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayReadings).to.equal(false)
+      })
+    })
+
+    describe("when the return submission method isn't abstractionVolumes", () => {
+      it('returns true', async () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayReadings).to.equal(true)
+      })
+    })
+  })
+
+  describe('the "displayTable" property', () => {
+    describe('when there are no return submissions', () => {
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayTable).to.equal(false)
+      })
+    })
+
+    describe('when there is a return submission', () => {
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog)
+        })
+
+        it('returns false', () => {
+          testReturnLog.returnSubmissions[0].nilReturn = true
+
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.displayTable).to.equal(false)
+        })
+
+        describe('which is not a nil return', () => {
+          it('returns true', () => {
+            const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+            expect(result.displayTable).to.equal(true)
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "displayTable" property', () => {
+    describe('when there is a return submission', () => {
+      beforeEach(async () => {
+        await setupSubmission(testReturnLog)
+      })
+
+      it('returns true ', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayTable).to.equal(true)
+      })
+    })
+
+    describe('when there is no return submission', () => {
+      it('returns false when there is no return submissions', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayTable).to.equal(false)
+      })
+    })
+  })
+
+  describe('the "displayUnits" property', () => {
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
+    })
+
+    describe('when the unit is not cubic metres', () => {
+      it('returns true', () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayUnits).to.equal(true)
+      })
+    })
+
+    describe('when the unit is not cubic metres', () => {
+      it('returns false', () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.displayUnits).to.equal(false)
+      })
+    })
+  })
+
+  describe('the "latest" property', () => {
+    describe('when this is the latest return log', () => {
+      it('returns true', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.latest).to.equal(true)
+      })
+    })
+
+    describe('when this is not the latest return log', () => {
+      beforeEach(async () => {
+        testReturnLog.versions = [
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
+          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+        ]
+
+        testReturnLog.returnSubmissions = [
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id }),
+          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+        ]
+
+        for (const returnSubmission of testReturnLog.returnSubmissions) {
+          returnSubmission.returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: returnSubmission.id
+            })
+          ]
+        }
+      })
+
+      it('returns false', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.latest).to.equal(false)
+      })
+    })
+  })
+
+  describe('the "licenceref" property', () => {
+    it('returns the licence reference', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.licenceref).to.equal(testReturnLog.licence.reference)
+    })
+  })
+
+  describe('the "meterDetails" property', () => {
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
+
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
+        manufacturer: 'MANUFACTURER',
+        multipler: 10,
+        serialNumber: 'SERIAL_NUMBER'
+      })
+    })
+
+    it('returns the formatted meter details', async () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.meterDetails).to.equal({
+        make: 'MANUFACTURER',
+        serialNumber: 'SERIAL_NUMBER',
+        xDisplay: 'Yes'
+      })
+    })
+  })
+
+  describe('the "method" property', () => {
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
+
+      Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('METHOD')
+    })
+
+    it('returns the submission method', async () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.method).to.equal('METHOD')
+    })
+  })
+
+  describe('the "nilReturn" property', () => {
+    describe('when there is a submission', () => {
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog, true)
+        })
+
+        it('returns true', async () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.nilReturn).to.equal(true)
+        })
+      })
+
+      describe('which is not a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog)
+        })
+
+        it('returns false', async () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.nilReturn).to.equal(false)
+        })
+      })
+    })
+
+    describe('when there is no submission', () => {
+      it('returns false', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.nilReturn).to.equal(false)
+      })
+    })
+  })
+
+  describe('the "purpose" property', () => {
+    it('returns the alias when the first purpose has an alias', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.purpose).to.equal('PURPOSE_ALIAS')
+    })
+
+    it('returns the tertiary description when the first purpose has no alias ', () => {
+      testReturnLog.purposes.unshift({ tertiary: { description: 'TERTIARY_DESCRIPTION' } })
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.purpose).to.equal('TERTIARY_DESCRIPTION')
+    })
+  })
+
+  describe('the "receivedDate" property', () => {
+    it('returns the formatted date when a received date is present', () => {
+      testReturnLog.receivedDate = new Date(`2022-01-01`)
+
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.receivedDate).to.equal('1 January 2022')
+    })
+
+    it('returns null when no received date is present', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.receivedDate).to.be.null()
+    })
+  })
+
+  describe('the "returnPeriod" property', () => {
+    it('returns the formatted return period', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.returnPeriod).to.equal('1 April 2022 to 31 March 2023')
+    })
+  })
+
+  describe('the "startReading" property', () => {
+    describe('when there is a submission', () => {
+      beforeEach(async () => {
+        await setupSubmission(testReturnLog)
+
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
+          manufacturer: 'MANUFACTURER',
+          multipler: 10,
+          serialNumber: 'SERIAL_NUMBER',
+          startReading: 1234
+        })
+      })
+
+      it('returns the start reading', async () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.startReading).to.equal(1234)
+      })
+    })
+
+    describe('when there is no submission', () => {
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.startReading).to.be.null()
+      })
+    })
+  })
+
+  describe('the "summaryTableData" property', () => {
+    describe('when there is no submission', () => {
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.summaryTableData).to.be.null()
+      })
+    })
+
+    describe('when there is a submission', () => {
+      let StubbedViewReturnLogPresenter
+
+      beforeEach(async () => {
+        // We have to use Proxyquire to stub BaseReturnLogsPresenter as Sinon cannot stub dependencies that are imported
+        // via destructuring
+        StubbedViewReturnLogPresenter = Proxyquire('../../../app/presenters/return-logs/view-return-log.presenter.js', {
+          './base-return-logs.presenter.js': {
+            generateSummaryTableHeaders: Sinon.stub().returns('GENERATED_HEADERS'),
+            generateSummaryTableRows: Sinon.stub().returns('GENERATED_ROWS')
+          }
+        })
+
+        await setupSubmission(testReturnLog)
+      })
+
+      it('returns generated headers and rows', async () => {
+        const result = StubbedViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.summaryTableData.headers).to.equal('GENERATED_HEADERS')
+        expect(result.summaryTableData.rows).to.equal('GENERATED_ROWS')
+      })
+    })
+  })
+
+  describe('the "tableTitle" property', () => {
+    beforeEach(async () => {
+      await setupSubmission(testReturnLog)
+    })
+
+    it('returns the frequency in the title', () => {
+      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+      expect(result.tableTitle).to.contain('monthly')
+    })
+
+    describe('when the method is abstractionVolumes', () => {
+      it("returns 'abstraction volumes' in the title", () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.tableTitle).to.contain('abstraction volumes')
+      })
+    })
+
+    describe('when the method is not abstractionVolumes', () => {
+      it("returns 'meter readings' in the title", () => {
+        Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.tableTitle).to.contain('meter readings')
+      })
+    })
+  })
+
+  describe('the "total" property', () => {
+    describe('when there is no submission', () => {
+      it('returns 0', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.total).to.equal(0)
+      })
+    })
+
+    describe('when there is a submission', () => {
+      describe('which is a nil return', () => {
+        beforeEach(async () => {
+          await setupSubmission(testReturnLog, true)
+        })
+
+        it('returns 0', () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.total).to.equal(0)
+        })
+      })
+
+      describe('which is not a nil return', () => {
+        beforeEach(async () => {
+          testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
+
+          testReturnLog.returnSubmissions = [
+            await ReturnSubmissionHelper.add({
+              returnLogId: testReturnLog.id
+            })
+          ]
+
+          testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id
+            }),
+            await ReturnSubmissionLineHelper.add({
+              returnSubmissionId: testReturnLog.returnSubmissions[0].id,
+              startDate: new Date(`2022-01-02`),
+              endDate: new Date(`2022-02-08`)
+            })
+          ]
+        })
+
+        it('returns the formatted total quantity', () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+          expect(result.total).to.equal('8,760')
+        })
+      })
+    })
+  })
+})
+
+async function setupSubmission(testReturnLog, nilReturn = false) {
+  testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
+
+  testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, nilReturn })]
+
+  testReturnLog.returnSubmissions[0].returnSubmissionLines = [
+    await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnLog.returnSubmissions[0].id })
+  ]
+}

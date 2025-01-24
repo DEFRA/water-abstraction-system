@@ -220,6 +220,25 @@ function formatMoney(valueInPence, signed = false) {
 }
 
 /**
+ * Formats a number as a string with commas and decimal places, for example, 1000 as '1,000.000'
+ *
+ * @param {number} number - The number to format
+ * @param {number} [minimumFractionDigits=0] - Minimum number of digits after the decimal point
+ * @param {number} [maximumFractionDigits=3] - Maximum number of digits after the decimal point
+ *
+ * @returns {string|null} The formatted number or null if the number is null or undefined
+ */
+function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 3) {
+  // NOTE: We don't use !number because that would match 0, which for this helper is a valid number and something we
+  // want to format
+  if (number === null) {
+    return null
+  }
+
+  return number.toLocaleString('en-GB', { minimumFractionDigits, maximumFractionDigits })
+}
+
+/**
  * Formats a number, which represents a value in pence to pounds, for example, 12776805 as '127768.05'
  *
  * @param {*} valueInPence - The value to be formatted to pounds
@@ -260,7 +279,7 @@ function sentenceCase(value) {
 }
 
 /**
- * Convert a string to title case by capitalizing the first letter of each word
+ * Convert a string to title case by lowercasing all characters then capitalizing the first letter of each word
  *
  * Will work for strings containing multiple words or only one.
  *
@@ -269,7 +288,7 @@ function sentenceCase(value) {
  * @returns {string} The title cased string
  */
 function titleCase(value) {
-  const words = value.split(' ')
+  const words = value.toLowerCase().split(' ')
   const titleCasedWords = []
 
   words.forEach((word) => {
@@ -293,6 +312,7 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatMoney,
+  formatNumber,
   formatPounds,
   leftPadZeroes,
   sentenceCase,

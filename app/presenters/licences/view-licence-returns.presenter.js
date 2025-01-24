@@ -30,16 +30,16 @@ function go(returnLogs, hasRequirements, auth) {
 }
 
 function _link(status, returnLogId, canManageReturns) {
+  if (FeatureFlagsConfig.enableSystemReturnsView) {
+    return `/system/return-logs?id=${returnLogId}`
+  }
+
   if (['completed', 'void'].includes(status)) {
     return `/returns/return?id=${returnLogId}`
   }
 
   if (canManageReturns) {
-    if (FeatureFlagsConfig.enableSystemReturnsView) {
-      return `/system/return-logs/setup?returnLogId=${returnLogId}`
-    } else {
-      return `/return/internal?returnId=${returnLogId}`
-    }
+    return `/return/internal?returnId=${returnLogId}`
   }
 
   return null
