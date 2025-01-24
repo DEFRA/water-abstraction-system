@@ -50,17 +50,24 @@ describe('Notifications Setup - Review presenter', () => {
           {
             licences: [`${testRecipients.licenceHolder.all_licences}`],
             method: 'Letter - licence holder',
-            contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
           },
           {
             licences: [`${testRecipients.returnsTo.all_licences}`],
             method: 'Letter - Returns To',
-            contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
           },
           {
             licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
             method: 'Letter - licence holder',
-            contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: [
+              'Mr H J Licence holder with multiple licences',
+              '3',
+              'Privet Drive',
+              'Little Whinging',
+              'Surrey',
+              'WD25 7LR'
+            ]
           }
         ],
         recipientsAmount: 5
@@ -86,17 +93,24 @@ describe('Notifications Setup - Review presenter', () => {
             {
               licences: [`${testRecipients.licenceHolder.all_licences}`],
               method: 'Letter - licence holder',
-              contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
             },
             {
               licences: [`${testRecipients.returnsTo.all_licences}`],
               method: 'Letter - Returns To',
-              contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
             },
             {
               licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
               method: 'Letter - licence holder',
-              contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: [
+                'Mr H J Licence holder with multiple licences',
+                '3',
+                'Privet Drive',
+                'Little Whinging',
+                'Surrey',
+                'WD25 7LR'
+              ]
             }
           ])
         })
@@ -119,17 +133,41 @@ describe('Notifications Setup - Review presenter', () => {
           })
 
           describe('when the contact is an address', () => {
-            it('should convert the contact into an array', () => {
-              const result = ReviewPresenter.go(testInput, page, pagination)
+            describe('and the type is a "person"', () => {
+              it('should convert the contact into an array and return the persons name', () => {
+                const result = ReviewPresenter.go(testInput, page, pagination)
 
-              const testRecipient = result.recipients.find((recipient) =>
-                recipient.licences.includes(testRecipients.licenceHolder.all_licences)
-              )
+                const testRecipient = result.recipients.find((recipient) =>
+                  recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+                )
 
-              expect(testRecipient).to.equal({
-                licences: [`${testRecipients.licenceHolder.all_licences}`],
-                method: 'Letter - licence holder',
-                contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+                expect(testRecipient).to.equal({
+                  licences: [`${testRecipients.licenceHolder.all_licences}`],
+                  method: 'Letter - licence holder',
+                  contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
+                })
+              })
+            })
+
+            describe('and the type is a "organisation"', () => {
+              beforeEach(() => {
+                testRecipients = RecipientsFixture.recipients()
+                testRecipients.licenceHolder.contact.type = 'organisation'
+                testInput = Object.values(testRecipients)
+              })
+
+              it('should convert the contact into an array and return the organisation name', () => {
+                const result = ReviewPresenter.go(testInput, page, pagination)
+
+                const testRecipient = result.recipients.find((recipient) =>
+                  recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+                )
+
+                expect(testRecipient).to.equal({
+                  licences: [`${testRecipients.licenceHolder.all_licences}`],
+                  method: 'Letter - licence holder',
+                  contact: ['Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR']
+                })
               })
             })
           })

@@ -17,6 +17,7 @@ const { db } = require('../../../../db/db.js')
  */
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)
+  // const { rows } = await _fetch('2024-11-28', 'true')
 
   return rows
 }
@@ -84,8 +85,7 @@ FROM (
       ELSE 'Letter - returns to'
     END) AS message_type,
     (NULL) AS recipient,
-    LOWER( concat_ws(',', contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country'))
-      AS contact,
+    contacts as contact,
     (hashtext(
       LOWER(
         concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
@@ -148,6 +148,7 @@ FROM (
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
 ) recipients
+--     WHERE contact_hash_id = 801469274
 GROUP BY
   message_type,
   recipient,

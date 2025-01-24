@@ -16,11 +16,13 @@ const DedupeRecipientsService = require('../../../../app/services/notifications/
 describe('Notifications Setup - Dedupe Recipients service', () => {
   let testRecipients
   let testDuplicateRecipients
+  let testDuplicateContactWithDifferentType
   let testInput
 
   beforeEach(() => {
     testRecipients = RecipientsFixture.recipients()
     testDuplicateRecipients = RecipientsFixture.duplicateRecipients()
+    testDuplicateContactWithDifferentType = RecipientsFixture.duplicateContactWithDifferentType()
     testInput = [...Object.values(testRecipients), ...Object.values(testDuplicateRecipients)]
   })
 
@@ -31,7 +33,22 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       expect(result).to.equal([
         {
           all_licences: testRecipients.returnsTo.all_licences,
-          contact: 'harry,j,potter,2,privet drive,little whinging,surrey,wd25 7lr',
+          contact: {
+            addressLine1: '2',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'H J',
+            name: 'Returns to',
+            postcode: 'WD25 7LR',
+            role: 'Returns to',
+            salutation: 'Mr',
+            town: 'Little Whinging',
+            type: 'Person'
+          },
           contact_hash_id: 123223,
           message_type: 'Letter - Returns To'
         },
@@ -58,19 +75,64 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
         },
         {
           all_licences: testRecipients.licenceHolder.all_licences,
-          contact: 'harry,j,potter,1,privet drive,little whinging,surrey,wd25 7lr',
+          contact: {
+            addressLine1: '1',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'H J',
+            name: 'Licence holder',
+            postcode: 'WD25 7LR',
+            role: 'Licence holder',
+            salutation: 'Mr',
+            town: 'Little Whinging',
+            type: 'Person'
+          },
           contact_hash_id: -1672785580,
           message_type: 'Letter - licence holder'
         },
         {
           all_licences: testRecipients.licenceHolderWithMultipleLicences.all_licences,
-          contact: 'harry,j,potter,3,privet drive,little whinging,surrey,wd25 7lr',
+          contact: {
+            addressLine1: '3',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'H J',
+            name: 'Licence holder with multiple licences',
+            postcode: 'WD25 7LR',
+            role: 'Licence holder',
+            salutation: 'Mr',
+            town: 'Little Whinging',
+            type: 'Person'
+          },
           contact_hash_id: -167278576,
           message_type: 'Letter - licence holder'
         },
         {
           all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
-          contact: 'harry,j,potter,4,privet drive,little whinging,surrey,wd25 7lr',
+          contact: {
+            addressLine1: `4`,
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'H J',
+            name: 'Duplicate Returns to',
+            postcode: 'WD25 7LR',
+            role: 'Returns to',
+            salutation: 'Mr',
+            town: 'Little Whinging',
+            type: 'Person'
+          },
           contact_hash_id: 167278556784,
           message_type: 'Letter - both'
         }
@@ -106,8 +168,56 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
         expect(result).to.equal([
           {
             all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
-            contact: 'harry,j,potter,4,privet drive,little whinging,surrey,wd25 7lr',
+            contact: {
+              addressLine1: `4`,
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'H J',
+              name: 'Duplicate Returns to',
+              postcode: 'WD25 7LR',
+              role: 'Returns to',
+              salutation: 'Mr',
+              town: 'Little Whinging',
+              type: 'Person'
+            },
             contact_hash_id: 167278556784,
+            message_type: 'Letter - both'
+          }
+        ])
+      })
+    })
+
+    describe('when the recipient has a duplicate contact hash but a different "contact.type"', () => {
+      it('correctly returns the "Organisation" contact with the "message_type" Letter - both, and the both licences merged', () => {
+        const result = DedupeRecipientsService.go([
+          testDuplicateContactWithDifferentType.duplicateContactOrganisationType,
+          testDuplicateContactWithDifferentType.duplicateContactPersonType
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: `${testDuplicateContactWithDifferentType.duplicateContactOrganisationType.all_licences},${testDuplicateContactWithDifferentType.duplicateContactPersonType.all_licences}`,
+            contact: {
+              addressLine1: `5`,
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'H J',
+              name: 'Duplicate contact type',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: 'Mr',
+              town: 'Little Whinging',
+              type: 'Organisation'
+            },
+            contact_hash_id: 1234756,
             message_type: 'Letter - both'
           }
         ])
