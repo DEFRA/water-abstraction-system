@@ -56,11 +56,13 @@ function determineReturnsPeriods(returnCycle) {
  *
  * The result includes the start date, end date, and due date for each period.
  *
- * @param {Date} determinationDate - The date to base the calculation on. Defaults to the current date.
+ * @param {Date} date - The date to base the calculation on. Defaults to the current date.
  *
  * @returns {object} An object containing calculated dates for all return periods
  */
-function determineUpcomingReturnsPeriods(determinationDate = new Date()) {
+function determineUpcomingReturnsPeriods(date = new Date()) {
+  const determinationDate = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+
   return {
     allYear: {
       startDate: _cycleStartDate(determinationDate, returnPeriodDates.allYear),
@@ -179,11 +181,9 @@ function _isDue(determinationDate, period) {
   const periodDueDay = period.dueDate.day
   const periodDueMonth = period.dueDate.month + 1
 
-  const dueDate = new Date(
-    `${year}-${String(periodDueMonth).padStart(2, '0')}-${String(periodDueDay).padStart(2, '0')}T23:59:59.999Z`
-  )
+  const dueDate = new Date(`${year}-${periodDueMonth}-${periodDueDay}`)
 
-  return dueDate.getTime() < determinationDate.getTime()
+  return dueDate < determinationDate
 }
 
 /**
