@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined
- * @module CheckPresenter
+ * @module NoAnnualBillRunPresenter
  */
 
 const { formatBillRunType, formatChargeScheme } = require('../../../base.presenter.js')
