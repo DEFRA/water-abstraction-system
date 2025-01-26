@@ -36,7 +36,7 @@ describe('Bill Runs - Setup - No Annual Bill Run presenter', () => {
         billRunType: 'Supplementary',
         chargeScheme: 'Current',
         dateCreated: null,
-        financialYear: null,
+        financialYearEnd: null,
         pageTitle: 'This bill run is blocked',
         regionName: session.regionName,
         sessionId: session.id,

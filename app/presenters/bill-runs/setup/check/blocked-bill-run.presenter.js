@@ -5,12 +5,7 @@
  * @module BlockedBillRunPresenter
  */
 
-const {
-  formatBillRunType,
-  formatChargeScheme,
-  formatFinancialYear,
-  formatLongDate
-} = require('../../../base.presenter.js')
+const { formatBillRunType, formatChargeScheme, formatLongDate } = require('../../../base.presenter.js')
 const { checkPageBackLink } = require('./base-check.presenter.js')
 
 const LAST_PRESROC_YEAR = 2022
@@ -40,7 +35,7 @@ function go(session, blockingResults) {
     billRunType,
     chargeScheme: formatChargeScheme(firstMatch.scheme),
     dateCreated: formatLongDate(firstMatch.createdAt),
-    financialYear: formatFinancialYear(toFinancialYearEnding),
+    financialYearEnd: toFinancialYearEnding,
     pageTitle: messages.title,
     regionName,
     sessionId,

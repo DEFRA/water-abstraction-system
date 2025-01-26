@@ -44,7 +44,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
         billRunType: 'Supplementary',
         chargeScheme: 'Both',
         dateCreated: null,
-        financialYear: '2024 to 2025',
+        financialYearEnd: 2025,
         pageTitle: 'Check the bill run to be created',
         regionName: session.regionName,
         sessionId: session.id,

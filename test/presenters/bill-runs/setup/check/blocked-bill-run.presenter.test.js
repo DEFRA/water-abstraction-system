@@ -58,7 +58,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
         billRunType: 'Annual',
         chargeScheme: 'Current',
         dateCreated: '1 May 2024',
-        financialYear: '2024 to 2025',
+        financialYearEnd: 2025,
         pageTitle: 'This bill run already exists',
         regionName: session.regionName,
         sessionId: session.id,

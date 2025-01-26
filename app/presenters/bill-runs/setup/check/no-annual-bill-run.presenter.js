@@ -45,7 +45,7 @@ function go(session) {
     billRunType: formatBillRunType(session.type, 'sroc', session.summer),
     chargeScheme: formatChargeScheme('sroc'),
     dateCreated: null,
-    financialYear: null,
+    financialYearEnd: null,
     pageTitle: 'This bill run is blocked',
     regionName,
     sessionId,

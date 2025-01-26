@@ -5,7 +5,7 @@
  * @module AllowBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme, formatFinancialYear } = require('../../../base.presenter.js')
+const { formatBillRunType, formatChargeScheme } = require('../../../base.presenter.js')
 const { checkPageBackLink } = require('./base-check.presenter.js')
 const { engineTriggers } = require('../../../../lib/static-lookups.lib.js')
 
@@ -33,7 +33,7 @@ function go(session, blockingResults) {
     billRunType,
     chargeScheme: _chargeScheme(trigger),
     dateCreated: null,
-    financialYear: formatFinancialYear(toFinancialYearEnding),
+    financialYearEnd: toFinancialYearEnding,
     pageTitle: 'Check the bill run to be created',
     regionName,
     sessionId,
