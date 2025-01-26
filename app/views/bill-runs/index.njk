@@ -10,17 +10,17 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       {# Bill runs busy banner #}
-      {% if busy == 'both' %}
+      {% if busy === 'both' %}
         {{ govukNotificationBanner({
             html: '<p class="govuk-notification-banner__heading">Bill runs are currently busy building and cancelling.</p>
               <p class="govuk-body">Please wait for these bill runs to finish before creating another one.</p>'
         }) }}
-      {% elif busy == 'building' %}
+      {% elif busy === 'building' %}
         {{ govukNotificationBanner({
             html: '<p class="govuk-notification-banner__heading">A bill run is currently building.</p>
               <p class="govuk-body">Please wait for this bill run to finish building before creating another one.</p>'
         }) }}
-      {% elif busy == 'cancelling' %}
+      {% elif busy === 'cancelling' %}
         {{ govukNotificationBanner({
             html: '<p class="govuk-notification-banner__heading">A bill run is currently cancelling.</p>
               <p class="govuk-body">Please wait for this bill run to finish cancelling before creating another one.</p>'
@@ -44,7 +44,7 @@
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
       {# Results #}
-      {% if billRuns|length == 0 %}
+      {% if billRuns|length === 0 %}
         <p>No bill runs found.</p>
       {% else %}
         <h2 class="govuk-heading-l govuk-!-margin-top-6">View a bill run</h2>
@@ -66,7 +66,7 @@
               {{ billRun.createdAt }}
             {% endif %}
 
-            {% if billRun.scheme == 'alcs' %}
+            {% if billRun.scheme === 'alcs' %}
               <div class="govuk-body-s govuk-!-margin-0">Old charge scheme</div>
             {% endif %}
           {% endset %}

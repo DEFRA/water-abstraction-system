@@ -39,7 +39,7 @@ describe('Return Versions - View presenter', () => {
       reason: 'New licence',
       requirements: [
         {
-          abstractionPeriod: 'From 1 April to 31 October',
+          abstractionPeriod: '1 April to 31 October',
           agreementsExceptions: 'None',
           frequencyCollected: 'monthly',
           frequencyReported: 'monthly',
@@ -205,12 +205,29 @@ describe('Return Versions - View presenter', () => {
 
   describe('the "requirements" property', () => {
     describe('the requirements "abstractionPeriod" property', () => {
-      it('formats the abstraction period for display', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('when the abstraction period has been set', () => {
+        it('formats the abstraction period for display', () => {
+          const result = ViewPresenter.go(returnVersion)
 
-        const { abstractionPeriod } = result.requirements[0]
+          const { abstractionPeriod } = result.requirements[0]
 
-        expect(abstractionPeriod).to.equal('From 1 April to 31 October')
+          expect(abstractionPeriod).to.equal('1 April to 31 October')
+        })
+      })
+
+      describe('when the abstraction period has not been set', () => {
+        beforeEach(() => {
+          returnVersion.returnRequirements[0].abstractionPeriodEndDay = null
+          returnVersion.returnRequirements[0].abstractionPeriodEndMonth = null
+          returnVersion.returnRequirements[0].abstractionPeriodStartDay = null
+          returnVersion.returnRequirements[0].abstractionPeriodStartMonth = null
+        })
+
+        it('returns an empty string', () => {
+          const result = ViewPresenter.go(returnVersion)
+
+          expect(result.requirements[0].abstractionPeriod).to.equal('')
+        })
       })
     })
 
