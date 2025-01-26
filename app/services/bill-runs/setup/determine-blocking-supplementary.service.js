@@ -147,7 +147,7 @@ function _trigger(matches, toFinancialYearEnding) {
   }
 
   if (matches.length === 0) {
-    if (toFinancialYearEnding > 2022) {
+    if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
       return engineTriggers.both
     }
 
