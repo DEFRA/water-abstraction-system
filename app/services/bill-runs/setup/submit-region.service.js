@@ -37,7 +37,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload, regions)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, payload, regions)
 
     // The journey is complete (we don't need any details) if the bill run type is not 2PT
     return { setupComplete: !session.type.startsWith('two_part') }
@@ -52,10 +52,14 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
+async function _save(session, payload, regions) {
   const currentData = session
+  const selectedRegion = regions.find((region) => {
+    return region.id === payload.region
+  })
 
   currentData.region = payload.region
+  currentData.regionName = selectedRegion.displayName
 
   return session.$query().patch({ data: currentData })
 }
