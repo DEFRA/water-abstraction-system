@@ -90,7 +90,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     it('returns the match and determines that only the "old" engine can be triggered', async () => {
       const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({ matches: [srocMatch], toFinancialYearEnding, trigger: engineTriggers.old })
+      expect(result).to.equal({ matches: [srocMatch], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
     })
   })
 
