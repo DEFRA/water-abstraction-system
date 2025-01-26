@@ -7,8 +7,8 @@
 
 const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
 const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
-const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
 const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
+const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
