@@ -42,7 +42,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
         billRunNumber: null,
         billRunStatus: null,
         billRunType: 'Supplementary',
-        chargeScheme: 'Current',
+        chargeScheme: 'Both',
         dateCreated: null,
         financialYear: '2024 to 2025',
         pageTitle: 'Check the bill run to be created',
@@ -50,6 +50,40 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
         sessionId: session.id,
         showCreateButton: true,
         warningMessage: null
+      })
+    })
+  })
+
+  describe('the "chargeScheme" property', () => {
+    describe('when both bill run types can be created (supplementary only)', () => {
+      it('returns "Both"', () => {
+        const result = AllowedBillRunPresenter.go(session, blockingResults)
+
+        expect(result.chargeScheme).to.equal('Both')
+      })
+    })
+
+    describe('when only an SROC bill run type can be created', () => {
+      beforeEach(() => {
+        blockingResults.trigger = engineTriggers.current
+      })
+
+      it('returns "Current"', () => {
+        const result = AllowedBillRunPresenter.go(session, blockingResults)
+
+        expect(result.chargeScheme).to.equal('Current')
+      })
+    })
+
+    describe('when only a PRESROC bill run type can be created', () => {
+      beforeEach(() => {
+        blockingResults.trigger = engineTriggers.old
+      })
+
+      it('returns "Current"', () => {
+        const result = AllowedBillRunPresenter.go(session, blockingResults)
+
+        expect(result.chargeScheme).to.equal('Old')
       })
     })
   })

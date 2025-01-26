@@ -326,7 +326,7 @@ describe('Bill Runs - Setup - Check service', () => {
             billRunNumber: null,
             billRunStatus: null,
             billRunType: 'Supplementary',
-            chargeScheme: 'Current',
+            chargeScheme: 'Both',
             dateCreated: null,
             financialYear: '2024 to 2025',
             pageTitle: 'Check the bill run to be created',

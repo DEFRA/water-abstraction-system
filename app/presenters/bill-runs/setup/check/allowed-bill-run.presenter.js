@@ -31,7 +31,7 @@ function go(session, blockingResults) {
     billRunNumber: null,
     billRunStatus: null,
     billRunType,
-    chargeScheme: formatChargeScheme(scheme),
+    chargeScheme: _chargeScheme(trigger),
     dateCreated: null,
     financialYear: formatFinancialYear(toFinancialYearEnding),
     pageTitle: 'Check the bill run to be created',
@@ -40,6 +40,16 @@ function go(session, blockingResults) {
     showCreateButton: true,
     warningMessage: null
   }
+}
+
+function _chargeScheme(trigger) {
+  if (trigger === engineTriggers.both) {
+    return 'Both'
+  }
+
+  const scheme = trigger === engineTriggers.old ? 'presroc' : 'sroc'
+
+  return formatChargeScheme(scheme)
 }
 
 module.exports = {
