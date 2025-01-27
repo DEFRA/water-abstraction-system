@@ -3,9 +3,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block breadcrumbs %}
@@ -14,8 +16,6 @@
     href: "returns-period"
   }) }}
 {% endblock %}
-
-
 
 {% set rows = [] %}
 
@@ -47,7 +47,7 @@
 
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+    <h1 class="govuk-heading-l"> {{ pageTitle }} </h1>
 
     <p> Returns invitations are ready to send.</p>
 
@@ -63,7 +63,11 @@
       }) }}
     </div>
 
-    <p>Showing {{ defaultPageSize }} of {{ recipientsAmount }}</p>
+    {% if pagination.numberOfPages > 1 %}
+      <p> Showing {{ defaultPageSize }} of {{ recipientsAmount }} recipients </p>
+    {% else %}
+      <p> Showing all {{ recipientsAmount }} recipients </p>
+    {% endif %}
 
     {{ govukTable({
       captionClasses: "govuk-table__caption--m",
@@ -84,6 +88,10 @@
       ],
       rows: rows
     }) }}
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
 
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
