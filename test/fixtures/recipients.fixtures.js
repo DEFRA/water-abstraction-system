@@ -34,7 +34,9 @@ function duplicateRecipients() {
 }
 
 /**
+ * Create duplicate by contact hash recipients with different types
  *
+ * @returns {object} - Returns duplicate contact hash recipients with different types
  */
 function duplicateContactWithDifferentType() {
   return {

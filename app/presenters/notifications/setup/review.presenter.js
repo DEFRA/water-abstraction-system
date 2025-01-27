@@ -6,8 +6,7 @@
  */
 
 const { defaultPageSize } = require('../../../../config/database.config.js')
-const { licenceContactDetails } = require('../..//contact.presenter.js')
-const { titleCase } = require('../../base.presenter.js')
+const CRMContactPresenter = require('../../crm-contact.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/review` page
@@ -43,7 +42,7 @@ function _contact(recipient) {
     return [recipient.recipient]
   }
 
-  const [contact] = licenceContactDetails([recipient.contact])
+  const [contact] = CRMContactPresenter.go([recipient.contact])
 
   return [contact.name, ...contact.address]
 }

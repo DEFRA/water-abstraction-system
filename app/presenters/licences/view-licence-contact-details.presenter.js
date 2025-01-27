@@ -5,7 +5,7 @@
  * @module ViewLicenceContactDetailsPresenter
  */
 
-const { licenceContactDetails } = require('../contact.presenter.js')
+const CRMContactPresenter = require('../crm-contact.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/licence-contact` view licence contact details link page
@@ -20,7 +20,7 @@ function go(licence) {
   return {
     licenceId,
     licenceRef,
-    licenceContactDetails: licenceContactDetails(licenceDocumentHeader.metadata.contacts),
+    licenceContactDetails: CRMContactPresenter.go(licenceDocumentHeader.metadata.contacts),
     pageTitle: 'Licence contact details'
   }
 }

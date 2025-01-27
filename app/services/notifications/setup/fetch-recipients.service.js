@@ -17,7 +17,6 @@ const { db } = require('../../../../db/db.js')
  */
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)
-  // const { rows } = await _fetch('2024-11-28', 'true')
 
   return rows
 }
@@ -148,7 +147,6 @@ FROM (
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
 ) recipients
---     WHERE contact_hash_id = 801469274
 GROUP BY
   message_type,
   recipient,
