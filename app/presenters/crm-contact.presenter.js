@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats contact data from crm.metadata.contacts
+ * Formats contact data from crm.licenceDocumentHeader.metadata.contacts
  * @module CRMContactPresenter
  */
 
@@ -21,7 +21,7 @@ const contactAddressFields = [
 /**
  * Processes an array of contacts and returns a list of objects containing the contact's address, role, and name.
  *
- * This contacts come directly from the **licenceDocumentHeader.metadata.contacts** object.
+ * This contacts come directly from the **crm.licenceDocumentHeader.metadata.contacts** object.
  *
  * The function first filters the contacts to include only those with valid roles.
  * Then, for each valid contact, it extracts the address, role, and name.
