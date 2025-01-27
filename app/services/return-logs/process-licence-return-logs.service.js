@@ -93,7 +93,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
 
   // If there is no licenceEndDate or if there is a licenceEndDate and the return cycle starts before the licenceEndDate
   // then create the return logs, otherwise just void the return logs for that cycle
-  if (!licenceEndDate || (licenceEndDate && returnCycle.startDate < licenceEndDate)) {
+  if (!licenceEndDate || returnCycle.startDate < licenceEndDate) {
     // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
     // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
     // matching an existing one), the insert will be ignored.
@@ -101,7 +101,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
     // return logs for the given cycle _not_ to mark as 'void'.
     //
-    // Because we've processed _all_ return requirements for the cycle, we no any return logs whose ID is not in
+    // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
     // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
     for (const returnRequirement of requirementsToProcess) {
       const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle)
