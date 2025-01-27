@@ -5,6 +5,7 @@
  * @module ReturnLogsSetupController
  */
 
+const CheckService = require('../services/return-logs/setup/check.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
@@ -20,6 +21,13 @@ const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
+
+async function check(request, h) {
+  const { sessionId } = request.params
+  const pageData = await CheckService.go(sessionId)
+
+  return h.view('return-logs/setup/check.njk', pageData)
+}
 
 async function guidance(_request, h) {
   return h.view('return-logs/setup/guidance.njk')
@@ -192,6 +200,7 @@ async function units(request, h) {
 }
 
 module.exports = {
+  check,
   guidance,
   meterDetails,
   meterProvided,
