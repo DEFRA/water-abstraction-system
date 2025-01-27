@@ -9,13 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-const RegionModel = require('../../../../app/models/region.model.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/bill-runs/setup/submit-check.service.js')
@@ -31,14 +30,23 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       permissions: { abstractionReform: false, billRuns: true, manage: true }
     }
   }
-  const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
+  const region = { id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5', displayName: 'Avalon' }
+  const sessionId = '4bcb28c5-95ae-487c-8f13-ac71ec3c5ff6'
 
   let blockingResults
   let createStub
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { region: regionId, type: 'annual' } })
+    session = { id: sessionId, region: region.id, regionName: region.displayName, type: 'annual' }
+
+    Sinon.stub(SessionModel, 'query').returns({
+      findById: Sinon.stub().withArgs(sessionId).resolves(session)
+    })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -70,7 +78,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
               batchType: 'annual',
               billRunNumber: 12345,
               createdAt: new Date('2024-05-01'),
-              region: { id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5', displayName: 'Stormlands' },
+              region,
               scheme: 'sroc',
               status: 'sent',
               summer: false,
@@ -82,11 +90,6 @@ describe('Bill Runs - Setup - Submit Check service', () => {
         }
 
         Sinon.stub(DetermineBlockingBillRunService, 'go').resolves(blockingResults)
-
-        Sinon.stub(RegionModel, 'query').returns({
-          select: Sinon.stub().returnsThis(),
-          findById: Sinon.stub().withArgs(regionId).resolves({ id: regionId, displayName: 'Stormlands' })
-        })
       })
 
       it('returns page data needed to re-render the view', async () => {
@@ -102,9 +105,9 @@ describe('Bill Runs - Setup - Submit Check service', () => {
           billRunType: 'Annual',
           chargeScheme: 'Current',
           dateCreated: '1 May 2024',
-          financialYear: '2024 to 2025',
+          financialYearEnd: 2025,
           pageTitle: 'This bill run already exists',
-          regionName: 'Stormlands',
+          regionName: 'Avalon',
           sessionId: session.id,
           showCreateButton: false,
           warningMessage: 'You can only have one Annual bill run per region in a financial year'
