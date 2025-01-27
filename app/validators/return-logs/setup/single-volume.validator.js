@@ -18,7 +18,7 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const singleVolumeError = 'Select which units were used'
+  const singleVolumeError = "Select if it's a single volume"
   const singleVolumeQuantityError = 'Enter a total figure'
 
   const schema = Joi.object({
