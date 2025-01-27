@@ -39,7 +39,7 @@ const contactAddressFields = [
  *   { role: 'Returns to', name: 'Jane Smith', address: { street: '456 Elm St', city: 'Springfield' } }
  * ];
  * const result = go(contacts);
- * console.log(result);
+ *
  * // Output:
  * // [
  * //   { address: { street: '123 Main St', city: 'Springfield' }, role: 'Licence holder', name: 'John Doe' },
@@ -99,7 +99,7 @@ function _extractOnlyContactsWithRoles(contacts) {
  *   country: 'USA'
  * };
  * const address = _contactAddress(contact);
- * console.log(address); // ['123 Main St', 'Apt 4B', 'Springfield', 'Greene', '12345', 'USA']
+ * // Output: ['123 Main St', 'Apt 4B', 'Springfield', 'Greene', '12345', 'USA']
  *
  * @private
  */
@@ -133,7 +133,7 @@ function _contactAddress(contact) {
  *   initials: 'J.D.',
  *   name: 'Doe'
  * };
- * console.log(_contactName(contact)); // 'Dr. J.D. Doe'
+ * // Output: 'Dr. J.D. Doe'
  *
  * @private
  */
