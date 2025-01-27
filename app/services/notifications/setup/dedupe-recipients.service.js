@@ -98,9 +98,9 @@ function _messageType(acc, obj) {
     return 'Letter - licence holder'
   } else if (currentRole === 'Returns to' && newRole === 'Returns to') {
     return 'Letter - returns to'
+  } else {
+    return 'Letter - both'
   }
-
-  return 'Letter - both'
 }
 
 function _duplicatePrimaryUserAndReturnsToContact(acc, obj) {
