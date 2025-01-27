@@ -5,6 +5,18 @@ const ReturnLogsSetupController = require('../controllers/return-logs-setup.cont
 const routes = [
   {
     method: 'GET',
+    path: '/return-logs/setup',
+    options: {
+      handler: ReturnLogsSetupController.setup,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/guidance',
     options: {
       handler: ReturnLogsSetupController.guidance,
@@ -17,9 +29,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup',
+    path: '/return-logs/setup/{sessionId}/check',
     options: {
-      handler: ReturnLogsSetupController.setup,
+      handler: ReturnLogsSetupController.check,
       auth: {
         access: {
           scope: ['billing']
@@ -164,6 +176,30 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/meter-details',
     options: {
       handler: ReturnLogsSetupController.submitMeterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.singleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.submitSingleVolume,
       auth: {
         access: {
           scope: ['billing']
