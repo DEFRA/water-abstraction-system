@@ -47,7 +47,7 @@ function _addDuplicateLicenceHolder(licenceRef) {
   return {
     all_licences: licenceRef,
     message_type: 'Letter - licence holder',
-    contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
+    contact: _contact('4', 'Duplicate Licence holder', 'Licence holder'),
     contact_hash_id: 167278556784
   }
 }

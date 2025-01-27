@@ -59,29 +59,22 @@ function _removeDuplicateContactHash(acc, obj) {
  * @private
  */
 function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
-  const recipients = [acc[obj.contact_hash_id], obj].filter(
-    (recipient) => recipient.message_type === 'Letter - licence holder'
-  )
+  let messageType = 'Letter - both'
 
-  if (recipients.length === 1) {
-    return {
-      ...recipients[0],
-      message_type: 'Letter - both'
-    }
+  if (acc[obj.contact_hash_id].contact.role === 'Licence holder' && obj.contact.role === 'Licence holder') {
+    messageType = 'Letter - licence holder'
   }
 
-  const recipientOrganisation = [acc[obj.contact_hash_id], obj].find(
-    (recipient) => recipient.contact.type.toLowerCase() === 'organisation'
-  )
-
-  const recipientPerson = [acc[obj.contact_hash_id], obj].find(
-    (recipient) => recipient.contact.type.toLowerCase() !== 'organisation'
-  )
+  if (acc[obj.contact_hash_id].contact.role === 'Returns to' && obj.contact.role === 'Returns to') {
+    messageType = 'Letter - returns to'
+  }
 
   return {
-    ...recipientOrganisation,
-    all_licences: recipientOrganisation.all_licences + ',' + recipientPerson.all_licences,
-    message_type: 'Letter - both'
+    ...acc[obj.contact_hash_id],
+    all_licences: [
+      ...new Set([...acc[obj.contact_hash_id].all_licences.split(','), ...obj.all_licences.split(',')])
+    ].join(','),
+    message_type: messageType
   }
 }
 

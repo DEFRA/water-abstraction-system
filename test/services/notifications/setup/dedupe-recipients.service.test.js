@@ -126,9 +126,9 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
             county: 'Surrey',
             forename: 'Harry',
             initials: 'H J',
-            name: 'Duplicate Returns to',
+            name: 'Duplicate Licence holder',
             postcode: 'WD25 7LR',
-            role: 'Returns to',
+            role: 'Licence holder',
             salutation: 'Mr',
             town: 'Little Whinging',
             type: 'Person'
@@ -177,6 +177,72 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
               county: 'Surrey',
               forename: 'Harry',
               initials: 'H J',
+              name: 'Duplicate Licence holder',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: 'Mr',
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: 167278556784,
+            message_type: 'Letter - both'
+          }
+        ])
+      })
+    })
+
+    describe('when the recipient has a duplicate "licence holder" and "licence holder" contact hash', () => {
+      it('correctly returns only the "licence holder" with the "message_type" Letter - licence holder', () => {
+        const result = DedupeRecipientsService.go([
+          testDuplicateRecipients.duplicateLicenceHolder,
+          testDuplicateRecipients.duplicateLicenceHolder
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicateLicenceHolder.all_licences,
+            contact: {
+              addressLine1: `4`,
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'H J',
+              name: 'Duplicate Licence holder',
+              postcode: 'WD25 7LR',
+              role: 'Licence holder',
+              salutation: 'Mr',
+              town: 'Little Whinging',
+              type: 'Person'
+            },
+            contact_hash_id: 167278556784,
+            message_type: 'Letter - licence holder'
+          }
+        ])
+      })
+    })
+
+    describe('when the recipient has a duplicate "Returns to" and "Returns to" contact hash', () => {
+      it('correctly returns only the "return to" with the "message_type" Letter - returns to', () => {
+        const result = DedupeRecipientsService.go([
+          testDuplicateRecipients.duplicateReturnsTo,
+          testDuplicateRecipients.duplicateReturnsTo
+        ])
+
+        expect(result).to.equal([
+          {
+            all_licences: testDuplicateRecipients.duplicateReturnsTo.all_licences,
+            contact: {
+              addressLine1: `4`,
+              addressLine2: 'Privet Drive',
+              addressLine3: null,
+              addressLine4: null,
+              country: null,
+              county: 'Surrey',
+              forename: 'Harry',
+              initials: 'H J',
               name: 'Duplicate Returns to',
               postcode: 'WD25 7LR',
               role: 'Returns to',
@@ -185,7 +251,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
               type: 'Person'
             },
             contact_hash_id: 167278556784,
-            message_type: 'Letter - both'
+            message_type: 'Letter - returns to'
           }
         ])
       })
@@ -218,7 +284,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
               type: 'Organisation'
             },
             contact_hash_id: 1234756,
-            message_type: 'Letter - both'
+            message_type: 'Letter - licence holder'
           }
         ])
       })
