@@ -54,7 +54,7 @@ const LAST_PRESROC_YEAR = 2022
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(regionId) {
-  const toFinancialYearEnding = await _toFinancialYearEnding(regionId)
+  let toFinancialYearEnding = await _toFinancialYearEnding(regionId)
 
   if (toFinancialYearEnding === 0) {
     return { matches: [], toFinancialYearEnding, trigger: engineTriggers.neither }
@@ -68,7 +68,13 @@ async function go(regionId) {
     return match
   })
 
-  const trigger = _trigger(matches)
+  const trigger = _trigger(matches, toFinancialYearEnding)
+
+  // If we determined that only an old PRESROC bill run can be generated then the financial year ending can only be the
+  // last PRESROC year
+  if (trigger === engineTriggers.old) {
+    toFinancialYearEnding = LAST_PRESROC_YEAR
+  }
 
   return { matches, toFinancialYearEnding, trigger }
 }
@@ -135,13 +141,20 @@ async function _toFinancialYearEnding(regionId) {
   return billRun ? billRun.toFinancialYearEnding : 0
 }
 
-function _trigger(matches) {
+function _trigger(matches, toFinancialYearEnding) {
   if (matches.length === 2) {
     return engineTriggers.neither
   }
 
   if (matches.length === 0) {
-    return engineTriggers.both
+    if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
+      return engineTriggers.both
+    }
+
+    // NOTE: This is protecting an edge case you can get in non-production environments, but not in production. There
+    // are no blocking bill runs, but the last annual was a PRESROC. So, `toFinancialYearEnding` has been determined as
+    // a PRESROC year. This means we should only allow the legacy supplementary bill run to be triggered.
+    return engineTriggers.old
   }
 
   if (matches[0].scheme === 'alcs') {
