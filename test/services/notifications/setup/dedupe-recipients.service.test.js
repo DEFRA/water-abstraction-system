@@ -139,7 +139,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       ])
     })
 
-    describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
+    describe('when the recipient has a duplicate "primary user" and "returns to" with the same contact hash', () => {
       it('correctly returns only the "primary user" with the "message_type" Email - both', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
@@ -158,8 +158,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
     })
 
-    describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
-      it('correctly returns only the "licence holder" with the "message_type" Letter - both', () => {
+    describe('when the recipient has a duplicate "licence holder" and "Returns to" with the same contact hash', () => {
+      it('correctly returns "all_licences" merged and the "message_type" Letter - both', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
@@ -191,8 +191,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
     })
 
-    describe('when the recipient has a duplicate "licence holder" and "licence holder" contact hash', () => {
-      it('correctly returns only the "licence holder" with the "message_type" Letter - licence holder', () => {
+    describe('when the recipient has a duplicate "licence holder" and "licence holder" with the same contact hash', () => {
+      it('correctly returns "all_licences" merged and the "message_type" Letter - licence holder', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateLicenceHolder
@@ -224,8 +224,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
     })
 
-    describe('when the recipient has a duplicate "Returns to" and "Returns to" contact hash', () => {
-      it('correctly returns only the "return to" with the "message_type" Letter - returns to', () => {
+    describe('when the recipient has a duplicate "Returns to" and "Returns to" with the same contact hash', () => {
+      it('correctly returns "all_licences" merged and the "message_type" Letter - returns to', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateRecipients.duplicateReturnsTo,
           testDuplicateRecipients.duplicateReturnsTo
@@ -257,7 +257,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
       })
     })
 
-    describe('when the recipient has a duplicate contact hash but a different "contact.type"', () => {
+    describe('when the recipient has a duplicate the same role but a different "contact.type" with the same contact hash', () => {
       it('correctly returns the "Organisation" contact with the "message_type" Letter - both, and the both licences merged', () => {
         const result = DedupeRecipientsService.go([
           testDuplicateContactWithDifferentType.duplicateContactOrganisationType,
