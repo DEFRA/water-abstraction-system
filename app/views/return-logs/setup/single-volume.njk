@@ -4,6 +4,7 @@
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -22,8 +23,8 @@
       titleText: "There is a problem",
       errorList: [
         {
-          text: error.text,
-          href: "#meter-provided-error"
+          text: error.message,
+          href: "#single-volume-error"
         }
       ]
     }) }}
@@ -38,9 +39,34 @@
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
+      {% set quantityInputHTML %}
+        {% if error %}
+          {% set errorClass = 'govuk-input--error' %}
+        {% else %}
+          {% set errorClass = '' %}
+        {% endif %}
+
+
+      {{ govukInput({
+        label: {
+          text: "Enter the total amount",
+          classes: "govuk-label"
+        },
+        id: "single-volume-quantity",
+        name: "singleVolumeQuantity",
+        classes: "govuk-input--width-10",
+        value: singleVolumeQuantity,
+        suffix: {
+          text: units
+        },
+        errorMessage: error.volumeInputFormElement
+      }) }}
+      {% endset %}
+
       {{ govukRadios({
-        name: "meterProvided",
-        errorMessage: error,
+        id: "single-volume",
+        name: "singleVolume",
+        errorMessage: error.radioFormElement,
         fieldset: {
           legend: {
             classes: "govuk-fieldset__legend--l"
@@ -50,12 +76,15 @@
           {
             value: "yes",
             text: "Yes",
-            checked: "yes" === meterProvided
+            checked: singleVolume === 'yes',
+            conditional: {
+              html: quantityInputHTML
+            }
           },
           {
             value: "no",
             text: "No",
-            checked: "no" === meterProvided
+            checked: singleVolume === 'no'
           }
         ]
       }) }}
