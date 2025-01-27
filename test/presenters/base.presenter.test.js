@@ -430,5 +430,17 @@ describe('Base presenter', () => {
         expect(result).to.equal('Spray Irrigation')
       })
     })
+
+    describe('when the value has text in brackets', () => {
+      beforeEach(() => {
+        valueToTitleCase = '(text in brackets)'
+      })
+
+      it('correctly returns the value in title case', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('(Text In Brackets)')
+      })
+    })
   })
 })

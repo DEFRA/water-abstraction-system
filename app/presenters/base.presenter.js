@@ -275,16 +275,20 @@ function sentenceCase(value) {
  * @returns {string} The title cased string
  */
 function titleCase(value) {
-  const words = value.toLowerCase().split(' ')
-  const titleCasedWords = []
-
-  words.forEach((word) => {
-    const titleCasedWord = word.charAt(0).toUpperCase() + word.slice(1)
-
-    titleCasedWords.push(titleCasedWord)
-  })
-
-  return titleCasedWords.join(' ')
+  return (
+    value
+      // We convert the entire string to lower case so we can correctly convert all-caps strings like 'TEXT' to 'Text'.
+      .toLowerCase()
+      // replace() iterates over a string. We use it to match each word with a regex and apply a function to each match.
+      // We define a word as:
+      // - Starts on a word boundary (eg. a space, bracket, dash, etc.). We use \b for this.
+      // - Has a word character. We use \w for this. We use + to specify there are one or more word chars.
+      // This regex correctly handles converting cases like '(text)' to '(Text)'.
+      .replace(/\b\w+/g, (match) => {
+        // Convert the first char of the matched string to upper case and append the remainder of the string
+        return match.charAt(0).toUpperCase() + match.slice(1)
+      })
+  )
 }
 
 module.exports = {
