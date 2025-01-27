@@ -112,7 +112,7 @@ describe('Process licence return logs service', () => {
         fetchReturnRequirementsStub.resolves([_returnRequirement])
       })
 
-      describe.only('and the change date means multiple return cycles need processing', () => {
+      describe('and the change date means multiple return cycles need processing', () => {
         beforeEach(() => {
           returnCycleModelStub.resolves(returnCycles(4))
 
