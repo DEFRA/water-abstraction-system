@@ -53,7 +53,7 @@ async function go(licenceId, changeDate = null) {
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
-  const returnCycles = await _fetchReturnCycles(changeDate, licenceEndDate)
+  const returnCycles = await _fetchReturnCycles(changeDate)
 
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate)
