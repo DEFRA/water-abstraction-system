@@ -44,44 +44,72 @@ function _removeDuplicateContactHash(acc, obj) {
 }
 
 /**
- * This function processes two recipient objects (an account object `acc` and a given `obj`),
- * and determines how to merge or update their details based on their message type and contact type.
+ * Merges two recipient objects (the accumulator object `acc` and a given `obj`), combining licenses and determining the appropriate message type.
  *
- * If only one recipient is of message type "Letter - licence holder", it updates the message type
- * to "Letter - both". If there are both an organisation and a person recipient, it combines their
- * `all_licences` values and updates the message type to "Letter - both", using the contact from the "Organisation" type.
+ * This function compares two recipients based on their contact hash ID. The contact details (such as name, address, etc.) might have minor differences (e.g., case sensitivity),
+ * but these differences are not important since a later parser step will standardize the contact values.
  *
- * @param {object} acc - The account object containing the recipient data.
- * @param {object} obj - The second recipient object to be checked and possibly merged.
+ * The function performs two main actions:
+ * - Merges all licenses from the current recipient and the new recipient into a single CSV string,
+ * removing duplicates using a Set (e.g., when both a "Licence holder" and a "Returns to" share the same license).
+ * - Determines the appropriate message type based on the roles of the current and new contacts.
  *
- * @returns {object} - The updated recipient
+ * @param {object} acc - The accumulator object, representing the previous state of the recipient.
+ * @param {object} obj - The new recipient object to compare against the accumulator.
+ * @returns {object} The updated recipient object with merged licenses and a determined message type.
  *
  * @private
  */
 function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
-  let messageType = 'Letter - both'
-
-  if (acc[obj.contact_hash_id].contact.role === 'Licence holder' && obj.contact.role === 'Licence holder') {
-    messageType = 'Letter - licence holder'
-  }
-
-  if (acc[obj.contact_hash_id].contact.role === 'Returns to' && obj.contact.role === 'Returns to') {
-    messageType = 'Letter - returns to'
-  }
-
   return {
     ...acc[obj.contact_hash_id],
     all_licences: [
       ...new Set([...acc[obj.contact_hash_id].all_licences.split(','), ...obj.all_licences.split(',')])
     ].join(','),
-    message_type: messageType
+    message_type: _messageType(acc, obj)
   }
+}
+
+/**
+ * Determines the appropriate message type based on the contact roles.
+ * There are three possible message types:
+ *
+ * - **Letter - licence holder**: Used when both the current contact and the new contact have the role of "Licence holder".
+ * - **Letter - returns to**: Used when both the current contact and the new contact have the role of "Returns to".
+ * - **Letter - both**: Used when the roles do not match, indicating that both the Licence holder and Returns to will receive the same letter.
+ *   This deduplication ensures the recipient only gets one letter even if both roles are involved.
+ *
+ * Note:
+ * If this function is called after an earlier round of calculation, the accumulator's state might already have the message type set to "Letter - both".
+ * In this case, the roles will never match in subsequent rounds, and the message type will always default to "Letter - both".
+ * Additionally, once the message type is set to "Letter - both", the licenses will continue to accumulate in the accumulator, regardless of further role checks.
+ *
+ * @param {object} acc - The accumulator object containing the previous state (recipient).
+ * @param {object} obj - The new object (recipient) to compare with the accumulator.
+ * @returns {string} The determined message type based on the role comparison.
+ *
+ * @private
+ */
+function _messageType(acc, obj) {
+  const currentRole = acc[obj.contact_hash_id].contact.role
+  const newRole = obj.contact.role
+
+  if (currentRole === 'Licence holder' && newRole === 'Licence holder') {
+    return 'Letter - licence holder'
+  } else if (currentRole === 'Returns to' && newRole === 'Returns to') {
+    return 'Letter - returns to'
+  }
+
+  return 'Letter - both'
 }
 
 function _duplicatePrimaryUserAndReturnsToContact(acc, obj) {
   const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Email - primary user')
   return {
     ...recipient,
+    all_licences: [
+      ...new Set([...acc[obj.contact_hash_id].all_licences.split(','), ...obj.all_licences.split(',')])
+    ].join(','),
     message_type: 'Email - both'
   }
 }
