@@ -30,7 +30,7 @@ describe('Notifications Setup - Review presenter', () => {
     testInput = Object.values(testRecipients).map((recipient) => {
       return {
         ...recipient,
-        message: 'Letter or email'
+        contact_type: 'Letter or email'
       }
     })
   })

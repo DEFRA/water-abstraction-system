@@ -152,6 +152,8 @@ const { db } = require('../../../../db/db.js')
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)
 
+  // const { rows } = await _fetch('2024-11-28', 'true')
+
   return rows
 }
 

@@ -11,9 +11,9 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const DedupeRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
+const DetermineRecipientsService = require('../../../../app/services/notifications/setup/determine-recipients.service.js')
 
-describe('Notifications Setup - Dedupe Recipients service', () => {
+describe('Notifications Setup - Determine Recipients service', () => {
   let testRecipients
   let testDuplicateRecipients
   let testInput
@@ -26,22 +26,22 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly dedupes the data and leaves none duplicates as they are', () => {
-      const result = DedupeRecipientsService.go(testInput)
+      const result = DetermineRecipientsService.go(testInput)
 
       expect(result).to.equal([
         {
           contact: null,
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-          contact_type: 'Primary user',
+          contact_type: 'Email - Primary user',
           email: 'primary.user@important.com',
           licence_refs: testRecipients.primaryUser.licence_refs
         },
         {
           contact: null,
           contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
+          contact_type: 'Email - Returns agent',
           email: 'returns.agent@important.com',
-          licence_refs: testRecipients.returnsAgent.licence_refs,
-          message_type: 'Returns agent'
+          licence_refs: testRecipients.returnsAgent.licence_refs
         },
         {
           contact: {
@@ -61,7 +61,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-          contact_type: 'Licence holder',
+          contact_type: 'Letter - Licence holder',
+          email: null,
           licence_refs: testRecipients.licenceHolder.licence_refs
         },
         {
@@ -82,7 +83,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
-          contact_type: 'Returns to',
+          contact_type: 'Letter - Returns to',
+          email: null,
           licence_refs: testRecipients.returnsTo.licence_refs
         },
         {
@@ -103,7 +105,8 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
-          contact_type: 'Licence holder',
+          contact_type: 'Letter - Licence holder',
+          email: null,
           licence_refs: testRecipients.licenceHolderWithMultipleLicences.licence_refs
         },
         {
@@ -124,24 +127,23 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-          contact_type: 'Licence holder',
-          licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-          message: 'Letter - both'
+          contact_type: 'Letter - Licence holder',
+          email: null,
+          licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs
         },
         {
           contact: null,
           contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-          contact_type: 'Primary user',
+          contact_type: 'Email - both',
           email: 'primary.user@important.com',
-          licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-          message: 'Email - both'
+          licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs
         }
       ])
     })
 
     describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
       it('correctly returns only the "primary user" with the "message_type" Email - both', () => {
-        const result = DedupeRecipientsService.go([
+        const result = DetermineRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
           testDuplicateRecipients.duplicateReturnsAgent
         ])
@@ -150,10 +152,9 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
           {
             contact: null,
             contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-            contact_type: 'Primary user',
+            contact_type: 'Email - both',
             email: 'primary.user@important.com',
-            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-            message: 'Email - both'
+            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs
           }
         ])
       })
@@ -161,7 +162,7 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
 
     describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
       it('correctly returns only the "licence holder" with the "message_type" Letter - both', () => {
-        const result = DedupeRecipientsService.go([
+        const result = DetermineRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
         ])
@@ -185,9 +186,9 @@ describe('Notifications Setup - Dedupe Recipients service', () => {
               type: 'Person'
             },
             contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-            contact_type: 'Licence holder',
-            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-            message: 'Letter - both'
+            contact_type: 'Letter - Licence holder',
+            email: null,
+            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs
           }
         ])
       })

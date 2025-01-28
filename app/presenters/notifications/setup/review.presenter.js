@@ -82,7 +82,7 @@ function _recipients(recipients, page) {
     return {
       contact: _contact(recipient),
       licences: _licences(recipient.licence_refs),
-      method: recipient.message
+      method: recipient.contact_type
     }
   })
 }
