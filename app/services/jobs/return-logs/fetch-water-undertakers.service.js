@@ -9,7 +9,6 @@ const { db } = require('../../../../db/db.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
 
-
 /**
  * Fetches all water undertaker licences that will have not been ended before 1/04/2025
  *

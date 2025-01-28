@@ -54,7 +54,6 @@ async function go() {
       await PersistReturnVersionService.go(returnVersionData)
     }
 
-
     calculateAndLogTimeTaken(startTime, 'Return version migration job complete')
   } catch (error) {
     global.GlobalNotifier.omfg('Return version migration job failed', error)
