@@ -221,6 +221,8 @@ function _logResult(startTime, billRun, results) {
 
   if (!firstError) {
     calculateAndLogTimeTaken(startTime, 'Delete bill run complete', { billRun })
+
+    return
   }
 
   global.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
