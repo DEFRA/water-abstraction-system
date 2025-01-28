@@ -5,7 +5,7 @@
  * @module ReviewService
  */
 
-const DedupeRecipientsService = require('./dedupe-recipients.service.js')
+const DedupeRecipientsService = require('./determine-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')

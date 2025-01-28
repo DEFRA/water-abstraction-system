@@ -26,7 +26,13 @@ describe('Notifications Setup - Review presenter', () => {
     }
 
     testRecipients = RecipientsFixture.recipients()
-    testInput = Object.values(testRecipients)
+    // The determine recipients service will add the message relevant to the recipient
+    testInput = Object.values(testRecipients).map((recipient) => {
+      return {
+        ...recipient,
+        message: 'Letter or email'
+      }
+    })
   })
 
   describe('when provided with "recipients"', () => {
@@ -38,29 +44,36 @@ describe('Notifications Setup - Review presenter', () => {
         pageTitle: 'Send returns invitations',
         recipients: [
           {
-            licences: [`${testRecipients.primaryUser.all_licences}`],
-            method: 'Email - primary user',
-            contact: ['primary.user@important.com']
+            contact: ['primary.user@important.com'],
+            licences: [testRecipients.primaryUser.licence_refs],
+            method: 'Letter or email'
           },
           {
-            licences: [`${testRecipients.returnsAgent.all_licences}`],
-            method: 'Email - returns agent',
-            contact: ['returns.agent@important.com']
+            contact: ['returns.agent@important.com'],
+            licences: [testRecipients.returnsAgent.licence_refs],
+            method: 'Letter or email'
           },
           {
-            licences: [`${testRecipients.licenceHolder.all_licences}`],
-            method: 'Letter - licence holder',
-            contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+            licences: [testRecipients.licenceHolder.licence_refs],
+            method: 'Letter or email'
           },
           {
-            licences: [`${testRecipients.returnsTo.all_licences}`],
-            method: 'Letter - Returns To',
-            contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+            licences: [testRecipients.returnsTo.licence_refs],
+            method: 'Letter or email'
           },
           {
-            licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
-            method: 'Letter - licence holder',
-            contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+            contact: [
+              'Mr H J Licence holder with multiple licences',
+              '3',
+              'Privet Drive',
+              'Little Whinging',
+              'Surrey',
+              'WD25 7LR'
+            ],
+            licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
+            method: 'Letter or email'
           }
         ],
         recipientsAmount: 5
@@ -74,29 +87,36 @@ describe('Notifications Setup - Review presenter', () => {
 
           expect(result.recipients).to.equal([
             {
-              licences: [`${testRecipients.primaryUser.all_licences}`],
-              method: 'Email - primary user',
+              licences: [`${testRecipients.primaryUser.licence_refs}`],
+              method: 'Letter or email',
               contact: ['primary.user@important.com']
             },
             {
-              licences: [`${testRecipients.returnsAgent.all_licences}`],
-              method: 'Email - returns agent',
+              licences: [`${testRecipients.returnsAgent.licence_refs}`],
+              method: 'Letter or email',
               contact: ['returns.agent@important.com']
             },
             {
-              licences: [`${testRecipients.licenceHolder.all_licences}`],
-              method: 'Letter - licence holder',
-              contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+              licences: [`${testRecipients.licenceHolder.licence_refs}`],
+              method: 'Letter or email'
             },
             {
-              licences: [`${testRecipients.returnsTo.all_licences}`],
-              method: 'Letter - Returns To',
-              contact: ['Harry', 'J', 'Potter', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+              licences: [`${testRecipients.returnsTo.licence_refs}`],
+              method: 'Letter or email'
             },
             {
-              licences: testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','),
-              method: 'Letter - licence holder',
-              contact: ['Harry', 'J', 'Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+              contact: [
+                'Mr H J Licence holder with multiple licences',
+                '3',
+                'Privet Drive',
+                'Little Whinging',
+                'Surrey',
+                'WD25 7LR'
+              ],
+              licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
+              method: 'Letter or email'
             }
           ])
         })
@@ -107,13 +127,13 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
-                recipient.licences.includes(testRecipients.primaryUser.all_licences)
+                recipient.licences.includes(testRecipients.primaryUser.licence_refs)
               )
 
               expect(testRecipient).to.equal({
                 contact: ['primary.user@important.com'],
-                licences: [`${testRecipients.primaryUser.all_licences}`],
-                method: 'Email - primary user'
+                licences: [`${testRecipients.primaryUser.licence_refs}`],
+                method: 'Letter or email'
               })
             })
           })
@@ -123,13 +143,13 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
-                recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+                recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
               )
 
               expect(testRecipient).to.equal({
-                licences: [`${testRecipients.licenceHolder.all_licences}`],
-                method: 'Letter - licence holder',
-                contact: ['Harry', 'J', 'Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'Wd25 7lr']
+                contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+                licences: [`${testRecipients.licenceHolder.licence_refs}`],
+                method: 'Letter or email'
               })
             })
           })
@@ -141,10 +161,10 @@ describe('Notifications Setup - Review presenter', () => {
               const result = ReviewPresenter.go(testInput, page, pagination)
 
               const testRecipient = result.recipients.find((recipient) =>
-                recipient.licences.includes(testRecipients.licenceHolder.all_licences)
+                recipient.licences.includes(testRecipients.licenceHolder.licence_refs)
               )
 
-              expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.all_licences])
+              expect(testRecipient.licences).to.equal([testRecipients.licenceHolder.licence_refs])
             })
           })
 
@@ -155,11 +175,11 @@ describe('Notifications Setup - Review presenter', () => {
               const testRecipient = result.recipients.find(
                 (recipient) =>
                   JSON.stringify(recipient.licences) ===
-                  JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.all_licences.split(','))
+                  JSON.stringify(testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','))
               )
 
               expect(testRecipient.licences).to.equal(
-                testRecipients.licenceHolderWithMultipleLicences.all_licences.split(',')
+                testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
               )
             })
           })

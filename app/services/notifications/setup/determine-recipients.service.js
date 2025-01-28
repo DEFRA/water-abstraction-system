@@ -2,7 +2,7 @@
 
 /**
  * Dedupes the recipients fetched when sending notifications
- * @module DedupeRecipientsService
+ * @module DetermineRecipientsService
  */
 
 /**
@@ -44,18 +44,18 @@ function _removeDuplicateContactHash(acc, obj) {
 }
 
 function _duplicateLicenceHolderAndReturnsToContact(acc, obj) {
-  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Letter - licence holder')
+  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.contact_type === 'Licence holder')
   return {
     ...recipient,
-    message_type: 'Letter - both'
+    message: 'Letter - both'
   }
 }
 
 function _duplicatePrimaryUserAndReturnsToContact(acc, obj) {
-  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.message_type === 'Email - primary user')
+  const recipient = [acc[obj.contact_hash_id], obj].find((rec) => rec.contact_type === 'Primary user')
   return {
     ...recipient,
-    message_type: 'Email - both'
+    message: 'Email - both'
   }
 }
 

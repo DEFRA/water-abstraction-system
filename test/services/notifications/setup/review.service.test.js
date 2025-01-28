@@ -30,7 +30,12 @@ describe('Notifications Setup - Review service', () => {
 
     testRecipients = RecipientsFixture.recipients()
 
-    Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
+    Sinon.stub(RecipientsService, 'go').resolves([
+      {
+        ...testRecipients.primaryUser,
+        message: 'Email - primary user'
+      }
+    ])
   })
 
   afterEach(() => {
@@ -51,7 +56,7 @@ describe('Notifications Setup - Review service', () => {
       recipients: [
         {
           contact: ['primary.user@important.com'],
-          licences: [`${testRecipients.primaryUser.all_licences}`],
+          licences: [`${testRecipients.primaryUser.licence_refs}`],
           method: 'Email - primary user'
         }
       ],
