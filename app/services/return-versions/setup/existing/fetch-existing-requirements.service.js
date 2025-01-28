@@ -25,7 +25,7 @@ async function go(returnVersionId) {
 async function _fetch(returnVersionId) {
   return ReturnVersionModel.query()
     .findById(returnVersionId)
-    .select(['id', 'multipleUpload', 'quarterlyReturns'])
+    .select(['id', 'multipleUpload', 'startDate', 'quarterlyReturns'])
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
       returnRequirementsBuilder

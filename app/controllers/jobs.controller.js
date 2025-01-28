@@ -10,6 +10,7 @@ const ProcessLicenceUpdates = require('../services/jobs/licence-updates/process-
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessSessionStorageCleanupService = require('../services/jobs/session-cleanup/process-session-storage-cleanup.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
+const ReturnVersionMigrationService = require('../services/jobs/return-logs/return-version-migration.service.js')
 
 const NO_CONTENT_STATUS_CODE = 204
 const NOT_FOUND_STATUS_CODE = 404
@@ -59,10 +60,17 @@ async function returnLogs(request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
+async function returnLogsMigration(request, h) {
+  ReturnVersionMigrationService.go()
+
+  return h.response().code(NO_CONTENT_STATUS_CODE)
+}
+
 module.exports = {
   exportDb,
   licenceUpdates,
   returnLogs,
+  returnLogsMigration,
   sessionCleanup,
   timeLimited
 }
