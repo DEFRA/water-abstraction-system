@@ -59,11 +59,13 @@ describe('Ad-hoc Returns Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'manage',
             sessionId: session.id,
             licenceRef: null,
             error: {
               text: 'Enter a licence number'
-            }
+            },
+            pageTitle: 'Enter a licence number'
           })
         })
       })
@@ -79,11 +81,13 @@ describe('Ad-hoc Returns Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'manage',
             sessionId: session.id,
             licenceRef: null,
             error: {
               text: 'Enter a licence number'
-            }
+            },
+            pageTitle: 'Enter a licence number'
           })
         })
       })
@@ -101,9 +105,11 @@ describe('Ad-hoc Returns Licence service', () => {
           const result = await SubmitLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
+            activeNavBar: 'manage',
             sessionId: session.id,
             licenceRef: null,
-            notification: 'There are no returns due for licence 01/145'
+            notification: 'There are no returns due for licence 01/145',
+            pageTitle: 'Enter a licence number'
           })
         })
       })

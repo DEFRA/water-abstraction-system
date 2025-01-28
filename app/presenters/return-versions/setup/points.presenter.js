@@ -24,6 +24,7 @@ function go(session, requirementIndex, points) {
     licenceId: licence.id,
     licencePoints: _licencePoints(points),
     licenceRef: licence.licenceRef,
+    pageTitle: 'Select the points for the requirements for returns',
     selectedPointIds: requirement?.points ? requirement.points.join(',') : '',
     sessionId
   }

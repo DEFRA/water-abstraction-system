@@ -22,6 +22,7 @@ function go(session) {
     backLink: `/system/return-versions/setup/${sessionId}/check`,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'You are about to cancel these requirements for returns',
     reason: returnRequirementReasons[reason],
     returnRequirements: _returnRequirements(journey, requirements),
     startDate: _startDate(session),

@@ -54,6 +54,7 @@ describe('Mark For Supplementary Billing Service', () => {
           attributes: { 'data-test': 'pre-sroc-years' }
         }
       ])
+      expect(result.activeNavBar).to.equal('search')
     })
   })
 })

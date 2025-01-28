@@ -13,18 +13,14 @@
  * @returns {object} page data needed by the view template
  */
 function go(session) {
-  const {
-    id: sessionId,
-    data: { returnReference },
-    reported
-  } = session
+  const { id: sessionId, returnReference, reported } = session
 
   return {
     pageTitle: 'How was this return reported?',
     reported: reported ?? null,
     sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${session.id}/received`
+    backLink: `/system/return-logs/setup/${sessionId}/submission`
   }
 }
 

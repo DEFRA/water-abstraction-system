@@ -39,7 +39,7 @@ describe('Return Logs Setup - Reported service', () => {
           pageTitle: 'How was this return reported?',
           activeNavBar: 'search',
           returnReference: '012345',
-          backLink: `/system/return-logs/setup/${session.id}/received`,
+          backLink: `/system/return-logs/setup/${session.id}/submission`,
           reported: null
         },
         { skip: ['sessionId'] }

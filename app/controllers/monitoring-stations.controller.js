@@ -15,9 +15,7 @@ async function view(request, h) {
 
   const pageData = await ViewService.go(monitoringStationId, auth)
 
-  return h.view('monitoring-stations/view.njk', {
-    ...pageData
-  })
+  return h.view('monitoring-stations/view.njk', pageData)
 }
 
 module.exports = {

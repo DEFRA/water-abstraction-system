@@ -22,6 +22,7 @@ function go(session, requirementIndex, licencePurposes) {
     backLink: _backLink(session),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'Select the purpose for the requirements for returns',
     purposes: _purposes(licencePurposes, requirement.purposes),
     sessionId
   }

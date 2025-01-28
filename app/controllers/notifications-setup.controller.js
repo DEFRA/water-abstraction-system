@@ -19,21 +19,18 @@ async function viewReturnsPeriod(request, h) {
 
   const pageData = await ReturnsPeriodService.go(sessionId)
 
-  return h.view(`${basePath}/view-returns-period.njk`, {
-    ...pageData
-  })
+  return h.view(`${basePath}/view-returns-period.njk`, pageData)
 }
 
 async function viewReview(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    query: { page }
   } = request
 
-  const pageData = await ReviewService.go(sessionId)
+  const pageData = await ReviewService.go(sessionId, page)
 
-  return h.view(`${basePath}/review.njk`, {
-    ...pageData
-  })
+  return h.view(`${basePath}/review.njk`, pageData)
 }
 
 async function setup(_request, h) {
@@ -51,9 +48,7 @@ async function submitReturnsPeriod(request, h) {
   const pageData = await SubmitReturnsPeriodService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`${basePath}/view-returns-period.njk`, {
-      ...pageData
-    })
+    return h.view(`${basePath}/view-returns-period.njk`, pageData)
   }
 
   return h.redirect(`/system/${basePath}/${pageData.redirect}`)

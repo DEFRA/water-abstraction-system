@@ -1,0 +1,54 @@
+{% extends 'layout.njk' %}
+
+{% set pageTitle = 'Guidance' %}
+
+{% block content %}
+  <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">Guidance</span>
+        <h1 class="govuk-heading-l">Help to enter multiple volumes or readings into a return</h1>
+      </div>
+
+      <div class="govuk-grid-column-two-thirds">
+        <p class="gem-c-lead-paragraph">You can enter multiple values into a return by copying and pasting from a document on your device. For example, from an Excel spreadsheet or a text file.</p>
+
+        <p>If you're using a spreadsheet, each of the values should be in one column. They should be in date order.</p>
+
+        <div>
+          <figure style="margin-left: 0">
+            <image src="/assets/images/example-excel-01-min.png" width="300px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 1: an Excel spreadsheet with 2 columns, one for dates and one for volumes or readings.</figcaption>
+          </figure>
+        </div>
+
+        <p>Select and then copy the values column. You do not need the dates.</p>
+
+        <div>
+          <figure style="margin-left: 0">
+            <image src="/assets/images/example-excel-02-min.png" width="300px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 2: an Excel spreadsheet with the values column selected.</figcaption>
+          </figure>
+        </div>
+
+        <p>Paste the values into the box on the form. The values will appear in a column.</p>
+
+        <div>
+          <figure style="margin-left: 0">
+            <image src="/assets/images/example-input-01-min.png" width="500px"></image>
+            <figcaption class="govuk-!-font-size-16" style="max-width: 360px;">Example 3: how readings or volumes look after being pasted into the box.</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <p>For this form to work, values should:</p>
+          <ul>
+            <li>either be on separate lines or be separated by a comma</li>
+            <li>cover the entire return period - if a value is missing, use an <span style="padding: 0.2em; background-color: #f3f2f1; color: #900;"><code>x</code></span> to fill the gap</li>
+            <li>run sequentially to match the return period dates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

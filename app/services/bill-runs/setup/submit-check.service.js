@@ -5,9 +5,11 @@
  * @module SubmitCheckService
  */
 
-const CheckPresenter = require('../../../presenters/bill-runs/setup/check.presenter.js')
+const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
+const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
 const CreateService = require('./create.service.js')
 const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
+const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
 
@@ -55,13 +57,25 @@ async function go(sessionId, auth) {
     return {}
   }
 
-  const pageData = await CheckPresenter.go(session, blockingResults)
+  const formattedData = _formattedData(session, blockingResults)
 
   return {
     activeNavBar: 'bill-runs',
     error: true,
-    ...pageData
+    ...formattedData
   }
+}
+
+function _formattedData(session, blockingResults) {
+  if (blockingResults.toFinancialYearEnding === 0) {
+    return NoAnnualBillRunPresenter.go(session)
+  }
+
+  if (blockingResults.trigger === engineTriggers.neither) {
+    return BlockedBillRunPresenter.go(session, blockingResults)
+  }
+
+  return AllowedBillRunPresenter.go(session, blockingResults)
 }
 
 module.exports = {

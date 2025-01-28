@@ -47,7 +47,6 @@ async function go(sessionId, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Why are no returns required?',
     ...formattedData
   }
 }

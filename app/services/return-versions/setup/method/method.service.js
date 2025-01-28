@@ -25,7 +25,6 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'How do you want to set up the requirements for returns?',
     ...formattedData
   }
 }

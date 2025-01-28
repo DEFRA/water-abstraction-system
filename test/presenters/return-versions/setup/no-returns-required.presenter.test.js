@@ -38,6 +38,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
       expect(result).to.equal({
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
         licenceRef: '01/ABC',
+        pageTitle: 'Why are no returns required?',
         reason: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })

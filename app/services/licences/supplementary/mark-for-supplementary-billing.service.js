@@ -19,9 +19,12 @@ const MarkForSupplementaryBillingPresenter = require('../../../presenters/licenc
 async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const formattedData = MarkForSupplementaryBillingPresenter.go(licenceData)
 
-  return pageData
+  return {
+    activeNavBar: 'search',
+    ...formattedData
+  }
 }
 
 async function _fetchLicenceData(licenceId) {

@@ -32,6 +32,7 @@ async function go(sessionId, payload) {
 
   if (validationResult) {
     return {
+      activeNavBar: 'manage',
       error: validationResult,
       ...formattedData
     }
@@ -40,6 +41,7 @@ async function go(sessionId, payload) {
   const dueReturns = await _dueReturnsExist(payload.licenceRef)
   if (!dueReturns) {
     return {
+      activeNavBar: 'manage',
       notification: `There are no returns due for licence ${payload.licenceRef}`,
       ...formattedData
     }

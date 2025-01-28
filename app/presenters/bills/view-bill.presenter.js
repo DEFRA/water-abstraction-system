@@ -17,9 +17,10 @@ const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js
  */
 function go(bill, billingAccount) {
   const { billRun } = bill
+  const accountName = billingAccount.$accountName()
 
   const formattedBill = {
-    accountName: billingAccount.$accountName(),
+    accountName,
     accountNumber: billingAccount.accountNumber,
     addressLines: billingAccount.$addressLines(),
     billId: bill.id,
@@ -40,6 +41,7 @@ function go(bill, billingAccount) {
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: _financialYear(bill),
     flaggedForReissue: bill.flaggedForRebilling,
+    pageTitle: `Bill for ${accountName}`,
     region: titleCase(billRun.region.displayName),
     transactionFile: billRun.transactionFileReference
   }

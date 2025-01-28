@@ -22,6 +22,7 @@ function go(session, requirementIndex) {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
+    pageTitle: 'Enter the abstraction period for the requirements for returns',
     sessionId
   }
 }

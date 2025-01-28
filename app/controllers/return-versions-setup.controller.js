@@ -50,9 +50,7 @@ async function abstractionPeriod(request, h) {
 
   const pageData = await AbstractionPeriodService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/abstraction-period.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/abstraction-period.njk', pageData)
 }
 
 async function add(request, h) {
@@ -68,9 +66,7 @@ async function additionalSubmissionOptions(request, h) {
 
   const pageData = await AdditionalSubmissionOptionsService.go(sessionId)
 
-  return h.view('return-versions/setup/additional-submission-options.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/additional-submission-options.njk', pageData)
 }
 
 async function agreementsExceptions(request, h) {
@@ -78,9 +74,7 @@ async function agreementsExceptions(request, h) {
 
   const pageData = await AgreementsExceptionsService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/agreements-exceptions.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/agreements-exceptions.njk', pageData)
 }
 
 async function approved(request, h) {
@@ -97,18 +91,14 @@ async function cancel(request, h) {
   const { sessionId } = request.params
   const pageData = await CancelService.go(sessionId)
 
-  return h.view('return-versions/setup/cancel.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/cancel.njk', pageData)
 }
 
 async function check(request, h) {
   const { sessionId } = request.params
   const pageData = await CheckService.go(sessionId, request.yar)
 
-  return h.view('return-versions/setup/check.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/check.njk', pageData)
 }
 
 async function deleteNote(request, h) {
@@ -124,9 +114,7 @@ async function existing(request, h) {
 
   const pageData = await ExistingService.go(sessionId)
 
-  return h.view('return-versions/setup/existing.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/existing.njk', pageData)
 }
 
 async function frequencyCollected(request, h) {
@@ -134,9 +122,7 @@ async function frequencyCollected(request, h) {
 
   const pageData = await FrequencyCollectedService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/frequency-collected.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/frequency-collected.njk', pageData)
 }
 
 async function frequencyReported(request, h) {
@@ -144,9 +130,7 @@ async function frequencyReported(request, h) {
 
   const pageData = await FrequencyReportedService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/frequency-reported.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/frequency-reported.njk', pageData)
 }
 
 async function method(request, h) {
@@ -154,9 +138,7 @@ async function method(request, h) {
 
   const pageData = await MethodService.go(sessionId)
 
-  return h.view('return-versions/setup/method.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/method.njk', pageData)
 }
 
 async function noReturnsRequired(request, h) {
@@ -164,9 +146,7 @@ async function noReturnsRequired(request, h) {
 
   const pageData = await NoReturnsRequiredService.go(sessionId)
 
-  return h.view('return-versions/setup/no-returns-required.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/no-returns-required.njk', pageData)
 }
 
 async function note(request, h) {
@@ -174,9 +154,7 @@ async function note(request, h) {
 
   const pageData = await NoteService.go(sessionId)
 
-  return h.view('return-versions/setup/note.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/note.njk', pageData)
 }
 
 async function points(request, h) {
@@ -184,9 +162,7 @@ async function points(request, h) {
 
   const pageData = await PointsService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/points.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/points.njk', pageData)
 }
 
 async function purpose(request, h) {
@@ -194,9 +170,7 @@ async function purpose(request, h) {
 
   const pageData = await SelectPurposeService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/purpose.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/purpose.njk', pageData)
 }
 
 async function reason(request, h) {
@@ -204,9 +178,7 @@ async function reason(request, h) {
 
   const pageData = await SelectReasonService.go(sessionId)
 
-  return h.view('return-versions/setup/reason.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/reason.njk', pageData)
 }
 
 async function remove(request, h) {
@@ -214,9 +186,7 @@ async function remove(request, h) {
 
   const pageData = await RemoveService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/remove.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/remove.njk', pageData)
 }
 
 async function returnsCycle(request, h) {
@@ -224,9 +194,7 @@ async function returnsCycle(request, h) {
 
   const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/returns-cycle.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/returns-cycle.njk', pageData)
 }
 
 async function siteDescription(request, h) {
@@ -234,9 +202,7 @@ async function siteDescription(request, h) {
 
   const pageData = await SiteDescriptionService.go(sessionId, requirementIndex)
 
-  return h.view('return-versions/setup/site-description.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/site-description.njk', pageData)
 }
 
 async function startDate(request, h) {
@@ -244,9 +210,7 @@ async function startDate(request, h) {
 
   const pageData = await StartDateService.go(sessionId)
 
-  return h.view('return-versions/setup/start-date.njk', {
-    ...pageData
-  })
+  return h.view('return-versions/setup/start-date.njk', pageData)
 }
 
 async function submitAbstractionPeriod(request, h) {

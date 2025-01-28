@@ -26,6 +26,7 @@ function go(session) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     licenceVersionStartDate: _licenceVersionStartDate(licence),
+    pageTitle: 'Select the start date for the requirements for returns',
     sessionId,
     startDateOption: startDateOptions ?? null
   }

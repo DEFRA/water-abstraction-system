@@ -64,6 +64,7 @@ describe('Return Versions Setup - Points presenter', () => {
           }
         ],
         licenceRef: '01/ABC',
+        pageTitle: 'Select the points for the requirements for returns',
         selectedPointIds: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })

@@ -47,6 +47,7 @@ describe('Return Versions Setup - Existing presenter', () => {
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
         existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
         licenceRef: '01/ABC',
+        pageTitle: 'Use previous requirements for returns',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

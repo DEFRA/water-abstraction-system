@@ -17,6 +17,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/guidance',
+    options: {
+      handler: ReturnLogsSetupController.guidance,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/check',
+    options: {
+      handler: ReturnLogsSetupController.check,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
       handler: ReturnLogsSetupController.received,
@@ -65,9 +89,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/{sessionId}/start',
+    path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.start,
+      handler: ReturnLogsSetupController.submission,
       auth: {
         access: {
           scope: ['billing']
@@ -77,9 +101,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-logs/setup/{sessionId}/start',
+    path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.submitStart,
+      handler: ReturnLogsSetupController.submitSubmission,
       auth: {
         access: {
           scope: ['billing']
@@ -104,6 +128,78 @@ const routes = [
     path: '/return-logs/setup/{sessionId}/units',
     options: {
       handler: ReturnLogsSetupController.submitUnits,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.meterProvided,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-provided',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterProvided,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/meter-details',
+    options: {
+      handler: ReturnLogsSetupController.meterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/meter-details',
+    options: {
+      handler: ReturnLogsSetupController.submitMeterDetails,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.singleVolume,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/single-volume',
+    options: {
+      handler: ReturnLogsSetupController.submitSingleVolume,
       auth: {
         access: {
           scope: ['billing']

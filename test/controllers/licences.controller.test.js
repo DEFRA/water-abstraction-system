@@ -591,7 +591,8 @@ describe('Licences controller', () => {
         beforeEach(async () => {
           Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
-            licenceRef: '01/test'
+            licenceRef: '01/test',
+            pageTitle: "You've marked this licence for the next supplementary bill run"
           })
         })
 
@@ -608,6 +609,7 @@ describe('Licences controller', () => {
 
 function _markForSupplementaryBilling() {
   return {
+    activeNavBar: 'search',
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
     licenceRef: '01/test',
     financialYears: [
@@ -615,7 +617,8 @@ function _markForSupplementaryBilling() {
       { text: '2023 to 2024', value: 2024 },
       { text: '2022 to 2023', value: 2023 },
       { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
-    ]
+    ],
+    pageTitle: 'Mark for the supplementary bill run'
   }
 }
 

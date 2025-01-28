@@ -53,10 +53,10 @@ async function go(licenceId, changeDate = null) {
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
-  const returnCycles = await _fetchReturnCycles(changeDate, licenceEndDate)
+  const returnCycles = await _fetchReturnCycles(changeDate)
 
   for (const returnCycle of returnCycles) {
-    await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef)
+    await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate)
   }
 }
 
@@ -66,19 +66,15 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
-async function _fetchReturnCycles(changeDate, licenceEndDate) {
+async function _fetchReturnCycles(changeDate) {
   const query = ReturnCycleModel.query()
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>=', changeDate)
 
-  if (licenceEndDate) {
-    query.where('startDate', '<=', licenceEndDate)
-  }
-
   return query.orderBy('endDate', 'desc')
 }
 
-async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef) {
+async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate) {
   // Determine if we have any return requirements that match the cycle being processed
   const requirementsToProcess = returnRequirements.filter((returnRequirement) => {
     return (
@@ -94,19 +90,24 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   }
 
   const generatedReturnLogIds = []
-  // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
-  // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
-  // matching an existing one), the insert will be ignored.
-  //
-  // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
-  // return logs for the given cycle _not_ to mark as 'void'.
-  //
-  // Because we've processed _all_ return requirements for the cycle, we no any return logs whose ID is not in
-  // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
-  for (const returnRequirement of requirementsToProcess) {
-    const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-    generatedReturnLogIds.push(...returnLogIds)
+  // If there is no licenceEndDate or if there is a licenceEndDate and the return cycle starts before the licenceEndDate
+  // then create the return logs, otherwise just void the return logs for that cycle
+  if (!licenceEndDate || returnCycle.startDate < licenceEndDate) {
+    // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
+    // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
+    // matching an existing one), the insert will be ignored.
+    //
+    // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
+    // return logs for the given cycle _not_ to mark as 'void'.
+    //
+    // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
+    // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
+    for (const returnRequirement of requirementsToProcess) {
+      const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+      generatedReturnLogIds.push(...returnLogIds)
+    }
   }
 
   await VoidLicenceReturnLogsService.go(generatedReturnLogIds, licenceRef, returnCycle.id, changeDate)

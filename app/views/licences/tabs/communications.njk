@@ -13,7 +13,7 @@
 
 <h2 class="govuk-heading-l">Communications</h2>
 
-{% if communications.length == 0 %}
+{% if communications.length === 0 %}
   <p data-test='no-communications-msg'>No communications for this licence.</p>
 {% else %}
   {% set tableRows = [] %}
