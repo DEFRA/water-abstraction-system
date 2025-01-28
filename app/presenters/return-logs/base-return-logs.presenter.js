@@ -25,7 +25,7 @@ function formatMeterDetails(meter) {
 }
 
 /**
- * Converts a quantity from a given unit to cubic meters and formats it
+ * Converts a quantity from a given unit to cubic metres and formats it
  *
  * @param {string} units - the unit of the quantity
  * @param {number} quantity - the quantity to be formatted
@@ -100,7 +100,7 @@ function generateSummaryTableHeaders(method, frequency, units) {
     headers.push({ text: sentenceCase(`${quantityPostfix}${returnUnits[units].label}`), format: 'numeric' })
   }
 
-  headers.push({ text: sentenceCase(`${quantityPostfix}cubic meters`), format: 'numeric' })
+  headers.push({ text: sentenceCase(`${quantityPostfix}cubic metres`), format: 'numeric' })
 
   if (frequency !== 'month') {
     headers.push({ text: 'Details', format: 'numeric' })

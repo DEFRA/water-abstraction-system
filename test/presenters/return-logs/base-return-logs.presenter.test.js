@@ -175,7 +175,7 @@ describe('Base Return Logs presenter', () => {
       })
     })
 
-    describe('when the unit is not cubic meters', () => {
+    describe('when the unit is not cubic metres', () => {
       describe('and the frequency is month', () => {
         it('includes a converted quantity column', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableHeaders(
@@ -201,28 +201,28 @@ describe('Base Return Logs presenter', () => {
       })
     })
 
-    describe('the Cubic meters column', () => {
+    describe('the Cubic metres column', () => {
       describe('when the frequency is not month', () => {
-        it('specifies the total cubic meters', () => {
+        it('specifies the total cubic metres', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableHeaders(
             'abstractionVolumes',
             'NOT_MONTH',
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'Total cubic meters', format: 'numeric' })
+          expect(result).to.include({ text: 'Total cubic metres', format: 'numeric' })
         })
       })
 
       describe('when the frequency is month', () => {
-        it('specifies the non-totalled cubic meters', () => {
+        it('specifies the non-totalled cubic metres', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableHeaders(
             'abstractionVolumes',
             'month',
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'Cubic meters', format: 'numeric' })
+          expect(result).to.include({ text: 'Cubic metres', format: 'numeric' })
         })
       })
     })
@@ -296,7 +296,7 @@ describe('Base Return Logs presenter', () => {
       expect(result[0].monthlyTotal).to.equal('1,500')
     })
 
-    it('returns non-cubic meter totals as a converted and formatted string', () => {
+    it('returns non-cubic metre totals as a converted and formatted string', () => {
       const result = BaseReturnLogsPresenter.generateSummaryTableRows('NOT_ABSTRACTION_VOLUMES', 'month', sampleLines)
 
       expect(result[1].unitTotal).to.equal('21,996.925')
