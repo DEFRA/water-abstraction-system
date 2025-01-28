@@ -2,7 +2,7 @@
 
 /**
  * Fetches the matching return log and associated submission and licence data needed for the view
- * @module FetchReturnVersionService
+ * @module FetchReturnLogService
  */
 
 const { ref } = require('objection')
