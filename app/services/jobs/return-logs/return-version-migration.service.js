@@ -16,7 +16,7 @@ const UserModel = require('../../../models/user.model.js')
 /**
  * Determines which licences need new return versions created for quarterly returns
  *
- * This service will generate new return versions for each licence that is a water undertaker (a water company).
+ * This service will generate new return versions for each current licence that is a water undertaker (a water company).
  * The new return version will start on 1/04/2025.
  */
 async function go() {
@@ -49,8 +49,7 @@ async function go() {
         requirements: returnRequirements.requirements,
         quarterlyReturns: true
       }
-      console.log(licences.length)
-      console.log(data)
+
       const returnVersionData = await GenerateReturnVersionService.go(data, user.id)
       await PersistReturnVersionService.go(returnVersionData)
     }

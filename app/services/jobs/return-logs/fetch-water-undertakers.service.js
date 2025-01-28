@@ -11,7 +11,7 @@ const ReturnRequirementModel = require('../../../models/return-requirement.model
 
 
 /**
- * Fetches all water undertakers that have a valid licence after 1/04/2025
+ * Fetches all water undertaker licences that will have not been ended before 1/04/2025
  *
  * @returns {Promise<module:LicenceModel>} the matching licences
  */
