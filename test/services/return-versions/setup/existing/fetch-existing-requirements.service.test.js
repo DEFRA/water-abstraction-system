@@ -34,6 +34,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
         id: seededReturnVersion.id,
         multipleUpload: false,
         quarterlyReturns: false,
+        startDate: seededReturnVersion.startDate,
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
