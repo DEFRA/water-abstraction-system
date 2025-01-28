@@ -13,15 +13,18 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
+const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
+const NoteService = require('../../app/services/return-logs/setup/note.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
+const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
@@ -111,6 +114,26 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
+  describe('/return-logs/setup/{sessionId}/delete-note', () => {
+    const path = 'delete-note'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(DeleteNoteService, 'go').resolves({
+          title: 'Removed',
+          text: 'Note removed'
+        })
+      })
+
+      it('redirects on success', async () => {
+        const result = await server.inject(_getOptions(path))
+
+        expect(result.statusCode).to.equal(302)
+        expect(result.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+      })
+    })
+  })
+
   describe('return-logs/setup/guidance', () => {
     describe('GET', () => {
       beforeEach(() => {
@@ -130,6 +153,58 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+        })
+      })
+    })
+  })
+
+  describe('/return-logs/setup/{sessionId}/note', () => {
+    const path = 'note'
+
+    describe('GET', () => {
+      beforeEach(async () => {
+        Sinon.stub(NoteService, 'go').resolves({
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          pageTitle: 'Add a note'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Add a note')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitNoteService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitNoteService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })
@@ -271,35 +346,29 @@ describe('Return Logs Setup controller', () => {
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
-        describe('and an option is selected', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({})
-          })
+        beforeEach(() => {
+          Sinon.stub(SubmitSubmissionService, 'go').resolves({})
+        })
 
-          it('redirects to the "reported" page', async () => {
-            const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
+        it('redirects to the "reported" page', async () => {
+          const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
-          })
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
         })
       })
 
       describe('when the request succeeds', () => {
-        describe('and the validation fails as no option has been selected', () => {
+        describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({
-              pageTitle: 'Abstraction return',
-              error: { text: 'Select what you want to do with this return' }
-            })
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('Select what you want to do with this return')
-            expect(response.payload).to.contain('Abstraction return')
+            expect(response.payload).to.contain('There is a problem')
           })
         })
       })
