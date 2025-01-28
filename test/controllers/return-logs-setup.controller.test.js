@@ -12,16 +12,19 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const CheckService = require('../../app/services/return-logs/setup/check.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
 const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
+const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
+const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
 const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
@@ -76,6 +79,40 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/received`)
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/check', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e139b961-0aa0-4e58-afcd-a95ce7d0e21d/check',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(CheckService, 'go').resolves({
+            pageTitle: 'Check details and enter new volumes or readings',
+            returnReference: '1234567',
+            sessionId: 'e139b961-0aa0-4e58-afcd-a95ce7d0e21d'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Check details and enter new volumes or readings')
+          expect(response.payload).to.contain('1234567')
+          expect(response.payload).to.contain('e139b961-0aa0-4e58-afcd-a95ce7d0e21d')
         })
       })
     })
@@ -466,7 +503,7 @@ describe('Return Logs Setup controller', () => {
 
             expect(response.statusCode).to.equal(302)
             expect(response.headers.location).to.equal(
-              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/meter-readings'
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/single-volume'
             )
           })
         })
@@ -569,6 +606,100 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Enter the make of the meter')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/single-volume', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/single-volume',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SingleVolumeService, 'go').resolves({
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5',
+            pageTitle: 'Is it a single volume?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Is it a single volume?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          options = _postOptions('single-volume', {})
+        })
+
+        describe('and a single volume was provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+              singleVolume: 'yes',
+              singleVolumeQuantity: '1000'
+            })
+          })
+
+          it('redirects to the "period used" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/period-used'
+            )
+          })
+        })
+
+        describe('and a single volume was not provided', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+              singleVolume: 'no'
+            })
+          })
+
+          it('redirects to the "check answers" page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/check-answers'
+            )
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          options = _postOptions('single-volume')
+
+          Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+            error: { message: 'Select which units were used' },
+            pageTitle: 'Is it a single volume?',
+            sessionId: 'e0c77b74-7326-493d-be5e-0d1ad41594b5'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select which units were used')
           expect(response.payload).to.contain('There is a problem')
         })
       })
