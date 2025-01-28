@@ -33,11 +33,23 @@ function duplicateRecipients() {
   }
 }
 
+/**
+ * Create duplicate by contact hash recipients with different types
+ *
+ * @returns {object} - Returns duplicate contact hash recipients with different types
+ */
+function duplicateContactWithDifferentType() {
+  return {
+    duplicateContactOrganisationType: _addDuplicaateContactType('Organisation'),
+    duplicateContactPersonType: _addDuplicaateContactType('Person')
+  }
+}
+
 function _addDuplicateLicenceHolder(licenceRef) {
   return {
     all_licences: licenceRef,
     message_type: 'Letter - licence holder',
-    contact: _contact('4'),
+    contact: _contact('4', 'Duplicate Licence holder', 'Licence holder'),
     contact_hash_id: 167278556784
   }
 }
@@ -46,7 +58,7 @@ function _addDuplicateReturnsTo(licenceRef) {
   return {
     all_licences: licenceRef,
     message_type: 'Letter - Returns To',
-    contact: _contact('4'),
+    contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
     contact_hash_id: 167278556784
   }
 }
@@ -55,8 +67,22 @@ function _addLicenceHolder() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - licence holder',
-    contact: _contact('1'),
+    contact: _contact('1', 'Licence holder', 'Licence holder'),
     contact_hash_id: -1672785580
+  }
+}
+
+function _addDuplicaateContactType(type) {
+  const contact = _contact('5', 'Duplicate contact type', 'Licence holder')
+
+  return {
+    all_licences: generateLicenceRef(),
+    message_type: 'Letter - licence holder',
+    contact: {
+      ...contact,
+      type
+    },
+    contact_hash_id: 1234756
   }
 }
 
@@ -104,7 +130,7 @@ function _addReturnTo() {
   return {
     all_licences: generateLicenceRef(),
     message_type: 'Letter - Returns To',
-    contact: _contact('2'),
+    contact: _contact('2', 'Returns to', 'Returns to'),
     contact_hash_id: 123223
   }
 }
@@ -113,7 +139,7 @@ function _addLicenceHolderWithMultipleLicences() {
   return {
     all_licences: `${generateLicenceRef()}, ${generateLicenceRef()}`,
     message_type: 'Letter - licence holder',
-    contact: _contact('3'),
+    contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
     contact_hash_id: -167278576
   }
 }
@@ -121,18 +147,32 @@ function _addLicenceHolderWithMultipleLicences() {
 /**
  * The fetch query handles duplicates by grouping them by a contact hash.
  *
- * This hash is unique to the contact address. For ease of testing, we are only incrementing the street number
- * and not using various addresses as we are only concerned with the contact hash ID to dedupe.
+ * This hash is unique to the contact address.
  *
- * @param line1 - the unique contract address
  * @returns {string} - a unique address
  * @private
  */
-function _contact(line1) {
-  return `harry,j,potter,${line1},privet drive,little whinging,surrey,wd25 7lr`
+function _contact(line1, name, role) {
+  return {
+    addressLine1: `${line1}`,
+    addressLine2: 'Privet Drive',
+    addressLine3: null,
+    addressLine4: null,
+    country: null,
+    county: 'Surrey',
+    forename: 'Harry',
+    initials: 'H J',
+    name,
+    postcode: 'WD25 7LR',
+    role,
+    salutation: 'Mr',
+    town: 'Little Whinging',
+    type: 'Person'
+  }
 }
 
 module.exports = {
-  recipients,
-  duplicateRecipients
+  duplicateContactWithDifferentType,
+  duplicateRecipients,
+  recipients
 }
