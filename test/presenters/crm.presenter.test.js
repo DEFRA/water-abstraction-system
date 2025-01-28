@@ -105,6 +105,7 @@ describe('CRM presenter', () => {
       })
     })
   })
+
   describe('#filteredContactDetailsByRole()', () => {
     describe('when given multiple valid contacts', () => {
       let invalidContact
