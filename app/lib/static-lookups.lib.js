@@ -123,6 +123,20 @@ const returnRequirementReasons = {
   'transfer-and-now-chargeable': 'Licence transferred and now chargeable'
 }
 
+const unitNames = {
+  CUBIC_METRES: 'm³',
+  LITRES: 'l',
+  MEGALITRES: 'Ml',
+  GALLONS: 'gal'
+}
+
+const returnUnits = {
+  [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres' },
+  [unitNames.LITRES]: { multiplier: 1000, label: 'litres' },
+  [unitNames.MEGALITRES]: { multiplier: 0.001, label: 'megalitres' },
+  [unitNames.GALLONS]: { multiplier: 219.969248299, label: 'gallons' }
+}
+
 const sources = ['nald', 'wrls']
 
 const twoPartTariffReviewIssues = {
@@ -151,7 +165,9 @@ module.exports = {
   returnPeriodDates,
   returnRequirementFrequencies,
   returnRequirementReasons,
+  returnUnits,
   sources,
   twoPartTariffReviewIssues,
-  quarterlyReturnPeriods
+  quarterlyReturnPeriods,
+  unitNames
 }
