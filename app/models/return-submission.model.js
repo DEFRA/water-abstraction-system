@@ -45,7 +45,7 @@ class ReturnSubmissionModel extends BaseModel {
   $applyReadings() {
     const meter = this.$meter()
 
-    if (!this.returnSubmissionLines || !meter || !meter.readings) {
+    if (!this.returnSubmissionLines || !meter?.readings) {
       return
     }
 
