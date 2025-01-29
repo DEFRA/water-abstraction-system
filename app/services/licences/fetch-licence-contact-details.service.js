@@ -31,15 +31,7 @@ async function _fetch(licenceId) {
     })
     .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
     .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
-      builder
-        .select(['role'])
-        // .where('role', 'primary_user').orWhere('role', 'user_returns')
-        .where(function () {
-          this.where('role', 'primary_user').andWhere('role', 'user_returns') // AND condition
-        })
-        .orWhere(function () {
-          this.where('role', 'primary_user').orWhere('role', 'user_returns') // OR condition
-        })
+      builder.whereIn('role', ['primary_user', 'user_returns'])
     })
     .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
     .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
