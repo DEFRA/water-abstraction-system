@@ -30,7 +30,7 @@ describe('Notifications Setup - Review presenter', () => {
     testInput = Object.values(testRecipients).map((recipient) => {
       return {
         ...recipient,
-        contact_type: 'Letter or email'
+        message_type: 'Letter or email'
       }
     })
   })
@@ -46,22 +46,22 @@ describe('Notifications Setup - Review presenter', () => {
           {
             contact: ['primary.user@important.com'],
             licences: [testRecipients.primaryUser.licence_refs],
-            method: 'Letter or email'
+            method: 'Letter or email - Primary User'
           },
           {
             contact: ['returns.agent@important.com'],
             licences: [testRecipients.returnsAgent.licence_refs],
-            method: 'Letter or email'
+            method: 'Letter or email - Returns agent'
           },
           {
             contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
             licences: [testRecipients.licenceHolder.licence_refs],
-            method: 'Letter or email'
+            method: 'Letter or email - Licence holder'
           },
           {
             contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
             licences: [testRecipients.returnsTo.licence_refs],
-            method: 'Letter or email'
+            method: 'Letter or email - Returns to'
           },
           {
             contact: [
@@ -73,7 +73,7 @@ describe('Notifications Setup - Review presenter', () => {
               'WD25 7LR'
             ],
             licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
-            method: 'Letter or email'
+            method: 'Letter or email - Licence holder'
           }
         ],
         recipientsAmount: 5
@@ -87,24 +87,24 @@ describe('Notifications Setup - Review presenter', () => {
 
           expect(result.recipients).to.equal([
             {
+              contact: ['primary.user@important.com'],
               licences: [`${testRecipients.primaryUser.licence_refs}`],
-              method: 'Letter or email',
-              contact: ['primary.user@important.com']
+              method: 'Letter or email - Primary user'
             },
             {
+              contact: ['returns.agent@important.com'],
               licences: [`${testRecipients.returnsAgent.licence_refs}`],
-              method: 'Letter or email',
-              contact: ['returns.agent@important.com']
+              method: 'Letter or email - Returns agent'
             },
             {
               contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
               licences: [`${testRecipients.licenceHolder.licence_refs}`],
-              method: 'Letter or email'
+              method: 'Letter or email - Licence holder'
             },
             {
               contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
               licences: [`${testRecipients.returnsTo.licence_refs}`],
-              method: 'Letter or email'
+              method: 'Letter or email  - Returns to'
             },
             {
               contact: [
@@ -116,7 +116,7 @@ describe('Notifications Setup - Review presenter', () => {
                 'WD25 7LR'
               ],
               licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
-              method: 'Letter or email'
+              method: 'Letter or email - Licence holder'
             }
           ])
         })
@@ -133,7 +133,7 @@ describe('Notifications Setup - Review presenter', () => {
               expect(testRecipient).to.equal({
                 contact: ['primary.user@important.com'],
                 licences: [`${testRecipients.primaryUser.licence_refs}`],
-                method: 'Letter or email'
+                method: 'Letter or email - Primary user'
               })
             })
           })
@@ -149,7 +149,7 @@ describe('Notifications Setup - Review presenter', () => {
               expect(testRecipient).to.equal({
                 contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
                 licences: [`${testRecipients.licenceHolder.licence_refs}`],
-                method: 'Letter or email'
+                method: 'Letter or email - Licence holder'
               })
             })
           })

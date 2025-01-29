@@ -85,7 +85,7 @@ function _addReturnsAgent() {
     licence_refs: generateLicenceRef(),
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-    message_type: 'Returns agent',
+    contact_type: 'Returns agent',
     email: 'returns.agent@important.com'
   }
 }

@@ -82,7 +82,7 @@ function _recipients(recipients, page) {
     return {
       contact: _contact(recipient),
       licences: _licences(recipient.licence_refs),
-      method: recipient.contact_type
+      method: `${recipient.message_type} - ${recipient.contact_type}`
     }
   })
 }

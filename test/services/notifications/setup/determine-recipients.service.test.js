@@ -32,16 +32,18 @@ describe('Notifications Setup - Determine Recipients service', () => {
         {
           contact: null,
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-          contact_type: 'Email - Primary user',
+          contact_type: 'Primary user',
           email: 'primary.user@important.com',
-          licence_refs: testRecipients.primaryUser.licence_refs
+          licence_refs: testRecipients.primaryUser.licence_refs,
+          message_type: 'Email'
         },
         {
           contact: null,
           contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-          contact_type: 'Email - Returns agent',
+          contact_type: 'Returns agent',
           email: 'returns.agent@important.com',
-          licence_refs: testRecipients.returnsAgent.licence_refs
+          licence_refs: testRecipients.returnsAgent.licence_refs,
+          message_type: 'Email'
         },
         {
           contact: {
@@ -61,9 +63,10 @@ describe('Notifications Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-          contact_type: 'Letter - Licence holder',
+          contact_type: 'Licence holder',
           email: null,
-          licence_refs: testRecipients.licenceHolder.licence_refs
+          licence_refs: testRecipients.licenceHolder.licence_refs,
+          message_type: 'Letter'
         },
         {
           contact: {
@@ -83,9 +86,10 @@ describe('Notifications Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
-          contact_type: 'Letter - Returns to',
+          contact_type: 'Returns to',
           email: null,
-          licence_refs: testRecipients.returnsTo.licence_refs
+          licence_refs: testRecipients.returnsTo.licence_refs,
+          message_type: 'Letter'
         },
         {
           contact: {
@@ -105,9 +109,10 @@ describe('Notifications Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
-          contact_type: 'Letter - Licence holder',
+          contact_type: 'Licence holder',
           email: null,
-          licence_refs: testRecipients.licenceHolderWithMultipleLicences.licence_refs
+          licence_refs: testRecipients.licenceHolderWithMultipleLicences.licence_refs,
+          message_type: 'Letter'
         },
         {
           contact: {
@@ -127,16 +132,18 @@ describe('Notifications Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-          contact_type: 'Letter - Licence holder',
+          contact_type: 'Licence holder',
           email: null,
-          licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs
+          licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
+          message_type: 'Letter'
         },
         {
           contact: null,
           contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-          contact_type: 'Email - both',
+          contact_type: 'both',
           email: 'primary.user@important.com',
-          licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs
+          licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
+          message_type: 'Email'
         }
       ])
     })
@@ -152,9 +159,10 @@ describe('Notifications Setup - Determine Recipients service', () => {
           {
             contact: null,
             contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-            contact_type: 'Email - both',
+            contact_type: 'both',
             email: 'primary.user@important.com',
-            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs
+            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
+            message_type: 'Email'
           }
         ])
       })
@@ -186,9 +194,10 @@ describe('Notifications Setup - Determine Recipients service', () => {
               type: 'Person'
             },
             contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-            contact_type: 'Letter - Licence holder',
+            contact_type: 'Licence holder',
             email: null,
-            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs
+            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
+            message_type: 'Letter'
           }
         ])
       })

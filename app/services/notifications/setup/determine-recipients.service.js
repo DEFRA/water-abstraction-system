@@ -66,11 +66,7 @@ function _determineRecipient(contactHashId, contacts) {
     return contact.contact_hash_id === contactHashId
   })
 
-  // if (matches.length > 1) {
   return _mergeRecipients(matches)
-  // }
-
-  // return matches[0]
 }
 
 function _includesContactType(matches, contactType) {
@@ -95,11 +91,11 @@ function _mergeRecipientsForEmail(matches) {
   let contactType
 
   if (primaryUser && returnsAgent) {
-    contactType = 'Email - both'
+    contactType = 'both'
   } else if (primaryUser) {
-    contactType = 'Email - Primary user'
+    contactType = 'Primary user'
   } else {
-    contactType = 'Email - Returns agent'
+    contactType = 'Returns agent'
   }
 
   return {
@@ -107,7 +103,8 @@ function _mergeRecipientsForEmail(matches) {
     contact_type: contactType,
     email: matches[0].email,
     contact: null,
-    contact_hash_id: matches[0].contact_hash_id
+    contact_hash_id: matches[0].contact_hash_id,
+    message_type: 'Email'
   }
 }
 
@@ -118,11 +115,11 @@ function _mergeRecipientsForLetter(matches) {
   let contactType
 
   if (licenceHolder && returnsTo) {
-    contactType = 'Letter - both'
+    contactType = 'both'
   } else if (licenceHolder) {
-    contactType = 'Letter - Licence holder'
+    contactType = 'Licence holder'
   } else {
-    contactType = 'Letter - Returns to'
+    contactType = 'Returns to'
   }
 
   return {
@@ -130,7 +127,8 @@ function _mergeRecipientsForLetter(matches) {
     contact_type: contactType,
     email: null,
     contact: matches[0].contact,
-    contact_hash_id: matches[0].contact_hash_id
+    contact_hash_id: matches[0].contact_hash_id,
+    message_type: 'Letter'
   }
 }
 
