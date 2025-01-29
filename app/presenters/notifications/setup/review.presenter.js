@@ -75,16 +75,47 @@ function _pagination(recipients, page) {
   return recipients.slice(pageNumber - defaultPageSize, pageNumber)
 }
 
+/**
+ * Sorts, maps, and paginates the recipients list.
+ *
+ * This function first maps over the recipients to transform each recipient object into a new format,
+ * then sorts the resulting array of transformed recipients alphabetically by their contact's name.
+ * After sorting, it uses pagination to return only the relevant subset of recipients for the given page.
+ *
+ * The map and sort are performed before pagination, as it is necessary to have the recipients in a defined
+ * order before determining which recipients should appear on the page.
+ *
+ * @private
+ */
 function _recipients(recipients, page) {
-  const paginatedRecipients = _pagination(recipients, page)
+  const sortedRecipients = recipients
+    .map((recipient) => {
+      return {
+        contact: _contact(recipient),
+        licences: _licences(recipient.licence_refs),
+        method: `${recipient.message_type} - ${recipient.contact_type}`
+      }
+    })
+    .sort(_sortContactAlphabeticallyByName)
 
-  return paginatedRecipients.map((recipient) => {
-    return {
-      contact: _contact(recipient),
-      licences: _licences(recipient.licence_refs),
-      method: `${recipient.message_type} - ${recipient.contact_type}`
-    }
-  })
+  return _pagination(sortedRecipients, page)
+}
+
+/**
+ * Sorts an array of contact objects alphabetically by the contact's name.
+ * The contact name is assumed to be the first element in the `contact` array
+ * (as constructed by the CRM presenter function `contactName`).
+ *
+ * This function compares the first element of the `contact` array for each
+ * object to determine alphabetical order.
+ *
+ * @private
+ */
+function _sortContactAlphabeticallyByName(a, b) {
+  if (a.contact[0] < b.contact[0]) return -1
+  if (a.contact[0] > b.contact[0]) return 1
+
+  return 0
 }
 
 module.exports = {
