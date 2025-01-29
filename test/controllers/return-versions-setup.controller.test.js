@@ -38,6 +38,7 @@ const SubmitFrequencyCollectedService = require('../../app/services/return-versi
 const SubmitFrequencyReportedService = require('../../app/services/return-versions/setup/submit-frequency-reported.service.js')
 const SubmitMethodService = require('../../app/services/return-versions/setup/method/submit-method.service.js')
 const SubmitNoReturnsRequiredService = require('../../app/services/return-versions/setup/submit-no-returns-required.service.js')
+const SubmitNoteService = require('../../app/services/return-versions/setup/submit-note.service.js')
 const SubmitPointsService = require('../../app/services/return-versions/setup/submit-points.service.js')
 const SubmitPurposeService = require('../../app/services/return-versions/setup/submit-purpose.service.js')
 const SubmitReasonService = require('../../app/services/return-versions/setup/submit-reason.service.js')
@@ -179,6 +180,36 @@ describe('Return Versions controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Add a note')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitNoteService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/return-versions/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitNoteService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

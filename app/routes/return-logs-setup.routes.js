@@ -41,6 +41,42 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/delete-note',
+    options: {
+      handler: ReturnLogsSetupController.deleteNote,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/note',
+    options: {
+      handler: ReturnLogsSetupController.note,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/note',
+    options: {
+      handler: ReturnLogsSetupController.submitNote,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
       handler: ReturnLogsSetupController.received,
