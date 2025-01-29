@@ -42,6 +42,9 @@ class ReturnSubmissionModel extends BaseModel {
     }
   }
 
+  /**
+   * Applies meter readings to return submission lines
+   */
   $applyReadings() {
     const meter = this.$meter()
 
@@ -59,6 +62,11 @@ class ReturnSubmissionModel extends BaseModel {
     }
   }
 
+  /**
+   * Returns the first meter from the return submission's metadata, or null if no meters exist.
+   *
+   * @returns {?object} The first meter, or null.
+   */
   $meter() {
     if (!this.metadata?.meters) {
       return null
@@ -67,6 +75,12 @@ class ReturnSubmissionModel extends BaseModel {
     return this.metadata.meters[0]
   }
 
+  /**
+   * Returns the method of measurement from the return submission's metadata, defaulting to 'abstractionVolumes' if none
+   * is specified.
+   *
+   * @returns {string} The method of measurement.
+   */
   $method() {
     if (!this.metadata?.method) {
       return 'abstractionVolumes'
@@ -75,6 +89,11 @@ class ReturnSubmissionModel extends BaseModel {
     return this.metadata.method
   }
 
+  /**
+   * Returns the unit of measurement from the return submission's metadata, defaulting to cubic metres if not specified.
+   *
+   * @returns {string} The unit of measurement.
+   */
   $units() {
     if (!this.metadata?.units) {
       return unitNames.CUBIC_METRES
