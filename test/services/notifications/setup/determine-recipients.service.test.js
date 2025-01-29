@@ -24,8 +24,8 @@ describe('Notifications Setup - Determine Recipients service', () => {
     testInput = [...Object.values(testRecipients), ...Object.values(testDuplicateRecipients)]
   })
 
-  describe('when provided with "recipients"', () => {
-    it('correctly dedupes the data and leaves none duplicates as they are', () => {
+  describe('when provided with "contacts"', () => {
+    it('correctly determines the "recipients", merging any duplicate contacts and leaving non-duplicates as is', () => {
       const result = DetermineRecipientsService.go(testInput)
 
       expect(result).to.equal([
