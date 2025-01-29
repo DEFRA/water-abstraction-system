@@ -148,7 +148,7 @@ describe('Notifications Setup - Determine Recipients service', () => {
       ])
     })
 
-    describe('when a "primary user" and a "returns to" contact have the same hash ID', () => {
+    describe('when a "Primary user" and a "Returns agent" contact have the same hash ID', () => {
       it('merges them into one "recipient" with the "contact_type" set to "both"', () => {
         const result = DetermineRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
