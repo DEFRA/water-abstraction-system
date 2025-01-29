@@ -148,8 +148,8 @@ describe('Notifications Setup - Determine Recipients service', () => {
       ])
     })
 
-    describe('when the recipient has a duplicate "primary user" and "returns to" contact hash', () => {
-      it('correctly returns only the "primary user" with the "message_type" Email - both', () => {
+    describe('when a "primary user" and a "returns to" contact have the same hash ID', () => {
+      it('merges them into one "recipient" with the "contact_type" set to "both"', () => {
         const result = DetermineRecipientsService.go([
           testDuplicateRecipients.duplicatePrimaryUser,
           testDuplicateRecipients.duplicateReturnsAgent
