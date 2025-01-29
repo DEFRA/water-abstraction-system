@@ -106,7 +106,7 @@ function _recipients(recipients, page) {
  *
  * ```javascript
  * // The contact name is assumed to be the first element in the `contact` array
- * const [name] = a.contact
+ * const [name] = recipient.contact
  * ```
  *
  * @private
