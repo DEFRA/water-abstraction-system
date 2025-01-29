@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Deletes the note from the return submission currently being setup
+ * Deletes the note from the return log currently being setup
  * @module DeleteNoteService
  */
 
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Deletes the note from the return submission currently being setup
+ * Deletes the note from the return log currently being setup
  *
- * It first retrieves the session instance for the returns submission journey in progress. Then it removes the notes
+ * It first retrieves the session instance for the return log journey in progress. Then it removes the notes
  * data from the session.
  *
  * @param {string} sessionId - The id of the current session

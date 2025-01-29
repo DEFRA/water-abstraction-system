@@ -11,10 +11,10 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/note` page
  *
- * Supports generating the data needed for the note page in the return submission setup journey. It fetches the
+ * Supports generating the data needed for the note page in the return log setup journey. It fetches the
  * current session record and combines it with textarea information needed for the form.
  *
- * @param {string} sessionId - The UUID for return submission setup session record
+ * @param {string} sessionId - The UUID for return log setup session record
  *
  * @returns {Promise<object>} The view data for the note page
  */

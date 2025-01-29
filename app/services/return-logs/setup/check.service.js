@@ -27,8 +27,8 @@ async function go(sessionId, yar) {
 
   return {
     activeNavBar: 'search',
-    notification,
-    ...formattedData
+    ...formattedData,
+    notification
   }
 }
 

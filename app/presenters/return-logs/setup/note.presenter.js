@@ -8,7 +8,7 @@
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/note` page
  *
- * @param {module:SessionModel} session - The returns submission session instance
+ * @param {module:SessionModel} session - The returns log session instance
  *
  * @returns {object} The data formatted for the view template
  */

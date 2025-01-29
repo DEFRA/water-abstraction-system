@@ -12,7 +12,7 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/note` page
  *
- * It first retrieves the session instance for the returns logs journey in progress.
+ * It first retrieves the session instance for the return log journey in progress.
  *
  * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
