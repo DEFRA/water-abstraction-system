@@ -191,10 +191,10 @@ function _total(selectedReturnSubmission) {
     return 0
   }
 
-  const total = selectedReturnSubmission.returnSubmissionLines.reduce((total, line) => {
+  const total = selectedReturnSubmission.returnSubmissionLines.reduce((acc, line) => {
     const quantity = line.quantity ?? 0
 
-    return total + quantity
+    return acc + quantity
   }, 0)
 
   return formatNumber(total)
