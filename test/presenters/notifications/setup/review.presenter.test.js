@@ -46,7 +46,7 @@ describe('Notifications Setup - Review presenter', () => {
           {
             contact: ['primary.user@important.com'],
             licences: [testRecipients.primaryUser.licence_refs],
-            method: 'Letter or email - Primary User'
+            method: 'Letter or email - Primary user'
           },
           {
             contact: ['returns.agent@important.com'],
@@ -88,23 +88,23 @@ describe('Notifications Setup - Review presenter', () => {
           expect(result.recipients).to.equal([
             {
               contact: ['primary.user@important.com'],
-              licences: [`${testRecipients.primaryUser.licence_refs}`],
+              licences: [testRecipients.primaryUser.licence_refs],
               method: 'Letter or email - Primary user'
             },
             {
               contact: ['returns.agent@important.com'],
-              licences: [`${testRecipients.returnsAgent.licence_refs}`],
+              licences: [testRecipients.returnsAgent.licence_refs],
               method: 'Letter or email - Returns agent'
             },
             {
               contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-              licences: [`${testRecipients.licenceHolder.licence_refs}`],
+              licences: [testRecipients.licenceHolder.licence_refs],
               method: 'Letter or email - Licence holder'
             },
             {
               contact: ['Mr H J Returns to', '2', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-              licences: [`${testRecipients.returnsTo.licence_refs}`],
-              method: 'Letter or email  - Returns to'
+              licences: [testRecipients.returnsTo.licence_refs],
+              method: 'Letter or email - Returns to'
             },
             {
               contact: [
