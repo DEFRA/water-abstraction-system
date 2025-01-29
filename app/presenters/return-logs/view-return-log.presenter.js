@@ -188,7 +188,7 @@ function _tableTitle(returnsFrequency, method) {
 
 function _total(selectedReturnSubmission) {
   if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
-    return 0
+    return formatNumber(0)
   }
 
   const total = selectedReturnSubmission.returnSubmissionLines.reduce((acc, line) => {

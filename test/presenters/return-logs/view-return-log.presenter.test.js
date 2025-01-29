@@ -505,10 +505,10 @@ describe('View Return Log presenter', () => {
 
   describe('the "total" property', () => {
     describe('when there is no submission', () => {
-      it('returns 0', () => {
+      it('returns 0 as a string', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-        expect(result.total).to.equal(0)
+        expect(result.total).to.equal('0')
       })
     })
 
@@ -518,10 +518,10 @@ describe('View Return Log presenter', () => {
           setupSubmission(testReturnLog, true)
         })
 
-        it('returns 0', () => {
+        it('returns 0 as a string', () => {
           const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-          expect(result.total).to.equal(0)
+          expect(result.total).to.equal('0')
         })
       })
 
