@@ -60,7 +60,7 @@ async function returnLogs(request, h) {
   return h.response().code(NO_CONTENT_STATUS_CODE)
 }
 
-async function returnLogsMigration(request, h) {
+async function returnVersionMigration(request, h) {
   ReturnVersionMigrationService.go()
 
   return h.response().code(NO_CONTENT_STATUS_CODE)
@@ -70,7 +70,7 @@ module.exports = {
   exportDb,
   licenceUpdates,
   returnLogs,
-  returnLogsMigration,
+  returnVersionMigration,
   sessionCleanup,
   timeLimited
 }

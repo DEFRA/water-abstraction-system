@@ -77,7 +77,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/return-version-migration',
     options: {
-      handler: JobsController.returnLogsMigration,
+      handler: JobsController.returnVersionMigration,
       app: {
         plainOutput: true
       },

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determines what licences need to have new return versions created
+ * Determines which licences need new return versions created for quarterly returns
  * @module ReturnVersionMigrationService
  */
 
@@ -33,7 +33,7 @@ async function go() {
 
     const licences = await FetchWaterUndertakersService.go()
 
-    for (const licence in licences) {
+    for (const licence of licences) {
       const returnRequirements = await GenerateFromExisintRequirementsService.go(licence.returnVersions[0].id)
 
       const data = {
@@ -56,7 +56,7 @@ async function go() {
 
     calculateAndLogTimeTaken(startTime, 'Return version migration job complete')
   } catch (error) {
-    global.GlobalNotifier.omfg('Return version migration job failed', error)
+    global.GlobalNotifier.omfg('Return version migration job failed', null, error)
   }
 }
 
