@@ -5,8 +5,8 @@
  * @module ReviewPresenter
  */
 
+const { contactName, contactAddress } = require('../../crm.presenter.js')
 const { defaultPageSize } = require('../../../../config/database.config.js')
-const { titleCase } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notifications/setup/review` page
@@ -38,11 +38,13 @@ function go(recipients, page, pagination) {
  * @returns {string[]}
  */
 function _contact(recipient) {
-  if (recipient.recipient) {
-    return [recipient.recipient]
+  if (recipient.email) {
+    return [recipient.email]
   }
 
-  return recipient.contact.split(',').map(titleCase)
+  const name = contactName(recipient.contact)
+  const address = contactAddress(recipient.contact)
+  return [name, ...address]
 }
 
 /**
@@ -79,8 +81,8 @@ function _recipients(recipients, page) {
   return paginatedRecipients.map((recipient) => {
     return {
       contact: _contact(recipient),
-      licences: _licences(recipient.all_licences),
-      method: recipient.message_type
+      licences: _licences(recipient.licence_refs),
+      method: `${recipient.message_type} - ${recipient.contact_type}`
     }
   })
 }
