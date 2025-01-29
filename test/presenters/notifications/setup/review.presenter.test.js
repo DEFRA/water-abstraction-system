@@ -27,6 +27,9 @@ describe('Notifications Setup - Review presenter', () => {
     }
 
     testRecipients = RecipientsFixture.recipients()
+    // This data is used to ensure the recipients are grouped when they have the same licence ref / name.
+    // Ignore the fact that these would be considered duplicates elsewhere in the code
+    // (e.g. contact hash / address being identical)
     testDuplicateRecipients = RecipientsFixture.duplicateRecipients()
 
     testInput = [...Object.values(testRecipients), ...Object.values(testDuplicateRecipients)].map((recipient) => {
