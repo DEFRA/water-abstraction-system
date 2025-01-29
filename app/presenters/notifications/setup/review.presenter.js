@@ -102,12 +102,12 @@ function _recipients(recipients, page) {
 }
 
 /**
- * Sorts an array of contact objects alphabetically by the contact's name.
- * The contact name is assumed to be the first element in the `contact` array
- * (as constructed by the CRM presenter function `contactName`).
+ * Sorts an array of recipients objects alphabetically by the contact's name.
  *
- * This function compares the first element of the `contact` array for each
- * object to determine alphabetical order.
+ * ```javascript
+ * // The contact name is assumed to be the first element in the `contact` array
+ * const [name] = a.contact
+ * ```
  *
  * @private
  */
