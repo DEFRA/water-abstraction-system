@@ -14,10 +14,15 @@ const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
 
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
@@ -25,20 +30,21 @@ describe('View Return Log presenter', () => {
   let auth
   let testReturnLog
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = {
       credentials: {
         scope: ['returns']
       }
     }
 
-    testReturnLog = await ReturnLogHelper.add({
+    testReturnLog = createInstance(ReturnLogModel, ReturnLogHelper, {
       metadata: {
         ...ReturnLogHelper.defaults().metadata,
         purposes: [{ alias: 'PURPOSE_ALIAS' }]
       }
     })
 
+    // Replicate the metadata copying done by FetchReturnLogService
     testReturnLog.siteDescription = testReturnLog.metadata.description
     testReturnLog.periodStartDay = testReturnLog.metadata.nald.periodStartDay
     testReturnLog.periodStartMonth = testReturnLog.metadata.nald.periodStartMonth
@@ -46,7 +52,7 @@ describe('View Return Log presenter', () => {
     testReturnLog.periodEndMonth = testReturnLog.metadata.nald.periodEndMonth
     testReturnLog.purposes = testReturnLog.metadata.purposes
     testReturnLog.twoPartTariff = testReturnLog.metadata.isTwoPartTariff
-    testReturnLog.licence = await LicenceHelper.add()
+    testReturnLog.licence = createInstance(LicenceModel, LicenceHelper)
   })
 
   afterEach(() => {
@@ -109,17 +115,19 @@ describe('View Return Log presenter', () => {
       })
     })
 
-    it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', async () => {
+    it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', () => {
       testReturnLog.versions = [
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
-        await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 101 })
+        createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id }),
+        createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id, version: 101 })
       ]
 
-      testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })]
+      testReturnLog.returnSubmissions = [
+        createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: testReturnLog.id })
+      ]
 
       for (const returnSubmission of testReturnLog.returnSubmissions) {
         returnSubmission.returnSubmissionLines = [
-          await ReturnSubmissionLineHelper.add({
+          createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
             returnSubmissionId: returnSubmission.id
           })
         ]
@@ -135,12 +143,12 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "displayReadings" property', () => {
-    beforeEach(async () => {
-      await setupSubmission(testReturnLog)
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
     })
 
     describe('when the return submission method is abstractionVolumes', () => {
-      it('returns false', async () => {
+      it('returns false', () => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
 
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
@@ -150,7 +158,7 @@ describe('View Return Log presenter', () => {
     })
 
     describe("when the return submission method isn't abstractionVolumes", () => {
-      it('returns true', async () => {
+      it('returns true', () => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
 
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
@@ -171,8 +179,8 @@ describe('View Return Log presenter', () => {
 
     describe('when there is a return submission', () => {
       describe('which is a nil return', () => {
-        beforeEach(async () => {
-          await setupSubmission(testReturnLog)
+        beforeEach(() => {
+          setupSubmission(testReturnLog)
         })
 
         it('returns false', () => {
@@ -196,11 +204,11 @@ describe('View Return Log presenter', () => {
 
   describe('the "displayTable" property', () => {
     describe('when there is a return submission', () => {
-      beforeEach(async () => {
-        await setupSubmission(testReturnLog)
+      beforeEach(() => {
+        setupSubmission(testReturnLog)
       })
 
-      it('returns true ', async () => {
+      it('returns true ', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.displayTable).to.equal(true)
@@ -217,8 +225,8 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "displayUnits" property', () => {
-    beforeEach(async () => {
-      await setupSubmission(testReturnLog)
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
     })
 
     describe('when the unit is not cubic metres', () => {
@@ -244,7 +252,7 @@ describe('View Return Log presenter', () => {
 
   describe('the "latest" property', () => {
     describe('when this is the latest return log', () => {
-      it('returns true', async () => {
+      it('returns true', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.latest).to.equal(true)
@@ -252,27 +260,27 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when this is not the latest return log', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         testReturnLog.versions = [
-          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id }),
-          await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id, version: 102 })
+          createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id }),
+          createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id, version: 102 })
         ]
 
         testReturnLog.returnSubmissions = [
-          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id }),
-          await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2 })
+          createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: testReturnLog.id }),
+          createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: testReturnLog.id, version: 2 })
         ]
 
         for (const returnSubmission of testReturnLog.returnSubmissions) {
           returnSubmission.returnSubmissionLines = [
-            await ReturnSubmissionLineHelper.add({
+            createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
               returnSubmissionId: returnSubmission.id
             })
           ]
         }
       })
 
-      it('returns false', async () => {
+      it('returns false', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.latest).to.equal(false)
@@ -289,8 +297,8 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "meterDetails" property', () => {
-    beforeEach(async () => {
-      await setupSubmission(testReturnLog)
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
 
       Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
         manufacturer: 'MANUFACTURER',
@@ -299,7 +307,7 @@ describe('View Return Log presenter', () => {
       })
     })
 
-    it('returns the formatted meter details', async () => {
+    it('returns the formatted meter details', () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
       expect(result.meterDetails).to.equal({
@@ -311,13 +319,13 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "method" property', () => {
-    beforeEach(async () => {
-      await setupSubmission(testReturnLog)
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
 
       Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('METHOD')
     })
 
-    it('returns the submission method', async () => {
+    it('returns the submission method', () => {
       const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
       expect(result.method).to.equal('METHOD')
@@ -327,11 +335,11 @@ describe('View Return Log presenter', () => {
   describe('the "nilReturn" property', () => {
     describe('when there is a submission', () => {
       describe('which is a nil return', () => {
-        beforeEach(async () => {
-          await setupSubmission(testReturnLog, true)
+        beforeEach(() => {
+          setupSubmission(testReturnLog, true)
         })
 
-        it('returns true', async () => {
+        it('returns true', () => {
           const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
           expect(result.nilReturn).to.equal(true)
@@ -339,11 +347,11 @@ describe('View Return Log presenter', () => {
       })
 
       describe('which is not a nil return', () => {
-        beforeEach(async () => {
-          await setupSubmission(testReturnLog)
+        beforeEach(() => {
+          setupSubmission(testReturnLog)
         })
 
-        it('returns false', async () => {
+        it('returns false', () => {
           const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
           expect(result.nilReturn).to.equal(false)
@@ -352,7 +360,7 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when there is no submission', () => {
-      it('returns false', async () => {
+      it('returns false', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.nilReturn).to.equal(false)
@@ -402,8 +410,8 @@ describe('View Return Log presenter', () => {
 
   describe('the "startReading" property', () => {
     describe('when there is a submission', () => {
-      beforeEach(async () => {
-        await setupSubmission(testReturnLog)
+      beforeEach(() => {
+        setupSubmission(testReturnLog)
 
         Sinon.stub(testReturnLog.returnSubmissions[0], '$meter').returns({
           manufacturer: 'MANUFACTURER',
@@ -413,7 +421,7 @@ describe('View Return Log presenter', () => {
         })
       })
 
-      it('returns the start reading', async () => {
+      it('returns the start reading', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.startReading).to.equal(1234)
@@ -441,7 +449,7 @@ describe('View Return Log presenter', () => {
     describe('when there is a submission', () => {
       let StubbedViewReturnLogPresenter
 
-      beforeEach(async () => {
+      beforeEach(() => {
         // We have to use Proxyquire to stub BaseReturnLogsPresenter as Sinon cannot stub dependencies that are imported
         // via destructuring
         StubbedViewReturnLogPresenter = Proxyquire('../../../app/presenters/return-logs/view-return-log.presenter.js', {
@@ -451,10 +459,10 @@ describe('View Return Log presenter', () => {
           }
         })
 
-        await setupSubmission(testReturnLog)
+        setupSubmission(testReturnLog)
       })
 
-      it('returns generated headers and rows', async () => {
+      it('returns generated headers and rows', () => {
         const result = StubbedViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.summaryTableData.headers).to.equal('GENERATED_HEADERS')
@@ -464,8 +472,8 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "tableTitle" property', () => {
-    beforeEach(async () => {
-      await setupSubmission(testReturnLog)
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
     })
 
     it('returns the frequency in the title', () => {
@@ -506,8 +514,8 @@ describe('View Return Log presenter', () => {
 
     describe('when there is a submission', () => {
       describe('which is a nil return', () => {
-        beforeEach(async () => {
-          await setupSubmission(testReturnLog, true)
+        beforeEach(() => {
+          setupSubmission(testReturnLog, true)
         })
 
         it('returns 0', () => {
@@ -518,20 +526,22 @@ describe('View Return Log presenter', () => {
       })
 
       describe('which is not a nil return', () => {
-        beforeEach(async () => {
-          testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
+        beforeEach(() => {
+          testReturnLog.versions = [
+            createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id })
+          ]
 
           testReturnLog.returnSubmissions = [
-            await ReturnSubmissionHelper.add({
+            createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, {
               returnLogId: testReturnLog.id
             })
           ]
 
           testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-            await ReturnSubmissionLineHelper.add({
+            createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
               returnSubmissionId: testReturnLog.returnSubmissions[0].id
             }),
-            await ReturnSubmissionLineHelper.add({
+            createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
               returnSubmissionId: testReturnLog.returnSubmissions[0].id,
               startDate: new Date(`2022-01-02`),
               endDate: new Date(`2022-02-08`)
@@ -549,12 +559,32 @@ describe('View Return Log presenter', () => {
   })
 })
 
-async function setupSubmission(testReturnLog, nilReturn = false) {
-  testReturnLog.versions = [await ReturnVersionHelper.add({ licenceId: testReturnLog.licence.id })]
+function setupSubmission(testReturnLog, nilReturn = false) {
+  testReturnLog.versions = [
+    createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id })
+  ]
 
-  testReturnLog.returnSubmissions = [await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, nilReturn })]
+  testReturnLog.returnSubmissions = [
+    createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, {
+      returnLogId: testReturnLog.id,
+      nilReturn
+    })
+  ]
 
   testReturnLog.returnSubmissions[0].returnSubmissionLines = [
-    await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnLog.returnSubmissions[0].id })
+    createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+      returnSubmissionId: testReturnLog.returnSubmissions[0].id
+    })
   ]
+}
+
+// Create an instance of a given model using the defaults of the given helper, without creating it in the db. This
+// allows us to pass in the expected models without having to touch the db at all.
+function createInstance(model, helper, data = {}) {
+  return model.fromJson({
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...helper.defaults(),
+    ...data
+  })
 }
