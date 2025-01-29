@@ -35,8 +35,8 @@
  * Where more than one match is found, the service will merge the contacts (depending on whether they are email or
  * letter based). The result of the merge becomes the 'recipient'.
  *
- * Other than the notification method, the key thing we need to determine when merging contacts is what `contact_type`
- * to use for the merged record.
+ * The key thing we need to determine when merging contacts is what `contact_type` to use for the merged record
+ * and what the `message_type` will be (Email or Letter).
  *
  * If all the matched contacts have the same contact type, then it will be used for the merged 'recipient'. But as per
  * our first example, if the roles differ, we have to assign a new contact type: 'Email - both' for email contacts, and

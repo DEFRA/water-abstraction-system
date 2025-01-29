@@ -26,10 +26,13 @@ describe('Notifications Setup - Review presenter', () => {
     }
 
     testRecipients = RecipientsFixture.recipients()
-    // The determine recipients service will add the message relevant to the recipient
+
     testInput = Object.values(testRecipients).map((recipient) => {
       return {
         ...recipient,
+        // The determine recipients service will add the message_type relevant to the recipient
+        // This map is a simple way to add the message type without affecting the fixtures.
+        // We are not concerned in this test how the message type is calculated so it is defaulted as below.
         message_type: 'Letter or email'
       }
     })
