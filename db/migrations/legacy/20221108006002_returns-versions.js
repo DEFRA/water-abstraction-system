@@ -15,6 +15,8 @@ exports.up = function (knex) {
     table.jsonb('metadata').notNullable()
     table.boolean('nil_return').notNullable()
     table.boolean('current')
+    table.text('notes')
+    table.integer('created_by')
 
     // Legacy timestamps
     // NOTE: They are not automatically set

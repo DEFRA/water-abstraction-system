@@ -22,6 +22,7 @@ function go(session) {
     backLink: `/system/return-versions/setup/${sessionId}/method`,
     existingOptions: _existingOptions(licence.returnVersions),
     licenceRef: licence.licenceRef,
+    pageTitle: 'Use previous requirements for returns',
     sessionId
   }
 }

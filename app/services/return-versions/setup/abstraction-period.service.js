@@ -26,7 +26,6 @@ async function go(sessionId, requirementIndex) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Enter the abstraction period for the requirements for returns',
     ...formattedData
   }
 }

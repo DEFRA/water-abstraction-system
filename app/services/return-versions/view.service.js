@@ -18,11 +18,11 @@ const ViewPresenter = require('../../presenters/return-versions/view.presenter.j
 async function go(returnVersionId) {
   const requirementsForReturns = await FetchReturnVersionService.go(returnVersionId)
 
-  const data = ViewPresenter.go(requirementsForReturns)
+  const formattedData = ViewPresenter.go(requirementsForReturns)
 
   return {
     activeNavBar: 'search',
-    ...data
+    ...formattedData
   }
 }
 

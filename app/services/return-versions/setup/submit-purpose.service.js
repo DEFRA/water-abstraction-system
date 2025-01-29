@@ -55,7 +55,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select the purpose for the requirements for returns',
     ...submittedSessionData
   }
 }

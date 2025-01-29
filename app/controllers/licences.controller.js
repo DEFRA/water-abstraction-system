@@ -29,11 +29,7 @@ async function markedForSupplementaryBilling(request, h) {
 
   const pageData = await MarkedForSupplementaryBillingService.go(licenceId)
 
-  return h.view('licences/marked-for-supplementary-billing.njk', {
-    pageTitle: "You've marked this licence for the next supplementary bill run",
-    activeNavBar: 'search',
-    ...pageData
-  })
+  return h.view('licences/marked-for-supplementary-billing.njk', pageData)
 }
 
 async function markForSupplementaryBilling(request, h) {
@@ -41,11 +37,7 @@ async function markForSupplementaryBilling(request, h) {
 
   const pageData = await MarkForSupplementaryBillingService.go(licenceId)
 
-  return h.view('licences/mark-for-supplementary-billing.njk', {
-    pageTitle: 'Mark for the supplementary bill run',
-    activeNavBar: 'search',
-    ...pageData
-  })
+  return h.view('licences/mark-for-supplementary-billing.njk', pageData)
 }
 
 async function noReturnsRequired(request, h) {
@@ -91,9 +83,7 @@ async function viewBills(request, h) {
 
   const pageData = await ViewLicenceBillsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 async function viewCommunications(request, h) {
@@ -105,9 +95,7 @@ async function viewCommunications(request, h) {
 
   const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 async function viewLicenceConditions(request, h) {
@@ -115,9 +103,7 @@ async function viewLicenceConditions(request, h) {
 
   const pageData = await ViewLicenceConditionsService.go(id)
 
-  return h.view('licences/conditions.njk', {
-    ...pageData
-  })
+  return h.view('licences/conditions.njk', pageData)
 }
 
 async function viewLicenceContactDetails(request, h) {
@@ -125,9 +111,7 @@ async function viewLicenceContactDetails(request, h) {
 
   const pageData = await ViewLicenceContactDetailsService.go(id)
 
-  return h.view('licences/licence-contact-details.njk', {
-    ...pageData
-  })
+  return h.view('licences/licence-contact-details.njk', pageData)
 }
 
 async function viewLicenceContacts(request, h) {
@@ -138,9 +122,7 @@ async function viewLicenceContacts(request, h) {
 
   const pageData = await ViewLicenceContactsService.go(id, auth)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 async function viewLicencePoints(request, h) {
@@ -148,9 +130,7 @@ async function viewLicencePoints(request, h) {
 
   const pageData = await ViewLicencePointsService.go(licenceId)
 
-  return h.view('licences/points.njk', {
-    ...pageData
-  })
+  return h.view('licences/points.njk', pageData)
 }
 
 async function viewLicencePurposes(request, h) {
@@ -158,9 +138,7 @@ async function viewLicencePurposes(request, h) {
 
   const pageData = await ViewLicencePurposesService.go(licenceId)
 
-  return h.view('licences/purposes.njk', {
-    ...pageData
-  })
+  return h.view('licences/purposes.njk', pageData)
 }
 
 async function viewHistory(request, h) {
@@ -171,9 +149,7 @@ async function viewHistory(request, h) {
 
   const pageData = await ViewLicenceHistoryService.go(id, auth)
 
-  return h.view('licences/history.njk', {
-    ...pageData
-  })
+  return h.view('licences/history.njk', pageData)
 }
 
 async function viewReturns(request, h) {
@@ -185,9 +161,7 @@ async function viewReturns(request, h) {
 
   const pageData = await ViewLicenceReturnsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 async function viewSetUp(request, h) {
@@ -198,9 +172,7 @@ async function viewSetUp(request, h) {
 
   const pageData = await ViewLicenceSetUpService.go(id, auth)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 async function viewSummary(request, h) {
@@ -211,9 +183,7 @@ async function viewSummary(request, h) {
 
   const pageData = await ViewLicenceSummaryService.go(id, auth)
 
-  return h.view(ViewLicencePage, {
-    ...pageData
-  })
+  return h.view(ViewLicencePage, pageData)
 }
 
 module.exports = {

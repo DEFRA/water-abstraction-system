@@ -16,10 +16,7 @@ async function remove(request, h) {
 
   const pageData = await RemoveBillService.go(id)
 
-  return h.view('bills/remove.njk', {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view('bills/remove.njk', pageData)
 }
 
 async function submitRemove(request, h) {
@@ -41,11 +38,7 @@ async function view(request, h) {
 
   const view = _determineView(pageData)
 
-  return h.view(view, {
-    pageTitle: `Bill for ${pageData.accountName}`,
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.view(view, pageData)
 }
 
 function _determineView(pageData) {

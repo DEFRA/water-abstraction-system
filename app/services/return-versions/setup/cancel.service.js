@@ -25,7 +25,6 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'You are about to cancel these requirements for returns',
     ...formattedData
   }
 }

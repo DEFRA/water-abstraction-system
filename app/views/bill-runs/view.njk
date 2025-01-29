@@ -203,7 +203,7 @@
       {% set licenceCell %}
         {% set licencesList %}
           {% for licence in bill.licences %}
-            {% if (loop.index0 + 1) == bill.licencesCount %}
+            {% if (loop.index0 + 1) === bill.licencesCount %}
               {{licence}}
             {% else %}
               {{licence}}<br>

@@ -32,7 +32,7 @@
   {# Main heading #}
   <div>
     <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
   </div>
   <div>
     <form method="post">
@@ -50,12 +50,12 @@
           {
             value: "meter-readings",
             text: "Meter Readings",
-            checked: "meter-readings" == reported
+            checked: "meter-readings" === reported
           },
           {
             value: "abstraction-volumes",
             text: "Abstraction Volumes",
-            checked: "abstraction-volumes" == reported
+            checked: "abstraction-volumes" === reported
           }
         ]
       }) }}

@@ -39,6 +39,7 @@ async function go() {
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
 
   return {
+    pageTitle: 'Info',
     addressFacadeData,
     appData,
     chargingModuleData,

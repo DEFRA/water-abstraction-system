@@ -67,7 +67,8 @@ describe('Fetch Licence Contact Details service', () => {
                 addressLine4: null
               }
             ],
-            IsCurrent: true,
+            isCurrent: true,
+            isSummer: true,
             Salutation: '',
             AddressLine1: 'ENVIRONMENT AGENCY',
             AddressLine2: 'HORIZON HOUSE',

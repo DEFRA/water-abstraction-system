@@ -47,6 +47,7 @@ describe('Return Versions Setup - Method presenter', () => {
         backLink: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         displayCopyExisting: true,
         licenceRef: '01/ABC',
+        pageTitle: 'How do you want to set up the requirements for returns?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         method: null
       })

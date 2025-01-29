@@ -61,26 +61,58 @@ describe('Base presenter', () => {
   })
 
   describe('#formatAbstractionDate()', () => {
-    const day = 12
-    const month = 9
+    let day
+    let month
 
-    it('correctly formats the given date, for example, 12 September', async () => {
-      const result = BasePresenter.formatAbstractionDate(day, month)
+    describe('when the abstraction day and month are not set', () => {
+      it('returns null', async () => {
+        const result = BasePresenter.formatAbstractionDate(day, month)
 
-      expect(result).to.equal('12 September')
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the abstraction day and month are set', () => {
+      beforeEach(() => {
+        day = 12
+        month = 9
+      })
+
+      it('correctly formats the given date, for example, 12 September', async () => {
+        const result = BasePresenter.formatAbstractionDate(day, month)
+
+        expect(result).to.equal('12 September')
+      })
     })
   })
 
   describe('#formatAbstractionPeriod()', () => {
-    const startDay = 1
-    const startMonth = 4
-    const endDay = 12
-    const endMonth = 9
+    let startDay
+    let startMonth
+    let endDay
+    let endMonth
 
-    it('correctly formats the given period, for example, 1 April to 12 September', async () => {
-      const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+    describe('when the abstraction period is not set', () => {
+      it('returns null', async () => {
+        const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 
-      expect(result).to.equal('1 April to 12 September')
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the abstraction period is set', () => {
+      beforeEach(() => {
+        startDay = 1
+        startMonth = 4
+        endDay = 12
+        endMonth = 9
+      })
+
+      it('correctly formats the given period, for example, 1 April to 12 September', async () => {
+        const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+
+        expect(result).to.equal('1 April to 12 September')
+      })
     })
   })
 

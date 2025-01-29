@@ -37,12 +37,18 @@ function generateBillRunTitle(regionName, batchType, scheme, summer) {
 /**
  * Formats an abstraction day and month into its string variant, for example, 1 and 4 becomes '1 April'
  *
+ * If either value is null or undefined, it returns null.
+ *
  * @param {number} abstractionDay
  * @param {number} abstractionMonth - Note: the index starts at 1, for example, 4 would be April
  *
- * @returns {string} The abstraction date formatted as a 'DD MMMM' string
+ * @returns {string|null} The abstraction date formatted as a 'DD MMMM' string or null if either value is not set
  */
 function formatAbstractionDate(abstractionDay, abstractionMonth) {
+  if (!abstractionDay || !abstractionMonth) {
+    return null
+  }
+
   // NOTE: Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
   const abstractionDate = new Date(1970, abstractionMonth - 1, abstractionDay)
@@ -53,16 +59,23 @@ function formatAbstractionDate(abstractionDay, abstractionMonth) {
 /**
  * Formats an abstraction period into its string variant, for example, '1 April to 31 October'
  *
+ * If the provided abstraction data is null or undefined, it returns null.
+ *
  * @param {number} startDay
  * @param {number} startMonth
  * @param {number} endDay
  * @param {number} endMonth
  *
- * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string
+ * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string, unless the abstraction period
+ * cannot be determined, in which case it returns null
  */
 function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
   const startDate = formatAbstractionDate(startDay, startMonth)
   const endDate = formatAbstractionDate(endDay, endMonth)
+
+  if (!startDate || !endDate) {
+    return null
+  }
 
   return `${startDate} to ${endDate}`
 }

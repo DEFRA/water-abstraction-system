@@ -1,0 +1,94 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: error.errorList
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
+  <div>
+    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
+  </div>
+  <div>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukInput({
+        label: {
+          text: "Make"
+        },
+        classes: "govuk-input--width-10",
+        id: "meter-make",
+        name: "meterMake",
+        value: meterMake,
+        errorMessage: {
+          text: error.meterMake.message
+        } if error.meterMake
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Serial number"
+        },
+        classes: "govuk-input--width-10",
+        id: "meter-serial-number",
+        name: "meterSerialNumber",
+        value: meterSerialNumber,
+        errorMessage: {
+          text: error.meterSerialNumber.message
+        } if error.meterSerialNumber
+      }) }}
+
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        name: "meter10TimesDisplay",
+        errorMessage: {
+          text: error.meter10TimesDisplay.message
+        } if error.meter10TimesDisplay,
+        fieldset: {
+          legend: {
+            text: "Does this meter have a ×10 display",
+            classes: "govuk-body"
+          }
+        },
+        hint: {
+          text: "This will not recalculate any of the volumes provided"
+        },
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: "yes" === meter10TimesDisplay
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: "no" === meter10TimesDisplay
+          }
+        ]
+      }) }}
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

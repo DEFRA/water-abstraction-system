@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
- * @module StartValidator
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/meter-provided` page
+ * @module MeterProvidedValidator
  */
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['enter-return', 'nil-return', 'record-receipt']
+const VALID_VALUES = ['yes', 'no']
 
 /**
- * Validates data submitted for the `/return-logs/setup/{sessionId}/start` page
+ * Validates data submitted for the `/return-logs/setup/{sessionId}/meter-provided` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -18,10 +18,11 @@ const VALID_VALUES = ['enter-return', 'nil-return', 'record-receipt']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const errorMessage = 'Select what you want to do with this return'
+  const meterProvided = payload.meterProvided
+  const errorMessage = 'Select if meter details have been provided'
 
   const schema = Joi.object({
-    journey: Joi.string()
+    meterProvided: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({
@@ -31,7 +32,7 @@ function go(payload) {
       })
   })
 
-  return schema.validate(payload, { abortEarly: false })
+  return schema.validate({ meterProvided }, { abortEarly: false })
 }
 
 module.exports = {

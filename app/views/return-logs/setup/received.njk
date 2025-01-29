@@ -33,7 +33,7 @@
   {# Main heading #}
   <div>
     <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
   </div>
   <div>
     <form method="post">
@@ -87,17 +87,17 @@
           {
             value: "today",
             text: "Today",
-            checked: receivedDateOption == 'today'
+            checked: receivedDateOption === 'today'
           },
           {
             value: "yesterday",
             text: "Yesterday",
-            checked: receivedDateOption == 'yesterday'
+            checked: receivedDateOption === 'yesterday'
           },
           {
             value: "custom-date",
             text: "Custom date",
-            checked: receivedDateOption == 'custom-date',
+            checked: receivedDateOption === 'custom-date',
             conditional: {
               html: dateInputHTML
             }

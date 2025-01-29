@@ -43,6 +43,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
         frequencyCollected: null,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
+        pageTitle: 'Select how often readings or volumes are collected',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

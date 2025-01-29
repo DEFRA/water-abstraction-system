@@ -1,29 +1,62 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Orchestrates fetching and presenting the data needed for the notifications setup review page
  * @module ReviewService
  */
 
+const DetermineRecipientsService = require('./determine-recipients.service.js')
+const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
+const RecipientsService = require('./fetch-recipients.service.js')
+const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
- * Formats data for the `/notifications/setup/review` page
+ * Orchestrates fetching and presenting the data needed for the notifications setup review page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
+ * @param {number|string} [page=1] - The currently selected page (if paginated)
  *
  * @returns {object} The view data for the review page
  */
-async function go(sessionId) {
+async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  // eslint-disable-next-line no-unused-vars
   const { returnsPeriod } = session
+  const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
+  const summer = _summer(returnsPeriod)
+
+  const recipientsData = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
+
+  const recipients = DetermineRecipientsService.go(recipientsData)
+
+  const pagination = PaginatorPresenter.go(
+    recipients.length,
+    Number(page),
+    `/system/notifications/setup/${sessionId}/review`
+  )
+
+  const formattedData = ReviewPresenter.go(recipients, page, pagination)
 
   return {
     activeNavBar: 'manage',
-    pageTitle: 'Review the mailing list'
+    ...formattedData,
+    pagination,
+    page
   }
+}
+
+function _extractReturnPeriod(returnsPeriod) {
+  const periods = determineUpcomingReturnPeriods()
+
+  return periods.find((period) => {
+    return period.name === returnsPeriod
+  })
+}
+
+function _summer(returnsPeriod) {
+  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 module.exports = {

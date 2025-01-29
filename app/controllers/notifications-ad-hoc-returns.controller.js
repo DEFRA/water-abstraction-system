@@ -16,11 +16,7 @@ async function licence(request, h) {
 
   const pageData = await LicenceService.go(sessionId)
 
-  return h.view(`${basePath}/licence.njk`, {
-    activeNavBar: 'manage',
-    pageTitle: 'Enter a licence number',
-    ...pageData
-  })
+  return h.view(`${basePath}/licence.njk`, pageData)
 }
 
 async function setup(_request, h) {
@@ -35,11 +31,7 @@ async function submitLicence(request, h) {
   const pageData = await SubmitLicenceService.go(sessionId, request.payload)
 
   if (pageData.error || pageData.notification) {
-    return h.view(`${basePath}/licence.njk`, {
-      activeNavBar: 'manage',
-      pageTitle: 'Enter a licence number',
-      ...pageData
-    })
+    return h.view(`${basePath}/licence.njk`, pageData)
   }
 
   return h.redirect(`/system/${basePath}/${sessionId}/check-returns`)
