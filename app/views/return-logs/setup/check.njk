@@ -41,6 +41,17 @@
     <hr class="govuk-section-break--visible">
   </div>
 
+
+  {# Meter details #}
+  {% set meterDetails %}
+    {% if meterProvided === 'yes' %}
+      <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
+    {% else %}
+      <div>Not provided</div>
+    {% endif %}
+  {% endset %}
+
+
   {# Reporting details #}
   <div class="govuk-!-margin-bottom-9">
     {{ govukSummaryList({
@@ -55,7 +66,7 @@
             text: "Return received"
           },
           value: {
-            html: "8 January 2025"
+            text: returnReceivedDate
           },
           actions: {
             items: [
@@ -72,7 +83,7 @@
             text: "Reporting figures"
           },
           value: {
-            html: "Volumes"
+            text: reportingFigures
           },
           actions: {
             items: [
@@ -89,7 +100,7 @@
             text: "Meter details"
           },
           value: {
-            html: "<div>Meter make</div>" + "<div>Meter serial number</div>"
+            html: meterDetails
           },
           actions: {
             items: [
@@ -106,7 +117,7 @@
             text: "Units"
           },
           value: {
-            html: "Cubic meters"
+            text: units
           },
           actions: {
             items: [
