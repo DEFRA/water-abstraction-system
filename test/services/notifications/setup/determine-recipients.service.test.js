@@ -168,8 +168,8 @@ describe('Notifications Setup - Determine Recipients service', () => {
       })
     })
 
-    describe('when the recipient has a duplicate "licence holder" and "Returns to" contact hash', () => {
-      it('correctly returns only the "licence holder" with the "message_type" Letter - both', () => {
+    describe('when a "licence holder" and a "Returns to" contact have the same hash ID', () => {
+      it('merges them into one "recipient" with the contact type set to "both"', () => {
         const result = DetermineRecipientsService.go([
           testDuplicateRecipients.duplicateLicenceHolder,
           testDuplicateRecipients.duplicateReturnsTo
