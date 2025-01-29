@@ -112,8 +112,13 @@ function _recipients(recipients, page) {
  * @private
  */
 function _sortContactAlphabeticallyByName(a, b) {
-  if (a.contact[0] < b.contact[0]) return -1
-  if (a.contact[0] > b.contact[0]) return 1
+  if (a.contact[0] < b.contact[0]) {
+    return -1
+  }
+
+  if (a.contact[0] > b.contact[0]) {
+    return 1
+  }
 
   return 0
 }
