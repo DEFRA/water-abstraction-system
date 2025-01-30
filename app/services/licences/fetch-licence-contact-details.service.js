@@ -29,12 +29,12 @@ async function _fetch(licenceId) {
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select(['id', 'metadata'])
     })
-    .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
-    .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles', (builder) => {
       builder.select(['role']).whereIn('role', ['primary_user', 'user_returns'])
     })
-    .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
-    .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity', (builder) => {
       builder.select(['name'])
     })
 }

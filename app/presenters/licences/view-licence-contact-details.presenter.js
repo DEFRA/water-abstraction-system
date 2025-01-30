@@ -33,12 +33,12 @@ function go(licence) {
 function _licenceContactDetails(licenceDocumentHeader) {
   return [
     ...filteredContactDetailsByRole(licenceDocumentHeader.metadata.contacts),
-    ..._licenceEntityRole(licenceDocumentHeader.licenceEntityRole)
+    ..._licenceEntityRoles(licenceDocumentHeader.licenceEntityRoles)
   ]
 }
 
-function _licenceEntityRole(licenceEntityRole) {
-  return licenceEntityRole.map(_licenceEntity).sort(_sortLicenceEntity)
+function _licenceEntityRoles(licenceEntityRoles) {
+  return licenceEntityRoles.map(_licenceEntity).sort(_sortLicenceEntity)
 }
 
 function _licenceEntity(entity) {
