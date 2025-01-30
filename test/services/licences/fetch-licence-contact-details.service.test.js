@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const CRMContactDetailsSeeder = require('../../support/seeders/crm-contact-details.seeder.js')
+const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
 const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
@@ -22,7 +22,7 @@ describe('Fetch Licence Contact Details service', () => {
 
   describe('when the licence has a licence document header', () => {
     before(async () => {
-      const { primaryUser: licenceDocumentHeader } = await CRMContactDetailsSeeder.seed(false)
+      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed(false)
 
       licence = await LicenceHelper.add({
         licenceRef: licenceDocumentHeader.licenceRef

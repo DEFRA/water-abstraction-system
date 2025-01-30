@@ -8,7 +8,7 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactDetailsSeeder = require('../../../support/seeders/crm-contact-details.seeder.js')
+const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
@@ -22,7 +22,7 @@ describe('Notifications Setup - Recipients service', () => {
     dueDate = '2023-04-28' // matches return log date
     isSummer = 'false'
 
-    recipients = await CRMContactDetailsSeeder.seed()
+    recipients = await LicenceDocumentHeaderSeeder.seed()
   })
 
   describe('when there is a "primary user"', () => {

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module RecipientsSeeder
+ * @module LicenceDocumentHeaderSeeder
  */
 
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
