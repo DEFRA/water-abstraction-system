@@ -173,9 +173,11 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when the return submission method is abstractionVolumes', () => {
-      it('returns false', () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+      })
 
+      it('returns false', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.displayReadings).to.equal(false)
@@ -183,9 +185,11 @@ describe('View Return Log presenter', () => {
     })
 
     describe("when the return submission method isn't abstractionVolumes", () => {
-      it('returns true', () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+      })
 
+      it('returns true', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.displayReadings).to.equal(true)
@@ -203,25 +207,27 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when there is a return submission', () => {
+      beforeEach(() => {
+        setupSubmission(testReturnLog)
+      })
+
       describe('which is a nil return', () => {
         beforeEach(() => {
-          setupSubmission(testReturnLog)
+          testReturnLog.returnSubmissions[0].nilReturn = true
         })
 
         it('returns false', () => {
-          testReturnLog.returnSubmissions[0].nilReturn = true
-
           const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
           expect(result.displayTable).to.equal(false)
         })
+      })
 
-        describe('which is not a nil return', () => {
-          it('returns true', () => {
-            const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+      describe('which is not a nil return', () => {
+        it('returns true', () => {
+          const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-            expect(result.displayTable).to.equal(true)
-          })
+          expect(result.displayTable).to.equal(true)
         })
       })
     })
@@ -255,19 +261,23 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when the unit is not cubic metres', () => {
-      it('returns true', () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.GALLONS)
+      })
 
+      it('returns true', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.displayUnits).to.equal(true)
       })
     })
 
-    describe('when the unit is not cubic metres', () => {
-      it('returns false', () => {
+    describe('when the unit is cubic metres', () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$units').returns(unitNames.CUBIC_METRES)
+      })
 
+      it('returns false', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.displayUnits).to.equal(false)
@@ -394,34 +404,46 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "purpose" property', () => {
-    it('returns the alias when the first purpose has an alias', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when the first purpose has an alias', () => {
+      it('returns the alias', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.purpose).to.equal('PURPOSE_ALIAS')
+        expect(result.purpose).to.equal('PURPOSE_ALIAS')
+      })
     })
 
-    it('returns the tertiary description when the first purpose has no alias ', () => {
-      testReturnLog.purposes.unshift({ tertiary: { description: 'TERTIARY_DESCRIPTION' } })
+    describe('when the first purpose has no alias', () => {
+      beforeEach(() => {
+        testReturnLog.purposes.unshift({ tertiary: { description: 'TERTIARY_DESCRIPTION' } })
+      })
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+      it('returns the tertiary description', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.purpose).to.equal('TERTIARY_DESCRIPTION')
+        expect(result.purpose).to.equal('TERTIARY_DESCRIPTION')
+      })
     })
   })
 
   describe('the "receivedDate" property', () => {
-    it('returns the formatted date when a received date is present', () => {
-      testReturnLog.receivedDate = new Date(`2022-01-01`)
+    describe('when no received date is present', () => {
+      it('returns null ', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-      expect(result.receivedDate).to.equal('1 January 2022')
+        expect(result.receivedDate).to.be.null()
+      })
     })
 
-    it('returns null when no received date is present', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when a received date is present', () => {
+      beforeEach(() => {
+        testReturnLog.receivedDate = new Date(`2022-01-01`)
+      })
 
-      expect(result.receivedDate).to.be.null()
+      it('returns the formatted date', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.receivedDate).to.equal('1 January 2022')
+      })
     })
   })
 
@@ -508,9 +530,11 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when the method is abstractionVolumes', () => {
-      it("returns 'abstraction volumes' in the title", () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('abstractionVolumes')
+      })
 
+      it("returns 'abstraction volumes' in the title", () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.tableTitle).to.contain('abstraction volumes')
@@ -518,9 +542,11 @@ describe('View Return Log presenter', () => {
     })
 
     describe('when the method is not abstractionVolumes', () => {
-      it("returns 'meter readings' in the title", () => {
+      beforeEach(() => {
         Sinon.stub(testReturnLog.returnSubmissions[0], '$method').returns('NOT_ABSTRACTION_VOLUMES')
+      })
 
+      it("returns 'meter readings' in the title", () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.tableTitle).to.contain('meter readings')
