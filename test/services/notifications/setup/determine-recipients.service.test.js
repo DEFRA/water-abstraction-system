@@ -132,7 +132,7 @@ describe('Notifications Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-          contact_type: 'Licence holder',
+          contact_type: 'both',
           email: null,
           licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
           message_type: 'Letter'
@@ -194,7 +194,7 @@ describe('Notifications Setup - Determine Recipients service', () => {
               type: 'Person'
             },
             contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-            contact_type: 'Licence holder',
+            contact_type: 'both',
             email: null,
             licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
             message_type: 'Letter'
