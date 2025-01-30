@@ -101,16 +101,18 @@ function _licence() {
     licenceDocumentHeader: {
       id: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
       licenceName: 'Between two ferns',
-      licenceEntityRole: {
-        id: 'd7eecfc1-7afa-49f7-8bef-5dc477696a2d',
-        licenceEntity: {
-          id: 'ba7702cf-cd87-4419-a04c-8cea4e0cfdc2',
-          user: {
-            id: 10036,
-            username: 'grace.hopper@example.co.uk'
+      licenceEntityRoles: [
+        {
+          id: 'd7eecfc1-7afa-49f7-8bef-5dc477696a2d',
+          licenceEntity: {
+            id: 'ba7702cf-cd87-4419-a04c-8cea4e0cfdc2',
+            user: {
+              id: 10036,
+              username: 'grace.hopper@example.co.uk'
+            }
           }
         }
-      }
+      ]
     },
     licenceSupplementaryYears: [],
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]

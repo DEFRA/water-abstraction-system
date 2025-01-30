@@ -30,7 +30,8 @@ async function go(returnVersionId) {
   return {
     multipleUpload: returnVersion.multipleUpload,
     quarterlyReturns: returnVersion.quarterlyReturns,
-    requirements: _transformForSetup(returnVersion)
+    requirements: _transformForSetup(returnVersion),
+    startDate: returnVersion.startDate
   }
 }
 
