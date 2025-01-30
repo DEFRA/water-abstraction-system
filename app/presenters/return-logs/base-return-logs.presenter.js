@@ -115,8 +115,8 @@ function generateSummaryTableHeaders(method, frequency, units) {
  * When viewing a return log, or reviewing a return submission on its `/check` page, we are expected to display a
  * monthly summary.
  *
- * For example, if a the return log is 'daily', for each month it covers we are required to summary the daily line
- * entries into a single 'monthly summary'.
+ * For example, if a return log is 'daily', for each month it covers we are required to summarise the daily line entries
+ * into a single 'monthly summary'.
  *
  * But there are a number of things we have to take into account
  *
@@ -136,8 +136,8 @@ function generateSummaryTableHeaders(method, frequency, units) {
  * @param {string} [id=null] - The ID to use in the link to view the daily/weekly details for a month
  * @param {string} [rootPath='/system/return-submissions'] - The base path for generating links to view details
  *
- * @returns {object[]} An array of row data objects for the summary table, each containing details like month,
- * total quantity, reading, and unit totals.
+ * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
+ * quantity, reading, and unit totals.
  */
 function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
   const groups = _groupLinesByMonth(lines)

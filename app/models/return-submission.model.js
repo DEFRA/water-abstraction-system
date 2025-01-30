@@ -65,7 +65,7 @@ class ReturnSubmissionModel extends BaseModel {
   /**
    * Returns the first meter from the return submission's metadata, or null if no meters exist.
    *
-   * @returns {?object} The first meter, or null.
+   * @returns {object|null} The first meter, or null.
    */
   $meter() {
     if (!this.metadata?.meters) {
