@@ -56,7 +56,6 @@ async function go() {
     .whereNotExists(
       ReturnVersionModel.query()
         .where('returnVersions.status', 'current')
-        .where('quarterlyReturns', true)
         .where('startDate', '>=', quarterlyStartDate)
         .whereColumn('returnVersions.licenceId', 'licences.id')
     )
