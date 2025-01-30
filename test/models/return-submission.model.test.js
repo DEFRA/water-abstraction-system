@@ -17,6 +17,8 @@ const ReturnSubmissionHelper = require('../support/helpers/return-submission.hel
 // Thing under test
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
 
+const { unitNames } = require('../../app/lib/static-lookups.lib.js')
+
 describe('Return Submission model', () => {
   let testRecord
 
@@ -98,6 +100,118 @@ describe('Return Submission model', () => {
         expect(result.returnSubmissionLines[0]).to.be.an.instanceOf(ReturnSubmissionLineModel)
         expect(result.returnSubmissionLines).to.include(testLines[0])
         expect(result.returnSubmissionLines).to.include(testLines[1])
+      })
+    })
+  })
+
+  describe('$applyReadings', () => {
+    beforeEach(() => {
+      testRecord = ReturnSubmissionModel.fromJson({
+        metadata: {
+          meters: [
+            {
+              readings: {
+                '2022-12-01_2022-12-02': 1,
+                '2022-12-03_2022-12-04': 2
+              }
+            }
+          ]
+        },
+        returnSubmissionLines: [
+          { startDate: new Date('2022-12-01'), endDate: new Date('2022-12-02') },
+          { startDate: new Date('2022-12-03'), endDate: new Date('2022-12-04') },
+          { startDate: new Date('2022-12-05'), endDate: new Date('2022-12-06') }
+        ]
+      })
+    })
+
+    it('applies readings to the return submission lines', () => {
+      testRecord.$applyReadings()
+
+      expect(testRecord.returnSubmissionLines[0].reading).to.equal(1)
+      expect(testRecord.returnSubmissionLines[1].reading).to.equal(2)
+      expect(testRecord.returnSubmissionLines[2].reading).be.null()
+    })
+  })
+
+  describe('$meter', () => {
+    describe('when the return submission contains meters', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson({
+          metadata: {
+            meters: [{ serialNumber: 'METER_1' }, { serialNumber: 'METER_2' }]
+          }
+        })
+      })
+
+      it('returns the first meter', () => {
+        const result = testRecord.$meter()
+
+        expect(result).to.equal({ serialNumber: 'METER_1' })
+      })
+    })
+
+    describe('when the return submission contains no meters', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson()
+      })
+
+      it('returns null', () => {
+        const result = testRecord.$meter()
+
+        expect(result).to.be.null()
+      })
+    })
+  })
+
+  describe('$method', () => {
+    describe('when the return submission contains the method', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson({ metadata: { method: 'METHOD' } })
+      })
+
+      it('returns the method', () => {
+        const result = testRecord.$method()
+
+        expect(result).to.equal('METHOD')
+      })
+    })
+
+    describe('when the return submission contains no method', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson()
+      })
+
+      it('returns the method as abstractionVolumes', () => {
+        const result = testRecord.$method()
+
+        expect(result).to.equal('abstractionVolumes')
+      })
+    })
+  })
+
+  describe('$units', () => {
+    describe('when the return submission contains the unit', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson({ metadata: { units: 'UNITS' } })
+      })
+
+      it('returns the unit', () => {
+        const result = testRecord.$units()
+
+        expect(result).to.equal('UNITS')
+      })
+    })
+
+    describe('when the return submission contains no unit', () => {
+      beforeEach(async () => {
+        testRecord = ReturnSubmissionModel.fromJson()
+      })
+
+      it('returns the units as cubic metres', () => {
+        const result = testRecord.$units()
+
+        expect(result).to.equal(unitNames.CUBIC_METRES)
       })
     })
   })

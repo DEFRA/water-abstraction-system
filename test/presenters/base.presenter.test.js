@@ -39,6 +39,14 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatNumber()', () => {
+    it('formats a number for display', () => {
+      const result = BasePresenter.formatNumber(12345.6789)
+
+      expect(result).to.equal('12,345.679')
+    })
+  })
+
   describe('#generateBillRunTitle()', () => {
     const regionName = 'anglian'
     const batchType = 'two_part_tariff'
@@ -443,15 +451,27 @@ describe('Base presenter', () => {
       })
     })
 
-    describe('when the value is all capitals', () => {
+    describe('when the value has a mix of capitals and lower case', () => {
       beforeEach(() => {
-        valueToTitleCase = 'SPRAY IRRIGATION'
+        valueToTitleCase = 'sPrAy iRRIGATION'
       })
 
-      it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
+      it('correctly returns the value in title case', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('SPRAY IRRIGATION')
+        expect(result).to.equal('Spray Irrigation')
+      })
+    })
+
+    describe('when the value has text in brackets', () => {
+      beforeEach(() => {
+        valueToTitleCase = '(text in brackets)'
+      })
+
+      it('correctly returns the value in title case', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('(Text In Brackets)')
       })
     })
   })

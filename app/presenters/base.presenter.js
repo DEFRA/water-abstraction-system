@@ -220,6 +220,25 @@ function formatMoney(valueInPence, signed = false) {
 }
 
 /**
+ * Formats a number as a string with commas and decimal places, for example, 1000 as '1,000.000'
+ *
+ * @param {number} number - The number to format
+ * @param {number} [minimumFractionDigits=0] - Minimum number of digits after the decimal point
+ * @param {number} [maximumFractionDigits=3] - Maximum number of digits after the decimal point
+ *
+ * @returns {string|null} The formatted number or null if the number is null or undefined
+ */
+function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 3) {
+  // NOTE: We don't use !number because that would match 0, which for this helper is a valid number and something we
+  // want to format
+  if (number === null) {
+    return null
+  }
+
+  return number.toLocaleString('en-GB', { minimumFractionDigits, maximumFractionDigits })
+}
+
+/**
  * Formats a number, which represents a value in pence to pounds, for example, 12776805 as '127768.05'
  *
  * @param {*} valueInPence - The value to be formatted to pounds
@@ -260,7 +279,7 @@ function sentenceCase(value) {
 }
 
 /**
- * Convert a string to title case by capitalizing the first letter of each word
+ * Convert a string to title case by lowercasing all characters then capitalizing the first letter of each word
  *
  * Will work for strings containing multiple words or only one.
  *
@@ -269,16 +288,20 @@ function sentenceCase(value) {
  * @returns {string} The title cased string
  */
 function titleCase(value) {
-  const words = value.split(' ')
-  const titleCasedWords = []
-
-  words.forEach((word) => {
-    const titleCasedWord = word.charAt(0).toUpperCase() + word.slice(1)
-
-    titleCasedWords.push(titleCasedWord)
-  })
-
-  return titleCasedWords.join(' ')
+  return (
+    value
+      // We convert the entire string to lower case so we can correctly convert all-caps strings like 'TEXT' to 'Text'.
+      .toLowerCase()
+      // replace() iterates over a string. We use it to match each word with a regex and apply a function to each match.
+      // We define a word as:
+      // - Starts on a word boundary (eg. a space, bracket, dash, etc.). We use \b for this.
+      // - Has a word character. We use \w for this. We use + to specify there are one or more word chars.
+      // This regex correctly handles converting cases like '(text)' to '(Text)'.
+      .replace(/\b\w+/g, (match) => {
+        // Convert the first char of the matched string to upper case and append the remainder of the string
+        return match.charAt(0).toUpperCase() + match.slice(1)
+      })
+  )
 }
 
 module.exports = {
@@ -293,6 +316,7 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatMoney,
+  formatNumber,
   formatPounds,
   leftPadZeroes,
   sentenceCase,
