@@ -39,6 +39,7 @@ describe('Fetch Licence Contact Details service', () => {
         licenceRef,
         licenceDocumentHeader: {
           id: licenceDocumentHeaderId,
+          licenceEntityRoles: [],
           metadata: {
             Name: 'GUPTA',
             Town: 'BRISTOL',
