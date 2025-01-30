@@ -174,7 +174,8 @@ function _testFetchLicenceContactDetailsData() {
           }
         ],
         IsCurrent: false
-      }
+      },
+      licenceEntityRoles: []
     }
   }
 }
