@@ -62,7 +62,7 @@ describe('Licence Document Header model', () => {
 
     describe('when linking to licence entity role', () => {
       it('can successfully run a related query', async () => {
-        const query = await LicenceDocumentHeaderModel.query().innerJoinRelated('licenceEntityRole')
+        const query = await LicenceDocumentHeaderModel.query().innerJoinRelated('licenceEntityRoles')
 
         expect(query).to.exist()
       })
@@ -70,13 +70,15 @@ describe('Licence Document Header model', () => {
       it('can eager load the licence entity role', async () => {
         const result = await LicenceDocumentHeaderModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('licenceEntityRole')
+          .withGraphFetched('licenceEntityRoles')
 
         expect(result).to.be.instanceOf(LicenceDocumentHeaderModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.licenceEntityRole).to.be.an.instanceOf(LicenceEntityRoleModel)
-        expect(result.licenceEntityRole).to.equal(testLicenceEntityRole)
+        const [licenceEntityRole] = result.licenceEntityRoles
+
+        expect(licenceEntityRole).to.be.an.instanceOf(LicenceEntityRoleModel)
+        expect(licenceEntityRole).to.equal(testLicenceEntityRole)
       })
     })
   })
