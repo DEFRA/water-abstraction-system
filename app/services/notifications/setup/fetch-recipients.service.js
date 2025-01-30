@@ -1,19 +1,153 @@
 'use strict'
 
 /**
- * Formats data for the `/notifications/setup/review` page
- * @module RecipientsService
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
+ * @module FetchContactsService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches recipient data for the `/notifications/setup/review` page.
+ * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
  *
- * @param {string} dueDate - The due date for the return (used to filter records).
- * @param {string} summer - A flag indicating whether the return is for the summer period (used to filter records).
+ * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
+ * > the tables in `crm_v2`.
  *
- * @returns {Promise<Recipient[]>} - A promise that resolves to a list of recipients.
+ * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
+ * linked to, or what roles they have.
+ *
+ * We start by determining which licences we need to send notifications for, by looking for 'due' return logs with a
+ * matching 'due date' and cycle (summer or winter and all year).
+ *
+ * For each licence linked to one of these return logs, we extract the contact information. This is complicated by a
+ * number of factors.
+ *
+ * - if a licence is _registered_ (more details below), we only care about the email addresses registered against it
+ * - all licences should have a 'licence holder' contact, but they may also have a 'returns' contact
+ * - there is a one-to-one relationship between `licences` and `licence_document_headers`, but the same contact (licence
+ * holder or returns) can appear in different licences, and we are expected to group them into a 'single' contact
+ *
+ * WRLS has the concept of a registered and unregistered licences:
+ *
+ * - **Unregistered licences** have not been linked to an external email, so do not have a 'primary user'. All licences
+ * have a contact with the role 'Licence holder', so this will be extracted as a 'contact'. They may also have a
+ * contact with the role 'Returns to' (but only one), which is extracted as well.
+ * - **Registered licences** have been linked to an external email. That initial email will be linked as the 'primary
+ * user'. These licences may also have designated other accounts as 'returns agents', which will be extracted as well.
+ *
+ * If a licence is registered, we only extract the email contacts. Unregistered licences its the 'Licence holder' and
+ * 'Returns to' contacts from `licence_document_headers.metadata->contacts`.
+ *
+ * Because we are working with `licence_document_header` we get one row per licence. So, the next step is to group the
+ * contacts by their contact information.
+ *
+ * We do this by generating a hash ID using PostgreSQL's
+ * {@link https://www.postgresql.org/docs/current/functions-binarystring.html | md5() function}. For email contacts, we
+ * simply hash the email address. For letter contacts, we extract key fields out of the JSON in `metadata`, convert them
+ * to lowercase, concatenate them, and then generate an `md5()` result from it.
+ *
+ * This means we can identify 'duplicate' contacts. For example, we can determine these contact records will result in
+ * the same 'recipient'.
+ *
+ * ```json
+ * {
+ *  "name": "Acme Ltd",
+ *  "role": "Licence holder",
+ *  "town": "Shifnal",
+ *  "type": "Organisation",
+ *  "county": "Shropshire",
+ *  "country": null,
+ *  "forename": null,
+ *  "initials": null,
+ *  "postcode": "TF11 8UP",
+ *  "salutation": null,
+ *  "addressLine1": "Cosford Court",
+ *  "addressLine2": null,
+ *  "addressLine3": null,
+ *  "addressLine4": null
+ * },
+ * {
+ *  "name": "ACME Ltd",
+ *  "role": "Licence holder",
+ *  "town": "Shifnal",
+ *  "type": "Organisation",
+ *  "county": "SHROPSHIRE",
+ *  "country": null,
+ *  "forename": null,
+ *  "initials": null,
+ *  "postcode": "TF11 8UP",
+ *  "salutation": null,
+ *  "addressLine1": "Cosford Court",
+ *  "addressLine2": null,
+ *  "addressLine3": null,
+ *  "addressLine4": null
+ * }
+ * ```
+ *
+ * > The deduping is very basic. We don't account for Ltd vs Limited, FAO Jon vs Jon, etc. But just doing this reduces
+ * > the number of recipients receiving duplicate notifications considerably compared to the legacy notification engine.
+ *
+ * The subquery determines which contacts to return and their hash ID. The top level part of the query then groups these
+ * results to remove the first tranche of duplicates. These are where, for example, 10 licences are all linked to the
+ * same primary user. Apart from the licence ref, all other fields will be the same. So, PostgreSQL can aggregate the
+ * licence refs into a single value, and group the rest into a single row.
+ *
+ * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
+ * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
+ *
+ * The end result is all the email, or letter contacts for each licence with a 'due' return for the period selected.
+ *
+ * ```javascript
+ * [
+ *   {
+ *     licence_refs: '01/123,01/125,01/126',
+ *     contact_type: 'Licence holder',
+ *     email: null,
+ *     contact: { // as found in metadata },
+ *     contact_hash_id: 'ec24af7ca0d9bf99b42bd9a14c709f97'
+ *   },
+ *   {
+ *     licence_refs: '16/167',
+ *     contact_type: 'Licence holder',
+ *     email: null,
+ *     contact: { // as found in metadata },
+ *     contact_hash_id: '97bedd3194939dfb1e3c71fe818afcbd'
+ *   },
+ *   {
+ *     licence_refs: '16/167',
+ *     contact_type: 'Returns to',
+ *     email: null,
+ *     contact: { // as found in metadata },
+ *     contact_hash_id: 'bc73e796352e116ce86353ae3b2a6074'
+ *   },
+ *   {
+ *     licence_refs: '9/40/05/0014/SR',
+ *     contact_type: 'Primary user',
+ *     email: 'grozbaz.mogka@bad-moons.co.uk',
+ *     contact: null,
+ *     contact_hash_id: '75fdc53f15c42d5b6ed8272d621ca9ab'
+ *   },
+ *   {
+ *     licence_refs: '9/40/05/0014/SR',
+ *     contact_type: 'Returns agent',
+ *     email: 'bolratoff-gazbag@goffs.net',
+ *     contact: null},
+ *     contact_hash_id: 'bed7b6a023b233a2eb68323a374171c5'
+ *   },
+ *   {
+ *     licence_refs: '2/27/20/037,2/27/20/038',
+ *     contact_type: 'Returns agent',
+ *     email: 'gartok-ruknot@snakebites.co.uk',
+ *     contact: null},
+ *     contact_hash_id: '3643e478e7999ff63f491234133e4c56'
+ *   }
+ * ]
+ * ```
+ *
+ * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
+ * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
+ *
+ * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)
@@ -21,72 +155,26 @@ async function go(dueDate, summer) {
   return rows
 }
 
-/**
- * Internal function that executes the database query to retrieve the recipient data.
- *
- * @param {string} dueDate - The due date for the return (used to filter records).
- * @param {string} summer - A flag indicating whether the return is for the summer period (used to filter records).
- *
- * @returns {Promise<object>} The raw database result containing the list of recipients.
- * @private
- */
 async function _fetch(dueDate, summer) {
   const query = _query()
 
   return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
 }
 
-/**
- * Constructs the SQL query string to fetch the recipient data.
- *
- * WRLS has the concept of a registered and unregistered licence:
- * - **Registered licences** are associated with a primary user who has an email address.
- *   These licences may also have multiple returns agents, who may share the same or have different
- *   email addresses compared to the primary user.
- *
- * - **Unregistered licences** are linked to a licence holder, who provides a contact address.
- *   Additionally, unregistered licences may have a 'Returns to' contact, whose contact address
- *   may be the same as, or different from, the licence holder’s.
- *
- * The query is designed to return recipients based on the due date and summer flag. It fetches (in order of preference):
- * - Recipients who are associated with a 'Licence holder' or 'Returns to' role and their contact details.
- * - Primary users, who are considered recipients for email notifications.
- * - Returns agents, who are also considered recipients for email notifications.
- *
- * The query differentiates between different types of recipients (and methods of contact):
- * - **Letter - licence holder**: Only returned for recipients with the 'Licence holder' role.
- * - **Letter - returns to**: Returned for recipients with the 'Returns to' role.
- * - **Email - primary user**: Returned for users with the 'primary_user' role (only email, no contact).
- * - **Email - returns agent**: Returned for users with the 'user_returns' role (only email, no contact).
- *
- * The output will include:
- * - A comma-separated list of licence references.
- * - The message type, which will indicate the mode of communication (either 'Letter' or 'Email').
- * - The recipient’s name (if applicable) or `null` (if the recipient is based on contact data).
- * - The recipient's contact details (only available for roles like 'Licence holder' and 'Returns to').
- * - A unique hash ID for the contact, generated from their details.
- *
- * @returns {string} The SQL query string.
- * @private
- */
 function _query() {
   return `SELECT
-  string_agg(licence_ref, ',' ORDER BY licence_ref) AS all_licences,
-  message_type,
-  recipient,
+  string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
+  contact_type,
+  email,
   contact,
   contact_hash_id
 FROM (
   SELECT DISTINCT
     ldh.licence_ref,
-    (CASE
-      WHEN contacts->>'role' = 'Licence holder' THEN 'Letter - licence holder'
-      ELSE 'Letter - returns to'
-    END) AS message_type,
-    (NULL) AS recipient,
-    LOWER( concat_ws(',', contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country'))
-      AS contact,
-    (hashtext(
+    (contacts->>'role') AS contact_type,
+    (NULL) AS email,
+    contacts as contact,
+    (md5(
       LOWER(
         concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
@@ -112,10 +200,10 @@ FROM (
   UNION ALL
   SELECT
     ldh.licence_ref,
-    ('Email - primary user') AS message_type,
-    le."name" AS recipient,
+    ('Primary user') AS contact_type,
+    le."name" AS email,
     (NULL) AS contact,
-    hashtext(LOWER(le."name")) AS contact_hash_id
+    md5(LOWER(le."name")) AS contact_hash_id
   FROM public.licence_document_headers ldh
   INNER JOIN public.licence_entity_roles ler
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
@@ -131,10 +219,10 @@ FROM (
   UNION ALL
   SELECT
     ldh.licence_ref,
-    ('Email - returns agent') AS message_type,
-    le."name" AS recipient,
+    ('Returns agent') AS contact_type,
+    le."name" AS email,
     (NULL) AS contact,
-    hashtext(LOWER(le."name")) AS contact_hash_id
+    md5(LOWER(le."name")) AS contact_hash_id
   FROM public.licence_document_headers ldh
   INNER JOIN public.licence_entity_roles ler
     ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
@@ -147,10 +235,10 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
-) recipients
+) contacts
 GROUP BY
-  message_type,
-  recipient,
+  contact_type,
+  email,
   contact,
   contact_hash_id;`
 }
@@ -158,12 +246,3 @@ GROUP BY
 module.exports = {
   go
 }
-
-/**
- * @typedef {object} Recipient
- * @property {string} all_licences - A comma-separated list of licences with the same contact.
- * @property {string} message_type - The type of message (e.g., 'Letter - licence holder', 'Email - primary user').
- * @property {string|null} recipient - The name of the recipient, or `null` if not applicable.
- * @property {object | null} contact - The contact details, or `null` if not applicable.
- * @property {string} contact_hash_id - A unique hash ID for the contact, generated from their details.
- */

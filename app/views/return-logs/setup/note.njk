@@ -1,0 +1,61 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.text,
+          href: '#note'
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  {% set pageHeader %}
+    <span class="govuk-heading-l govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Return reference {{ returnReference }}</span> {{ pageTitle }}
+    </span>
+  {% endset %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    <div class="govuk-body">
+      {{ govukCharacterCount({
+        name: "note",
+        id: "note",
+        maxlength: 500,
+        value: note,
+        label: {
+          html: pageHeader,
+          isPageHeading: true
+        },
+        hint: {
+          text: "Provide a short explanation about the editing of this return."
+        },
+        errorMessage: {
+          text: error.text
+        } if error
+      }) }}
+
+      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
+    </div>
+  </form>
+{% endblock %}
