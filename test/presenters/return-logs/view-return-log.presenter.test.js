@@ -68,76 +68,101 @@ describe('View Return Log presenter', () => {
   })
 
   describe('the "actionButton" property', () => {
-    it('returns null if this is a void return', () => {
-      testReturnLog.status = 'void'
+    describe('when this is a void return', () => {
+      beforeEach(() => {
+        testReturnLog.status = 'void'
+      })
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.actionButton).to.be.null()
-    })
-
-    it("returns null if auth credentials don't include returns", () => {
-      auth.credentials.scope = ['NOT_RETURNS']
-
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-      expect(result.actionButton).to.be.null()
-    })
-
-    it('returns the expected "Edit return" result if the return is completed', () => {
-      testReturnLog.status = 'completed'
-
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
-
-      expect(result.actionButton).to.equal({
-        href: `/return/internal?returnId=${testReturnLog.id}`,
-        text: 'Edit return'
+        expect(result.actionButton).to.be.null()
       })
     })
 
-    it('returns the expected "Submit return" result if the return is due', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when auth credentials do not include returns', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['NOT_RETURNS']
+      })
 
-      expect(result.actionButton).to.equal({
-        href: `/system/return-logs/setup?returnLogId=${testReturnLog.id}`,
-        text: 'Submit return'
+      it('returns null', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.actionButton).to.be.null()
+      })
+    })
+
+    describe('when the return is completed', () => {
+      beforeEach(() => {
+        testReturnLog.status = 'completed'
+      })
+
+      it('returns the expected "Edit return" result', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.actionButton).to.equal({
+          href: `/return/internal?returnId=${testReturnLog.id}`,
+          text: 'Edit return'
+        })
+      })
+    })
+
+    describe('when the return is due', () => {
+      beforeEach(() => {
+        // Not strictly needed as 'due' is the default status but we include it here for clarity
+        testReturnLog.status = 'due'
+      })
+
+      it('returns the expected "Submit return" result', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.actionButton).to.equal({
+          href: `/system/return-logs/setup?returnLogId=${testReturnLog.id}`,
+          text: 'Submit return'
+        })
       })
     })
   })
 
   describe('the "backLink" property', () => {
-    it('returns the expected "Go back to summary" result when this is the latest return log', () => {
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+    describe('when this is the latest return log', () => {
+      it('returns the expected "Go back to summary" result', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
-      expect(result.backLink).to.equal({
-        href: `/system/licences/${testReturnLog.licence.id}/returns`,
-        text: 'Go back to summary'
+        expect(result.backLink).to.equal({
+          href: `/system/licences/${testReturnLog.licence.id}/returns`,
+          text: 'Go back to summary'
+        })
       })
     })
 
-    it('returns the expected "Go back to the latest version" result when this isn\'t the latest return log', () => {
-      testReturnLog.versions = [
-        createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id }),
-        createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id, version: 101 })
-      ]
-
-      testReturnLog.returnSubmissions = [
-        createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: testReturnLog.id })
-      ]
-
-      for (const returnSubmission of testReturnLog.returnSubmissions) {
-        returnSubmission.returnSubmissionLines = [
-          createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
-            returnSubmissionId: returnSubmission.id
-          })
+    describe("when this isn't the latest return log", () => {
+      beforeEach(() => {
+        testReturnLog.versions = [
+          createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id }),
+          createInstance(ReturnVersionModel, ReturnVersionHelper, { licenceId: testReturnLog.licence.id, version: 101 })
         ]
-      }
 
-      const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+        testReturnLog.returnSubmissions = [
+          createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { returnLogId: testReturnLog.id })
+        ]
 
-      expect(result.backLink).to.equal({
-        href: `/system/return-logs?id=${testReturnLog.id}`,
-        text: 'Go back to the latest version'
+        for (const returnSubmission of testReturnLog.returnSubmissions) {
+          returnSubmission.returnSubmissionLines = [
+            createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+              returnSubmissionId: returnSubmission.id
+            })
+          ]
+        }
+      })
+
+      it('returns the expected "Go back to the latest version" result', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.backLink).to.equal({
+          href: `/system/return-logs?id=${testReturnLog.id}`,
+          text: 'Go back to the latest version'
+        })
       })
     })
   })
