@@ -31,7 +31,7 @@ async function _fetch(licenceId) {
     })
     .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
     .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
-      builder.whereIn('role', ['primary_user', 'user_returns'])
+      builder.select(['role']).whereIn('role', ['primary_user', 'user_returns'])
     })
     .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
     .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
