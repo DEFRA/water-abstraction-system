@@ -37,10 +37,6 @@ function _licenceContactDetails(licenceDocumentHeader) {
   ]
 }
 
-function _licenceEntityRoles(licenceEntityRoles) {
-  return licenceEntityRoles.map(_licenceEntity).sort(_sortLicenceEntity)
-}
-
 function _licenceEntity(entity) {
   return {
     role: ROLES[entity.role],
@@ -48,7 +44,11 @@ function _licenceEntity(entity) {
   }
 }
 
-function _sortLicenceEntity(a, b) {
+function _licenceEntityRoles(licenceEntityRoles) {
+  return licenceEntityRoles.map(_licenceEntity).sort(_sortLicenceEntities)
+}
+
+function _sortLicenceEntities(a, b) {
   if (a.role < b.role) {
     return -1
   }

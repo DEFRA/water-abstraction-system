@@ -12,49 +12,20 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
+ * @param {boolean} returnLogs - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
+ * to be included in the recipients list
+ *
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
-async function seed() {
+async function seed(returnLogs = true) {
   return {
-    licenceHolder: await _addLicenceHolder(),
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(),
-    primaryUser: await _addPrimaryUser()
+    licenceHolder: await _addLicenceHolder(returnLogs),
+    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs),
+    primaryUser: await _addLicenceEntityRoles(returnLogs)
   }
 }
 
-async function _addLicenceHolder() {
-  const name = 'Licence holder only'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder')]
-    }
-  })
-
-  await ReturnLogHelper.add({
-    licenceRef: licenceDocumentHeader.licenceRef
-  })
-
-  return licenceDocumentHeader
-}
-
-async function _addLicenceHolderAndReturnToSameRef() {
-  const name = 'Licence holder and returns to'
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    metadata: {
-      ..._metadata(name),
-      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
-    }
-  })
-
-  await ReturnLogHelper.add({
-    licenceRef: licenceDocumentHeader.licenceRef
-  })
-
-  return licenceDocumentHeader
-}
-
-async function _addPrimaryUser() {
+async function _addLicenceEntityRoles(returnLogs) {
   const primaryUser = {
     name: 'Primary User test',
     email: 'primary.user@important.com',
@@ -97,9 +68,47 @@ async function _addPrimaryUser() {
     role: userReturns.role
   })
 
-  await ReturnLogHelper.add({
-    licenceRef: licenceDocumentHeader.licenceRef
+  if (returnLogs) {
+    await ReturnLogHelper.add({
+      licenceRef: licenceDocumentHeader.licenceRef
+    })
+  }
+
+  return licenceDocumentHeader
+}
+
+async function _addLicenceHolder(returnLogs) {
+  const name = 'Licence holder only'
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    metadata: {
+      ..._metadata(name),
+      contacts: [_contact(name, 'Licence holder')]
+    }
   })
+
+  if (returnLogs) {
+    await ReturnLogHelper.add({
+      licenceRef: licenceDocumentHeader.licenceRef
+    })
+  }
+
+  return licenceDocumentHeader
+}
+
+async function _addLicenceHolderAndReturnToSameRef(returnLogs) {
+  const name = 'Licence holder and returns to'
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    metadata: {
+      ..._metadata(name),
+      contacts: [_contact(name, 'Licence holder'), _contact(name, 'Returns to')]
+    }
+  })
+
+  if (returnLogs) {
+    await ReturnLogHelper.add({
+      licenceRef: licenceDocumentHeader.licenceRef
+    })
+  }
 
   return licenceDocumentHeader
 }
