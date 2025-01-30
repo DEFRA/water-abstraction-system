@@ -25,9 +25,11 @@ function recipients() {
  */
 function duplicateRecipients() {
   const duplicateLicenceRef = generateLicenceRef()
+  const licenceDuplicateLicenceRef = generateLicenceRef()
+
   return {
-    duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
-    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef),
+    duplicateLicenceHolder: _addDuplicateLicenceHolder(licenceDuplicateLicenceRef),
+    duplicateReturnsTo: _addDuplicateReturnsTo(licenceDuplicateLicenceRef),
     duplicatePrimaryUser: _addDuplicatePrimaryUser(duplicateLicenceRef),
     duplicateReturnsAgent: _addDuplicateReturnsAgent(duplicateLicenceRef)
   }
@@ -45,7 +47,7 @@ function _addDuplicateLicenceHolder(licenceRef) {
 function _addDuplicateReturnsTo(licenceRef) {
   return {
     licence_refs: licenceRef,
-    contact_type: 'Returns To',
+    contact_type: 'Returns to',
     contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
     contact_hash_id: 'b1b355491c7d42778890c545e08797ea'
   }
@@ -96,7 +98,7 @@ function _addDuplicateReturnsAgent(licenceRef) {
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
     contact_type: 'Returns agent',
-    recipient: 'returns.agent@important.com'
+    email: 'returns.agent@important.com'
   }
 }
 
