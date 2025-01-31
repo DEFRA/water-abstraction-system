@@ -19,6 +19,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/download',
+    options: {
+      handler: NotificationsSetupController.downloadRecipients,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NotificationsSetupController.viewReturnsPeriod,
