@@ -37,25 +37,33 @@ function _licenceContactDetails(licenceDocumentHeader) {
   ]
 }
 
-function _licenceEntity(entity) {
-  return {
-    role: ROLES[entity.role],
-    email: entity.licenceEntity.name
-  }
+function _formatLicenceEntityRoles(licenceEntityRoles) {
+  return licenceEntityRoles.map((licenceEntityRole) => {
+    return {
+      role: ROLES[licenceEntityRole.role],
+      email: licenceEntityRole.licenceEntity.name
+    }
+  })
 }
 
 function _licenceEntityRoles(licenceEntityRoles) {
-  return licenceEntityRoles.map(_licenceEntity).sort(_sortLicenceEntities)
+  const formattedLicenceEntityRoles = _formatLicenceEntityRoles(licenceEntityRoles)
+
+  return _sortLicenceEntityRoles(formattedLicenceEntityRoles)
 }
 
-function _sortLicenceEntities(a, b) {
-  if (a.role < b.role) {
-    return -1
-  }
-  if (a.role > b.role) {
-    return 1
-  }
-  return 0
+function _sortLicenceEntityRoles(licenceEntityRoles) {
+  return licenceEntityRoles.sort((a, b) => {
+    if (a.role < b.role) {
+      return -1
+    }
+
+    if (a.role > b.role) {
+      return 1
+    }
+
+    return 0
+  })
 }
 
 module.exports = {
