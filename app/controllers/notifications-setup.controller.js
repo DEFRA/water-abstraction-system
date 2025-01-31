@@ -1,9 +1,10 @@
 'use strict'
 
+const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
+const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../services/notifications/setup/review.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
-const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
 
 /**
  * Controller for /notifications/setup endpoints
@@ -11,6 +12,21 @@ const InitiateSessionService = require('../services/notifications/setup/initiate
  */
 
 const basePath = 'notifications/setup'
+
+async function downloadRecipients(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { data, type, filename } = await DownloadRecipientsService.go(sessionId)
+
+  return h
+    .response(data)
+    .type(type)
+    .encoding('binary')
+    .header('Content-Type', type)
+    .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
 
 async function viewReturnsPeriod(request, h) {
   const {
@@ -55,6 +71,7 @@ async function submitReturnsPeriod(request, h) {
 }
 
 module.exports = {
+  downloadRecipients,
   viewReturnsPeriod,
   viewReview,
   setup,
