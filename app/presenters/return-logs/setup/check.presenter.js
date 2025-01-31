@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
@@ -34,10 +34,10 @@ function go(session) {
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
-    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
+    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : sentenceCase(reported),
     returnReference,
     sessionId,
-    units: _units(units)
+    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 
@@ -56,11 +56,6 @@ function _note(note) {
       text: 'No notes added'
     }
   }
-}
-
-function _units(units) {
-  // Need to do something to format the units
-  return units
 }
 
 module.exports = {
