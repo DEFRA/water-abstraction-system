@@ -16,7 +16,13 @@ describe('Return Logs Setup - Check presenter', () => {
   beforeEach(() => {
     session = {
       id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
-      returnReference: '1234'
+      meterMake: 'Test meter make',
+      meterProvided: 'yes',
+      meterSerialNumber: '098765',
+      receivedDate: '2025-01-31T00:00:00.000Z',
+      reported: 'volumes',
+      returnReference: '1234',
+      units: 'megalitres'
     }
   })
 
@@ -25,6 +31,9 @@ describe('Return Logs Setup - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
+        meterMake: 'Test meter make',
+        meterProvided: 'yes',
+        meterSerialNumber: '098765',
         note: {
           actions: [
             {
@@ -35,8 +44,11 @@ describe('Return Logs Setup - Check presenter', () => {
           text: 'No notes added'
         },
         pageTitle: 'Check details and enter new volumes or readings',
+        returnReceivedDate: '31 January 2025',
+        reportingFigures: 'Volumes',
         returnReference: '1234',
-        sessionId: session.id
+        sessionId: session.id,
+        units: 'Megalitres'
       })
     })
   })
@@ -81,6 +93,82 @@ describe('Return Logs Setup - Check presenter', () => {
           ],
           text: 'No notes added'
         })
+      })
+    })
+  })
+
+  describe('the "reportingFigures" property', () => {
+    describe('when the user has used meter readings', () => {
+      beforeEach(() => {
+        session.reported = 'meter-readings'
+      })
+
+      it('returns the method of gathering the figures as "Meter readings"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.reportingFigures).to.equal('Meter readings')
+      })
+    })
+
+    describe('when the user has used volumes', () => {
+      beforeEach(() => {
+        session.reported = 'volumes'
+      })
+
+      it('returns the method of gathering the figures as "Volumes"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.reportingFigures).to.equal('Volumes')
+      })
+    })
+  })
+
+  describe('the "units" property', () => {
+    describe('when the user has used cubic metres', () => {
+      beforeEach(() => {
+        session.units = 'cubic-metres'
+      })
+
+      it('returns the unit of measurement as "Cubic metres"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.units).to.equal('Cubic metres')
+      })
+    })
+
+    describe('when the user has used litres', () => {
+      beforeEach(() => {
+        session.units = 'litres'
+      })
+
+      it('returns the unit of measurement as "Litres"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.units).to.equal('Litres')
+      })
+    })
+
+    describe('when the user has used megalitres', () => {
+      beforeEach(() => {
+        session.units = 'megalitres'
+      })
+
+      it('returns the unit of measurement as "Megalitres"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.units).to.equal('Megalitres')
+      })
+    })
+
+    describe('when the user has used gallons', () => {
+      beforeEach(() => {
+        session.units = 'gallons'
+      })
+
+      it('returns the unit of measurement as "Gallons"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.units).to.equal('Gallons')
       })
     })
   })
