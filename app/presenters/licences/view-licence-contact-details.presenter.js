@@ -7,7 +7,7 @@ const { filteredContactDetailsByRole } = require('../crm.presenter.js')
  * @module ViewLicenceContactDetailsPresenter
  */
 
-const ROLES = {
+const ENTITY_ROLES = {
   primary_user: 'Primary user',
   user_returns: 'Returns agent'
 }
