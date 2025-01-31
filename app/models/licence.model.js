@@ -235,16 +235,16 @@ class LicenceModel extends BaseModel {
           .modifyGraph('licenceDocumentHeader', (builder) => {
             builder.select(['id'])
           })
-          .withGraphFetched('licenceDocumentHeader.licenceEntityRole')
-          .modifyGraph('licenceDocumentHeader.licenceEntityRole', (builder) => {
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRoles')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRoles', (builder) => {
             builder.select(['id']).where('role', 'primary_user')
           })
-          .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity')
-          .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity', (builder) => {
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity', (builder) => {
             builder.select(['id'])
           })
-          .withGraphFetched('licenceDocumentHeader.licenceEntityRole.licenceEntity.user')
-          .modifyGraph('licenceDocumentHeader.licenceEntityRole.licenceEntity.user', (builder) => {
+          .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity.user')
+          .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity.user', (builder) => {
             builder.select(['id', 'username'])
           })
       }
@@ -411,11 +411,18 @@ class LicenceModel extends BaseModel {
    *
    * Within the UI this what determines whether you see the "Registered to" link in the view licence page's top section.
    *
+   * This query will find the `licenceEntityRole` with the role 'primary_user'. As we can expect multiple
+   * `licenceEntityRoles` we need to take the first (and expected to be only) `licenceEntityRole` from the received
+   * array of `licenceEntityRoles`.
+   *
+   * > We understand that `licenceEntityRoles` can be associated with the same `company_entity_id`. A common example
+   * of this is having a 'Primary user' and a 'Returns agent' (known as `user_agent` in the database)
+   *
    * @returns {(module:UserModel|null)} the primary user if the licence has one and the additional properties needed to
    * to determine it have been set, else `null`
    */
   $primaryUser() {
-    const primaryUser = this?.licenceDocumentHeader?.licenceEntityRole?.licenceEntity?.user
+    const primaryUser = this?.licenceDocumentHeader?.licenceEntityRoles?.[0]?.licenceEntity?.user
 
     return primaryUser || null
   }

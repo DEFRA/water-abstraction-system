@@ -51,8 +51,8 @@ class LicenceDocumentHeaderModel extends BaseModel {
           to: 'licences.licenceRef'
         }
       },
-      licenceEntityRole: {
-        relation: Model.HasOneRelation,
+      licenceEntityRoles: {
+        relation: Model.HasManyRelation,
         modelClass: 'licence-entity-role.model',
         join: {
           from: 'licenceDocumentHeaders.companyEntityId',
