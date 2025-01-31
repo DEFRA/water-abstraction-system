@@ -16,7 +16,7 @@
  */
 function go(recipients) {
   const formattedData = _formatData(recipients)
-  return jsonToCSV(formattedData)
+  return _jsonToCSV(formattedData)
 }
 
 function _formatData(data) {
@@ -27,7 +27,7 @@ function _formatData(data) {
   })
 }
 
-function jsonToCSV(jsonArray) {
+function _jsonToCSV(jsonArray) {
   // Get the headers from the keys of the first object
   const headers = Object.keys(jsonArray[0])
 

@@ -15,17 +15,18 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  * @param {boolean} returnLogs - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
  * to be included in the recipients list
  *
+ * @param dueDate
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
-async function seed(returnLogs = true) {
+async function seed(returnLogs = true, dueDate = '2023-04-28') {
   return {
-    licenceHolder: await _addLicenceHolder(returnLogs),
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs),
-    primaryUser: await _addLicenceEntityRoles(returnLogs)
+    licenceHolder: await _addLicenceHolder(returnLogs, dueDate),
+    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs, dueDate),
+    primaryUser: await _addLicenceEntityRoles(returnLogs, dueDate)
   }
 }
 
-async function _addLicenceEntityRoles(returnLogs) {
+async function _addLicenceEntityRoles(returnLogs, dueDate) {
   const primaryUser = {
     name: 'Primary User test',
     email: 'primary.user@important.com',
@@ -70,14 +71,15 @@ async function _addLicenceEntityRoles(returnLogs) {
 
   if (returnLogs) {
     await ReturnLogHelper.add({
-      licenceRef: licenceDocumentHeader.licenceRef
+      licenceRef: licenceDocumentHeader.licenceRef,
+      dueDate
     })
   }
 
   return licenceDocumentHeader
 }
 
-async function _addLicenceHolder(returnLogs) {
+async function _addLicenceHolder(returnLogs, dueDate) {
   const name = 'Licence holder only'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
@@ -88,14 +90,15 @@ async function _addLicenceHolder(returnLogs) {
 
   if (returnLogs) {
     await ReturnLogHelper.add({
-      licenceRef: licenceDocumentHeader.licenceRef
+      licenceRef: licenceDocumentHeader.licenceRef,
+      dueDate
     })
   }
 
   return licenceDocumentHeader
 }
 
-async function _addLicenceHolderAndReturnToSameRef(returnLogs) {
+async function _addLicenceHolderAndReturnToSameRef(returnLogs, dueDate) {
   const name = 'Licence holder and returns to'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
@@ -106,7 +109,8 @@ async function _addLicenceHolderAndReturnToSameRef(returnLogs) {
 
   if (returnLogs) {
     await ReturnLogHelper.add({
-      licenceRef: licenceDocumentHeader.licenceRef
+      licenceRef: licenceDocumentHeader.licenceRef,
+      dueDate
     })
   }
 

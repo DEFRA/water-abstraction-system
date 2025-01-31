@@ -102,42 +102,6 @@ describe('Notifications Setup controller', () => {
         })
       })
     })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        describe('and the validation fails', () => {
-          beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({
-              ..._viewReturnsPeriod(),
-              error: 'Something went wrong'
-            })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {})
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(postOptions)
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-
-        describe('and the validation succeeds', () => {
-          beforeEach(async () => {
-            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({ redirect: 'send-notice' })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {})
-          })
-
-          it('redirects the to the next page', async () => {
-            const response = await server.inject(postOptions)
-
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/notifications/setup/send-notice')
-          })
-        })
-      })
-    })
   })
 
   describe('notifications/setup/returns-period', () => {

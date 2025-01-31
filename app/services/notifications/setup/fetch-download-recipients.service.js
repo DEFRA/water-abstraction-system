@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  * @param {Date} dueDate
  * @param {boolean} summer
  *
- * @returns {object[]} - matching recipients
+ * @returns {Promise<object[]>} - matching recipients
  */
 async function go(dueDate, summer) {
   const { rows } = await _fetch(dueDate, summer)

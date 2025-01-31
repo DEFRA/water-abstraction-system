@@ -18,7 +18,7 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  *
- * @returns {object} The data for the download link
+ * @returns {Promise<object>} The data for the download link
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
@@ -27,9 +27,9 @@ async function go(sessionId) {
   const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
   const summer = _summer(returnsPeriod)
 
-  const data = await FetchDownloadRecipientsService.go(selectedReturnsPeriod.dueDate, summer)
+  const recipients = await FetchDownloadRecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const formattedData = DownloadRecipientsPresenter.go(data)
+  const formattedData = DownloadRecipientsPresenter.go(recipients)
 
   return {
     data: formattedData,
