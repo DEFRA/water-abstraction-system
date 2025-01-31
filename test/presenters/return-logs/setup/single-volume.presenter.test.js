@@ -78,15 +78,15 @@ describe('Return Logs Setup - Single Volume presenter', () => {
   })
 
   describe('the "units" property', () => {
-    describe('when the "units" property is "cubic-meters"', () => {
+    describe('when the "units" property is "cubic-metres"', () => {
       beforeEach(() => {
-        session.units = 'cubic-meters'
+        session.units = 'cubic-metres'
       })
 
       it('returns the "units" property presenter correctly', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.units).to.equal('cubic meters')
+        expect(result.units).to.equal('cubic metres')
       })
     })
 

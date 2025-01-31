@@ -20,7 +20,7 @@ describe('Return Logs Setup - Single Volume service', () => {
     session = await SessionHelper.add({
       data: {
         returnReference: '012345',
-        units: 'cubic-meters'
+        units: 'cubic-metres'
       }
     })
   })
@@ -43,7 +43,7 @@ describe('Return Logs Setup - Single Volume service', () => {
           returnReference: '012345',
           singleVolume: null,
           singleVolumeQuantity: null,
-          units: 'cubic meters'
+          units: 'cubic metres'
         },
         { skip: ['sessionId'] }
       )
