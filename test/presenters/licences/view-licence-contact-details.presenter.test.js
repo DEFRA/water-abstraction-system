@@ -40,59 +40,95 @@ describe('View Licence Contact Details presenter', () => {
             address: ['Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL', 'United Kingdom'],
             role: 'Returns to',
             name: 'Mr N Edmonds'
+          },
+          {
+            email: 'primary.user@important.com',
+            role: 'Primary user'
+          },
+          {
+            email: 'returns.agent@important.com',
+            role: 'Returns agent'
           }
         ]
       })
     })
 
     describe('the "licenceContactDetails" property', () => {
-      describe('the "licenceContactDetails.address" property', () => {
-        it('returns the address of the property', () => {
-          const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
-
-          expect(result.licenceContactDetails[0].address).to.equal([
-            'ENVIRONMENT AGENCY',
-            'HORIZON HOUSE',
-            'DEANERY ROAD',
-            'BRISTOL',
-            'BS1 5AH',
-            'United Kingdom'
-          ])
-        })
-      })
-
-      describe('the "licenceContactDetails.role" property', () => {
-        describe('when one of the licence contact details has the role type of "Enforcement officer"', () => {
-          it('returns licenceContactDetails without the contact with the role type of "Enforcement officer"', () => {
+      describe('when the licence contact is a "contact"', () => {
+        describe('the "licenceContactDetails.address" property', () => {
+          it('returns the address of the property', () => {
             const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
 
-            const hasEnforcementOfficer = result.licenceContactDetails.some((contact) => {
-              return contact.role === 'Enforcement officer'
+            expect(result.licenceContactDetails[0].address).to.equal([
+              'ENVIRONMENT AGENCY',
+              'HORIZON HOUSE',
+              'DEANERY ROAD',
+              'BRISTOL',
+              'BS1 5AH',
+              'United Kingdom'
+            ])
+          })
+        })
+
+        describe('the "licenceContactDetails.role" property', () => {
+          describe('when one of the licence contact details has the role type of "Enforcement officer"', () => {
+            it('returns licenceContactDetails without the contact with the role type of "Enforcement officer"', () => {
+              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+
+              const hasEnforcementOfficer = result.licenceContactDetails.some((contact) => {
+                return contact.role === 'Enforcement officer'
+              })
+
+              expect(hasEnforcementOfficer).to.be.false()
+            })
+          })
+        })
+
+        describe('the "licenceContacts.name" property', () => {
+          describe('when the initials are null', () => {
+            beforeEach(() => {
+              licenceContactDetailsData.licenceDocumentHeader.metadata.contacts[3].initials = null
             })
 
-            expect(hasEnforcementOfficer).to.be.false()
+            it("returns the licence contact's forename and name", () => {
+              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+
+              expect(result.licenceContactDetails[2].name).to.equal('Mr Noel Edmonds')
+            })
+          })
+
+          describe('when the initials are not null', () => {
+            it("returns the licence contact's forename and name", () => {
+              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+
+              expect(result.licenceContactDetails[2].name).to.equal('Mr N Edmonds')
+            })
           })
         })
       })
 
-      describe('the "licenceContacts.name" property', () => {
-        describe('when the initials are null', () => {
-          beforeEach(() => {
-            licenceContactDetailsData.licenceDocumentHeader.metadata.contacts[3].initials = null
+      describe('when the licence contact is a "licenceEntityRole"', () => {
+        describe('the "licenceContactDetails" property', () => {
+          describe('and the role is "primary_user"', () => {
+            it('returns the email and formatted role', () => {
+              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+
+              expect(result.licenceContactDetails[3]).to.equal({
+                email: 'primary.user@important.com',
+                role: 'Primary user'
+              })
+            })
           })
 
-          it("returns the licence contact's forename and name", () => {
-            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+          describe('and the role is "user_returns"', () => {
+            it('returns the email and formatted role', () => {
+              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
 
-            expect(result.licenceContactDetails[2].name).to.equal('Mr Noel Edmonds')
-          })
-        })
-
-        describe('when the initials are not null', () => {
-          it("returns the licence contact's forename and name", () => {
-            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
-
-            expect(result.licenceContactDetails[2].name).to.equal('Mr N Edmonds')
+              expect(result.licenceContactDetails[4]).to.equal({
+                email: 'returns.agent@important.com',
+                role: 'Returns agent'
+              })
+            })
           })
         })
       })
@@ -174,7 +210,21 @@ function _testFetchLicenceContactDetailsData() {
           }
         ],
         IsCurrent: false
-      }
+      },
+      licenceEntityRoles: [
+        {
+          role: 'primary_user',
+          licenceEntity: {
+            name: 'primary.user@important.com'
+          }
+        },
+        {
+          role: 'user_returns',
+          licenceEntity: {
+            name: 'returns.agent@important.com'
+          }
+        }
+      ]
     }
   }
 }
