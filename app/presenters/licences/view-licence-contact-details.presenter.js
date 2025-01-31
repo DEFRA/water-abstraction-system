@@ -40,7 +40,7 @@ function _licenceContactDetails(licenceDocumentHeader) {
 function _formatLicenceEntityRoles(licenceEntityRoles) {
   return licenceEntityRoles.map((licenceEntityRole) => {
     return {
-      role: ROLES[licenceEntityRole.role],
+      role: ENTITY_ROLES[licenceEntityRole.role],
       email: licenceEntityRole.licenceEntity.name
     }
   })
