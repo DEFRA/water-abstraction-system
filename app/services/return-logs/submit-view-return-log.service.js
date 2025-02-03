@@ -8,10 +8,11 @@
 const ReturnLogModel = require('../../models/return-log.model.js')
 
 /**
+ * TODO: Full JSDocs
  *
- * @param returnLogId
- * @param yar
- * @param payload
+ * @param {string} returnLogId - The id of the return log to update
+ * @param {object} yar - The Hapi Yar session manager
+ * @param {object} payload - The submitted form data
  */
 async function go(returnLogId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
