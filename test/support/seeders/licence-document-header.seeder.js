@@ -14,19 +14,19 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  *
  * @param {boolean} returnLogs - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
  * to be included in the recipients list
- * @param {string} dueDate
+ * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
  *
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
-async function seed(returnLogs = true, dueDate = '2023-04-28') {
+async function seed(returnLogs = true, returnLogDueDate = '2023-04-28') {
   return {
-    licenceHolder: await _addLicenceHolder(returnLogs, dueDate),
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs, dueDate),
-    primaryUser: await _addLicenceEntityRoles(returnLogs, dueDate)
+    licenceHolder: await _addLicenceHolder(returnLogs, returnLogDueDate),
+    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs, returnLogDueDate),
+    primaryUser: await _addLicenceEntityRoles(returnLogs, returnLogDueDate)
   }
 }
 
-async function _addLicenceEntityRoles(enableReturnLog, dueDate) {
+async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate) {
   const primaryUser = {
     name: 'Primary User test',
     email: 'primary.user@important.com',
@@ -74,14 +74,14 @@ async function _addLicenceEntityRoles(enableReturnLog, dueDate) {
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      dueDate
+      returnLogDueDate
     })
   }
 
   return { ...licenceDocumentHeader, returnLog }
 }
 
-async function _addLicenceHolder(enableReturnLog, dueDate) {
+async function _addLicenceHolder(enableReturnLog, returnLogDueDate) {
   const name = 'Licence holder only'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
@@ -95,14 +95,14 @@ async function _addLicenceHolder(enableReturnLog, dueDate) {
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      dueDate
+      returnLogDueDate
     })
   }
 
   return { ...licenceDocumentHeader, returnLog }
 }
 
-async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, dueDate) {
+async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDueDate) {
   const name = 'Licence holder and returns to'
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     metadata: {
@@ -116,7 +116,7 @@ async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, dueDate) {
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      dueDate
+      returnLogDueDate
     })
   }
 
