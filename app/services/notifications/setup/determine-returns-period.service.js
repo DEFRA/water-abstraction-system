@@ -12,7 +12,7 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
  *
  * All the returns periods will be calculated from the upcoming return periods.
  *
- * The `returnsPeriod` arg will be found and returned
+ * The `returnsPeriod` will be found and returned
  *
  * @param {string} returnsPeriod
  *
