@@ -11,7 +11,7 @@ const { pipeline, Transform } = require('stream')
 const path = require('path')
 const util = require('util')
 
-const ConvertToCSVService = require('./convert-to-csv.service.js')
+const { TransformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
 /**
  * Converts data into CSV format and writes it to a file
@@ -30,7 +30,7 @@ async function go(headers, rows, schemaFolderPath, tableName) {
 
   const transformDataStream = _transformDataStream()
 
-  const convertedHeaders = ConvertToCSVService.go(headers)
+  const convertedHeaders = TransformArrayToCSVRow(headers)
 
   writeToFileStream.write(convertedHeaders)
 
@@ -48,7 +48,7 @@ function _transformDataStream() {
   return new Transform({
     objectMode: true,
     transform: function (row, _encoding, callback) {
-      const datRow = ConvertToCSVService.go(Object.values(row))
+      const datRow = TransformArrayToCSVRow(Object.values(row))
 
       callback(null, datRow)
     }
