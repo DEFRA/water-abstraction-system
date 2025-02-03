@@ -14,9 +14,11 @@
  * - Dates are converted into ISO string format
  * - Strings are escaped to handle special characters (e.g., ',', '/', '.', '\\', '"', '\n')
  *
- * @param {Array} arrayToTransform - An array of data to transform. Each element can be of any type (string, number, object, boolean, date, etc.)
+ * @param {Array} arrayToTransform - An array of data to transform. Each element can be of any type
+ * (string, number, object, boolean, date, etc.)
  *
- * @returns {string} A CSV formatted string with each value separated by commas, and rows separated by newline characters (`\n`).
+ * @returns {string} A CSV formatted string with each value separated by commas,
+ * with a separated by newline characters (`\n`) to signify the end of the row.
  *
  * @private
  */
