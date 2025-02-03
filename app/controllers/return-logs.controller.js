@@ -20,7 +20,7 @@ async function view(request, h) {
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewReturnLogService.go(query.id, version, auth)
+  const pageData = await ViewReturnLogService.go(query.id, version, auth, request.yar)
 
   return h.view('return-logs/view.njk', pageData)
 }
