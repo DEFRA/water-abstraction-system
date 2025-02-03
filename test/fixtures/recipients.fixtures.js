@@ -25,9 +25,11 @@ function recipients() {
  */
 function duplicateRecipients() {
   const duplicateLicenceRef = generateLicenceRef()
+  const licenceDuplicateLicenceRef = generateLicenceRef()
+
   return {
-    duplicateLicenceHolder: _addDuplicateLicenceHolder(duplicateLicenceRef),
-    duplicateReturnsTo: _addDuplicateReturnsTo(duplicateLicenceRef),
+    duplicateLicenceHolder: _addDuplicateLicenceHolder(licenceDuplicateLicenceRef),
+    duplicateReturnsTo: _addDuplicateReturnsTo(licenceDuplicateLicenceRef),
     duplicatePrimaryUser: _addDuplicatePrimaryUser(duplicateLicenceRef),
     duplicateReturnsAgent: _addDuplicateReturnsAgent(duplicateLicenceRef)
   }
@@ -35,86 +37,86 @@ function duplicateRecipients() {
 
 function _addDuplicateLicenceHolder(licenceRef) {
   return {
-    all_licences: licenceRef,
-    message_type: 'Letter - licence holder',
-    contact: _contact('4'),
-    contact_hash_id: 167278556784
+    licence_refs: licenceRef,
+    contact_type: 'Licence holder',
+    contact: _contact('4', 'Duplicate Licence holder', 'Licence holder'),
+    contact_hash_id: 'b1b355491c7d42778890c545e08797ea'
   }
 }
 
 function _addDuplicateReturnsTo(licenceRef) {
   return {
-    all_licences: licenceRef,
-    message_type: 'Letter - Returns To',
-    contact: _contact('4'),
-    contact_hash_id: 167278556784
+    licence_refs: licenceRef,
+    contact_type: 'Returns to',
+    contact: _contact('4', 'Duplicate Returns to', 'Returns to'),
+    contact_hash_id: 'b1b355491c7d42778890c545e08797ea'
   }
 }
 
 function _addLicenceHolder() {
   return {
-    all_licences: generateLicenceRef(),
-    message_type: 'Letter - licence holder',
-    contact: _contact('1'),
-    contact_hash_id: -1672785580
+    licence_refs: generateLicenceRef(),
+    contact_type: 'Licence holder',
+    contact: _contact('1', 'Licence holder', 'Licence holder'),
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214'
   }
 }
 
 function _addPrimaryUser() {
   return {
-    all_licences: generateLicenceRef(),
+    licence_refs: generateLicenceRef(),
     contact: null,
-    contact_hash_id: 1178136542,
-    message_type: 'Email - primary user',
-    recipient: 'primary.user@important.com'
+    contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+    contact_type: 'Primary user',
+    email: 'primary.user@important.com'
   }
 }
 
 function _addDuplicatePrimaryUser(licenceRef) {
   return {
-    all_licences: licenceRef,
+    licence_refs: licenceRef,
     contact: null,
-    contact_hash_id: 14567627,
-    message_type: 'Email - primary user',
-    recipient: 'primary.user@important.com'
+    contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
+    contact_type: 'Primary user',
+    email: 'primary.user@important.com'
   }
 }
 
 function _addReturnsAgent() {
   return {
-    all_licences: generateLicenceRef(),
+    licence_refs: generateLicenceRef(),
     contact: null,
-    contact_hash_id: -370722837,
-    message_type: 'Email - returns agent',
-    recipient: 'returns.agent@important.com'
+    contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
+    contact_type: 'Returns agent',
+    email: 'returns.agent@important.com'
   }
 }
 
 function _addDuplicateReturnsAgent(licenceRef) {
   return {
-    all_licences: licenceRef,
+    licence_refs: licenceRef,
     contact: null,
-    contact_hash_id: 14567627,
-    message_type: 'Email - returns agent',
-    recipient: 'returns.agent@important.com'
+    contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
+    contact_type: 'Returns agent',
+    email: 'returns.agent@important.com'
   }
 }
 
 function _addReturnTo() {
   return {
-    all_licences: generateLicenceRef(),
-    message_type: 'Letter - Returns To',
-    contact: _contact('2'),
-    contact_hash_id: 123223
+    licence_refs: generateLicenceRef(),
+    contact_type: 'Returns to',
+    contact: _contact('2', 'Returns to', 'Returns to'),
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893'
   }
 }
 
 function _addLicenceHolderWithMultipleLicences() {
   return {
-    all_licences: `${generateLicenceRef()}, ${generateLicenceRef()}`,
-    message_type: 'Letter - licence holder',
-    contact: _contact('3'),
-    contact_hash_id: -167278576
+    licence_refs: `${generateLicenceRef()}, ${generateLicenceRef()}`,
+    contact_type: 'Licence holder',
+    contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
+    contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075'
   }
 }
 
@@ -128,8 +130,23 @@ function _addLicenceHolderWithMultipleLicences() {
  * @returns {string} - a unique address
  * @private
  */
-function _contact(line1) {
-  return `harry,j,potter,${line1},privet drive,little whinging,surrey,wd25 7lr`
+function _contact(line1, name, role) {
+  return {
+    addressLine1: `${line1}`,
+    addressLine2: 'Privet Drive',
+    addressLine3: null,
+    addressLine4: null,
+    country: null,
+    county: 'Surrey',
+    forename: 'Harry',
+    initials: 'H J',
+    name,
+    postcode: 'WD25 7LR',
+    role,
+    salutation: 'Mr',
+    town: 'Little Whinging',
+    type: 'Person'
+  }
 }
 
 module.exports = {

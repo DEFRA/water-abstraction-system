@@ -51,8 +51,8 @@ describe('Notifications Setup - Review service', () => {
       recipients: [
         {
           contact: ['primary.user@important.com'],
-          licences: [`${testRecipients.primaryUser.all_licences}`],
-          method: 'Email - primary user'
+          licences: [`${testRecipients.primaryUser.licence_refs}`],
+          method: 'Email - Primary user'
         }
       ],
       recipientsAmount: 1

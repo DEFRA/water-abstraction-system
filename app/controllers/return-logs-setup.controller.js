@@ -6,15 +6,18 @@
  */
 
 const CheckService = require('../services/return-logs/setup/check.service.js')
+const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
 const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
+const NoteService = require('../services/return-logs/setup/note.service.js')
 const ReceivedService = require('../services/return-logs/setup/received.service.js')
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
+const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
 const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
 const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
 const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
@@ -24,9 +27,17 @@ const UnitsService = require('../services/return-logs/setup/units.service.js')
 
 async function check(request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckService.go(sessionId)
+  const pageData = await CheckService.go(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
+}
+
+async function deleteNote(request, h) {
+  const { sessionId } = request.params
+
+  await DeleteNoteService.go(sessionId, request.yar)
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
 async function guidance(_request, h) {
@@ -45,6 +56,14 @@ async function meterProvided(request, h) {
   const pageData = await MeterProvidedService.go(sessionId)
 
   return h.view('return-logs/setup/meter-provided.njk', pageData)
+}
+
+async function note(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await NoteService.go(sessionId)
+
+  return h.view('return-logs/setup/note.njk', pageData)
 }
 
 async function received(request, h) {
@@ -114,6 +133,19 @@ async function submitMeterProvided(request, h) {
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-details`)
+}
+
+async function submitNote(request, h) {
+  const { sessionId } = request.params
+  const { user } = request.auth.credentials
+
+  const pageData = await SubmitNoteService.go(sessionId, request.payload, user, request.yar)
+
+  if (pageData.error) {
+    return h.view('return-logs/setup/note.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
 async function submitReceived(request, h) {
@@ -201,9 +233,11 @@ async function units(request, h) {
 
 module.exports = {
   check,
+  deleteNote,
   guidance,
   meterDetails,
   meterProvided,
+  note,
   received,
   reported,
   setup,
@@ -211,6 +245,7 @@ module.exports = {
   submission,
   submitMeterDetails,
   submitMeterProvided,
+  submitNote,
   submitReceived,
   submitReported,
   submitSingleVolume,

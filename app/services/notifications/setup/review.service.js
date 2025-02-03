@@ -5,7 +5,7 @@
  * @module ReviewService
  */
 
-const DedupeRecipientsService = require('./dedupe-recipients.service.js')
+const DetermineRecipientsService = require('./determine-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
@@ -27,17 +27,17 @@ async function go(sessionId, page = 1) {
   const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
   const summer = _summer(returnsPeriod)
 
-  const recipients = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
+  const recipientsData = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
 
-  const dedupeRecipients = DedupeRecipientsService.go(recipients)
+  const recipients = DetermineRecipientsService.go(recipientsData)
 
   const pagination = PaginatorPresenter.go(
-    dedupeRecipients.length,
+    recipients.length,
     Number(page),
     `/system/notifications/setup/${sessionId}/review`
   )
 
-  const formattedData = ReviewPresenter.go(dedupeRecipients, page, pagination)
+  const formattedData = ReviewPresenter.go(recipients, page, pagination)
 
   return {
     activeNavBar: 'manage',

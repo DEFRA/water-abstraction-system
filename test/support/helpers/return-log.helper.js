@@ -25,7 +25,7 @@ const { generateLegacyId } = require('./return-requirement.helper.js')
  * - `returnReference` - [randomly generated - 10000321]
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
- * - `status` - completed
+ * - `status` - due
  * - `updatedAt` - new Date()
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database

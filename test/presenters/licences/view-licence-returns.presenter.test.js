@@ -52,7 +52,7 @@ describe('View Licence returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2012',
-            link: '/returns/return?id=v1:1:01/123:10046821:2020-01-02:2020-02-01',
+            link: '/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01',
             purpose: 'SPRAY IRRIGATION',
             reference: '10046821',
             returnLogId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
@@ -62,7 +62,7 @@ describe('View Licence returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2012',
-            link: '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01',
+            link: '/system/return-logs?id=v1:1:01/123:10046820:2020-01-02:2020-02-01',
             purpose: 'SPRAY IRRIGATION',
             reference: '10046820',
             returnLogId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
@@ -105,75 +105,87 @@ describe('View Licence returns presenter', () => {
     })
 
     describe('the "link" property', () => {
-      describe('when the return log has a status of "completed"', () => {
-        it('returns a link to the view return log page', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+      it('returns a link to the view return log page', () => {
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-          expect(result.returns[0].link).to.equal('/returns/return?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
-        })
+        expect(result.returns[0].link).to.equal('/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
       })
 
-      describe('when the return log has a status of "due"', () => {
-        describe('and the user is permitted to submit and edit returns', () => {
-          it('returns a link to the edit return log page', () => {
-            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-            expect(result.returns[1].link).to.equal(
-              '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
-            )
-          })
-        })
-
-        describe('and the user is not permitted to submit and edit returns', () => {
-          beforeEach(() => {
-            auth.credentials.scope = []
-          })
-
-          it('returns null', () => {
-            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-            expect(result.returns[1].link).to.be.null()
-          })
-        })
-      })
-
-      describe('when the return log has a status of "received"', () => {
+      describe('when enableSystemReturnsView is set to false', () => {
         beforeEach(() => {
-          returnLogs[1].status = 'received'
+          Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(false)
         })
 
-        describe('and the user is permitted to submit and edit returns', () => {
-          it('returns a link to the edit return log page', () => {
+        describe('and the return log has a status of "completed"', () => {
+          it('returns a link to the view return log page', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-            expect(result.returns[1].link).to.equal(
-              '/system/return-logs/setup?returnLogId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
-            )
+            expect(result.returns[0].link).to.equal('/returns/return?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
           })
         })
 
-        describe('and the user is not permitted to submit and edit returns', () => {
+        describe('and the return log has a status of "due"', () => {
+          describe('and the user is permitted to submit and edit returns', () => {
+            it('returns a link to the edit return log page', () => {
+              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+              expect(result.returns[1].link).to.equal(
+                '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+              )
+            })
+          })
+
+          describe('and the user is not permitted to submit and edit returns', () => {
+            beforeEach(() => {
+              auth.credentials.scope = []
+            })
+
+            it('returns null', () => {
+              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+              expect(result.returns[1].link).to.be.null()
+            })
+          })
+        })
+
+        describe('and the return log has a status of "received"', () => {
           beforeEach(() => {
-            auth.credentials.scope = []
+            returnLogs[1].status = 'received'
           })
 
-          it('returns null', () => {
+          describe('and the user is permitted to submit and edit returns', () => {
+            it('returns a link to the edit return log page', () => {
+              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+              expect(result.returns[1].link).to.equal(
+                '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
+              )
+            })
+          })
+
+          describe('and the user is not permitted to submit and edit returns', () => {
+            beforeEach(() => {
+              auth.credentials.scope = []
+            })
+
+            it('returns null', () => {
+              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+
+              expect(result.returns[1].link).to.be.null()
+            })
+          })
+        })
+
+        describe('and the return log has a status of "void"', () => {
+          beforeEach(() => {
+            returnLogs[1].status = 'void'
+          })
+
+          it('returns a link to the view return log page', () => {
             const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-            expect(result.returns[1].link).to.be.null()
+            expect(result.returns[1].link).to.equal('/returns/return?id=v1:1:01/123:10046820:2020-01-02:2020-02-01')
           })
-        })
-      })
-
-      describe('when the return log has a status of "void"', () => {
-        beforeEach(() => {
-          returnLogs[1].status = 'void'
-        })
-
-        it('returns a link to the view return log page', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-          expect(result.returns[1].link).to.equal('/returns/return?id=v1:1:01/123:10046820:2020-01-02:2020-02-01')
         })
       })
     })
