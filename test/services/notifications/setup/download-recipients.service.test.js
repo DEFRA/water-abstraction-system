@@ -40,7 +40,7 @@ describe('Notifications Setup - Download recipients service', () => {
       const result = await DownloadRecipientsService.go(session.id)
 
       expect(result).to.equal({
-        data: 'Licences\n"12323"\n"4567"',
+        data: '"Licences"\n"12323"\n"4567"\n',
         filename: 'recipients.csv',
         type: 'text/csv'
       })
