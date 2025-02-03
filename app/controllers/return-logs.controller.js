@@ -28,7 +28,7 @@ async function view(request, h) {
 async function submitView(request, h) {
   const { id } = request.query
 
-  await SubmitViewReturnLogService.go(id)
+  await SubmitViewReturnLogService.go(id, request.yar, request.payload)
 
   return h.redirect(`/system/return-logs?id=${id}`)
 }
