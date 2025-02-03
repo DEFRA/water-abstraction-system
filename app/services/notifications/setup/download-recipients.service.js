@@ -5,10 +5,10 @@
  * @module DownloadRecipientsService
  */
 
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notifications/setup/download-recipients.presenter.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the notifications setup download link
@@ -23,11 +23,9 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { returnsPeriod } = session
-  const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
-  const summer = _summer(returnsPeriod)
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  const recipients = await FetchDownloadRecipientsService.go(selectedReturnsPeriod.dueDate, summer)
+  const recipients = await FetchDownloadRecipientsService.go(returnsPeriod.dueDate, summer)
 
   const formattedData = DownloadRecipientsPresenter.go(recipients)
 
@@ -36,18 +34,6 @@ async function go(sessionId) {
     type: 'text/csv',
     filename: 'recipients.csv'
   }
-}
-
-function _extractReturnPeriod(returnsPeriod) {
-  const periods = determineUpcomingReturnPeriods()
-
-  return periods.find((period) => {
-    return period.name === returnsPeriod
-  })
-}
-
-function _summer(returnsPeriod) {
-  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 module.exports = {
