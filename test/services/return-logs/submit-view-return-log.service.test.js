@@ -61,7 +61,7 @@ describe('Submit View Return Log Service', () => {
 
     describe('and the user is marking the return log query as resolved', () => {
       beforeEach(() => {
-        payload = { 'mark-query': 'unmark' }
+        payload = { 'mark-query': 'resolve' }
       })
 
       it('updates the status of the return log with no flash message set', async () => {
