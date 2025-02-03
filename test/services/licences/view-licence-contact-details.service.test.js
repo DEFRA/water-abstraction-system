@@ -82,7 +82,8 @@ function _testFetchLicenceContactDetailsData() {
         AddressLine2: 'HORIZON HOUSE',
         AddressLine3: 'DEANERY ROAD',
         AddressLine4: ''
-      }
+      },
+      licenceEntityRoles: []
     }
   }
 }

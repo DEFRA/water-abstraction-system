@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
+const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
 const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
@@ -18,16 +18,18 @@ describe('Fetch Licence Contact Details service', () => {
   let licence
   let licenceId
   let licenceRef
-  let licenceDocumentHeader
   let licenceDocumentHeaderId
 
   describe('when the licence has a licence document header', () => {
     before(async () => {
-      licence = await LicenceHelper.add()
+      const { primaryUser: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed(false)
+
+      licence = await LicenceHelper.add({
+        licenceRef: licenceDocumentHeader.licenceRef
+      })
+
       licenceId = licence.id
       licenceRef = licence.licenceRef
-
-      licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ licenceRef })
       licenceDocumentHeaderId = licenceDocumentHeader.id
     })
 
@@ -39,41 +41,58 @@ describe('Fetch Licence Contact Details service', () => {
         licenceRef,
         licenceDocumentHeader: {
           id: licenceDocumentHeaderId,
+          licenceEntityRoles: [
+            {
+              role: 'primary_user',
+              licenceEntity: {
+                name: 'primary.user@important.com'
+              }
+            },
+            {
+              role: 'user_returns',
+              licenceEntity: {
+                name: 'returns.agent@important.com'
+              }
+            }
+          ],
           metadata: {
-            Name: 'GUPTA',
-            Town: 'BRISTOL',
-            County: 'AVON',
-            Country: '',
-            Expires: null,
-            Forename: 'AMARA',
-            Initials: 'A',
-            Modified: '20080327',
-            Postcode: 'BS1 5AH',
+            Name: 'Primary User test',
             contacts: [
               {
-                name: 'GUPTA',
-                role: 'Licence holder',
-                town: 'BRISTOL',
-                type: 'Person',
-                county: 'AVON',
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
                 country: null,
-                forename: 'AMARA',
-                initials: 'A',
-                postcode: 'BS1 5AH',
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Primary User test',
+                postcode: 'WD25 7LR',
+                role: 'Licence holder',
                 salutation: null,
-                addressLine1: 'ENVIRONMENT AGENCY',
-                addressLine2: 'HORIZON HOUSE',
-                addressLine3: 'DEANERY ROAD',
-                addressLine4: null
+                town: 'Little Whinging',
+                type: 'Person'
+              },
+              {
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
+                country: null,
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Primary User test',
+                postcode: 'WD25 7LR',
+                role: 'Returns to',
+                salutation: null,
+                town: 'Little Whinging',
+                type: 'Person'
               }
             ],
             isCurrent: true,
-            isSummer: true,
-            Salutation: '',
-            AddressLine1: 'ENVIRONMENT AGENCY',
-            AddressLine2: 'HORIZON HOUSE',
-            AddressLine3: 'DEANERY ROAD',
-            AddressLine4: ''
+            isSummer: true
           }
         }
       })

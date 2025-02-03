@@ -37,7 +37,7 @@
           value: {
             text:  licenceContactDetail.name
           }
-        },
+        } if licenceContactDetail.name,
         {
           key: {
             text: "Address",
@@ -46,7 +46,16 @@
           value: {
             html: displayAddress(licenceContactDetail.address)
           }
+        } if licenceContactDetail.address,
+        {
+          key: {
+          text: "Email",
+          classes:"govuk-!-font-weight-regular"
+        },
+          value: {
+          text: licenceContactDetail.email
         }
+        } if licenceContactDetail.email
       ]
     })
   }}

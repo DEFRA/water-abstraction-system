@@ -29,6 +29,14 @@ async function _fetch(licenceId) {
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select(['id', 'metadata'])
     })
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles', (builder) => {
+      builder.select(['role']).whereIn('role', ['primary_user', 'user_returns'])
+    })
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity', (builder) => {
+      builder.select(['name'])
+    })
 }
 
 module.exports = {
