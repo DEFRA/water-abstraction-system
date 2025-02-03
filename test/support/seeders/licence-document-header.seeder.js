@@ -14,8 +14,8 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  *
  * @param {boolean} returnLogs - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
  * to be included in the recipients list
+ * @param {string} dueDate
  *
- * @param dueDate
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
 async function seed(returnLogs = true, dueDate = '2023-04-28') {
