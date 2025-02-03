@@ -4,7 +4,7 @@
  * Transforms an array into a CSV formatted string.
  *
  * A CSV header / row is the same regardless of transformation. The header is commonly the first row.
- * Therefore, this function works for both a header and rows.
+ * Therefore, this function works for both a header and row.
  *
  * The function can transform most common types:
  * - Objects are stringified and parsed
@@ -27,13 +27,13 @@ function TransformArrayToCSVRow(arrayToTransform) {
     return undefined
   }
 
-  const transformedArrayToRow = arrayToTransform
+  const transformedRow = arrayToTransform
     .map((value) => {
       return _transformValueToCSV(value)
     })
     .join(',')
 
-  return transformedArrayToRow + '\n'
+  return transformedRow + '\n'
 }
 
 /**
