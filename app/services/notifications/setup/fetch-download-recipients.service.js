@@ -38,9 +38,11 @@ const { db } = require('../../../../db/db.js')
  * If a licence is registered, we only extract the email contacts. Unregistered licences its the 'Licence holder' and
  * 'Returns to' contacts from `licence_document_headers.metadata->contacts`.
  *
- * FetchContactsService removes duplicates, and we have other functions that squash duplicate licences together.
+ * We have another service 'FetchContactsService' which removes duplicates rows by squashing them together.
  * We do not want to remove duplicates for the downloadable recipients. Each row in the CSV file should represent the
- * data received from this query. We expect to see duplicate licences with different contacts types.
+ * data received from this query (For either registered to unregistered licence).
+ * We expect to see duplicate licences with different contacts types
+ * (but still preferring the registered over unregistered licence).
  *
  * @param {Date} dueDate
  * @param {boolean} summer
