@@ -15,7 +15,7 @@ describe('Transform to csv', () => {
     let testArray
 
     beforeEach(() => {
-      testArray = _complexArray()
+      testArray = _testArray()
     })
 
     it('correctly transforms all data types to csv', () => {
@@ -64,7 +64,7 @@ describe('Transform to csv', () => {
       })
 
       describe('a number', () => {
-        it('correctly formats the boolean to a string', () => {
+        it('correctly formats the number to a string', () => {
           const result = TransformArrayToCSVRow([100])
 
           expect(result).to.equal('100\n')
@@ -72,7 +72,7 @@ describe('Transform to csv', () => {
       })
 
       describe('a string containing', () => {
-        describe('a comma', () => {
+        describe('a comma ,', () => {
           it('correctly formats the string', () => {
             const result = TransformArrayToCSVRow(['I am a, comma seperated sentence.'])
 
@@ -80,7 +80,7 @@ describe('Transform to csv', () => {
           })
         })
 
-        describe('a single double quote', () => {
+        describe('a single double quote "', () => {
           it('correctly formats the string', () => {
             const result = TransformArrayToCSVRow(['I am a " double quote sentence.'])
 
@@ -88,7 +88,7 @@ describe('Transform to csv', () => {
           })
         })
 
-        describe('a double double quote', () => {
+        describe('a double double quote ""', () => {
           it('correctly formats the string', () => {
             const result = TransformArrayToCSVRow(['I am a "" double quote sentence.'])
 
@@ -96,7 +96,7 @@ describe('Transform to csv', () => {
           })
         })
 
-        describe('a back slash', () => {
+        describe('a back slash "\\" ', () => {
           it('correctly formats the string', () => {
             const result = TransformArrayToCSVRow(['I am a  "\\"  back slash sentence.'])
 
@@ -115,12 +115,8 @@ describe('Transform to csv', () => {
     })
 
     describe('when an array of strings us provided', () => {
-      beforeEach(() => {
-        testArray = _arrayOfStrings()
-      })
-
       it('converts the data to a CSV format', () => {
-        const result = TransformArrayToCSVRow(testArray)
+        const result = TransformArrayToCSVRow(['name', 'age'])
 
         expect(result).to.equal('"name","age"\n')
       })
@@ -136,11 +132,7 @@ describe('Transform to csv', () => {
   })
 })
 
-function _arrayOfStrings() {
-  return ['name', 'age']
-}
-
-function _complexArray() {
+function _testArray() {
   return [
     '20146cdc-9b40-4769-aa78-b51c17080d56',
     '4.1.1',
