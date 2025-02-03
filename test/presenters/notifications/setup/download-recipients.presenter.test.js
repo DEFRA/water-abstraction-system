@@ -21,7 +21,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
     it('correctly formats the data to a csv string', () => {
       const result = DownloadRecipientsPresenter.go(recipients)
 
-      expect(result).to.equal('licence\n"12323"\n"4567"')
+      expect(result).to.equal('Licences\n"12323"\n"4567"')
     })
 
     it('correctly formats the headers', () => {
@@ -29,7 +29,7 @@ describe('Notifications Setup - Download recipients presenter', () => {
 
       const [headers] = result.split('\n')
 
-      expect(headers).to.equal('licence')
+      expect(headers).to.equal('Licences')
     })
 
     it('correctly formats a row', () => {

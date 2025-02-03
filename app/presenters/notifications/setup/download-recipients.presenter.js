@@ -12,7 +12,7 @@
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  *
- * @returns {object} - The data formatted for the view template
+ * @returns {string} - The data to a csv string
  */
 function go(recipients) {
   const formattedData = _formatData(recipients)
@@ -22,7 +22,7 @@ function go(recipients) {
 function _formatData(data) {
   return data.map((item) => {
     return {
-      licence: item.licence_ref
+      Licences: item.licence_ref
     }
   })
 }

@@ -15,14 +15,18 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @param {number|string} page - The currently selected page
  * @param {object} pagination - The result from `PaginatorPresenter`
  *
+ * @param sessionId
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page, pagination) {
+function go(recipients, page, pagination, sessionId) {
   return {
     defaultPageSize,
     pageTitle: _pageTitle(page, pagination),
     recipients: _recipients(recipients, page),
-    recipientsAmount: recipients.length
+    recipientsAmount: recipients.length,
+    links: {
+      download: `/system/notifications/setup/${sessionId}/download`
+    }
   }
 }
 
