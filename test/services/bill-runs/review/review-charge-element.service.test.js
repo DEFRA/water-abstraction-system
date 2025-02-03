@@ -12,6 +12,7 @@ const { expect } = Code
 const BillRunsReviewFixture = require('../../../fixtures/bill-runs-review.fixture.js')
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
 
 // Thing under test
@@ -26,6 +27,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
+    Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
     Sinon.stub(FetchReviewChargeElementService, 'go').resolves(reviewChargeElement)
   })
 
@@ -66,7 +68,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
               returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
-              returnLink: '/returns/return?id=v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+              returnLink: '/system/return-logs?id=v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',
               returnTotal: '0 ML / 0 ML'
@@ -109,7 +111,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
               returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
-              returnLink: '/returns/return?id=v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+              returnLink: '/system/return-logs?id=v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',
               returnTotal: '0 ML / 0 ML'
@@ -119,6 +121,22 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           status: 'review'
         })
+      })
+    })
+
+    describe('when enableSystemReturnsView is set to false', () => {
+      beforeEach(() => {
+        yarStub = { flash: Sinon.stub().withArgs('banner').returns([undefined]) }
+
+        Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(false)
+      })
+
+      it('returns the "returnLink" URL to the legacy page', async () => {
+        const result = await ReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+
+        expect(result.matchedReturns[0].returnLink).to.equal(
+          '/returns/return?id=v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31'
+        )
       })
     })
   })
