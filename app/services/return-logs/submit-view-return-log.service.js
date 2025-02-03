@@ -23,13 +23,13 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  * @param {object} payload - The submitted form data
  */
 async function go(returnLogId, yar, payload) {
-  const underQuery = payload['mark-query'] === 'mark'
+  const markUnderQuery = payload['mark-query'] === 'mark'
 
-  if (underQuery) {
+  if (markUnderQuery) {
     yar.flash('banner', 'This return has been marked under query.')
   }
 
-  await ReturnLogModel.query().findById(returnLogId).patch({ underQuery })
+  await ReturnLogModel.query().findById(returnLogId).patch({ underQuery: markUnderQuery })
 }
 
 module.exports = {
