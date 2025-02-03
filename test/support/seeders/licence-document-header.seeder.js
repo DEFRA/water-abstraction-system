@@ -12,17 +12,17 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
- * @param {boolean} returnLogs - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
+ * @param {boolean} enableReturnLog - defaulted to true, this needs to be false if you do not want the `licenceDocumentHeader`
  * to be included in the recipients list
  * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
  *
  * @returns {object[]} - an array of the added licenceDocumentHeaders
  */
-async function seed(returnLogs = true, returnLogDueDate = '2023-04-28') {
+async function seed(enableReturnLog = true, returnLogDueDate = '2023-04-28') {
   return {
-    licenceHolder: await _addLicenceHolder(returnLogs, returnLogDueDate),
-    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(returnLogs, returnLogDueDate),
-    primaryUser: await _addLicenceEntityRoles(returnLogs, returnLogDueDate)
+    licenceHolder: await _addLicenceHolder(enableReturnLog, returnLogDueDate),
+    licenceHolderAndReturnTo: await _addLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDueDate),
+    primaryUser: await _addLicenceEntityRoles(enableReturnLog, returnLogDueDate)
   }
 }
 
@@ -74,7 +74,7 @@ async function _addLicenceEntityRoles(enableReturnLog, returnLogDueDate) {
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      returnLogDueDate
+      dueDate: returnLogDueDate
     })
   }
 
@@ -95,7 +95,7 @@ async function _addLicenceHolder(enableReturnLog, returnLogDueDate) {
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      returnLogDueDate
+      dueDate: returnLogDueDate
     })
   }
 
@@ -116,7 +116,7 @@ async function _addLicenceHolderAndReturnToSameRef(enableReturnLog, returnLogDue
   if (enableReturnLog) {
     returnLog = await ReturnLogHelper.add({
       licenceRef: licenceDocumentHeader.licenceRef,
-      returnLogDueDate
+      dueDate: returnLogDueDate
     })
   }
 
