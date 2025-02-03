@@ -14,6 +14,10 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 const FetchDownloadRecipientsService = require('../../../../app/services/notifications/setup/fetch-download-recipients.service.js')
 
 describe('Notifications Setup - Fetch Download Recipients service', () => {
+  // These dates match the return logs helper
+  const startDate = new Date('2022-04-01')
+  const endDate = new Date('2023-03-31')
+
   let dueDate
   let isSummer
   let testRecipients
@@ -35,17 +39,23 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
       expect(primaryUser).to.equal({
         contact: null,
         contact_type: 'Primary user',
+        due_date: new Date(dueDate),
         email: 'primary.user@important.com',
+        end_date: endDate,
         licence_ref: testRecipients.primaryUser.licenceRef,
-        return_reference: testRecipients.primaryUser.returnLog.returnReference
+        return_reference: testRecipients.primaryUser.returnLog.returnReference,
+        start_date: startDate
       })
 
       expect(returnsAgent).to.equal({
         contact: null,
         contact_type: 'Returns agent',
+        due_date: new Date(dueDate),
         email: 'returns.agent@important.com',
+        end_date: endDate,
         licence_ref: testRecipients.primaryUser.licenceRef,
-        return_reference: testRecipients.primaryUser.returnLog.returnReference
+        return_reference: testRecipients.primaryUser.returnLog.returnReference,
+        start_date: startDate
       })
     })
 
@@ -73,9 +83,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
             type: 'Person'
           },
           contact_type: 'Licence holder',
+          due_date: new Date(dueDate),
           email: null,
+          end_date: endDate,
           licence_ref: testRecipients.licenceHolder.licenceRef,
-          return_reference: testRecipients.licenceHolder.returnLog.returnReference
+          return_reference: testRecipients.licenceHolder.returnLog.returnReference,
+          start_date: startDate
         }
       ])
     })
@@ -104,9 +117,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
             type: 'Person'
           },
           contact_type: 'Licence holder',
+          due_date: new Date(dueDate),
           email: null,
+          end_date: endDate,
           licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-          return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference
+          return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
+          start_date: startDate
         },
         {
           contact: {
@@ -126,9 +142,12 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
             type: 'Person'
           },
           contact_type: 'Returns to',
+          due_date: new Date(dueDate),
           email: null,
+          end_date: endDate,
           licence_ref: testRecipients.licenceHolderAndReturnTo.licenceRef,
-          return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference
+          return_reference: testRecipients.licenceHolderAndReturnTo.returnLog.returnReference,
+          start_date: startDate
         }
       ])
     })

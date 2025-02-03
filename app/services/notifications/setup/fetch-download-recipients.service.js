@@ -65,6 +65,9 @@ SELECT
   contacts.licence_ref,
   contacts.contact_type,
   contacts.return_reference,
+  contacts.start_date,
+  contacts.end_date,
+  contacts.due_date,
   contacts.email,
   contacts.contact
 FROM (
@@ -73,7 +76,10 @@ FROM (
     (contacts->>'role') AS contact_type,
     (NULL) AS email,
     contacts as contact,
-    rl.return_reference
+    rl.return_reference,
+    rl.start_date,
+    rl.end_date,
+    rl.due_date
   FROM public.licence_document_headers ldh
     INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON TRUE
     INNER JOIN public.return_logs rl
@@ -101,7 +107,10 @@ FROM (
     END) AS contact_type,
     le."name" AS email,
     (NULL) AS contact,
-    rl.return_reference
+    rl.return_reference,
+    rl.start_date,
+    rl.end_date,
+    rl.due_date
   FROM public.licence_document_headers ldh
   INNER JOIN public.licence_entity_roles ler
     ON ler.company_entity_id = ldh.company_entity_id
