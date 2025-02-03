@@ -124,7 +124,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
       })
     })
 
-    describe('when enableSystemReturnsView is set to false', () => {
+    describe('and the "enableSystemReturnsView" flag is set to false', () => {
       beforeEach(() => {
         yarStub = { flash: Sinon.stub().withArgs('banner').returns([undefined]) }
 

@@ -117,7 +117,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
       })
     })
 
-    describe('when enableSystemReturnsView is set to false', () => {
+    describe('and the "enableSystemReturnsView" flag is set to false', () => {
       beforeEach(() => {
         Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(false)
       })
