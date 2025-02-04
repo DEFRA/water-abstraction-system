@@ -238,8 +238,8 @@ describe('Return Logs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
-        describe('and the received date is entered', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({})
           })
@@ -251,23 +251,36 @@ describe('Return Logs Setup controller', () => {
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/submission`)
           })
         })
-      })
 
-      describe('when a request is invalid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitReceivedService, 'go').resolves({
-            error: { message: 'Enter a real received date' },
-            pageTitle: 'When was the return received?',
-            sessionId
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "submission" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReceivedService, 'go').resolves({
+              error: { message: 'Enter a real received date' },
+              pageTitle: 'When was the return received?',
+              sessionId
+            })
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Enter a real received date')
-          expect(response.payload).to.contain('There is a problem')
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Enter a real received date')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

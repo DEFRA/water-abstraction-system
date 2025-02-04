@@ -151,13 +151,18 @@ async function submitNote(request, h) {
 async function submitReceived(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitReceivedService.go(sessionId, payload)
+  const pageData = await SubmitReceivedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/received.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/submission`)
