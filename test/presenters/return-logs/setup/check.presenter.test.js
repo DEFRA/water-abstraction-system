@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/return-logs/setup/check.presenter.js')
 
-describe.only('Return Logs Setup - Check presenter', () => {
+describe('Return Logs Setup - Check presenter', () => {
   let session
 
   beforeEach(() => {
