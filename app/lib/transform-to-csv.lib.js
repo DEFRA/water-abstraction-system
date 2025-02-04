@@ -22,7 +22,7 @@
  *
  * @private
  */
-function TransformArrayToCSVRow(arrayToTransform) {
+function transformArrayToCSVRow(arrayToTransform) {
   if (!arrayToTransform) {
     return undefined
   }
@@ -73,5 +73,5 @@ function _transformValueToCSV(value) {
 }
 
 module.exports = {
-  TransformArrayToCSVRow
+  transformArrayToCSVRow
 }

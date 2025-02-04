@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const { TransformArrayToCSVRow } = require('../../app/lib/transform-to-csv.lib.js')
+const { transformArrayToCSVRow } = require('../../app/lib/transform-to-csv.lib.js')
 
 describe('Transform to csv', () => {
-  describe('#TransformArrayToCSVRow', () => {
+  describe('#transformArrayToCSVRow', () => {
     let testArray
 
     beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Transform to csv', () => {
     })
 
     it('correctly transforms all data types to csv', () => {
-      const result = TransformArrayToCSVRow(testArray)
+      const result = transformArrayToCSVRow(testArray)
 
       expect(result).to.equal(
         '"20146cdc-9b40-4769-aa78-b51c17080d56",' +
@@ -41,7 +41,7 @@ describe('Transform to csv', () => {
     describe('when the data type is', () => {
       describe('an object', () => {
         it('correctly formats the object to a string', () => {
-          const result = TransformArrayToCSVRow([{ message: 'a json object' }])
+          const result = transformArrayToCSVRow([{ message: 'a json object' }])
 
           expect(result).to.equal('"{""message"": ""a json object""}"\n')
         })
@@ -49,7 +49,7 @@ describe('Transform to csv', () => {
 
       describe('a UUID', () => {
         it('correctly formats the UUID to a string', () => {
-          const result = TransformArrayToCSVRow(['20146cdc-9b40-4769-aa78-b51c17080d56'])
+          const result = transformArrayToCSVRow(['20146cdc-9b40-4769-aa78-b51c17080d56'])
 
           expect(result).to.equal('"20146cdc-9b40-4769-aa78-b51c17080d56"\n')
         })
@@ -57,7 +57,7 @@ describe('Transform to csv', () => {
 
       describe('a boolean', () => {
         it('correctly formats the boolean to a string', () => {
-          const result = TransformArrayToCSVRow([true])
+          const result = transformArrayToCSVRow([true])
 
           expect(result).to.equal('true\n')
         })
@@ -65,7 +65,7 @@ describe('Transform to csv', () => {
 
       describe('a number', () => {
         it('correctly formats the number to a string', () => {
-          const result = TransformArrayToCSVRow([100])
+          const result = transformArrayToCSVRow([100])
 
           expect(result).to.equal('100\n')
         })
@@ -74,7 +74,7 @@ describe('Transform to csv', () => {
       describe('a string containing', () => {
         describe('a comma ,', () => {
           it('correctly formats the string', () => {
-            const result = TransformArrayToCSVRow(['I am a, comma seperated sentence.'])
+            const result = transformArrayToCSVRow(['I am a, comma seperated sentence.'])
 
             expect(result).to.equal('"I am a, comma seperated sentence."\n')
           })
@@ -82,7 +82,7 @@ describe('Transform to csv', () => {
 
         describe('a single double quote "', () => {
           it('correctly formats the string', () => {
-            const result = TransformArrayToCSVRow(['I am a " double quote sentence.'])
+            const result = transformArrayToCSVRow(['I am a " double quote sentence.'])
 
             expect(result).to.equal('"I am a "" double quote sentence."\n')
           })
@@ -90,7 +90,7 @@ describe('Transform to csv', () => {
 
         describe('a double double quote ""', () => {
           it('correctly formats the string', () => {
-            const result = TransformArrayToCSVRow(['I am a "" double quote sentence.'])
+            const result = transformArrayToCSVRow(['I am a "" double quote sentence.'])
 
             expect(result).to.equal('"I am a """" double quote sentence."\n')
           })
@@ -98,7 +98,7 @@ describe('Transform to csv', () => {
 
         describe('a back slash "\\" ', () => {
           it('correctly formats the string', () => {
-            const result = TransformArrayToCSVRow(['I am a  "\\"  back slash sentence.'])
+            const result = transformArrayToCSVRow(['I am a  "\\"  back slash sentence.'])
 
             expect(result).to.equal('"I am a  ""\\""  back slash sentence."\n')
           })
@@ -107,7 +107,7 @@ describe('Transform to csv', () => {
 
       describe('a date', () => {
         it('correctly formats the date to an iso string', () => {
-          const result = TransformArrayToCSVRow([new Date('2021-02-01')])
+          const result = transformArrayToCSVRow([new Date('2021-02-01')])
 
           expect(result).to.equal('2021-02-01T00:00:00.000Z\n')
         })
@@ -116,7 +116,7 @@ describe('Transform to csv', () => {
 
     describe('when an array of strings us provided', () => {
       it('converts the data to a CSV format', () => {
-        const result = TransformArrayToCSVRow(['name', 'age'])
+        const result = transformArrayToCSVRow(['name', 'age'])
 
         expect(result).to.equal('"name","age"\n')
       })
@@ -124,7 +124,7 @@ describe('Transform to csv', () => {
 
     describe('when no array is provided', () => {
       it('returns undefined', () => {
-        const result = TransformArrayToCSVRow()
+        const result = transformArrayToCSVRow()
 
         expect(result).to.equal(undefined)
       })
