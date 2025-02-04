@@ -43,6 +43,9 @@ describe('Notifications Setup - Review service', () => {
     expect(result).to.equal({
       activeNavBar: 'manage',
       defaultPageSize: 25,
+      links: {
+        download: `/system/notifications/setup/${session.id}/download`
+      },
       pageTitle: 'Send returns invitations',
       page: 1,
       pagination: {
