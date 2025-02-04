@@ -14,15 +14,19 @@ const { defaultPageSize } = require('../../../../config/database.config.js')
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {number|string} page - The currently selected page
  * @param {object} pagination - The result from `PaginatorPresenter`
+ * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page, pagination) {
+function go(recipients, page, pagination, sessionId) {
   return {
     defaultPageSize,
     pageTitle: _pageTitle(page, pagination),
     recipients: _recipients(recipients, page),
-    recipientsAmount: recipients.length
+    recipientsAmount: recipients.length,
+    links: {
+      download: `/system/notifications/setup/${sessionId}/download`
+    }
   }
 }
 

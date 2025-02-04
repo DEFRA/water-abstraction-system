@@ -6,11 +6,11 @@
  */
 
 const DetermineRecipientsService = require('./determine-recipients.service.js')
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
@@ -23,11 +23,9 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { returnsPeriod } = session
-  const selectedReturnsPeriod = _extractReturnPeriod(returnsPeriod)
-  const summer = _summer(returnsPeriod)
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  const recipientsData = await RecipientsService.go(selectedReturnsPeriod.dueDate, summer)
+  const recipientsData = await RecipientsService.go(returnsPeriod.dueDate, summer)
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 
@@ -37,7 +35,7 @@ async function go(sessionId, page = 1) {
     `/system/notifications/setup/${sessionId}/review`
   )
 
-  const formattedData = ReviewPresenter.go(recipients, page, pagination)
+  const formattedData = ReviewPresenter.go(recipients, page, pagination, sessionId)
 
   return {
     activeNavBar: 'manage',
@@ -45,18 +43,6 @@ async function go(sessionId, page = 1) {
     pagination,
     page
   }
-}
-
-function _extractReturnPeriod(returnsPeriod) {
-  const periods = determineUpcomingReturnPeriods()
-
-  return periods.find((period) => {
-    return period.name === returnsPeriod
-  })
-}
-
-function _summer(returnsPeriod) {
-  return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
 module.exports = {
