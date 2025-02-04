@@ -14,8 +14,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const DownloadRecipientsService = require('../../../../app/services/notifications/setup/download-recipients.service.js')
 
 describe('Notifications Setup - Download recipients service', () => {
-  let session
   const referenceCode = 'RINV-00R1MQ'
+
+  let session  
 
   before(async () => {
     session = await SessionHelper.add({
