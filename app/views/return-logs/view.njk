@@ -20,9 +20,9 @@
 
 {% block content %}
   {# Notification banner #}
-  {% if bannerMessage %}
+  {% if notificationBannerMessage %}
     {{ govukNotificationBanner({
-      text: bannerMessage
+      text: notificationBannerMessage
     }) }}
   {%endif%}
 

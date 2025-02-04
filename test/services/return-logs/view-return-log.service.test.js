@@ -34,7 +34,7 @@ describe('View Return Log service', () => {
     Sinon.stub(FetchReturnLogService, 'go').resolves(mockReturnLog)
 
     yarStub = {
-      flash: Sinon.stub().returns(['BANNER_MESSAGE'])
+      flash: Sinon.stub().returns(['NOTIFICATION_BANNER_MESSAGE'])
     }
   })
 
@@ -49,7 +49,7 @@ describe('View Return Log service', () => {
     // passed to the presenter
     expect(result).to.include({
       activeNavBar: 'search',
-      bannerMessage: 'BANNER_MESSAGE',
+      notificationBannerMessage: 'NOTIFICATION_BANNER_MESSAGE',
       pageTitle: 'Abstraction return'
     })
   })

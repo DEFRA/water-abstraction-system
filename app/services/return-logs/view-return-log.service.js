@@ -21,13 +21,13 @@ const ViewReturnLogPresenter = require('../../presenters/return-logs/view-return
 async function go(returnId, version, auth, yar) {
   const returnLog = await FetchReturnLogService.go(returnId, version)
 
-  const [bannerMessage] = yar.flash('banner')
+  const [notificationBannerMessage] = yar.flash('banner')
 
   const pageData = ViewReturnLogPresenter.go(returnLog, auth)
 
   return {
     activeNavBar: 'search',
-    bannerMessage,
+    notificationBannerMessage,
     ...pageData
   }
 }
