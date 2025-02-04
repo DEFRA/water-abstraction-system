@@ -11,15 +11,13 @@ const { expect } = Code
 const DownloadRecipientsService = require('../../../../app/services/notifications/setup/download-recipients.service.js')
 
 describe('Notifications Setup - Download recipients service', () => {
-  describe('when provided with "recipients"', () => {
-    it('correctly returns the csv string, filename and type', async () => {
-      const result = await DownloadRecipientsService.go()
+  it('correctly returns the csv string, filename and type', async () => {
+    const result = await DownloadRecipientsService.go()
 
-      expect(result).to.equal({
-        data: 'Licences\n12234\n',
-        filename: 'recipients.csv',
-        type: 'text/csv'
-      })
+    expect(result).to.equal({
+      data: 'Licences\n12234\n',
+      filename: 'recipients.csv',
+      type: 'text/csv'
     })
   })
 })
