@@ -16,7 +16,7 @@ const DownloadRecipientsService = require('../../../../app/services/notification
 describe('Notifications Setup - Download recipients service', () => {
   const referenceCode = 'RINV-00R1MQ'
 
-  let session  
+  let session
 
   before(async () => {
     session = await SessionHelper.add({
