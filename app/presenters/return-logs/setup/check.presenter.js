@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
@@ -16,27 +16,41 @@ const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
  */
 function go(session) {
   const {
+    endDate,
     id: sessionId,
     meterMake,
     meterProvided,
     meterSerialNumber,
     note,
+    periodEndDay,
+    periodEndMonth,
+    periodStartDay,
+    periodStartMonth,
+    purposes,
     receivedDate,
     reported,
     returnReference,
+    siteDescription,
+    startDate,
+    twoPartTariff,
     units
   } = session
 
   return {
+    abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     meterMake,
     meterProvided,
     meterSerialNumber,
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
-    returnReceivedDate: formatLongDate(new Date(receivedDate)),
+    purposes,
     reportingFigures: reported === 'meter-readings' ? 'Meter readings' : sentenceCase(reported),
+    returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
+    returnReceivedDate: formatLongDate(new Date(receivedDate)),
     returnReference,
+    siteDescription,
     sessionId,
+    tariff: twoPartTariff ? 'Two-part' : 'Standard',
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
