@@ -214,7 +214,7 @@ function _viewReturnsPeriod() {
 
 function _viewReview() {
   return {
-    pageTitle: 'Review the mailing listr',
+    pageTitle: 'Review the mailing list',
     activeNavBar: 'manage'
   }
 }
