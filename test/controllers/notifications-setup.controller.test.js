@@ -11,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const DownloadRecipientsService = require('../../app/services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../../app/services/notifications/setup/review.service.js')
@@ -68,6 +69,36 @@ describe('Notifications Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/returns-period`)
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/download', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/download`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(DownloadRecipientsService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+        })
+
+        it('returns the file successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.headers['content-type']).to.equal('type/csv')
+          expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
+          expect(response.payload).to.equal('test')
         })
       })
     })
