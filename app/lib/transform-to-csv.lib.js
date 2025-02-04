@@ -1,32 +1,33 @@
 'use strict'
 
 /**
- * Convert data to CSV format
- * @module ConvertToCSVService
- */
-
-/**
- * Converts data to a CSV formatted string
+ * Transforms an array into a CSV formatted string.
  *
- * @param {string[]} data - An array representing either the headers or rows from a db table
+ * A CSV header / row is the same regardless of transformation. The header is commonly the first row.
+ * Therefore, this function works for both a header and row.
  *
- * @returns {string} A CSV formatted string
- */
-function go(data) {
-  if (!data) {
-    return undefined
-  }
-
-  return _transformDataToCSV(data)
-}
-
-/**
- * Transforms each row or header to CSV format and joins the values with commas
+ * The function can transform most common types:
+ * - Objects are stringified and parsed
+ * - Numbers are converted to strings
+ * - Booleans are converted to strings
+ * - Falsey values are converted to empty strings
+ * - Dates are converted into ISO string format
+ * - Strings are escaped to handle special characters (e.g., ',', '/', '.', '\\', '"', '\n')
+ *
+ * @param {Array} arrayToTransform - An array of data to transform. Each element can be of any type
+ * (string, number, object, boolean, date, etc.)
+ *
+ * @returns {string} A CSV formatted string with each value separated by commas,
+ * with a separated by newline characters (`\n`) to signify the end of the row.
  *
  * @private
  */
-function _transformDataToCSV(data) {
-  const transformedRow = data
+function transformArrayToCSVRow(arrayToTransform) {
+  if (!arrayToTransform) {
+    return undefined
+  }
+
+  const transformedRow = arrayToTransform
     .map((value) => {
       return _transformValueToCSV(value)
     })
@@ -72,5 +73,5 @@ function _transformValueToCSV(value) {
 }
 
 module.exports = {
-  go
+  transformArrayToCSVRow
 }
