@@ -10,9 +10,8 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates fetching and formatting the data needed for the notifications setup download link
  *
- * The service will fetch recipients and then create a csv with the recipients' data.
- *
- * It does not seem necessary to use a data stream to create the csv as the data is relatively small.
+ * This service creates a csv file of recipient for the user to download. It does not seem necessary to use a `Stream`
+ * to create the csv as the data is relatively small.
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  *
