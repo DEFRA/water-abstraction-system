@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SingleVolumeValidator = require('../../../../app/validators/return-logs/setup/single-volume.validator.js')
 
-describe.only('Return Logs Setup - Single Volume validator', () => {
+describe('Return Logs Setup - Single Volume validator', () => {
   let payload
 
   describe('when a valid payload is provided', () => {
