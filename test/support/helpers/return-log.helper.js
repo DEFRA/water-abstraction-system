@@ -25,7 +25,7 @@ const { generateLegacyId } = require('./return-requirement.helper.js')
  * - `returnReference` - [randomly generated - 10000321]
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
- * - `status` - completed
+ * - `status` - due
  * - `updatedAt` - new Date()
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -57,11 +57,12 @@ function defaults(data = {}) {
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
   const endDate = data.endDate ? new Date(data.endDate) : new Date('2023-03-31')
+  const dueDate = data.dueDate ? new Date(data.dueDate) : new Date('2023-04-28')
 
   const defaults = {
     id: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),
     createdAt: timestamp,
-    dueDate: new Date('2023-04-28'),
+    dueDate,
     endDate,
     licenceRef,
     metadata: {

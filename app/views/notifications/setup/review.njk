@@ -25,7 +25,7 @@
       {{
       govukDetails({
         classes: 'govuk-!-margin-bottom-0',
-        summaryText: recipient.licences.length + ' licence numbers',
+        summaryText: recipient.licences.length + ' licences',
         html: newLineArrayItems(recipient.licences)
       })
       }}
@@ -54,7 +54,9 @@
     <div class="govuk-button-group">
       {{ govukButton({
         text: "Download recipients",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        href: links.download,
+        preventDoubleClick: true
       }) }}
 
       {{ govukButton({
