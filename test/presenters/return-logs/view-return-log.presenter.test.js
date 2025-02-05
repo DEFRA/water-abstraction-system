@@ -608,6 +608,36 @@ describe('View Return Log presenter', () => {
       })
     })
   })
+
+  describe('the "underQuery" property', () => {
+    beforeEach(() => {
+      setupSubmission(testReturnLog)
+    })
+
+    describe('when the return log is under query', () => {
+      beforeEach(() => {
+        testReturnLog.underQuery = true
+      })
+
+      it('returns true', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.underQuery).to.equal(true)
+      })
+    })
+
+    describe('when the return log is not under query', () => {
+      beforeEach(() => {
+        testReturnLog.underQuery = false
+      })
+
+      it('returns false', () => {
+        const result = ViewReturnLogPresenter.go(testReturnLog, auth)
+
+        expect(result.underQuery).to.equal(false)
+      })
+    })
+  })
 })
 
 function setupSubmission(testReturnLog, nilReturn = false) {

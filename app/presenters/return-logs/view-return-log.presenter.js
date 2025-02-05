@@ -40,6 +40,7 @@ function go(returnLog, auth) {
     status,
     startDate,
     twoPartTariff,
+    underQuery,
     versions
   } = returnLog
 
@@ -74,6 +75,7 @@ function go(returnLog, auth) {
     tableTitle: _tableTitle(returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
+    underQuery,
     versions: _versions(selectedReturnSubmission, versions, id)
   }
 }
