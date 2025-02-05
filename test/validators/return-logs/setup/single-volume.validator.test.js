@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SingleVolumeValidator = require('../../../../app/validators/return-logs/setup/single-volume.validator.js')
 
-describe('Return Logs Setup - Single Volume validator', () => {
+describe.only('Return Logs Setup - Single Volume validator', () => {
   let payload
 
   describe('when a valid payload is provided', () => {
@@ -80,9 +80,22 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
       })
 
-      describe('but entered a volume too small', () => {
+      describe('but entered a negative volume', () => {
         beforeEach(() => {
           payload.singeVolumeQuantity = '-0.1'
+        })
+
+        it('fails validation with the message "Enter a total figure"', () => {
+          const result = SingleVolumeValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Enter a total figure')
+        })
+      })
+
+      describe('but entered a volume too small', () => {
+        beforeEach(() => {
+          payload.singeVolumeQuantity = '0'
         })
 
         it('fails validation with the message "Enter a total figure"', () => {
