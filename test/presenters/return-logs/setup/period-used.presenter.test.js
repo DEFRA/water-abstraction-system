@@ -60,13 +60,13 @@ describe('Return Logs Setup - Period Used presenter', () => {
 
     describe('when the user has previously selected custom date as the period used', () => {
       beforeEach(() => {
-        session.periodDateUsedOptions = 'custom-date'
+        session.periodDateUsedOptions = 'custom-dates'
       })
 
       it('returns the "periodDateUsedOptions" property populated to re-select the option', () => {
         const result = PeriodUsedPresenter.go(session)
 
-        expect(result.periodDateUsedOptions).to.equal('custom-date')
+        expect(result.periodDateUsedOptions).to.equal('custom-dates')
       })
     })
   })
