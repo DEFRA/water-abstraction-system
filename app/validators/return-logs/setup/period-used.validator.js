@@ -20,15 +20,6 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, startDate, endDate) {
-  console.log('🚀  endDate:', endDate)
-  console.log('🚀  startDate:', startDate)
-  const { periodDateUsedOptions: selectedOption } = payload
-  const validatedPayload = _validatePayload(payload)
-
-  if (validatedPayload.error || selectedOption === 'default') {
-    return validatedPayload
-  }
-
   const {
     'period-used-from-day': startDay,
     'period-used-from-month': startMonth,
@@ -41,7 +32,7 @@ function go(payload, startDate, endDate) {
   payload.fromFullDate = _fullDate(startDay, startMonth, startYear)
   payload.toFullDate = _fullDate(endDay, endMonth, endYear)
 
-  return _validateCustomDate(payload, startDate, endDate)
+  return _validateDate(payload, startDate, endDate)
 }
 
 /**
@@ -70,17 +61,29 @@ function _fullDate(day, month, year) {
   return `${year}-${paddedMonth}-${paddedDay}`
 }
 
-function _validateCustomDate(payload, startDate, endDate) {
+function _validateDate(payload, startDate, endDate) {
   const schema = Joi.object({
-    fromFullDate: Joi.date().format(['YYYY-MM-DD']).required().min(startDate).messages({
-      'date.base': 'Enter a valid from date',
-      'date.format': 'Enter a valid from date',
-      'date.min': 'The from date must be within the return periods start date'
+    periodDateUsedOptions: Joi.string().required().messages({
+      'any.required': 'Select what period was used for this volume',
+      'string.empty': 'Select what period was used for this volume'
     }),
-    toFullDate: Joi.date().format(['YYYY-MM-DD']).required().max(endDate).messages({
-      'date.base': 'Enter a valid to date',
-      'date.format': 'Enter a valid to date',
-      'date.max': 'The to date must be within the return periods end date'
+    fromFullDate: Joi.alternatives().conditional('periodDateUsedOptions', {
+      is: 'custom-dates',
+      then: Joi.date().format(['YYYY-MM-DD']).min(startDate).required().messages({
+        'date.base': 'Enter a valid from date',
+        'date.format': 'Enter a valid from date',
+        'date.min': 'The from date must be within the return period start date'
+      }),
+      otherwise: Joi.optional() // Ensures this field is ignored if not using 'custom-dates'
+    }),
+    toFullDate: Joi.alternatives().conditional('periodDateUsedOptions', {
+      is: 'custom-dates',
+      then: Joi.date().format(['YYYY-MM-DD']).max(endDate).required().messages({
+        'date.base': 'Enter a valid to date',
+        'date.format': 'Enter a valid to date',
+        'date.max': 'The to date must be within the return periods end date'
+      }),
+      otherwise: Joi.optional() // Ensures this field is ignored if not using 'custom-dates'
     })
   })
     .custom(_fromDateBeforeToDate, 'From date before to date')
@@ -89,27 +92,6 @@ function _validateCustomDate(payload, startDate, endDate) {
     })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-function _validatePayload(payload) {
-  const schema = Joi.object({
-    periodDateUsedOptions: Joi.string().required().messages({
-      'any.required': 'Select what period was used for this volume',
-      'string.empty': 'Select what period was used for this volume'
-    }),
-    'period-used-from-day': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() }),
-    'period-used-from-month': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() }),
-    'period-used-from-year': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() }),
-    'period-used-to-day': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() }),
-    'period-used-to-month': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() }),
-    'period-used-to-year': Joi.number().when('periodDateUsedOptions', { is: 'custom-dates', then: Joi.required() })
-  }).messages({
-    'any.required': 'Enter a date for the period used',
-    'string.empty': 'Enter a date for the period used',
-    'number.base': 'Enter a date for the period used'
-  })
-
-  return schema.validate(payload, { abortEarly: true, allowUnknown: true })
 }
 
 module.exports = {
