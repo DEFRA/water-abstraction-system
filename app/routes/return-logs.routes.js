@@ -9,6 +9,13 @@ const routes = [
     options: {
       handler: ReturnLogsController.view
     }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs',
+    options: {
+      handler: ReturnLogsController.submitView
+    }
   }
 ]
 
