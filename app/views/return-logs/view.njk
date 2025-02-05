@@ -117,16 +117,16 @@
         <form method="post">
           <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
           {% if actionButton %}
-          {# The button group div goes inside the if because we only need a group when there's two buttons #}
-          <div class="govuk-button-group">
-            {# Submit/Edit return button #}
-            {{
-              govukButton({
-                text: actionButton.text,
-                preventDoubleClick: true,
-                href: actionButton.href
-              })
-            }}
+            {# The button group div goes inside the if because we only need a group when there's two buttons #}
+            <div class="govuk-button-group">
+              {# Submit/Edit return button #}
+              {{
+                govukButton({
+                  text: actionButton.text,
+                  preventDoubleClick: true,
+                  href: actionButton.href
+                })
+              }}
           {% endif %}
 
           {# Mark as under query / Resolve query button #}
@@ -137,19 +137,20 @@
             {% set queryButtonText = 'Mark as under query' %}
             {% set queryButtonValue = 'mark' %}
           {% endif %}
-            {{
-              govukButton({
-                text: queryButtonText,
-                classes: "govuk-button--secondary",
-                name: "mark-query",
-                value: queryButtonValue,
-                preventDoubleClick: true
-              })
-            }}
+          {{
+            govukButton({
+              text: queryButtonText,
+              classes: "govuk-button--secondary",
+              name: "mark-query",
+              value: queryButtonValue,
+              preventDoubleClick: true
+            })
+          }}
+
           {% if actionButton %}
-          </div>
+            </div>
+          {% endif %}
         </form>
-        {% endif %}
       </div>
     </div>
 
