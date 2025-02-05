@@ -7,6 +7,8 @@
 
 const Boom = require('@hapi/boom')
 
+const SubmitViewReturnLogService = require('../services/return-logs/submit-view-return-log.service.js')
+
 const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
 
 async function view(request, h) {
@@ -18,11 +20,20 @@ async function view(request, h) {
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewReturnLogService.go(query.id, version, auth)
+  const pageData = await ViewReturnLogService.go(query.id, version, auth, request.yar)
 
   return h.view('return-logs/view.njk', pageData)
 }
 
+async function submitView(request, h) {
+  const { id } = request.query
+
+  await SubmitViewReturnLogService.go(id, request.yar, request.payload)
+
+  return h.redirect(`/system/return-logs?id=${id}`)
+}
+
 module.exports = {
+  submitView,
   view
 }

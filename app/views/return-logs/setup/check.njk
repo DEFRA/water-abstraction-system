@@ -16,9 +16,44 @@
 
   {# Main heading #}
   <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
+    <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
     <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
   </div>
+
+
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        attributes: {
+          'data-test': 'meta-data'
+        },
+        rows: [
+          {
+            key: { text: "Site description", classes: "meta-data__label" },
+            value: { html: '<span data-test="site-description">' + siteDescription + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Purpose", classes: "meta-data__label" },
+            value: { html: '<span data-test="purpose">' + purposes + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Return period", classes: "meta-data__label" },
+            value: { html: '<span data-test="returns-period">' + returnPeriod + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Abstraction period", classes: "meta-data__label" },
+            value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Tariff", classes: "meta-data__label" },
+            value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
+          }
+        ]
+      })
+    }}
+  </div>
+
+
 
   {# Notes #}
   <div class="govuk-!-margin-bottom-9">
@@ -41,22 +76,27 @@
     <hr class="govuk-section-break--visible">
   </div>
 
+
+  {# Meter details #}
+  {% set meterDetails %}
+    {% if meterProvided === 'yes' %}
+      <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
+    {% else %}
+      <div>Not provided</div>
+    {% endif %}
+  {% endset %}
+
+
   {# Reporting details #}
   <div class="govuk-!-margin-bottom-9">
     {{ govukSummaryList({
       card: {
-        title: {
-          text: "Reporting details"
-        }
+        title: { text: "Reporting details" }
       },
       rows: [
         {
-          key: {
-            text: "Return received"
-          },
-          value: {
-            html: "8 January 2025"
-          },
+          key: { text: "Return received" },
+          value: { text: returnReceivedDate },
           actions: {
             items: [
               {
@@ -68,12 +108,8 @@
           }
         },
         {
-          key: {
-            text: "Reporting figures"
-          },
-          value: {
-            html: "Volumes"
-          },
+          key: { text: "Reporting figures" },
+          value: { text: reportingFigures },
           actions: {
             items: [
               {
@@ -85,12 +121,8 @@
           }
         },
         {
-          key: {
-            text: "Meter details"
-          },
-          value: {
-            html: "<div>Meter make</div>" + "<div>Meter serial number</div>"
-          },
+          key: { text: "Meter details" },
+          value: { html: meterDetails },
           actions: {
             items: [
               {
@@ -102,12 +134,8 @@
           }
         },
         {
-          key: {
-            text: "Units"
-          },
-          value: {
-            html: "Cubic meters"
-          },
+          key: { text: "Units" },
+          value: { text: units },
           actions: {
             items: [
               {
@@ -128,59 +156,25 @@
       captionClasses: "govuk-table__caption--m",
       firstCellIsHeader: false,
       head: [
-        {
-          text: "Month"
-        },
-        {
-          text: "Total cubic meters",
-          format: "numeric"
-        },
-        {
-          text: "Details",
-          format: "numeric"
-        }
+        { text: "Month" },
+        { text: "Total cubic metres", format: "numeric" },
+        { text: "Details", format: "numeric" }
       ],
       rows: [
         [
-          {
-            text: "April 2024"
-          },
-          {
-            text: "150.388",
-            format: "numeric"
-          },
-          {
-            html: '<a href="#">Change daily volumes</a>',
-            classes: "govuk-link",
-            format: "numeric"
-          }
+          { text: "April 2024" },
+          { text: "150.388", format: "numeric" },
+          { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
         ],
         [
-          {
-            text: "May 2024"
-          },
-          {
-            text: "155.403",
-            format: "numeric"
-          },
-          {
-            html: '<a href="#">Change daily volumes</a>',
-            classes: "govuk-link",
-            format: "numeric"
-          }
+          { text: "May 2024" },
+          { text: "155.403", format: "numeric" },
+          { html: '<a href="#">Change daily volumes</a>', classes: "govuk-link", format: "numeric" }
         ],
         [
-          {
-            text: "Total volume of water abstracted",
-            classes: "govuk-table__header"
-          },
-          {
-            html: "<strong>305.791</strong>",
-            format: "numeric"
-          },
-          {
-            text: ""
-          }
+          { text: "Total volume of water abstracted", classes: "govuk-table__header" },
+          { html: "<strong>305.791</strong>", format: "numeric" },
+          { text: "" }
         ]
       ]
     }) }}

@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
@@ -18,6 +19,13 @@
 {% endblock %}
 
 {% block content %}
+  {# Notification banner #}
+  {% if notificationBannerMessage %}
+    {{ govukNotificationBanner({
+      text: notificationBannerMessage
+    }) }}
+  {%endif%}
+
   {# Version warning #}
   {% if latest == false %}
     {{ govukWarningText({
@@ -104,20 +112,47 @@
     </div>
   {% endif %}
 
-  {# Submit/Edit return button #}
-  {% if actionButton %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-full">
-        {{
+        <form method="post">
+          <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+          {% if actionButton %}
+            {# The button group div goes inside the if because we only need a group when there's two buttons #}
+            <div class="govuk-button-group">
+              {# Submit/Edit return button #}
+              {{
+                govukButton({
+                  text: actionButton.text,
+                  preventDoubleClick: true,
+                  href: actionButton.href
+                })
+              }}
+          {% endif %}
+
+          {# Mark as under query / Resolve query button #}
+          {% if underQuery %}
+            {% set queryButtonText = 'Resolve query' %}
+            {% set queryButtonValue = 'resolve' %}
+          {% else %}
+            {% set queryButtonText = 'Mark as under query' %}
+            {% set queryButtonValue = 'mark' %}
+          {% endif %}
+          {{
             govukButton({
-              text: actionButton.text,
-              preventDoubleClick: true,
-              href: actionButton.href
+              text: queryButtonText,
+              classes: "govuk-button--secondary",
+              name: "mark-query",
+              value: queryButtonValue,
+              preventDoubleClick: true
             })
           }}
+
+          {% if actionButton %}
+            </div>
+          {% endif %}
+        </form>
       </div>
     </div>
-  {% endif %}
 
   {# Selected return submission details #}
   {% if displayTable %}
