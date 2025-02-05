@@ -37,39 +37,27 @@ function go(recipients) {
  */
 function _transformForCsv(recipients) {
   return recipients.map((recipient) => {
-    const common = {
+    const { contact } = recipient
+
+    return {
       Licences: recipient.licence_ref,
       'Return references': recipient.return_reference,
       'Returns period start date': formatDateObjectToISO(recipient.start_date),
       'Returns period end date': formatDateObjectToISO(recipient.end_date),
       'Returns due date': formatDateObjectToISO(recipient.due_date),
-      'Message type': 'email',
+      'Message type': contact ? 'letter' : 'email',
       'Message reference': 'invitations',
-      'Licence holder': '',
+      'Licence holder': contact ? contactName(recipient.contact) : '',
       'Recipient name': '',
       Email: recipient.email || '',
-      'Address line 1': '',
-      'Address line 2': '',
-      'Address line 3': '',
-      'Address line 4': '',
-      'Address line 5': '',
-      'Address line 6': '',
-      Postcode: ''
+      'Address line 1': contact ? contact.addressLine1 : '',
+      'Address line 2': contact ? contact.addressLine2 : '',
+      'Address line 3': contact ? contact.addressLine3 : '',
+      'Address line 4': contact ? contact.addressLine4 : '',
+      'Address line 5': contact?.town || contact?.county,
+      'Address line 6': contact ? contact.country : '',
+      Postcode: contact ? contact.postcode : ''
     }
-
-    if (recipient.contact) {
-      common['Message type'] = 'letter'
-      common['Licence holder'] = contactName(recipient.contact)
-      common['Address line 1'] = recipient.contact.addressLine1
-      common['Address line 2'] = recipient.contact.addressLine2
-      common['Address line 3'] = recipient.contact.addressLine3
-      common['Address line 4'] = recipient.contact.addressLine4
-      common['Address line 5'] = recipient.contact.town || recipient.contact.county
-      common['Address line 6'] = recipient.contact.country
-      common['Postcode'] = recipient.contact.postcode
-    }
-
-    return common
   })
 }
 
