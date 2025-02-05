@@ -166,7 +166,7 @@ async function submitPeriodUsed(request, h) {
     return h.view('return-logs/setup/period-used.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/check-answers`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
 async function submitReceived(request, h) {
@@ -212,7 +212,7 @@ async function submitSingleVolume(request, h) {
   }
 
   if (pageData.singleVolume === 'no') {
-    return h.redirect(`/system/return-logs/setup/${sessionId}/check-answers`)
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/period-used`)
