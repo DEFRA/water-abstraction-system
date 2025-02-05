@@ -54,7 +54,7 @@ function _transformForCsv(recipients) {
       'Address line 2': contact ? contact.addressLine2 : '',
       'Address line 3': contact ? contact.addressLine3 : '',
       'Address line 4': contact ? contact.addressLine4 : '',
-      'Address line 5': contact?.town || contact?.county,
+      'Address line 5': contact ? contact.town || contact.county : '',
       'Address line 6': contact ? contact.country : '',
       Postcode: contact ? contact.postcode : ''
     }
