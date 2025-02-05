@@ -29,6 +29,23 @@ function go(recipients) {
 }
 
 /**
+ * Transforms the address for the CSV
+ *
+ * @private
+ */
+function _address(contact) {
+  return {
+    'Address line 1': contact ? contact.addressLine1 : '',
+    'Address line 2': contact ? contact.addressLine2 : '',
+    'Address line 3': contact ? contact.addressLine3 : '',
+    'Address line 4': contact ? contact.addressLine4 : '',
+    'Address line 5': contact ? contact.town || contact.county : '',
+    'Address line 6': contact ? contact.country : '',
+    Postcode: contact ? contact.postcode : ''
+  }
+}
+
+/**
  * Transforms the recipients' data into a CSV-compatible format.
  *
  * The order of the object dictates the CSV header order.
@@ -50,13 +67,7 @@ function _transformForCsv(recipients) {
       'Licence holder': contact ? contactName(recipient.contact) : '',
       'Recipient name': '',
       Email: recipient.email || '',
-      'Address line 1': contact ? contact.addressLine1 : '',
-      'Address line 2': contact ? contact.addressLine2 : '',
-      'Address line 3': contact ? contact.addressLine3 : '',
-      'Address line 4': contact ? contact.addressLine4 : '',
-      'Address line 5': contact ? contact.town || contact.county : '',
-      'Address line 6': contact ? contact.country : '',
-      Postcode: contact ? contact.postcode : ''
+      ..._address(contact)
     }
   })
 }
