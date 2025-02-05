@@ -72,7 +72,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
   })
 
   describe('the "periodUsedFromDay", "periodUsedFromMonth" and "periodUsedFromYear" properties', () => {
-    describe('when the user has previously entered a used from day', () => {
+    describe('when the user has previously entered a period used from date', () => {
       beforeEach(() => {
         session.periodUsedFromDay = '1'
         session.periodUsedFromMonth = '04'
@@ -90,7 +90,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
   })
 
   describe('the "periodUsedToDay", "periodUsedToMonth" and "periodUsedToYear" properties', () => {
-    describe('when the user has previously entered a used to day', () => {
+    describe('when the user has previously entered a period used to date', () => {
       beforeEach(() => {
         session.periodUsedToDay = '31'
         session.periodUsedToMonth = '03'
