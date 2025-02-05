@@ -631,7 +631,7 @@ describe('View Return Log presenter', () => {
         testReturnLog.underQuery = false
       })
 
-      it('returns true', () => {
+      it('returns false', () => {
         const result = ViewReturnLogPresenter.go(testReturnLog, auth)
 
         expect(result.underQuery).to.equal(false)
