@@ -46,6 +46,12 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  if (payload.meterProvided === 'no') {
+    session.meterMake = null
+    session.meterSerialNumber = null
+    session.meter10TimesDisplay = null
+  }
+
   session.meterProvided = payload.meterProvided
 
   return session.$update()

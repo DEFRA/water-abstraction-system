@@ -79,7 +79,7 @@
 
   {# Meter details #}
   {% set meterDetails %}
-    {% if meterProvided === 'yes' %}
+    {% if meterMake %}
       <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
     {% else %}
       <div>Not provided</div>
