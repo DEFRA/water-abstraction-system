@@ -30,7 +30,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { meterProvided: 'yes' }
       })
 
@@ -51,7 +51,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       })
 
       describe('and the user has selected "no" to a meter being provided', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { meterProvided: 'no' }
         })
 
@@ -92,7 +92,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
