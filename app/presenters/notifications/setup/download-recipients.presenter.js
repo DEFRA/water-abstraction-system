@@ -64,9 +64,8 @@ function _transformForCsv(recipients) {
       'Returns due date': formatDateObjectToISO(recipient.due_date),
       'Message type': contact ? 'letter' : 'email',
       'Message reference': 'invitations',
-      'Licence holder': contact ? contactName(recipient.contact) : '',
-      'Recipient name': '',
       Email: recipient.email || '',
+      'Recipient name': contact ? contactName(recipient.contact) : '',
       ..._address(contact)
     }
   })
