@@ -42,7 +42,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
         expect(refreshedSession.meterProvided).to.equal('yes')
       })
 
-      describe('and the user has previously selected "yes" to a meter being provided', () => {
+      describe('and the user has selected "yes" to a meter being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitMeterProvidedService.go(session.id, payload)
 
@@ -50,7 +50,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
         })
       })
 
-      describe('and the user has previously selected "no" to a meter being provided', () => {
+      describe('and the user has selected "no" to a meter being provided', () => {
         beforeEach(async () => {
           payload = { meterProvided: 'no' }
         })
@@ -59,6 +59,34 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           const result = await SubmitMeterProvidedService.go(session.id, payload)
 
           expect(result).to.equal({ meterProvided: 'no' })
+        })
+
+        describe('and meter details had previously been saved to the session', () => {
+          beforeEach(async () => {
+            payload = { meterProvided: 'no' }
+            sessionData = {
+              data: {
+                meterProvided: 'yes',
+                meterMake: 'Test Meter Make',
+                meterSerialNumber: 'TEST-9876543',
+                meter10TimesDisplay: 'no',
+                returnReference: '12345'
+              }
+            }
+
+            session = await SessionHelper.add(sessionData)
+          })
+
+          it('removes the previously entered meter details from the session data', async () => {
+            await SubmitMeterProvidedService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.meterProvided).to.equal('no')
+            expect(refreshedSession.meterMake).to.be.null()
+            expect(refreshedSession.meterSerialNumber).to.be.null()
+            expect(refreshedSession.meter10TimesDisplay).to.be.null()
+          })
         })
       })
     })

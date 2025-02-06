@@ -34,6 +34,28 @@ describe('Return Logs Setup - Reported presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns a link back to the "check" page', () => {
+        const result = ReportedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      })
+    })
+
+    describe('when the user has come from somewhere else', () => {
+      it('returns a link back to the "Submission" page', () => {
+        const result = ReportedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission')
+      })
+    })
+  })
+
   describe('the "reported" property', () => {
     describe('when the user has previously selected "Meter Readings" as the reported type', () => {
       beforeEach(() => {

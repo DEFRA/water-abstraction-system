@@ -16,12 +16,22 @@ function go(session) {
   const { id: sessionId, returnReference, reported } = session
 
   return {
+    backLink: _backLink(session),
     pageTitle: 'How was this return reported?',
     reported: reported ?? null,
-    sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${sessionId}/submission`
+    sessionId
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/submission`
 }
 
 module.exports = {

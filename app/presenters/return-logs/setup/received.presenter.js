@@ -15,7 +15,6 @@
 function go(session) {
   const {
     id: sessionId,
-    licenceId,
     returnReference,
     receivedDateOptions,
     receivedDateDay,
@@ -24,7 +23,7 @@ function go(session) {
   } = session
 
   return {
-    backLink: `/system/licences/${licenceId}/returns`,
+    backLink: _backLink(session),
     pageTitle: 'When was the return received?',
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,
@@ -33,6 +32,16 @@ function go(session) {
     returnReference,
     sessionId
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id, licenceId } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/licences/${licenceId}/returns`
 }
 
 module.exports = {

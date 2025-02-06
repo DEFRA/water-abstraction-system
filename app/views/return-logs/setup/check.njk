@@ -79,7 +79,7 @@
 
   {# Meter details #}
   {% set meterDetails %}
-    {% if meterProvided === 'yes' %}
+    {% if meterMake %}
       <div>{{meterMake}}</div><div>{{meterSerialNumber}}</div>
     {% else %}
       <div>Not provided</div>
@@ -100,7 +100,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.received,
                 text: "Change",
                 visuallyHiddenText: "return received date"
               }
@@ -113,7 +113,7 @@
           actions: {
             items: [
               {
-                href: "#",
+                href: links.reported,
                 text: "Change",
                 visuallyHiddenText: "reporting figures"
               }
@@ -191,7 +191,7 @@
       text: "Cancel",
       classes: "govuk-button--secondary",
       preventDoubleClick: true,
-      href: "/system/return-logs/setup/" + sessionId + "/cancel"
+      href: links.cancel
     }) }}
   </div>
 {% endblock %}
