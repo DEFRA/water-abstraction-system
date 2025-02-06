@@ -41,6 +41,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-logs/setup/{sessionId}/confirmation',
+    options: {
+      handler: ReturnLogsSetupController.confirmation,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-logs/setup/{sessionId}/delete-note',
     options: {
       handler: ReturnLogsSetupController.deleteNote,

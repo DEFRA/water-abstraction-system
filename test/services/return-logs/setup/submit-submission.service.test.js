@@ -23,16 +23,103 @@ describe('Return Logs Setup - Submit Submission service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(() => {
-        payload = { journey: 'enter-return' }
+      describe('and a return has a status of "due"', () => {
+        beforeEach(() => {
+          session.status = 'due'
+          session.$update()
+        })
+
+        describe('and the user has selected "Enter and submit"', () => {
+          beforeEach(() => {
+            payload = { journey: 'enter-return' }
+          })
+
+          it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('enter-return')
+            expect(result.redirect).to.equal('reported')
+          })
+        })
+
+        describe('and the user has selected "Enter a nil return"', () => {
+          beforeEach(() => {
+            payload = { journey: 'nil-return' }
+          })
+
+          it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('nil-return')
+            expect(result.redirect).to.equal('reported')
+          })
+        })
+
+        describe('and the user has selected "Record receipt"', () => {
+          beforeEach(() => {
+            payload = { journey: 'record-receipt' }
+          })
+
+          it('saves the submitted option to the session and returns the redirect as "confirmation"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('record-receipt')
+            expect(result.redirect).to.equal('confirmation')
+          })
+        })
       })
 
-      it('saves and returns the submitted option', async () => {
-        await SubmitSubmissionService.go(session.id, payload)
+      describe('and a return does not have a status of "due"', () => {
+        describe('and the user has selected "Enter and submit"', () => {
+          beforeEach(() => {
+            payload = { journey: 'enter-return' }
+          })
 
-        const refreshedSession = await session.$query()
+          it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
 
-        expect(refreshedSession.journey).to.equal('enter-return')
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('enter-return')
+            expect(result.redirect).to.equal('reported')
+          })
+        })
+
+        describe('and the user has selected "Enter a nil return"', () => {
+          beforeEach(() => {
+            payload = { journey: 'nil-return' }
+          })
+
+          it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('nil-return')
+            expect(result.redirect).to.equal('reported')
+          })
+        })
+
+        describe('and the user has selected "Record receipt"', () => {
+          beforeEach(() => {
+            payload = { journey: 'record-receipt' }
+          })
+
+          it('saves the submitted option to the session and returns the redirect as "confirmation"', async () => {
+            const result = await SubmitSubmissionService.go(session.id, payload)
+
+            const refreshedSession = await session.$query()
+
+            expect(refreshedSession.journey).to.equal('record-receipt')
+            expect(result.redirect).to.equal('reported')
+          })
+        })
       })
     })
 

@@ -13,6 +13,7 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
+const ConfirmationService = require('../../app/services/return-logs/setup/confirmation.service.js')
 const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
@@ -114,6 +115,34 @@ describe('Return Logs Setup controller', () => {
           expect(response.payload).to.contain('098765')
           expect(response.payload).to.contain('1234567')
           expect(response.payload).to.contain(sessionId)
+        })
+      })
+    })
+  })
+
+  describe('return-logs/setup/{sessionId}/confirmation', () => {
+    const path = 'confirmation'
+
+    describe('GET', () => {
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(ConfirmationService, 'go').resolves({
+            activeNavBar: 'search',
+            backLink: `/system/licences/37132eb4-63c5-47be-9275-54fffbb49ef3/returns`,
+            licenceRef: '01/117',
+            pageTitle: 'Return 10032788 received',
+            purposes: 'Mineral Washing',
+            sessionId,
+            siteDescription: 'Addington Sandpits'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Return 10032788 received')
+          expect(response.payload).to.contain('View returns for 01/117')
         })
       })
     })
@@ -352,7 +381,9 @@ describe('Return Logs Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSubmissionService, 'go').resolves({})
+          Sinon.stub(SubmitSubmissionService, 'go').resolves({
+            redirect: 'reported'
+          })
         })
 
         it('redirects to the "reported" page', async () => {

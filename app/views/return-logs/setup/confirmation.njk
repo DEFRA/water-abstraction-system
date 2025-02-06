@@ -1,0 +1,25 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block content %}
+  <div class="govuk-panel govuk-panel--confirmation">
+    <h1 class="govuk-panel__title">{{ pageTitle }}</h1>
+
+    <div class="govuk-panel__body govuk-!-font-size-24">
+      Licence number <strong>{{ licenceRef }}</strong>
+    </div>
+
+    <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+      Site description <strong>{{ siteDescription }}</strong>
+    </div>
+
+    <div class="govuk-panel__body govuk-!-font-size-24 govuk-!-padding-top-4">
+      Purpose <strong> {{ purposes }}</strong>
+    </div>
+  </div>
+
+  <div>
+    <a class="govuk-body" href={{ backLink }}>View returns for {{ licenceRef }}</a>
+  </div>
+{% endblock %}

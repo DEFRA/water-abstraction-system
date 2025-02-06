@@ -25,7 +25,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirect: _redirect(payload.journey, session.status)
+    }
   }
 
   const formattedData = SubmissionPresenter.go(session)
@@ -35,6 +37,14 @@ async function go(sessionId, payload) {
     error: validationResult,
     ...formattedData
   }
+}
+
+function _redirect(journey, status) {
+  if (journey === 'record-receipt' && status === 'due') {
+    return 'confirmation'
+  }
+
+  return 'reported'
 }
 
 async function _save(session, payload) {
