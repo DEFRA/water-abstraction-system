@@ -1,0 +1,39 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {{ govukBackLink({
+    text: 'Back',
+    href: "review"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-body">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <form method="post">
+          <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+          {{ govukTextarea({
+            name: "licences",
+            id: "remove-licences",
+            label: {
+              text: pageTitle,
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              text: hint
+            }
+          }) }}
+
+          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
