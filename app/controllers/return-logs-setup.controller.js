@@ -192,13 +192,18 @@ async function submitReceived(request, h) {
 async function submitReported(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitReportedService.go(sessionId, payload)
+  const pageData = await SubmitReportedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/reported.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)

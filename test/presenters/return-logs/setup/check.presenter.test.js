@@ -26,7 +26,7 @@ describe('Return Logs Setup - Check presenter', () => {
       periodStartMonth: 1,
       purposes: 'Evaporative Cooling',
       receivedDate: '2025-01-31T00:00:00.000Z',
-      reported: 'volumes',
+      reported: 'abstraction-volumes',
       returnReference: '1234',
       siteDescription: 'POINT A, TEST SITE DESCRIPTION',
       startDate: '2004-04-01T00:00:00.000Z',
@@ -43,7 +43,8 @@ describe('Return Logs Setup - Check presenter', () => {
         abstractionPeriod: '1 January to 31 December',
         links: {
           cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
-          received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received'
+          received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received',
+          reported: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/reported'
         },
         meterMake: 'Test meter make',
         meterProvided: 'yes',
@@ -129,7 +130,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('when the user has used volumes', () => {
       beforeEach(() => {
-        session.reported = 'volumes'
+        session.reported = 'abstraction-volumes'
       })
 
       it('returns the method of gathering the figures as "Volumes"', () => {

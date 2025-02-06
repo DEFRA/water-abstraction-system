@@ -93,7 +93,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'check'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(CheckService, 'go').resolves({ pageTitle: 'Check details and enter new volumes or readings' })
         })
@@ -208,7 +208,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'received'
 
     describe('GET', () => {
-      describe('when a request succeeds', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(ReceivedService, 'go').resolves({
             sessionId,
@@ -246,7 +246,7 @@ describe('Return Logs Setup controller', () => {
             Sinon.stub(SubmitReceivedService, 'go').resolves({ checkPageVisited: true })
           })
 
-          it('redirects to the "submission" page', async () => {
+          it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(302)
@@ -279,7 +279,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'reported'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(ReportedService, 'go').resolves({
             sessionId,
@@ -298,8 +298,8 @@ describe('Return Logs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
-        describe('and the reported type is entered', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             Sinon.stub(SubmitReportedService, 'go').resolves({})
           })
@@ -311,23 +311,36 @@ describe('Return Logs Setup controller', () => {
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
           })
         })
-      })
 
-      describe('when a request is invalid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitReportedService, 'go').resolves({
-            error: { text: 'Select how this return was reported' },
-            pageTitle: 'How was this return reported?',
-            sessionId
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitReportedService, 'go').resolves({
+              error: { text: 'Select how this return was reported' },
+              pageTitle: 'How was this return reported?',
+              sessionId
+            })
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select how this return was reported')
-          expect(response.payload).to.contain('There is a problem')
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select how this return was reported')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

@@ -40,7 +40,8 @@ function go(session) {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
-      received: `/system/return-logs/setup/${sessionId}/received`
+      received: `/system/return-logs/setup/${sessionId}/received`,
+      reported: `/system/return-logs/setup/${sessionId}/reported`
     },
     meterMake,
     meterProvided,
@@ -48,7 +49,7 @@ function go(session) {
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
     purposes,
-    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : sentenceCase(reported),
+    reportingFigures: reported === 'meter-readings' ? 'Meter readings' : 'Volumes',
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
     returnReference,
