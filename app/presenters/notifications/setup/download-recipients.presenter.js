@@ -9,6 +9,25 @@ const { contactName } = require('../../crm.presenter.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
+const HEADERS = [
+  'Licences',
+  'Return references',
+  'Returns period start date',
+  'Returns period end date',
+  'Returns due date',
+  'Message type',
+  'Message reference',
+  'Email',
+  'Recipient name',
+  'Address line 1',
+  'Address line 2',
+  'Address line 3',
+  'Address line 4',
+  'Address line 5',
+  'Address line 6',
+  'Postcode'
+]
+
 /**
  * Formats data for the `/notifications/setup/download` link.
  *
@@ -24,27 +43,22 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
  * row as column headers and subsequent rows corresponding to the recipient details.
  */
 function go(recipients) {
-  const formattedData = _transformForCsv(recipients)
-  return _transformJsonToCsv(formattedData)
+  const rows = _transformToCsv(recipients)
+
+  return [HEADERS + '\n', ...rows].join('')
 }
 
-/**
- * Transforms the address for the CSV
- *
- * @private
- */
 function _address(contact) {
-  return {
-    'Address line 1': contact ? contact.addressLine1 : '',
-    'Address line 2': contact ? contact.addressLine2 : '',
-    'Address line 3': contact ? contact.addressLine3 : '',
-    'Address line 4': contact ? contact.addressLine4 : '',
-    'Address line 5': contact ? contact.town || contact.county : '',
-    'Address line 6': contact ? contact.country : '',
-    Postcode: contact ? contact.postcode : ''
-  }
+  return [
+    contact ? contact.addressLine1 : '',
+    contact ? contact.addressLine2 : '',
+    contact ? contact.addressLine3 : '',
+    contact ? contact.addressLine4 : '',
+    contact ? contact.town || contact.county : '',
+    contact ? contact.country : '',
+    contact ? contact.postcode : ''
+  ]
 }
-
 /**
  * Transforms the recipients' data into a CSV-compatible format.
  *
@@ -52,46 +66,25 @@ function _address(contact) {
  *
  * @private
  */
-function _transformForCsv(recipients) {
+function _transformToCsv(recipients) {
   return recipients.map((recipient) => {
     const { contact } = recipient
 
-    return {
-      Licences: recipient.licence_ref,
-      'Return references': recipient.return_reference,
-      'Returns period start date': formatDateObjectToISO(recipient.start_date),
-      'Returns period end date': formatDateObjectToISO(recipient.end_date),
-      'Returns due date': formatDateObjectToISO(recipient.due_date),
-      'Message type': contact ? 'letter' : 'email',
-      'Message reference': 'invitations',
-      Email: recipient.email || '',
-      'Recipient name': contact ? contactName(recipient.contact) : '',
+    const row = [
+      recipient.licence_ref,
+      recipient.return_reference,
+      formatDateObjectToISO(recipient.start_date),
+      formatDateObjectToISO(recipient.end_date),
+      formatDateObjectToISO(recipient.due_date),
+      contact ? 'letter' : 'email',
+      'invitations',
+      recipient.email || '',
+      contact ? contactName(recipient.contact) : '',
       ..._address(contact)
-    }
-  })
-}
+    ]
 
-/**
- * Transforms an array of JSON objects into a CSV string.
- *
- * This function takes an array of JSON objects and transforms it into a CSV string.
- * The keys of the objects become the column headers, and the values become the rows
- * corresponding to each header. The output will be a standard CSV format with the
- * first row containing the headers.
- *
- * Where rows do no have values they will default to an empty string.
- *
- * @private
- */
-function _transformJsonToCsv(jsonArray) {
-  const headers = transformArrayToCSVRow(Object.keys(jsonArray[0]))
-
-  const rows = jsonArray.map((obj) => {
-    const row = Object.values(obj)
     return transformArrayToCSVRow(row)
   })
-
-  return [headers, ...rows].join('')
 }
 
 module.exports = {
