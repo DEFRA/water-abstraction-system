@@ -254,6 +254,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.periodUsed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/setup/{sessionId}/period-used',
+    options: {
+      handler: ReturnLogsSetupController.submitPeriodUsed,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 

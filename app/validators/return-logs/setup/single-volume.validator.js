@@ -30,12 +30,12 @@ function go(payload) {
         'any.only': singleVolumeError,
         'string.empty': singleVolumeError
       }),
-    singleVolumeQuantity: Joi.number().min(0).when('singleVolume', { is: 'yes', then: Joi.required() }).messages({
+    singleVolumeQuantity: Joi.number().positive().when('singleVolume', { is: 'yes', then: Joi.required() }).messages({
       'any.required': singleVolumeQuantityError,
       'number.base': singleVolumeQuantityError,
-      'number.min': singleVolumeQuantityError,
       'number.max': singleVolumeQuantityError,
-      'number.unsafe': singleVolumeQuantityError
+      'number.unsafe': singleVolumeQuantityError,
+      'number.positive': singleVolumeQuantityError
     })
   })
 
