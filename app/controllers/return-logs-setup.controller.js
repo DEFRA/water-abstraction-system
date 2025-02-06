@@ -6,6 +6,7 @@
  */
 
 const CheckService = require('../services/return-logs/setup/check.service.js')
+const ConfirmationService = require('../services/return-logs/setup/confirmation.service.js')
 const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
@@ -30,6 +31,13 @@ async function check(request, h) {
   const pageData = await CheckService.go(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
+}
+
+async function confirmation(request, h) {
+  const { sessionId } = request.params
+  const pageData = await ConfirmationService.go(sessionId)
+
+  return h.view('return-logs/setup/confirmation.njk', pageData)
 }
 
 async function deleteNote(request, h) {
@@ -206,7 +214,7 @@ async function submitSubmission(request, h) {
     return h.view('return-logs/setup/submission.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/${sessionId}/reported`)
+  return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitUnits(request, h) {
@@ -233,6 +241,7 @@ async function units(request, h) {
 
 module.exports = {
   check,
+  confirmation,
   deleteNote,
   guidance,
   meterDetails,
