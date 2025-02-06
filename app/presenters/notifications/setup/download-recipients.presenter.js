@@ -49,14 +49,18 @@ function go(recipients) {
 }
 
 function _address(contact) {
+  if (!contact) {
+    return ['', '', '', '', '', '', '']
+  }
+
   return [
-    contact ? contact.addressLine1 : '',
-    contact ? contact.addressLine2 : '',
-    contact ? contact.addressLine3 : '',
-    contact ? contact.addressLine4 : '',
-    contact ? contact.town || contact.county : '',
-    contact ? contact.country : '',
-    contact ? contact.postcode : ''
+    contact.addressLine1,
+    contact.addressLine2,
+    contact.addressLine3,
+    contact.addressLine4,
+    contact.town || contact.county,
+    contact.country,
+    contact.postcode
   ]
 }
 /**
