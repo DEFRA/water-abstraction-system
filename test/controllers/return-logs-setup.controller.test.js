@@ -623,7 +623,7 @@ describe('Return Logs Setup controller', () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check-answers`)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
       })

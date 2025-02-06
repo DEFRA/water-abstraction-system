@@ -44,7 +44,7 @@ const { db } = require('../../../../db/db.js')
  * different contacts types (but still preferring the registered over unregistered licence).
  *
  * @param {Date} dueDate
- * @param {boolean} summer
+ * @param {string} summer
  *
  * @returns {Promise<object[]>} - matching recipients
  */
