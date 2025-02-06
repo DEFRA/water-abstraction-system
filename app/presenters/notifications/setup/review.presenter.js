@@ -25,7 +25,8 @@ function go(recipients, page, pagination, sessionId) {
     recipients: _recipients(recipients, page),
     recipientsAmount: recipients.length,
     links: {
-      download: `/system/notifications/setup/${sessionId}/download`
+      download: `/system/notifications/setup/${sessionId}/download`,
+      removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
     }
   }
 }

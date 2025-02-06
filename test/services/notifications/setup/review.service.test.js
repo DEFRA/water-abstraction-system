@@ -44,7 +44,8 @@ describe('Notifications Setup - Review service', () => {
       activeNavBar: 'manage',
       defaultPageSize: 25,
       links: {
-        download: `/system/notifications/setup/${session.id}/download`
+        download: `/system/notifications/setup/${session.id}/download`,
+        removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
       },
       pageTitle: 'Send returns invitations',
       page: 1,

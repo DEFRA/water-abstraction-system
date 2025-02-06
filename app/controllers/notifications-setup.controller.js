@@ -7,6 +7,7 @@
 
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
+const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../services/notifications/setup/review.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
@@ -26,6 +27,16 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewRemoveLicences(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await RemoveLicencesService.go(sessionId)
+
+  return h.view(`${basePath}/remove-licences.njk`, pageData)
 }
 
 async function viewReturnsPeriod(request, h) {
@@ -72,6 +83,7 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewRemoveLicences,
   viewReturnsPeriod,
   viewReview,
   setup,
