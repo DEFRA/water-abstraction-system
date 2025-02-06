@@ -528,7 +528,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'meter-details'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(MeterDetailsService, 'go').resolves({
             sessionId,
@@ -546,8 +546,8 @@ describe('Return Logs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
-        describe('and a meter details were provided', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
               meterMake: 'Meter',
@@ -563,26 +563,44 @@ describe('Return Logs Setup controller', () => {
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-readings`)
           })
         })
-      })
 
-      describe('when a request is invalid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
-            error: {
-              errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
-              meterMake: { message: 'Enter the make of the meter' }
-            },
-            pageTitle: 'Have meter details been provided?',
-            sessionId: 'Meter details'
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              checkPageVisited: true,
+              meterMake: 'Meter',
+              meterSerialNumber: '1234',
+              meter10TimesDisplay: 'no'
+            })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+              error: {
+                errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
+                meterMake: { message: 'Enter the make of the meter' }
+              },
+              pageTitle: 'Have meter details been provided?',
+              sessionId: 'Meter details'
+            })
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Enter the make of the meter')
-          expect(response.payload).to.contain('There is a problem')
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Enter the make of the meter')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

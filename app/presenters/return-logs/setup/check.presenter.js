@@ -40,6 +40,7 @@ function go(session) {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
+      meterDetails: `/system/return-logs/setup/${sessionId}/meter-details`,
       received: `/system/return-logs/setup/${sessionId}/received`,
       reported: `/system/return-logs/setup/${sessionId}/reported`
     },

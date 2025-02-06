@@ -50,6 +50,7 @@ describe('Return Logs Setup - Check service', () => {
         activeNavBar: 'search',
         links: {
           cancel: `/system/return-logs/setup/${session.id}/cancel`,
+          meterDetails: `/system/return-logs/setup/${session.id}/meter-details`,
           received: `/system/return-logs/setup/${session.id}/received`,
           reported: `/system/return-logs/setup/${session.id}/reported`
         },

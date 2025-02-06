@@ -16,7 +16,7 @@ function go(session) {
   const { id: sessionId, returnReference, meterMake, meterSerialNumber, meter10TimesDisplay } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/meter-provided`,
+    backLink: _backLink(session),
     meterMake: meterMake ?? null,
     meterSerialNumber: meterSerialNumber ?? null,
     meter10TimesDisplay: meter10TimesDisplay ?? null,
@@ -24,6 +24,16 @@ function go(session) {
     returnReference,
     sessionId
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/meter-provided`
 }
 
 module.exports = {
