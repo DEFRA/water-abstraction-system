@@ -208,7 +208,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'received'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when a request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(ReceivedService, 'go').resolves({
             sessionId,
