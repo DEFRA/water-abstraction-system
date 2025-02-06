@@ -38,6 +38,10 @@ function go(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    links: {
+      cancel: `/system/return-logs/setup/${sessionId}/cancel`,
+      received: `/system/return-logs/setup/${sessionId}/received`
+    },
     meterMake,
     meterProvided,
     meterSerialNumber,
@@ -49,7 +53,6 @@ function go(session) {
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
     returnReference,
     siteDescription,
-    sessionId,
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
   }

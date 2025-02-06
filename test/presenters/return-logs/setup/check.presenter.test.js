@@ -41,6 +41,10 @@ describe('Return Logs Setup - Check presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
+        links: {
+          cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
+          received: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received'
+        },
         meterMake: 'Test meter make',
         meterProvided: 'yes',
         meterSerialNumber: '098765',
@@ -59,7 +63,6 @@ describe('Return Logs Setup - Check presenter', () => {
         reportingFigures: 'Volumes',
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReference: '1234',
-        sessionId: session.id,
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         tariff: 'Standard',
         units: 'Megalitres'

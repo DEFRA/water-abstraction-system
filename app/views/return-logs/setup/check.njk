@@ -100,7 +100,7 @@
           actions: {
             items: [
               {
-                href: "received",
+                href: links.received,
                 text: "Change",
                 visuallyHiddenText: "return received date"
               }
@@ -191,7 +191,7 @@
       text: "Cancel",
       classes: "govuk-button--secondary",
       preventDoubleClick: true,
-      href: "/system/return-logs/setup/" + sessionId + "/cancel"
+      href: links.cancel
     }) }}
   </div>
 {% endblock %}

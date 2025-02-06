@@ -95,14 +95,7 @@ describe('Return Logs Setup controller', () => {
     describe('GET', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(CheckService, 'go').resolves({
-            meterMake: 'Test meter make',
-            meterProvided: 'yes',
-            meterSerialNumber: '098765',
-            pageTitle: 'Check details and enter new volumes or readings',
-            returnReference: '1234567',
-            sessionId
-          })
+          Sinon.stub(CheckService, 'go').resolves({ pageTitle: 'Check details and enter new volumes or readings' })
         })
 
         it('returns the page successfully', async () => {
@@ -110,10 +103,6 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check details and enter new volumes or readings')
-          expect(response.payload).to.contain('Test meter make')
-          expect(response.payload).to.contain('098765')
-          expect(response.payload).to.contain('1234567')
-          expect(response.payload).to.contain(sessionId)
         })
       })
     })
