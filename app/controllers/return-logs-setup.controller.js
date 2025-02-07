@@ -36,8 +36,8 @@ async function check(request, h) {
 }
 
 async function confirmReceived(request, h) {
-  const { sessionId } = request.params
-  const pageData = await ConfirmReceivedService.go(sessionId)
+  const { id: returnLogId } = request.query
+  const pageData = await ConfirmReceivedService.go(returnLogId)
 
   return h.view('return-logs/setup/confirm-received.njk', pageData)
 }
@@ -233,6 +233,10 @@ async function submitSubmission(request, h) {
 
   if (pageData.error) {
     return h.view('return-logs/setup/submission.njk', pageData)
+  }
+
+  if (pageData.redirect === 'confirm-received') {
+    return h.redirect(`/system/return-logs/setup/confirm-received?id=${pageData.returnLogId}`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
