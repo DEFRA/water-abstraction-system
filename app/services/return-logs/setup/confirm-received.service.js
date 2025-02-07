@@ -1,42 +1,29 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirm-received` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirm-received` page
  * @module ConfirmReceivedService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchConfirmReceivedService = require('../../../services/return-logs/setup/fetch-confirm-received.service.js')
 const ConfirmReceivedPresenter = require('../../../presenters/return-logs/setup/confirm-received.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirm-received` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirm-received` page
  *
- * @param {string} sessionId - The UUID of the current session
+ * @param {string} returnLogId - The UUID of the return log
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+async function go(returnLogId) {
+  const returnLog = await FetchConfirmReceivedService.go(returnLogId)
 
-  await _markConfirmReceivedPageVisited(session)
-
-  const formattedData = ConfirmReceivedPresenter.go(session)
-
-  await ReturnLogModel.query()
-    .findById(session.returnLogId)
-    .patch({ receivedDate: session.receivedDate, status: 'completed' })
+  const formattedData = ConfirmReceivedPresenter.go(returnLog)
 
   return {
     activeNavBar: 'search',
     ...formattedData
   }
-}
-
-async function _markConfirmReceivedPageVisited(session) {
-  session.confirmReceivedPageVisited = true
-
-  return session.$update()
 }
 
 module.exports = {
