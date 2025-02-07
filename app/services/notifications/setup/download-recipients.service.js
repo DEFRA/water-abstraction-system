@@ -28,7 +28,8 @@ async function go(sessionId) {
 
   const recipients = await FetchDownloadRecipientsService.go(
     determinedReturnsPeriod.returnsPeriod.dueDate,
-    determinedReturnsPeriod.summer
+    determinedReturnsPeriod.summer,
+    session.removeLicences
   )
 
   const formattedData = DownloadRecipientsPresenter.go(recipients)

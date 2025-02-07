@@ -146,22 +146,36 @@ const { db } = require('../../../../db/db.js')
  *
  * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
  * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
+ * @param {string[]} removeLicences - The licences to exclude from the results
  *
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(dueDate, summer, removeLicences = ['']) {
+  const { rows } = await _fetch(dueDate, summer, removeLicences)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
-  const query = _query()
+async function _fetch(dueDate, summer, removeLicences) {
+  // Adds the required '?' bindings for the removeLicences array size.
+  const placeholders = removeLicences.map(() => '?').join(',')
 
-  return db.raw(query, [dueDate, summer, dueDate, summer, dueDate, summer])
+  const query = _query(placeholders)
+
+  return db.raw(query, [
+    dueDate,
+    summer,
+    ...removeLicences,
+    dueDate,
+    summer,
+    ...removeLicences,
+    dueDate,
+    summer,
+    ...removeLicences
+  ])
 }
 
-function _query() {
+function _query(placeholders) {
   return `SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
   contact_type,
@@ -197,6 +211,7 @@ FROM (
         ler.company_entity_id = ldh.company_entity_id
         AND ler."role" IN ('primary_user', 'user_returns')
     )
+    AND ldh.licence_ref NOT IN (${placeholders})
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -216,6 +231,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND ldh.licence_ref NOT IN (${placeholders})
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -235,6 +251,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND ldh.licence_ref NOT IN (${placeholders})
 ) contacts
 GROUP BY
   contact_type,

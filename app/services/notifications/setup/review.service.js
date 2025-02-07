@@ -25,7 +25,7 @@ async function go(sessionId, page = 1) {
 
   const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  const recipientsData = await RecipientsService.go(returnsPeriod.dueDate, summer)
+  const recipientsData = await RecipientsService.go(returnsPeriod.dueDate, summer, session.removeLicences)
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 

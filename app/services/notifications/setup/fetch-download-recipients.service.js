@@ -45,22 +45,26 @@ const { db } = require('../../../../db/db.js')
  *
  * @param {Date} dueDate
  * @param {string} summer
+ * @param {string[]} removeLicences - The licences to exclude from the results
  *
  * @returns {Promise<object[]>} - matching recipients
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(dueDate, summer, removeLicences = ['']) {
+  const { rows } = await _fetch(dueDate, summer, removeLicences)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
-  const query = _query()
+async function _fetch(dueDate, summer, removeLicences) {
+  // Adds the required '?' bindings for the removeLicences array size.
+  const placeholders = removeLicences.map(() => '?').join(',')
 
-  return db.raw(query, [dueDate, summer, dueDate, summer])
+  const query = _query(placeholders)
+
+  return db.raw(query, [dueDate, summer, ...removeLicences, dueDate, summer, ...removeLicences])
 }
 
-function _query() {
+function _query(placeholders) {
   return `
 SELECT
   contacts.licence_ref,
@@ -91,6 +95,7 @@ FROM (
       AND rl.metadata->>'isCurrent' = 'true'
       AND rl.metadata->>'isSummer' = ?
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
+      AND ldh.licence_ref NOT IN (${placeholders})
       AND NOT EXISTS (
         SELECT
             1
@@ -125,6 +130,8 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND ldh.licence_ref NOT IN (${placeholders})
+
 ) contacts
 ORDER BY
 contacts.licence_ref`

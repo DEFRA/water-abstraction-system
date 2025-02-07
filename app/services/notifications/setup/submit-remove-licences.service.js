@@ -40,7 +40,10 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.removeLicences = [payload.removeLicences]
+  session.removeLicences = payload.removeLicences
+    .replace(/\n/g, ' ') // Replace newlines with spaces
+    .split(/[\s,]+/) // Split by spaces, multiple spaces, or commas
+    .filter((item) => item !== '') // Remove empty strings if any
 
   return session.$update()
 }
