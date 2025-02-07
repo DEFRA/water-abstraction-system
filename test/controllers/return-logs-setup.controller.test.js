@@ -13,7 +13,7 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
-const ConfirmedReceivedService = require('../../app/services/return-logs/setup/confirmed-received.service.js')
+const ConfirmReceivedService = require('../../app/services/return-logs/setup/confirm-received.service.js')
 const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
 const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
@@ -120,13 +120,13 @@ describe('Return Logs Setup controller', () => {
     })
   })
 
-  describe('return-logs/setup/{sessionId}/confirmed-received', () => {
-    const path = 'confirmed-received'
+  describe('return-logs/setup/{sessionId}/confirm-received', () => {
+    const path = 'confirm-received'
 
     describe('GET', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ConfirmedReceivedService, 'go').resolves({
+          Sinon.stub(ConfirmReceivedService, 'go').resolves({
             activeNavBar: 'search',
             backLink: `/system/licences/37132eb4-63c5-47be-9275-54fffbb49ef3/returns`,
             licenceRef: '01/117',

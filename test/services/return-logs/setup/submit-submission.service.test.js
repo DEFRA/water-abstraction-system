@@ -64,13 +64,13 @@ describe('Return Logs Setup - Submit Submission service', () => {
             payload = { journey: 'record-receipt' }
           })
 
-          it('saves the submitted option to the session and returns the redirect as "confirmed-received"', async () => {
+          it('saves the submitted option to the session and returns the redirect as "confirm-received"', async () => {
             const result = await SubmitSubmissionService.go(session.id, payload)
 
             const refreshedSession = await session.$query()
 
             expect(refreshedSession.journey).to.equal('record-receipt')
-            expect(result.redirect).to.equal('confirmed-received')
+            expect(result.redirect).to.equal('confirm-received')
           })
         })
       })

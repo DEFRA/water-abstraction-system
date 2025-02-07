@@ -41,9 +41,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/{sessionId}/confirmed-received',
+    path: '/return-logs/setup/{sessionId}/confirm-received',
     options: {
-      handler: ReturnLogsSetupController.confirmedReceived,
+      handler: ReturnLogsSetupController.confirmReceived,
       auth: {
         access: {
           scope: ['billing']

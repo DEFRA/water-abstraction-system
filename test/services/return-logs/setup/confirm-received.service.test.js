@@ -13,9 +13,9 @@ const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ConfirmedReceivedService = require('../../../../app/services/return-logs/setup/confirmed-received.service.js')
+const ConfirmReceivedService = require('../../../../app/services/return-logs/setup/confirm-received.service.js')
 
-describe.only('Return Logs Setup - Confirmed Received service', () => {
+describe('Return Logs Setup - Confirm Received service', () => {
   let session
 
   before(async () => {
@@ -25,7 +25,7 @@ describe.only('Return Logs Setup - Confirmed Received service', () => {
         dueDate: '2019-06-09T00:00:00.000Z',
         endDate: '2019-05-12T00:00:00.000Z',
         journey: 'record-receipt',
-        purposes: 'Mineral Washing',
+        purposes: ['Mineral Washing'],
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         startDate: '2019-04-01T00:00:00.000Z',
         licenceRef: '01/117',
@@ -49,29 +49,32 @@ describe.only('Return Logs Setup - Confirmed Received service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmedReceivedService.go(session.id)
+      const result = await ConfirmReceivedService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         backLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',
-        purposes: 'Mineral Washing',
+        purpose: {
+          label: 'Purpose',
+          value: 'Mineral Washing'
+        },
         sessionId: session.id,
         siteDescription: 'Addington Sandpits'
       })
     })
 
-    it('updates the session record to indicate user has visited the "confirmed-received" page', async () => {
-      await ConfirmedReceivedService.go(session.id)
+    it('updates the session record to indicate user has visited the "confirm-received" page', async () => {
+      await ConfirmReceivedService.go(session.id)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.confirmedReceivedPageVisited).to.be.true()
+      expect(refreshedSession.confirmReceivedPageVisited).to.be.true()
     })
 
     it('updates the return log record status to "completed" and receivedDate to the value in the session', async () => {
-      await ConfirmedReceivedService.go(session.id)
+      await ConfirmReceivedService.go(session.id)
 
       const returnLog = await ReturnLogModel.query().findById(session.data.returnLogId)
 

@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ConfirmedReceivedPresenter = require('../../../../app/presenters/return-logs/setup/confirmed-received.presenter.js')
+const ConfirmReceivedPresenter = require('../../../../app/presenters/return-logs/setup/confirm-received.presenter.js')
 
-describe('Return Logs Setup - Confirmed Received presenter', () => {
+describe('Return Logs Setup - Confirm Received presenter', () => {
   let session
 
   beforeEach(() => {
     session = {
       beenReceived: false,
-      confirmationPageVisited: true,
+      confirmReceivedPageVisited: true,
       createdAt: '2025-02-06T12:14:21.212Z',
       dueDate: '2019-06-09T00:00:00.000Z',
       endDate: '2019-05-12T00:00:00.000Z',
@@ -28,7 +28,7 @@ describe('Return Logs Setup - Confirmed Received presenter', () => {
       periodEndMonth: 9,
       periodStartDay: 1,
       periodStartMonth: 10,
-      purposes: 'Mineral Washing',
+      purposes: ['Mineral Washing'],
       receivedDate: '2025-02-05T00:00:00.000Z',
       receivedDateOptions: 'yesterday',
       returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
@@ -44,15 +44,46 @@ describe('Return Logs Setup - Confirmed Received presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = ConfirmedReceivedPresenter.go(session)
+      const result = ConfirmReceivedPresenter.go(session)
 
       expect(result).to.equal({
         backLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',
-        purposes: 'Mineral Washing',
+        purpose: {
+          label: 'Purpose',
+          value: 'Mineral Washing'
+        },
         sessionId: session.id,
         siteDescription: 'Addington Sandpits'
+      })
+    })
+  })
+
+  describe('the "purpose" property', () => {
+    describe('when the return log session has multiple purposes', () => {
+      beforeEach(() => {
+        session.purposes.push('General Washing/Process Washing')
+      })
+
+      it('returns an object with a label property set to "Purposes" and a value property containing the comma separated purposes as a string', () => {
+        const result = ConfirmReceivedPresenter.go(session)
+
+        expect(result.purpose).to.equal({
+          label: 'Purposes',
+          value: 'Mineral Washing, General Washing/Process Washing'
+        })
+      })
+    })
+
+    describe('when the return log session has a single purpose', () => {
+      it('returns an object with a label property set to "Purpose" and a value property containing the single purpose', () => {
+        const result = ConfirmReceivedPresenter.go(session)
+
+        expect(result.purpose).to.equal({
+          label: 'Purpose',
+          value: 'Mineral Washing'
+        })
       })
     })
   })
