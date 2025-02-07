@@ -29,7 +29,7 @@ describe('Notifications Setup - Remove licences service', () => {
       activeNavBar: 'manage',
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
-      licences: []
+      removeLicences: []
     })
   })
 })

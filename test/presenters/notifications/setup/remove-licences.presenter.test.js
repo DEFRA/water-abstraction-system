@@ -19,7 +19,7 @@ describe('Notifications Setup - Remove licences presenter', () => {
     expect(result).to.equal({
       hint: 'Separate the licences numbers with a comma or new line.',
       pageTitle: 'Enter the licence numbers to remove from the mailing list',
-      licences: []
+      removeLicences: []
     })
   })
 })
