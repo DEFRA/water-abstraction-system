@@ -41,7 +41,7 @@ async function go(sessionId, payload) {
 
 function _redirect(journey, status) {
   if (journey === 'record-receipt' && status === 'due') {
-    return 'confirmation'
+    return 'confirmed-received'
   }
 
   return 'reported'
