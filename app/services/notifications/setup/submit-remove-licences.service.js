@@ -10,7 +10,7 @@ const RemoveLicencesValidator = require('../../../validators/notifications/setup
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for  the notifications setup remove licences page
+ * Orchestrates validating the data for the notifications setup remove licences page
  *
  * @param {string} sessionId - The UUID for setup ad-hoc returns notification session record
  * @param {object} payload
