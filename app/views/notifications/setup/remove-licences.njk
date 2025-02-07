@@ -13,27 +13,37 @@
 
 {% block content %}
   <div class="govuk-body">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
-        <form method="post">
-          <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+    {% if error %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: error.text,
+            href: "#removeLicences-error"
+          }
+        ]
+      }) }}
+    {% endif %}
 
-          {{ govukTextarea({
-            name: "licences",
-            id: "remove-licences",
-            label: {
-              text: pageTitle,
-              classes: "govuk-label--l",
-              isPageHeading: true
-            },
-            hint: {
-              text: hint
-            }
-          }) }}
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
-          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-        </form>
-      </div>
-    </div>
+      {{ govukTextarea({
+        name: "removeLicences",
+        id: "remove-licences",
+        errorMessage: error,
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: hint
+        },
+        value: removeLicences
+      }) }}
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
   </div>
 {% endblock %}

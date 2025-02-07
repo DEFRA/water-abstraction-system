@@ -16,6 +16,7 @@ const InitiateSessionService = require('../../app/services/notifications/setup/i
 const RemoveLicencesService = require('../../app/services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../../app/services/notifications/setup/review.service.js')
+const SubmitRemoveLicencesService = require('../../app/services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
 // For running our service
@@ -132,6 +133,42 @@ describe('Notifications Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain(pageData.activeNavBar)
           expect(response.payload).to.contain(pageData.pageTitle)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(session)
+            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({
+              ..._viewRemoveLicence(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'review' })
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/notifications/setup/review')
+          })
         })
       })
     })
