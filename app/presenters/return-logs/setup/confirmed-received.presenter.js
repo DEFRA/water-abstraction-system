@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Format data for the `/return-log/setup/{sessionId}/confirmation` page
- * @module ConfirmationPresenter
+ * Format data for the `/return-log/setup/{sessionId}/confirmed-received` page
+ * @module ConfirmedReceivedPresenter
  */
 
 /**
- * Format data for the `/return-log/setup/{sessionId}/confirmation` page
+ * Format data for the `/return-log/setup/{sessionId}/confirmed-received` page
  *
  * @param {module:SessionModel} session - The return log setup session instance
  *

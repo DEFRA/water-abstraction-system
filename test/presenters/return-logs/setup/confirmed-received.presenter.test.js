@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ConfirmationPresenter = require('../../../../app/presenters/return-logs/setup/confirmation.presenter.js')
+const ConfirmedReceivedPresenter = require('../../../../app/presenters/return-logs/setup/confirmed-received.presenter.js')
 
-describe('Return Logs Setup - Confirmation presenter', () => {
+describe('Return Logs Setup - Confirmed Received presenter', () => {
   let session
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('Return Logs Setup - Confirmation presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(session)
+      const result = ConfirmedReceivedPresenter.go(session)
 
       expect(result).to.equal({
         backLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',

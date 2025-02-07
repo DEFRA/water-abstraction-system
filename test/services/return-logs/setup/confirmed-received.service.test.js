@@ -13,9 +13,9 @@ const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ConfirmationService = require('../../../../app/services/return-logs/setup/confirmation.service.js')
+const ConfirmedReceivedService = require('../../../../app/services/return-logs/setup/confirmed-received.service.js')
 
-describe('Return Logs Setup - Confirmation service', () => {
+describe.only('Return Logs Setup - Confirmed Received service', () => {
   let session
 
   before(async () => {
@@ -40,8 +40,7 @@ describe('Return Logs Setup - Confirmation service', () => {
         returnReference: '10032788',
         siteDescription: 'Addington Sandpits',
         periodStartMonth: 10,
-        receivedDateOptions: 'yesterday',
-        confirmationPageVisited: true
+        receivedDateOptions: 'yesterday'
       }
     })
 
@@ -50,7 +49,7 @@ describe('Return Logs Setup - Confirmation service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmationService.go(session.id)
+      const result = await ConfirmedReceivedService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -63,16 +62,16 @@ describe('Return Logs Setup - Confirmation service', () => {
       })
     })
 
-    it('updates the session record to indicate user has visited the "confirmation" page', async () => {
-      await ConfirmationService.go(session.id)
+    it('updates the session record to indicate user has visited the "confirmed-received" page', async () => {
+      await ConfirmedReceivedService.go(session.id)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.confirmationPageVisited).to.be.true()
+      expect(refreshedSession.confirmedReceivedPageVisited).to.be.true()
     })
 
     it('updates the return log record status to "completed" and receivedDate to the value in the session', async () => {
-      await ConfirmationService.go(session.id)
+      await ConfirmedReceivedService.go(session.id)
 
       const returnLog = await ReturnLogModel.query().findById(session.data.returnLogId)
 

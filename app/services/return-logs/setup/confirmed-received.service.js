@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirmation` page
- * @module ConfirmationService
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirmed-received` page
+ * @module ConfirmedReceivedService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const ConfirmationPresenter = require('../../../presenters/return-logs/setup/confirmation.presenter.js')
+const ConfirmedReceivedPresenter = require('../../../presenters/return-logs/setup/confirmed-received.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirmation` page
+ * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/confirmed-received` page
  *
  * @param {string} sessionId - The UUID of the current session
  *
@@ -21,7 +21,7 @@ async function go(sessionId) {
 
   await _markConfirmationPageVisited(session)
 
-  const formattedData = ConfirmationPresenter.go(session)
+  const formattedData = ConfirmedReceivedPresenter.go(session)
 
   await ReturnLogModel.query()
     .findById(session.returnLogId)
@@ -34,7 +34,7 @@ async function go(sessionId) {
 }
 
 async function _markConfirmationPageVisited(session) {
-  session.confirmationPageVisited = true
+  session.confirmedReceivedPageVisited = true
 
   return session.$update()
 }
