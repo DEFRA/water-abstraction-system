@@ -5,6 +5,7 @@
  * @module SubmitSubmissionService
  */
 
+const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
@@ -22,11 +23,16 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
+  const { returnLogId } = session
+
   if (!validationResult) {
     await _save(session, payload)
 
+    const redirect = await _redirect(payload.journey, session)
+
     return {
-      redirect: _redirect(payload.journey, session.status)
+      redirect,
+      returnLogId
     }
   }
 
@@ -39,8 +45,16 @@ async function go(sessionId, payload) {
   }
 }
 
-function _redirect(journey, status) {
+async function _redirect(journey, session) {
+  const { id, status } = session
+
   if (journey === 'record-receipt' && status === 'due') {
+    await ReturnLogModel.query()
+      .findById(session.returnLogId)
+      .patch({ receivedDate: session.receivedDate, status: 'completed' })
+
+    await SessionModel.query().deleteById(id)
+
     return 'confirm-received'
   }
 
