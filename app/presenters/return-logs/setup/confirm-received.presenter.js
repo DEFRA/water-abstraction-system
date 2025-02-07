@@ -1,41 +1,44 @@
 'use strict'
 
 /**
- * Format data for the `/return-log/setup/{sessionId}/confirm-received` page
+ * Formats return log data for the `/return-log/setup/confirm-received` page
  * @module ConfirmReceivedPresenter
  */
 
 /**
- * Format data for the `/return-log/setup/{sessionId}/confirm-received` page
+ * Formats return log data for the `/return-log/setup/confirm-received` page
  *
- * @param {module:SessionModel} session - The return log setup session instance
+ * @param {module:ReturnLogModel} returnLog - The return log instance
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
-  const { id: sessionId, licenceId, licenceRef, purposes, returnReference, siteDescription } = session
+function go(returnLog) {
+  const { licenceId, licenceRef, purposes, returnReference, siteDescription } = returnLog
 
   return {
     backLink: `/system/licences/${licenceId}/returns`,
     licenceRef,
     pageTitle: `Return ${returnReference} received`,
     purpose: _formatPurposes(purposes),
-    sessionId,
     siteDescription
   }
 }
 
 function _formatPurposes(purposes) {
-  if (purposes.length === 1) {
+  const formattedPurposes = purposes.map((purpose) => {
+    return purpose.tertiary.description
+  })
+
+  if (formattedPurposes.length === 1) {
     return {
       label: 'Purpose',
-      value: purposes[0]
+      value: formattedPurposes[0]
     }
   }
 
   return {
     label: 'Purposes',
-    value: purposes.join(', ')
+    value: formattedPurposes.join(', ')
   }
 }
 
