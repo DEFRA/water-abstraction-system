@@ -10,6 +10,7 @@ const InitiateSessionService = require('../services/notifications/setup/initiate
 const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../services/notifications/setup/review.service.js')
+const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
 const basePath = 'notifications/setup'
@@ -66,6 +67,21 @@ async function setup(_request, h) {
   return h.redirect(`/system/${basePath}/${session.id}/returns-period`)
 }
 
+async function submitRemoveLicences(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitRemoveLicencesService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`${basePath}/remove-licences.njk`, pageData)
+  }
+
+  return h.redirect(`/system/${basePath}/${pageData.redirect}`)
+}
+
 async function submitReturnsPeriod(request, h) {
   const {
     payload,
@@ -87,5 +103,6 @@ module.exports = {
   viewReturnsPeriod,
   viewReview,
   setup,
+  submitRemoveLicences,
   submitReturnsPeriod
 }

@@ -18,9 +18,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { licencesToRemove = [] } = session
+  const { removeLicences = [] } = session
 
-  const formattedData = RemoveLicencesPresenter.go(licencesToRemove)
+  const formattedData = RemoveLicencesPresenter.go(removeLicences)
 
   return {
     activeNavBar: 'manage',
