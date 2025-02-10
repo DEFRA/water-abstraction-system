@@ -38,6 +38,28 @@ describe('Return Logs Setup - Received presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns a link back to the "check" page', () => {
+        const result = ReceivedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+      })
+    })
+
+    describe('when the user has come from somewhere else', () => {
+      it('returns a link back to the "Licence" page on the "Returns" tab', () => {
+        const result = ReceivedPresenter.go(session)
+
+        expect(result.backLink).to.equal('/system/licences/a96ce5c6-2c42-4b3f-946d-0428b5f07ce6/returns')
+      })
+    })
+  })
+
   describe('the "receivedDate" properties', () => {
     describe('when the user has previously selected todays date as the received date', () => {
       beforeEach(() => {

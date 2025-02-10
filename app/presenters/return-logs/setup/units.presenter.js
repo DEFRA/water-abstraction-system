@@ -16,12 +16,22 @@ function go(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {
+    backLink: _backLink(session),
     pageTitle: 'Which units were used?',
-    units: units ?? null,
-    sessionId,
     returnReference,
-    backLink: `/system/return-logs/setup/${sessionId}/reported`
+    sessionId,
+    units: units ?? null
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/reported`
 }
 
 module.exports = {

@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -18,6 +19,7 @@ describe('Return Logs Setup - Submit Received service', () => {
   let session
   let sessionData
   let testDate
+  let yarStub
 
   beforeEach(async () => {
     sessionData = {
@@ -29,6 +31,8 @@ describe('Return Logs Setup - Submit Received service', () => {
     }
 
     session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
@@ -42,12 +46,45 @@ describe('Return Logs Setup - Submit Received service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReceivedService.go(session.id, payload)
+        await SubmitReceivedService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.receivedDateOptions).to.equal('today')
         expect(new Date(refreshedSession.receivedDate)).to.equal(testDate)
+      })
+
+      describe('and the page has been not been visited', () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
+          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: undefined
+          })
+        })
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        })
+
+        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
+          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: true
+          })
+        })
+
+        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          await SubmitReceivedService.go(session.id, payload, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+        })
       })
     })
 
@@ -62,7 +99,7 @@ describe('Return Logs Setup - Submit Received service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReceivedService.go(session.id, payload)
+        await SubmitReceivedService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -82,7 +119,7 @@ describe('Return Logs Setup - Submit Received service', () => {
       })
 
       it('saves the submitted values', async () => {
-        await SubmitReceivedService.go(session.id, payload)
+        await SubmitReceivedService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -94,9 +131,9 @@ describe('Return Logs Setup - Submit Received service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitReceivedService.go(session.id, payload)
+        const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({ checkPageVisited: undefined })
       })
     })
 
@@ -106,7 +143,7 @@ describe('Return Logs Setup - Submit Received service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReceivedService.go(session.id, payload)
+        const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
         expect(result).to.equal(
           {
@@ -125,7 +162,7 @@ describe('Return Logs Setup - Submit Received service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload)
+          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'Select the return received date',
@@ -146,7 +183,7 @@ describe('Return Logs Setup - Submit Received service', () => {
         })
 
         it('includes an error for the date input element', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload)
+          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'Enter a real received date',
@@ -156,7 +193,7 @@ describe('Return Logs Setup - Submit Received service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload)
+          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
 
           expect(result.receivedDateDay).to.equal('a')
           expect(result.receivedDateMonth).to.equal('b')
