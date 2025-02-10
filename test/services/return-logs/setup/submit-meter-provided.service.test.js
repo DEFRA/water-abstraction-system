@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -17,6 +18,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     sessionData = {
@@ -26,50 +28,103 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
     }
 
     session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { meterProvided: 'yes' }
       })
 
       it('saves the submitted option', async () => {
-        await SubmitMeterProvidedService.go(session.id, payload)
+        await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.meterProvided).to.equal('yes')
       })
 
-      describe('and the user has previously selected "yes" to a meter being provided', () => {
+      describe('and the user has selected "yes" to a meter being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitMeterProvidedService.go(session.id, payload)
+          const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ meterProvided: 'yes' })
+          expect(result).to.equal({ checkPageVisited: undefined, meterProvided: 'yes' })
         })
       })
 
-      describe('and the user has previously selected "no" to a meter being provided', () => {
-        beforeEach(async () => {
+      describe('and the user has selected "no" to a meter being provided', () => {
+        beforeEach(() => {
           payload = { meterProvided: 'no' }
         })
 
-        it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitMeterProvidedService.go(session.id, payload)
+        describe('and the page has been not been visited', () => {
+          it('returns the correct details the controller needs to redirect the journey', async () => {
+            const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ meterProvided: 'no' })
+            expect(result).to.equal({ checkPageVisited: undefined, meterProvided: 'no' })
+          })
+
+          describe('and meter details had previously been saved to the session', () => {
+            beforeEach(async () => {
+              payload = { meterProvided: 'no' }
+              sessionData = {
+                data: {
+                  meterProvided: 'yes',
+                  meterMake: 'Test Meter Make',
+                  meterSerialNumber: 'TEST-9876543',
+                  meter10TimesDisplay: 'no',
+                  returnReference: '12345'
+                }
+              }
+
+              session = await SessionHelper.add(sessionData)
+            })
+
+            it('removes the previously entered meter details from the session data', async () => {
+              await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+
+              const refreshedSession = await session.$query()
+
+              expect(refreshedSession.meterProvided).to.equal('no')
+              expect(refreshedSession.meterMake).to.be.null()
+              expect(refreshedSession.meterSerialNumber).to.be.null()
+              expect(refreshedSession.meter10TimesDisplay).to.be.null()
+            })
+          })
+        })
+
+        describe('and the page has been been visited', () => {
+          beforeEach(async () => {
+            session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+          })
+
+          it('returns the correct details the controller needs to redirect the journey', async () => {
+            const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ checkPageVisited: true, meterProvided: 'no' })
+          })
+
+          it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+            await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+
+            const [flashType, notification] = yarStub.flash.args[0]
+
+            expect(flashType).to.equal('notification')
+            expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+          })
         })
       })
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitMeterProvidedService.go(session.id, payload)
+        const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
         expect(result).to.equal(
           {
@@ -85,7 +140,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitMeterProvidedService.go(session.id, payload)
+          const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({ text: 'Select if meter details have been provided' })
         })

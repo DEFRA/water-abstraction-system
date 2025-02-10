@@ -48,6 +48,13 @@ describe('Return Logs Setup - Check service', () => {
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
         activeNavBar: 'search',
+        links: {
+          cancel: `/system/return-logs/setup/${session.id}/cancel`,
+          meterDetails: `/system/return-logs/setup/${session.id}/meter-provided`,
+          received: `/system/return-logs/setup/${session.id}/received`,
+          reported: `/system/return-logs/setup/${session.id}/reported`,
+          units: `/system/return-logs/setup/${session.id}/units`
+        },
         meterMake: undefined,
         meterProvided: 'no',
         meterSerialNumber: undefined,
@@ -67,7 +74,6 @@ describe('Return Logs Setup - Check service', () => {
         reportingFigures: 'Volumes',
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReference: '1234',
-        sessionId: session.id,
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         tariff: 'Standard',
         units: 'Megalitres'
