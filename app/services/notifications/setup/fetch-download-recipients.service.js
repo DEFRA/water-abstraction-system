@@ -49,7 +49,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object[]>} - matching recipients
  */
-async function go(dueDate, summer, removeLicences = ['']) {
+async function go(dueDate, summer, removeLicences) {
   const { rows } = await _fetch(dueDate, summer, removeLicences)
 
   return rows

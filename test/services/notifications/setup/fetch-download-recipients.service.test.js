@@ -20,18 +20,20 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
 
   let dueDate
   let isSummer
+  let removeLicences
   let testRecipients
 
   before(async () => {
     dueDate = '2024-04-28' // This needs to differ from any other returns log tests
     isSummer = 'false'
+    removeLicences = ['']
 
     testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
   })
 
   describe('when there are recipients', () => {
     it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer)
+      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
 
       const primaryUser = result.find((item) => item.contact_type === 'Primary user')
       const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
@@ -60,7 +62,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
     })
 
     it('correctly returns "Licence holder" contact', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer)
+      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
 
       const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolder.licenceRef)
 
@@ -94,7 +96,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
     })
 
     it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer)
+      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
 
       const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef)
 

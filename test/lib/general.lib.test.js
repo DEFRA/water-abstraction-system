@@ -507,4 +507,70 @@ describe('GeneralLib', () => {
       })
     })
   })
+
+  describe.only('#transformStringOfLicencesToArray', () => {
+    let licences
+
+    describe('when there is a single licence', () => {
+      beforeEach(() => {
+        licences = '123'
+      })
+
+      it('returns an array with the single licence', () => {
+        const result = GeneralLib.transformStringOfLicencesToArray(licences)
+
+        expect(result).to.equal(['123'])
+      })
+    })
+
+    describe('when there are multiple licences', () => {
+      describe('and they are separated by a ","', () => {
+        beforeEach(() => {
+          licences = '123, 456, 789'
+        })
+
+        it('returns an array with multiple licences', () => {
+          const result = GeneralLib.transformStringOfLicencesToArray(licences)
+
+          expect(result).to.equal(['123', '456', '789'])
+        })
+
+        describe('and there are extra spaces', () => {
+          beforeEach(() => {
+            licences = '123 ,   456,  789  '
+          })
+
+          it('returns an array with multiple licences', () => {
+            const result = GeneralLib.transformStringOfLicencesToArray(licences)
+
+            expect(result).to.equal(['123', '456', '789'])
+          })
+        })
+      })
+
+      describe('and they are separated by a "\\n"', () => {
+        beforeEach(() => {
+          licences = '123\n 456\n 789'
+        })
+
+        it('returns an array with multiple licences', () => {
+          const result = GeneralLib.transformStringOfLicencesToArray(licences)
+
+          expect(result).to.equal(['123', '456', '789'])
+        })
+      })
+
+      describe('and they are separated by a " " (space)', () => {
+        beforeEach(() => {
+          licences = '123 456 789'
+        })
+
+        it('returns an array with only one item', () => {
+          const result = GeneralLib.transformStringOfLicencesToArray(licences)
+
+          expect(result).to.equal(['123 456 789'])
+        })
+      })
+    })
+  })
 })

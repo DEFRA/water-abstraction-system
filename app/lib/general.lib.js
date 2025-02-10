@@ -254,6 +254,44 @@ function transactionsMatch(left, right) {
   )
 }
 
+/**
+ * Transforms a string of licenses into an array of individual license numbers.
+ * The string can contain license numbers separated by newlines or commas.
+ *
+ * This function replaces newlines with commas, then splits the string by commas,
+ * and removes any empty strings from the result.
+ *
+ * ```javascript
+ * transformStringOfLicencesToArray('123, 456, 789');
+ * // Returns: ['123', '456', '789']
+ *
+ * transformStringOfLicencesToArray('123\n456,789');
+ * // Returns: ['123', '456', '789']
+ *
+ * transformStringOfLicencesToArray('123\n456\n789');
+ * // Returns: ['123', '456', '789']
+ *
+ * transformStringOfLicencesToArray('');
+ * // Returns: ['']
+ * ```
+ *
+ * @param {string} licences - A string containing one or more license numbers
+ *
+ * @returns {string[]} - An array of license numbers as strings.
+ *
+ */
+function transformStringOfLicencesToArray(licences) {
+  if (!licences) {
+    return ['']
+  }
+
+  return licences
+    .replace(/\n/g, ',') // Replace newlines with commas
+    .split(',') // Split by commas
+    .map((item) => item.trim()) // Trim any leading/trailing spaces
+    .filter((item) => item !== '') // Remove empty strings if any
+}
+
 module.exports = {
   calculateAndLogTimeTaken,
   currentTimeInNanoseconds,
@@ -262,5 +300,6 @@ module.exports = {
   generateUUID,
   periodsOverlap,
   timestampForPostgres,
-  transactionsMatch
+  transactionsMatch,
+  transformStringOfLicencesToArray
 }

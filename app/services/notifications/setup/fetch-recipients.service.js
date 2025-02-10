@@ -150,7 +150,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
-async function go(dueDate, summer, removeLicences = ['']) {
+async function go(dueDate, summer, removeLicences) {
   const { rows } = await _fetch(dueDate, summer, removeLicences)
 
   return rows
