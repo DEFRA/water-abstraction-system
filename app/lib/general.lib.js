@@ -255,8 +255,8 @@ function transactionsMatch(left, right) {
 }
 
 /**
- * Transforms a string of licenses into an array of individual license numbers.
- * The string can contain license numbers separated by newlines or commas.
+ * Transforms a string of licences into an array of individual licence numbers.
+ * The string can contain licence numbers separated by newlines or commas.
  *
  * This function replaces newlines with commas, then splits the string by commas,
  * and removes any empty strings from the result.
@@ -275,9 +275,9 @@ function transactionsMatch(left, right) {
  * // Returns: ['']
  * ```
  *
- * @param {string} licences - A string containing one or more license numbers
+ * @param {string} licences - A string containing one or more licence numbers
  *
- * @returns {string[]} - An array of license numbers as strings.
+ * @returns {string[]} - An array of licence numbers as strings.
  *
  */
 function transformStringOfLicencesToArray(licences) {
