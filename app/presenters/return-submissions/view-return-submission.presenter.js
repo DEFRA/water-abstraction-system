@@ -22,10 +22,15 @@ function go(returnSubmission, monthIndex) {
   const requestedMonthLines = returnSubmissionLines.filter((line) => line.startDate.getMonth() === requestedMonth)
 
   return {
-    pageTitle: _formatPageTitle(returnSubmissionLines[0].startDate),
+    backLink: _backLink(returnSubmission),
+    pageTitle: _pageTitle(returnSubmissionLines[0].startDate),
     returnReference: returnSubmission.returnLog.returnReference,
     tableData: _tableData(requestedMonthLines)
   }
+}
+
+function _backLink(returnSubmission) {
+  return `/system/return-logs?id=${returnSubmission.returnLogId}`
 }
 
 function _determineRequestedMonth(firstLine, monthIndex) {
