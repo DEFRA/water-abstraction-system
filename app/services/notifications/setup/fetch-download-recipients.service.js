@@ -43,8 +43,8 @@ const { db } = require('../../../../db/db.js')
  * received from this query (For either registered to unregistered licence). We expect to see duplicate licences with
  * different contacts types (but still preferring the registered over unregistered licence).
  *
- * @param {Date} dueDate
- * @param {string} summer
+ * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
+ * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
  * @param {string[]} removeLicences - The licences to exclude from the results
  *
  * @returns {Promise<object[]>} - matching recipients
@@ -56,15 +56,15 @@ async function go(dueDate, summer, removeLicences) {
 }
 
 async function _fetch(dueDate, summer, removeLicences) {
-  // Adds the required '?' bindings for the removeLicences array size.
-  const placeholders = removeLicences.map(() => '?').join(',')
+  // Creates an array of ['?'] placeholder for the licence to be excluded from the query
+  const excludeLicences = removeLicences.map(() => '?').join(',')
 
-  const query = _query(placeholders)
+  const query = _query(excludeLicences)
 
   return db.raw(query, [dueDate, summer, ...removeLicences, dueDate, summer, ...removeLicences])
 }
 
-function _query(placeholders) {
+function _query(excludeLicences) {
   return `
 SELECT
   contacts.licence_ref,
@@ -95,7 +95,7 @@ FROM (
       AND rl.metadata->>'isCurrent' = 'true'
       AND rl.metadata->>'isSummer' = ?
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
-      AND ldh.licence_ref NOT IN (${placeholders})
+      AND ldh.licence_ref NOT IN (${excludeLicences})
       AND NOT EXISTS (
         SELECT
             1
@@ -130,7 +130,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
-    AND ldh.licence_ref NOT IN (${placeholders})
+    AND ldh.licence_ref NOT IN (${excludeLicences})
 
 ) contacts
 ORDER BY

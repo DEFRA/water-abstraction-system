@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -145,6 +145,20 @@ describe('Notifications Setup - Recipients service', () => {
         contact_type: 'Returns to',
         email: null
       })
+    })
+  })
+
+  describe('when there are licence to exclude from the recipients', () => {
+    beforeEach(() => {
+      removeLicences = [recipients.primaryUser.licenceRef]
+    })
+
+    it('correctly returns recipients without the "removeLicences"', async () => {
+      const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+
+      const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
+
+      expect(testRecipient).to.be.undefined()
     })
   })
 })

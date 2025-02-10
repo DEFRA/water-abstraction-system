@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -152,6 +152,23 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
           start_date: startDate
         }
       ])
+    })
+
+    describe('and there are licence to exclude from the recipients', () => {
+      beforeEach(() => {
+        removeLicences = [testRecipients.primaryUser.licenceRef]
+      })
+
+      it('correctly returns recipients without the "removeLicences"', async () => {
+        const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
+
+        const primaryUser = result.find((item) => item.contact_type === 'Primary user')
+        const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
+
+        expect(primaryUser).to.be.undefined()
+
+        expect(returnsAgent).to.be.undefined()
+      })
     })
   })
 })
