@@ -1,8 +1,72 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 {% block content %}
-  <pre>
-    returnSubmissionId: {{ returnSubmissionId }}
-    monthIndex: {{ monthIndex }}
-  </pre>
+
+  {# TODO: Back button #}
+
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">Return {{ returnReference }}</span>{{ pageTitle }}
+      </h1>
+    </div>
+  </div>
+
+  {# Display the table using a GOVUK table component #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {% set tableRows = [] %}
+
+      {% for row in tableData.rows %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
+
+        {# Create the summary row #}
+        {% set tableRow = [
+          {
+            text: row.date,
+            attributes: { 'data-test': 'date-' + rowIndex }
+          }
+        ] %}
+
+        {# Cubic metres column #}
+        {% set tableRow = (tableRow.push(
+          {
+            text: row.quantity,
+            format: 'numeric',
+            attributes: { 'data-test': 'cubic-metres-' + rowIndex }
+          }
+        ), tableRow) %}
+
+        {# Push our row into the table rows array #}
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endfor %}
+
+      {# Define and push the final total row into the table rows array #}
+      {% set totalRow = [
+        {
+          html: '<strong>Total volume of water abstracted</strong>',
+          attributes: { 'data-test': 'total-row-text' }
+        },
+        {
+          html: '<strong>' + tableData.total + '</strong>',
+          format: 'numeric',
+          attributes: { 'data-test': 'total-row-value' }
+        }
+      ] %}
+      {% set tableRows = (tableRows.push(totalRow), tableRows) %}
+
+      {{
+        govukTable({
+          firstCellIsHeader: false,
+          attributes: { 'data-test': 'summaries' },
+          head: tableData.headers,
+          rows: tableRows
+        })
+      }}
+    </div>
+  </div>
 {% endblock %}
