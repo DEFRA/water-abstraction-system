@@ -23,7 +23,7 @@ function go(returnSubmission, monthIndex) {
 
   return {
     backLink: _backLink(returnSubmission),
-    pageTitle: _pageTitle(returnSubmissionLines[0].startDate),
+    pageTitle: _pageTitle(requestedMonthLines[0].startDate),
     returnReference: returnSubmission.returnLog.returnReference,
     tableData: _tableData(requestedMonthLines)
   }
