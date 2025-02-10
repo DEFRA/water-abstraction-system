@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -17,6 +18,7 @@ describe('Return Logs Setup - Submit Units service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     sessionData = {
@@ -26,6 +28,8 @@ describe('Return Logs Setup - Submit Units service', () => {
     }
 
     session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
@@ -35,11 +39,44 @@ describe('Return Logs Setup - Submit Units service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitUnitsService.go(session.id, payload)
+        await SubmitUnitsService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.units).to.equal('litres')
+      })
+
+      describe('and the page has been not been visited', () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
+          const result = await SubmitUnitsService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: undefined
+          })
+        })
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        })
+
+        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
+          const result = await SubmitUnitsService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: true
+          })
+        })
+
+        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          await SubmitUnitsService.go(session.id, payload, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+        })
       })
     })
 
@@ -49,7 +86,7 @@ describe('Return Logs Setup - Submit Units service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitUnitsService.go(session.id, payload)
+        const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
         expect(result).to.equal(
           {
@@ -65,7 +102,7 @@ describe('Return Logs Setup - Submit Units service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitUnitsService.go(session.id, payload)
+          const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({ text: 'Select which units were used' })
         })
