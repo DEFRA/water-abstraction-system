@@ -508,7 +508,7 @@ describe('GeneralLib', () => {
     })
   })
 
-  describe.only('#transformStringOfLicencesToArray', () => {
+  describe('#transformStringOfLicencesToArray', () => {
     let licences
 
     describe('when there is a single licence', () => {
