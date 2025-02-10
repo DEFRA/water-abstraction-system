@@ -45,6 +45,7 @@ const ModLogHelper = require('../../../../test/support/helpers/mod-log.helper.js
 const MonitoringStationHelper = require('../../../../test/support/helpers/monitoring-station.helper.js')
 const PointHelper = require('../../../../test/support/helpers/point.helper.js')
 const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
+const ReturnCycleHelper = require('../../../../test/support/helpers/return-cycle.helper.js')
 const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
 const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../../../test/support/helpers/return-requirement-purpose.helper.js')
@@ -162,6 +163,11 @@ const LOAD_HELPERS = {
   },
   points: { helper: PointHelper, test: false },
   permitLicences: { helper: PermitLicenceHelper, test: false },
+  returnCycles: {
+    helper: ReturnCycleHelper,
+    test: true,
+    legacy: { schema: 'returns', table: 'return_cycles', id: 'return_cycle_id' }
+  },
   returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
   returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
   returnRequirementPurposes: { helper: ReturnRequirementPurposeHelper, test: false },
