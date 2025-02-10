@@ -52,7 +52,8 @@ describe('Return Logs Setup - Check service', () => {
           cancel: `/system/return-logs/setup/${session.id}/cancel`,
           meterDetails: `/system/return-logs/setup/${session.id}/meter-provided`,
           received: `/system/return-logs/setup/${session.id}/received`,
-          reported: `/system/return-logs/setup/${session.id}/reported`
+          reported: `/system/return-logs/setup/${session.id}/reported`,
+          units: `/system/return-logs/setup/${session.id}/units`
         },
         meterMake: undefined,
         meterProvided: 'no',

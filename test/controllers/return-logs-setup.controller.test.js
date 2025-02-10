@@ -399,7 +399,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'units'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(UnitsService, 'go').resolves({
             sessionId,
@@ -418,8 +418,8 @@ describe('Return Logs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
-        describe('and the unit type is entered', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             Sinon.stub(SubmitUnitsService, 'go').resolves({})
           })
@@ -431,23 +431,36 @@ describe('Return Logs Setup controller', () => {
             expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-provided`)
           })
         })
-      })
 
-      describe('when a request is invalid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitUnitsService, 'go').resolves({
-            error: { text: 'Select which units were used' },
-            pageTitle: 'Which units were used?',
-            sessionId
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitUnitsService, 'go').resolves({
+              error: { text: 'Select which units were used' },
+              pageTitle: 'Which units were used?',
+              sessionId
+            })
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select which units were used')
-          expect(response.payload).to.contain('There is a problem')
+          it('re-renders the page with an error message', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Select which units were used')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })

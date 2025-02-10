@@ -253,13 +253,18 @@ async function submitSubmission(request, h) {
 async function submitUnits(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitUnitsService.go(sessionId, payload)
+  const pageData = await SubmitUnitsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/units.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
