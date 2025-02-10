@@ -133,16 +133,21 @@ async function submitMeterDetails(request, h) {
 async function submitMeterProvided(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitMeterProvidedService.go(sessionId, payload)
+  const pageData = await SubmitMeterProvidedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-provided.njk', pageData)
   }
 
   if (pageData.meterProvided === 'no') {
+    if (pageData.checkPageVisited) {
+      return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+    }
+
     return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
   }
 

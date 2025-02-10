@@ -457,7 +457,7 @@ describe('Return Logs Setup controller', () => {
     const path = 'meter-provided'
 
     describe('GET', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         beforeEach(() => {
           Sinon.stub(MeterProvidedService, 'go').resolves({
             sessionId,
@@ -476,7 +476,7 @@ describe('Return Logs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
+      describe('when the request succeeds', () => {
         describe('and a meter was provided', () => {
           beforeEach(() => {
             Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'yes' })
@@ -491,15 +491,30 @@ describe('Return Logs Setup controller', () => {
         })
 
         describe('and a meter was not provided', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no' })
+          describe('and the page has not been visited previously', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no' })
+            })
+
+            it('redirects to the "single volume" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
+            })
           })
 
-          it('redirects to the "meter provided" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
+          describe('and the page has been visited previously', () => {
+            beforeEach(() => {
+              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ checkPageVisited: true, meterProvided: 'no' })
+            })
 
-            expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
+            it('redirects to the "check" page', async () => {
+              const response = await server.inject(_postOptions(path, {}))
+
+              expect(response.statusCode).to.equal(302)
+              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            })
           })
         })
       })

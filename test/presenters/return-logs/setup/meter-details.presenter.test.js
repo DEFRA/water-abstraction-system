@@ -36,30 +36,6 @@ describe('Return Logs Setup - Meter Details presenter', () => {
     })
   })
 
-  describe('the "backLink" property', () => {
-    describe('when the user has come from the "check" page', () => {
-      beforeEach(() => {
-        session.checkPageVisited = true
-      })
-
-      it('returns a link back to the "check" page', () => {
-        const result = MeterDetailsPresenter.go(session)
-
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
-      })
-    })
-
-    describe('when the user has come from somewhere else', () => {
-      it('returns a link back to the "Meter provided" page on', () => {
-        const result = MeterDetailsPresenter.go(session)
-
-        expect(result.backLink).to.equal(
-          '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided'
-        )
-      })
-    })
-  })
-
   describe('the "meterMake" property', () => {
     describe('when the user has previously entered the make of the meter', () => {
       beforeEach(() => {
