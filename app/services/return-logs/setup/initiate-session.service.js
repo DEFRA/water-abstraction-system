@@ -69,11 +69,9 @@ async function _fetchReturnLog(returnLogId) {
 }
 
 function _formatPurposes(purposes) {
-  const purposeDescriptionArray = purposes.map((purpose) => {
+  return purposes.map((purpose) => {
     return purpose.tertiary.description
   })
-
-  return purposeDescriptionArray.join(', ')
 }
 
 module.exports = {
