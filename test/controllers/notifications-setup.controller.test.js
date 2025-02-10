@@ -11,9 +11,12 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const DownloadRecipientsService = require('../../app/services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notifications/setup/initiate-session.service.js')
+const RemoveLicencesService = require('../../app/services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../../app/services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../../app/services/notifications/setup/review.service.js')
+const SubmitRemoveLicencesService = require('../../app/services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../../app/services/notifications/setup/submit-returns-period.service.js')
 
 // For running our service
@@ -68,6 +71,104 @@ describe('Notifications Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/returns-period`)
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/download', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/download`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(DownloadRecipientsService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+        })
+
+        it('returns the file successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.headers['content-type']).to.equal('type/csv')
+          expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
+          expect(response.payload).to.equal('test')
+        })
+      })
+    })
+  })
+
+  describe('notifications/setup/remove-licences', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/remove-licences`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['returns'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          Sinon.stub(RemoveLicencesService, 'go').returns(_viewRemoveLicence())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewRemoveLicence()
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain(pageData.activeNavBar)
+          expect(response.payload).to.contain(pageData.pageTitle)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(session)
+            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({
+              ..._viewRemoveLicence(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'review' })
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/notifications/setup/review')
+          })
         })
       })
     })
@@ -181,9 +282,17 @@ function _viewReturnsPeriod() {
   }
 }
 
+function _viewRemoveLicence() {
+  return {
+    pageTitle: 'Remove licences',
+    hint: 'hint to remove',
+    activeNavBar: 'manage'
+  }
+}
+
 function _viewReview() {
   return {
-    pageTitle: 'Review the mailing listr',
+    pageTitle: 'Review the mailing list',
     activeNavBar: 'manage'
   }
 }

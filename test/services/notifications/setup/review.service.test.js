@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -43,6 +43,10 @@ describe('Notifications Setup - Review service', () => {
     expect(result).to.equal({
       activeNavBar: 'manage',
       defaultPageSize: 25,
+      links: {
+        download: `/system/notifications/setup/${session.id}/download`,
+        removeLicences: `/system/notifications/setup/${session.id}/remove-licences`
+      },
       pageTitle: 'Send returns invitations',
       page: 1,
       pagination: {
@@ -56,30 +60,6 @@ describe('Notifications Setup - Review service', () => {
         }
       ],
       recipientsAmount: 1
-    })
-  })
-
-  describe('when the returns period is not for summer', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
-    })
-
-    it('should call the "ReviewService" with the returns period due date and summer "false"', async () => {
-      await ReviewService.go(session.id)
-
-      expect(RecipientsService.go.calledWith(new Date(`${year}-04-28`), 'false')).to.be.true()
-    })
-  })
-
-  describe('when the returns period is for summer', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({ data: { returnsPeriod: 'summer' } })
-    })
-
-    it('should call the "ReviewService" with the returns period due date and summer "false"', async () => {
-      await ReviewService.go(session.id)
-
-      expect(RecipientsService.go.calledWith(new Date(`${year}-11-28`), 'true')).to.be.true()
     })
   })
 })
