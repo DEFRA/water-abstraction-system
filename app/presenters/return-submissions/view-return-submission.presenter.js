@@ -39,7 +39,7 @@ function _determineRequestedMonth(firstLine, monthIndex) {
   return firstMonth + monthIndex
 }
 
-function _formatPageTitle(date) {
+function _pageTitle(date) {
   const titleDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
 
   return `Water abstracted ${titleDate}`
