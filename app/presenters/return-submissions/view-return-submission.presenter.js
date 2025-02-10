@@ -58,11 +58,13 @@ function _tableData(lines) {
 }
 
 function _total(lines) {
-  return lines.reduce((acc, line) => {
+  const total = lines.reduce((acc, line) => {
     const quantity = line.quantity ?? 0
 
     return acc + quantity
   }, 0)
+
+  return formatNumber(total)
 }
 
 module.exports = {
