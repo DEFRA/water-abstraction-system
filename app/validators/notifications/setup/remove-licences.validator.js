@@ -12,7 +12,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Validates data submitted for the `/notifications/setup/remove-licences` page
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {object[]} validLicences - The licences present in the database
+ * @param {object[]} validLicences - An array of licences found in the database from `payload.removeLicences`
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were

@@ -22,7 +22,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
   let payload
   let session
   let validLicences
-  let FetchReturnsDueServiceStub
+  let fetchReturnsDueServiceStub
 
   before(() => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
@@ -33,12 +33,12 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
     validLicences = [{ licenceRef: '1234' }]
 
-    FetchReturnsDueServiceStub = Sinon.stub(FetchReturnsDueService, 'go')
+    fetchReturnsDueServiceStub = Sinon.stub(FetchReturnsDueService, 'go')
   })
 
   afterEach(() => {
     clock.restore()
-    FetchReturnsDueServiceStub.restore()
+    fetchReturnsDueServiceStub.restore()
   })
 
   describe('when submitting licences to remove ', () => {
@@ -46,7 +46,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
       beforeEach(async () => {
         payload = { removeLicences: '1234' }
 
-        FetchReturnsDueServiceStub.resolves(validLicences)
+        fetchReturnsDueServiceStub.resolves(validLicences)
       })
 
       it('saves the submitted value', async () => {
@@ -72,7 +72,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
         validLicences = []
 
-        FetchReturnsDueServiceStub.resolves([validLicences])
+        fetchReturnsDueServiceStub.resolves([validLicences])
       })
 
       it('correctly presents the data with the error', async () => {
