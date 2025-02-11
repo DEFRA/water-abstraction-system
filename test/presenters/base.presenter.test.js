@@ -47,6 +47,24 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatQuantity()', () => {
+    describe('when quantity and units are provided', () => {
+      it('returns converted and formatted quantity', () => {
+        const result = BasePresenter.formatQuantity('gal', 100)
+
+        expect(result).to.equal('21,996.925')
+      })
+    })
+
+    describe('when quantity is null', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatQuantity('someUnit', null)
+
+        expect(result).to.equal(null)
+      })
+    })
+  })
+
   describe('#generateBillRunTitle()', () => {
     const regionName = 'anglian'
     const batchType = 'two_part_tariff'
