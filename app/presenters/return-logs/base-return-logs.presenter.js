@@ -219,10 +219,10 @@ function _groupLinesByMonth(lines) {
 function _linkDetails(id, method, frequency, endDate, rootPath) {
   const linkTextMethod = method === 'abstractionVolumes' ? 'volumes' : 'readings'
   const text = `View ${returnRequirementFrequencies[frequency]} ${linkTextMethod}`
-  const monthIndex = endDate.getMonth()
+  const yearMonth = `${endDate.getFullYear()}-${endDate.getMonth()}`
 
   return {
-    href: `${rootPath}/${id}/${monthIndex}`,
+    href: `${rootPath}/${id}/${yearMonth}`,
     text
   }
 }

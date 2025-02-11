@@ -319,8 +319,8 @@ describe('Base Return Logs presenter', () => {
             'ID'
           )
 
-          expect(result[0].link.href).to.equal('/system/return-submissions/ID/0')
-          expect(result[1].link.href).to.equal('/system/return-submissions/ID/1')
+          expect(result[0].link.href).to.equal('/system/return-submissions/ID/2023-0')
+          expect(result[1].link.href).to.equal('/system/return-submissions/ID/2023-1')
         })
 
         describe('when the method is abstractionVolumes', () => {

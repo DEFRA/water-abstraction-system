@@ -5,7 +5,7 @@ const ReturnSubmissionsController = require('../controllers/return-submissions.c
 const routes = [
   {
     method: 'GET',
-    path: '/return-submissions/{returnSubmissionId}/{monthIndex}',
+    path: '/return-submissions/{returnSubmissionId}/{yearMonth}',
     options: {
       handler: ReturnSubmissionsController.view
     }

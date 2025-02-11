@@ -12,14 +12,14 @@ const ViewReturnSubmissionPresenter = require('../../presenters/return-submissio
  * Orchestrates fetching and presenting the data needed for the view return submission page
  *
  * @param {string} returnSubmissionId - The ID of the return submission to view
- * @param {number} monthIndex - The zero-indexed month to view
+ * @param {number} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view return submission template.
  */
-async function go(returnSubmissionId, monthIndex) {
+async function go(returnSubmissionId, yearMonth) {
   const returnSubmission = await FetchReturnSubmissionService.go(returnSubmissionId)
 
-  const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, monthIndex)
+  const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, yearMonth)
 
   return {
     activeNavBar: 'search',

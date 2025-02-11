@@ -11,17 +11,20 @@ const { formatLongDate, formatNumber } = require('../base.presenter.js')
  * Formats return submission data ready for presenting in the view return log page
  *
  * @param {module:ReturnSubmissionModel} returnSubmission - The return submission
- * @param {number} monthIndex - The zero-indexed month to view
+ * @param {string} yearMonth - The year and zero-indexed month to view, eg. `2014-0` for January 2014
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnSubmission, monthIndex) {
+function go(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
-  const requestedMonth = _determineRequestedMonth(returnSubmissionLines[0], monthIndex)
-  const requestedMonthLines = returnSubmissionLines.filter((line) => line.startDate.getMonth() === requestedMonth)
+  const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
+  const requestedMonthLines = returnSubmissionLines.filter(
+    (line) => line.startDate.getFullYear() === requestedYear && line.startDate.getMonth() === requestedMonth
+  )
 
   return {
+    rawData: JSON.stringify(returnSubmission, null, 2),
     backLink: _backLink(returnSubmission),
     pageTitle: _pageTitle(requestedMonthLines[0].startDate),
     returnReference: returnSubmission.returnLog.returnReference,
@@ -33,10 +36,10 @@ function _backLink(returnSubmission) {
   return `/system/return-logs?id=${returnSubmission.returnLogId}`
 }
 
-function _determineRequestedMonth(firstLine, monthIndex) {
-  const firstMonth = firstLine.startDate.getMonth()
-
-  return firstMonth + monthIndex
+function _determineRequestedYearAndMonth(yearMonth) {
+  // Splitting a string like `2014-0` by the dash gives us an array of strings ['2014', '0']. We chain `.map(Number)` to
+  // then create a new array, applying the Number() function to each one. The result is an array of numbers [2014, 0].
+  return yearMonth.split('-').map(Number)
 }
 
 function _pageTitle(date) {
