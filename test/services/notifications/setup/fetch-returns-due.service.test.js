@@ -11,9 +11,9 @@ const { expect } = Code
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const FetchDueReturnsLogsService = require('../../../../app/services/notifications/setup/fetch-due-returns-logs.service.js')
+const FetchReturnsDueService = require('../../../../app/services/notifications/setup/fetch-returns-due.service.js')
 
-describe('Notifications Setup - Fetch due returns logs service', () => {
+describe('Notifications Setup - Fetch returns due service', () => {
   let dueDate
   let isSummer
   let licenceRefs
@@ -35,7 +35,7 @@ describe('Notifications Setup - Fetch due returns logs service', () => {
 
   describe('when there are licences', () => {
     it('correctly returns the matching licences', async () => {
-      const result = await FetchDueReturnsLogsService.go(licenceRefs, dueDate, isSummer)
+      const result = await FetchReturnsDueService.go(licenceRefs, dueDate, isSummer)
 
       expect(result).to.equal([
         {

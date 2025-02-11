@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the due returns logs for the `/notifications/setup/remove-licences` page
- * @module FetchDueReturnsLogsService
+ * Fetches the returns due for the `/notifications/setup/remove-licences` page
+ * @module FetchReturnsDueService
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
 
 /**
- * Fetches the due return logs for the `/notifications/setup/remove-licences` page.
+ * Fetches the returns due for the `/notifications/setup/remove-licences` page
  *
  * This function validates the submitted licences to exclude from the list of recipients and download link.
  * It checks if the provided `licenceRef` is valid. If it's not valid, it will not be returned in the results.

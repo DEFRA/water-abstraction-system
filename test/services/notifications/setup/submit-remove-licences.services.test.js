@@ -9,7 +9,7 @@ const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const FetchDueReturnsLogsService = require('../../../../app/services/notifications/setup/fetch-due-returns-logs.service.js')
+const FetchReturnsDueService = require('../../../../app/services/notifications/setup/fetch-returns-due.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
   let payload
   let session
   let validLicences
-  let fetchDueReturnsLogsServiceStub
+  let FetchReturnsDueServiceStub
 
   before(() => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
@@ -33,12 +33,12 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
     validLicences = [{ licenceRef: '1234' }]
 
-    fetchDueReturnsLogsServiceStub = Sinon.stub(FetchDueReturnsLogsService, 'go')
+    FetchReturnsDueServiceStub = Sinon.stub(FetchReturnsDueService, 'go')
   })
 
   afterEach(() => {
     clock.restore()
-    fetchDueReturnsLogsServiceStub.restore()
+    FetchReturnsDueServiceStub.restore()
   })
 
   describe('when submitting licences to remove ', () => {
@@ -46,7 +46,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
       beforeEach(async () => {
         payload = { removeLicences: '1234' }
 
-        fetchDueReturnsLogsServiceStub.resolves(validLicences)
+        FetchReturnsDueServiceStub.resolves(validLicences)
       })
 
       it('saves the submitted value', async () => {
@@ -72,7 +72,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
         validLicences = []
 
-        fetchDueReturnsLogsServiceStub.resolves([validLicences])
+        FetchReturnsDueServiceStub.resolves([validLicences])
       })
 
       it('correctly presents the data with the error', async () => {
