@@ -40,7 +40,7 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
     const startDate = _cloneDate(clonedPeriodStartDate)
 
     // No jiggery-pokery needed. Simply add it to the days array as both the start and end date
-    days.push({ start_date: startDate, end_date: startDate })
+    days.push({ startDate, endDate: startDate })
 
     // Move the date to the next day, and round we go again!
     clonedPeriodStartDate.setDate(clonedPeriodStartDate.getDate() + 1)
@@ -52,8 +52,8 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
 /**
  * Creates an array of week objects, each representing a single week within the given period.
  *
- * A full week starts on Saturday and ends on the following Friday. If the `periodStartDate`
- * does not fall on a Saturday, the start date is adjusted backwards to the previous Saturday
+ * A full week starts on Sunday and ends on the following Saturday. If the `periodStartDate`
+ * does not fall on a Sunday, the start date is adjusted backwards to the previous Sunday
  * to ensure the first full week is included. If the `periodEndDate` does not complete a full week,
  * the partial week at the end is excluded.
  *
@@ -78,7 +78,7 @@ function weeksFromPeriod(periodStartDate, periodEndDate) {
       // Set the start date back to 6 days, which makes it the previous Sunday
       startDate.setDate(startDate.getDate() - 6)
 
-      weeks.push({ start_date: startDate, end_date: endDate })
+      weeks.push({ startDate, endDate })
 
       // Now we have found our first week, we can just move the date forward by 6 days to the next Saturday, thus saving
       // a bunch of loop iterations
@@ -126,7 +126,7 @@ function monthsFromPeriod(periodStartDate, periodEndDate) {
     // Set start date to first of the month. Passing it in as a string to new Date() helps keep it UTC rather than local
     const startDate = new Date(`${endDate.getFullYear()}-${endDate.getMonth() + 1}-01`)
 
-    months.push({ start_date: startDate, end_date: endDate })
+    months.push({ startDate, endDate })
   }
 
   return months
