@@ -40,7 +40,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.removeLicences = [payload.removeLicences]
+  session.removeLicences = payload.removeLicences
 
   return session.$update()
 }

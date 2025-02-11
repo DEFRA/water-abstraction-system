@@ -20,13 +20,15 @@ describe('Notifications Setup - Review service', () => {
   const year = 2025
 
   let clock
+  let removeLicences
   let session
   let testRecipients
 
   before(async () => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    removeLicences = ''
 
-    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
+    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', removeLicences } })
 
     testRecipients = RecipientsFixture.recipients()
 
