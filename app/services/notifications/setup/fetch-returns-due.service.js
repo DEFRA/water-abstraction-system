@@ -19,7 +19,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
  * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
  *
- * @returns {Promise<object[]>} - Due return log licences matching the provided `licenceRefs`
+ * @returns {Promise<object[]>}
  */
 async function go(licenceRefs, dueDate, summer) {
   return _fetch(licenceRefs, dueDate, summer)
