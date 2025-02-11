@@ -5,6 +5,7 @@
  * @module ReturnLogsSetupController
  */
 
+const CancelService = require('../services/return-logs/setup/cancel.service.js')
 const CheckService = require('../services/return-logs/setup/check.service.js')
 const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
@@ -16,6 +17,7 @@ const ReceivedService = require('../services/return-logs/setup/received.service.
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
+const SubmitCancel = require('../services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
@@ -26,6 +28,13 @@ const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-
 const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
 const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
 const UnitsService = require('../services/return-logs/setup/units.service.js')
+
+async function cancel(request, h) {
+  const { sessionId } = request.params
+  const pageData = await CancelService.go(sessionId)
+
+  return h.view('return-logs/setup/cancel.njk', pageData)
+}
 
 async function check(request, h) {
   const { sessionId } = request.params
@@ -108,6 +117,15 @@ async function submission(request, h) {
   const pageData = await SubmissionService.go(sessionId)
 
   return h.view('return-logs/setup/submission.njk', pageData)
+}
+
+async function submitCancel(request, h) {
+  const { sessionId } = request.params
+  const { returnLogId } = request.payload
+
+  await SubmitCancel.go(sessionId)
+
+  return h.redirect(`/system/return-logs?id=${returnLogId}`)
 }
 
 async function submitMeterDetails(request, h) {
@@ -278,6 +296,7 @@ async function units(request, h) {
 }
 
 module.exports = {
+  cancel,
   check,
   deleteNote,
   guidance,
@@ -290,6 +309,7 @@ module.exports = {
   setup,
   singleVolume,
   submission,
+  submitCancel,
   submitMeterDetails,
   submitMeterProvided,
   submitNote,
