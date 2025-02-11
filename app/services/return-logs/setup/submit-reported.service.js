@@ -5,6 +5,7 @@
  * @module SubmitReportedService
  */
 
+const GeneralLib = require('../../../lib/general.lib.js')
 const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
 const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -20,10 +21,11 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} If no errors the page data for the reported page else the validation error details
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
@@ -31,7 +33,13 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    if (session.checkPageVisited) {
+      GeneralLib.flashNotification(yar)
+    }
+
+    return {
+      checkPageVisited: session.checkPageVisited
+    }
   }
 
   const formattedData = ReportedPresenter.go(session)

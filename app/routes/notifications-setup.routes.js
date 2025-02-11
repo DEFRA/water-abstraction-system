@@ -43,6 +43,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: basePath + '/{sessionId}/remove-licences',
+    options: {
+      handler: NotificationsSetupController.viewRemoveLicences,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: basePath + '/{sessionId}/remove-licences',
+    options: {
+      handler: NotificationsSetupController.submitRemoveLicences,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: basePath + '/{sessionId}/review',
     options: {
       handler: NotificationsSetupController.viewReview,

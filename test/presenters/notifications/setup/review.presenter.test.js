@@ -53,7 +53,8 @@ describe('Notifications Setup - Review presenter', () => {
       expect(result).to.equal({
         defaultPageSize: 25,
         links: {
-          download: `/system/notifications/setup/${sessionId}/download`
+          download: `/system/notifications/setup/${sessionId}/download`,
+          removeLicences: `/system/notifications/setup/${sessionId}/remove-licences`
         },
         pageTitle: 'Send returns invitations',
         recipients: [

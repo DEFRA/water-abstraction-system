@@ -113,13 +113,18 @@ async function submission(request, h) {
 async function submitMeterDetails(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitMeterDetailsService.go(sessionId, payload)
+  const pageData = await SubmitMeterDetailsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-details.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-readings`)
@@ -128,16 +133,21 @@ async function submitMeterDetails(request, h) {
 async function submitMeterProvided(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitMeterProvidedService.go(sessionId, payload)
+  const pageData = await SubmitMeterProvidedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-provided.njk', pageData)
   }
 
   if (pageData.meterProvided === 'no') {
+    if (pageData.checkPageVisited) {
+      return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
+    }
+
     return h.redirect(`/system/return-logs/setup/${sessionId}/single-volume`)
   }
 
@@ -172,13 +182,18 @@ async function submitPeriodUsed(request, h) {
 async function submitReceived(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitReceivedService.go(sessionId, payload)
+  const pageData = await SubmitReceivedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/received.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/submission`)
@@ -187,13 +202,18 @@ async function submitReceived(request, h) {
 async function submitReported(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitReportedService.go(sessionId, payload)
+  const pageData = await SubmitReportedService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/reported.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
@@ -233,13 +253,18 @@ async function submitSubmission(request, h) {
 async function submitUnits(request, h) {
   const {
     params: { sessionId },
-    payload
+    payload,
+    yar
   } = request
 
-  const pageData = await SubmitUnitsService.go(sessionId, payload)
+  const pageData = await SubmitUnitsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/units.njk', pageData)
+  }
+
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)

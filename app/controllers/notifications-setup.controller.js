@@ -7,8 +7,10 @@
 
 const DownloadRecipientsService = require('../services/notifications/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notifications/setup/initiate-session.service.js')
+const RemoveLicencesService = require('../services/notifications/setup/remove-licences.service.js')
 const ReturnsPeriodService = require('../services/notifications/setup/returns-period.service.js')
 const ReviewService = require('../services/notifications/setup/review.service.js')
+const SubmitRemoveLicencesService = require('../services/notifications/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notifications/setup/submit-returns-period.service.js')
 
 const basePath = 'notifications/setup'
@@ -26,6 +28,16 @@ async function downloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function viewRemoveLicences(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await RemoveLicencesService.go(sessionId)
+
+  return h.view(`${basePath}/remove-licences.njk`, pageData)
 }
 
 async function viewReturnsPeriod(request, h) {
@@ -55,6 +67,21 @@ async function setup(_request, h) {
   return h.redirect(`/system/${basePath}/${session.id}/returns-period`)
 }
 
+async function submitRemoveLicences(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitRemoveLicencesService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`${basePath}/remove-licences.njk`, pageData)
+  }
+
+  return h.redirect(`/system/${basePath}/${pageData.redirect}`)
+}
+
 async function submitReturnsPeriod(request, h) {
   const {
     payload,
@@ -72,8 +99,10 @@ async function submitReturnsPeriod(request, h) {
 
 module.exports = {
   downloadRecipients,
+  viewRemoveLicences,
   viewReturnsPeriod,
   viewReview,
   setup,
+  submitRemoveLicences,
   submitReturnsPeriod
 }
