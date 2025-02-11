@@ -41,12 +41,23 @@
           }
         ] %}
 
+        {# Add units column if the submission was not in cubic metres #}
+        {% if displayUnits %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: row.unitQuantity,
+              format: 'numeric',
+              attributes: { 'data-test': 'unit-quantity-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
         {# Cubic metres column #}
         {% set tableRow = (tableRow.push(
           {
-            text: row.quantity,
+            text: row.cubicMetresQuantity,
             format: 'numeric',
-            attributes: { 'data-test': 'cubic-metres-' + rowIndex }
+            attributes: { 'data-test': 'cubic-metres-quantity' + rowIndex }
           }
         ), tableRow) %}
 
@@ -59,13 +70,29 @@
         {
           html: '<strong>Total volume of water abstracted</strong>',
           attributes: { 'data-test': 'total-row-text' }
-        },
+        }
+      ] %}
+
+      {# Add units column if the submission was not in cubic metres #}
+      {% if displayUnits %}
+        {% set totalRow = (totalRow.push(
+          {
+            html: '<strong>' + tableData.unitTotal + '</strong>',
+            format: 'numeric',
+            attributes: { 'data-test': 'total-row-unit-value' }
+          }
+        ), totalRow) %}
+      {% endif %}
+
+
+      {% set totalRow = (totalRow.push(
         {
-          html: '<strong>' + tableData.total + '</strong>',
+          html: '<strong>' + tableData.cubicMetresTotal + '</strong>',
           format: 'numeric',
           attributes: { 'data-test': 'total-row-value' }
         }
-      ] %}
+      ), totalRow) %}
+
       {% set tableRows = (tableRows.push(totalRow), tableRows) %}
 
       {{

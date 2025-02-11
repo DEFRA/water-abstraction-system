@@ -5,7 +5,9 @@
  * @module ViewReturnSubmissionPresenter
  */
 
-const { formatLongDate, formatNumber } = require('../base.presenter.js')
+const { formatLongDate, formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
+
+const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats return submission data ready for presenting in the view return log page
@@ -23,12 +25,15 @@ function go(returnSubmission, yearMonth) {
     (line) => line.startDate.getFullYear() === requestedYear && line.startDate.getMonth() === requestedMonth
   )
 
+  const units = returnSubmission.$units()
+
   return {
     rawData: JSON.stringify(returnSubmission, null, 2),
     backLink: _backLink(returnSubmission),
-    pageTitle: _pageTitle(requestedMonthLines[0].startDate),
+    displayUnits: units !== unitNames.CUBIC_METRES,
+    pageTitle: _pageTitle(requestedMonthLines[0].endDate),
     returnReference: returnSubmission.returnLog.returnReference,
-    tableData: _tableData(requestedMonthLines)
+    tableData: _tableData(requestedMonthLines, units)
   }
 }
 
@@ -48,31 +53,56 @@ function _pageTitle(date) {
   return `Water abstracted ${titleDate}`
 }
 
-function _tableData(lines) {
-  const headers = [{ text: 'Day' }, { text: 'Cubic metres', format: 'numeric' }]
-
-  const rows = lines.map((line) => {
-    return {
-      date: formatLongDate(line.startDate),
-      quantity: formatNumber(line.quantity)
-    }
-  })
+function _tableData(lines, units) {
+  const headers = _generateTableHeaders(units)
+  const rows = _generateTableRows(lines)
+  const { cubicMetresTotal, unitTotal } = _total(lines, units)
 
   return {
+    cubicMetresTotal,
     headers,
     rows,
-    total: _total(lines)
+    unitTotal
   }
 }
 
-function _total(lines) {
-  const total = lines.reduce((acc, line) => {
+function _generateTableRows(lines) {
+  return lines.map((line) => {
+    const { endDate, quantity, userUnit } = line
+
+    const rowData = {
+      cubicMetresQuantity: formatQuantity(userUnit, quantity),
+      date: formatLongDate(endDate),
+      unitQuantity: formatNumber(quantity)
+    }
+
+    return rowData
+  })
+}
+
+function _generateTableHeaders(units) {
+  const headers = [{ text: 'Day' }]
+
+  if (units !== unitNames.CUBIC_METRES) {
+    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
+  }
+
+  headers.push({ text: 'Cubic metres', format: 'numeric' })
+
+  return headers
+}
+
+function _total(lines, units) {
+  const totalQuantity = lines.reduce((acc, line) => {
     const quantity = line.quantity ?? 0
 
     return acc + quantity
   }, 0)
 
-  return formatNumber(total)
+  return {
+    cubicMetresTotal: formatQuantity(units, totalQuantity),
+    unitTotal: formatNumber(totalQuantity)
+  }
 }
 
 module.exports = {
