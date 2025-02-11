@@ -30,7 +30,7 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.removeLicences).to.equal(['1234'])
+        expect(refreshedSession.removeLicences).to.equal('1234')
       })
 
       it('returns the redirect route', async () => {
