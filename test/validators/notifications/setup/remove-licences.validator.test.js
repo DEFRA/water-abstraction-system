@@ -19,7 +19,7 @@ describe('Notifications Setup - Remove licences validator', () => {
     validLicences = [{ licenceRef: '123/67' }]
   })
 
-  describe('when licences are valid licences', () => {
+  describe('when licences are valid', () => {
     it('confirms the data is valid', () => {
       const result = RemoveLicencesValidator.go(payload, validLicences)
 
