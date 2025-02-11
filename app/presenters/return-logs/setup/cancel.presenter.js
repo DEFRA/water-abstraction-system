@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/cancel` page
- * @module CancelRequirementsPresenter
+ * @module CancelPresenter
  */
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
