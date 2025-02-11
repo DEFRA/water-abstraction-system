@@ -17,7 +17,7 @@ const ReceivedService = require('../services/return-logs/setup/received.service.
 const ReportedService = require('../services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../services/return-logs/setup/submission.service.js')
-const SubmitCancel = require('../services/return-logs/setup/submit-cancel.service.js')
+const SubmitCancelService = require('../services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
@@ -123,7 +123,7 @@ async function submitCancel(request, h) {
   const { sessionId } = request.params
   const { returnLogId } = request.payload
 
-  await SubmitCancel.go(sessionId)
+  await SubmitCancelService.go(sessionId)
 
   return h.redirect(`/system/return-logs?id=${returnLogId}`)
 }
