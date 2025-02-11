@@ -56,15 +56,12 @@ async function go(dueDate, summer, removeLicences) {
 }
 
 async function _fetch(dueDate, summer, removeLicences) {
-  // Creates an array of ['?'] placeholder for the licence to be excluded from the query
-  const excludeLicences = removeLicences.map(() => '?').join(',')
+  const query = _query()
 
-  const query = _query(excludeLicences)
-
-  return db.raw(query, [dueDate, summer, ...removeLicences, dueDate, summer, ...removeLicences])
+  return db.raw(query, [dueDate, summer, removeLicences, dueDate, summer, removeLicences])
 }
 
-function _query(excludeLicences) {
+function _query() {
   return `
 SELECT
   contacts.licence_ref,
@@ -95,7 +92,7 @@ FROM (
       AND rl.metadata->>'isCurrent' = 'true'
       AND rl.metadata->>'isSummer' = ?
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
-      AND ldh.licence_ref NOT IN (${excludeLicences})
+      AND NOT (ldh.licence_ref = ANY (?))
       AND NOT EXISTS (
         SELECT
             1
@@ -130,8 +127,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
-    AND ldh.licence_ref NOT IN (${excludeLicences})
-
+    AND NOT (ldh.licence_ref = ANY (?))
 ) contacts
 ORDER BY
 contacts.licence_ref`

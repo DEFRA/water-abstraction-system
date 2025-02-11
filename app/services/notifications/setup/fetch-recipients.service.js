@@ -157,25 +157,22 @@ async function go(dueDate, summer, removeLicences) {
 }
 
 async function _fetch(dueDate, summer, removeLicences) {
-  // Creates an array of ['?'] placeholder for the licence to be excluded from the query
-  const excludeLicences = removeLicences.map(() => '?').join(',')
-
-  const query = _query(excludeLicences)
+  const query = _query()
 
   return db.raw(query, [
     dueDate,
     summer,
-    ...removeLicences,
+    removeLicences,
     dueDate,
     summer,
-    ...removeLicences,
+    removeLicences,
     dueDate,
     summer,
-    ...removeLicences
+    removeLicences
   ])
 }
 
-function _query(excludeLicences) {
+function _query() {
   return `SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
   contact_type,
@@ -211,7 +208,7 @@ FROM (
         ler.company_entity_id = ldh.company_entity_id
         AND ler."role" IN ('primary_user', 'user_returns')
     )
-    AND ldh.licence_ref NOT IN (${excludeLicences})
+    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -231,7 +228,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
-    AND ldh.licence_ref NOT IN (${excludeLicences})
+    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -251,7 +248,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
-    AND ldh.licence_ref NOT IN (${excludeLicences})
+    AND NOT (ldh.licence_ref = ANY (?))
 ) contacts
 GROUP BY
   contact_type,
