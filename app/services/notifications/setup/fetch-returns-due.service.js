@@ -10,8 +10,10 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 /**
  * Fetches the returns due for the `/notifications/setup/remove-licences` page
  *
- * This function validates the submitted licences to exclude from the list of recipients and download link.
- * It checks if the provided `licenceRef` is valid. If it's not valid, it will not be returned in the results.
+ * This function is part of the validation for excluding licences from the list of recipients and download link.
+ *
+ * The calling function should handle the comparison of matching licences. This service returns any matching licences
+ * with those provided (making them a valid licence in the context of 'the licence exists with the given due date).
  *
  * @param {string[]} licenceRefs - the licences to find
  * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
