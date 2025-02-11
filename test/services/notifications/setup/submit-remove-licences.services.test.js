@@ -3,26 +3,50 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const FetchDueReturnsLogsService = require('../../../../app/services/notifications/setup/fetch-due-returns-logs.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitRemoveLicencesService = require('../../../../app/services/notifications/setup/submit-remove-licences.service.js')
 
 describe('Notifications Setup - Submit Remove licences service', () => {
+  const year = 2025
+
+  let clock
   let payload
   let session
+  let validLicences
+  let fetchDueReturnsLogsServiceStub
+
+  before(() => {
+    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+  })
+
+  beforeEach(async () => {
+    session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour' } })
+
+    validLicences = [{ licenceRef: '1234' }]
+
+    fetchDueReturnsLogsServiceStub = Sinon.stub(FetchDueReturnsLogsService, 'go')
+  })
+
+  afterEach(() => {
+    clock.restore()
+    fetchDueReturnsLogsServiceStub.restore()
+  })
 
   describe('when submitting licences to remove ', () => {
     describe('is successful', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add()
-
         payload = { removeLicences: '1234' }
+
+        fetchDueReturnsLogsServiceStub.resolves(validLicences)
       })
 
       it('saves the submitted value', async () => {
@@ -44,8 +68,11 @@ describe('Notifications Setup - Submit Remove licences service', () => {
 
     describe('fails validation', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add()
-        payload = {}
+        payload = { removeLicences: '789' }
+
+        validLicences = []
+
+        fetchDueReturnsLogsServiceStub.resolves([validLicences])
       })
 
       it('correctly presents the data with the error', async () => {
@@ -54,10 +81,10 @@ describe('Notifications Setup - Submit Remove licences service', () => {
         expect(result).to.equal({
           activeNavBar: 'manage',
           error: {
-            text: 'Please enter a licence number'
+            text: 'There are no returns due for licence 789'
           },
           hint: 'Separate the licences numbers with a comma or new line.',
-          removeLicences: undefined,
+          removeLicences: '789',
           pageTitle: 'Enter the licence numbers to remove from the mailing list'
         })
       })

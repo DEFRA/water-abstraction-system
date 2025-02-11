@@ -5,9 +5,12 @@
  * @module SubmitRemoveLicencesService
  */
 
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const FetchDueReturnsLogsService = require('./fetch-due-returns-logs.service.js')
 const RemoveLicencesPresenter = require('../../../presenters/notifications/setup/remove-licences.presenter.js')
 const RemoveLicencesValidator = require('../../../validators/notifications/setup/remove-licences.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for the notifications setup remove licences page
@@ -20,7 +23,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const validLicences = await _fetchValidLicences(session, payload)
+
+  const validationResult = _validate(payload, validLicences)
 
   if (validationResult) {
     const formattedData = RemoveLicencesPresenter.go(payload.removeLicences)
@@ -39,14 +44,22 @@ async function go(sessionId, payload) {
   }
 }
 
+async function _fetchValidLicences(session, payload) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+
+  const removeLicences = transformStringOfLicencesToArray(payload.removeLicences)
+
+  return FetchDueReturnsLogsService.go(removeLicences, returnsPeriod.dueDate, summer)
+}
+
 async function _save(session, payload) {
   session.removeLicences = payload.removeLicences
 
   return session.$update()
 }
 
-function _validate(payload) {
-  const validation = RemoveLicencesValidator.go(payload)
+function _validate(payload, validLicences) {
+  const validation = RemoveLicencesValidator.go(payload, validLicences)
 
   if (!validation.error) {
     return null
