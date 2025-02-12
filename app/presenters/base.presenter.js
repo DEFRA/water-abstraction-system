@@ -25,7 +25,7 @@ function convertPenceToPounds(value) {
  * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
  */
 function formatQuantity(units, quantity) {
-  if (!quantity) {
+  if (quantity === null || quantity === undefined) {
     return null
   }
 

@@ -49,10 +49,20 @@ describe('Base presenter', () => {
 
   describe('#formatQuantity()', () => {
     describe('when quantity and units are provided', () => {
-      it('returns converted and formatted quantity', () => {
-        const result = BasePresenter.formatQuantity('gal', 100)
+      describe('and the value is not 0', () => {
+        it('returns converted and formatted quantity', () => {
+          const result = BasePresenter.formatQuantity('gal', 100)
 
-        expect(result).to.equal('21,996.925')
+          expect(result).to.equal('21,996.925')
+        })
+      })
+
+      describe('and the value is 0', () => {
+        it('returns 0 as a string', () => {
+          const result = BasePresenter.formatQuantity('gal', 0)
+
+          expect(result).to.equal('0')
+        })
       })
     })
 
