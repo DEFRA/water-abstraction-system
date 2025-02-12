@@ -12,8 +12,8 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
 /**
  * Creates an array of day objects, each representing a single day within the given period.
  *
- * This function iterates through each day between the period start and end date (inclusive),
- * creating an object for each day with the same start and end date.
+ * This function iterates through each day between the period start and end date (inclusive), creating an object for
+ * each day with the same start and end date.
  *
  * @param {Date} periodStartDate - The start date of the period.
  * @param {Date} periodEndDate - The end date of the period.
