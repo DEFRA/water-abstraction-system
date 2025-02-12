@@ -15,11 +15,14 @@ describe('Notifications Setup - Remove licences validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { removeLicences: '123/67' }
     validLicences = [{ licenceRef: '123/67' }]
   })
 
-  describe('when licences are valid', () => {
+  describe('when licences are valid to be removed', () => {
+    beforeEach(() => {
+      payload = { removeLicences: '123/67' }
+    })
+
     it('confirms the data is valid', () => {
       const result = RemoveLicencesValidator.go(payload, validLicences)
 
@@ -29,9 +32,9 @@ describe('Notifications Setup - Remove licences validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe('because the licence is not a valid licence', () => {
+    describe('because a licence is not a valid licence to be removed', () => {
       beforeEach(() => {
-        validLicences = ['']
+        payload = { removeLicences: '01/123' }
       })
 
       it('fails validation', () => {
@@ -39,14 +42,13 @@ describe('Notifications Setup - Remove licences validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('There are no returns due for licence 123/67')
+        expect(result.error.details[0].message).to.equal('There are no returns due for licence 01/123')
       })
     })
 
-    describe('because multiple licences are not valid licences', () => {
+    describe('because multiple licences are not valid licences to be removed', () => {
       beforeEach(() => {
-        payload = { removeLicences: '123/67, 678' }
-        validLicences = ['']
+        payload = { removeLicences: '01/123,678' }
       })
 
       it('fails validation', () => {
@@ -54,7 +56,7 @@ describe('Notifications Setup - Remove licences validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('There are no returns due for licences 123/67, 678')
+        expect(result.error.details[0].message).to.equal('There are no returns due for licences 01/123, 678')
       })
     })
   })

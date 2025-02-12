@@ -6,38 +6,28 @@
  */
 
 const Joi = require('joi')
+
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Validates data submitted for the `/notifications/setup/remove-licences` page
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {object[]} validLicences - An array of licences found in the database from `payload.removeLicences`
+ * @param {object[]} validLicences - The licences that that have due returns for the selected notification period
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, validLicences) {
-  const schema = Joi.object(
-    {
-      removeLicences: Joi.custom((value, helpers) => {
-        const expectedLicences = validLicences.map((licence) => licence.licenceRef)
-        const result = transformStringOfLicencesToArray(value)
+  const validLicenceRefs = validLicences.map((licence) => {
+    return licence.licenceRef
+  })
 
-        const missingLicences = _findMissingElements(result, expectedLicences)
-
-        if (missingLicences.length > 0) {
-          const messageKey = missingLicences.length === 1 ? 'missingLicence' : 'missingLicences'
-          const missingValue = missingLicences.length === 1 ? missingLicences[0] : missingLicences.join(', ')
-
-          return helpers.error(messageKey, { missingLicences: missingValue })
-        }
-
-        return result
-      })
-    },
-    'Custom Licence Validation'
-  ).messages({
+  const schema = Joi.object({
+    removeLicences: Joi.custom((value, helpers) => {
+      return _removedLicencesInValidLicencesValidator(value, helpers, validLicenceRefs)
+    }, 'Custom Licence Validation')
+  }).messages({
     missingLicence: 'There are no returns due for licence {{#missingLicences}}',
     missingLicences: 'There are no returns due for licences {{#missingLicences}}'
   })
@@ -45,21 +35,31 @@ function go(payload, validLicences) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-/**
- * Finds the elements that are present in one array but missing in the other.
- *
- * @param {Array} arr1 - The first array.
- * @param {Array} arr2 - The second array.
- * @returns {Array} An array containing all the elements not found in either array
- */
-function _findMissingElements(arr1, arr2) {
-  const cleanArr1 = arr1.filter((item) => item !== undefined && item !== null)
-  const cleanArr2 = arr2.filter((item) => item !== undefined && item !== null)
+function _findRemovedLicencesNotInValidLicences(licenceRefsToRemove, validLicenceRefs) {
+  const missingLicences = []
 
-  const missingInArr2 = cleanArr1.filter((item) => !cleanArr2.includes(item))
-  const missingInArr1 = cleanArr2.filter((item) => !cleanArr1.includes(item))
+  for (const licenceRefToRemove of licenceRefsToRemove) {
+    if (!validLicenceRefs.includes(licenceRefToRemove)) {
+      missingLicences.push(licenceRefToRemove)
+    }
+  }
 
-  return [...missingInArr2, ...missingInArr1]
+  return missingLicences
+}
+
+function _removedLicencesInValidLicencesValidator(value, helpers, validLicenceRefs) {
+  const result = transformStringOfLicencesToArray(value)
+
+  const missingLicences = _findRemovedLicencesNotInValidLicences(result, validLicenceRefs)
+
+  if (missingLicences.length > 0) {
+    const messageKey = missingLicences.length === 1 ? 'missingLicence' : 'missingLicences'
+    const missingValue = missingLicences.join(', ')
+
+    return helpers.error(messageKey, { missingLicences: missingValue })
+  }
+
+  return result
 }
 
 module.exports = {
