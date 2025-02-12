@@ -1,0 +1,65 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+{# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">Return reference {{ returnReference }}</span>
+    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-!-margin-bottom-9">
+    {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        attributes: {
+          'data-test': 'meta-data'
+        },
+        rows: [
+          {
+            key: { text: "Site description", classes: "meta-data__label" },
+            value: { html: '<span data-test="site-description">' + siteDescription + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Purpose", classes: "meta-data__label" },
+            value: { html: '<span data-test="purpose">' + purposes + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Return period", classes: "meta-data__label" },
+            value: { html: '<span data-test="returns-period">' + returnPeriod + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Abstraction period", classes: "meta-data__label" },
+            value: { html: '<span data-test="abstraction-period">' + abstractionPeriod + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Received date", classes: "meta-data__label" },
+            value: { html: '<span data-test="received-date">' + returnReceivedDate + '</span>', classes: "meta-data__value" }
+          },
+          {
+            key: { text: "Tariff", classes: "meta-data__label" },
+            value: { html: '<span data-test="tariff">' + tariff + '</span>', classes: "meta-data__value" }
+          }
+        ]
+      })
+    }}
+  </div>
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+      <input type="hidden" id="return-log-id" name="returnLogId" value="{{ returnLogId }}"/>
+
+    {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

@@ -20,14 +20,16 @@ describe('Notifications Setup - Download recipients service', () => {
   const year = 2025
 
   let clock
+  let removeLicences
   let session
   let testRecipients
 
   before(async () => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    removeLicences = ''
 
     session = await SessionHelper.add({
-      data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns invitation' }
+      data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns invitation', removeLicences }
     })
 
     testRecipients = _recipients()

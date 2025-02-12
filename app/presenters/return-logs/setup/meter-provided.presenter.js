@@ -16,12 +16,22 @@ function go(session) {
   const { id: sessionId, returnReference, meterProvided } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/units`,
+    backLink: _backLink(session),
     meterProvided: meterProvided ?? null,
     pageTitle: 'Have meter details been provided?',
     returnReference,
     sessionId
   }
+}
+
+function _backLink(session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/setup/${id}/units`
 }
 
 module.exports = {
