@@ -12,6 +12,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const CancelService = require('../../app/services/return-logs/setup/cancel.service.js')
 const CheckService = require('../../app/services/return-logs/setup/check.service.js')
 const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
 const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
@@ -22,6 +23,7 @@ const ReceivedService = require('../../app/services/return-logs/setup/received.s
 const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
 const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
 const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
+const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
 const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
 const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
 const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
@@ -84,6 +86,42 @@ describe('Return Logs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/return-logs/setup/${session.id}/received`)
+        })
+      })
+    })
+  })
+
+  describe('/return-logs/setup/{sessionId}/cancel', () => {
+    const path = 'cancel'
+
+    describe('GET', () => {
+      beforeEach(() => {
+        Sinon.stub(CancelService, 'go').resolves({ pageTitle: 'You are about to cancel this return submission' })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('You are about to cancel this return submission')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCancelService, 'go').resolves()
+        })
+
+        it('redirects to the "abstraction return" page', async () => {
+          const response = await server.inject(
+            _postOptions(path, { returnLogId: 'v1:6:09/999:1003992:2022-04-01:2023-03-31' })
+          )
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/return-logs?id=v1:6:09/999:1003992:2022-04-01:2023-03-31')
         })
       })
     })
