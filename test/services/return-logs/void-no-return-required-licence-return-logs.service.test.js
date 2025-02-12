@@ -15,7 +15,7 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 // Thing under test
 const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../app/services/return-logs/void-no-return-required-licence-return-logs.service.js')
 
-describe.only('Return Logs - Void No Return Required Licence Return Logs service', () => {
+describe('Return Logs - Void No Return Required Licence Return Logs service', () => {
   let licence
   let returnVersion
   let returnLogMatchingVersion
