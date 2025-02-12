@@ -42,137 +42,6 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('weekFromPeriod', () => {
-    let startDate
-    let endDate
-
-    describe('given a "startDate" that is a Sunday and an "endDate" that is a Saturday', () => {
-      before(async () => {
-        // Sunday
-        startDate = new Date('2025-02-02')
-        // Saturday
-        endDate = new Date('2025-02-22')
-      })
-
-      it('returns a "week" object for each week (Sunday to Saturday) within the period', () => {
-        const results = DateLib.weeksFromPeriod(startDate, endDate)
-
-        expect(results).to.equal([
-          {
-            startDate: new Date('2025-02-02'),
-            endDate: new Date('2025-02-08')
-          },
-          {
-            startDate: new Date('2025-02-09'),
-            endDate: new Date('2025-02-15')
-          },
-          {
-            startDate: new Date('2025-02-16'),
-            endDate: new Date('2025-02-22')
-          }
-        ])
-      })
-    })
-    describe('given a "startDate" that is Wednesday and an "endDate" that is a Saturday', () => {
-      before(async () => {
-        // Wednesday
-        startDate = new Date('2025-02-05')
-        // Saturday
-        endDate = new Date('2025-02-22')
-      })
-
-      it('sets the start date of the first "week" back to the Sunday (start of the week)', () => {
-        const results = DateLib.weeksFromPeriod(startDate, endDate)
-
-        expect(results[0]).to.equal({
-          startDate: new Date('2025-02-02'),
-          endDate: new Date('2025-02-08')
-        })
-      })
-    })
-
-    describe('given a "startDate" that is Sunday and an "endDate" that is a Thursday', () => {
-      before(async () => {
-        // Sunday
-        startDate = new Date('2025-02-02')
-        // Thursday
-        endDate = new Date('2025-02-27')
-      })
-
-      it('sets the last "week" as the last full week (Sun to Sat) before the "endDate"', () => {
-        const results = DateLib.weeksFromPeriod(startDate, endDate)
-
-        expect(results[results.length - 1]).to.equal({
-          startDate: new Date('2025-02-16'),
-          endDate: new Date('2025-02-22')
-        })
-      })
-    })
-  })
-
-  describe('monthFromPeriod', () => {
-    let startDate
-    let endDate
-
-    describe('given a "startDate" that is the first of the month and an "endDate" that is the last of the month', () => {
-      before(async () => {
-        startDate = new Date('2025-02-01')
-        endDate = new Date('2025-04-30')
-      })
-
-      it('returns a "month" object for each month within the period', () => {
-        const results = DateLib.monthsFromPeriod(startDate, endDate)
-
-        expect(results).to.equal([
-          {
-            startDate: new Date('2025-02-01'),
-            endDate: new Date('2025-02-28')
-          },
-          {
-            startDate: new Date('2025-03-01'),
-            endDate: new Date('2025-03-31')
-          },
-          {
-            startDate: new Date('2025-04-01'),
-            endDate: new Date('2025-04-30')
-          }
-        ])
-      })
-    })
-
-    describe('given a "startDate" that is in the middle and an "endDate" that is the last of the month', () => {
-      before(async () => {
-        startDate = new Date('2025-02-15')
-        endDate = new Date('2025-04-30')
-      })
-
-      it('sets the start date of the first "month" back to the 1st', () => {
-        const results = DateLib.monthsFromPeriod(startDate, endDate)
-
-        expect(results[0]).to.equal({
-          startDate: new Date('2025-02-01'),
-          endDate: new Date('2025-02-28')
-        })
-      })
-    })
-
-    describe('given a "startDate" that is the first of the month and an "endDate" that is in the middle', () => {
-      before(async () => {
-        startDate = new Date('2025-02-01')
-        endDate = new Date('2025-04-15')
-      })
-
-      it('sets the end date of the last "month" forward to the last of the month', () => {
-        const results = DateLib.monthsFromPeriod(startDate, endDate)
-
-        expect(results[results.length - 1]).to.equal({
-          startDate: new Date('2025-04-01'),
-          endDate: new Date('2025-04-30')
-        })
-      })
-    })
-  })
-
   describe('determineEarliestDate', () => {
     let dates
 
@@ -301,6 +170,34 @@ describe('Dates lib', () => {
     })
   })
 
+  describe('isISODateFormat', () => {
+    it('should return false if the date is not in the iso format - yyyy-mm-dd', () => {
+      const result = DateLib.isISODateFormat('20/07/2020')
+
+      expect(result).to.be.false()
+    })
+
+    it('should return true if the date is in the iso format - yyyy-mm-dd', () => {
+      const result = DateLib.isISODateFormat('2020-07-20')
+
+      expect(result).to.be.true()
+    })
+  })
+
+  describe('isQuarterlyReturnSubmissions', () => {
+    it('should return true if the date is >= 2025-04-01', () => {
+      const result = DateLib.isQuarterlyReturnSubmissions('2025-04-01')
+
+      expect(result).to.be.true()
+    })
+
+    it('should return false if the date is < 2025-04-01', () => {
+      const result = DateLib.isQuarterlyReturnSubmissions('2025-03-31')
+
+      expect(result).to.be.false()
+    })
+  })
+
   describe('isValidDate', () => {
     it('should return false is no date provided', () => {
       const result = DateLib.isValidDate()
@@ -375,31 +272,134 @@ describe('Dates lib', () => {
     })
   })
 
-  describe('isISODateFormat', () => {
-    it('should return false if the date is not in the iso format - yyyy-mm-dd', () => {
-      const result = DateLib.isISODateFormat('20/07/2020')
+  describe('monthFromPeriod', () => {
+    let startDate
+    let endDate
 
-      expect(result).to.be.false()
+    describe('given a "startDate" that is the first of the month and an "endDate" that is the last of the month', () => {
+      before(async () => {
+        startDate = new Date('2025-02-01')
+        endDate = new Date('2025-04-30')
+      })
+
+      it('returns a "month" object for each month within the period', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
+
+        expect(results).to.equal([
+          {
+            startDate: new Date('2025-02-01'),
+            endDate: new Date('2025-02-28')
+          },
+          {
+            startDate: new Date('2025-03-01'),
+            endDate: new Date('2025-03-31')
+          },
+          {
+            startDate: new Date('2025-04-01'),
+            endDate: new Date('2025-04-30')
+          }
+        ])
+      })
     })
 
-    it('should return true if the date is in the iso format - yyyy-mm-dd', () => {
-      const result = DateLib.isISODateFormat('2020-07-20')
+    describe('given a "startDate" that is in the middle and an "endDate" that is the last of the month', () => {
+      before(async () => {
+        startDate = new Date('2025-02-15')
+        endDate = new Date('2025-04-30')
+      })
 
-      expect(result).to.be.true()
+      it('sets the start date of the first "month" back to the 1st', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
+
+        expect(results[0]).to.equal({
+          startDate: new Date('2025-02-01'),
+          endDate: new Date('2025-02-28')
+        })
+      })
+    })
+
+    describe('given a "startDate" that is the first of the month and an "endDate" that is in the middle', () => {
+      before(async () => {
+        startDate = new Date('2025-02-01')
+        endDate = new Date('2025-04-15')
+      })
+
+      it('sets the end date of the last "month" forward to the last of the month', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
+
+        expect(results[results.length - 1]).to.equal({
+          startDate: new Date('2025-04-01'),
+          endDate: new Date('2025-04-30')
+        })
+      })
     })
   })
 
-  describe('isQuarterlyReturnSubmissions', () => {
-    it('should return true if the date is >= 2025-04-01', () => {
-      const result = DateLib.isQuarterlyReturnSubmissions('2025-04-01')
+  describe('weekFromPeriod', () => {
+    let startDate
+    let endDate
 
-      expect(result).to.be.true()
+    describe('given a "startDate" that is a Sunday and an "endDate" that is a Saturday', () => {
+      before(async () => {
+        // Sunday
+        startDate = new Date('2025-02-02')
+        // Saturday
+        endDate = new Date('2025-02-22')
+      })
+
+      it('returns a "week" object for each week (Sunday to Saturday) within the period', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
+
+        expect(results).to.equal([
+          {
+            startDate: new Date('2025-02-02'),
+            endDate: new Date('2025-02-08')
+          },
+          {
+            startDate: new Date('2025-02-09'),
+            endDate: new Date('2025-02-15')
+          },
+          {
+            startDate: new Date('2025-02-16'),
+            endDate: new Date('2025-02-22')
+          }
+        ])
+      })
+    })
+    describe('given a "startDate" that is Wednesday and an "endDate" that is a Saturday', () => {
+      before(async () => {
+        // Wednesday
+        startDate = new Date('2025-02-05')
+        // Saturday
+        endDate = new Date('2025-02-22')
+      })
+
+      it('sets the start date of the first "week" back to the Sunday (start of the week)', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
+
+        expect(results[0]).to.equal({
+          startDate: new Date('2025-02-02'),
+          endDate: new Date('2025-02-08')
+        })
+      })
     })
 
-    it('should return false if the date is < 2025-04-01', () => {
-      const result = DateLib.isQuarterlyReturnSubmissions('2025-03-31')
+    describe('given a "startDate" that is Sunday and an "endDate" that is a Thursday', () => {
+      before(async () => {
+        // Sunday
+        startDate = new Date('2025-02-02')
+        // Thursday
+        endDate = new Date('2025-02-27')
+      })
 
-      expect(result).to.be.false()
+      it('sets the last "week" as the last full week (Sun to Sat) before the "endDate"', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
+
+        expect(results[results.length - 1]).to.equal({
+          startDate: new Date('2025-02-16'),
+          endDate: new Date('2025-02-22')
+        })
+      })
     })
   })
 })

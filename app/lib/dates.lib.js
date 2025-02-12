@@ -213,26 +213,6 @@ function isQuarterlyReturnSubmissions(date) {
 }
 
 /**
- * Depending on how you instantiate a date in JavaScript, it will set the time element to either UTC or whatever the
- * locale is.
- *
- * For example, create one date by missing in another date, and you'll see the time set according to local time (GMT or
- * BST). Create one using a string, for example, `new Date('2024-04-01') and it will use UTC as the locale for the time
- * element.
- *
- * We only want to be working with UTC dates to avoid any issues, but there are times we need to clone a date to avoid
- * making changes to the original. To ensure our cloned date is also UTC, we have this method.
- * @private
- */
-function _cloneDate(dateToClone) {
-  const year = dateToClone.getFullYear()
-  const month = dateToClone.getMonth() + 1
-  const day = dateToClone.getDate()
-
-  return new Date(`${year}-${month}-${day}`)
-}
-
-/**
  * Creates an array of month objects, each representing a full calendar month within the given period.
  *
  * If the `periodStartDate` is not the first day of the month, the start date is adjusted backwards to the 1st of that
@@ -313,6 +293,26 @@ function weeksFromPeriod(periodStartDate, periodEndDate) {
   }
 
   return weeks
+}
+
+/**
+ * Depending on how you instantiate a date in JavaScript, it will set the time element to either UTC or whatever the
+ * locale is.
+ *
+ * For example, create one date by missing in another date, and you'll see the time set according to local time (GMT or
+ * BST). Create one using a string, for example, `new Date('2024-04-01') and it will use UTC as the locale for the time
+ * element.
+ *
+ * We only want to be working with UTC dates to avoid any issues, but there are times we need to clone a date to avoid
+ * making changes to the original. To ensure our cloned date is also UTC, we have this method.
+ * @private
+ */
+function _cloneDate(dateToClone) {
+  const year = dateToClone.getFullYear()
+  const month = dateToClone.getMonth() + 1
+  const day = dateToClone.getDate()
+
+  return new Date(`${year}-${month}-${day}`)
 }
 
 module.exports = {
