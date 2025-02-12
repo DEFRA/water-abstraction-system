@@ -14,15 +14,13 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const FetchReturnsDueService = require('../../../../app/services/notifications/setup/fetch-returns-due.service.js')
 
 describe('Notifications Setup - Fetch returns due service', () => {
-  let dueDate
-  let isSummer
+  const dueDate = '2024-04-28' // This needs to differ from any other returns log tests
+  const isSummer = 'false'
+
   let licenceRefs
   let returnLog
 
   before(async () => {
-    dueDate = '2024-04-28' // This needs to differ from any other returns log tests
-    isSummer = 'false'
-
     const defaults = ReturnLogHelper.defaults()
 
     returnLog = await ReturnLogHelper.add({
