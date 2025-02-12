@@ -45,7 +45,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * received from this query (For either registered to unregistered licence). We expect to see duplicate licences with
  * different contacts types (but still preferring the registered over unregistered licence).
  *
- * @param {module:SessionModel} session - The session instance to format
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} - matching recipients
  */

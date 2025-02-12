@@ -28,7 +28,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
   before(async () => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
 
-    dueDate = '2023-04-28' // This needs to differ from any other returns log tests
+    dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
     removeLicences = ''
 
     session = { returnsPeriod: 'quarterFour', removeLicences }

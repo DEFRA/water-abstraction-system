@@ -146,7 +146,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * ]
  * ```
  *
- * @param {module:SessionModel} session - The session instance to format
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
