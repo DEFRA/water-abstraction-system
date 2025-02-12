@@ -8,14 +8,12 @@
 /**
  * Formats data for the `/notifications/ad-hoc-returns/{sessionId}/licence` page
  *
- * @param {module:SessionModel} session - The session instance to format
- *
+ * @param licenceRef
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+function go(licenceRef) {
   return {
-    sessionId: session.id,
-    licenceRef: session.licenceRef ?? null,
+    licenceRef: licenceRef || null,
     pageTitle: 'Enter a licence number'
   }
 }
