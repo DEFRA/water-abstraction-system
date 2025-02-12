@@ -104,7 +104,7 @@ describe('Notifications Ad Hoc Returns controller', () => {
 function _getOptions(path) {
   return {
     method: 'GET',
-    url: `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
+    url: `/notifications/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
     auth: {
       strategy: 'session',
       credentials: { scope: ['returns'] }
@@ -113,9 +113,5 @@ function _getOptions(path) {
 }
 
 function _postOptions(path, payload, scope) {
-  return postRequestOptions(
-    `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
-    payload,
-    scope
-  )
+  return postRequestOptions(`/notifications/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`, payload, scope)
 }
