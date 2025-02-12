@@ -43,21 +43,22 @@ const { db } = require('../../../../db/db.js')
  * received from this query (For either registered to unregistered licence). We expect to see duplicate licences with
  * different contacts types (but still preferring the registered over unregistered licence).
  *
- * @param {Date} dueDate
- * @param {string} summer
+ * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
+ * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
+ * @param {string[]} removeLicences - The licences to exclude from the results
  *
  * @returns {Promise<object[]>} - matching recipients
  */
-async function go(dueDate, summer) {
-  const { rows } = await _fetch(dueDate, summer)
+async function go(dueDate, summer, removeLicences) {
+  const { rows } = await _fetch(dueDate, summer, removeLicences)
 
   return rows
 }
 
-async function _fetch(dueDate, summer) {
+async function _fetch(dueDate, summer, removeLicences) {
   const query = _query()
 
-  return db.raw(query, [dueDate, summer, dueDate, summer])
+  return db.raw(query, [dueDate, summer, removeLicences, dueDate, summer, removeLicences])
 }
 
 function _query() {
@@ -91,6 +92,7 @@ FROM (
       AND rl.metadata->>'isCurrent' = 'true'
       AND rl.metadata->>'isSummer' = ?
       AND contacts->>'role' IN ('Licence holder', 'Returns to')
+      AND NOT (ldh.licence_ref = ANY (?))
       AND NOT EXISTS (
         SELECT
             1
@@ -125,6 +127,7 @@ FROM (
     AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
     AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
 ) contacts
 ORDER BY
 contacts.licence_ref`

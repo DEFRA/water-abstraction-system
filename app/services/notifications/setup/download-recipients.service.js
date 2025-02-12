@@ -9,6 +9,7 @@ const DetermineReturnsPeriodService = require('./determine-returns-period.servic
 const DownloadRecipientsPresenter = require('../../../presenters/notifications/setup/download-recipients.presenter.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the notifications setup download link
@@ -26,9 +27,12 @@ async function go(sessionId) {
 
   const determinedReturnsPeriod = DetermineReturnsPeriodService.go(returnsPeriod)
 
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
   const recipients = await FetchDownloadRecipientsService.go(
     determinedReturnsPeriod.returnsPeriod.dueDate,
-    determinedReturnsPeriod.summer
+    determinedReturnsPeriod.summer,
+    removeLicences
   )
 
   const formattedData = DownloadRecipientsPresenter.go(recipients)

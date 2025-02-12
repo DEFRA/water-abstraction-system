@@ -46,6 +46,15 @@ async function _deleteAllTestData() {
   WHERE
     "is_test" = TRUE;
 
+  DELETE
+  FROM
+    "returns"."returns" AS "r"
+    USING "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "r"."licence_ref" = "l"."licence_ref";
+
+
   ALTER TABLE returns.lines ENABLE TRIGGER ALL;
   ALTER TABLE returns.versions ENABLE TRIGGER ALL;
   ALTER TABLE returns.returns ENABLE TRIGGER ALL;
