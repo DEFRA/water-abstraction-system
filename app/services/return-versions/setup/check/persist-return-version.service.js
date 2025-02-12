@@ -18,6 +18,7 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  * create a new return version for a licence.
  *
  * @param {object} returnVersionData - The return version data required to persist a new return version for a licence
+ * @returns {string} The return version ID
  */
 async function go(returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
@@ -25,6 +26,8 @@ async function go(returnVersionData) {
   const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
 
   await _persistReturnRequirements(returnRequirements, returnVersionId)
+
+  return returnVersionId
 }
 
 async function _persistReturnRequirements(returnRequirements, returnVersionId) {
