@@ -9,7 +9,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notifications/ad-hoc-returns/licence.presenter.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
-const AdHodLicenceValidator = require('../../../validators/notifications/setup/ad-hoc-licence.validator.js')
+const AdHocLicenceValidator = require('../../../validators/notifications/setup/ad-hoc-licence.validator.js')
 
 /**
  * Orchestrates validating the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
@@ -74,13 +74,13 @@ async function _save(session, payload) {
 }
 
 async function _validate(payload) {
-  let licenceExists = null
+  let licenceExists = false
 
   if (payload.licenceRef) {
     licenceExists = await _licenceExists(payload.licenceRef)
   }
 
-  const validation = AdHodLicenceValidator.go(payload, licenceExists)
+  const validation = AdHocLicenceValidator.go(payload, licenceExists)
 
   if (!validation.error) {
     return null

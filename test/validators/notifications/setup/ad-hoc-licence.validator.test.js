@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AdHodLicenceValidator = require('../../../../app/validators/notifications/setup/ad-hoc-licence.validator.js')
+const AdHocLicenceValidator = require('../../../../app/validators/notifications/setup/ad-hoc-licence.validator.js')
 
 describe('Notifications Setup - Ad Hoc licence validator', () => {
   let licenceExists
@@ -20,7 +20,7 @@ describe('Notifications Setup - Ad Hoc licence validator', () => {
   })
 
   it('confirms the data is valid', () => {
-    const result = AdHodLicenceValidator.go(payload, licenceExists)
+    const result = AdHocLicenceValidator.go(payload, licenceExists)
 
     expect(result.value).to.exist()
     expect(result.error).not.to.exist()
@@ -34,7 +34,7 @@ describe('Notifications Setup - Ad Hoc licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = AdHodLicenceValidator.go(payload, licenceExists)
+        const result = AdHocLicenceValidator.go(payload, licenceExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -48,7 +48,7 @@ describe('Notifications Setup - Ad Hoc licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = AdHodLicenceValidator.go(payload, licenceExists)
+        const result = AdHocLicenceValidator.go(payload, licenceExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

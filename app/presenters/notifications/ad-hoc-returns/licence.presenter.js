@@ -8,7 +8,8 @@
 /**
  * Formats data for the `/notifications/ad-hoc-returns/{sessionId}/licence` page
  *
- * @param licenceRef
+ * @param {string} licenceRef
+ *
  * @returns {object} - The data formatted for the view template
  */
 function go(licenceRef) {

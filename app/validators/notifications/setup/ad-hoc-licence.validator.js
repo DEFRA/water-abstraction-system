@@ -2,7 +2,7 @@
 
 /**
  * Validates data submitted for the `/notifications/setup/licence` page
- * @module AdHodLicenceValidator
+ * @module AdHocLicenceValidator
  */
 
 const Joi = require('joi')
