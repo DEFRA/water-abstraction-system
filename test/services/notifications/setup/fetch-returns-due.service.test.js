@@ -23,12 +23,24 @@ describe('Notifications Setup - Fetch returns due service', () => {
     dueDate = '2024-04-28' // This needs to differ from any other returns log tests
     isSummer = 'false'
 
-    returnLog = await ReturnLogHelper.add({})
+    const defaults = ReturnLogHelper.defaults()
+
+    returnLog = await ReturnLogHelper.add({
+      dueDate,
+      metadata: {
+        ...defaults.metadata,
+        isSummer
+      }
+    })
 
     // Add an additional returns log
-    await ReturnLogHelper.add({})
-
-    dueDate = returnLog.dueDate
+    await ReturnLogHelper.add({
+      dueDate,
+      metadata: {
+        ...defaults.metadata,
+        isSummer
+      }
+    })
 
     licenceRefs = [returnLog.licenceRef]
   })
