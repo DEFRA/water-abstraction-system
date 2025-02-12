@@ -25,15 +25,17 @@ function go(returnSubmission, yearMonth) {
     (line) => line.startDate.getFullYear() === requestedYear && line.startDate.getMonth() === requestedMonth
   )
 
+  const method = returnSubmission.$method()
   const units = returnSubmission.$units()
 
   return {
     rawData: JSON.stringify(returnSubmission, null, 2),
     backLink: _backLink(returnSubmission),
+    displayReadings: method !== 'abstractionVolumes',
     displayUnits: units !== unitNames.CUBIC_METRES,
     pageTitle: _pageTitle(requestedMonthLines[0].endDate),
     returnReference: returnSubmission.returnLog.returnReference,
-    tableData: _tableData(requestedMonthLines, units)
+    tableData: _tableData(requestedMonthLines, units, method)
   }
 }
 
@@ -53,8 +55,8 @@ function _pageTitle(date) {
   return `Water abstracted ${titleDate}`
 }
 
-function _tableData(lines, units) {
-  const headers = _generateTableHeaders(units)
+function _tableData(lines, units, method) {
+  const headers = _generateTableHeaders(units, method)
   const rows = _generateTableRows(lines)
   const { cubicMetresTotal, unitTotal } = _total(lines, units)
 
@@ -68,11 +70,12 @@ function _tableData(lines, units) {
 
 function _generateTableRows(lines) {
   return lines.map((line) => {
-    const { endDate, quantity, userUnit } = line
+    const { endDate, quantity, reading, userUnit } = line
 
     const rowData = {
       cubicMetresQuantity: formatQuantity(userUnit, quantity),
       date: formatLongDate(endDate),
+      reading,
       unitQuantity: formatNumber(quantity)
     }
 
@@ -80,11 +83,15 @@ function _generateTableRows(lines) {
   })
 }
 
-function _generateTableHeaders(units) {
+function _generateTableHeaders(units, method) {
   const headers = [{ text: 'Day' }]
 
   if (units !== unitNames.CUBIC_METRES) {
     headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
+  }
+
+  if (method !== 'abstractionVolumes') {
+    headers.push({ text: 'Reading', format: 'numeric' })
   }
 
   headers.push({ text: 'Cubic metres', format: 'numeric' })

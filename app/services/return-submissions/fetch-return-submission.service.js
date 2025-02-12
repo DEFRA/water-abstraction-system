@@ -20,6 +20,8 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 async function go(returnSubmissionId) {
   const returnSubmission = await _fetch(returnSubmissionId)
 
+  returnSubmission.$applyReadings()
+
   return returnSubmission
 }
 

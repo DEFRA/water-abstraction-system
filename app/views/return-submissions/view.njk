@@ -41,6 +41,17 @@
           }
         ] %}
 
+        {# Add readings column if the submission was meter readings #}
+        {% if displayReadings %}
+          {% set tableRow = (tableRow.push(
+            {
+              text: row.reading,
+              format: 'numeric',
+              attributes: { 'data-test': 'reading-' + rowIndex }
+            }
+          ), tableRow) %}
+        {% endif %}
+
         {# Add units column if the submission was not in cubic metres #}
         {% if displayUnits %}
           {% set tableRow = (tableRow.push(
@@ -65,11 +76,13 @@
         {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
 
-      {# Define and push the final total row into the table rows array #}
+      {# Define and push the final total row into the table rows array. We set the first cell to span 2 columns if we
+      are displaying meter readings in order to correctly align the cubmic metres total. #}
       {% set totalRow = [
         {
           html: '<strong>Total volume of water abstracted</strong>',
-          attributes: { 'data-test': 'total-row-text' }
+          attributes: { 'data-test': 'total-row-text' },
+          colspan: 2 if displayReadings else 1
         }
       ] %}
 
@@ -83,7 +96,6 @@
           }
         ), totalRow) %}
       {% endif %}
-
 
       {% set totalRow = (totalRow.push(
         {
