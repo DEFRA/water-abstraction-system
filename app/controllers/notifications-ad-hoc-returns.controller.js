@@ -5,7 +5,6 @@
  * @module NotificationsAdHocReturnsController
  */
 
-const InitiateSessionService = require('../services/notifications/ad-hoc-returns/initiate-session.service.js')
 const LicenceService = require('../services/notifications/ad-hoc-returns/licence.service.js')
 const SubmitLicenceService = require('../services/notifications/ad-hoc-returns/submit-licence.service.js')
 
@@ -17,12 +16,6 @@ async function licence(request, h) {
   const pageData = await LicenceService.go(sessionId)
 
   return h.view(`${basePath}/licence.njk`, pageData)
-}
-
-async function setup(_request, h) {
-  const session = await InitiateSessionService.go()
-
-  return h.redirect(`/system/${basePath}/${session.id}/licence`)
 }
 
 async function submitLicence(request, h) {
@@ -39,6 +32,5 @@ async function submitLicence(request, h) {
 
 module.exports = {
   licence,
-  setup,
   submitLicence
 }

@@ -50,27 +50,60 @@ describe('Notifications Setup controller', () => {
 
   describe('notifications/setup', () => {
     describe('GET', () => {
-      beforeEach(async () => {
-        getOptions = {
-          method: 'GET',
-          url: '/notifications/setup',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
-        }
-      })
-
-      describe('when a request is valid', () => {
+      let response
+      describe('when the "notification" query string is "invitations" ', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+          getOptions = {
+            method: 'GET',
+            url: '/notifications/setup?notification=invitations',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          response = { redirect: `${session.id}/returns-period` }
         })
 
-        it('redirects successfully', async () => {
-          const response = await server.inject(getOptions)
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+          })
 
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/returns-period`)
+          it('redirects successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/returns-period`)
+          })
+        })
+      })
+
+      describe('when the "notification" query string is "ad-hoc" ', () => {
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: '/notifications/setup?notification=ad-hoc',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+
+          response = { redirect: `${session.id}/licence` }
+        })
+
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+          })
+
+          it('redirects successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal(`/system/notifications/setup/${session.id}/licence`)
+          })
         })
       })
     })
