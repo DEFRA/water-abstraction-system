@@ -51,6 +51,7 @@ describe('Notifications Setup controller', () => {
   describe('notifications/setup', () => {
     describe('GET', () => {
       let response
+
       describe('when the "notification" query string is "invitations" ', () => {
         beforeEach(async () => {
           getOptions = {
@@ -62,7 +63,7 @@ describe('Notifications Setup controller', () => {
             }
           }
 
-          response = { redirect: `${session.id}/returns-period` }
+          response = { path: 'returns-period', sessionId: session.id }
         })
 
         describe('when a request is valid', () => {
@@ -90,7 +91,7 @@ describe('Notifications Setup controller', () => {
             }
           }
 
-          response = { redirect: `${session.id}/licence` }
+          response = { path: 'licence', sessionId: session.id }
         })
 
         describe('when a request is valid', () => {
