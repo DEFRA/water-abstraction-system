@@ -15,16 +15,16 @@ describe('Dates lib', () => {
     let startDate
     let endDate
 
-    describe('given a startDate and endDate', () => {
+    describe('given a "startDate" and "endDate"', () => {
       before(async () => {
         startDate = new Date('2023-04-01')
         endDate = new Date('2023-04-03')
       })
 
-      it('returns each day within the period', () => {
-        const result = DateLib.daysFromPeriod(startDate, endDate)
+      it('returns a "day" object for each day within the period (inclusive)', () => {
+        const results = DateLib.daysFromPeriod(startDate, endDate)
 
-        expect(result).to.equal([
+        expect(results).to.equal([
           {
             startDate: new Date('2023-04-01'),
             endDate: new Date('2023-04-01')
@@ -46,16 +46,18 @@ describe('Dates lib', () => {
     let startDate
     let endDate
 
-    describe('given a startDate and endDate', () => {
+    describe('given a "startDate" that is a Sunday and an "endDate" that is a Saturday', () => {
       before(async () => {
+        // Sunday
         startDate = new Date('2025-02-02')
+        // Saturday
         endDate = new Date('2025-02-22')
       })
 
-      it('returns each week within the period', () => {
-        const result = DateLib.weeksFromPeriod(startDate, endDate)
+      it('returns a "week" object for each week (Sunday to Saturday) within the period', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
 
-        expect(result).to.equal([
+        expect(results).to.equal([
           {
             startDate: new Date('2025-02-02'),
             endDate: new Date('2025-02-08')
@@ -71,30 +73,38 @@ describe('Dates lib', () => {
         ])
       })
     })
+    describe('given a "startDate" that is Wednesday and an "endDate" that is a Saturday', () => {
+      before(async () => {
+        // Wednesday
+        startDate = new Date('2025-02-05')
+        // Saturday
+        endDate = new Date('2025-02-22')
+      })
 
-    describe('given a startDate thats after a Sunday (week begins on Sunday)', () => {
-      describe('and an endDate thats after a Sunday', () => {
-        before(async () => {
-          startDate = new Date('2025-02-05')
-          endDate = new Date('2025-02-27')
+      it('sets the start date of the first "week" back to the Sunday (start of the week)', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
+
+        expect(results[0]).to.equal({
+          startDate: new Date('2025-02-02'),
+          endDate: new Date('2025-02-08')
         })
+      })
+    })
 
-        it('returns the first week starting on the Sunday before the start date', () => {
-          const result = DateLib.weeksFromPeriod(startDate, endDate)
+    describe('given a "startDate" that is Sunday and an "endDate" that is a Thursday', () => {
+      before(async () => {
+        // Sunday
+        startDate = new Date('2025-02-02')
+        // Thursday
+        endDate = new Date('2025-02-27')
+      })
 
-          expect(result[0]).to.equal({
-            startDate: new Date('2025-02-02'),
-            endDate: new Date('2025-02-08')
-          })
-        })
+      it('sets the last "week" as the last full week (Sun to Sat) before the "endDate"', () => {
+        const results = DateLib.weeksFromPeriod(startDate, endDate)
 
-        it('returns the last week ending on the Friday before the end date', () => {
-          const result = DateLib.weeksFromPeriod(startDate, endDate)
-
-          expect(result[2]).to.equal({
-            startDate: new Date('2025-02-16'),
-            endDate: new Date('2025-02-22')
-          })
+        expect(results[results.length - 1]).to.equal({
+          startDate: new Date('2025-02-16'),
+          endDate: new Date('2025-02-22')
         })
       })
     })
@@ -104,16 +114,16 @@ describe('Dates lib', () => {
     let startDate
     let endDate
 
-    describe('given a startDate and endDate', () => {
+    describe('given a "startDate" that is the first of the month and an "endDate" that is the last of the month', () => {
       before(async () => {
         startDate = new Date('2025-02-01')
         endDate = new Date('2025-04-30')
       })
 
-      it('returns each month within the period', () => {
-        const result = DateLib.monthsFromPeriod(startDate, endDate)
+      it('returns a "month" object for each month within the period', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
 
-        expect(result).to.equal([
+        expect(results).to.equal([
           {
             startDate: new Date('2025-02-01'),
             endDate: new Date('2025-02-28')
@@ -130,29 +140,34 @@ describe('Dates lib', () => {
       })
     })
 
-    describe('given a startDate thats after the beginning of the month', () => {
-      describe('and an endDate thats after the beginning of a month', () => {
-        before(async () => {
-          startDate = new Date('2025-02-15')
-          endDate = new Date('2025-04-10')
+    describe('given a "startDate" that is in the middle and an "endDate" that is the last of the month', () => {
+      before(async () => {
+        startDate = new Date('2025-02-15')
+        endDate = new Date('2025-04-30')
+      })
+
+      it('sets the start date of the first "month" back to the 1st', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
+
+        expect(results[0]).to.equal({
+          startDate: new Date('2025-02-01'),
+          endDate: new Date('2025-02-28')
         })
+      })
+    })
 
-        it('returns the starting month as a full month', () => {
-          const result = DateLib.monthsFromPeriod(startDate, endDate)
+    describe('given a "startDate" that is the first of the month and an "endDate" that is in the middle', () => {
+      before(async () => {
+        startDate = new Date('2025-02-01')
+        endDate = new Date('2025-04-15')
+      })
 
-          expect(result[0]).to.equal({
-            startDate: new Date('2025-02-01'),
-            endDate: new Date('2025-02-28')
-          })
-        })
+      it('sets the end date of the last "month" forward to the last of the month', () => {
+        const results = DateLib.monthsFromPeriod(startDate, endDate)
 
-        it('returns the last full month before the end date', () => {
-          const result = DateLib.monthsFromPeriod(startDate, endDate)
-
-          expect(result[1]).to.equal({
-            startDate: new Date('2025-03-01'),
-            endDate: new Date('2025-03-31')
-          })
+        expect(results[results.length - 1]).to.equal({
+          startDate: new Date('2025-04-01'),
+          endDate: new Date('2025-04-30')
         })
       })
     })
