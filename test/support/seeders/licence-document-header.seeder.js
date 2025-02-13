@@ -16,7 +16,7 @@ const ReturnLogHelper = require('../helpers/return-log.helper.js')
  * to be included in the recipients list
  * @param {string} returnLogDueDate - defaulted to the same due date set by the returnsLogHelper
  *
- * @returns {object[]} - an array of the added licenceDocumentHeaders
+ * @returns {Promise<object[]>} - an array of the added licenceDocumentHeaders
  */
 async function seed(enableReturnLog = true, returnLogDueDate = '2023-04-28') {
   return {

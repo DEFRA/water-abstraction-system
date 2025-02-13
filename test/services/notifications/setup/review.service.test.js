@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,15 +17,11 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ReviewService = require('../../../../app/services/notifications/setup/review.service.js')
 
 describe('Notifications Setup - Review service', () => {
-  const year = 2025
-
-  let clock
   let removeLicences
   let session
   let testRecipients
 
   before(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
     removeLicences = ''
 
     session = await SessionHelper.add({ data: { returnsPeriod: 'quarterFour', removeLicences } })
@@ -33,10 +29,6 @@ describe('Notifications Setup - Review service', () => {
     testRecipients = RecipientsFixture.recipients()
 
     Sinon.stub(RecipientsService, 'go').resolves([testRecipients.primaryUser])
-  })
-
-  afterEach(() => {
-    clock.restore()
   })
 
   it('correctly presents the data', async () => {

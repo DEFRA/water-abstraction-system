@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,28 +12,37 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 
 // Thing under test
 const FetchDownloadRecipientsService = require('../../../../app/services/notifications/setup/fetch-download-recipients.service.js')
+const Sinon = require('sinon')
 
 describe('Notifications Setup - Fetch Download Recipients service', () => {
-  // These dates match the return logs helper
-  const startDate = new Date('2022-04-01')
   const endDate = new Date('2023-03-31')
+  const startDate = new Date('2022-04-01')
+  const year = 2023
 
+  let clock
+  let session
   let dueDate
-  let isSummer
   let removeLicences
   let testRecipients
 
   before(async () => {
-    dueDate = '2024-04-28' // This needs to differ from any other returns log tests
-    isSummer = 'false'
-    removeLicences = ['']
+    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+
+    dueDate = `${year}-04-28` // This needs to differ from any other returns log tests
+    removeLicences = ''
+
+    session = { returnsPeriod: 'quarterFour', removeLicences }
 
     testRecipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
   })
 
+  after(() => {
+    clock.restore()
+  })
+
   describe('when there are recipients', () => {
     it('correctly returns "Primary user" and "Returns agent" contacts', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await FetchDownloadRecipientsService.go(session)
 
       const primaryUser = result.find((item) => item.contact_type === 'Primary user')
       const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
@@ -62,7 +71,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
     })
 
     it('correctly returns "Licence holder" contact', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await FetchDownloadRecipientsService.go(session)
 
       const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolder.licenceRef)
 
@@ -96,7 +105,7 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
     })
 
     it('correctly returns duplicate "Licence holder" and "Returns to" contacts', async () => {
-      const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await FetchDownloadRecipientsService.go(session)
 
       const found = result.filter((item) => item.licence_ref === testRecipients.licenceHolderAndReturnTo.licenceRef)
 
@@ -156,11 +165,13 @@ describe('Notifications Setup - Fetch Download Recipients service', () => {
 
     describe('and there are licence to exclude from the recipients', () => {
       beforeEach(() => {
-        removeLicences = [testRecipients.primaryUser.licenceRef]
+        removeLicences = testRecipients.primaryUser.licenceRef
+
+        session = { returnsPeriod: 'quarterFour', removeLicences }
       })
 
       it('correctly returns recipients without the "removeLicences"', async () => {
-        const result = await FetchDownloadRecipientsService.go(dueDate, isSummer, removeLicences)
+        const result = await FetchDownloadRecipientsService.go(session)
 
         const primaryUser = result.find((item) => item.contact_type === 'Primary user')
         const returnsAgent = result.find((item) => item.contact_type === 'Returns agent')
