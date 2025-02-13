@@ -66,7 +66,9 @@ async function go(session) {
 async function _fetchRecipient(session) {
   const { licenceRef } = session
 
-  const where = 'AND ldh.licence_ref = ?'
+  const where = `
+    AND ldh.licence_ref = ?
+  `
 
   const bindings = [licenceRef, licenceRef]
 
@@ -82,7 +84,11 @@ async function _fetchRecipients(session) {
 
   const dueDate = returnsPeriod.dueDate
 
-  const where = "AND rl.due_date = ?\n    AND rl.metadata->>'isSummer' = ?\n    AND NOT (ldh.licence_ref = ANY (?))"
+  const where = `
+    AND rl.due_date = ?
+    AND rl.metadata->>'isSummer' = ?
+    AND NOT (ldh.licence_ref = ANY (?))
+  `
 
   const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences]
 
