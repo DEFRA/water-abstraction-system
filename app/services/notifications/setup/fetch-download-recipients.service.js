@@ -56,11 +56,11 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} - matching recipients
  */
 async function go(session) {
-  if (session.journey !== 'ad-hoc') {
-    return _fetchRecipients(session)
+  if (session.journey === 'ad-hoc') {
+    return _fetchRecipient(session)
   }
 
-  return _fetchRecipient(session)
+  return _fetchRecipients(session)
 }
 
 async function _fetchRecipient(session) {
