@@ -2,7 +2,7 @@
 
 const NotificationsAdHocReturnsController = require('../controllers/notifications-ad-hoc-returns.controller.js')
 
-const basePath = '/notifications/ad-hoc-returns/'
+const basePath = '/notifications/setup/'
 
 const routes = [
   {
@@ -10,18 +10,6 @@ const routes = [
     path: basePath + '{sessionId}/licence',
     options: {
       handler: NotificationsAdHocReturnsController.licence,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: basePath + 'setup',
-    options: {
-      handler: NotificationsAdHocReturnsController.setup,
       auth: {
         access: {
           scope: ['returns']

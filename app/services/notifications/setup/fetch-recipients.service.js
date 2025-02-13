@@ -5,7 +5,9 @@
  * @module FetchContactsService
  */
 
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const { db } = require('../../../../db/db.js')
+const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats the contact data from which recipients will be determined for the `/notifications/setup/review` page
@@ -144,14 +146,16 @@ const { db } = require('../../../../db/db.js')
  * ]
  * ```
  *
- * @param {string} dueDate - The 'due' date for outstanding return logs to fetch contacts for
- * @param {string} summer - Whether we are looking for outstanding summer or all year return logs
- * @param {string[]} removeLicences - The licences to exclude from the results
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
-async function go(dueDate, summer, removeLicences) {
-  const { rows } = await _fetch(dueDate, summer, removeLicences)
+async function go(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const { rows } = await _fetch(returnsPeriod.dueDate, summer, removeLicences)
 
   return rows
 }

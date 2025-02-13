@@ -61,10 +61,12 @@ async function viewReview(request, h) {
   return h.view(`${basePath}/review.njk`, pageData)
 }
 
-async function setup(_request, h) {
-  const session = await InitiateSessionService.go()
+async function setup(request, h) {
+  const { notification } = request.query
 
-  return h.redirect(`/system/${basePath}/${session.id}/returns-period`)
+  const { sessionId, path } = await InitiateSessionService.go(notification)
+
+  return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
 
 async function submitRemoveLicences(request, h) {
