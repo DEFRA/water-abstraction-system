@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
- * @module LicenceService
+ * Orchestrates fetching and presenting the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * @module AdHocLicenceService
  */
 
-const LicencePresenter = require('../../../presenters/notifications/ad-hoc-returns/licence.presenter.js')
+const AdHocLicencePresenter = require('../../../presenters/notifications/setup/ad-hoc-licence.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
+ * Orchestrates fetching and presenting the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
  *
  * Supports generating the data needed for the licence page in the ad-hoc returns notification journey. It fetches
  * the current session record and formats the data needed for the form.
@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = LicencePresenter.go(session.licenceRef)
+  const formattedData = AdHocLicencePresenter.go(session.licenceRef)
 
   return {
     activeNavBar: 'manage',

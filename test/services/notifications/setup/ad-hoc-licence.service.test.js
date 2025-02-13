@@ -12,9 +12,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const LicenceService = require('../../../../app/services/notifications/ad-hoc-returns/licence.service.js')
+const AdHocLicenceService = require('../../../../app/services/notifications/setup/ad-hoc-licence.service.js')
 
-describe('Notifications Ad-hoc Returns - Licence service', () => {
+describe('Notifications Setup - Ad Hoc Licence service', () => {
   let session
 
   beforeEach(async () => {
@@ -27,7 +27,7 @@ describe('Notifications Ad-hoc Returns - Licence service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicenceService.go(session.id)
+      const result = await AdHocLicenceService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'manage',

@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
- * @module SubmitLicenceService
+ * Orchestrates validating the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
+ * @module SubmitAdHocLicenceService
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
-const LicencePresenter = require('../../../presenters/notifications/ad-hoc-returns/licence.presenter.js')
+const AdHocLicencePresenter = require('../../../presenters/notifications/setup/ad-hoc-licence.presenter.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const AdHocLicenceValidator = require('../../../validators/notifications/setup/ad-hoc-licence.validator.js')
 
 /**
- * Orchestrates validating the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
+ * Orchestrates validating the data for `/notifications/setup/{sessionId}/ad-hoc-licence` page
  *
  * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
  * error. If they have we check if it exists in the database. If it doesn't exist we return an the same error.
@@ -30,7 +30,7 @@ async function go(sessionId, payload) {
 
   const validationResult = await _validate(payload)
 
-  const formattedData = LicencePresenter.go(payload.licenceRef)
+  const formattedData = AdHocLicencePresenter.go(payload.licenceRef)
 
   if (validationResult) {
     return {

@@ -13,9 +13,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const SubmitLicenceService = require('../../../../app/services/notifications/ad-hoc-returns/submit-licence.service.js')
+const SubmitAdHocLicenceService = require('../../../../app/services/notifications/setup/submit-ad-hoc-licence.service.js')
 
-describe('Ad-hoc Returns Licence service', () => {
+describe('Notifications Setup - Submit Ad Hoc Licence service', () => {
   let payload
   let session
 
@@ -35,7 +35,7 @@ describe('Ad-hoc Returns Licence service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitLicenceService.go(session.id, payload)
+        await SubmitAdHocLicenceService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
@@ -43,7 +43,7 @@ describe('Ad-hoc Returns Licence service', () => {
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitLicenceService.go(session.id, payload)
+        const result = await SubmitAdHocLicenceService.go(session.id, payload)
 
         expect(result).to.equal({})
       })
@@ -56,7 +56,7 @@ describe('Ad-hoc Returns Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitAdHocLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -77,7 +77,7 @@ describe('Ad-hoc Returns Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitAdHocLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
@@ -100,7 +100,7 @@ describe('Ad-hoc Returns Licence service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload)
+          const result = await SubmitAdHocLicenceService.go(session.id, payload)
 
           expect(result).to.equal({
             activeNavBar: 'manage',
