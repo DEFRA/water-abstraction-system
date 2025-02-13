@@ -24,7 +24,7 @@ const NOTIFICATION_TYPES = {
     prefix: 'ADHC-',
     type: 'Ad hoc',
     journey: 'ad-hoc',
-    redirectPath: 'licence'
+    redirectPath: 'ad-hoc-licence'
   }
 }
 
