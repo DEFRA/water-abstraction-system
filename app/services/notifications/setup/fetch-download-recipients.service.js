@@ -18,8 +18,14 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
- * We start by determining which licences we need to send notifications for, by looking for 'due' return logs with a
- * matching 'due date' and cycle (summer or winter and all year).
+ * We have two mechanisms for returning a recipient. One is for the 'ad-hoc' journey which is for an individual licence
+ * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
+ * returns period.
+ *
+ * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRe'.
+ *
+ * For the 'ad-hoc' journey we start by determining which licence we need to send a notifications for, by
+ * looking for return logs with a matching 'licenceRef' the user has entered.
  *
  * For each licence linked to one of these return logs, we extract the contact information. This is complicated by a
  * number of factors.

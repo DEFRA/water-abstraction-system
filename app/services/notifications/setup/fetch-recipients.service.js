@@ -18,8 +18,17 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
- * We start by determining which licences we need to send notifications for, by looking for 'due' return logs with a
- * matching 'due date' and cycle (summer or winter and all year).
+ * We have two mechanisms for returning a recipient. One is for the 'ad-hoc' journey which is for an individual licence
+ * based on a 'licenceRef'. And the other is for any journey that needs multiple recipients based on the selected
+ * returns period.
+ *
+ * For the 'ad-hoc' journey we determine the recipients from the returns logs based on the provided 'licenceRe'.
+ *
+ * For the 'ad-hoc' journey we start by determining which licence we need to send a notifications for, by
+ * looking for return logs with a matching 'licenceRef' the user has entered.
+ *
+ * For the multiple recipients journey we start by determining which licences we need to send notifications for, by
+ * looking for 'due' return logs with a matching 'due date' and cycle (summer or winter and all year).
  *
  * For each licence linked to one of these return logs, we extract the contact information. This is complicated by a
  * number of factors.
@@ -97,7 +106,11 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Those contacts with the same hash ID that cannot be grouped, for example, because one has the `contact_type='Licence
  * holder'` and the other `contact_type='Returns to'` will be handled by `DetermineRecipientsService`.
  *
- * The end result is all the email, or letter contacts for each licence with a 'due' return for the period selected.
+ * For the 'ad-hoc' journey the end result is all the email, or letter contacts for that  licence with a 'due'
+ * return for any period.
+ *
+ * For the multiple recipient journeys the end result is all the email, or letter contacts for each licence with a 'due'
+ * return for the period selected.
  *
  * ```javascript
  * [
@@ -151,11 +164,11 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
-  if (session.journey !== 'ad-hoc') {
-    return _fetchRecipients(session)
+  if (session.journey === 'ad-hoc') {
+    return _fetchRecipient(session)
   }
 
-  return _fetchRecipient(session)
+  return _fetchRecipients(session)
 }
 
 async function _fetchRecipient(session) {
