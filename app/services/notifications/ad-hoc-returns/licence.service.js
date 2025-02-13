@@ -20,7 +20,8 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = LicencePresenter.go(session)
+
+  const formattedData = LicencePresenter.go(session.licenceRef)
 
   return {
     activeNavBar: 'manage',
