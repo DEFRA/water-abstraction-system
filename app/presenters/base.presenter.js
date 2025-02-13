@@ -1,5 +1,7 @@
 'use strict'
 
+const { returnUnits } = require('../lib/static-lookups.lib.js')
+
 /**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
@@ -12,6 +14,24 @@
  */
 function convertPenceToPounds(value) {
   return value / 100
+}
+
+/**
+ * Converts a quantity from a given unit to cubic metres and formats it
+ *
+ * @param {string} units - the unit of the quantity
+ * @param {number} quantity - the quantity to be formatted
+ *
+ * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
+ */
+function formatQuantity(units, quantity) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  const convertedQuantity = quantity * returnUnits[units].multiplier
+
+  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -318,6 +338,7 @@ module.exports = {
   formatMoney,
   formatNumber,
   formatPounds,
+  formatQuantity,
   leftPadZeroes,
   sentenceCase,
   titleCase
