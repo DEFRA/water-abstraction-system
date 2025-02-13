@@ -27,7 +27,8 @@ describe('Return Logs - Void No Return Required Licence Return Logs service', ()
       licence = await LicenceHelper.add()
       returnVersion = await ReturnVersionHelper.add({
         licenceId: licence.id,
-        endDate: new Date('2023-03-31')
+        endDate: new Date('2023-03-31'),
+        startDate: new Date('2022-04-01')
       })
       returnLogMatchingVersion = await ReturnLogHelper.add({
         endDate: new Date('2023-03-31'),
@@ -42,7 +43,11 @@ describe('Return Logs - Void No Return Required Licence Return Logs service', ()
     })
 
     it('voids the return logs that are between the start and end dates of the no return required version', async () => {
-      await VoidNoReturnRequiredLicenceReturnLogsService.go(returnVersion.id)
+      await VoidNoReturnRequiredLicenceReturnLogsService.go(
+        licence.licenceRef,
+        returnVersion.startDate,
+        returnVersion.endDate
+      )
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).to.equal('void')
@@ -69,7 +74,7 @@ describe('Return Logs - Void No Return Required Licence Return Logs service', ()
     })
 
     it('voids the return logs that are from the start date of the return version forward', async () => {
-      await VoidNoReturnRequiredLicenceReturnLogsService.go(returnVersion.id)
+      await VoidNoReturnRequiredLicenceReturnLogsService.go(licence.licenceRef, returnVersion.startDate)
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).to.equal('void')

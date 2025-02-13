@@ -23,11 +23,11 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
 async function go(returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
 
-  const { id: returnVersionId } = await ReturnVersionModel.query().insert(returnVersion)
+  const persistedReturnVersion = await ReturnVersionModel.query().insert(returnVersion)
 
-  await _persistReturnRequirements(returnRequirements, returnVersionId)
+  await _persistReturnRequirements(returnRequirements, persistedReturnVersion.id)
 
-  return returnVersionId
+  return persistedReturnVersion
 }
 
 async function _persistReturnRequirements(returnRequirements, returnVersionId) {

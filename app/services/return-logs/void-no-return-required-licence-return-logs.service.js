@@ -7,28 +7,22 @@
 
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
-const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
  * Handles voiding the return logs for a licence after a no returns required return version has been created
  *
- * @param {string} returnVersionId - The return version id for the no returns required version
+ * @param {string} licenceRef - The licenceRef of the licence
+ * @param {Date} startDate - The start date of no returns required return version
+ * @param {Date} endDate - The optional end date of no returns required return version
  */
-async function go(returnVersionId) {
-  const returnVersion = await ReturnVersionModel.query()
-    .findById(returnVersionId)
-    .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select(['id', 'licenceRef'])
-    })
-
+async function go(licenceRef, startDate, endDate) {
   const query = ReturnLogModel.query()
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
-    .where('licenceRef', returnVersion.licence.licenceRef)
-    .where('startDate', '>=', returnVersion.startDate)
+    .where('licenceRef', licenceRef)
+    .where('startDate', '>=', startDate)
 
-  if (returnVersion.endDate) {
-    query.where('endDate', '<=', returnVersion.endDate)
+  if (endDate) {
+    query.where('endDate', '<=', endDate)
   }
 
   await query

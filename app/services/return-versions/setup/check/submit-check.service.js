@@ -29,14 +29,18 @@ async function go(sessionId, userId) {
 
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
 
-  const returnVersionId = await PersistReturnVersionService.go(returnVersionData)
+  await PersistReturnVersionService.go(returnVersionData)
 
   const oneDayInMilliseconds = 24 * 60 * 60 * 1000
   const changeDate = new Date(returnVersionData.returnVersion.startDate)
   changeDate.setTime(changeDate.getTime() - oneDayInMilliseconds)
 
   if (session.data.journey === 'no-returns-required') {
-    await VoidNoReturnRequiredLicenceReturnLogsService.go(returnVersionId, changeDate)
+    await VoidNoReturnRequiredLicenceReturnLogsService.go(
+      session.data.licence.licenceRef,
+      returnVersionData.returnVersion.endDate,
+      returnVersionData.returnVersion.startDate
+    )
   }
 
   await ProcessLicenceReturnLogsService.go(returnVersionData.returnVersion.licenceId, changeDate)
