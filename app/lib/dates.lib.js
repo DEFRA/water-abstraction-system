@@ -10,6 +10,37 @@ const LAST_DAY_OF_FEB_STANDARD_YEAR = 28
 const LAST_DAY_OF_FEB_LEAP_YEAR = 29
 
 /**
+ * Creates an array of day objects, each representing a single day within the given period.
+ *
+ * This function iterates through each day between the period start and end date (inclusive), creating an object for
+ * each day with the same start and end date.
+ *
+ * @param {Date} periodStartDate - The start date of the period.
+ * @param {Date} periodEndDate - The end date of the period.
+ *
+ * @returns {object[]} An array of day objects, each containing startDate and endDate properties.
+ */
+function daysFromPeriod(periodStartDate, periodEndDate) {
+  const days = []
+
+  // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
+  const clonedPeriodStartDate = _cloneDate(periodStartDate)
+
+  while (clonedPeriodStartDate <= periodEndDate) { // eslint-disable-line
+    // Clone the date again for the same reason above
+    const startDate = _cloneDate(clonedPeriodStartDate)
+
+    // No jiggery-pokery needed. Simply add it to the days array as both the start and end date
+    days.push({ startDate, endDate: startDate })
+
+    // Move the date to the next day, and round we go again!
+    clonedPeriodStartDate.setDate(clonedPeriodStartDate.getDate() + 1)
+  }
+
+  return days
+}
+
+/**
  * From an array of dates, filter out empty values and return the earliest
  *
  * This was created as part of our work on generating return logs for licences, and needing to work out the earliest
@@ -181,12 +212,118 @@ function isQuarterlyReturnSubmissions(date) {
   return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 
+/**
+ * Creates an array of month objects, each representing a full calendar month within the given period.
+ *
+ * If the `periodStartDate` is not the first day of the month, the start date is adjusted backwards to the 1st of that
+ * month to ensure the first full month is included. If the `periodEndDate` falls before the end of a month, the end
+ * date is pushed forward to the end of the month.
+ *
+ * @param {Date} periodStartDate - The start date of the period.
+ * @param {Date} periodEndDate - The end date of the period.
+ *
+ * @returns {object[]} An array of month objects, each containing `startDate` and `endDate` properties representing full
+ * months.
+ */
+function monthsFromPeriod(periodStartDate, periodEndDate) {
+  const months = []
+
+  // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
+  const clonedPeriodStartDate = _cloneDate(periodStartDate)
+
+  while (clonedPeriodStartDate < periodEndDate) { // eslint-disable-line
+    // Bump the returnLogStartDate to the next month, for example 2013-04-15 becomes 2013-05-15
+    clonedPeriodStartDate.setMonth(clonedPeriodStartDate.getMonth() + 1)
+
+    // Then clone that for our end date. "But we want the last day in April!?" we hear you scream :-)
+    const endDate = _cloneDate(clonedPeriodStartDate)
+
+    // We use some JavaScript magic to move endDate back to the last of the month. By setting the date (the 01, 02, 03
+    // etc part) to 0, it's the equivalent of setting it to the 1st, then asking JavaScript to minus 1 day. That's
+    // how we get to 2013-04-30. It also means we don't need to worry about which months have 30 vs 31 days, or whether
+    // we are in a leap year!
+    endDate.setDate(0)
+
+    // Set start date to first of the month. Passing it in as a string to new Date() helps keep it UTC rather than local
+    const startDate = new Date(`${endDate.getFullYear()}-${endDate.getMonth() + 1}-01`)
+
+    months.push({ startDate, endDate })
+  }
+
+  return months
+}
+
+/**
+ * Creates an array of week objects, each representing a single week within the given period.
+ *
+ * A full week starts on Sunday and ends on the following Saturday. If the `periodStartDate` does not fall on a Sunday,
+ * the start date is adjusted backwards to the previous Sunday to ensure the first full week is included. If the
+ * `periodEndDate` does not complete a full week, the partial week at the end is excluded.
+ *
+ * @param {Date} periodStartDate - The start date of the period.
+ * @param {Date} periodEndDate - The end date of the period.
+ *
+ * @returns {object[]} An array of week objects, each containing startDate and endDate properties.
+ */
+function weeksFromPeriod(periodStartDate, periodEndDate) {
+  const weeks = []
+
+  // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
+  const clonedPeriodStartDate = _cloneDate(periodStartDate)
+
+  while (clonedPeriodStartDate <= periodEndDate) { // eslint-disable-line
+    // Is the date a Saturday?
+    if (clonedPeriodStartDate.getDay() === 6) {
+      // Yes! Clone the date again for the same reason above
+      const endDate = _cloneDate(clonedPeriodStartDate)
+      const startDate = _cloneDate(clonedPeriodStartDate)
+
+      // Set the start date back to 6 days, which makes it the previous Sunday
+      startDate.setDate(startDate.getDate() - 6)
+
+      weeks.push({ startDate, endDate })
+
+      // Now we have found our first week, we can just move the date forward by 6 days to the next Saturday, thus saving
+      // a bunch of loop iterations
+      clonedPeriodStartDate.setDate(clonedPeriodStartDate.getDate() + 6)
+    } else {
+      // Move the date to the next day, and try again!
+      clonedPeriodStartDate.setDate(clonedPeriodStartDate.getDate() + 1)
+    }
+  }
+
+  return weeks
+}
+
+/**
+ * Depending on how you instantiate a date in JavaScript, it will set the time element to either UTC or whatever the
+ * locale is.
+ *
+ * For example, create one date by missing in another date, and you'll see the time set according to local time (GMT or
+ * BST). Create one using a string, for example, `new Date('2024-04-01') and it will use UTC as the locale for the time
+ * element.
+ *
+ * We only want to be working with UTC dates to avoid any issues, but there are times we need to clone a date to avoid
+ * making changes to the original. To ensure our cloned date is also UTC, we have this method.
+ * @private
+ */
+function _cloneDate(dateToClone) {
+  const year = dateToClone.getFullYear()
+  const month = dateToClone.getMonth() + 1
+  const day = dateToClone.getDate()
+
+  return new Date(`${year}-${month}-${day}`)
+}
+
 module.exports = {
+  daysFromPeriod,
   determineEarliestDate,
   determineLatestDate,
   formatDateObjectToISO,
   formatStandardDateToISO,
   isISODateFormat,
   isQuarterlyReturnSubmissions,
-  isValidDate
+  isValidDate,
+  monthsFromPeriod,
+  weeksFromPeriod
 }
