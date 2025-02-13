@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,24 +12,35 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 
 // Thing under test
 const RecipientsService = require('../../../../app/services/notifications/setup/fetch-recipients.service.js')
+const Sinon = require('sinon')
 
 describe('Notifications Setup - Recipients service', () => {
+  const year = 2025
+
+  let clock
+  let session
   let dueDate
-  let isSummer
   let recipients
   let removeLicences
 
   before(async () => {
-    dueDate = '2023-04-28' // matches return log date
-    isSummer = 'false'
-    removeLicences = ['']
+    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
 
-    recipients = await LicenceDocumentHeaderSeeder.seed()
+    dueDate = '2025-04-28'
+    removeLicences = ''
+
+    session = { returnsPeriod: 'quarterFour', removeLicences }
+
+    recipients = await LicenceDocumentHeaderSeeder.seed(true, dueDate)
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   describe('when there is a "primary user"', () => {
     it('correctly returns the "primary user" instead of the "Licence holder"', async () => {
-      const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await RecipientsService.go(session)
 
       const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
 
@@ -44,7 +55,7 @@ describe('Notifications Setup - Recipients service', () => {
 
     describe('and there is a "returns agent" (known as userReturns in the DB)', () => {
       it('correctly returns the "returns agent" as well as the primary user', async () => {
-        const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+        const result = await RecipientsService.go(session)
 
         const [, testRecipientReturnsAgent] = result.filter((res) =>
           res.licence_refs.includes(recipients.primaryUser.licenceRef)
@@ -63,7 +74,7 @@ describe('Notifications Setup - Recipients service', () => {
 
   describe('when the licence number only has one recipient which has the "licence holder" role', () => {
     it('correctly returns the licence holder data', async () => {
-      const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await RecipientsService.go(session)
 
       const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.licenceHolder.licenceRef))
 
@@ -94,7 +105,7 @@ describe('Notifications Setup - Recipients service', () => {
 
   describe('when the licence has one recipient which has both the "licence holder" and "Returns to" role', () => {
     it('correctly returns the licence holder and returns to data', async () => {
-      const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await RecipientsService.go(session)
 
       const [licenceHolder, returnsTo] = result.filter((res) =>
         res.licence_refs.includes(recipients.licenceHolderAndReturnTo.licenceRef)
@@ -150,11 +161,13 @@ describe('Notifications Setup - Recipients service', () => {
 
   describe('when there are licence to exclude from the recipients', () => {
     beforeEach(() => {
-      removeLicences = [recipients.primaryUser.licenceRef]
+      removeLicences = recipients.primaryUser.licenceRef
+
+      session = { returnsPeriod: 'quarterFour', removeLicences }
     })
 
     it('correctly returns recipients without the "removeLicences"', async () => {
-      const result = await RecipientsService.go(dueDate, isSummer, removeLicences)
+      const result = await RecipientsService.go(session)
 
       const [testRecipient] = result.filter((res) => res.licence_refs.includes(recipients.primaryUser.licenceRef))
 

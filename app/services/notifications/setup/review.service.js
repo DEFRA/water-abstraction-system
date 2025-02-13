@@ -6,12 +6,10 @@
  */
 
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const RecipientsService = require('./fetch-recipients.service.js')
 const ReviewPresenter = require('../../../presenters/notifications/setup/review.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notifications setup review page
@@ -24,11 +22,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
 async function go(sessionId, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
-
-  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
-
-  const recipientsData = await RecipientsService.go(returnsPeriod.dueDate, summer, removeLicences)
+  const recipientsData = await RecipientsService.go(session)
 
   const recipients = DetermineRecipientsService.go(recipientsData)
 
