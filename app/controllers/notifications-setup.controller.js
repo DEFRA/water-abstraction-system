@@ -62,9 +62,9 @@ async function viewReview(request, h) {
 }
 
 async function setup(request, h) {
-  const { notification } = request.query
+  const { journey } = request.query
 
-  const { sessionId, path } = await InitiateSessionService.go(notification)
+  const { sessionId, path } = await InitiateSessionService.go(journey)
 
   return h.redirect(`/system/${basePath}/${sessionId}/${path}`)
 }
