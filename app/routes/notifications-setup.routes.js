@@ -31,30 +31,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
-    options: {
-      handler: NotificationsSetupController.viewLicence,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: basePath + '/{sessionId}/ad-hoc-licence',
-    options: {
-      handler: NotificationsSetupController.submitLicence,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: basePath + '/{sessionId}/returns-period',
     options: {
       handler: NotificationsSetupController.viewReturnsPeriod,

@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AdHocLicencePresenter = require('../../../../app/presenters/notifications/setup/ad-hoc-licence.presenter.js')
+const LicencePresenter = require('../../../../app/presenters/notifications/ad-hoc-returns/licence.presenter.js')
 
-describe('Notifications Setup - Ad Hoc Licence presenter', () => {
+describe('Ad-hoc Returns Licence presenter', () => {
   let licenceRef
 
   it('correctly presents the data', () => {
-    const result = AdHocLicencePresenter.go(licenceRef)
+    const result = LicencePresenter.go(licenceRef)
 
     expect(result).to.equal({
       licenceRef: null,
@@ -28,7 +28,7 @@ describe('Notifications Setup - Ad Hoc Licence presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = AdHocLicencePresenter.go(licenceRef)
+      const result = LicencePresenter.go(licenceRef)
 
       expect(result).to.equal({
         licenceRef: '01/111',
