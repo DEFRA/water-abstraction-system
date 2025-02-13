@@ -56,7 +56,7 @@ describe('Notifications Setup controller', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notifications/setup?notification=invitations',
+            url: '/notifications/setup?journey=invitations',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -84,7 +84,7 @@ describe('Notifications Setup controller', () => {
         beforeEach(async () => {
           getOptions = {
             method: 'GET',
-            url: '/notifications/setup?notification=ad-hoc',
+            url: '/notifications/setup?journey=ad-hoc',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
