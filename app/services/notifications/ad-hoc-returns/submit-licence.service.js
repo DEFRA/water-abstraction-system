@@ -9,6 +9,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notifications/ad-hoc-returns/licence.presenter.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const AdHocLicenceValidator = require('../../../validators/notifications/setup/ad-hoc-licence.validator.js')
 
 /**
  * Orchestrates validating the data for `/notifications/ad-hoc-returns/{sessionId}/licence` page
@@ -28,7 +29,8 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = await _validate(payload)
-  const formattedData = LicencePresenter.go(session)
+
+  const formattedData = LicencePresenter.go(payload.licenceRef)
 
   if (validationResult) {
     return {
@@ -39,6 +41,7 @@ async function go(sessionId, payload) {
   }
 
   const dueReturns = await _dueReturnsExist(payload.licenceRef)
+
   if (!dueReturns) {
     return {
       activeNavBar: 'manage',
@@ -48,6 +51,7 @@ async function go(sessionId, payload) {
   }
 
   await _save(session, payload)
+
   return {}
 }
 
@@ -58,7 +62,7 @@ async function _dueReturnsExist(licenceRef) {
 }
 
 async function _licenceExists(licenceRef) {
-  const licence = await LicenceModel.query().where('licenceRef', licenceRef).first()
+  const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').first()
 
   return !!licence
 }
@@ -70,16 +74,22 @@ async function _save(session, payload) {
 }
 
 async function _validate(payload) {
-  if (payload.licenceRef) {
-    const licenceExists = await _licenceExists(payload.licenceRef)
+  let licenceExists = false
 
-    if (licenceExists) {
-      return null
-    }
+  if (payload.licenceRef) {
+    licenceExists = await _licenceExists(payload.licenceRef)
   }
 
+  const validation = AdHocLicenceValidator.go(payload, licenceExists)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message } = validation.error.details[0]
+
   return {
-    text: 'Enter a licence number'
+    text: message
   }
 }
 
