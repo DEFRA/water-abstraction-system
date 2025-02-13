@@ -12,7 +12,6 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/notifications/ad-hoc-returns/initiate-session.service.js')
 const LicenceService = require('../../app/services/notifications/ad-hoc-returns/licence.service.js')
 const SubmitLicenceService = require('../../app/services/notifications/ad-hoc-returns/submit-licence.service.js')
 
@@ -39,36 +38,6 @@ describe('Notifications Ad Hoc Returns controller', () => {
 
   afterEach(() => {
     Sinon.restore()
-  })
-
-  describe('notifications/ad-hoc-returns/setup', () => {
-    describe('GET', () => {
-      const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
-
-      beforeEach(async () => {
-        options = {
-          method: 'GET',
-          url: '/notifications/ad-hoc-returns/setup',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
-        }
-      })
-
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal(`/system/notifications/ad-hoc-returns/${session.id}/licence`)
-        })
-      })
-    })
   })
 
   describe('notifications/ad-hoc-returns/{sessionId}/licence', () => {
@@ -135,7 +104,7 @@ describe('Notifications Ad Hoc Returns controller', () => {
 function _getOptions(path) {
   return {
     method: 'GET',
-    url: `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
+    url: `/notifications/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
     auth: {
       strategy: 'session',
       credentials: { scope: ['returns'] }
@@ -144,9 +113,5 @@ function _getOptions(path) {
 }
 
 function _postOptions(path, payload, scope) {
-  return postRequestOptions(
-    `/notifications/ad-hoc-returns/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`,
-    payload,
-    scope
-  )
+  return postRequestOptions(`/notifications/setup/e0c77b74-7326-493d-be5e-0d1ad41594b5/${path}`, payload, scope)
 }
