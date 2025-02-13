@@ -151,32 +151,48 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  if (session.journey !== 'ad-hoc') {
+    return _fetchRecipients(session)
+  }
 
-  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+  return _fetchRecipient(session)
+}
 
-  const { rows } = await _fetch(returnsPeriod.dueDate, summer, removeLicences)
+async function _fetchRecipient(session) {
+  const { licenceRef } = session
+
+  const where = 'AND ldh.licence_ref = ?'
+
+  const bindings = [licenceRef, licenceRef, licenceRef]
+
+  const { rows } = await _fetch(bindings, where)
 
   return rows
 }
 
-async function _fetch(dueDate, summer, removeLicences) {
-  const query = _query()
+async function _fetchRecipients(session) {
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
 
-  return db.raw(query, [
-    dueDate,
-    summer,
-    removeLicences,
-    dueDate,
-    summer,
-    removeLicences,
-    dueDate,
-    summer,
-    removeLicences
-  ])
+  const removeLicences = transformStringOfLicencesToArray(session.removeLicences)
+
+  const dueDate = returnsPeriod.dueDate
+
+  const where = "AND rl.due_date = ?\n    AND rl.metadata->>'isSummer' = ?\n    AND NOT (ldh.licence_ref = ANY (?))"
+
+  const bindings = [dueDate, summer, removeLicences, dueDate, summer, removeLicences, dueDate, summer, removeLicences]
+
+  const { rows } = await _fetch(bindings, where)
+
+  return rows
 }
 
-function _query() {
+async function _fetch(bindings, where) {
+  const query = _query(where)
+
+  return db.raw(query, bindings)
+}
+
+function _query(additionalWhereClause) {
   return `SELECT
   string_agg(licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
   contact_type,
@@ -200,9 +216,8 @@ FROM (
   INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
+    ${additionalWhereClause}
     AND contacts->>'role' IN ('Licence holder', 'Returns to')
     AND NOT EXISTS (
       SELECT
@@ -212,7 +227,6 @@ FROM (
         ler.company_entity_id = ldh.company_entity_id
         AND ler."role" IN ('primary_user', 'user_returns')
     )
-    AND NOT (ldh.licence_ref = ANY (?))
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -229,10 +243,8 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
+    ${additionalWhereClause}
   UNION ALL
   SELECT
     ldh.licence_ref,
@@ -249,10 +261,8 @@ FROM (
     ON rl.licence_ref = ldh.licence_ref
   WHERE
     rl.status = 'due'
-    AND rl.due_date = ?
     AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.metadata->>'isSummer' = ?
-    AND NOT (ldh.licence_ref = ANY (?))
+    ${additionalWhereClause}
 ) contacts
 GROUP BY
   contact_type,
